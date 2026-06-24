@@ -29,7 +29,6 @@ import (
 	"github.com/tphakala/birdnet-go/internal/imageprovider"
 	"github.com/tphakala/birdnet-go/internal/observability"
 	"github.com/tphakala/birdnet-go/internal/security/securitytest"
-	"github.com/tphakala/birdnet-go/internal/speciesdict"
 	"github.com/tphakala/birdnet-go/internal/suncalc"
 )
 
@@ -1543,25 +1542,3 @@ func TestGetAppConfig_SentryConfigWhenDisabled(t *testing.T) {
 	assert.Nil(t, response.Sentry, "Sentry config should be nil when disabled")
 }
 
-// TestGetAppConfig_SpeciesDictVersion verifies the response JSON carries
-// speciesDictVersion equal to speciesdict.Version() and that it is non-empty.
-func TestGetAppConfig_SpeciesDictVersion(t *testing.T) {
-	e, controller := setupAppConfigTest(t, nil)
-
-	req := httptest.NewRequest(http.MethodGet, "/api/v2/app/config", http.NoBody)
-	rec := httptest.NewRecorder()
-	ctx := e.NewContext(req, rec)
-	ctx.SetPath("/api/v2/app/config")
-
-	err := controller.GetAppConfig(ctx)
-	require.NoError(t, err)
-	require.Equal(t, http.StatusOK, rec.Code)
-
-	var response AppConfigResponse
-	err = json.Unmarshal(rec.Body.Bytes(), &response)
-	require.NoError(t, err)
-
-	expectedVersion := speciesdict.Version()
-	assert.NotEmpty(t, response.SpeciesDictVersion, "speciesDictVersion must not be empty")
-	assert.Equal(t, expectedVersion, response.SpeciesDictVersion, "speciesDictVersion must match speciesdict.Version()")
-}

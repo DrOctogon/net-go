@@ -151,14 +151,6 @@ func TestGetJobQueueRetryConfig(t *testing.T) {
 		testRetryConfigOverride = nil
 	}()
 	// Create test retry configurations
-	bwRetryConfig := jobqueue.RetryConfig{
-		Enabled:      true,
-		MaxRetries:   3,
-		InitialDelay: 10 * time.Second,
-		MaxDelay:     60 * time.Second,
-		Multiplier:   2.0,
-	}
-
 	mqttRetryConfig := jobqueue.RetryConfig{
 		Enabled:      true,
 		MaxRetries:   5,
@@ -168,10 +160,6 @@ func TestGetJobQueueRetryConfig(t *testing.T) {
 	}
 
 	// Create test actions with retry configurations
-	bwAction := &BirdWeatherAction{
-		RetryConfig: bwRetryConfig,
-	}
-
 	mqttAction := &MqttAction{
 		RetryConfig: mqttRetryConfig,
 	}
@@ -186,12 +174,6 @@ func TestGetJobQueueRetryConfig(t *testing.T) {
 		wantEnabled    bool
 		wantMaxRetries int
 	}{
-		{
-			name:           "BirdWeatherAction",
-			action:         bwAction,
-			wantEnabled:    true,
-			wantMaxRetries: 3,
-		},
 		{
 			name:           "MqttAction",
 			action:         mqttAction,
@@ -247,10 +229,6 @@ func TestGetJobQueueRetryConfig(t *testing.T) {
 
 			// For actions with retry configuration, check if the full configuration is preserved
 			switch tt.action.(type) {
-			case *BirdWeatherAction:
-				assert.Equal(t, bwRetryConfig.InitialDelay, config.InitialDelay, "getJobQueueRetryConfig() InitialDelay")
-				assert.Equal(t, bwRetryConfig.MaxDelay, config.MaxDelay, "getJobQueueRetryConfig() MaxDelay")
-				assert.InDelta(t, bwRetryConfig.Multiplier, config.Multiplier, 0, "getJobQueueRetryConfig() Multiplier")
 			case *MqttAction:
 				assert.Equal(t, mqttRetryConfig.InitialDelay, config.InitialDelay, "getJobQueueRetryConfig() InitialDelay")
 				assert.Equal(t, mqttRetryConfig.MaxDelay, config.MaxDelay, "getJobQueueRetryConfig() MaxDelay")
@@ -287,15 +265,6 @@ func TestEnqueueTask(t *testing.T) {
 			action Action
 		}{
 			{"MockAction", &MockAction{}},
-			{"BirdWeatherAction", &BirdWeatherAction{
-				RetryConfig: jobqueue.RetryConfig{
-					Enabled:      true,
-					MaxRetries:   3,
-					InitialDelay: 10 * time.Second,
-					MaxDelay:     60 * time.Second,
-					Multiplier:   2.0,
-				},
-			}},
 			{"MqttAction", &MqttAction{
 				RetryConfig: jobqueue.RetryConfig{
 					Enabled:      true,

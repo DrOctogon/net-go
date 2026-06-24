@@ -16,7 +16,6 @@ import (
 	"github.com/tphakala/birdnet-go/internal/audiocore/engine"
 	"github.com/tphakala/birdnet-go/internal/audiocore/schedule"
 	"github.com/tphakala/birdnet-go/internal/audiocore/soundlevel"
-	"github.com/tphakala/birdnet-go/internal/birdweather"
 	"github.com/tphakala/birdnet-go/internal/classifier"
 	"github.com/tphakala/birdnet-go/internal/conf"
 	"github.com/tphakala/birdnet-go/internal/datastore"
@@ -320,8 +319,6 @@ func (cm *ControlMonitor) handleControlSignal(signal string) {
 		cm.handleReconfigureMQTT()
 	case "reconfigure_rtsp_sources":
 		cm.handleReconfigureStreams()
-	case "reconfigure_birdweather":
-		cm.handleReconfigureBirdWeather()
 	case "update_detection_intervals":
 		cm.handleUpdateDetectionIntervals()
 	case "reconfigure_sound_level":
@@ -552,46 +549,6 @@ func (cm *ControlMonitor) handleReconfigureStreams() {
 	if cm.apiController != nil {
 		cm.apiController.BroadcastInferenceTopologyChanged()
 	}
-}
-
-// handleReconfigureBirdWeather reconfigures the BirdWeather integration
-func (cm *ControlMonitor) handleReconfigureBirdWeather() {
-	GetLogger().Info("Reconfiguring BirdWeather integration")
-	settings := conf.Setting()
-
-	if cm.proc == nil {
-		GetLogger().Error("Processor not available for BirdWeather reconfiguration")
-		cm.notifyError("Failed to reconfigure BirdWeather", errors.Newf("processor not available").
-			Component("analysis").
-			Category(errors.CategoryConfiguration).
-			Context("operation", "reconfigure_birdweather").
-			Build())
-		return
-	}
-
-	// First, safely disconnect any existing client
-	cm.proc.DisconnectBwClient()
-
-	// Create new BirdWeather client with updated settings
-	if settings.Realtime.Birdweather.Enabled {
-		bwClient, err := birdweather.New(settings)
-		if err != nil {
-			GetLogger().Error("Failed to create BirdWeather client", logger.Error(err))
-			cm.notifyError("Failed to create BirdWeather client", err)
-			return
-		}
-
-		// Update the processor's BirdWeather client using the thread-safe setter
-		cm.proc.SetBwClient(bwClient)
-		GetLogger().Info("BirdWeather integration configured successfully")
-		cm.notifySuccess("BirdWeather integration configured successfully")
-	} else {
-		// If BirdWeather is disabled, client is already set to nil by DisconnectBwClient
-		GetLogger().Info("BirdWeather integration disabled")
-		cm.notifySuccess("BirdWeather integration disabled")
-	}
-
-	emitHotReload("birdweather")
 }
 
 // handleUpdateDetectionIntervals updates event tracking intervals for species

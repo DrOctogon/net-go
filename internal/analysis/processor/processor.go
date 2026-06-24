@@ -21,7 +21,6 @@ import (
 	"github.com/tphakala/birdnet-go/internal/audiocore/buffer"
 	"github.com/tphakala/birdnet-go/internal/audiocore/convert"
 	"github.com/tphakala/birdnet-go/internal/audiocore/ultrasonic"
-	"github.com/tphakala/birdnet-go/internal/birdweather"
 	"github.com/tphakala/birdnet-go/internal/classifier"
 	"github.com/tphakala/birdnet-go/internal/conf"
 	"github.com/tphakala/birdnet-go/internal/datastore"
@@ -57,8 +56,6 @@ type Processor struct {
 	Repo                 datastore.DetectionRepository // New - preferred for detection operations
 	Bn                   *classifier.Orchestrator
 	log                  logger.Logger // Logger inherited from analysis package with "processor" child module
-	BwClient             *birdweather.BwClient
-	bwClientMutex        sync.RWMutex // Mutex to protect BwClient access
 	MqttClient           mqtt.Client
 	mqttMutex            sync.RWMutex // Mutex to protect MQTT client access
 	mqttNotReadyWarnOnce sync.Once    // Ensures the "client not ready" warning logs at most once per process to avoid flood
@@ -433,23 +430,6 @@ func initSpeciesTracker(settings *conf.Settings, ds datastore.Interface) *specie
 	return tracker
 }
 
-// initBirdWeatherClient initializes the BirdWeather client if enabled.
-func (p *Processor) initBirdWeatherClient(settings *conf.Settings) {
-	if !settings.Realtime.Birdweather.Enabled {
-		return
-	}
-
-	bwClient, err := birdweather.New(settings)
-	if err != nil {
-		GetLogger().Error("Failed to create BirdWeather client",
-			logger.Error(err),
-			logger.String("operation", "birdweather_client_init"),
-			logger.String("integration", "birdweather"))
-		return
-	}
-	p.SetBwClient(bwClient)
-}
-
 // initDynamicThresholds loads and starts persistence for dynamic thresholds if enabled.
 func (p *Processor) initDynamicThresholds(settings *conf.Settings) {
 	if !settings.Realtime.DynamicThreshold.Enabled {
@@ -562,8 +542,6 @@ func New(settings *conf.Settings, ds datastore.Interface, bn *classifier.Orchest
 	// are NOT started here. Call Start() after wiring BufferMgr and Registry
 	// to avoid a race where detections arrive before the buffer manager is set.
 
-	// Initialize BirdWeather client if enabled
-	p.initBirdWeatherClient(settings)
 
 	// Initialize MQTT client if enabled in settings
 	p.initializeMQTT(settings)
@@ -2081,25 +2059,6 @@ func (p *Processor) getDefaultActions(det *Detections) []Action {
 		actions = append(actions, p.buildSaveAudioAction(det, detectionCtx))
 	}
 
-	// Add BirdWeatherAction if enabled and client is initialized
-	// NOTE: BirdWeather runs independently (doesn't need detection ID from database)
-	if settings.Realtime.Birdweather.Enabled {
-		bwClient := p.GetBwClient() // Use getter for thread safety
-		if bwClient != nil {
-			bwRetryConfig := retryConfigFromSettings(settings.Realtime.Birdweather.RetrySettings)
-
-			actions = append(actions, &BirdWeatherAction{
-				Settings:      settings,
-				EventTracker:  p.GetEventTracker(),
-				BwClient:      bwClient,
-				Result:        det.Result, // Domain model (single source of truth)
-				pcmData:       det.pcmData3s,
-				RetryConfig:   bwRetryConfig,
-				CorrelationID: det.CorrelationID,
-			})
-		}
-	}
-
 	// Check if UpdateRangeFilterAction needs to be executed for the day
 	// Use atomic check-and-set to prevent race conditions (see GitHub issue #1357)
 	// This ensures only ONE goroutine will trigger the daily range filter update,
@@ -2247,30 +2206,6 @@ func (p *Processor) readCaptureSegment(sourceID string, startTime time.Time, dur
 	return cb.ReadSegment(startTime, endTime)
 }
 
-// GetBwClient safely returns the current BirdWeather client
-func (p *Processor) GetBwClient() *birdweather.BwClient {
-	p.bwClientMutex.RLock()
-	defer p.bwClientMutex.RUnlock()
-	return p.BwClient
-}
-
-// SetBwClient safely sets a new BirdWeather client
-func (p *Processor) SetBwClient(client *birdweather.BwClient) {
-	p.bwClientMutex.Lock()
-	defer p.bwClientMutex.Unlock()
-	p.BwClient = client
-}
-
-// DisconnectBwClient safely disconnects and removes the BirdWeather client
-func (p *Processor) DisconnectBwClient() {
-	p.bwClientMutex.Lock()
-	defer p.bwClientMutex.Unlock()
-	// Call the Close method if the client exists
-	if p.BwClient != nil {
-		p.BwClient.Close()
-		p.BwClient = nil
-	}
-}
 
 // SetEventTracker safely replaces the current EventTracker
 func (p *Processor) SetEventTracker(tracker *EventTracker) {
@@ -2531,9 +2466,6 @@ func (p *Processor) ShutdownWithContext(ctx context.Context) error {
 			logger.String("operation", "processor_shutdown"))
 		return nil //nolint:nilerr // Context expiration during non-critical cleanup is acceptable; not a failure.
 	}
-
-	// Disconnect BirdWeather client
-	p.DisconnectBwClient()
 
 	// Disconnect MQTT client if connected
 	mqttClient := p.GetMQTTClient()

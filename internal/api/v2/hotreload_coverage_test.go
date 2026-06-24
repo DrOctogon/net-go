@@ -77,6 +77,9 @@ var hotReloadRegistry = map[string]hotReloadEntry{
 	// --- BSG ---
 	"BSG": {categories: []hotReloadCategory{hotReloadRestart}},
 
+	// --- HumanVoice ---
+	"HumanVoice": {categories: []hotReloadCategory{hotReloadFresh}},
+
 	// --- Models ---
 	"Models": {categories: []hotReloadCategory{hotReloadRestart}},
 
@@ -145,8 +148,8 @@ var hotReloadRegistry = map[string]hotReloadEntry{
 		action:     "reconfigure_log_deduplication",
 	},
 
-	// -- Birdweather --
-	"Realtime.Birdweather": {categories: []hotReloadCategory{hotReloadFresh}, action: "reconfigure_birdweather"},
+	// -- Birdweather (integration removed; config field retained, no reload action) --
+	"Realtime.Birdweather": {categories: []hotReloadCategory{hotReloadFresh}},
 
 	// -- eBird --
 	"Realtime.EBird": {categories: []hotReloadCategory{hotReloadFresh}},

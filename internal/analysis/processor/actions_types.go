@@ -12,7 +12,6 @@ import (
 	"github.com/tphakala/birdnet-go/internal/analysis/jobqueue"
 	"github.com/tphakala/birdnet-go/internal/analysis/species"
 	"github.com/tphakala/birdnet-go/internal/audiocore/buffer"
-	"github.com/tphakala/birdnet-go/internal/birdweather"
 	"github.com/tphakala/birdnet-go/internal/classifier"
 	"github.com/tphakala/birdnet-go/internal/conf"
 	"github.com/tphakala/birdnet-go/internal/datastore"
@@ -150,18 +149,6 @@ type PreRendererSubmit interface {
 	Stop() // Graceful shutdown
 }
 
-type BirdWeatherAction struct {
-	Settings      *conf.Settings
-	Result        detection.Result // Domain model (single source of truth)
-	pcmData       []byte
-	BwClient      *birdweather.BwClient
-	EventTracker  *EventTracker
-	RetryConfig   jobqueue.RetryConfig // Configuration for retry behavior
-	Description   string
-	CorrelationID string     // Detection correlation ID for log tracking
-	mu            sync.Mutex // Protect concurrent access to Result and pcmData
-}
-
 type MqttAction struct {
 	Settings       *conf.Settings
 	Result         detection.Result // Domain model (single source of truth)
@@ -254,14 +241,6 @@ func (a *SaveAudioAction) GetDescription() string {
 		return a.Description
 	}
 	return "Save audio clip to file"
-}
-
-// GetDescription returns a human-readable description of the BirdWeatherAction
-func (a *BirdWeatherAction) GetDescription() string {
-	if a.Description != "" {
-		return a.Description
-	}
-	return "Upload detection to BirdWeather"
 }
 
 // GetDescription returns a human-readable description of the MqttAction

@@ -12,7 +12,6 @@ import (
 	"github.com/tphakala/birdnet-go/internal/conf"
 	"github.com/tphakala/birdnet-go/internal/datastore/v2/repository"
 	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/speciesdict"
 	"github.com/tphakala/birdnet-go/internal/telemetry"
 )
 
@@ -34,7 +33,6 @@ type AppConfigResponse struct {
 	CSRFToken          string                `json:"csrfToken"`
 	Security           SecurityConfigDTO     `json:"security"`
 	Version            string                `json:"version"`
-	SpeciesDictVersion string                `json:"speciesDictVersion"`        // dataset version for content-addressed dictionary URL construction
 	BasePath           string                `json:"basePath"`                  // reverse proxy prefix for frontend URL construction
 	ColorScheme        string                `json:"colorScheme,omitempty"`     // admin-configured color scheme for all visitors
 	CustomColors       *conf.CustomColors    `json:"customColors,omitempty"`    // custom scheme hex colors (when colorScheme is "custom")
@@ -192,7 +190,6 @@ func (c *Controller) GetAppConfig(ctx echo.Context) error {
 			PrivateMode: settings.Security.PrivateMode,
 		},
 		Version:            settings.Version,
-		SpeciesDictVersion: speciesdict.Version(),
 		BasePath:           basePath,
 		ColorScheme:        settings.Realtime.Dashboard.ColorScheme,
 		CustomColors:       settings.Realtime.Dashboard.CustomColors,

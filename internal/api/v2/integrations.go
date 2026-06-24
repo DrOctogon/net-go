@@ -13,7 +13,6 @@ import (
 	"time"
 
 	"github.com/labstack/echo/v4"
-	"github.com/tphakala/birdnet-go/internal/birdweather"
 	"github.com/tphakala/birdnet-go/internal/conf"
 	"github.com/tphakala/birdnet-go/internal/logger"
 	"github.com/tphakala/birdnet-go/internal/mqtt"
@@ -52,22 +51,6 @@ func (a *mqttTestAdapter) TestConnection(ctx context.Context, resultChan chan<- 
 
 func (a *mqttTestAdapter) Cleanup() {
 	a.client.Disconnect()
-}
-
-// birdweatherTestAdapter wraps birdweather.BwClient to implement IntegrationTestClient
-type birdweatherTestAdapter struct {
-	client interface {
-		TestConnection(ctx context.Context, resultChan chan<- birdweather.TestResult)
-		Close()
-	}
-}
-
-func (a *birdweatherTestAdapter) TestConnection(ctx context.Context, resultChan chan<- birdweather.TestResult) {
-	a.client.TestConnection(ctx, resultChan)
-}
-
-func (a *birdweatherTestAdapter) Cleanup() {
-	a.client.Close()
 }
 
 // runStreamingIntegrationTest runs an integration test with streaming results.
@@ -231,11 +214,6 @@ func (c *Controller) initIntegrationsRoutes() {
 	mqttTLSGroup.POST("/certificate", c.UploadMQTTTLSCertificate)
 	mqttTLSGroup.DELETE("/certificate", c.DeleteMQTTTLSCertificate)
 
-	// BirdWeather routes
-	bwGroup := integrationsGroup.Group("/birdweather")
-	bwGroup.GET("/status", c.GetBirdWeatherStatus)
-	bwGroup.POST("/test", c.TestBirdWeatherConnection)
-
 	// Weather routes
 	weatherGroup := integrationsGroup.Group("/weather")
 	weatherGroup.POST("/test", c.TestWeatherConnection)
@@ -339,38 +317,6 @@ func (c *Controller) checkMQTTConnectionStatus(parentCtx context.Context, settin
 	return true, "" // Connected successfully
 }
 
-// GetBirdWeatherStatus handles GET /api/v2/integrations/birdweather/status
-func (c *Controller) GetBirdWeatherStatus(ctx echo.Context) error {
-	ip := ctx.RealIP()
-	path := ctx.Request().URL.Path
-	c.logInfoIfEnabled("Getting BirdWeather status",
-		logger.String("path", path),
-		logger.String("ip", ip))
-
-	// Get BirdWeather configuration from fresh settings
-	bwConfig := c.currentSettings().Realtime.Birdweather
-
-	// Prepare status response
-	status := BirdWeatherStatus{
-		Enabled:          bwConfig.Enabled,
-		StationID:        bwConfig.ID,
-		Threshold:        bwConfig.Threshold,
-		LocationAccuracy: bwConfig.LocationAccuracy,
-	}
-
-	// For now, we just return the configuration status
-	// In the future, we could add checks for client status here
-	c.logInfoIfEnabled("Retrieved BirdWeather status successfully",
-		logger.Bool("enabled", status.Enabled),
-		logger.String("station_id", status.StationID),
-		logger.Float64("threshold", status.Threshold),
-		logger.String("path", path),
-		logger.String("ip", ip),
-	)
-
-	return ctx.JSON(http.StatusOK, status)
-}
-
 // TestMQTTConnection handles POST /api/v2/integrations/mqtt/test
 func (c *Controller) TestMQTTConnection(ctx echo.Context) error {
 	// Get MQTT configuration from fresh settings
@@ -419,72 +365,6 @@ func (c *Controller) TestMQTTConnection(ctx echo.Context) error {
 	// Create adapter and run streaming test
 	adapter := &mqttTestAdapter{client: client}
 	return runStreamingIntegrationTest(c, ctx, resultChan, adapter, integrationMediumTimeout*time.Second, "MQTT")
-}
-
-// TestBirdWeatherConnection handles POST /api/v2/integrations/birdweather/test
-func (c *Controller) TestBirdWeatherConnection(ctx echo.Context) error {
-	var request BirdWeatherTestRequest
-	if err := ctx.Bind(&request); err != nil {
-		return c.HandleError(ctx, err, "Invalid BirdWeather test request", http.StatusBadRequest)
-	}
-
-	// Validate BirdWeather configuration from the request
-	if !request.Enabled {
-		return ctx.JSON(http.StatusOK, map[string]any{
-			"success": false,
-			"message": "BirdWeather integration is not enabled",
-			"state":   "failed",
-		})
-	}
-
-	// Validate BirdWeather configuration
-	if request.ID == "" {
-		return ctx.JSON(http.StatusBadRequest, map[string]any{
-			"success": false,
-			"message": "BirdWeather station ID not configured",
-			"state":   "failed",
-		})
-	}
-
-	// Clone current settings and override only BirdWeather fields from the request
-	testSettings := conf.CloneSettings(c.currentSettings())
-	testSettings.Realtime.Birdweather = conf.BirdweatherSettings{
-		Enabled:          request.Enabled,
-		ID:               request.ID,
-		Threshold:        request.Threshold,
-		LocationAccuracy: request.LocationAccuracy,
-		Debug:            request.Debug,
-	}
-
-	// Create test BirdWeather client with the test configuration
-	client, err := birdweather.New(testSettings)
-	if err != nil {
-		return ctx.JSON(http.StatusInternalServerError, map[string]any{
-			"success": false,
-			"message": formatClientError("Failed to create BirdWeather client", err, testSettings),
-			"state":   "failed",
-		})
-	}
-
-	// Prepare for testing
-	ctx.Response().Header().Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	ctx.Response().WriteHeader(http.StatusOK)
-
-	// Channel for test results
-	resultChan := make(chan birdweather.TestResult)
-
-	// Create adapter and run streaming test
-	adapter := &birdweatherTestAdapter{client: client}
-	return runStreamingIntegrationTest(c, ctx, resultChan, adapter, integrationLongTimeout*time.Second, "BirdWeather")
-}
-
-// BirdWeatherTestRequest represents a request to test BirdWeather connectivity
-type BirdWeatherTestRequest struct {
-	Enabled          bool    `json:"enabled"`
-	ID               string  `json:"id"`
-	Threshold        float64 `json:"threshold"`
-	LocationAccuracy float64 `json:"locationAccuracy"`
-	Debug            bool    `json:"debug"`
 }
 
 // EBirdTestRequest represents a request to test eBird API connectivity

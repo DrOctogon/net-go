@@ -987,8 +987,6 @@ func getSettingsSectionValue(settings *conf.Settings, section string) (any, erro
 		return &settings.Realtime.Weather, nil
 	case "mqtt":
 		return &settings.Realtime.MQTT, nil
-	case "birdweather":
-		return &settings.Realtime.Birdweather, nil
 	case SettingsSectionSpecies:
 		return &settings.Realtime.Species, nil
 	case "rtsp":
@@ -1626,8 +1624,6 @@ func getSettingsSection(settings *conf.Settings, section string) (any, error) {
 		return settings.Realtime.Weather, nil
 	case "mqtt":
 		return settings.Realtime.MQTT, nil
-	case "birdweather":
-		return settings.Realtime.Birdweather, nil
 	case SettingsSectionSpecies:
 		return settings.Realtime.Species, nil
 	default:
@@ -2147,7 +2143,6 @@ var settingsChangeChecks = []settingsChangeCheck{
 	{"Base threshold", "recalculate_dynamic_thresholds", baseThresholdChanged, "Recalculating dynamic thresholds...", notification.MsgSettingsRecalculatingThresholds, "info", toastDurationShort},
 	{"Dynamic thresholds", "reconfigure_dynamic_thresholds", dynamicThresholdEnabledChanged, "Reconfiguring dynamic thresholds...", notification.MsgSettingsReconfiguringDynamicThresholds, "info", toastDurationMedium},
 	{"MQTT", "reconfigure_mqtt", mqttSettingsChanged, "Reconfiguring MQTT connection...", notification.MsgSettingsReconfiguringMqtt, "info", toastDurationMedium},
-	{"BirdWeather", "reconfigure_birdweather", birdWeatherSettingsChanged, "Reconfiguring BirdWeather integration...", notification.MsgSettingsReconfiguringBirdweather, "info", toastDurationMedium},
 	{"Streams", "reconfigure_rtsp_sources", streamsSettingsChanged, "Reconfiguring audio streams...", notification.MsgSettingsReconfiguringStreams, "info", toastDurationMedium},
 	{"Telemetry", "reconfigure_telemetry", telemetrySettingsChanged, "Reconfiguring telemetry settings...", notification.MsgSettingsReconfiguringTelemetry, "info", toastDurationShort},
 	{"Species tracking", "reconfigure_species_tracking", speciesTrackingSettingsChanged, "Reconfiguring species tracking...", notification.MsgSettingsReconfiguringSpeciesTracking, "info", toastDurationShort},
@@ -2454,28 +2449,6 @@ func speciesIntervalSettingsChanged(oldSettings, currentSettings *conf.Settings)
 	}
 
 	// No relevant changes detected
-	return false
-}
-
-// birdWeatherSettingsChanged checks if BirdWeather integration settings have changed
-func birdWeatherSettingsChanged(oldSettings, currentSettings *conf.Settings) bool {
-	// Check for changes in BirdWeather enabled state
-	if oldSettings.Realtime.Birdweather.Enabled != currentSettings.Realtime.Birdweather.Enabled {
-		return true
-	}
-
-	// Check for changes in BirdWeather credentials and configuration
-	if oldSettings.Realtime.Birdweather.ID != currentSettings.Realtime.Birdweather.ID ||
-		oldSettings.Realtime.Birdweather.Threshold != currentSettings.Realtime.Birdweather.Threshold ||
-		oldSettings.Realtime.Birdweather.LocationAccuracy != currentSettings.Realtime.Birdweather.LocationAccuracy {
-		return true
-	}
-
-	// Check for debug mode changes
-	if oldSettings.Realtime.Birdweather.Debug != currentSettings.Realtime.Birdweather.Debug {
-		return true
-	}
-
 	return false
 }
 

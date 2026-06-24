@@ -129,8 +129,6 @@ func getJobQueueRetryConfig(action Action) jobqueue.RetryConfig {
 	}
 
 	switch a := action.(type) {
-	case *BirdWeatherAction:
-		return a.RetryConfig // Now directly returns jobqueue.RetryConfig
 	case *MqttAction:
 		return a.RetryConfig // Now directly returns jobqueue.RetryConfig
 	case *SaveAudioAction:

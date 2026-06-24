@@ -210,20 +210,6 @@ func (c *Controller) registerHealthChecks() {
 				return client.IsConnected()
 			},
 		),
-		checks.NewBirdWeatherCheck(
-			func() bool { return c.currentSettings().Realtime.Birdweather.Enabled },
-			func() (bool, string) {
-				proc := c.Processor
-				if proc == nil {
-					return false, "Processor unavailable"
-				}
-				bw := proc.GetBwClient()
-				if bw == nil {
-					return false, "BirdWeather client not initialized"
-				}
-				return bw.Status()
-			},
-		),
 		checks.NewNotificationProvidersCheck(func() (int, int, string) {
 			providers := notification.GetAllPushProviderHealth()
 			if len(providers) == 0 {
