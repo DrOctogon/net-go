@@ -11,7 +11,6 @@ import (
 	"github.com/tphakala/birdnet-go/cmd/benchmark"
 	"github.com/tphakala/birdnet-go/cmd/license"
 	"github.com/tphakala/birdnet-go/cmd/notify"
-	"github.com/tphakala/birdnet-go/cmd/rangefilter"
 	"github.com/tphakala/birdnet-go/cmd/serve"
 	"github.com/tphakala/birdnet-go/cmd/support"
 	"github.com/tphakala/birdnet-go/internal/conf"
@@ -35,7 +34,6 @@ func RootCommand(settings *conf.Settings) *cobra.Command {
 	serveCmd := serve.Command(settings)
 	authorsCmd := authors.Command()
 	licenseCmd := license.Command()
-	rangeCmd := rangefilter.Command(settings)
 	supportCmd := support.Command(settings)
 	benchmarkCmd := benchmark.Command(settings)
 	notifyCmd := notify.Command(settings)
@@ -44,7 +42,6 @@ func RootCommand(settings *conf.Settings) *cobra.Command {
 		serveCmd,
 		authorsCmd,
 		licenseCmd,
-		rangeCmd,
 		supportCmd,
 		benchmarkCmd,
 		notifyCmd,
