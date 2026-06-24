@@ -56,10 +56,11 @@ const (
 
 // Registry ID constants for model identification across packages.
 const (
-	RegistryIDBirdNETV3 = "BirdNET_V3.0"
-	RegistryIDBSG       = "BSG"
-	RegistryIDBat       = "Bat"
-	RegistryIDPerchV2   = "Perch_V2"
+	RegistryIDBirdNETV3  = "BirdNET_V3.0"
+	RegistryIDBSG        = "BSG"
+	RegistryIDBat        = "Bat"
+	RegistryIDPerchV2    = "Perch_V2"
+	RegistryIDHumanVoice = "HumanVoice"
 )
 
 // defaultBirdNETClassifierARM64Arch is the GOARCH for which container images
@@ -195,6 +196,17 @@ var ModelRegistry = map[string]ModelInfo{
 		Description:      "Regional bird classifier optimized for Finnish bird species",
 		Spec:             ModelSpec{SampleRate: 48000, ClipLength: 3 * time.Second},
 		ConfigAliases:    []string{conf.ModelIDBSG},
+	},
+	RegistryIDHumanVoice: {
+		ID:               RegistryIDHumanVoice,
+		Name:             "Human Voice Detector",
+		Backend:          BackendONNX,
+		DetectionName:    "HumanVoice",
+		DetectionVersion: "1.0",
+		Description:      "Human voice / speech detection (Silero VAD)",
+		Spec:             ModelSpec{SampleRate: 16000, ClipLength: 3 * time.Second},
+		ConfigAliases:    []string{conf.ModelIDHumanVoice},
+		NumSpecies:       1,
 	},
 }
 

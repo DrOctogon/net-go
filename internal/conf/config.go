@@ -1282,6 +1282,15 @@ type UltrasonicFilterConfig struct {
 	FrequencySplitHz int     `yaml:"frequencysplithz" json:"frequencySplitHz"` // boundary between audible and ultrasonic bands in Hz
 }
 
+// HumanVoiceConfig holds configuration for human voice / speech detection
+// using a Silero VAD ONNX model. Mirrors the simplest model config shape
+// (model path + confidence threshold). Phase 2 wires this into the model
+// orchestrator load path; Phase 1 only declares the type.
+type HumanVoiceConfig struct {
+	ModelPath string  `yaml:"modelpath,omitempty" json:"modelPath,omitempty"` // path to the Silero VAD ONNX model file
+	Threshold float64 `yaml:"threshold" json:"threshold"`                     // confidence threshold for human voice detections
+}
+
 // BSGConfig holds configuration for BSG regional bird models.
 type BSGConfig struct {
 	ModelPath string `yaml:"modelpath,omitempty" json:"modelPath,omitempty"` // path to BSG ONNX model file
@@ -1669,11 +1678,12 @@ type Settings struct {
 		TimeAs24h bool   `yaml:"timeas24h" json:"timeAs24h"` // true 24-hour time format, false 12-hour time format
 	} `yaml:"main" json:"main"`
 
-	BirdNET BirdNETConfig `yaml:"birdnet" json:"birdnet"` // BirdNET configuration
-	Perch   PerchConfig   `yaml:"perch" json:"perch"`     // Perch v2 model configuration
-	Bat     BatConfig     `yaml:"bat" json:"bat"`         // Bat detection configuration
-	BSG     BSGConfig     `yaml:"bsg" json:"bsg"`         // BSG regional bird model configuration
-	Models  ModelsConfig  `yaml:"models" json:"models"`   // Global model enablement and management
+	BirdNET    BirdNETConfig    `yaml:"birdnet" json:"birdnet"`       // BirdNET configuration
+	Perch      PerchConfig      `yaml:"perch" json:"perch"`           // Perch v2 model configuration
+	Bat        BatConfig        `yaml:"bat" json:"bat"`               // Bat detection configuration
+	BSG        BSGConfig        `yaml:"bsg" json:"bsg"`               // BSG regional bird model configuration
+	HumanVoice HumanVoiceConfig `yaml:"humanvoice" json:"humanVoice"` // Human voice / speech detection configuration
+	Models     ModelsConfig     `yaml:"models" json:"models"`         // Global model enablement and management
 
 	LowMemory LowMemoryConfig `yaml:"lowmemory" json:"lowMemory" mapstructure:"lowmemory"` // Low-memory mode override (auto/on/off) for constrained systems
 
