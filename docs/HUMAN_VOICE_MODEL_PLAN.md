@@ -39,6 +39,65 @@ Plan said "one rewrite unit" but that detonates the whole pipeline at once. **Pe
 
 ---
 
+## 2c-3 EXECUTION SPEC (turn-key — read before cutting)
+
+Atomic commit; no green intermediate. Order: slim the facade → delete bird files → delete ebird → retarget consumers → build/fix/test. Verified against the codebase 2026-06-24.
+
+### A. classifier facade — KEEP (edit in place)
+- `model.go` — keep `ModelSpec`, `ModelInstance`, `ModelInfo`-adjacent consts. Drop `NameResolver` iff no remaining consumer (control_monitor's `OpenFaunaResolver()` use is removed below).
+- `queue.go` — keep verbatim (`Results` struct, `ResultsQueue`, `ResizeQueue`, `DefaultQueueSize`). This is the pipeline's data carrier; consumers read `classifier.Results` off `ResultsQueue`.
+- `logger.go` — keep.
+- `model_registry.go` — SLIM to: `ModelInfo` struct + `DisplayName`/`ToDetectionModelInfo`; consts `BackendTFLite/ONNX/OpenVINO`, `Quantization*`, `RegistryIDHumanVoice`, `DetectionNamePerch` (drop if no consumer after retarget); `ModelRegistry` map with **only** the `RegistryIDHumanVoice` entry; helpers consumers call: `ResolveConfigModelID`, `ConfigAliasForRegistry`, `GetModelSpec`, `DetectionModelInfoForID`, `KnownConfigIDs`. DROP: all BirdNET/Perch/Bat/BSG entries, `ResolveBirdNETVersion`, `DetermineModelInfo`, `filenamePatterns`, `detectQuantization`, `remapV24ForONNXOnly`, `stockBirdNETV24ONNXVariant`, `customBirdNETV24ModelInfo`, `defaultClassifierModelInfo`, `defaultRangeFilterONNXPath`, `IsLocaleSupported`, `birdnetVersionToRegistryID`, refs to `DefaultModelVersion`/`DefaultBirdNETINT8ONNXModelName`/`DefaultRangeFilterV2ONNXModelName` (those consts live in deleted files).
+- `orchestrator.go` — REWRITE to a single-model host (~80 LOC). Import cycle: `humanvoice`→`classifier`, so the Orchestrator must NOT construct the model. Inject it:
+  ```go
+  type Orchestrator struct {
+      settingsAtomic atomic.Pointer[conf.Settings]
+      inferenceMu    sync.Mutex      // serialize Predict (model not goroutine-safe)
+      primary        ModelInstance
+  }
+  func NewOrchestrator(settings *conf.Settings, primary ModelInstance) (*Orchestrator, error)
+  func (o *Orchestrator) PredictModel(ctx, modelID string, sample [][]float32) ([]datastore.Results, error) // ignore modelID; use primary
+  func (o *Orchestrator) Predict(ctx, sample) ([]datastore.Results, error)
+  func (o *Orchestrator) ModelSpecFor(modelID string) (ModelSpec, error) // primary.Spec()
+  func (o *Orchestrator) NumSpecies() int        // primary.NumSpecies()
+  func (o *Orchestrator) Labels() []string       // primary.Labels()
+  func (o *Orchestrator) AllLabels() []string    // primary.Labels()
+  func (o *Orchestrator) ModelInfos() []ModelInfo
+  func (o *Orchestrator) Delete()                // primary.Close()
+  ```
+  Keep `tracing.go`/`threads.go` only if the rewritten Predict uses them; otherwise delete.
+
+### B. classifier — DELETE files
+birdnet.go, perch_onnx.go, bat_onnx.go, orchestrator_bat_onnx.go, orchestrator_perch_onnx.go, orchestrator_memory.go, orchestrator_notifications.go, range_filter.go, mapped_range_filter.go, model_onnx.go, model_openvino.go, model_manager.go, model_catalog.go, catalog_loader.go, heatmap_service.go, genus.go, taxonomy.go, taxonomy_resolver.go, label_files.go, names.go, models_embedded.go, models_external.go, nighttime_scheduler.go, analyze.go, tflite_available.go, tflite_unavailable.go, openvino_available.go, openvino_unavailable.go, `data/*` (.tflite/.json), + all `*_test.go` for the above. **Delete `internal/ebird/` whole.**
+
+### C. analysis consumers — RETARGET (file:line from 2c map; re-verify, lines drift)
+- `birdnet_service.go`: replace `classifier.NewOrchestrator(settings)` → build `humanvoice.New(&humanvoice.Config{ModelPath, ONNXRuntimePath, Threads, Threshold})` then `classifier.NewOrchestrator(settings, model)`. DELETE `classifier.BuildRangeFilter`, `classifier.LoadCatalog`, `classifier.NewModelManager`+`ScanInstalled`. Keep `bn.NumSpecies()`.
+- `process.go`: keep `PredictModel`, `ModelSpecFor`, `ResultsQueue`. No bird logic.
+- `processor/processor.go` (heaviest, 23 sites): DROP `EnrichResultWithTaxonomy`, `GetSpeciesOccurrenceAtTime`, `taxonomyDB` field + `LoadTaxonomyDatabase`, `RegistryIDBat`/`DetectionNamePerch` branches (bat/perch special-casing), `ModelRegistry[item.ModelID].Spec.ClipLength` → use `ModelSpecFor`/`GetModelSpec`. Keep the `ResultsQueue` consume loop + `classifier.Results`/`DetectionModelInfoForID`/`ResolveConfigModelID`. `detection.ParseSpeciesString` stays (generic).
+- `control_monitor.go`: DROP `BuildRangeFilter` (×2), `OpenFaunaResolver()`; `AllLabels()` → ["Human Voice"].
+- `buffer_manager.go`: keep `*Orchestrator`/`ModelSpec`/`ModelInfo` types — no change beyond compile.
+- `audio_pipeline_service.go`: `ResolveConfigModelID`/`ModelRegistry` keep; with single model the per-model fan-out collapses to one entry — simplify model-set join.
+- `extended_capture.go`: DROP `LoadTaxonomyDatabase`; `AllLabels()` trivial.
+- `daylight_filter.go`, `dogbarkfilter.go`, `vocalization_labels.go`: DELETE (bird/bat filters) + unregister from processor.
+- `database_service.go`/`database_migration.go`: DROP `LoadTaxonomyData("")`.
+- `false_positive_filter.go`, `actions_types.go`: DROP `RegistryIDBat` branch / `UpdateRangeFilterAction`.
+
+### D. api/v2 — remaining classifier coupling (deferred from 2c-1, MUST handle here)
+`api.go` still has `TaxonomyDB *classifier.TaxonomyDatabase` (field + `LoadTaxonomyDatabase` at ~531) and `ModelManager *classifier.ModelManager` (field + `WithModelManager` + `initModelRoutes`). Both types are deleted here. Remove the fields, the load call, the option, and the model-gallery routes (`models.go` + tests). Re-grep `c.TaxonomyDB` / `ModelManager` for stragglers.
+
+### E. conf + observability + notification (range/secondary peripherals)
+- `conf/config.go`: drop `RangeFilterSettings`, `PerchConfig`, `BatConfig`, `BSGConfig` + their `Settings` fields + bird fields on `BirdNETConfig` (keep struct for lat/long/threads/threshold/onnxruntimepath that humanvoice config reads). `conf/range_filter.go` helpers + `conf/clone.go`/`validate_services.go` refs.
+- `observability/metrics/birdnet.go`: drop `RangeFilterDuration`/`RecordRangeFilter`.
+- `notification/message_keys.go`: drop `MsgSettingsRebuildingRangeFilter`.
+
+### F. species-analytics deletion (user-chosen, datastore-only, no classifier coupling)
+`analytics.go`: remove `GetSpeciesAccumulation`, `GetSpeciesPhenology`, `GetSpeciesHourlyDistribution` handlers + routes. `notifications.go`: remove `CreateTestNewSpeciesNotification` + route. Delete tests: analytics_species_accumulation/distribution/phenology_test.go, notifications_new_species_test.go. (Can be its own small commit.)
+
+### G. Verify
+`go build -tags "notflite skipfrontend" ./...` → 0; `go vet` the touched pkgs; `go test -tags "notflite skipfrontend" ./internal/api/v2/ ./internal/analysis/... ./internal/classifier/...`. humanvoice `Predict` still uses the generic ONNX path (real Silero VAD = 2d).
+
+---
+
 ## 1. Decisions locked
 
 | Topic | Decision |
