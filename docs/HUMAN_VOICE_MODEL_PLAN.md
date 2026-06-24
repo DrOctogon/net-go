@@ -1,9 +1,32 @@
 # Pivot Plan: BirdNET-Go → Human Voice Detector
 
-Status: PLAN (no code written yet)
-Date: 2026-06-23
+Status: IN PROGRESS — Phases 1 + 2a committed, green.
+Date: 2026-06-23 (updated 2026-06-24)
+Branch: `human-voice-pivot`
 Strategy: **Neutralize + repurpose** — strip bird/animal brain, keep reusable
 acoustic pipeline, retarget to human-voice-only detection.
+
+---
+
+## PROGRESS CHECKPOINT (read this first)
+
+| Commit | Phase | What landed |
+|---|---|---|
+| `262bbc73` | 1 | `internal/classifier/humanvoice/` — Silero VAD `ModelInstance` wrapper, `RegistryIDHumanVoice` registry entry, `HumanVoiceConfig` + `conf.ModelIDHumanVoice`. Additive; no bird code touched. |
+| `34091881` | 2a | Deleted `internal/birdweather/` + `internal/speciesdict/` and ALL callers (processor `BwClient` + upload action, `control_monitor` reconfigure, api/v2 integrations routes/handlers, species-dictionary endpoint, app DTO field). Fixed 3 stale tests. |
+
+**Build command (always use this tag set — frontend `dist` not built, no TFLite C lib):**
+`go build -tags "notflite skipfrontend" ./...` → currently exit 0.
+
+**Known deferred debt:**
+- `conf` still has a dead `BirdweatherSettings` struct + `Realtime.Birdweather` field (retained to keep 2a bounded; the hot-reload coverage test maps it with no action). Remove in the config-cleanup pass.
+- Phase 1 `humanvoice.Predict` runs the GENERIC `inference.Classifier` — it does NOT yet implement Silero VAD's real stateful streaming I/O (state tensors + `sr` input + 512-sample frames). Real inference is unbuilt. See §3 / Phase 2c.
+
+## REMAINING WORK (do mechanical parts on Sonnet, not Opus)
+
+- **2b** — delete `internal/imageprovider/` (~20 api/v2 files reference it: analytics, sse, settings, insights, media, app DTOs, processor actions, mqtt/dto, main.go). Bounded, mechanical.
+- **2c (MILESTONE)** — classifier brain swap. The bird brain is ONE welded subsystem: `internal/classifier` (~11.6k LOC) + `internal/ebird` (imported by `classifier/genus.go`→`birdnet.go`) + embedded model data (unconditional embeds in `genus.go`/`taxonomy.go`/`label_files.go`) + range filter + species/heatmap/taxonomy api/v2 endpoints + 30+ consumers in `analysis`. Deleting model data detonates the embeds. Must be done as ONE rewrite unit: construct `humanvoice.Model` in the `analysis` layer (avoids `humanvoice`→`classifier` import cycle), introduce a reduced `ModelInstance`-only classifier facade, re-type consumers, AND build the real Silero VAD inference path + fetch `silero_vad.onnx`.
+- **3+** — datastore voice label_type + store-all-clips (force `save_audio_action.go`), frontend retarget (voice-event list, drop species/taxonomy/rarity UI), rebrand, dead-conf cleanup.
 
 ---
 

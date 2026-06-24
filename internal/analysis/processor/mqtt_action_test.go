@@ -222,7 +222,6 @@ func TestMqttAction_Execute_PayloadContainsAllFields(t *testing.T) {
 		MqttClient:     mockClient,
 		EventTracker:   eventTracker,
 		DetectionCtx:   detectionCtx,
-		BirdImageCache: nil, // Not needed for this test
 	}
 
 	err := action.Execute(t.Context(), nil)

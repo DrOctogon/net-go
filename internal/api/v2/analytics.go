@@ -19,7 +19,7 @@ import (
 	"github.com/tphakala/birdnet-go/internal/datastore"
 	"github.com/tphakala/birdnet-go/internal/datastore/v2/entities"
 	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/imageprovider"
+
 	"github.com/tphakala/birdnet-go/internal/logger"
 )
 
@@ -579,21 +579,10 @@ func collectSpeciesWithDetections(aggregatedData map[string]aggregatedBirdInfo) 
 	return names
 }
 
-// batchFetchCachedThumbnails fetches thumbnail URLs from cache only
-func (c *Controller) batchFetchCachedThumbnails(scientificNames []string) map[string]string {
-	thumbnailURLs := make(map[string]string)
-	cache := c.BirdImageCache
-	if cache == nil || len(scientificNames) == 0 {
-		return thumbnailURLs
-	}
-
-	batchResults := cache.GetBatchCachedOnly(scientificNames)
-	for name := range batchResults {
-		if img := batchResults[name]; img.URL != "" && !img.IsNegativeEntry() {
-			thumbnailURLs[name] = imageprovider.ProxyImageURL(name)
-		}
-	}
-	return thumbnailURLs
+// batchFetchCachedThumbnails returns an empty map.
+// Image providers have been removed as part of the human-voice pivot.
+func (c *Controller) batchFetchCachedThumbnails(_ []string) map[string]string {
+	return make(map[string]string)
 }
 
 // parseStatusTimeFromDate parses selected date for species status computation
@@ -754,34 +743,14 @@ func extractScientificNames(summaryData []datastore.SpeciesSummaryData) []string
 	return names
 }
 
-// batchFetchThumbnailsWithLogging fetches thumbnails with debug logging
-func (c *Controller) batchFetchThumbnailsWithLogging(scientificNames []string, ip, path string) map[string]imageprovider.BirdImage {
-	cache := c.BirdImageCache
-	if cache == nil || len(scientificNames) == 0 {
-		return nil
-	}
-
-	c.logDebugIfEnabled("Fetching cached thumbnails only",
-		logger.Int("count", len(scientificNames)),
-		logger.String("ip", ip),
-		logger.String("path", path),
-	)
-	thumbStart := time.Now()
-	thumbnailURLs := cache.GetBatchCachedOnly(scientificNames)
-	thumbDuration := time.Since(thumbStart)
-	c.logInfoIfEnabled("Cached thumbnail fetch completed",
-		logger.Int64("duration_ms", thumbDuration.Milliseconds()),
-		logger.Int("cached_count", len(thumbnailURLs)),
-		logger.Int("requested_count", len(scientificNames)),
-		logger.String("ip", ip),
-		logger.String("path", path),
-	)
-
-	return thumbnailURLs
+// batchFetchThumbnailsWithLogging returns nil.
+// Image providers have been removed as part of the human-voice pivot.
+func (c *Controller) batchFetchThumbnailsWithLogging(_ []string, _, _ string) map[string]string {
+	return nil
 }
 
 // convertSummaryDataToResponse converts datastore models to API response
-func (c *Controller) convertSummaryDataToResponse(summaryData []datastore.SpeciesSummaryData, thumbnailURLs map[string]imageprovider.BirdImage) []SpeciesSummary {
+func (c *Controller) convertSummaryDataToResponse(summaryData []datastore.SpeciesSummaryData, thumbnailURLs map[string]string) []SpeciesSummary {
 	response := make([]SpeciesSummary, 0, len(summaryData))
 
 	for i := range summaryData {
@@ -795,7 +764,7 @@ func (c *Controller) convertSummaryDataToResponse(summaryData []datastore.Specie
 			LastHeard:      formatTimeIfNotZero(data.LastSeen),
 			AvgConfidence:  data.AvgConfidence,
 			MaxConfidence:  data.MaxConfidence,
-			ThumbnailURL:   getThumbnailURLFromBirdImage(thumbnailURLs, data.ScientificName),
+			ThumbnailURL:   getThumbnailWithFallback(thumbnailURLs, data.ScientificName),
 		})
 	}
 
@@ -808,17 +777,6 @@ func formatTimeIfNotZero(t time.Time) string {
 		return ""
 	}
 	return t.Format(time.DateTime)
-}
-
-// getThumbnailURLFromBirdImage extracts URL from BirdImage map
-func getThumbnailURLFromBirdImage(thumbnailURLs map[string]imageprovider.BirdImage, scientificName string) string {
-	if thumbnailURLs == nil {
-		return ""
-	}
-	if img, ok := thumbnailURLs[scientificName]; ok && img.URL != "" && !img.IsNegativeEntry() {
-		return imageprovider.ProxyImageURL(scientificName)
-	}
-	return ""
 }
 
 // applyOptionalLimit parses and applies limit parameter
@@ -2392,21 +2350,10 @@ func extractNewSpeciesNames(data []datastore.NewSpeciesData) []string {
 	return names
 }
 
-// batchFetchThumbnailURLs fetches thumbnail URLs from cache
-func (c *Controller) batchFetchThumbnailURLs(scientificNames []string) map[string]string {
-	thumbnailURLs := make(map[string]string)
-	cache := c.BirdImageCache
-	if cache == nil {
-		return thumbnailURLs
-	}
-
-	batchResults := cache.GetBatch(scientificNames)
-	for name := range batchResults {
-		if img := batchResults[name]; img.URL != "" && !img.IsNegativeEntry() {
-			thumbnailURLs[name] = imageprovider.ProxyImageURL(name)
-		}
-	}
-	return thumbnailURLs
+// batchFetchThumbnailURLs returns an empty map.
+// Image providers have been removed as part of the human-voice pivot.
+func (c *Controller) batchFetchThumbnailURLs(_ []string) map[string]string {
+	return make(map[string]string)
 }
 
 // Helper function to sum array values
@@ -2504,36 +2451,13 @@ func (c *Controller) GetSpeciesThumbnails(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, result)
 }
 
-// buildThumbnailMap creates a map of species names to thumbnail URLs.
+// buildThumbnailMap creates a map of species names to placeholder thumbnail URLs.
+// Image providers have been removed as part of the human-voice pivot.
 func (c *Controller) buildThumbnailMap(speciesParams []string) map[string]string {
-	result := make(map[string]string)
-
-	cache := c.BirdImageCache
-	if cache == nil {
-		for _, name := range speciesParams {
-			result[name] = placeholderImageURL
-		}
-		return result
-	}
-
-	images := cache.GetBatch(speciesParams)
-
-	// Convert to simple map of scientific name -> proxy URL
-	for name := range images {
-		if img := images[name]; img.URL != "" && !img.IsNegativeEntry() {
-			result[name] = imageprovider.ProxyImageURL(name)
-		} else {
-			result[name] = placeholderImageURL
-		}
-	}
-
-	// Add placeholder for any missing species
+	result := make(map[string]string, len(speciesParams))
 	for _, name := range speciesParams {
-		if _, exists := result[name]; !exists {
-			result[name] = placeholderImageURL
-		}
+		result[name] = placeholderImageURL
 	}
-
 	return result
 }
 

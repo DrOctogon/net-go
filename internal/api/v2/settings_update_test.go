@@ -139,11 +139,9 @@ func TestMergePreservesJSONDashFields(t *testing.T) {
 func TestDashboardPartialUpdate(t *testing.T) {
 	// Get initial settings and override some values for testing
 	initialSettings := getTestSettings(t)
-	initialSettings.Realtime.Dashboard.Thumbnails.ImageProvider = "testprovider"
 	initialSettings.Realtime.Dashboard.SummaryLimit = 200
 
 	// Capture initial values
-	initialProvider := initialSettings.Realtime.Dashboard.Thumbnails.ImageProvider
 	initialLimit := initialSettings.Realtime.Dashboard.SummaryLimit
 	initialRecent := initialSettings.Realtime.Dashboard.Thumbnails.Recent
 
@@ -188,8 +186,7 @@ func TestDashboardPartialUpdate(t *testing.T) {
 	settings := controller.Settings.Load()
 	assert.False(t, settings.Realtime.Dashboard.Thumbnails.Summary)                        // Changed
 	assert.Equal(t, initialRecent, settings.Realtime.Dashboard.Thumbnails.Recent)          // Preserved
-	assert.Equal(t, initialProvider, settings.Realtime.Dashboard.Thumbnails.ImageProvider) // Preserved
-	assert.Equal(t, initialLimit, settings.Realtime.Dashboard.SummaryLimit)                // Preserved
+	assert.Equal(t, initialLimit, settings.Realtime.Dashboard.SummaryLimit) // Preserved
 }
 
 // TestWeatherPartialUpdate verifies weather settings preserve unmodified fields
@@ -490,8 +487,6 @@ func TestSpeciesConfigUpdate(t *testing.T) {
 func TestEmptyUpdatePreservesEverything(t *testing.T) {
 	// Get initial settings and override some values for testing
 	initialSettings := getTestSettings(t)
-	initialSettings.Realtime.Dashboard.Thumbnails.ImageProvider = "wikimedia"
-
 	// Get initial state
 	initialJSON, err := json.Marshal(initialSettings.Realtime.Dashboard)
 	require.NoError(t, err)

@@ -180,7 +180,7 @@ func TestSpeciesAPIValidation(t *testing.T) {
 			http.StatusBadRequest, "Missing required parameter"},
 		{"GetSpeciesThumbnail missing code", "/api/v2/species//thumbnail", []string{"code"}, []string{""},
 			func(c *Controller) func(echo.Context) error { return c.GetSpeciesThumbnail },
-			http.StatusBadRequest, "Missing species code"},
+			http.StatusNotFound, "Image service not available"},
 
 		// Invalid format tests - GetSpeciesInfo
 		{"GetSpeciesInfo too short", "/api/v2/species?scientific_name=Ab", nil, nil,
@@ -207,7 +207,7 @@ func TestSpeciesAPIValidation(t *testing.T) {
 		// Error handling - nil processor
 		{"GetSpeciesThumbnail nil processor", "/api/v2/species/amro/thumbnail", []string{"code"}, []string{"amro"},
 			func(c *Controller) func(echo.Context) error { return c.GetSpeciesThumbnail },
-			http.StatusServiceUnavailable, "BirdNET service unavailable"},
+			http.StatusNotFound, "Image service not available"},
 	}
 
 	for _, tt := range tests {

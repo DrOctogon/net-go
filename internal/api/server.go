@@ -2,7 +2,6 @@ package api
 
 import (
 	"context"
-	"embed"
 	"fmt"
 	"net"
 	"net/http"
@@ -30,7 +29,6 @@ import (
 	datastoreV2 "github.com/tphakala/birdnet-go/internal/datastore/v2"
 	"github.com/tphakala/birdnet-go/internal/errors"
 	"github.com/tphakala/birdnet-go/internal/health"
-	"github.com/tphakala/birdnet-go/internal/imageprovider"
 	"github.com/tphakala/birdnet-go/internal/logger"
 	"github.com/tphakala/birdnet-go/internal/observability"
 	"github.com/tphakala/birdnet-go/internal/security"
@@ -38,14 +36,6 @@ import (
 
 	"golang.org/x/crypto/acme/autocert"
 )
-
-// ImageDataFs holds the embedded image provider data filesystem.
-// This is set by main.go before starting the server.
-var ImageDataFs embed.FS
-
-// ImageProviderRegistry is set by main.go before starting the server.
-// It provides access to bird image providers.
-var ImageProviderRegistry *imageprovider.ImageProviderRegistry
 
 // Server is the main HTTP server for BirdNET-Go.
 // It manages the Echo framework instance, middleware, and all HTTP routes.
@@ -60,7 +50,6 @@ type Server struct {
 	// Dependencies
 	dataStore      datastore.Interface
 	v2Manager      datastoreV2.Manager
-	birdImageCache *imageprovider.BirdImageCache
 	sunCalc        *suncalc.SunCalc
 	processor      *processor.Processor
 	oauth2Server   *security.OAuth2Server
@@ -189,13 +178,6 @@ type ServerOption func(*Server)
 func WithDataStore(ds datastore.Interface) ServerOption {
 	return func(s *Server) {
 		s.dataStore = ds
-	}
-}
-
-// WithBirdImageCache sets the bird image cache for the server.
-func WithBirdImageCache(cache *imageprovider.BirdImageCache) ServerOption {
-	return func(s *Server) {
-		s.birdImageCache = cache
 	}
 }
 
@@ -519,7 +501,6 @@ func (s *Server) setupRoutes() error {
 		s.echo,
 		s.dataStore,
 		s.settings,
-		s.birdImageCache,
 		s.sunCalc,
 		s.controlChan,
 		s.metrics,

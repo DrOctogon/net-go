@@ -48,7 +48,6 @@ func getTestSettings(t *testing.T) *conf.Settings {
 	settings.Realtime.Dashboard.SummaryLimit = 100 // Valid range: 10-1000
 	settings.Realtime.Dashboard.Thumbnails.Summary = true
 	settings.Realtime.Dashboard.Thumbnails.Recent = true
-	settings.Realtime.Dashboard.Thumbnails.ImageProvider = "avicommons"
 	settings.Realtime.Dashboard.Locale = "en"
 
 	// Weather settings

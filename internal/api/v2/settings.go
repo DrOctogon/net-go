@@ -9,18 +9,14 @@ import (
 	"net/http"
 	"reflect"
 	"slices"
-	"sort"
 	"strconv"
 	"strings"
 	"text/template"
 	"time"
-	"unicode/utf8"
-
 	"github.com/labstack/echo/v4"
 	"github.com/tphakala/birdnet-go/internal/audiocore/schedule"
 	"github.com/tphakala/birdnet-go/internal/conf"
 	"github.com/tphakala/birdnet-go/internal/events"
-	"github.com/tphakala/birdnet-go/internal/imageprovider"
 	"github.com/tphakala/birdnet-go/internal/logger"
 	"github.com/tphakala/birdnet-go/internal/notification"
 	"github.com/tphakala/birdnet-go/internal/restart"
@@ -69,8 +65,6 @@ func (c *Controller) initSettingsRoutes() {
 	settingsGroup.GET("", c.GetAllSettings)
 	// GET /api/v2/settings/locales - Retrieves available locales for BirdNET (must be before /:section)
 	settingsGroup.GET("/locales", c.GetLocales)
-	// GET /api/v2/settings/imageproviders - Retrieves available image providers (must be before /:section)
-	settingsGroup.GET("/imageproviders", c.GetImageProviders)
 	// GET /api/v2/settings/systemid - Retrieves the system ID for support tracking (must be before /:section)
 	settingsGroup.GET("/systemid", c.GetSystemID)
 	// GET /api/v2/settings/:section - Retrieves settings for a specific section (e.g., birdnet, webserver)
@@ -324,7 +318,6 @@ func (c *Controller) UpdateSettings(ctx echo.Context) error {
 	}
 
 	telemetry.UpdateTelemetryEnabled()
-	imageprovider.SetCustomSynonyms(updated.TaxonomySynonyms, updated.BirdNET.Labels)
 
 	if publishGlobal && !c.DisableSaveSettings {
 		c.logAPIRequest(ctx, logger.LogLevelInfo, "Settings updated and saved successfully",
@@ -739,9 +732,6 @@ func (c *Controller) UpdateSectionSettings(ctx echo.Context) error {
 	}
 
 	telemetry.UpdateTelemetryEnabled()
-
-	// Rebuild taxonomy synonym lookup cache if overrides changed
-	imageprovider.SetCustomSynonyms(updated.TaxonomySynonyms, updated.BirdNET.Labels)
 
 	return ctx.JSON(http.StatusOK, map[string]any{
 		"message":          fmt.Sprintf("%s settings updated successfully", section),
@@ -2610,12 +2600,6 @@ type LocaleData struct {
 	Name string `json:"name"`
 }
 
-// ImageProviderOption represents an image provider option
-type ImageProviderOption struct {
-	Value   string `json:"value"`
-	Display string `json:"display"`
-}
-
 // GetLocales handles GET /api/v2/settings/locales
 func (c *Controller) GetLocales(ctx echo.Context) error {
 	c.logAPIRequest(ctx, logger.LogLevelInfo, "Getting available locales")
@@ -2628,57 +2612,6 @@ func (c *Controller) GetLocales(ctx echo.Context) error {
 	c.logAPIRequest(ctx, logger.LogLevelInfo, "Retrieved locales successfully", logger.Int("count", len(locales)))
 
 	return ctx.JSON(http.StatusOK, locales)
-}
-
-// capitalizeProviderName returns a display name for the provider with first letter capitalized.
-func capitalizeProviderName(name string) string {
-	if name == "" {
-		return "(unknown)"
-	}
-	r, size := utf8.DecodeRuneInString(name)
-	return strings.ToUpper(string(r)) + name[size:]
-}
-
-// collectImageProviders collects and sorts image providers from the registry.
-func (c *Controller) collectImageProviders(ctx echo.Context) (providers []ImageProviderOption, count int) {
-	providers = []ImageProviderOption{{Value: "auto", Display: "Auto (Default)"}}
-
-	cache := c.BirdImageCache
-	if cache == nil {
-		c.logAPIRequest(ctx, logger.LogLevelWarn, "BirdImageCache is nil, cannot get provider names")
-		return providers, count
-	}
-
-	registry := cache.GetRegistry()
-	if registry == nil {
-		c.logAPIRequest(ctx, logger.LogLevelWarn, "ImageProviderRegistry is nil, cannot get provider names")
-		return providers, count
-	}
-
-	registry.RangeProviders(func(name string, _ *imageprovider.BirdImageCache) bool {
-		providers = append(providers, ImageProviderOption{Value: name, Display: capitalizeProviderName(name)})
-		count++
-		return true
-	})
-
-	// Sort providers alphabetically by display name (excluding 'auto')
-	if len(providers) > minSortableElements {
-		sub := providers[1:]
-		sort.Slice(sub, func(i, j int) bool { return sub[i].Display < sub[j].Display })
-	}
-
-	return providers, count
-}
-
-// GetImageProviders handles GET /api/v2/settings/imageproviders
-func (c *Controller) GetImageProviders(ctx echo.Context) error {
-	c.logAPIRequest(ctx, logger.LogLevelInfo, "Getting available image providers")
-
-	providers, providerCount := c.collectImageProviders(ctx)
-
-	c.logAPIRequest(ctx, logger.LogLevelInfo, "Retrieved image providers successfully", logger.Int("count", len(providers)), logger.Int("provider_count", providerCount))
-
-	return ctx.JSON(http.StatusOK, map[string]any{"providers": providers})
 }
 
 // GetSystemID handles GET /api/v2/settings/systemid

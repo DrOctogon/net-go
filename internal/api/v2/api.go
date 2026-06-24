@@ -33,7 +33,6 @@ import (
 	"github.com/tphakala/birdnet-go/internal/ebird"
 	"github.com/tphakala/birdnet-go/internal/errors"
 	"github.com/tphakala/birdnet-go/internal/health"
-	"github.com/tphakala/birdnet-go/internal/imageprovider"
 	"github.com/tphakala/birdnet-go/internal/imports"
 	"github.com/tphakala/birdnet-go/internal/logger"
 	"github.com/tphakala/birdnet-go/internal/notification"
@@ -68,7 +67,6 @@ type Controller struct {
 	// settingsMutex.Lock without deadlocking on a non-reentrant RLock. The sibling
 	// engine and audioWatchdog fields use the same atomic-pointer pattern.
 	Settings          atomic.Pointer[conf.Settings]
-	BirdImageCache    *imageprovider.BirdImageCache
 	SunCalc           *suncalc.SunCalc
 	Processor         *processor.Processor
 	EBirdClient       *ebird.Client
@@ -368,7 +366,7 @@ func (c *Controller) TunnelDetectionMiddleware() echo.MiddlewareFunc {
 // The controller owns the global settings singleton: it reads from the current
 // atomic snapshot on each request and publishes updates back via StoreSettings.
 func New(e *echo.Echo, ds datastore.Interface, settings *conf.Settings,
-	birdImageCache *imageprovider.BirdImageCache, sunCalc *suncalc.SunCalc,
+	sunCalc *suncalc.SunCalc,
 	controlChan chan string,
 	metrics *observability.Metrics, opts ...Option) (*Controller, error) {
 	// Refresh from the global atomic pointer so the controller starts with
@@ -377,7 +375,7 @@ func New(e *echo.Echo, ds datastore.Interface, settings *conf.Settings,
 	if global := conf.GetSettings(); global != nil {
 		settings = global
 	}
-	c, err := NewWithOptions(e, ds, settings, birdImageCache, sunCalc, controlChan, metrics, true, opts...)
+	c, err := NewWithOptions(e, ds, settings, sunCalc, controlChan, metrics, true, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -441,7 +439,7 @@ func ensureDirectoryExists(path string) error {
 // NewWithOptions creates a new API controller with optional route initialization.
 // Set initializeRoutes to false for testing to avoid starting background goroutines.
 func NewWithOptions(e *echo.Echo, ds datastore.Interface, settings *conf.Settings,
-	birdImageCache *imageprovider.BirdImageCache, sunCalc *suncalc.SunCalc,
+	sunCalc *suncalc.SunCalc,
 	controlChan chan string,
 	metrics *observability.Metrics, initializeRoutes bool, opts ...Option) (*Controller, error) {
 
@@ -471,7 +469,6 @@ func NewWithOptions(e *echo.Echo, ds datastore.Interface, settings *conf.Setting
 		DS:                   ds,
 		Repo:                 repo, // Bridge to new domain model (nil if datastore disabled)
 		isGlobalOwner:        settings == conf.GetSettings(),
-		BirdImageCache:       birdImageCache,
 		SunCalc:              sunCalc,
 		controlChan:          controlChan,
 		detectionCache:       cache.New(detectionCacheExpiry, detectionCacheCleanup),
@@ -1188,12 +1185,12 @@ func (c *Controller) GetAuthMiddleware() echo.MiddlewareFunc {
 // InitializeAPI creates a new API controller and registers all routes.
 // Auth middleware and service should be passed via functional options.
 func InitializeAPI(e *echo.Echo, ds datastore.Interface, settings *conf.Settings,
-	birdImageCache *imageprovider.BirdImageCache, sunCalc *suncalc.SunCalc,
+	sunCalc *suncalc.SunCalc,
 	controlChan chan string, proc *processor.Processor,
 	metrics *observability.Metrics, opts ...Option) *Controller {
 
 	// Create API controller with metrics and functional options
-	apiController, err := New(e, ds, settings, birdImageCache, sunCalc, controlChan, metrics, opts...)
+	apiController, err := New(e, ds, settings, sunCalc, controlChan, metrics, opts...)
 	if err != nil {
 		GetLogger().Error("Failed to initialize API", logger.Error(err))
 		os.Exit(1)

@@ -20,7 +20,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/tphakala/birdnet-go/internal/datastore"
-	"github.com/tphakala/birdnet-go/internal/imageprovider"
+
 )
 
 // =============================================================================
@@ -61,18 +61,6 @@ var mqttAPIContractFields = struct {
 	SourceID    string // camelCase - added for Home Assistant discovery
 	SourceName  string // camelCase - display name for stable source mapping
 	Occurrence  string // lowercase with omitempty
-	BirdImage   string // PascalCase - DO NOT CHANGE (backward compatibility)
-
-	// BirdImage nested fields (from imageprovider.BirdImage)
-	// These use PascalCase because Go's default JSON marshaling is used
-	BirdImageURL            string
-	BirdImageScientificName string
-	BirdImageLicenseName    string
-	BirdImageLicenseURL     string
-	BirdImageAuthorName     string
-	BirdImageAuthorURL      string
-	BirdImageCachedAt       string
-	BirdImageSourceProvider string
 }{
 	// Root-level fields from embedded Note (PascalCase - Go default)
 	CommonName:     "CommonName",
@@ -90,17 +78,6 @@ var mqttAPIContractFields = struct {
 	SourceID:    "sourceId",    // camelCase - new field for HA
 	SourceName:  "sourceName",  // camelCase - display name for stable source mapping
 	Occurrence:  "occurrence",  // lowercase with omitempty
-	BirdImage:   "BirdImage",   // PascalCase - FROZEN for backward compatibility
-
-	// BirdImage nested fields (PascalCase - Go default)
-	BirdImageURL:            "URL",
-	BirdImageScientificName: "ScientificName",
-	BirdImageLicenseName:    "LicenseName",
-	BirdImageLicenseURL:     "LicenseURL",
-	BirdImageAuthorName:     "AuthorName",
-	BirdImageAuthorURL:      "AuthorURL",
-	BirdImageCachedAt:       "CachedAt",
-	BirdImageSourceProvider: "SourceProvider",
 }
 
 // TestMQTTAPIContract_NoteWithBirdImage_FieldNames verifies that the MQTT JSON
@@ -131,16 +108,6 @@ func TestMQTTAPIContract_NoteWithBirdImage_FieldNames(t *testing.T) {
 		DetectionID: 12345, // Should match Note.ID for URL construction
 		SourceID:    "test-source-1",
 		SourceName:  testAudioSource().DisplayName, // "test-source"
-		BirdImage: imageprovider.BirdImage{
-			URL:            "https://example.com/bird.jpg",
-			ScientificName: "Turdus migratorius",
-			LicenseName:    "CC BY-SA 4.0",
-			LicenseURL:     "https://creativecommons.org/licenses/by-sa/4.0/",
-			AuthorName:     "Test Author",
-			AuthorURL:      "https://example.com/author",
-			CachedAt:       time.Date(2024, 1, 15, 12, 0, 0, 0, time.UTC),
-			SourceProvider: "wikimedia",
-		},
 	}
 
 	// Marshal to JSON
@@ -203,40 +170,6 @@ func TestMQTTAPIContract_NoteWithBirdImage_FieldNames(t *testing.T) {
 			"sourceName must match the audio source DisplayName")
 	})
 
-	t.Run("BirdImage field uses PascalCase for backward compatibility", func(t *testing.T) {
-		// FROZEN: BirdImage must be PascalCase for backward compatibility
-		// See: https://github.com/tphakala/birdnet-go/discussions/1759
-		assert.Contains(t, jsonMap, mqttAPIContractFields.BirdImage,
-			"MQTT API CONTRACT VIOLATION: BirdImage field must be PascalCase (was changed to camelCase in error)")
-
-		// Verify it's NOT using camelCase
-		assert.NotContains(t, jsonMap, "birdImage",
-			"MQTT API CONTRACT VIOLATION: BirdImage must NOT be camelCase - this breaks existing integrations")
-	})
-
-	t.Run("BirdImage nested fields use PascalCase", func(t *testing.T) {
-		// Get the BirdImage object
-		birdImageRaw, ok := jsonMap[mqttAPIContractFields.BirdImage]
-		require.True(t, ok, "BirdImage field must be present")
-
-		birdImage, ok := birdImageRaw.(map[string]any)
-		require.True(t, ok, "BirdImage must be an object")
-
-		// FROZEN: These nested field names are part of the API contract
-		assert.Contains(t, birdImage, mqttAPIContractFields.BirdImageURL,
-			"MQTT API CONTRACT VIOLATION: BirdImage.URL field must be PascalCase")
-		assert.Contains(t, birdImage, mqttAPIContractFields.BirdImageLicenseName,
-			"MQTT API CONTRACT VIOLATION: BirdImage.LicenseName field must be PascalCase")
-		assert.Contains(t, birdImage, mqttAPIContractFields.BirdImageAuthorName,
-			"MQTT API CONTRACT VIOLATION: BirdImage.AuthorName field must be PascalCase")
-		assert.Contains(t, birdImage, mqttAPIContractFields.BirdImageSourceProvider,
-			"MQTT API CONTRACT VIOLATION: BirdImage.SourceProvider field must be PascalCase")
-
-		// Verify values
-		assert.Equal(t, "https://example.com/bird.jpg", birdImage[mqttAPIContractFields.BirdImageURL],
-			"BirdImage.URL value mismatch")
-	})
-
 	t.Run("Occurrence uses lowercase with omitempty", func(t *testing.T) {
 		// occurrence field uses lowercase (from Note struct JSON tag)
 		assert.Contains(t, jsonMap, mqttAPIContractFields.Occurrence,
@@ -245,67 +178,6 @@ func TestMQTTAPIContract_NoteWithBirdImage_FieldNames(t *testing.T) {
 		require.True(t, ok, "occurrence must be a number")
 		assert.InDelta(t, 0.75, occurrence, 0.001, "occurrence value mismatch")
 	})
-}
-
-// TestMQTTAPIContract_BirdImageURL_Accessible verifies that Home Assistant
-// integrations can access the bird image URL at the expected path.
-//
-// Home Assistant users access this via: value_json.BirdImage.URL
-// This test ensures that path remains valid.
-func TestMQTTAPIContract_BirdImageURL_Accessible(t *testing.T) {
-	t.Parallel()
-
-	note := NoteWithBirdImage{
-		Note: datastore.Note{
-			CommonName:     "American Robin",
-			ScientificName: "Turdus migratorius",
-			Confidence:     0.88,
-			Source:         testAudioSource(),
-		},
-		SourceID: "backyard-mic",
-		BirdImage: imageprovider.BirdImage{
-			URL:            "https://upload.wikimedia.org/bird.jpg",
-			ScientificName: "Turdus migratorius",
-			LicenseName:    "CC BY 2.0",
-			AuthorName:     "Photographer Name",
-		},
-	}
-
-	jsonData, err := json.Marshal(note)
-	require.NoError(t, err)
-
-	var jsonMap map[string]any
-	err = json.Unmarshal(jsonData, &jsonMap)
-	require.NoError(t, err)
-
-	// ==========================================================================
-	// SIMULATE HOME ASSISTANT VALUE TEMPLATE ACCESS
-	// ==========================================================================
-	// Home Assistant users access the image URL via: value_json.BirdImage.URL
-	// This simulates that access pattern to ensure it works.
-	// ==========================================================================
-
-	// Step 1: Access BirdImage (must be PascalCase)
-	birdImageRaw, exists := jsonMap["BirdImage"]
-	require.True(t, exists,
-		"HOME ASSISTANT INTEGRATION BROKEN: Cannot access value_json.BirdImage - field not found")
-
-	birdImage, ok := birdImageRaw.(map[string]any)
-	require.True(t, ok,
-		"HOME ASSISTANT INTEGRATION BROKEN: value_json.BirdImage is not an object")
-
-	// Step 2: Access URL within BirdImage (must be PascalCase)
-	url, exists := birdImage["URL"]
-	require.True(t, exists,
-		"HOME ASSISTANT INTEGRATION BROKEN: Cannot access value_json.BirdImage.URL - field not found")
-
-	assert.Equal(t, "https://upload.wikimedia.org/bird.jpg", url,
-		"BirdImage.URL value incorrect")
-
-	// Verify the WRONG paths don't work (these would be breaking changes)
-	_, wrongPath1 := jsonMap["birdImage"] // camelCase - WRONG
-	assert.False(t, wrongPath1,
-		"API CONTRACT: 'birdImage' (camelCase) should NOT exist - use 'BirdImage' (PascalCase)")
 }
 
 // TestMQTTAPIContract_OccurrenceOmittedWhenZero verifies the omitempty behavior.
@@ -320,8 +192,7 @@ func TestMQTTAPIContract_OccurrenceOmittedWhenZero(t *testing.T) {
 			Occurrence:     0.0, // Zero - should be omitted
 			Source:         testAudioSource(),
 		},
-		SourceID:  "test-source",
-		BirdImage: imageprovider.BirdImage{},
+		SourceID: "test-source",
 	}
 
 	jsonData, err := json.Marshal(note)
@@ -359,16 +230,6 @@ func TestMQTTAPIContract_AllExpectedFieldsPresent(t *testing.T) {
 		},
 		DetectionID: 67890, // Should match Note.ID for URL construction
 		SourceID:    "garden-mic",
-		BirdImage: imageprovider.BirdImage{
-			URL:            "https://example.com/sparrow.jpg",
-			ScientificName: "Passer domesticus",
-			LicenseName:    "CC BY-SA 4.0",
-			LicenseURL:     "https://creativecommons.org/licenses/by-sa/4.0/",
-			AuthorName:     "Bird Photographer",
-			AuthorURL:      "https://example.com/photographer",
-			CachedAt:       time.Now(),
-			SourceProvider: "flickr",
-		},
 	}
 
 	jsonData, err := json.Marshal(note)
@@ -394,32 +255,11 @@ func TestMQTTAPIContract_AllExpectedFieldsPresent(t *testing.T) {
 		"occurrence",     // lowercase - from embedded Note (explicit tag)
 		"detectionId",    // camelCase - database ID for URL construction (issue #1748)
 		"sourceId",       // camelCase - new field for HA discovery
-		"BirdImage",      // PascalCase - FROZEN for backward compatibility
 	}
 
 	for _, field := range expectedRootFields {
 		assert.Contains(t, jsonMap, field,
 			"MQTT API CONTRACT: Expected field '%s' not found in JSON payload", field)
-	}
-
-	// ==========================================================================
-	// EXPECTED BIRDIMAGE NESTED FIELDS (FROZEN CONTRACT)
-	// ==========================================================================
-	birdImage := jsonMap["BirdImage"].(map[string]any)
-	expectedBirdImageFields := []string{
-		"URL",            // PascalCase - Go default
-		"ScientificName", // PascalCase - Go default
-		"LicenseName",    // PascalCase - Go default
-		"LicenseURL",     // PascalCase - Go default
-		"AuthorName",     // PascalCase - Go default
-		"AuthorURL",      // PascalCase - Go default
-		"CachedAt",       // PascalCase - Go default
-		"SourceProvider", // PascalCase - Go default
-	}
-
-	for _, field := range expectedBirdImageFields {
-		assert.Contains(t, birdImage, field,
-			"MQTT API CONTRACT: Expected BirdImage.%s field not found", field)
 	}
 }
 
@@ -441,9 +281,6 @@ func TestMQTTAPIContract_NoRedundantDuplicateFields(t *testing.T) {
 		},
 		DetectionID: 12345,
 		SourceID:    "test-source",
-		BirdImage: imageprovider.BirdImage{
-			URL: "https://example.com/test.jpg",
-		},
 	}
 
 	jsonData, err := json.Marshal(note)
@@ -512,9 +349,6 @@ func TestMQTTAPIContract_NoUnexpectedCamelCaseConversions(t *testing.T) {
 			Source:         testAudioSource(),
 		},
 		SourceID: "test",
-		BirdImage: imageprovider.BirdImage{
-			URL: "https://example.com/test.jpg",
-		},
 	}
 
 	jsonData, err := json.Marshal(note)

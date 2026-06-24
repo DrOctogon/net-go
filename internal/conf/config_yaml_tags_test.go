@@ -115,7 +115,6 @@ func TestSettingsYAMLRoundTrip(t *testing.T) {
 	original.Realtime.Audio.Export.Retention.MinClips = 10
 	original.Realtime.Audio.Export.Retention.CheckInterval = 15
 	// Dashboard
-	original.Realtime.Dashboard.Thumbnails.ImageProvider = "avicommons"
 	original.Realtime.Dashboard.SummaryLimit = 30
 	original.Realtime.Dashboard.TemperatureUnit = "fahrenheit"
 	// DynamicThreshold
@@ -146,7 +145,6 @@ func TestSettingsYAMLRoundTrip(t *testing.T) {
 	assert.Equal(t, "80%", restored.Realtime.Audio.Export.Retention.MaxUsage)
 	assert.Equal(t, 10, restored.Realtime.Audio.Export.Retention.MinClips)
 	assert.Equal(t, 15, restored.Realtime.Audio.Export.Retention.CheckInterval)
-	assert.Equal(t, "avicommons", restored.Realtime.Dashboard.Thumbnails.ImageProvider)
 	assert.Equal(t, 30, restored.Realtime.Dashboard.SummaryLimit)
 	assert.Equal(t, "fahrenheit", restored.Realtime.Dashboard.TemperatureUnit)
 	assert.Equal(t, 24, restored.Realtime.DynamicThreshold.ValidHours)

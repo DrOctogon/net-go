@@ -12,7 +12,6 @@ import (
 	"github.com/tphakala/birdnet-go/internal/datastore"
 	datastoreV2 "github.com/tphakala/birdnet-go/internal/datastore/v2"
 	"github.com/tphakala/birdnet-go/internal/datastore/v2/repository"
-	"github.com/tphakala/birdnet-go/internal/imageprovider"
 	"github.com/tphakala/birdnet-go/internal/logger"
 	"golang.org/x/text/unicode/norm"
 )
@@ -268,9 +267,10 @@ func resolveCommonName(nameMap map[string]string, scientificName string) string 
 	return scientificName
 }
 
-// buildThumbnailURL returns the proxy image URL for a species.
-func buildThumbnailURL(scientificName string) string {
-	return imageprovider.ProxyImageURL(scientificName)
+// buildThumbnailURL returns an empty string.
+// Image providers have been removed as part of the human-voice pivot.
+func buildThumbnailURL(_ string) string {
+	return ""
 }
 
 // analyticsTZOffset returns the server local timezone's UTC offset (seconds) in effect at ref.

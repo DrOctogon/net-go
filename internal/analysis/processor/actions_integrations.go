@@ -13,13 +13,12 @@ import (
 	"github.com/tphakala/birdnet-go/internal/datastore"
 	"github.com/tphakala/birdnet-go/internal/errors"
 	"github.com/tphakala/birdnet-go/internal/events"
-	"github.com/tphakala/birdnet-go/internal/imageprovider"
 	"github.com/tphakala/birdnet-go/internal/logger"
 	"github.com/tphakala/birdnet-go/internal/mqtt"
 	"github.com/tphakala/birdnet-go/internal/privacy"
 )
 
-// NoteWithBirdImage wraps a Note with bird image data for MQTT publishing.
+// NoteWithBirdImage wraps a Note with source metadata for MQTT publishing.
 // The SourceID field enables Home Assistant to filter detections by source.
 //
 // IMPORTANT: JSON field names are part of the public MQTT API contract.
@@ -36,10 +35,9 @@ type NoteWithBirdImage struct {
 	ID     *struct{} `json:"ID,omitempty"`     // Suppressed: use detectionId instead
 	Source *struct{} `json:"Source,omitempty"` // Suppressed: use sourceId instead
 
-	DetectionID uint                    `json:"detectionId"`          // Database ID for URL construction (e.g., /api/v2/audio/{id})
-	SourceID    string                  `json:"sourceId"`             // Audio source ID for HA filtering (added for HA discovery)
-	SourceName  string                  `json:"sourceName,omitempty"` // Display name for stable source mapping (#2799)
-	BirdImage   imageprovider.BirdImage `json:"BirdImage"`            // PascalCase for backward compatibility - DO NOT CHANGE
+	DetectionID uint   `json:"detectionId"`          // Database ID for URL construction (e.g., /api/v2/audio/{id})
+	SourceID    string `json:"sourceId"`             // Audio source ID for HA filtering (added for HA discovery)
+	SourceName  string `json:"sourceName,omitempty"` // Display name for stable source mapping (#2799)
 }
 
 // Execute sends the note to the MQTT broker.
@@ -79,9 +77,6 @@ func (a *MqttAction) Execute(_ context.Context, data any) error {
 			Build()
 	}
 
-	// Get bird image of detected bird using the shared helper
-	birdImage := getBirdImageFromCache(a.BirdImageCache, a.Result.Species.ScientificName, a.Result.Species.CommonName, a.CorrelationID)
-
 	// Get detection ID from shared context (set by DatabaseAction in CompositeAction sequence)
 	var detectionID uint
 	if a.DetectionCtx != nil {
@@ -103,13 +98,12 @@ func (a *MqttAction) Execute(_ context.Context, data any) error {
 	// gracefully, or use the detection ID-based audio endpoint which has
 	// built-in wait-for-encoding support.
 
-	// Wrap note with bird image and include detection ID, SourceID, and SourceName
+	// Wrap note with source metadata and detection ID for URL construction.
 	noteWithBirdImage := NoteWithBirdImage{
 		Note:        note,
 		DetectionID: detectionID, // Explicit field for URL construction (e.g., /api/v2/audio/{id})
 		SourceID:    note.Source.ID,
 		SourceName:  note.Source.DisplayName,
-		BirdImage:   birdImage,
 	}
 
 	// Create a JSON representation of the note
@@ -285,9 +279,6 @@ func (a *SSEAction) Execute(_ context.Context, data any) error {
 		}
 	}
 
-	// Get bird image of detected bird using the shared helper
-	birdImage := getBirdImageFromCache(a.BirdImageCache, a.Result.Species.ScientificName, a.Result.Species.CommonName, a.CorrelationID)
-
 	// Convert Result to Note for SSEBroadcaster (backward compatible SSE payload)
 	note := datastore.NoteFromResult(&a.Result)
 
@@ -300,7 +291,7 @@ func (a *SSEAction) Execute(_ context.Context, data any) error {
 	// from ever showing the audio player for the detection.
 
 	// Broadcast the detection with error handling
-	if err := a.SSEBroadcaster(&note, &birdImage); err != nil {
+	if err := a.SSEBroadcaster(&note); err != nil {
 		// Log the error with retry information if retries are enabled
 		// Sanitize error before logging
 		sanitizedErr := privacy.WrapError(err)

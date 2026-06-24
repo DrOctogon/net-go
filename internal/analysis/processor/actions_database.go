@@ -275,11 +275,6 @@ func (a *DatabaseAction) populateEventMetadata(detectionEvent events.DetectionEv
 		}
 	}
 
-	if a.processor != nil && a.processor.BirdImageCache != nil {
-		if birdImage, err := a.processor.BirdImageCache.Get(a.Result.Species.ScientificName); err == nil && birdImage.URL != "" {
-			metadata["image_url"] = birdImage.URL
-		}
-	}
 }
 
 func hasNoveltyStatus(novelty species.NoveltyStatus) bool {

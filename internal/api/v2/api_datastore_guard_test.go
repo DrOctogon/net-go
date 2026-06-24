@@ -44,7 +44,7 @@ func TestGetSpectrogramStatusReturns503WhenDatastoreDisabled(t *testing.T) {
 
 // TestInitMediaRoutesSkippedWhenDatastoreDisabled pins that the ID-based (datastore
 // dependent) media routes are not registered when the controller has no datastore, while
-// the datastore-independent media routes (filename serve, species images) still register.
+// the datastore-independent media routes (filename serve) still register.
 func TestInitMediaRoutesSkippedWhenDatastoreDisabled(t *testing.T) {
 	e := echo.New()
 	controller := &Controller{
@@ -55,7 +55,7 @@ func TestInitMediaRoutesSkippedWhenDatastoreDisabled(t *testing.T) {
 
 	controller.initMediaRoutes()
 
-	var hasFilenameSpectrogram, hasSpeciesImage bool
+	var hasFilenameSpectrogram bool
 	for _, r := range e.Routes() {
 		// Every datastore-dependent media handler is registered under an :id parameter.
 		assert.NotContains(t, r.Path, ":id",
@@ -63,17 +63,12 @@ func TestInitMediaRoutesSkippedWhenDatastoreDisabled(t *testing.T) {
 		// The query-ID audio endpoint is also datastore-dependent.
 		assert.NotEqual(t, "/api/v2/media/audio", r.Path,
 			"the datastore-dependent query-ID audio route must not register: %s %s", r.Method, r.Path)
-		switch r.Path {
-		case "/api/v2/media/spectrogram/:filename":
+		if r.Path == "/api/v2/media/spectrogram/:filename" {
 			hasFilenameSpectrogram = true
-		case "/api/v2/media/species-image":
-			hasSpeciesImage = true
 		}
 	}
 	assert.True(t, hasFilenameSpectrogram,
 		"datastore-independent filename spectrogram route must still register when the datastore is disabled")
-	assert.True(t, hasSpeciesImage,
-		"datastore-independent species-image route must still register when the datastore is disabled")
 }
 
 // TestInitDetectionRoutesSkippedWhenDatastoreDisabled pins that the detection route group

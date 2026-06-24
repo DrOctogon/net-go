@@ -397,7 +397,6 @@ func init() {
 	RegisterComponent("ffmpeg-manager", "ffmpeg-manager")
 	RegisterComponent("ffmpeg-stream", "ffmpeg-stream")
 	RegisterComponent("datastore", "datastore")
-	RegisterComponent("imageprovider", "imageprovider")
 	RegisterComponent("diskmanager", "diskmanager")
 	RegisterComponent("ebird", "ebird")
 	RegisterComponent("mqtt", "mqtt")
@@ -621,14 +620,6 @@ func detectCategory(err error, component string) ErrorCategory {
 		return CategoryDatabase
 	case "http-controller":
 		return CategoryHTTP
-	case "imageprovider":
-		if strings.Contains(errorMsg, "cache") {
-			return CategoryImageCache
-		}
-		if strings.Contains(errorMsg, "fetch") || strings.Contains(errorMsg, "download") || strings.Contains(errorMsg, "url") {
-			return CategoryImageFetch
-		}
-		return CategoryImageProvider
 	}
 
 	return CategoryGeneric

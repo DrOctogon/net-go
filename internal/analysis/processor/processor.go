@@ -25,7 +25,6 @@ import (
 	"github.com/tphakala/birdnet-go/internal/conf"
 	"github.com/tphakala/birdnet-go/internal/datastore"
 	"github.com/tphakala/birdnet-go/internal/detection"
-	"github.com/tphakala/birdnet-go/internal/imageprovider"
 	"github.com/tphakala/birdnet-go/internal/logger"
 	"github.com/tphakala/birdnet-go/internal/mqtt"
 	"github.com/tphakala/birdnet-go/internal/notification"
@@ -59,7 +58,6 @@ type Processor struct {
 	MqttClient           mqtt.Client
 	mqttMutex            sync.RWMutex // Mutex to protect MQTT client access
 	mqttNotReadyWarnOnce sync.Once    // Ensures the "client not ready" warning logs at most once per process to avoid flood
-	BirdImageCache       *imageprovider.BirdImageCache
 	EventTracker         *EventTracker
 	eventTrackerMu       sync.RWMutex            // Mutex to protect EventTracker access
 	NewSpeciesTracker    *species.SpeciesTracker // Tracks new species detections
@@ -89,8 +87,8 @@ type Processor struct {
 	preRendererOnce      sync.Once          // Ensures pre-renderer is initialized only once
 	startOnce            sync.Once          // Ensures Start() is called only once
 	// SSE related fields
-	SSEBroadcaster      func(note *datastore.Note, birdImage *imageprovider.BirdImage) error // Function to broadcast detection via SSE
-	sseBroadcasterMutex sync.RWMutex                                                         // Mutex to protect SSE broadcaster access
+	SSEBroadcaster      func(note *datastore.Note) error // Function to broadcast detection via SSE
+	sseBroadcasterMutex sync.RWMutex                    // Mutex to protect SSE broadcaster access
 
 	// Pending detection broadcast fields
 	PendingBroadcaster      func(snapshot []SSEPendingDetection) // Function to broadcast pending detections via SSE
@@ -448,7 +446,10 @@ func (p *Processor) initDynamicThresholds(settings *conf.Settings) {
 // New creates a new Processor with the given dependencies.
 // The parentLog parameter should be the analysis package logger, which will be used to create
 // a child logger with ".processor" suffix for hierarchical logging (e.g., "analysis.processor").
-func New(settings *conf.Settings, ds datastore.Interface, bn *classifier.Orchestrator, metrics *observability.Metrics, birdImageCache *imageprovider.BirdImageCache, parentLog logger.Logger) *Processor {
+// New creates a new Processor with the given dependencies.
+// The parentLog parameter should be the analysis package logger, which will be used to create
+// a child logger with ".processor" suffix for hierarchical logging (e.g., "analysis.processor").
+func New(settings *conf.Settings, ds datastore.Interface, bn *classifier.Orchestrator, metrics *observability.Metrics, parentLog logger.Logger) *Processor {
 	// Create child logger from parent for hierarchical logging
 	var procLog logger.Logger
 	if parentLog != nil {
@@ -462,9 +463,8 @@ func New(settings *conf.Settings, ds datastore.Interface, bn *classifier.Orchest
 		Settings:       settings,
 		Ds:             ds,
 		Repo:           datastore.NewDetectionRepository(ds, nil), // Bridge to new domain model
-		Bn:             bn,
-		log:            procLog,
-		BirdImageCache: birdImageCache,
+		Bn:           bn,
+		log:          procLog,
 		EventTracker: NewEventTrackerWithConfig(
 			time.Duration(settings.Realtime.Interval)*time.Second,
 			settings.Realtime.Species.Config,
@@ -1971,7 +1971,6 @@ func (p *Processor) getDefaultActions(det *Detections) []Action {
 		sseAction = &SSEAction{
 			Settings:       settings,
 			Result:         det.Result, // Domain model (single source of truth)
-			BirdImageCache: p.BirdImageCache,
 			EventTracker:   p.GetEventTracker(),
 			DetectionCtx:   detectionCtx, // Share context from DatabaseAction (provides database ID)
 			RetryConfig:    sseRetryConfig,
@@ -1994,9 +1993,8 @@ func (p *Processor) getDefaultActions(det *Detections) []Action {
 				MqttClient:     mqttClient,
 				EventTracker:   p.GetEventTracker(),
 				DetectionCtx:   detectionCtx, // Share context from DatabaseAction
-				Result:         det.Result,   // Domain model (single source of truth)
-				BirdImageCache: p.BirdImageCache,
-				RetryConfig:    mqttRetryConfig,
+				Result:      det.Result, // Domain model (single source of truth)
+				RetryConfig: mqttRetryConfig,
 				CorrelationID:  det.CorrelationID,
 			}
 		}
@@ -2253,15 +2251,15 @@ func (p *Processor) GetBirdNET() *classifier.Orchestrator {
 	return p.Bn
 }
 
-// SetSSEBroadcaster safely sets the SSE broadcaster function
-func (p *Processor) SetSSEBroadcaster(broadcaster func(note *datastore.Note, birdImage *imageprovider.BirdImage) error) {
+// SetSSEBroadcaster safely sets the SSE broadcaster function.
+func (p *Processor) SetSSEBroadcaster(broadcaster func(note *datastore.Note) error) {
 	p.sseBroadcasterMutex.Lock()
 	defer p.sseBroadcasterMutex.Unlock()
 	p.SSEBroadcaster = broadcaster
 }
 
-// GetSSEBroadcaster safely returns the current SSE broadcaster function
-func (p *Processor) GetSSEBroadcaster() func(note *datastore.Note, birdImage *imageprovider.BirdImage) error {
+// GetSSEBroadcaster safely returns the current SSE broadcaster function.
+func (p *Processor) GetSSEBroadcaster() func(note *datastore.Note) error {
 	p.sseBroadcasterMutex.RLock()
 	defer p.sseBroadcasterMutex.RUnlock()
 	return p.SSEBroadcaster

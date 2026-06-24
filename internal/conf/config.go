@@ -153,7 +153,6 @@ type Thumbnails struct {
 	Debug          bool   `yaml:"debug" json:"debug"`                   // true to enable debug mode
 	Summary        bool   `yaml:"summary" json:"summary"`               // show thumbnails on summary table
 	Recent         bool   `yaml:"recent" json:"recent"`                 // show thumbnails on recent table
-	ImageProvider  string `yaml:"imageprovider" json:"imageProvider"`   // preferred image provider: "auto", "wikimedia", "avicommons"
 	FallbackPolicy string `yaml:"fallbackpolicy" json:"fallbackPolicy"` // fallback policy: "none", "all" - try all available providers if preferred fails
 }
 

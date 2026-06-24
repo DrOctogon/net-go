@@ -666,65 +666,11 @@ func (c *Controller) findDetailedSubspecies(taxonomy []ebird.TaxonomyEntry, spec
 
 // GetSpeciesThumbnail retrieves a bird thumbnail image by species code
 // GET /api/v2/species/:code/thumbnail
+// GetSpeciesThumbnail is a stub handler. Image providers have been removed
+// as part of the human-voice pivot.
 func (c *Controller) GetSpeciesThumbnail(ctx echo.Context) error {
-	speciesCode := ctx.Param("code")
-	if speciesCode == "" {
-		return c.HandleError(ctx, errors.Newf("species code parameter is required").
-			Category(errors.CategoryValidation).
-			Component("api-species").
-			Build(), "Missing species code", http.StatusBadRequest)
-	}
-
-	// Log the request if API logger is available
-	c.logDebugIfEnabled("Retrieving thumbnail for species code",
-		logger.String("species_code", speciesCode),
-		logger.String("ip", ctx.RealIP()),
-		logger.String("path", ctx.Request().URL.Path),
-	)
-
-	// Snapshot to avoid TOCTOU race on c.Processor
-	proc := c.Processor
-	if proc == nil || proc.Bn == nil {
-		return c.HandleError(ctx, errors.Newf("BirdNET processor not available").
-			Category(errors.CategorySystem).
-			Component("api-species").
-			Build(), "BirdNET service unavailable", http.StatusServiceUnavailable)
-	}
-
-	cache := c.BirdImageCache
-	if cache == nil {
-		return c.HandleError(ctx, errors.Newf("image service unavailable").
-			Category(errors.CategorySystem).
-			Component("api-species").
-			Build(), "Image service unavailable", http.StatusServiceUnavailable)
-	}
-
-	// Get species name from the taxonomy map using the species code
-	bn := proc.Bn
-	speciesName, exists := bn.GetSpeciesNameFromCode(speciesCode)
-
-	if !exists {
-		return c.HandleError(ctx, errors.Newf("species code '%s' not found in taxonomy", speciesCode).
-			Category(errors.CategoryNotFound).
-			Context("species_code", speciesCode).
-			Component("api-species").
-			Build(), "Species not found", http.StatusNotFound)
-	}
-
-	// Split the species name to get scientific name
-	scientificName, _ := classifier.SplitSpeciesName(speciesName)
-
-	if scientificName == "" {
-		return c.HandleError(ctx, errors.Newf("invalid species name format for code '%s'", speciesCode).
-			Category(errors.CategoryValidation).
-			Context("species_code", speciesCode).
-			Context("species_name", speciesName).
-			Component("api-species").
-			Build(), "Invalid species data", http.StatusInternalServerError)
-	}
-
-	// Delegate to the image proxy handler
-	ctx.SetParamNames("scientific_name")
-	ctx.SetParamValues(scientificName)
-	return c.ServeSpeciesImageProxy(ctx)
+	return c.HandleError(ctx, errors.Newf("image service not available").
+		Category(errors.CategorySystem).
+		Component("api-species").
+		Build(), "Image service not available", http.StatusNotFound)
 }

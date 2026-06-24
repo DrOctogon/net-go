@@ -14,7 +14,6 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tphakala/birdnet-go/internal/conf"
 	"github.com/tphakala/birdnet-go/internal/datastore"
-	"github.com/tphakala/birdnet-go/internal/imageprovider"
 )
 
 // TestCompositeAction_DatabaseToSSE_IDPropagation verifies that the detection ID
@@ -36,7 +35,7 @@ func TestCompositeAction_DatabaseToSSE_IDPropagation(t *testing.T) {
 	// Track what SSE receives
 	var sseReceivedNoteID uint
 	var sseReceivedMu sync.Mutex
-	sseBroadcaster := func(note *datastore.Note, _ *imageprovider.BirdImage) error {
+	sseBroadcaster := func(note *datastore.Note) error {
 		sseReceivedMu.Lock()
 		defer sseReceivedMu.Unlock()
 		sseReceivedNoteID = note.ID

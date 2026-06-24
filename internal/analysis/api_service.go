@@ -13,7 +13,6 @@ import (
 	"github.com/tphakala/birdnet-go/internal/conf"
 	"github.com/tphakala/birdnet-go/internal/errors"
 	"github.com/tphakala/birdnet-go/internal/health"
-	"github.com/tphakala/birdnet-go/internal/imageprovider"
 	"github.com/tphakala/birdnet-go/internal/logger"
 	"github.com/tphakala/birdnet-go/internal/monitor"
 	"github.com/tphakala/birdnet-go/internal/notification"
@@ -36,10 +35,9 @@ type APIServerService struct {
 	metrics    *observability.Metrics
 	engine     *engine.AudioEngine
 
-	server         *api.Server
-	proc           *processor.Processor
-	birdImageCache *imageprovider.BirdImageCache
-	sunCalc        *suncalc.SunCalc
+	server        *api.Server
+	proc          *processor.Processor
+	sunCalc       *suncalc.SunCalc
 	oauth2Server   *security.OAuth2Server
 	systemMonitor  *monitor.SystemMonitor
 	controlChan    chan string
@@ -120,14 +118,11 @@ func (s *APIServerService) Start(ctx context.Context) error {
 	// Update BirdNET model loaded metric.
 	UpdateBirdNETModelLoadedMetric(s.metrics.BirdNET, bn)
 
-	// Initialize bird image cache.
-	s.birdImageCache = initBirdImageCache(s.settings, dataStore, s.metrics)
-
 	// Create SunCalc for sunrise/sunset calculations.
 	s.sunCalc = suncalc.NewSunCalc(s.settings.BirdNET.Latitude, s.settings.BirdNET.Longitude)
 
 	// Create processor.
-	s.proc = processor.New(s.settings, dataStore, bn, s.metrics, s.birdImageCache, GetLogger())
+	s.proc = processor.New(s.settings, dataStore, bn, s.metrics, GetLogger())
 	s.proc.SetSunCalc(s.sunCalc)
 
 	// Initialize backup system (optional; failure is non-fatal).
@@ -178,7 +173,6 @@ func (s *APIServerService) Start(ctx context.Context) error {
 
 	serverOpts := []api.ServerOption{
 		api.WithDataStore(dataStore),
-		api.WithBirdImageCache(s.birdImageCache),
 		api.WithProcessor(s.proc),
 		api.WithMetrics(s.metrics),
 		api.WithControlChannel(s.controlChan),

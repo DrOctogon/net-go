@@ -21,8 +21,6 @@ import (
 	"github.com/tphakala/birdnet-go/internal/conf"
 	"github.com/tphakala/birdnet-go/internal/datastore"
 	"github.com/tphakala/birdnet-go/internal/datastore/mocks"
-	"github.com/tphakala/birdnet-go/internal/imageprovider"
-	"github.com/tphakala/birdnet-go/internal/observability"
 )
 
 // Test date constant used across multiple test cases
@@ -613,25 +611,11 @@ func TestGetInvalidAnalyticsRequests(t *testing.T) {
 		Return([]datastore.ImageCache{}, nil).
 		Maybe()
 
-	// Initialize a mock image cache for controller creation - ONCE for all test cases
-	testMetrics, _ := observability.NewMetrics() // Create a dummy metrics instance
-	// Create a stub provider to avoid nil pointer panics
-	stubProvider := &TestImageProvider{
-		FetchFunc: func(scientificName string) (imageprovider.BirdImage, error) {
-			return imageprovider.BirdImage{}, nil
-		},
-	}
-	mockImageCache := imageprovider.InitCache("test", stubProvider, testMetrics, mockDS)
-	t.Cleanup(func() {
-		assert.NoError(t, mockImageCache.Close(), "Failed to close image cache")
-	})
-
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 			controller := &Controller{
-				DS:             mockDS,
-				BirdImageCache: mockImageCache,
+				DS: mockDS,
 				// sunCalc and controlChan might be needed depending on handlers tested
 			}
 			controller.Settings.Store(appSettings)
@@ -743,55 +727,9 @@ func TestGetDailySpeciesSummary_MultipleDetections(t *testing.T) {
 		sciRedBelliedWoodpecker: expectedRbwoHourlyCounts,
 	}, nil)
 
-	// Mock for image cache initialization
-	mockDS.On("GetAllImageCaches", mock.AnythingOfType("string")).Return([]datastore.ImageCache{}, nil)
-
-	// GetImageCache not needed when using GetImageCacheBatch
-	// mockDS.On("GetImageCache", mock.AnythingOfType("datastore.ImageCacheQuery")).Return(nil, nil)
-
-	// Mock GetImageCacheBatch to return cached images with URLs containing scientific names
-	// Use dynamic return based on input parameters
-	mockDS.On("GetImageCacheBatch", mock.AnythingOfType("string"), mock.AnythingOfType("[]string")).Return(
-		func(provider string, names []string) map[string]*datastore.ImageCache {
-			result := make(map[string]*datastore.ImageCache)
-			for _, name := range names {
-				result[name] = &datastore.ImageCache{
-					ScientificName: name,
-					URL:            "http://example.com/" + name + ".jpg",
-					CachedAt:       time.Now(),
-					ProviderName:   provider,
-				}
-			}
-			return result
-		}, nil)
-
-	// Expect calls to SaveImageCache - not needed since we're returning cached images
-	// mockDS.On("SaveImageCache", mock.AnythingOfType("*datastore.ImageCache")).Return(nil)
-
-	// Create a mock image provider (can be nil if cache doesn't need real fetching)
-	mockImageProvider := &TestImageProvider{
-		FetchFunc: func(scientificName string) (imageprovider.BirdImage, error) {
-			// Return placeholder or specific mock image data if needed
-			return imageprovider.BirdImage{
-				ScientificName: scientificName,
-				URL:            fmt.Sprintf("http://example.com/%s.jpg", scientificName),
-				// Add other fields if necessary
-			}, nil
-		},
-	}
-
-	// Create a bird image cache with our mock provider
-	// ---> FIX: Provide a non-nil observability.Metrics instance <---
-	testMetrics, _ := observability.NewMetrics() // Create a dummy metrics instance
-	imageCache := imageprovider.InitCache("test", mockImageProvider, testMetrics, mockDS)
-	t.Cleanup(func() {
-		assert.NoError(t, imageCache.Close(), "Failed to close image cache")
-	})
-
 	// Create a controller with our mocks
 	controller := &Controller{
-		DS:             mockDS,
-		BirdImageCache: imageCache,
+		DS: mockDS,
 	}
 
 	// Create a request with the date we want to test
@@ -842,7 +780,7 @@ func TestGetDailySpeciesSummary_MultipleDetections(t *testing.T) {
 			FirstHeard:          "08:15:00",
 			LatestHeard:         "14:45:00",
 			HighConfidence:      true, // Based on 0.95 > 0.8
-			ThumbnailURLContain: "/api/v2/media/image/Corvus%20brachyrhynchos",
+			ThumbnailURLContain: "bird-placeholder",
 		})
 		// Max confidence is merged from the species summary aggregation
 		assert.InDelta(t, 0.95, amcro.MaxConfidence, 0.001, "American Crow max confidence should be merged")
@@ -859,7 +797,7 @@ func TestGetDailySpeciesSummary_MultipleDetections(t *testing.T) {
 			FirstHeard:          "10:20:00",
 			LatestHeard:         "16:05:00",
 			HighConfidence:      true, // Based on 0.8 >= 0.8
-			ThumbnailURLContain: "/api/v2/media/image/Melanerpes%20carolinus",
+			ThumbnailURLContain: "bird-placeholder",
 		})
 		// RBWO's max (0.8) is NOT its last note (0.75), so this pins the
 		// max() aggregation rather than a "last-note-wins" implementation.
@@ -1015,43 +953,9 @@ func TestGetDailySpeciesSummary_SingleDetection(t *testing.T) {
 		sciRedBelliedWoodpecker: expectedRbwoSingleHourly,
 	}, nil)
 
-	// Mock for image cache initialization
-	mockDS.On("GetAllImageCaches", mock.AnythingOfType("string")).Return([]datastore.ImageCache{}, nil)
-	// Mock GetImageCacheBatch to return cached images with URLs containing scientific names
-	// Use dynamic return based on input parameters
-	mockDS.On("GetImageCacheBatch", mock.AnythingOfType("string"), mock.AnythingOfType("[]string")).Return(
-		func(provider string, names []string) map[string]*datastore.ImageCache {
-			result := make(map[string]*datastore.ImageCache)
-			for _, name := range names {
-				result[name] = &datastore.ImageCache{
-					ScientificName: name,
-					URL:            "http://example.com/" + name + ".jpg",
-					CachedAt:       time.Now(),
-					ProviderName:   provider,
-				}
-			}
-			return result
-		}, nil)
-	// SaveImageCache not needed since we're returning already cached images
-	// mockDS.On("SaveImageCache", mock.AnythingOfType("*datastore.ImageCache")).Return(nil)
-
-	// Create a mock image provider
-	mockImageProvider := &TestImageProvider{
-		FetchFunc: func(scientificName string) (imageprovider.BirdImage, error) {
-			return imageprovider.BirdImage{
-				ScientificName: scientificName,
-				URL:            "http://example.com/" + scientificName + ".jpg",
-			}, nil
-		},
-	}
-
-	// Create a bird image cache with our mock provider
-	imageCache := imageprovider.InitCache("test", mockImageProvider, NewTestMetrics(t), mockDS)
-
 	// Create a controller with our mocks
 	controller := &Controller{
-		DS:             mockDS,
-		BirdImageCache: imageCache,
+		DS: mockDS,
 	}
 
 	// Create a request with the date we want to test
@@ -1080,9 +984,6 @@ func TestGetDailySpeciesSummary_SingleDetection(t *testing.T) {
 	for _, species := range response {
 		assert.Equal(t, 1, species.Count, "%s should have 1 detection", species.CommonName)
 	}
-
-	// Close the image cache to clean up resources
-	require.NoError(t, imageCache.Close(), "Failed to close image cache")
 
 	// Assert that all expectations were met
 	mockDS.AssertExpectations(t)

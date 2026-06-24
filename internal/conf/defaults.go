@@ -57,7 +57,6 @@ func setDefaultConfig() {
 	setModuleLogDefaults("diskmanager", true)                     // Disk management
 	viper.SetDefault("logging.modules.diskmanager.level", "info") // Override: runs per-clip, debug floods log
 	setModuleLogDefaults("events", true)                          // Event bus
-	setModuleLogDefaults("imageprovider", true)                   // Bird image provider
 	setModuleLogDefaults("monitor", true)                         // System monitoring
 	setModuleLogDefaults("notifications", true)                   // Push notifications
 	setModuleLogDefaults("securefs", true)                        // Secure filesystem operations
@@ -168,7 +167,6 @@ func setDefaultConfig() {
 	viper.SetDefault("realtime.dashboard.thumbnails.debug", false)
 	viper.SetDefault("realtime.dashboard.thumbnails.summary", false)
 	viper.SetDefault("realtime.dashboard.thumbnails.recent", true)
-	viper.SetDefault("realtime.dashboard.thumbnails.imageprovider", "avicommons")
 	viper.SetDefault("realtime.dashboard.thumbnails.fallbackpolicy", "none")
 	viper.SetDefault("realtime.dashboard.summarylimit", 30)
 	viper.SetDefault("realtime.dashboard.locale", "en")               // Default UI locale

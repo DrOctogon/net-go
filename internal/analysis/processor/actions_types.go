@@ -16,7 +16,6 @@ import (
 	"github.com/tphakala/birdnet-go/internal/conf"
 	"github.com/tphakala/birdnet-go/internal/datastore"
 	"github.com/tphakala/birdnet-go/internal/detection"
-	"github.com/tphakala/birdnet-go/internal/imageprovider"
 	"github.com/tphakala/birdnet-go/internal/mqtt"
 )
 
@@ -150,10 +149,9 @@ type PreRendererSubmit interface {
 }
 
 type MqttAction struct {
-	Settings       *conf.Settings
-	Result         detection.Result // Domain model (single source of truth)
-	BirdImageCache *imageprovider.BirdImageCache
-	MqttClient     mqtt.Client
+	Settings   *conf.Settings
+	Result     detection.Result // Domain model (single source of truth)
+	MqttClient mqtt.Client
 	EventTracker   *EventTracker
 	DetectionCtx   *DetectionContext    // Shared context from DatabaseAction
 	RetryConfig    jobqueue.RetryConfig // Configuration for retry behavior
@@ -170,18 +168,17 @@ type UpdateRangeFilterAction struct {
 }
 
 type SSEAction struct {
-	Settings       *conf.Settings
-	Result         detection.Result // Domain model (single source of truth)
-	BirdImageCache *imageprovider.BirdImageCache
-	EventTracker   *EventTracker
-	DetectionCtx   *DetectionContext    // Shared context from DatabaseAction (provides database ID)
-	RetryConfig    jobqueue.RetryConfig // Configuration for retry behavior
-	Description    string
-	CorrelationID  string     // Detection correlation ID for log tracking
-	mu             sync.Mutex // Protect concurrent access to Result
-	// SSEBroadcaster is a function that broadcasts detection data
-	// This allows the action to be independent of the specific API implementation
-	SSEBroadcaster func(note *datastore.Note, birdImage *imageprovider.BirdImage) error
+	Settings      *conf.Settings
+	Result        detection.Result // Domain model (single source of truth)
+	EventTracker  *EventTracker
+	DetectionCtx  *DetectionContext    // Shared context from DatabaseAction (provides database ID)
+	RetryConfig   jobqueue.RetryConfig // Configuration for retry behavior
+	Description   string
+	CorrelationID string     // Detection correlation ID for log tracking
+	mu            sync.Mutex // Protect concurrent access to Result
+	// SSEBroadcaster is a function that broadcasts detection data.
+	// This allows the action to be independent of the specific API implementation.
+	SSEBroadcaster func(note *datastore.Note) error
 }
 
 // CompositeAction executes multiple actions sequentially, ensuring proper dependency management.

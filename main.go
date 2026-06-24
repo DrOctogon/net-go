@@ -1,7 +1,6 @@
 package main
 
 import (
-	"embed"
 	"fmt"
 	"log/slog"
 	"os"
@@ -15,11 +14,9 @@ import (
 	"github.com/spf13/viper"
 	"github.com/tphakala/birdnet-go/cmd"
 	"github.com/tphakala/birdnet-go/internal/analysis"
-	"github.com/tphakala/birdnet-go/internal/api"
 	"github.com/tphakala/birdnet-go/internal/conf"
 	"github.com/tphakala/birdnet-go/internal/errors"
 	"github.com/tphakala/birdnet-go/internal/health"
-	"github.com/tphakala/birdnet-go/internal/imageprovider"
 	"github.com/tphakala/birdnet-go/internal/logger"
 	"github.com/tphakala/birdnet-go/internal/restart"
 	"github.com/tphakala/birdnet-go/internal/telemetry"
@@ -30,12 +27,6 @@ var buildDate string
 
 // version holds the Git version tag
 var version string
-
-//go:embed internal/imageprovider/data/latest.json
-var imageDataFs embed.FS // Embed image provider data
-
-// ImageProviderRegistry is a global registry for image providers
-var imageProviderRegistry *imageprovider.ImageProviderRegistry
 
 func main() {
 	exitCode := mainWithExitCode()
@@ -99,24 +90,12 @@ func mainWithExitCode() int {
 		defer pprof.StopCPUProfile()
 	}
 
-	// Publish the embedded image data to the API server
-	api.ImageDataFs = imageDataFs
-
-	// Initialize the image provider registry
-	imageProviderRegistry = imageprovider.NewImageProviderRegistry()
-	api.ImageProviderRegistry = imageProviderRegistry
-
 	// Load the configuration
 	settings := conf.Setting()
 	if settings == nil {
 		bootLog.Error("Failed to load configuration")
 		return 1
 	}
-
-	// Apply taxonomy synonym overrides from config.
-	// Pass nil for knownLabels: BirdNET labels are not yet loaded at this stage.
-	// Validation only runs via the API settings endpoint where labels are populated.
-	imageprovider.SetCustomSynonyms(settings.TaxonomySynonyms, nil)
 
 	// Set runtime values
 	settings.Version = version

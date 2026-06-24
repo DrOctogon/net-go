@@ -13,7 +13,7 @@ import (
 	"github.com/tphakala/birdnet-go/internal/conf/conftest"
 	"github.com/tphakala/birdnet-go/internal/datastore"
 	"github.com/tphakala/birdnet-go/internal/datastore/mocks"
-	"github.com/tphakala/birdnet-go/internal/imageprovider"
+
 	"github.com/tphakala/birdnet-go/internal/observability"
 	"github.com/tphakala/birdnet-go/internal/suncalc"
 )
@@ -54,21 +54,6 @@ func publishTestSettings(tb testing.TB, settings *conf.Settings) {
 	tb.Cleanup(func() { conftest.SetTestSettings(prev) })
 }
 
-// TestImageProvider implements the imageprovider.Provider interface for testing
-// with a function field for easier test setup.
-// Use this when you need a simple mock with customizable behavior via FetchFunc.
-type TestImageProvider struct {
-	FetchFunc func(scientificName string) (imageprovider.BirdImage, error)
-}
-
-// Fetch implements the ImageProvider Fetch method
-func (m *TestImageProvider) Fetch(scientificName string) (imageprovider.BirdImage, error) {
-	if m.FetchFunc != nil {
-		return m.FetchFunc(scientificName)
-	}
-	return imageprovider.BirdImage{}, nil
-}
-
 // NewTestMetrics creates a new metrics instance for testing
 func NewTestMetrics(t *testing.T) *observability.Metrics {
 	t.Helper()
@@ -103,19 +88,6 @@ func setupAnalyticsTestEnvironment(t *testing.T) (*echo.Echo, *mocks.MockInterfa
 	return e, mockDS, controller
 }
 
-// MockImageProvider is a mock implementation of imageprovider.ImageProvider interface
-// that uses testify/mock for expectations and verification.
-// Use this when you need to verify specific method calls and arguments.
-type MockImageProvider struct {
-	mock.Mock
-}
-
-// Fetch implements the ImageProvider interface
-func (m *MockImageProvider) Fetch(scientificName string) (imageprovider.BirdImage, error) {
-	args := m.Called(scientificName)
-	return args.Get(0).(imageprovider.BirdImage), args.Error(1)
-}
-
 // Setup function to create a test environment
 //
 // This function creates a complete test environment for API tests with the following components:
@@ -123,10 +95,8 @@ func (m *MockImageProvider) Fetch(scientificName string) (imageprovider.BirdImag
 // 2. mocks.MockInterface - A generated mock implementation of the datastore interface for test data
 // 3. Settings - Default configuration settings for testing
 // 4. Logger - A test logger that outputs to stdout
-// 5. MockImageProvider - A mock image provider for bird images
-// 6. BirdImageCache - An initialized image cache with the mock provider
-// 7. SunCalc - A mock sun calculator for time-based calculations
-// 8. Control channel - A channel for control messages between components
+// 5. SunCalc - A mock sun calculator for time-based calculations
+// 6. Control channel - A channel for control messages between components
 //
 // The function returns the Echo instance, mocks.MockInterface, and Controller for use in tests.
 // Note: Callers are responsible for closing any resources (like channels) when tests complete.
@@ -142,22 +112,6 @@ func setupTestEnvironment(t *testing.T) (*echo.Echo, *mocks.MockInterface, *Cont
 	// Create settings from shared valid defaults, with test-specific overrides
 	settings := newValidTestSettings()
 	settings.Realtime.Audio.Export.Path = t.TempDir()
-
-	// Create a mock ImageProvider for testing
-	mockImageProvider := new(MockImageProvider)
-
-	// Set default behavior to return an empty bird image for any species
-	emptyBirdImage := imageprovider.BirdImage{
-		URL:            "https://example.com/empty.jpg",
-		ScientificName: "Test Species",
-	}
-	mockImageProvider.On("Fetch", mock.Anything).Return(emptyBirdImage, nil)
-
-	// Create a properly initialized BirdImageCache with the mock provider
-	birdImageCache := &imageprovider.BirdImageCache{
-		// We can only set exported fields, so we'll use SetImageProvider method instead
-	}
-	birdImageCache.SetImageProvider(mockImageProvider)
 
 	// Create sun calculator with test coordinates (Helsinki, Finland)
 	sunCalc := suncalc.NewSunCalc(testHelsinkiLatitude, testHelsinkiLongitude)
@@ -177,7 +131,7 @@ func setupTestEnvironment(t *testing.T) (*echo.Echo, *mocks.MockInterface, *Cont
 	publishTestSettings(t, settings)
 
 	// Create API controller without initializing routes to avoid starting background goroutines
-	controller, err := NewWithOptions(e, mockDS, settings, birdImageCache, sunCalc, controlChan, mockMetrics, false)
+	controller, err := NewWithOptions(e, mockDS, settings, sunCalc, controlChan, mockMetrics, false)
 	if err != nil {
 		t.Fatalf("Failed to create test API controller: %v", err)
 	}

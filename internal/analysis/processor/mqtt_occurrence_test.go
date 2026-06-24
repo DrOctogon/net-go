@@ -111,7 +111,7 @@ func TestMqttAction_IncludesOccurrence(t *testing.T) {
 	action := &MqttAction{
 		Settings:       settings,
 		Result:         testResult, // Domain model (single source of truth)
-		BirdImageCache: nil,        // No image cache for this test
+
 		MqttClient:     mockClient,
 		EventTracker:   eventTracker,
 		RetryConfig:    retryConfig,
@@ -198,7 +198,6 @@ func TestMqttAction_OmitsOccurrenceWhenZero(t *testing.T) {
 	action := &MqttAction{
 		Settings:       settings,
 		Result:         testResult, // Domain model (single source of truth)
-		BirdImageCache: nil,
 		MqttClient:     mockClient,
 		EventTracker:   eventTracker,
 		RetryConfig:    retryConfig,

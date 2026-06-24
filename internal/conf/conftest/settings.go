@@ -35,7 +35,6 @@ func GetTestSettings() *conf.Settings {
 	settings.Realtime.Dashboard.Thumbnails.Debug = false
 	settings.Realtime.Dashboard.Thumbnails.Summary = false
 	settings.Realtime.Dashboard.Thumbnails.Recent = true
-	settings.Realtime.Dashboard.Thumbnails.ImageProvider = "avicommons"
 	settings.Realtime.Dashboard.Thumbnails.FallbackPolicy = conf.RetentionPolicyNone
 
 	// Other realtime settings
@@ -122,9 +121,8 @@ func (b *SettingsBuilder) WithRTSPHealthThreshold(seconds int) *SettingsBuilder 
 	return b
 }
 
-// WithImageProvider configures thumbnail image provider settings.
-func (b *SettingsBuilder) WithImageProvider(provider, fallbackPolicy string) *SettingsBuilder {
-	b.settings.Realtime.Dashboard.Thumbnails.ImageProvider = provider
+// WithImageProvider configures thumbnail fallback policy.
+func (b *SettingsBuilder) WithImageProvider(_ string, fallbackPolicy string) *SettingsBuilder {
 	b.settings.Realtime.Dashboard.Thumbnails.FallbackPolicy = fallbackPolicy
 	return b
 }

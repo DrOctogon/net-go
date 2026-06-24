@@ -2,10 +2,7 @@
 package mqtt
 
 import (
-	"time"
-
 	"github.com/tphakala/birdnet-go/internal/detection"
-	"github.com/tphakala/birdnet-go/internal/imageprovider"
 )
 
 // MQTTEventDTO is the data transfer object for MQTT publishing.
@@ -103,23 +100,3 @@ func NewMQTTEventDTO(r *detection.Result) *MQTTEventDTO {
 	return dto
 }
 
-// SetBirdImage adds bird image data to the DTO.
-func (dto *MQTTEventDTO) SetBirdImage(img *imageprovider.BirdImage) {
-	if img == nil || img.URL == "" {
-		return
-	}
-
-	dto.BirdImage = &BirdImageDTO{
-		URL:            img.URL,
-		ScientificName: img.ScientificName,
-		LicenseName:    img.LicenseName,
-		LicenseURL:     img.LicenseURL,
-		AuthorName:     img.AuthorName,
-		AuthorURL:      img.AuthorURL,
-		SourceProvider: img.SourceProvider,
-	}
-
-	if !img.CachedAt.IsZero() {
-		dto.BirdImage.CachedAt = img.CachedAt.Format(time.RFC3339)
-	}
-}

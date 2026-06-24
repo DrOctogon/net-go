@@ -21,7 +21,7 @@ import (
 	"github.com/tphakala/birdnet-go/internal/conf"
 	"github.com/tphakala/birdnet-go/internal/datastore/v2/repository"
 	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/imageprovider"
+
 	"github.com/tphakala/birdnet-go/internal/logger"
 	"github.com/tphakala/birdnet-go/internal/securefs"
 	"github.com/tphakala/birdnet-go/internal/spectrogram"
@@ -109,9 +109,6 @@ var (
 	// Generation errors
 	ErrSpectrogramGeneration = errors.NewStd("failed to generate spectrogram")
 
-	// Image errors
-	ErrImageProviderNotAvailable = errors.NewStd("image provider not available")
-
 	// Sentinel errors for nilnil cases
 	ErrSpectrogramExists       = errors.NewStd("spectrogram already exists")
 	ErrSpectrogramNotGenerated = errors.NewStd("spectrogram not generated")
@@ -179,14 +176,6 @@ func (c *Controller) initMediaRoutes() {
 	// Original filename-based routes (keep for backward compatibility if needed, but ensure they use SFS)
 	c.Group.GET("/media/audio/:filename", c.ServeAudioClip)
 	c.Group.GET("/media/spectrogram/:filename", c.ServeSpectrogram)
-
-	// Bird image endpoints
-	c.Group.GET("/media/species-image", c.GetSpeciesImage)
-	c.Group.GET("/media/species-image/info", c.GetSpeciesImageInfo)
-
-	// Proxied bird image endpoints (serve cached files, solve CORS)
-	c.Group.GET("/media/image/:scientific_name", c.ServeSpeciesImageProxy)
-	c.Group.GET("/media/bird-image/:scientific_name", c.ServeSpeciesImageProxy) // backward-compat alias
 
 	// The remaining ID-based media handlers dereference c.DS (clip/model lookups).
 	// Honor the constructor's "datastore disabled" mode (NewWithOptions permits a nil
@@ -280,7 +269,7 @@ func (c *Controller) translateSecureFSError(ctx echo.Context, err error, userMsg
 			logger.String("tunnel_provider", tunnelProvider),
 		)
 		return c.HandleError(ctx, err, "Requested resource is not a regular file", http.StatusForbidden)
-	case errors.Is(err, os.ErrNotExist) || errors.Is(err, fs.ErrNotExist) || errors.Is(err, ErrAudioFileNotFound) || errors.Is(err, imageprovider.ErrImageNotFound):
+	case errors.Is(err, os.ErrNotExist) || errors.Is(err, fs.ErrNotExist) || errors.Is(err, ErrAudioFileNotFound):
 		c.logInfoIfEnabled("Resource not found", // Info level as 404 is common
 			logger.Error(err),
 			logger.String("path", ctx.Request().URL.Path),
@@ -2989,181 +2978,5 @@ func (c *Controller) generateSpectrogramFromRel(ctx context.Context, relAudioPat
 // now uses the shared generator from internal/spectrogram/generator.go via
 // c.spectrogramGenerator.GenerateFromFile().
 
-// GetSpeciesImage serves an image for a bird species by scientific name
-func (c *Controller) GetSpeciesImage(ctx echo.Context) error {
-	scientificName := ctx.QueryParam("name")
-	if scientificName == "" {
-		return c.HandleError(ctx, fmt.Errorf("missing scientific name"), "Scientific name is required", http.StatusBadRequest)
-	}
-
-	// Trim whitespace to prevent empty strings with spaces
-	scientificName = strings.TrimSpace(scientificName)
-	if scientificName == "" {
-		return c.HandleError(ctx, fmt.Errorf("scientific name contains only whitespace"), "Valid scientific name is required", http.StatusBadRequest)
-	}
-
-	// Delegate to the proxy handler by setting the param
-	ctx.SetParamNames("scientific_name")
-	ctx.SetParamValues(scientificName)
-	return c.ServeSpeciesImageProxy(ctx)
-}
-
-// GetSpeciesImageInfo returns attribution metadata for a species image as JSON
-func (c *Controller) GetSpeciesImageInfo(ctx echo.Context) error {
-	scientificName := ctx.QueryParam("name")
-	if scientificName == "" {
-		return c.HandleError(ctx, fmt.Errorf("missing scientific name"), "Scientific name is required", http.StatusBadRequest)
-	}
-
-	scientificName = strings.TrimSpace(scientificName)
-	if scientificName == "" {
-		return c.HandleError(ctx, fmt.Errorf("scientific name contains only whitespace"), "Valid scientific name is required", http.StatusBadRequest)
-	}
-
-	cache := c.BirdImageCache
-	if cache == nil {
-		return c.HandleError(ctx, ErrImageProviderNotAvailable, "Image service unavailable", http.StatusServiceUnavailable)
-	}
-
-	birdImage, err := cache.Get(scientificName)
-	if err != nil {
-		if errors.Is(err, imageprovider.ErrImageNotFound) {
-			ctx.Response().Header().Set("Cache-Control", fmt.Sprintf("public, max-age=%d", NotFoundCacheSeconds))
-			return c.HandleError(ctx, err, "Image not found for species", http.StatusNotFound)
-		}
-		return c.HandleError(ctx, err, "Failed to fetch species image info", http.StatusInternalServerError)
-	}
-
-	ctx.Response().Header().Set("Cache-Control", fmt.Sprintf("public, max-age=%d", ImageCacheSeconds))
-
-	return ctx.JSON(http.StatusOK, map[string]string{
-		"authorName":     birdImage.AuthorName,
-		"authorURL":      birdImage.AuthorURL,
-		"licenseName":    birdImage.LicenseName,
-		"licenseURL":     birdImage.LicenseURL,
-		"sourceProvider": birdImage.SourceProvider,
-	})
-}
-
-// ServeSpeciesImageProxy serves a cached bird image by scientific name.
-// If the image is cached locally, it serves the file with browser cache headers.
-// If not cached, it fetches from the provider, caches, and serves.
-// Falls back to 302 redirect to external URL if local fetch fails.
-// Route: GET /media/image/:scientific_name
-// Route: GET /media/bird-image/:scientific_name (alias)
-func (c *Controller) ServeSpeciesImageProxy(ctx echo.Context) error {
-	scientificName, err := url.PathUnescape(ctx.Param("scientific_name"))
-	if err != nil {
-		return c.HandleError(ctx, fmt.Errorf("invalid scientific name encoding"), "Invalid species name", http.StatusBadRequest)
-	}
-
-	scientificName = strings.TrimSpace(scientificName)
-	if scientificName == "" {
-		return c.HandleError(ctx, fmt.Errorf("missing scientific name"), "Scientific name is required", http.StatusBadRequest)
-	}
-
-	// Input validation: reject path traversal attempts and invalid paths
-	if !filepath.IsLocal(scientificName) {
-		return c.HandleError(ctx, fmt.Errorf("invalid scientific name"), "Invalid species name", http.StatusBadRequest)
-	}
-
-	cache := c.BirdImageCache
-	if cache == nil {
-		return c.HandleError(ctx, ErrImageProviderNotAvailable, "Image service unavailable", http.StatusServiceUnavailable)
-	}
-
-	// Look up metadata to know which provider owns this image
-	birdImage, err := cache.Get(scientificName)
-	if err != nil {
-		if errors.Is(err, imageprovider.ErrImageNotFound) {
-			ctx.Response().Header().Set("Cache-Control", fmt.Sprintf("public, max-age=%d", NotFoundCacheSeconds))
-			return c.HandleError(ctx, err, "Image not found for species", http.StatusNotFound)
-		}
-		return c.HandleError(ctx, err, "Failed to fetch species image", http.StatusInternalServerError)
-	}
-
-	// Negative cache entries have no real image URL
-	if birdImage.IsNegativeEntry() || birdImage.URL == "" {
-		ctx.Response().Header().Set("Cache-Control", fmt.Sprintf("public, max-age=%d", NotFoundCacheSeconds))
-		return c.HandleError(ctx, imageprovider.ErrImageNotFound, "Image not found for species", http.StatusNotFound)
-	}
-
-	// Get the file cache from the BirdImageCache
-	fileCache := cache.GetFileCache()
-	if fileCache == nil {
-		// No file cache configured, redirect to external URL
-		return ctx.Redirect(http.StatusFound, birdImage.URL)
-	}
-
-	provider := birdImage.SourceProvider
-	if provider == "" {
-		provider = cache.GetProviderName()
-	}
-
-	// Try to serve from file cache
-	cachedPath, contentType, fresh, err := fileCache.Get(provider, scientificName)
-	if err != nil {
-		return c.HandleError(ctx, err, "File cache error", http.StatusInternalServerError)
-	}
-
-	if cachedPath != "" && fresh {
-		c.logDebugIfEnabled("Serving fresh cached image",
-			logger.String("scientific_name", scientificName),
-			logger.String("path", cachedPath))
-		return c.serveImageFile(ctx, cachedPath, contentType)
-	}
-
-	// File not cached or stale — download it
-	newPath, newCT, dlErr := fileCache.DownloadAndStore(ctx.Request().Context(), provider, scientificName, birdImage.URL)
-	if dlErr != nil {
-		// Graceful degradation: serve stale file if available, otherwise redirect
-		if cachedPath != "" {
-			c.logDebugIfEnabled("Download failed, serving stale cached image",
-				logger.String("scientific_name", scientificName),
-				logger.String("path", cachedPath),
-				logger.Error(dlErr))
-			return c.serveImageFile(ctx, cachedPath, contentType)
-		}
-		c.logInfoIfEnabled("File cache download failed, redirecting to external URL",
-			logger.String("scientific_name", scientificName),
-			logger.String("url", birdImage.URL),
-			logger.Error(dlErr))
-		return ctx.Redirect(http.StatusFound, birdImage.URL)
-	}
-
-	c.logDebugIfEnabled("Serving freshly downloaded image",
-		logger.String("scientific_name", scientificName),
-		logger.String("path", newPath),
-		logger.String("content_type", newCT))
-	return c.serveImageFile(ctx, newPath, newCT)
-}
-
-// serveImageFile serves a cached image file with appropriate cache headers.
-// http.ServeContent handles Last-Modified, If-Modified-Since, and If-None-Match natively.
-func (c *Controller) serveImageFile(ctx echo.Context, filePath, contentType string) error {
-	file, err := os.Open(filePath)
-	if err != nil {
-		return c.HandleError(ctx, err, "Failed to open cached image", http.StatusInternalServerError)
-	}
-	defer func() { _ = file.Close() }()
-
-	info, err := file.Stat()
-	if err != nil {
-		return c.HandleError(ctx, err, "Failed to stat cached image", http.StatusInternalServerError)
-	}
-
-	if contentType != "" {
-		ctx.Response().Header().Set("Content-Type", contentType)
-	}
-	ctx.Response().Header().Set("Cache-Control", fmt.Sprintf("public, max-age=%d", ImageCacheSeconds))
-
-	// ETag based on modification time and size
-	etag := fmt.Sprintf(`"%x-%x"`, info.ModTime().UnixNano(), info.Size())
-	ctx.Response().Header().Set("ETag", etag)
-
-	// http.ServeContent handles Last-Modified, If-Modified-Since, and range requests.
-	http.ServeContent(ctx.Response(), ctx.Request(), filepath.Base(filePath), info.ModTime(), file)
-	return nil
-}
 
 // HandleError method should exist on Controller, typically defined in controller.go or api.go

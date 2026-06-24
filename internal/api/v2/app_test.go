@@ -26,7 +26,6 @@ import (
 	"github.com/tphakala/birdnet-go/internal/branding"
 	"github.com/tphakala/birdnet-go/internal/conf"
 	"github.com/tphakala/birdnet-go/internal/datastore/mocks"
-	"github.com/tphakala/birdnet-go/internal/imageprovider"
 	"github.com/tphakala/birdnet-go/internal/observability"
 	"github.com/tphakala/birdnet-go/internal/security/securitytest"
 	"github.com/tphakala/birdnet-go/internal/suncalc"
@@ -65,19 +64,13 @@ func setupAppConfigTest(t *testing.T, securityConfig *conf.Security) (*echo.Echo
 		Security: secCfg,
 	}
 
-	mockImageProvider := &MockImageProvider{}
-	mockImageProvider.On("Fetch", mock.Anything).Return(imageprovider.BirdImage{}, nil).Maybe()
-
-	birdImageCache := &imageprovider.BirdImageCache{}
-	birdImageCache.SetImageProvider(mockImageProvider)
-
 	sunCalc := suncalc.NewSunCalc(testHelsinkiLatitude, testHelsinkiLongitude)
 	controlChan := make(chan string, testControlChannelBuf)
 	mockMetrics, _ := observability.NewMetrics()
 
 	publishTestSettings(t, settings)
 
-	controller, err := NewWithOptions(e, mockDS, settings, birdImageCache, sunCalc, controlChan, mockMetrics, false)
+	controller, err := NewWithOptions(e, mockDS, settings, sunCalc, controlChan, mockMetrics, false)
 	require.NoError(t, err, "Failed to create test API controller")
 
 	t.Cleanup(func() {
@@ -117,12 +110,6 @@ func setupAppConfigTestWithAuth(t *testing.T, securityConfig *conf.Security) (*e
 		Security: secCfg,
 	}
 
-	mockImageProvider := &MockImageProvider{}
-	mockImageProvider.On("Fetch", mock.Anything).Return(imageprovider.BirdImage{}, nil).Maybe()
-
-	birdImageCache := &imageprovider.BirdImageCache{}
-	birdImageCache.SetImageProvider(mockImageProvider)
-
 	sunCalc := suncalc.NewSunCalc(testHelsinkiLatitude, testHelsinkiLongitude)
 	controlChan := make(chan string, testControlChannelBuf)
 	mockMetrics, _ := observability.NewMetrics()
@@ -139,7 +126,7 @@ func setupAppConfigTestWithAuth(t *testing.T, securityConfig *conf.Security) (*e
 	// Initialize gothic session store
 	gothic.Store = sessions.NewCookieStore([]byte(settings.Security.SessionSecret))
 
-	controller, err := NewWithOptions(e, mockDS, settings, birdImageCache, sunCalc, controlChan, mockMetrics, true,
+	controller, err := NewWithOptions(e, mockDS, settings, sunCalc, controlChan, mockMetrics, true,
 		WithAuthMiddleware(authMw.Authenticate), WithAuthService(authService))
 	require.NoError(t, err, "Failed to create test API controller with auth")
 
@@ -591,15 +578,11 @@ func TestGetAppConfig_EmptyVersion(t *testing.T) {
 		},
 	}
 
-	mockImageProvider := &MockImageProvider{}
-	mockImageProvider.On("Fetch", mock.Anything).Return(imageprovider.BirdImage{}, nil).Maybe()
-	birdImageCache := &imageprovider.BirdImageCache{}
-	birdImageCache.SetImageProvider(mockImageProvider)
 	sunCalc := suncalc.NewSunCalc(testHelsinkiLatitude, testHelsinkiLongitude)
 	controlChan := make(chan string, testControlChannelBuf)
 	mockMetrics, _ := observability.NewMetrics()
 
-	controller, err := NewWithOptions(e, mockDS, settings, birdImageCache, sunCalc, controlChan, mockMetrics, false)
+	controller, err := NewWithOptions(e, mockDS, settings, sunCalc, controlChan, mockMetrics, false)
 	require.NoError(t, err)
 
 	t.Cleanup(func() {
@@ -651,15 +634,11 @@ func TestGetAppConfig_VersionWithSpecialChars(t *testing.T) {
 				},
 			}
 
-			mockImageProvider := &MockImageProvider{}
-			mockImageProvider.On("Fetch", mock.Anything).Return(imageprovider.BirdImage{}, nil).Maybe()
-			birdImageCache := &imageprovider.BirdImageCache{}
-			birdImageCache.SetImageProvider(mockImageProvider)
 			sunCalc := suncalc.NewSunCalc(testHelsinkiLatitude, testHelsinkiLongitude)
 			controlChan := make(chan string, testControlChannelBuf)
 			mockMetrics, _ := observability.NewMetrics()
 
-			controller, err := NewWithOptions(e, mockDS, settings, birdImageCache, sunCalc, controlChan, mockMetrics, false)
+			controller, err := NewWithOptions(e, mockDS, settings, sunCalc, controlChan, mockMetrics, false)
 			require.NoError(t, err)
 
 			t.Cleanup(func() {

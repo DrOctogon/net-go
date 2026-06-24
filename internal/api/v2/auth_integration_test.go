@@ -20,7 +20,6 @@ import (
 	"github.com/tphakala/birdnet-go/internal/api/auth"
 	"github.com/tphakala/birdnet-go/internal/conf"
 	"github.com/tphakala/birdnet-go/internal/datastore/mocks"
-	"github.com/tphakala/birdnet-go/internal/imageprovider"
 	"github.com/tphakala/birdnet-go/internal/observability"
 	"github.com/tphakala/birdnet-go/internal/security"
 	"github.com/tphakala/birdnet-go/internal/security/securitytest"
@@ -62,14 +61,6 @@ func setupAuthIntegrationTest(t *testing.T) (*echo.Echo, *Controller, *conf.Sett
 		},
 	}
 
-	// Create mock ImageProvider
-	mockImageProvider := &MockImageProvider{}
-	mockImageProvider.On("Fetch", mock.Anything).Return(imageprovider.BirdImage{}, nil).Maybe()
-
-	// Create bird image cache with mock provider
-	birdImageCache := &imageprovider.BirdImageCache{}
-	birdImageCache.SetImageProvider(mockImageProvider)
-
 	// Create sun calculator
 	sunCalc := suncalc.NewSunCalc(60.1699, 24.9384)
 
@@ -90,7 +81,7 @@ func setupAuthIntegrationTest(t *testing.T) (*echo.Echo, *Controller, *conf.Sett
 	gothic.Store = sessions.NewCookieStore([]byte(settings.Security.SessionSecret))
 
 	// Create API controller with OAuth2Server via functional options
-	controller, err := NewWithOptions(e, mockDS, settings, birdImageCache, sunCalc, controlChan, mockMetrics, true,
+	controller, err := NewWithOptions(e, mockDS, settings, sunCalc, controlChan, mockMetrics, true,
 		WithAuthMiddleware(authMw.Authenticate), WithAuthService(authService))
 	require.NoError(t, err, "Failed to create test API controller")
 
@@ -313,10 +304,6 @@ func TestV2AuthFlow_EmptyClientID_V1Compatible(t *testing.T) {
 		},
 	}
 
-	mockImageProvider := &MockImageProvider{}
-	mockImageProvider.On("Fetch", mock.Anything).Return(imageprovider.BirdImage{}, nil).Maybe()
-	birdImageCache := &imageprovider.BirdImageCache{}
-	birdImageCache.SetImageProvider(mockImageProvider)
 	sunCalc := suncalc.NewSunCalc(60.1699, 24.9384)
 	controlChan := make(chan string, 10)
 	mockMetrics, _ := observability.NewMetrics()
@@ -326,7 +313,7 @@ func TestV2AuthFlow_EmptyClientID_V1Compatible(t *testing.T) {
 	authService := auth.NewSecurityAdapter(oauth2Server)
 	authMw := auth.NewMiddleware(authService)
 
-	controller, err := NewWithOptions(e, mockDS, settings, birdImageCache, sunCalc, controlChan, mockMetrics, true,
+	controller, err := NewWithOptions(e, mockDS, settings, sunCalc, controlChan, mockMetrics, true,
 		WithAuthMiddleware(authMw.Authenticate), WithAuthService(authService))
 	require.NoError(t, err)
 

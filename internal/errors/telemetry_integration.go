@@ -67,25 +67,6 @@ var (
 		"context deadline exceeded", // Upload/request timeout
 		"tls handshake timeout",
 		"eof", // Connection lost (e.g., MQTT broker disconnect)
-
-		// imageprovider Wikipedia rate-limit / circuit-breaker noise.
-		// Wikipedia rate-limits the image fetcher (HTTP 429) and the circuit
-		// breaker then throttles further calls, so forwarding a Sentry event for
-		// each rejected request is pure noise. These are built with CategoryNetwork
-		// in internal/imageprovider/wikipedia.go. The patterns are Wikipedia-specific
-		// full signatures (not loose substrings like "rate limit exceeded") so
-		// network-category errors from other components are never collaterally
-		// suppressed, matching the rtspSilenceTimeoutSignature approach above.
-		// HTTP 429 is purely environmental throttling so every occurrence is
-		// suppressed; 403/500/503 still report at least the first event because
-		// those can indicate a real problem (policy violation, server fault).
-		// Lowercase substrings of the real messages produced there:
-		//   - handleHTTPStatusError: "Wikipedia API returned status 429: <body>"
-		//   - checkCircuitBreaker:   "Wikipedia API circuit breaker open: <reason>"
-		//   - diagnostic path:       "Wikipedia rate limit exceeded: <message>"
-		"wikipedia api returned status 429",  // direct HTTP 429 from the API
-		"wikipedia api circuit breaker open", // repeated rejection while breaker is open
-		"wikipedia rate limit exceeded",      // diagnostic rate-limit error
 	}
 )
 

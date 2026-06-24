@@ -35,14 +35,6 @@ logging:
     max_rotated_files: 5
     compress: true
   modules:
-    imageprovider:
-      enabled: true
-      file_path: logs/imageprovider.log
-      level: debug
-      console_also: true
-      max_size: 25
-      max_age: 14
-      max_rotated_files: 3
     audio:
       enabled: true
       file_path: logs/audio.log
@@ -86,17 +78,7 @@ logging:
 
 	// Verify module outputs (the critical fix — "modules" maps to ModuleOutputs)
 	require.NotNil(t, cfg.ModuleOutputs, "ModuleOutputs should not be nil (mapped from modules)")
-	require.Contains(t, cfg.ModuleOutputs, "imageprovider")
 	require.Contains(t, cfg.ModuleOutputs, "audio")
-
-	imgMod := cfg.ModuleOutputs["imageprovider"]
-	assert.True(t, imgMod.Enabled)
-	assert.Equal(t, "logs/imageprovider.log", imgMod.FilePath, "FilePath should be unmarshaled from file_path")
-	assert.Equal(t, "debug", imgMod.Level, "Module level should be 'debug' — this was the root cause of missing debug logs")
-	assert.True(t, imgMod.ConsoleAlso, "ConsoleAlso should be unmarshaled from console_also")
-	assert.Equal(t, 25, imgMod.MaxSize)
-	assert.Equal(t, 14, imgMod.MaxAge)
-	assert.Equal(t, 3, imgMod.MaxRotatedFiles)
 
 	audioMod := cfg.ModuleOutputs["audio"]
 	assert.True(t, audioMod.Enabled)
@@ -127,9 +109,6 @@ func TestViperUnmarshalLoggingDefaults(t *testing.T) {
 	v.SetDefault("logging.file_output.max_age", 30)
 	v.SetDefault("logging.file_output.max_rotated_files", 10)
 	v.SetDefault("logging.file_output.compress", false)
-	v.SetDefault("logging.modules.imageprovider.enabled", true)
-	v.SetDefault("logging.modules.imageprovider.file_path", "logs/imageprovider.log")
-	v.SetDefault("logging.modules.imageprovider.level", "debug")
 	v.SetDefault("logging.module_levels.analysis", "warn")
 
 	var settings Settings
@@ -146,12 +125,6 @@ func TestViperUnmarshalLoggingDefaults(t *testing.T) {
 	assert.Equal(t, 30, cfg.FileOutput.MaxAge, "MaxAge should be unmarshaled from max_age default")
 	assert.Equal(t, 10, cfg.FileOutput.MaxRotatedFiles, "MaxRotatedFiles should be unmarshaled from max_rotated_files default")
 	assert.False(t, cfg.FileOutput.Compress, "Compress should default to false")
-
-	require.NotNil(t, cfg.ModuleOutputs, "ModuleOutputs must be populated from logging.modules.* defaults")
-	require.Contains(t, cfg.ModuleOutputs, "imageprovider")
-	assert.Equal(t, "debug", cfg.ModuleOutputs["imageprovider"].Level,
-		"Module level from defaults should be 'debug'")
-	assert.Equal(t, "logs/imageprovider.log", cfg.ModuleOutputs["imageprovider"].FilePath)
 
 	require.NotNil(t, cfg.ModuleLevels, "ModuleLevels must be populated from logging.module_levels.* defaults")
 	assert.Equal(t, "warn", cfg.ModuleLevels["analysis"])

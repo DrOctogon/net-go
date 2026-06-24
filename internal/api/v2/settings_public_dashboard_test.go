@@ -28,7 +28,6 @@ import (
 	"github.com/tphakala/birdnet-go/internal/api/auth"
 	"github.com/tphakala/birdnet-go/internal/conf"
 	"github.com/tphakala/birdnet-go/internal/datastore/mocks"
-	"github.com/tphakala/birdnet-go/internal/imageprovider"
 	"github.com/tphakala/birdnet-go/internal/notification"
 	"github.com/tphakala/birdnet-go/internal/observability"
 	"github.com/tphakala/birdnet-go/internal/security/securitytest"
@@ -93,9 +92,8 @@ func newSettingsAuthTestEnvWithNotifier(t *testing.T) (*echo.Echo, *notification
 			Dashboard: conf.Dashboard{
 				SummaryLimit: 42,
 				Thumbnails: conf.Thumbnails{
-					ImageProvider: "avicommons",
-					Summary:       true,
-					Recent:        true,
+					Summary: true,
+					Recent:  true,
 				},
 				Locale: "en",
 			},
@@ -106,13 +104,6 @@ func newSettingsAuthTestEnvWithNotifier(t *testing.T) (*echo.Echo, *notification
 			Longitude: 24.9384,
 		},
 	}
-
-	mockImageProvider := &MockImageProvider{}
-	mockImageProvider.On("Fetch", mock.Anything).
-		Return(imageprovider.BirdImage{}, nil).Maybe()
-
-	birdImageCache := &imageprovider.BirdImageCache{}
-	birdImageCache.SetImageProvider(mockImageProvider)
 
 	sunCalc := suncalc.NewSunCalc(testHelsinkiLatitude, testHelsinkiLongitude)
 	controlChan := make(chan string, testControlChannelBuf)
@@ -137,7 +128,7 @@ func newSettingsAuthTestEnvWithNotifier(t *testing.T) (*echo.Echo, *notification
 	t.Cleanup(notifService.Stop)
 
 	controller, err := NewWithOptions(
-		e, mockDS, settings, birdImageCache, sunCalc, controlChan, mockMetrics,
+		e, mockDS, settings, sunCalc, controlChan, mockMetrics,
 		true, // initializeRoutes - register full /api/v2 route tree
 		WithAuthMiddleware(authMw.Authenticate),
 		WithAuthService(authService),

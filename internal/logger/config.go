@@ -57,7 +57,6 @@ const (
 	DefaultAudioLogPath         = "logs/audio.log"
 	DefaultBirdweatherLogPath   = "logs/birdweather.log"
 	DefaultWeatherLogPath       = "logs/weather.log"
-	DefaultImageproviderLogPath = "logs/imageprovider.log"
 	DefaultSpectrogramLogPath   = "logs/spectrogram.log"
 	DefaultActionsLogPath       = "logs/actions.log"
 	DefaultClassifierLogPath    = "logs/classifier.log"
@@ -147,7 +146,7 @@ func applyConfigDefaults(cfg *LoggingConfig) {
 	// External service integration logs
 	ensureModuleOutput(cfg, "birdweather", DefaultBirdweatherLogPath)
 	ensureModuleOutput(cfg, "weather", DefaultWeatherLogPath)
-	ensureModuleOutput(cfg, "imageprovider", DefaultImageproviderLogPath)
+
 
 	// Spectrogram generation logs
 	ensureModuleOutput(cfg, "spectrogram", DefaultSpectrogramLogPath)

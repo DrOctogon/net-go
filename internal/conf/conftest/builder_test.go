@@ -252,7 +252,6 @@ func TestSettingsBuilder_WithImageProvider(t *testing.T) {
 				WithImageProvider(tt.provider, tt.fallbackPolicy).
 				Build()
 
-			assert.Equal(t, tt.provider, settings.Realtime.Dashboard.Thumbnails.ImageProvider)
 			assert.Equal(t, tt.fallbackPolicy, settings.Realtime.Dashboard.Thumbnails.FallbackPolicy)
 		})
 	}
