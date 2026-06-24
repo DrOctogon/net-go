@@ -162,10 +162,6 @@ Lightweight connectivity check. Returns a minimal response with no database quer
 | GET    | `/media/audio/:filename`             | `ServeAudioClip`         | ❌   | Serve audio file                   |
 | GET    | `/media/spectrogram/:filename`       | `ServeSpectrogram`       | ❌   | Serve spectrogram image            |
 | GET    | `/media/audio`                       | `ServeAudioByQueryID`    | ❌   | Serve audio by detection ID        |
-| GET    | `/media/species-image`               | `GetSpeciesImage`        | ❌   | Get species thumbnail image        |
-| GET    | `/media/species-image/info`          | `GetSpeciesImageInfo`    | ❌   | Get species image attribution      |
-| GET    | `/media/image/:scientific_name`      | `ServeSpeciesImageProxy` | ❌   | Serve cached bird image (proxy)    |
-| GET    | `/media/bird-image/:scientific_name` | `ServeSpeciesImageProxy` | ❌   | Alias for image proxy endpoint     |
 | GET    | `/spectrogram/:id/status`            | `GetSpectrogramStatus`   | ❌   | Get spectrogram generation status  |
 | POST   | `/audio/:id/clip`                    | `ExtractAudioClipByID`   | ✅   | Extract audio clip from time range |
 
@@ -183,18 +179,6 @@ Lightweight connectivity check. Returns a minimal response with no database quer
 | GET    | `/notifications/unread/count`      | `GetUnreadCount`                   | ❌   | Count unread notifications (public read-only). Used by dashboard NotificationBell.                                  |
 | POST   | `/notifications/test/new-species`  | `CreateTestNewSpeciesNotification` | ✅   | Create test new-species notification                                                                                |
 | GET    | `/notifications/check-ntfy-server` | `CheckNtfyServer`                  | ✅   | Probe NTFY host for HTTPS/HTTP connectivity (authenticated to prevent SSRF relay). Query: `host=<hostname[:port]>`. |
-
-### Range Filter (`range.go`)
-
-| Method | Route                   | Handler                       | Auth | Description                                                 |
-| ------ | ----------------------- | ----------------------------- | ---- | ----------------------------------------------------------- |
-| GET    | `/range/status`         | `GetRangeFilterStatus`        | ❌   | Per-classifier geomodel coverage, auto-selection, threshold |
-| GET    | `/range/species/scores` | `GetRangeFilterSpeciesScores` | ❌   | Raw geomodel scores, primary model only; excludes always-active secondary models (e.g. bats) by design |
-| GET    | `/range/species/count`  | `GetRangeFilterSpeciesCount`  | ❌   | Species count with range filter                             |
-| GET    | `/range/species/list`   | `GetRangeFilterSpeciesList`   | ❌   | Species list with taxonomy groups                           |
-| GET    | `/range/species/csv`    | `GetRangeFilterSpeciesCSV`    | ❌   | Export species as CSV; with custom params includes always-active secondary models (matches the test endpoint); no-param export returns the persisted filter |
-| POST   | `/range/species/test`   | `TestRangeFilter`             | ❌   | Test range filter; returns the active set (range-filtered birds plus always-active secondary models) |
-| POST   | `/range/rebuild`        | `RebuildRangeFilter`          | ❌   | Rebuild range filter data                                   |
 
 ### Search (`search.go`)
 
@@ -232,16 +216,6 @@ The `GET /settings/dashboard` endpoint is intentionally public so that unauthent
 | Method | Route                | Handler            | Auth | Description                                              |
 | ------ | -------------------- | ------------------ | ---- | -------------------------------------------------------- |
 | GET    | `/filesystem/browse` | `BrowseFileSystem` | ✅   | Browse files and directories with secure path validation |
-
-### Species (`species.go`)
-
-| Method | Route                      | Handler               | Auth | Description                                                       |
-| ------ | -------------------------- | --------------------- | ---- | ----------------------------------------------------------------- |
-| GET    | `/species`                          | `GetSpeciesInfo`          | ❌   | Get extended species information including rarity status          |
-| GET    | `/species/all`                      | `GetAllSpecies`           | ❌   | Get all BirdNET species labels (not filtered by location)         |
-| GET    | `/species/taxonomy`                 | `GetSpeciesTaxonomy`      | ❌   | Get detailed taxonomy data with subspecies and hierarchy          |
-| GET    | `/species/:code/thumbnail`          | `GetSpeciesThumbnail`     | ❌   | Get bird thumbnail image by species code (redirects to image URL) |
-| GET    | `/species/dictionary/:locale`       | `ServeSpeciesDictionary`  | ❌   | Precompressed per-locale species name dictionary (gzip JSON)      |
 
 ### Server-Sent Events (`sse.go`)
 

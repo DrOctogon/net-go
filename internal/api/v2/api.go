@@ -30,7 +30,6 @@ import (
 	"github.com/tphakala/birdnet-go/internal/datastore"
 	datastoreV2 "github.com/tphakala/birdnet-go/internal/datastore/v2"
 	"github.com/tphakala/birdnet-go/internal/datastore/v2/repository"
-	"github.com/tphakala/birdnet-go/internal/ebird"
 	"github.com/tphakala/birdnet-go/internal/errors"
 	"github.com/tphakala/birdnet-go/internal/health"
 	"github.com/tphakala/birdnet-go/internal/imports"
@@ -69,7 +68,6 @@ type Controller struct {
 	Settings          atomic.Pointer[conf.Settings]
 	SunCalc           *suncalc.SunCalc
 	Processor         *processor.Processor
-	EBirdClient       *ebird.Client
 	TaxonomyDB        *classifier.TaxonomyDatabase
 	controlChan       chan string
 	shutdownRequester ShutdownRequester // programmatic shutdown trigger (e.g., for restart)
@@ -583,35 +581,6 @@ func NewWithOptions(e *echo.Echo, ds datastore.Interface, settings *conf.Setting
 	// Initialize SSE manager
 	c.sseManager = NewSSEManager()
 
-	// Initialize eBird client if enabled
-	if settings.Realtime.EBird.Enabled {
-		if settings.Realtime.EBird.APIKey == "" {
-			// Create notification for missing API key
-			// The Build() method automatically publishes to the event bus for notifications
-			_ = errors.Newf("eBird integration enabled but API key not configured").
-				Category(errors.CategoryConfiguration).
-				Context("setting", "realtime.ebird.apikey").
-				Component("ebird").
-				Build()
-			log.Warn("eBird integration enabled but API key not configured")
-		} else {
-			ebirdConfig := ebird.Config{
-				APIKey:   settings.Realtime.EBird.APIKey,
-				CacheTTL: time.Duration(settings.Realtime.EBird.CacheTTL) * time.Hour,
-			}
-			ebirdClient, err := ebird.NewClient(ebirdConfig)
-			if err != nil {
-				// Initialization error - already enhanced by ebird.NewClient
-				log.Warn("Failed to initialize eBird client", logger.Error(err))
-				// Continue without eBird client - it's not critical
-			} else {
-				c.EBirdClient = ebirdClient
-				log.Info("Initialized eBird API client")
-			}
-		}
-	} else {
-		log.Debug("eBird integration disabled")
-	}
 
 	// Initialize routes if requested (skip in tests to avoid starting background goroutines)
 	if initializeRoutes {
@@ -720,15 +689,12 @@ func (c *Controller) initRoutes() {
 		{"control routes", c.initControlRoutes},
 		{"auth routes", c.initAuthRoutes},
 		{"media routes", c.initMediaRoutes},
-		{"range routes", c.initRangeRoutes},
-		{"heatmap routes", c.initHeatmapRoutes},
 		{"sse routes", c.initSSERoutes},
 		{"diagnostics routes", c.initDiagnosticsRoutes},
 		{"metrics history routes", c.initMetricsHistoryRoutes},
 		{"notification routes", c.initNotificationRoutes},
 		{"support routes", c.initSupportRoutes},
 		{"debug routes", c.initDebugRoutes},
-		{"species routes", c.initSpeciesRoutes},
 		{"dynamic threshold routes", c.initDynamicThresholdRoutes},
 		{"alert routes", c.initAlertRoutes},
 		{"model routes", c.initModelRoutes},

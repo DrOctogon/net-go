@@ -12,7 +12,6 @@ import (
 	"github.com/tphakala/birdnet-go/internal/datastore"
 	datastoreV2 "github.com/tphakala/birdnet-go/internal/datastore/v2"
 	"github.com/tphakala/birdnet-go/internal/datastore/v2/repository"
-	"github.com/tphakala/birdnet-go/internal/logger"
 	"golang.org/x/text/unicode/norm"
 )
 
@@ -475,72 +474,12 @@ func (c *Controller) GetExpectedTodayRegional(ctx echo.Context) error {
 }
 
 func (c *Controller) getExpectedTodayRegionalImpl(ctx echo.Context) error {
-	if c.EBirdClient == nil {
-		return ctx.JSON(http.StatusOK, ExpectedTodayRegionalResponse{
-			Species:   []RegionalSpeciesItem{},
-			Available: false,
-		})
-	}
-
-	settings := c.currentSettings()
-	if settings == nil {
-		return ctx.JSON(http.StatusOK, ExpectedTodayRegionalResponse{
-			Species:   []RegionalSpeciesItem{},
-			Available: false,
-		})
-	}
-	lat := settings.BirdNET.Latitude
-	lng := settings.BirdNET.Longitude
-	if lat == 0 && lng == 0 {
-		return ctx.JSON(http.StatusOK, ExpectedTodayRegionalResponse{
-			Species:   []RegionalSpeciesItem{},
-			Available: false,
-		})
-	}
-
-	reqCtx, cancel := context.WithTimeout(ctx.Request().Context(), insightsQueryTimeout)
-	defer cancel()
-
-	observations, err := c.EBirdClient.GetRecentObservations(reqCtx, lat, lng, 14)
-	if err != nil {
-		return c.handleAnalyticsQueryError(ctx, err, "eBird observations", "Failed to query eBird observations")
-	}
-
-	// Get local species to deduplicate against (best-effort; if this fails, show all eBird results)
-	now := time.Now()
-	yearRanges := buildYearRanges(now, expectedTodayWindowDays)
-	localSpecies, localErr := c.insightsRepo.GetExpectedSpeciesToday(reqCtx, yearRanges, analyticsTZOffset(now), nil)
-	if localErr != nil {
-		c.logAPIRequest(ctx, logger.LogLevelWarn, "Failed to query local species for deduplication",
-			logger.Error(localErr))
-	}
-
-	localSet := make(map[string]struct{}, len(localSpecies))
-	for _, sp := range localSpecies {
-		localSet[sp.ScientificName] = struct{}{}
-	}
-
-	seen := make(map[string]struct{})
-	items := make([]RegionalSpeciesItem, 0)
-	for _, obs := range observations {
-		if _, isLocal := localSet[obs.ScientificName]; isLocal {
-			continue
-		}
-		if _, already := seen[obs.ScientificName]; already {
-			continue
-		}
-		seen[obs.ScientificName] = struct{}{}
-		items = append(items, RegionalSpeciesItem{
-			ScientificName:  obs.ScientificName,
-			CommonName:      obs.CommonName,
-			ObservationDate: obs.ObservationDt,
-			LocationName:    obs.LocationName,
-		})
-	}
-
+	// Regional expected-species came from the eBird integration, which has been
+	// removed in the human-voice pivot. The endpoint is retained for contract
+	// stability but always reports the feature as unavailable.
 	return ctx.JSON(http.StatusOK, ExpectedTodayRegionalResponse{
-		Species:   items,
-		Available: true,
+		Species:   []RegionalSpeciesItem{},
+		Available: false,
 	})
 }
 

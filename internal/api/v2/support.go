@@ -24,6 +24,7 @@ const (
 	supportMaxLogSizeMB     = 50          // Maximum log size in MB
 	supportBytesPerMB       = 1024 * 1024 // Bytes per megabyte
 	supportDumpTimeout      = 120 * time.Second
+	daysPerWeek             = 7            // Days in a week (log duration calc)
 )
 
 // valueContext wraps a cancellation-bearing context while delegating

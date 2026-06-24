@@ -142,21 +142,6 @@ func (c *Controller) registerHealthChecks() {
 			status := inference.CheckOpenVINOAvailability()
 			return status.Supported, status.Active
 		}),
-		checks.NewRangeFilterCheck(func() checks.RangeFilterStatusInfo {
-			orch, err := c.getBirdNETInstance()
-			if err != nil || orch == nil {
-				return checks.RangeFilterStatusInfo{}
-			}
-			st := orch.RangeFilterStatus()
-			return checks.RangeFilterStatusInfo{
-				LocationConfigured: st.LocationConfigured,
-				Active:             st.Active,
-				FellBack:           st.FellBack,
-				GeomodelActive:     st.Geomodel != nil,
-				MappedSpecies:      st.MappedSpecies,
-			}
-		}),
-
 		// Stream checks
 		checks.NewStreamConnectivityCheck(getStreamHealthInfos),
 		checks.NewStreamErrorRateCheck(c.healthMetricsStore, c.healthEvents.Recent),

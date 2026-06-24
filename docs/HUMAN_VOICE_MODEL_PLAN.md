@@ -14,6 +14,15 @@ acoustic pipeline, retarget to human-voice-only detection.
 |---|---|---|
 | `262bbc73` | 1 | `internal/classifier/humanvoice/` — Silero VAD `ModelInstance` wrapper, `RegistryIDHumanVoice` registry entry, `HumanVoiceConfig` + `conf.ModelIDHumanVoice`. Additive; no bird code touched. |
 | `34091881` | 2a | Deleted `internal/birdweather/` + `internal/speciesdict/` and ALL callers (processor `BwClient` + upload action, `control_monitor` reconfigure, api/v2 integrations routes/handlers, species-dictionary endpoint, app DTO field). Fixed 3 stale tests. |
+| `a3c4f9b4` | 2b | Deleted `internal/imageprovider/` (~10.5k LOC) + ALL callers (APIServerService, Processor, SSEAction/MqttAction, pending_broadcast, api/server, api/v2/api, conf/defaults, mqtt/dto). Stubbed `GetSpeciesThumbnail`→404, `getThumbnailURL`→placeholder. Dropped `BirdImage` SSE/MQTT fields + image-cache analytics calls. Fixed sse_contract/analytics/species/datastore-guard tests. |
+| _(pending)_ | 2c-1 | **api/v2 bird-endpoint peel + ebird decouple.** Deleted `species.go`, `species_taxonomy.go`, `range.go`, `heatmap.go` (+ dedicated tests). Removed range/heatmap/species route registrations + `EBirdClient` field + ebird init/import from `api.go`. Neutralized `getExpectedTodayRegionalImpl` (eBird-backed) → always `Available:false`. Dropped range-filter health check from `diagnostics.go`. Moved `daysPerWeek` const to `support.go`. README bird sections removed. api/v2 build+tests green. |
+
+### Phase 2c decomposition (decided 2026-06-24)
+Plan said "one rewrite unit" but that detonates the whole pipeline at once. **Peel leaves first**, build green each step:
+- **2c-1** (done): api/v2 bird endpoints + ebird decouple. ✅
+- **2c-2**: range-filter peripherals — `cmd/rangefilter/`, `internal/health/checks/range_filter_check.go`, observability range metric, notification range-rebuild key, conf `range_filter.go` helpers where safe. Also fold in the **species-analytics deletion** (phenology/accumulation/distribution endpoints in analytics.go + new-species notification) — these are datastore-only (zero classifier coupling) so they don't block, but user chose to delete them.
+- **2c-3 (MILESTONE)**: welded core swap — reduce `internal/classifier` to a `ModelInstance`-only facade, delete `internal/ebird` + bird impls (birdnet/perch/bat/bsg) + range filter + taxonomy/genus + embeds + model gallery, retarget ~50 analysis consumers, construct `humanvoice.Model` in the analysis layer.
+- **2d**: real stateful Silero VAD inference (state tensors, `sr` input, 512-sample frames) + fetch `silero_vad.onnx`. Deferred from 2c-3 so the structural swap stays reviewable; humanvoice `Predict` uses the current generic path / clearly-marked stub until then.
 
 **Build command (always use this tag set — frontend `dist` not built, no TFLite C lib):**
 `go build -tags "notflite skipfrontend" ./...` → currently exit 0.
