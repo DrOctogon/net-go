@@ -1,4 +1,4 @@
-// Package observability provides metrics and monitoring capabilities for the BirdNET-Go application.
+// Package observability provides metrics and monitoring capabilities for the VoiceWatch application.
 package observability
 
 import (
@@ -17,7 +17,7 @@ import (
 type Metrics struct {
 	registry      *prometheus.Registry
 	MQTT          *metrics.MQTTMetrics
-	BirdNET       *metrics.BirdNETMetrics
+	VoiceWatch       *metrics.VoiceWatchMetrics
 	ImageProvider *metrics.ImageProviderMetrics
 	DiskManager   *metrics.DiskManagerMetrics
 	Weather       *metrics.WeatherMetrics
@@ -39,9 +39,9 @@ func NewMetrics() (*Metrics, error) {
 		return nil, fmt.Errorf("failed to create MQTT metrics: %w", err)
 	}
 
-	birdnetMetrics, err := metrics.NewBirdNETMetrics(registry)
+	voicewatchMetrics, err := metrics.NewVoiceWatchMetrics(registry)
 	if err != nil {
-		return nil, fmt.Errorf("failed to create BirdNET metrics: %w", err)
+		return nil, fmt.Errorf("failed to create VoiceWatch metrics: %w", err)
 	}
 
 	imageProviderMetrics, err := metrics.NewImageProviderMetrics(registry)
@@ -92,7 +92,7 @@ func NewMetrics() (*Metrics, error) {
 	m := &Metrics{
 		registry:      registry,
 		MQTT:          mqttMetrics,
-		BirdNET:       birdnetMetrics,
+		VoiceWatch:    voicewatchMetrics,
 		ImageProvider: imageProviderMetrics,
 		DiskManager:   diskManagerMetrics,
 		Weather:       weatherMetrics,
@@ -105,7 +105,7 @@ func NewMetrics() (*Metrics, error) {
 	}
 
 	// Initialize tracing with metrics
-	initializeTracing(birdnetMetrics)
+	initializeTracing(voicewatchMetrics)
 
 	// Initialize diskmanager with metrics
 	diskmanager.SetMetrics(diskManagerMetrics)
@@ -130,4 +130,4 @@ func (m *Metrics) metricsHandler(w http.ResponseWriter, r *http.Request) {
 // initializeTracing previously wired metrics into the classifier tracing layer.
 // The classifier tracing/span subsystem was removed in the human-voice pivot, so
 // this is now a no-op retained for call-site and test compatibility.
-func initializeTracing(_ *metrics.BirdNETMetrics) {}
+func initializeTracing(_ *metrics.VoiceWatchMetrics) {}

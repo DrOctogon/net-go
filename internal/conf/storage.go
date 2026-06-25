@@ -131,11 +131,11 @@ func Load() (*Settings, error) {
 	// API returns correct season dates from the start. Without this,
 	// Viper defaults (Northern Hemisphere) would be served regardless
 	// of the configured latitude.
-	locationConfigured := settings.BirdNET.LocationConfigured
+	locationConfigured := settings.VoiceWatch.LocationConfigured
 	if settings.Realtime.SpeciesTracking.SeasonalTracking.Enabled && locationConfigured {
 		settings.Realtime.SpeciesTracking.SeasonalTracking = GetSeasonalTrackingWithHemisphere(
 			settings.Realtime.SpeciesTracking.SeasonalTracking,
-			settings.BirdNET.Latitude,
+			settings.VoiceWatch.Latitude,
 		)
 	}
 
@@ -417,7 +417,7 @@ func Setting() *Settings {
 func prepareSettingsForSave(s *Settings, latitude float64) Settings {
 	settingsCopy := *s
 
-	locationConfigured := s.BirdNET.LocationConfigured
+	locationConfigured := s.VoiceWatch.LocationConfigured
 	if settingsCopy.Realtime.SpeciesTracking.SeasonalTracking.Enabled && locationConfigured {
 		settingsCopy.Realtime.SpeciesTracking.SeasonalTracking = GetSeasonalTrackingWithHemisphere(
 			settingsCopy.Realtime.SpeciesTracking.SeasonalTracking,
@@ -448,7 +448,7 @@ func SaveSettings() error {
 	settingsCopy := *CloneSettings(current)
 
 	// Apply data transformations (seasonal tracking, etc.) on the clone.
-	settingsCopy = prepareSettingsForSave(&settingsCopy, current.BirdNET.Latitude)
+	settingsCopy = prepareSettingsForSave(&settingsCopy, current.VoiceWatch.Latitude)
 
 	// Find the path of the current config file
 	configPath, err := FindConfigFile()

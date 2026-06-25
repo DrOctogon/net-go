@@ -45,9 +45,9 @@ func (p *Processor) initExtendedCapture() {
 		labels = p.Bn.AllLabels()
 	}
 	if len(labels) == 0 {
-		labels = settings.BirdNET.Labels
+		labels = settings.VoiceWatch.Labels
 	}
-	locale := settings.BirdNET.Locale
+	locale := settings.VoiceWatch.Locale
 
 	isAll, resolved := resolveSpeciesFilter(
 		settings.Realtime.ExtendedCapture.Species, labels, locale, "extended_capture",

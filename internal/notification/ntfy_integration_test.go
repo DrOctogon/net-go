@@ -48,7 +48,7 @@ func TestNtfyShoutrrrDelivery_NoAuth(t *testing.T) {
 	}{
 		{
 			name:    "basic_delivery",
-			message: "Hello from BirdNET-Go integration test",
+			message: "Hello from VoiceWatch integration test",
 		},
 		{
 			name:    "with_title",

@@ -38,7 +38,7 @@ func TestValidateRealtimeSettings_IntervalMustBePositive(t *testing.T) {
 				Interval: tt.interval,
 				Audio: AudioSettings{
 					Sources: []AudioSourceConfig{
-						{Name: "test", Device: testAudioDeviceSysdefault, Model: "birdnet"},
+						{Name: "test", Device: testAudioDeviceSysdefault, Model:  "voicewatch"},
 					},
 					Export: ExportSettings{Type: AudioExportTypeWAV},
 				},
@@ -149,7 +149,7 @@ func TestValidateExportPath(t *testing.T) {
 func TestValidateAudioSettings_ExportPathTraversal(t *testing.T) {
 	settings := &AudioSettings{
 		Sources: []AudioSourceConfig{
-			{Name: "test", Device: testAudioDeviceSysdefault, Model: "birdnet"},
+			{Name: "test", Device: testAudioDeviceSysdefault, Model:  "voicewatch"},
 		},
 		Export: ExportSettings{
 			Enabled: true,
@@ -274,7 +274,7 @@ func TestValidateEQFilters(t *testing.T) {
 func TestValidateAudioSettings_GlobalEQFilters(t *testing.T) {
 	settings := &AudioSettings{
 		Sources: []AudioSourceConfig{
-			{Name: "test", Device: testAudioDeviceSysdefault, Model: "birdnet"},
+			{Name: "test", Device: testAudioDeviceSysdefault, Model:  "voicewatch"},
 		},
 		Export: ExportSettings{Type: AudioExportTypeWAV},
 		Equalizer: EqualizerSettings{
@@ -403,14 +403,14 @@ func TestValidateDynamicThresholdSettings(t *testing.T) {
 
 func TestValidateSettings_EmptyBirdNETLocaleDefaulted(t *testing.T) {
 	settings := createMinimalValidSettings()
-	settings.BirdNET.Locale = ""
+	settings.VoiceWatch.Locale = ""
 
 	require.NoError(t, ValidateSettings(settings))
 
-	// The default "en" is normalized by validateBirdNETSettings to "en-uk"
-	assert.NotEmpty(t, settings.BirdNET.Locale,
+	// The default "en" is normalized by validateVoiceWatchSettings to "en-uk"
+	assert.NotEmpty(t, settings.VoiceWatch.Locale,
 		"empty locale should be defaulted, not left empty")
-	assert.Contains(t, settings.BirdNET.Locale, "en",
+	assert.Contains(t, settings.VoiceWatch.Locale, "en",
 		"defaulted locale should be an English variant")
 }
 
@@ -554,11 +554,11 @@ func createMinimalValidSettings() *Settings {
 	// Main
 	s.Main.Name = "Test Station"
 
-	// BirdNET
-	s.BirdNET.Sensitivity = 1.0
-	s.BirdNET.Threshold = 0.7
-	s.BirdNET.Overlap = 1.5
-	s.BirdNET.Locale = "en"
+	// VoiceWatch
+	s.VoiceWatch.Sensitivity = 1.0
+	s.VoiceWatch.Threshold = 0.7
+	s.VoiceWatch.Overlap = 1.5
+	s.VoiceWatch.Locale = "en"
 
 	// WebServer
 	s.WebServer.Enabled = true
@@ -572,7 +572,7 @@ func createMinimalValidSettings() *Settings {
 	// Realtime
 	s.Realtime.Interval = 15
 	s.Realtime.Audio.Sources = []AudioSourceConfig{
-		{Name: "test", Device: testAudioDeviceSysdefault, Model: "birdnet"},
+		{Name: "test", Device: testAudioDeviceSysdefault, Model:  "voicewatch"},
 	}
 	s.Realtime.Audio.Export.Type = AudioExportTypeWAV
 	s.Realtime.Audio.Export.Length = 15
@@ -590,11 +590,11 @@ func createMinimalValidSettings() *Settings {
 // Issue #511: NaN/Infinity bypass float range validation
 // -----------------------------------------------------------------------
 
-func TestValidateBirdNETSettings_NaNInfinityRejected(t *testing.T) {
+func TestValidateVoiceWatchSettings_NaNInfinityRejected(t *testing.T) {
 	t.Parallel()
 
-	base := func() *BirdNETConfig {
-		return &BirdNETConfig{
+	base := func() *VoiceWatchConfig {
+		return &VoiceWatchConfig{
 			Sensitivity: 0.5,
 			Threshold:   0.8,
 			Overlap:     1.5,
@@ -606,18 +606,18 @@ func TestValidateBirdNETSettings_NaNInfinityRejected(t *testing.T) {
 
 	tests := []struct {
 		name   string
-		mutate func(c *BirdNETConfig)
+		mutate func(c *VoiceWatchConfig)
 	}{
-		{"NaN sensitivity", func(c *BirdNETConfig) { c.Sensitivity = math.NaN() }},
-		{"Inf sensitivity", func(c *BirdNETConfig) { c.Sensitivity = math.Inf(1) }},
-		{"-Inf sensitivity", func(c *BirdNETConfig) { c.Sensitivity = math.Inf(-1) }},
-		{"NaN threshold", func(c *BirdNETConfig) { c.Threshold = math.NaN() }},
-		{"Inf threshold", func(c *BirdNETConfig) { c.Threshold = math.Inf(1) }},
-		{"NaN overlap", func(c *BirdNETConfig) { c.Overlap = math.NaN() }},
-		{"NaN longitude", func(c *BirdNETConfig) { c.Longitude = math.NaN() }},
-		{"Inf longitude", func(c *BirdNETConfig) { c.Longitude = math.Inf(1) }},
-		{"NaN latitude", func(c *BirdNETConfig) { c.Latitude = math.NaN() }},
-		{"Inf latitude", func(c *BirdNETConfig) { c.Latitude = math.Inf(-1) }},
+		{"NaN sensitivity", func(c *VoiceWatchConfig) { c.Sensitivity = math.NaN() }},
+		{"Inf sensitivity", func(c *VoiceWatchConfig) { c.Sensitivity = math.Inf(1) }},
+		{"-Inf sensitivity", func(c *VoiceWatchConfig) { c.Sensitivity = math.Inf(-1) }},
+		{"NaN threshold", func(c *VoiceWatchConfig) { c.Threshold = math.NaN() }},
+		{"Inf threshold", func(c *VoiceWatchConfig) { c.Threshold = math.Inf(1) }},
+		{"NaN overlap", func(c *VoiceWatchConfig) { c.Overlap = math.NaN() }},
+		{"NaN longitude", func(c *VoiceWatchConfig) { c.Longitude = math.NaN() }},
+		{"Inf longitude", func(c *VoiceWatchConfig) { c.Longitude = math.Inf(1) }},
+		{"NaN latitude", func(c *VoiceWatchConfig) { c.Latitude = math.NaN() }},
+		{"Inf latitude", func(c *VoiceWatchConfig) { c.Latitude = math.Inf(-1) }},
 	}
 
 	for _, tt := range tests {
@@ -626,7 +626,7 @@ func TestValidateBirdNETSettings_NaNInfinityRejected(t *testing.T) {
 			cfg := base()
 			tt.mutate(cfg)
 
-			result := ValidateBirdNETSettings(cfg)
+			result := ValidateVoiceWatchSettings(cfg)
 			assert.False(t, result.Valid, "expected validation to fail for %s", tt.name)
 			assert.NotEmpty(t, result.Errors, "expected at least one error for %s", tt.name)
 		})
@@ -651,7 +651,7 @@ func TestValidateAudioSourceConfig_NaNGainRejected(t *testing.T) {
 	src := AudioSourceConfig{
 		Name:   "test",
 		Device: testAudioDeviceSysdefault,
-		Model:  "birdnet",
+		Model:  "voicewatch",
 		Gain:   math.NaN(),
 	}
 
@@ -697,7 +697,7 @@ func TestValidateSpeciesConfig_NaNThresholdRejected(t *testing.T) {
 		Interval: 15,
 		Audio: AudioSettings{
 			Sources: []AudioSourceConfig{
-				{Name: "test", Device: testAudioDeviceSysdefault, Model: "birdnet"},
+				{Name: "test", Device: testAudioDeviceSysdefault, Model:  "voicewatch"},
 			},
 			Export: ExportSettings{Type: AudioExportTypeWAV},
 		},

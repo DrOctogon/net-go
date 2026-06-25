@@ -29,7 +29,7 @@ var textAttrPool = sync.Pool{
 // container, the execution environment (journald, Docker log driver) adds
 // timestamps automatically. This avoids redundant timestamps like:
 //
-//	Dec 28 13:43:08 birdnet-go[1234]: [28.12.2025 13:43:08] INFO ...
+//	Dec 28 13:43:08 voicewatch[1234]: [28.12.2025 13:43:08] INFO ...
 //
 // Format: LEVEL  [module] message key=value key2=value2
 //
@@ -40,7 +40,7 @@ var textAttrPool = sync.Pool{
 //
 // In journald, this appears as:
 //
-//	Dec 28 13:43:08 birdnet-go[1234]: INFO  [main] Initializing application
+//	Dec 28 13:43:08 voicewatch[1234]: INFO  [main] Initializing application
 type textHandler struct {
 	writer io.Writer
 	level  slog.Level

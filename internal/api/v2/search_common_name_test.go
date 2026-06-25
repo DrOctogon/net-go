@@ -33,7 +33,7 @@ func setupSearchTestController(t *testing.T, labels []string) *Controller {
 		Group: e.Group("/api/v2"),
 	}
 	c.Settings.Store(&conf.Settings{
-		BirdNET: conf.BirdNETConfig{
+		VoiceWatch: conf.VoiceWatchConfig{
 			Labels: labels,
 		},
 	})

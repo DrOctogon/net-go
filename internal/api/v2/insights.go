@@ -398,7 +398,7 @@ func (c *Controller) initInsightsRoutes() {
 
 	// Build both name maps once and cache on Controller
 	if s := c.controllerSettings(); s != nil {
-		c.UpdateCommonNameMap(s.BirdNET.Labels)
+		c.UpdateCommonNameMap(s.VoiceWatch.Labels)
 	}
 
 	insightsGroup := c.Group.Group("/insights")

@@ -4,7 +4,7 @@ import (
 	"github.com/tphakala/voicewatch/internal/datastore/v2/entities"
 )
 
-// DefaultRules returns the built-in alert rules that ship with BirdNET-Go.
+// DefaultRules returns the built-in alert rules that ship with VoiceWatch.
 // These are seeded on first v2 activation and can be restored via reset-defaults.
 func DefaultRules() []entities.AlertRule {
 	return []entities.AlertRule{

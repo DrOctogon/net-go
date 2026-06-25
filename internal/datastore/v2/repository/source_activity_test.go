@@ -36,7 +36,7 @@ func setupSourceTestDB(t *testing.T) *gorm.DB {
 	))
 
 	require.NoError(t, db.Create(&entities.LabelType{ID: 1, Name: "species"}).Error)
-	require.NoError(t, db.Create(&entities.AIModel{ID: 1, Name: "BirdNET", Version: "2.4"}).Error)
+	require.NoError(t, db.Create(&entities.AIModel{ID: 1, Name: "VoiceWatch", Version: "2.4"}).Error)
 
 	return db
 }

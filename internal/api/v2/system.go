@@ -1736,8 +1736,8 @@ func (c *Controller) DownloadDatabaseBackup(ctx echo.Context) error {
 		return c.HandleError(ctx, randErr, "Failed to generate secure backup filename", http.StatusInternalServerError)
 	}
 	randomSuffix := "-" + hex.EncodeToString(randomBytes)
-	tempPath := filepath.Join(os.TempDir(), fmt.Sprintf("birdnet-%s-backup-%s%s.db", dbType, timestamp, randomSuffix))
-	filename := fmt.Sprintf("birdnet-%s-backup-%s.db", dbType, timestamp)
+	tempPath := filepath.Join(os.TempDir(), fmt.Sprintf("voicewatch-%s-backup-%s%s.db", dbType, timestamp, randomSuffix))
+	filename := fmt.Sprintf("voicewatch-%s-backup-%s.db", dbType, timestamp)
 
 	// Set response headers BEFORE starting VACUUM to establish the connection.
 	// This prevents connection timeout during the long VACUUM operation.

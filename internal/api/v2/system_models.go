@@ -22,7 +22,7 @@ func (c *Controller) GetActiveModels(ctx echo.Context) error {
 	if c.Processor == nil {
 		return ctx.JSON(http.StatusOK, []ActiveModelResponse{})
 	}
-	bn := c.Processor.GetBirdNET()
+	bn := c.Processor.GetOrchestrator()
 	if bn == nil {
 		return ctx.JSON(http.StatusOK, []ActiveModelResponse{})
 	}

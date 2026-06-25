@@ -30,7 +30,7 @@ type ModelTarget struct {
 // the source rate. A single Resampler is created per unique target rate to
 // avoid redundant conversion when multiple models share the same rate.
 //
-// PCM constraint: The BirdNET model expects 16-bit signed little-endian PCM.
+// PCM constraint: The speech model expects 16-bit signed little-endian PCM.
 // Callers must ensure the router delivers frames with BitDepth=16. Higher
 // bit depths will be written to the buffers without conversion, which will
 // produce incorrect analysis results.

@@ -180,8 +180,8 @@ func mapYrResponseToWeatherData(response *YrResponse, settings *conf.Settings) *
 	return &WeatherData{
 		Time: current.Time,
 		Location: Location{
-			Latitude:  settings.BirdNET.Latitude,
-			Longitude: settings.BirdNET.Longitude,
+			Latitude:  settings.VoiceWatch.Latitude,
+			Longitude: settings.VoiceWatch.Longitude,
 		},
 		Temperature: Temperature{
 			Current: current.Data.Instant.Details.AirTemperature,
@@ -211,8 +211,8 @@ func (p *YrNoProvider) FetchWeather(ctx context.Context, settings *conf.Settings
 	// needs no API key, so only the coordinates go in the query. YrNoBaseURL is a
 	// constant with no existing query, so appending "?" + encoded is safe.
 	query := url.Values{
-		"lat": {strconv.FormatFloat(settings.BirdNET.Latitude, 'f', yrNoCoordPrecision, 64)},
-		"lon": {strconv.FormatFloat(settings.BirdNET.Longitude, 'f', yrNoCoordPrecision, 64)},
+		"lat": {strconv.FormatFloat(settings.VoiceWatch.Latitude, 'f', yrNoCoordPrecision, 64)},
+		"lon": {strconv.FormatFloat(settings.VoiceWatch.Longitude, 'f', yrNoCoordPrecision, 64)},
 	}
 	apiURL := YrNoBaseURL + "?" + query.Encode()
 

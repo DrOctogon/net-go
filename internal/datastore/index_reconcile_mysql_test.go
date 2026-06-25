@@ -117,7 +117,7 @@ func TestReconcile_MySQL_DropsStaleSpeciesName(t *testing.T) {
 		CREATE TABLE dynamic_thresholds (
 			id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 			species_name VARCHAR(200) NOT NULL,
-			model_name VARCHAR(100) NOT NULL DEFAULT 'BirdNET',
+			model_name VARCHAR(100) NOT NULL DEFAULT 'VoiceWatch',
 			scientific_name VARCHAR(200),
 			level INT NOT NULL DEFAULT 0,
 			current_value DOUBLE NOT NULL,
@@ -153,7 +153,7 @@ func TestReconcile_MySQL_AutoMigrateSucceedsAfterReconcile(t *testing.T) {
 		CREATE TABLE dynamic_thresholds (
 			id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 			species_name VARCHAR(200) NOT NULL,
-			model_name VARCHAR(100) NOT NULL DEFAULT 'BirdNET',
+			model_name VARCHAR(100) NOT NULL DEFAULT 'VoiceWatch',
 			scientific_name VARCHAR(200),
 			level INT NOT NULL DEFAULT 0,
 			current_value DOUBLE NOT NULL,
@@ -173,7 +173,7 @@ func TestReconcile_MySQL_AutoMigrateSucceedsAfterReconcile(t *testing.T) {
 	require.NoError(t, reconTestDB.Exec(`
 		INSERT INTO dynamic_thresholds
 		(species_name, model_name, current_value, base_threshold, valid_hours, expires_at, last_triggered, first_created, updated_at)
-		VALUES ('robin', 'BirdNET', 0.8, 0.5, 24, NOW(), NOW(), NOW(), NOW())
+		VALUES ('robin', 'VoiceWatch', 0.8, 0.5, 24, NOW(), NOW(), NOW(), NOW())
 	`).Error)
 
 	require.NoError(t, reconcileLegacyUniqueIndexes(reconTestDB, "mysql", reconTestDBName, []any{&DynamicThreshold{}}))
@@ -226,7 +226,7 @@ func TestReconcile_MySQL_ToleratesAlreadyDropped(t *testing.T) {
 		CREATE TABLE dynamic_thresholds (
 			id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 			species_name VARCHAR(200) NOT NULL,
-			model_name VARCHAR(100) NOT NULL DEFAULT 'BirdNET',
+			model_name VARCHAR(100) NOT NULL DEFAULT 'VoiceWatch',
 			scientific_name VARCHAR(200),
 			level INT NOT NULL DEFAULT 0,
 			current_value DOUBLE NOT NULL,

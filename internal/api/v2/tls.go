@@ -315,7 +315,7 @@ func (c *Controller) DownloadTLSCertificate(ctx echo.Context) error {
 
 	certPath := tlsMgr.GetCertificatePath(tlsServiceName, conf.TLSCertTypeServerCert)
 
-	ctx.Response().Header().Set("Content-Disposition", `attachment; filename="birdnet-go.crt"`)
+	ctx.Response().Header().Set("Content-Disposition", `attachment; filename="voicewatch.crt"`)
 
 	return ctx.File(certPath)
 }

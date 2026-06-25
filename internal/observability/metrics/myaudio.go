@@ -63,10 +63,10 @@ type MyAudioMetrics struct {
 	fileSizesTotal        *prometheus.CounterVec
 	audioFileInfoGauge    *prometheus.GaugeVec
 
-	// BirdNET processing buffer overrun metrics
-	birdnetProcessingOverrunsTotal   *prometheus.CounterVec
-	birdnetProcessingOverrunDuration *prometheus.HistogramVec
-	birdnetProcessingOverrunRatio    *prometheus.HistogramVec
+	// VoiceWatch processing buffer overrun metrics
+	voicewatchProcessingOverrunsTotal   *prometheus.CounterVec
+	voicewatchProcessingOverrunDuration *prometheus.HistogramVec
+	voicewatchProcessingOverrunRatio    *prometheus.HistogramVec
 
 	// Audio processing metrics
 	audioProcessingTotal    *prometheus.CounterVec
@@ -78,7 +78,7 @@ type MyAudioMetrics struct {
 	audioInferenceDuration  *prometheus.HistogramVec
 	audioDataSizeTotal      *prometheus.CounterVec
 	audioSampleCountTotal   *prometheus.CounterVec
-	birdnetResultsTotal     *prometheus.CounterVec
+	voicewatchResultsTotal     *prometheus.CounterVec
 	audioQueueOperations    *prometheus.CounterVec
 
 	// collectors is a slice of all collectors for easier iteration
@@ -387,29 +387,29 @@ func (m *MyAudioMetrics) initMetrics() error {
 		[]string{"format", "metric_type"}, // metric_type: sample_rate, channels, bit_depth, total_samples
 	)
 
-	// BirdNET processing buffer overrun metrics
-	m.birdnetProcessingOverrunsTotal = prometheus.NewCounterVec(
+	// VoiceWatch processing buffer overrun metrics
+	m.voicewatchProcessingOverrunsTotal = prometheus.NewCounterVec(
 		prometheus.CounterOpts{
-			Name: "myaudio_birdnet_processing_overruns_total",
-			Help: "Total number of BirdNET processing buffer overruns (inference exceeded effective buffer duration)",
+			Name: "myaudio_voicewatch_processing_overruns_total",
+			Help: "Total number of VoiceWatch processing buffer overruns (inference exceeded effective buffer duration)",
 		},
 		[]string{"source"},
 	)
 
-	m.birdnetProcessingOverrunDuration = prometheus.NewHistogramVec(
+	m.voicewatchProcessingOverrunDuration = prometheus.NewHistogramVec(
 		prometheus.HistogramOpts{
-			Name:    "myaudio_birdnet_processing_overrun_duration_seconds",
+			Name:    "myaudio_voicewatch_processing_overrun_duration_seconds",
 			Help:    "Elapsed processing time when a buffer overrun occurred",
 			Buckets: prometheus.ExponentialBuckets(BucketStart1ms, BucketFactor2, BucketCount15), // 1ms to ~32s
 		},
 		[]string{"source"},
 	)
 
-	m.birdnetProcessingOverrunRatio = prometheus.NewHistogramVec(
+	m.voicewatchProcessingOverrunRatio = prometheus.NewHistogramVec(
 		prometheus.HistogramOpts{
-			Name:    "myaudio_birdnet_processing_overrun_ratio",
+			Name:    "myaudio_voicewatch_processing_overrun_ratio",
 			Help:    "Ratio of elapsed processing time to effective buffer duration (>1.0 means overrun)",
-			Buckets: BirdNETOverrunRatioBuckets,
+			Buckets: VoiceWatchOverrunRatioBuckets,
 		},
 		[]string{"source"},
 	)
@@ -468,7 +468,7 @@ func (m *MyAudioMetrics) initMetrics() error {
 	m.audioInferenceDuration = prometheus.NewHistogramVec(
 		prometheus.HistogramOpts{
 			Name:    "myaudio_audio_inference_duration_seconds",
-			Help:    "Time taken for BirdNET inference operations",
+			Help:    "Time taken for VoiceWatch inference operations",
 			Buckets: prometheus.ExponentialBuckets(BucketStart1ms, BucketFactor2, BucketCount15), // 1ms to ~32s
 		},
 		[]string{"source"},
@@ -490,10 +490,10 @@ func (m *MyAudioMetrics) initMetrics() error {
 		[]string{"source"},
 	)
 
-	m.birdnetResultsTotal = prometheus.NewCounterVec(
+	m.voicewatchResultsTotal = prometheus.NewCounterVec(
 		prometheus.CounterOpts{
-			Name: "myaudio_birdnet_results_total",
-			Help: "Total number of BirdNET detection results",
+			Name: "myaudio_voicewatch_results_total",
+			Help: "Total number of VoiceWatch detection results",
 		},
 		[]string{"source"},
 	)
@@ -542,9 +542,9 @@ func (m *MyAudioMetrics) initMetrics() error {
 		m.fileOperationErrors,
 		m.fileSizesTotal,
 		m.audioFileInfoGauge,
-		m.birdnetProcessingOverrunsTotal,
-		m.birdnetProcessingOverrunDuration,
-		m.birdnetProcessingOverrunRatio,
+		m.voicewatchProcessingOverrunsTotal,
+		m.voicewatchProcessingOverrunDuration,
+		m.voicewatchProcessingOverrunRatio,
 		m.audioProcessingTotal,
 		m.audioProcessingDuration,
 		m.audioProcessingErrors,
@@ -554,7 +554,7 @@ func (m *MyAudioMetrics) initMetrics() error {
 		m.audioInferenceDuration,
 		m.audioDataSizeTotal,
 		m.audioSampleCountTotal,
-		m.birdnetResultsTotal,
+		m.voicewatchResultsTotal,
 		m.audioQueueOperations,
 	}
 
@@ -695,14 +695,14 @@ func (m *MyAudioMetrics) RecordBufferWraparound(bufferType, source string) {
 
 // BirdNET processing buffer overrun recording methods
 
-// RecordBirdNETProcessingOverrun records a BirdNET processing buffer overrun event.
+// RecordVoiceWatchProcessingOverrun records a VoiceWatch processing buffer overrun event.
 // elapsed is the actual processing duration in seconds.
 // bufferLen is the effective buffer duration in seconds.
-func (m *MyAudioMetrics) RecordBirdNETProcessingOverrun(source string, elapsedSeconds, bufferLenSeconds float64) {
-	m.birdnetProcessingOverrunsTotal.WithLabelValues(source).Inc()
-	m.birdnetProcessingOverrunDuration.WithLabelValues(source).Observe(elapsedSeconds)
+func (m *MyAudioMetrics) RecordVoiceWatchProcessingOverrun(source string, elapsedSeconds, bufferLenSeconds float64) {
+	m.voicewatchProcessingOverrunsTotal.WithLabelValues(source).Inc()
+	m.voicewatchProcessingOverrunDuration.WithLabelValues(source).Observe(elapsedSeconds)
 	if bufferLenSeconds > 0 {
-		m.birdnetProcessingOverrunRatio.WithLabelValues(source).Observe(elapsedSeconds / bufferLenSeconds)
+		m.voicewatchProcessingOverrunRatio.WithLabelValues(source).Observe(elapsedSeconds / bufferLenSeconds)
 	}
 }
 
@@ -834,9 +834,9 @@ func (m *MyAudioMetrics) RecordAudioSampleCount(source string, sampleCount int) 
 	m.audioSampleCountTotal.WithLabelValues(source).Add(float64(sampleCount))
 }
 
-// RecordBirdNETResults records the number of BirdNET detection results
-func (m *MyAudioMetrics) RecordBirdNETResults(source string, resultCount int) {
-	m.birdnetResultsTotal.WithLabelValues(source).Add(float64(resultCount))
+// RecordVoiceWatchResults records the number of VoiceWatch detection results
+func (m *MyAudioMetrics) RecordVoiceWatchResults(source string, resultCount int) {
+	m.voicewatchResultsTotal.WithLabelValues(source).Add(float64(resultCount))
 }
 
 // RecordAudioQueueOperation records an audio queue operation

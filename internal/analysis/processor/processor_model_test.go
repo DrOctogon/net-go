@@ -20,16 +20,16 @@ func TestCreateDetectionResult_ModelInfo(t *testing.T) {
 		expectedVariant string
 	}{
 		{
-			name:            "empty modelID defaults to BirdNET",
+			name:            "empty modelID defaults to VoiceWatch",
 			modelID:         "",
-			expectedName:    "BirdNET",
+			expectedName:    "VoiceWatch",
 			expectedVersion: "2.4",
 			expectedVariant: "default",
 		},
 		{
 			name:            "BirdNET_V2.4 resolves to BirdNET model",
 			modelID:         "BirdNET_V2.4",
-			expectedName:    "BirdNET",
+			expectedName:    "VoiceWatch",
 			expectedVersion: "2.4",
 			expectedVariant: "default",
 		},

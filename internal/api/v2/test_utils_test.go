@@ -165,7 +165,7 @@ func setupTestEnvironment(t *testing.T) (*echo.Echo, *mocks.MockInterface, *Cont
 // need debug mode should set controller.Settings.WebServer.Debug = true.
 func newValidTestSettings() *conf.Settings {
 	return &conf.Settings{
-		BirdNET: conf.BirdNETConfig{
+		VoiceWatch: conf.VoiceWatchConfig{
 			Sensitivity: 1.0,
 			Threshold:   0.8,
 			Locale:      "en",

@@ -72,7 +72,7 @@ func settingsForBirdMinDetections(t *testing.T, wantMinDet int) *conf.Settings {
 	}
 	s := &conf.Settings{}
 	s.Realtime.FalsePositiveFilter.Level = p.level
-	s.BirdNET.Overlap = p.overlap
+	s.VoiceWatch.Overlap = p.overlap
 	return s
 }
 

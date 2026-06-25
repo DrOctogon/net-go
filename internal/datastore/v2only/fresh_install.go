@@ -156,7 +156,7 @@ func InitializeFreshInstall(settings *conf.Settings, log logger.Logger, speciesC
 	avesClassID := avesClass.ID
 
 	// Get the default model (seeded by Initialize)
-	defaultModel, err := modelRepo.GetByNameVersionVariant(ctx, "BirdNET", "2.4", "default")
+	defaultModel, err := modelRepo.GetByNameVersionVariant(ctx, "VoiceWatch", "2.4", "default")
 	if err != nil {
 		_ = manager.Close()
 		return nil, errors.New(err).
@@ -183,7 +183,7 @@ func InitializeFreshInstall(settings *conf.Settings, log logger.Logger, speciesC
 		DefaultModelID:     defaultModel.ID,
 		SpeciesLabelTypeID: speciesLabelType.ID,
 		AvesClassID:        &avesClassID,
-		Labels:             settings.BirdNET.Labels, // Required for locale-specific common name resolution
+		Labels:             settings.VoiceWatch.Labels, // Required for locale-specific common name resolution
 		SpeciesCodeMap:     speciesCodeMap,
 	})
 	if err != nil {

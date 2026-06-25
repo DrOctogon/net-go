@@ -207,7 +207,7 @@ func TestTypeConfusionAttacks(t *testing.T) {
 		},
 		{
 			name:    "Null for required field",
-			section: "birdnet",
+			section: "voicewatch",
 			confusedData: map[string]any{
 				"latitude": nil,
 			},
@@ -215,7 +215,7 @@ func TestTypeConfusionAttacks(t *testing.T) {
 		},
 		{
 			name:    "Boolean instead of number",
-			section: "birdnet",
+			section: "voicewatch",
 			confusedData: map[string]any{
 				"threshold": true,
 			},

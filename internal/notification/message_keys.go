@@ -30,7 +30,7 @@ const (
 	MsgErrorCategory       = "notifications.content.error.categoryError"
 
 	// Settings change toasts
-	MsgSettingsReloadingBirdnet               = "notifications.content.settings.reloadingBirdnet"
+	MsgSettingsReloadingVoiceWatch               = "notifications.content.settings.reloadingBirdnet"
 	MsgSettingsUpdatingIntervals              = "notifications.content.settings.updatingIntervals"
 	MsgSettingsReconfiguringMqtt              = "notifications.content.settings.reconfiguringMqtt"
 	MsgSettingsReconfiguringBirdweather       = "notifications.content.settings.reconfiguringBirdweather"

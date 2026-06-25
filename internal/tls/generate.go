@@ -75,7 +75,7 @@ func GenerateSelfSigned(opts SelfSignedOptions) (certPEM, keyPEM string, err err
 	template := &x509.Certificate{
 		SerialNumber: serialNumber,
 		Subject: pkix.Name{
-			CommonName: "BirdNET-Go",
+			CommonName: "VoiceWatch",
 		},
 		NotBefore:             now,
 		NotAfter:              now.Add(opts.Validity),

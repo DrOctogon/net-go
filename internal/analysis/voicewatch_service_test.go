@@ -9,19 +9,19 @@ import (
 )
 
 // Compile-time interface compliance check.
-var _ app.Analyzer = (*BirdNETAnalyzer)(nil)
+var _ app.Analyzer = (*VoiceWatchAnalyzer)(nil)
 
-func TestBirdNETAnalyzer_Name(t *testing.T) {
+func TestVoiceWatchAnalyzer_Name(t *testing.T) {
 	t.Parallel()
 
-	a := NewBirdNETAnalyzer(&conf.Settings{})
-	assert.Equal(t, "birdnet-analyzer", a.Name())
+	a := NewVoiceWatchAnalyzer(&conf.Settings{})
+	assert.Equal(t, "voicewatch-analyzer", a.Name())
 }
 
-func TestBirdNETAnalyzer_Compatible(t *testing.T) {
+func TestVoiceWatchAnalyzer_Compatible(t *testing.T) {
 	t.Parallel()
 
-	a := NewBirdNETAnalyzer(&conf.Settings{})
+	a := NewVoiceWatchAnalyzer(&conf.Settings{})
 
 	tests := []struct {
 		name       string
@@ -43,17 +43,17 @@ func TestBirdNETAnalyzer_Compatible(t *testing.T) {
 	}
 }
 
-func TestBirdNETAnalyzer_BirdNET_NilBeforeStart(t *testing.T) {
+func TestVoiceWatchAnalyzer_BirdNET_NilBeforeStart(t *testing.T) {
 	t.Parallel()
 
-	a := NewBirdNETAnalyzer(&conf.Settings{})
-	assert.Nil(t, a.BirdNET(), "BirdNET() should return nil before Start()")
+	a := NewVoiceWatchAnalyzer(&conf.Settings{})
+	assert.Nil(t, a.Orchestrator(), "Orchestrator() should return nil before Start()")
 }
 
-func TestBirdNETAnalyzer_Stop_NilSafe(t *testing.T) {
+func TestVoiceWatchAnalyzer_Stop_NilSafe(t *testing.T) {
 	t.Parallel()
 
-	a := NewBirdNETAnalyzer(&conf.Settings{})
+	a := NewVoiceWatchAnalyzer(&conf.Settings{})
 	// Stop before Start should not panic and should return nil.
 	assert.NotPanics(t, func() {
 		err := a.Stop(t.Context())

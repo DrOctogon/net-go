@@ -9,8 +9,8 @@ import (
 
 // BirdNETProvider defines the minimal interface for accessing BirdNET functionality
 type BirdNETProvider interface {
-	// GetBirdNET returns the classifier orchestrator instance
-	GetBirdNET() *classifier.Orchestrator
+	// GetOrchestrator returns the classifier orchestrator instance
+	GetOrchestrator() *classifier.Orchestrator
 }
 
 // ProcessorProvider defines the interface for accessing the analysis processor

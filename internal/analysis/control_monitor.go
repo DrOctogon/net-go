@@ -132,7 +132,7 @@ func NewControlMonitor(wg *sync.WaitGroup, controlChan chan string, quitChan, re
 	// has been built (startup BuildRangeFilter already ran). Forward display reads
 	// the live resolver regardless of map state; only the reverse (search) maps
 	// depend on this re-localize. Locale changes later re-localize via
-	// handleReloadBirdnet (BuildRangeFilter runs before UpdateNameMaps there).
+	// handleReloadVoiceWatch (BuildRangeFilter runs before UpdateNameMaps there).
 	if cm.bn != nil {
 		var ds datastore.Interface
 		if cm.proc != nil && cm.proc.Ds != nil {
@@ -314,7 +314,7 @@ func (cm *ControlMonitor) handleControlSignal(signal string) {
 	case "rebuild_range_filter":
 		cm.handleRebuildRangeFilter()
 	case "reload_birdnet":
-		cm.handleReloadBirdnet()
+		cm.handleReloadVoiceWatch()
 	case "reconfigure_mqtt":
 		cm.handleReconfigureMQTT()
 	case "reconfigure_rtsp_sources":
@@ -400,24 +400,24 @@ func (cm *ControlMonitor) handleRebuildRangeFilter() {
 	CleanupOverrunTrackers(time.Hour)
 }
 
-// handleReloadBirdnet reloads the BirdNET model
-func (cm *ControlMonitor) handleReloadBirdnet() {
+// handleReloadVoiceWatch reloads the VoiceWatch model
+func (cm *ControlMonitor) handleReloadVoiceWatch() {
 	// Guard the orchestrator dereference for consistency with NewControlMonitor
 	// (see handleRebuildRangeFilter). Defensive: cm.bn is always set in realtime
 	// analysis, but this avoids a panic if the handler is ever reached without an
 	// orchestrator.
 	if cm.bn == nil {
-		GetLogger().Warn("Cannot reload BirdNET model: orchestrator not initialized")
+		GetLogger().Warn("Cannot reload VoiceWatch model: orchestrator not initialized")
 		return
 	}
 	if err := cm.bn.ReloadModel(); err != nil {
-		GetLogger().Error("Failed to reload BirdNET model", logger.Error(err))
-		cm.notifyError("Failed to reload BirdNET model", err)
+		GetLogger().Error("Failed to reload VoiceWatch model", logger.Error(err))
+		cm.notifyError("Failed to reload VoiceWatch model", err)
 		return
 	}
 
-	GetLogger().Info("BirdNET model reloaded successfully")
-	cm.notifySuccess("BirdNET model reloaded successfully")
+	GetLogger().Info("VoiceWatch model reloaded successfully")
+	cm.notifySuccess("VoiceWatch model reloaded successfully")
 
 	// Rebuild name maps with the reloaded model's labels (use fresh settings, not a
 	// stale pointer) so the cached maps re-localize after a locale/model reload.
@@ -792,12 +792,12 @@ func (cm *ControlMonitor) handleReconfigureSpeciesTracking() {
 		return
 	}
 
-	// Adjust seasonal tracking for hemisphere based on BirdNET latitude
+	// Adjust seasonal tracking for hemisphere based on VoiceWatch latitude
 	hemisphereAwareTracking := settings.Realtime.SpeciesTracking
 	if hemisphereAwareTracking.SeasonalTracking.Enabled {
 		hemisphereAwareTracking.SeasonalTracking = conf.GetSeasonalTrackingWithHemisphere(
 			hemisphereAwareTracking.SeasonalTracking,
-			settings.BirdNET.Latitude,
+			settings.VoiceWatch.Latitude,
 		)
 	}
 
@@ -813,7 +813,7 @@ func (cm *ControlMonitor) handleReconfigureSpeciesTracking() {
 	// Replace the existing tracker
 	cm.proc.SetNewSpeciesTracker(newTracker)
 
-	hemisphere := conf.DetectHemisphere(settings.BirdNET.Latitude)
+	hemisphere := conf.DetectHemisphere(settings.VoiceWatch.Latitude)
 	GetLogger().Info("Species tracking reconfigured",
 		logger.Int("window_days", settings.Realtime.SpeciesTracking.NewSpeciesWindowDays),
 		logger.Int("sync_minutes", settings.Realtime.SpeciesTracking.SyncIntervalMinutes),
@@ -898,7 +898,7 @@ func (cm *ControlMonitor) handleReconfigureAudioSources() {
 }
 
 // handleRecalculateDynamicThresholds recalculates all dynamic threshold CurrentValue entries
-// when the global BirdNET.Threshold changes. The stored absolute values are recomputed
+// when the global VoiceWatch.Threshold changes. The stored absolute values are recomputed
 // from each species' current level/tier and the new base threshold.
 func (cm *ControlMonitor) handleRecalculateDynamicThresholds() {
 	if cm.proc != nil {

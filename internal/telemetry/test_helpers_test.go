@@ -77,7 +77,7 @@ func InitForTesting(t TestingTB) (config *TestConfig, cleanup func()) {
 		scope.SetTag("system_id", testSettings.SystemID)
 		scope.SetTag("test_mode", "true")
 		scope.SetContext("application", map[string]any{
-			"name":      "BirdNET-Go",
+			"name":      "VoiceWatch",
 			"version":   testSettings.Version,
 			"system_id": testSettings.SystemID,
 			"test_mode": true,

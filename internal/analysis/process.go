@@ -1,5 +1,5 @@
-// process.go provides the BirdNET analysis pipeline entry point.
-// ProcessData converts PCM audio to float32, runs BirdNET inference,
+// process.go provides the VoiceWatch analysis pipeline entry point.
+// ProcessData converts PCM audio to float32, runs VoiceWatch inference,
 // and enqueues results for downstream processing.
 package analysis
 
@@ -39,7 +39,7 @@ const (
 	bufferOverrunMinCount = 10
 )
 
-// bufferOverrunTracker tracks BirdNET processing buffer overruns using a tumbling window.
+// bufferOverrunTracker tracks VoiceWatch processing buffer overruns using a tumbling window.
 // When the window expires and enough overruns have accumulated, a single Sentry event is sent.
 type bufferOverrunTracker struct {
 	mu           sync.Mutex
@@ -229,7 +229,7 @@ func reportBufferOverruns(source, modelID string, count int64, maxElapsed, buffe
 		"reporting_window_minutes": int(window.Minutes()),
 	}
 	telemetry.FastCaptureMessageWithExtras(
-		"sustained BirdNET processing buffer overruns detected",
+		"sustained VoiceWatch processing buffer overruns detected",
 		sentry.LevelWarning,
 		"analysis",
 		extras,
@@ -305,7 +305,7 @@ func ProcessData(ctx context.Context, bn *classifier.Orchestrator, bufMgr *buffe
 		return errors.New(err).
 			Component("analysis").
 			Category(errors.CategoryAudioAnalysis).
-			Context("operation", "birdnet_predict").
+			Context("operation", "voicewatch_predict").
 			Build()
 	}
 
@@ -321,11 +321,11 @@ func ProcessData(ctx context.Context, bn *classifier.Orchestrator, bufMgr *buffe
 
 	// Record result count metric
 	if pm != nil {
-		pm.RecordBirdNETResults(source, len(results))
+		pm.RecordVoiceWatchResults(source, len(results))
 	}
 
-	// DEBUG print all BirdNET results
-	if conf.Setting().BirdNET.Debug {
+	// DEBUG print all VoiceWatch results
+	if conf.Setting().VoiceWatch.Debug {
 		debugThreshold := float32(0) // set to 0 for now, maybe add a config option later
 		hasHighConfidenceResults := false
 		for _, result := range results {
@@ -336,11 +336,11 @@ func ProcessData(ctx context.Context, bn *classifier.Orchestrator, bufMgr *buffe
 		}
 
 		if hasHighConfidenceResults {
-			log.Debug("birdnet results",
+			log.Debug("voicewatch results",
 				logger.String("source", source))
 			for _, result := range results {
 				if result.Confidence > debugThreshold {
-					log.Debug("birdnet result",
+					log.Debug("voicewatch result",
 						logger.Float64("confidence", float64(result.Confidence)),
 						logger.String("species", result.Species))
 				}
@@ -350,7 +350,7 @@ func ProcessData(ctx context.Context, bn *classifier.Orchestrator, bufMgr *buffe
 
 	// Derive the analysis buffer interval from the model's spec. If
 	// inference exceeds this interval the pipeline falls behind real-time.
-	effectiveBufferDuration := 3 * time.Second / 2 // fallback: BirdNET v2.4
+	effectiveBufferDuration := 3 * time.Second / 2 // fallback: VoiceWatch
 	if spec, err := bn.ModelSpecFor(modelID); err == nil {
 		effectiveBufferDuration = spec.BufferInterval()
 	}
@@ -365,7 +365,7 @@ func ProcessData(ctx context.Context, bn *classifier.Orchestrator, bufMgr *buffe
 
 		m := processMetrics.Load()
 		if m != nil {
-			m.RecordBirdNETProcessingOverrun(source, elapsedTime.Seconds(), effectiveBufferDuration.Seconds())
+			m.RecordVoiceWatchProcessingOverrun(source, elapsedTime.Seconds(), effectiveBufferDuration.Seconds())
 		}
 	}
 

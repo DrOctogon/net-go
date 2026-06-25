@@ -148,11 +148,11 @@ func TestGetExternalMedia_ContainerMountAbsent(t *testing.T) {
 	assert.NotEmpty(t, resp.Guidance.Steps, "guidance.steps should contain setup instructions")
 	// Verify the guidance steps contain required setup commands.
 	steps := strings.Join(resp.Guidance.Steps, "\n")
-	assert.Contains(t, steps, "mkdir -p /mnt/birdnet-go/external", "guidance must include mkdir step")
+	assert.Contains(t, steps, "mkdir -p /mnt/voicewatch/external", "guidance must include mkdir step")
 	assert.Contains(t, steps, "mount --bind", "guidance must include bind mount step")
 	assert.Contains(t, steps, "make-rshared", "guidance must include make-rshared step")
 	assert.Contains(t, steps, `chown -h "${BIRDNET_UID:-1000}:${BIRDNET_GID:-1000}"`, "guidance must include chown step with env vars")
-	assert.Contains(t, steps, "-v /mnt/birdnet-go/external:/external:rslave", "guidance must include volume flag")
+	assert.Contains(t, steps, "-v /mnt/voicewatch/external:/external:rslave", "guidance must include volume flag")
 }
 
 // TestGetExternalMedia_PodmanMountAbsent tests the Podman-specific guidance path.
@@ -206,7 +206,7 @@ func TestGetExternalMedia_GenericContainerMountAbsent(t *testing.T) {
 	assert.Equal(t, "LXC", resp.Guidance.Environment)
 	// The generic branch still includes the common host setup commands.
 	steps := strings.Join(resp.Guidance.Steps, "\n")
-	assert.Contains(t, steps, "mkdir -p /mnt/birdnet-go/external")
+	assert.Contains(t, steps, "mkdir -p /mnt/voicewatch/external")
 	assert.Contains(t, steps, "mount --bind")
 	assert.Contains(t, steps, "make-rshared")
 	assert.Contains(t, steps, `chown -h "${BIRDNET_UID:-1000}:${BIRDNET_GID:-1000}"`)

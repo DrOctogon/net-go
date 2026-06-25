@@ -8,7 +8,7 @@ import (
 )
 
 // testKnownIDs mirrors classifier.KnownConfigIDs() for testing without circular imports.
-var testKnownIDs = map[string]bool{"birdnet": true, "human_voice": true}
+var testKnownIDs = map[string]bool{"voicewatch": true, "human_voice": true}
 
 func TestModelsConfig_Defaults(t *testing.T) {
 	t.Parallel()
@@ -21,9 +21,9 @@ func TestAudioSourceConfig_ModelsField(t *testing.T) {
 	src := AudioSourceConfig{
 		Name:   "Test Mic",
 		Device: "hw:0,0",
-		Models: []string{"birdnet", "perch_v2"},
+		Models: []string{"voicewatch", "perch_v2"},
 	}
-	assert.Equal(t, []string{"birdnet", "perch_v2"}, src.Models)
+	assert.Equal(t, []string{"voicewatch", "perch_v2"}, src.Models)
 }
 
 func TestStreamConfig_ModelsField(t *testing.T) {
@@ -31,9 +31,9 @@ func TestStreamConfig_ModelsField(t *testing.T) {
 	stream := StreamConfig{
 		Name:   "Garden Cam",
 		URL:    "rtsp://192.168.1.100/audio",
-		Models: []string{"birdnet"},
+		Models: []string{"voicewatch"},
 	}
-	assert.Equal(t, []string{"birdnet"}, stream.Models)
+	assert.Equal(t, []string{"voicewatch"}, stream.Models)
 }
 
 func TestMigrateSourceModels_SingularToPlural(t *testing.T) {
@@ -56,18 +56,18 @@ func TestMigrateSourceModels_DefaultToBirdNET(t *testing.T) {
 	}
 	migrated := settings.MigrateSourceModels()
 	require.True(t, migrated)
-	assert.Equal(t, []string{"birdnet"}, settings.Realtime.Audio.Sources[0].Models)
+	assert.Equal(t, []string{"voicewatch"}, settings.Realtime.Audio.Sources[0].Models)
 }
 
 func TestMigrateSourceModels_SkipIfModelsAlreadySet(t *testing.T) {
 	t.Parallel()
 	settings := &Settings{}
 	settings.Realtime.Audio.Sources = []AudioSourceConfig{
-		{Name: "Mic1", Device: "hw:0,0", Models: []string{"birdnet", "perch_v2"}},
+		{Name: "Mic1", Device: "hw:0,0", Models: []string{"voicewatch", "perch_v2"}},
 	}
 	migrated := settings.MigrateSourceModels()
 	assert.False(t, migrated, "should not migrate if Models already set")
-	assert.Equal(t, []string{"birdnet", "perch_v2"}, settings.Realtime.Audio.Sources[0].Models)
+	assert.Equal(t, []string{"voicewatch", "perch_v2"}, settings.Realtime.Audio.Sources[0].Models)
 }
 
 func TestMigrateSourceModels_StreamConfigMigration(t *testing.T) {
@@ -78,21 +78,21 @@ func TestMigrateSourceModels_StreamConfigMigration(t *testing.T) {
 	}
 	migrated := settings.MigrateSourceModels()
 	require.True(t, migrated)
-	assert.Equal(t, []string{"birdnet"}, settings.Realtime.RTSP.Streams[0].Models)
+	assert.Equal(t, []string{"voicewatch"}, settings.Realtime.RTSP.Streams[0].Models)
 }
 
 func TestValidateModelConfig_NoErrorsWithJustBirdNET(t *testing.T) {
 	t.Parallel()
 	settings := &Settings{}
-	settings.Models.Enabled = []string{"birdnet"}
+	settings.Models.Enabled = []string{"voicewatch"}
 	errs := settings.ValidateModelConfig(testKnownIDs, true)
-	assert.Empty(t, errs, "should have no errors with just BirdNET")
+	assert.Empty(t, errs, "should have no errors with just VoiceWatch")
 }
 
 func TestValidateModelConfig_UnknownModelWarning(t *testing.T) {
 	t.Parallel()
 	settings := &Settings{}
-	settings.Models.Enabled = []string{"birdnet", "unknown_model"}
+	settings.Models.Enabled = []string{"voicewatch", "unknown_model"}
 	warnings := settings.ValidateModelConfig(testKnownIDs, true)
 	assert.NotEmpty(t, warnings, "unknown model ID should produce a warning")
 }
@@ -100,9 +100,9 @@ func TestValidateModelConfig_UnknownModelWarning(t *testing.T) {
 func TestValidateModelConfig_SourceReferencesUnavailableModel(t *testing.T) {
 	t.Parallel()
 	settings := &Settings{}
-	settings.Models.Enabled = []string{"birdnet"}
+	settings.Models.Enabled = []string{"voicewatch"}
 	settings.Realtime.Audio.Sources = []AudioSourceConfig{
-		{Name: "Mic1", Device: "hw:0,0", Models: []string{"birdnet", "perch_v2"}},
+		{Name: "Mic1", Device: "hw:0,0", Models: []string{"voicewatch", "perch_v2"}},
 	}
 	warnings := settings.ValidateModelConfig(testKnownIDs, true)
 	assert.NotEmpty(t, warnings, "source referencing model not in models.enabled should warn")
@@ -111,17 +111,17 @@ func TestValidateModelConfig_SourceReferencesUnavailableModel(t *testing.T) {
 func TestValidateModelConfig_SkipSourceRefsAtEarlyLoading(t *testing.T) {
 	t.Parallel()
 	settings := &Settings{}
-	settings.Models.Enabled = []string{"birdnet"}
+	settings.Models.Enabled = []string{"voicewatch"}
 	settings.Realtime.Audio.Sources = []AudioSourceConfig{
-		{Name: "Mic1", Device: "hw:0,0", Models: []string{"birdnet", "perch_v2"}},
+		{Name: "Mic1", Device: "hw:0,0", Models: []string{"voicewatch", "perch_v2"}},
 	}
 	warnings := settings.ValidateModelConfig(testKnownIDs, false)
 	assert.Empty(t, warnings, "source reference checks should be skipped when checkSourceRefs is false")
 }
 
-func TestBirdNETConfig_VersionField(t *testing.T) {
+func TestVoiceWatchConfig_VersionField(t *testing.T) {
 	t.Parallel()
 	settings := &Settings{}
-	settings.BirdNET.Version = "2.4"
-	assert.Equal(t, "2.4", settings.BirdNET.Version)
+	settings.VoiceWatch.Version = "2.4"
+	assert.Equal(t, "2.4", settings.VoiceWatch.Version)
 }

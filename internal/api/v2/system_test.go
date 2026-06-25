@@ -840,7 +840,7 @@ func TestProcessInfoStructure(t *testing.T) {
 
 	proc := ProcessInfo{
 		PID:    12345,
-		Name:   "birdnet-go",
+		Name:   "voicewatch",
 		Status: "running",
 		CPU:    2.5,
 		Memory: 104857600, // 100 MB

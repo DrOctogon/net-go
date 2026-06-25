@@ -18,8 +18,8 @@ const (
 	labelSource                    = "source"
 )
 
-// BirdNETMetrics contains all Prometheus metrics related to BirdNET operations.
-type BirdNETMetrics struct {
+// VoiceWatchMetrics contains all Prometheus metrics related to BirdNET operations.
+type VoiceWatchMetrics struct {
 	DetectionCounter *prometheus.CounterVec
 	ProcessTimeGauge prometheus.Gauge
 
@@ -49,34 +49,34 @@ type BirdNETMetrics struct {
 	registry *prometheus.Registry
 }
 
-// NewBirdNETMetrics creates a new instance of BirdNETMetrics.
+// NewVoiceWatchMetrics creates a new instance of VoiceWatchMetrics.
 // It requires a Prometheus registry to register the metrics.
 // It returns an error if metric registration fails.
-func NewBirdNETMetrics(registry *prometheus.Registry) (*BirdNETMetrics, error) {
-	m := &BirdNETMetrics{registry: registry}
+func NewVoiceWatchMetrics(registry *prometheus.Registry) (*VoiceWatchMetrics, error) {
+	m := &VoiceWatchMetrics{registry: registry}
 	if err := m.initMetrics(); err != nil {
-		return nil, fmt.Errorf("failed to initialize BirdNET metrics: %w", err)
+		return nil, fmt.Errorf("failed to initialize VoiceWatch metrics: %w", err)
 	}
 	if err := registry.Register(m); err != nil {
-		return nil, fmt.Errorf("failed to register BirdNET metrics: %w", err)
+		return nil, fmt.Errorf("failed to register VoiceWatch metrics: %w", err)
 	}
 	return m, nil
 }
 
-// initMetrics initializes all metrics for BirdNETMetrics.
-func (m *BirdNETMetrics) initMetrics() error {
+// initMetrics initializes all metrics for VoiceWatchMetrics.
+func (m *VoiceWatchMetrics) initMetrics() error {
 	// Original metrics
 	m.DetectionCounter = prometheus.NewCounterVec(
 		prometheus.CounterOpts{
 			Name: "birdnet_detections",
-			Help: "Total number of BirdNET detections partitioned by species name.",
+			Help: "Total number of VoiceWatch detections partitioned by species name.",
 		},
 		[]string{"species"},
 	)
 	m.ProcessTimeGauge = prometheus.NewGauge(
 		prometheus.GaugeOpts{
 			Name: "birdnet_processing_time_milliseconds",
-			Help: "Most recent processing time for a BirdNET detection request in milliseconds.",
+			Help: "Most recent processing time for a VoiceWatch detection request in milliseconds.",
 		},
 	)
 
@@ -152,7 +152,7 @@ func (m *BirdNETMetrics) initMetrics() error {
 	m.ModelLoadedGauge = prometheus.NewGauge(
 		prometheus.GaugeOpts{
 			Name: "birdnet_model_loaded",
-			Help: "Whether the BirdNET model is currently loaded (1) or not (0)",
+			Help: "Whether the VoiceWatch model is currently loaded (1) or not (0)",
 		},
 	)
 
@@ -191,17 +191,17 @@ func (m *BirdNETMetrics) initMetrics() error {
 
 // IncrementDetectionCounter increments the detection counter for a given species.
 // It should be called each time BirdNET detects a species.
-func (m *BirdNETMetrics) IncrementDetectionCounter(speciesName string) {
+func (m *VoiceWatchMetrics) IncrementDetectionCounter(speciesName string) {
 	m.DetectionCounter.WithLabelValues(speciesName).Inc()
 }
 
 // SetProcessTime sets the most recent processing time for a BirdNET detection request.
-func (m *BirdNETMetrics) SetProcessTime(milliseconds float64) {
+func (m *VoiceWatchMetrics) SetProcessTime(milliseconds float64) {
 	m.ProcessTimeGauge.Set(milliseconds)
 }
 
 // RecordPrediction records metrics for a prediction operation
-func (m *BirdNETMetrics) RecordPrediction(model string, durationSeconds float64, err error) {
+func (m *VoiceWatchMetrics) RecordPrediction(model string, durationSeconds float64, err error) {
 	if err != nil {
 		m.PredictionTotal.WithLabelValues(model, "error").Inc()
 		m.PredictionErrors.WithLabelValues(model, categorizeError(err)).Inc()
@@ -212,17 +212,17 @@ func (m *BirdNETMetrics) RecordPrediction(model string, durationSeconds float64,
 }
 
 // RecordChunkProcess records metrics for chunk processing
-func (m *BirdNETMetrics) RecordChunkProcess(model string, durationSeconds float64) {
+func (m *VoiceWatchMetrics) RecordChunkProcess(model string, durationSeconds float64) {
 	m.ChunkProcessDuration.WithLabelValues(model).Observe(durationSeconds)
 }
 
 // RecordModelInvoke records metrics for model invocation
-func (m *BirdNETMetrics) RecordModelInvoke(model string, durationSeconds float64) {
+func (m *VoiceWatchMetrics) RecordModelInvoke(model string, durationSeconds float64) {
 	m.ModelInvokeDuration.WithLabelValues(model).Observe(durationSeconds)
 }
 
 // RecordModelLoad records metrics for model loading operations
-func (m *BirdNETMetrics) RecordModelLoad(model string, err error) {
+func (m *VoiceWatchMetrics) RecordModelLoad(model string, err error) {
 	if err != nil {
 		m.ModelLoadTotal.WithLabelValues(model, "error").Inc()
 		m.ModelLoadErrors.WithLabelValues(model, categorizeError(err)).Inc()
@@ -234,12 +234,12 @@ func (m *BirdNETMetrics) RecordModelLoad(model string, err error) {
 }
 
 // SetActiveProcessing sets the number of active processing operations
-func (m *BirdNETMetrics) SetActiveProcessing(count float64) {
+func (m *VoiceWatchMetrics) SetActiveProcessing(count float64) {
 	m.ActiveProcessingGauge.Set(count)
 }
 
 // SetInferenceRTF sets the real-time factor gauge for a model. Nil-safe.
-func (m *BirdNETMetrics) SetInferenceRTF(model string, rtf float64) {
+func (m *VoiceWatchMetrics) SetInferenceRTF(model string, rtf float64) {
 	if m == nil || m.InferenceRTF == nil {
 		return
 	}
@@ -247,7 +247,7 @@ func (m *BirdNETMetrics) SetInferenceRTF(model string, rtf float64) {
 }
 
 // SetModelRSSBytes sets the approximate per-model host RSS gauge. Nil-safe.
-func (m *BirdNETMetrics) SetModelRSSBytes(model string, bytes int64) {
+func (m *VoiceWatchMetrics) SetModelRSSBytes(model string, bytes int64) {
 	if m == nil || m.ModelRSSBytes == nil {
 		return
 	}
@@ -255,7 +255,7 @@ func (m *BirdNETMetrics) SetModelRSSBytes(model string, bytes int64) {
 }
 
 // SetAudioQueueDepth sets the instantaneous audio queue depth gauge for a source. Nil-safe.
-func (m *BirdNETMetrics) SetAudioQueueDepth(source string, depth float64) {
+func (m *VoiceWatchMetrics) SetAudioQueueDepth(source string, depth float64) {
 	if m == nil || m.AudioQueueDepth == nil {
 		return
 	}
@@ -263,7 +263,7 @@ func (m *BirdNETMetrics) SetAudioQueueDepth(source string, depth float64) {
 }
 
 // SetAudioDroppedChunks sets the cumulative dropped-audio-chunks gauge for a source. Nil-safe.
-func (m *BirdNETMetrics) SetAudioDroppedChunks(source string, total float64) {
+func (m *VoiceWatchMetrics) SetAudioDroppedChunks(source string, total float64) {
 	if m == nil || m.AudioDroppedChunks == nil {
 		return
 	}
@@ -272,7 +272,7 @@ func (m *BirdNETMetrics) SetAudioDroppedChunks(source string, total float64) {
 
 // DeleteInferenceMetrics removes a model's inference gauge label values, e.g.
 // after the model is unloaded, so Prometheus stops reporting stale series. Nil-safe.
-func (m *BirdNETMetrics) DeleteInferenceMetrics(model string) {
+func (m *VoiceWatchMetrics) DeleteInferenceMetrics(model string) {
 	if m == nil {
 		return
 	}
@@ -326,7 +326,7 @@ func categorizeError(err error) string {
 }
 
 // Describe implements the prometheus.Collector interface.
-func (m *BirdNETMetrics) Describe(ch chan<- *prometheus.Desc) {
+func (m *VoiceWatchMetrics) Describe(ch chan<- *prometheus.Desc) {
 	m.DetectionCounter.Describe(ch)
 	m.ProcessTimeGauge.Describe(ch)
 
@@ -355,7 +355,7 @@ func (m *BirdNETMetrics) Describe(ch chan<- *prometheus.Desc) {
 }
 
 // Collect implements the prometheus.Collector interface.
-func (m *BirdNETMetrics) Collect(ch chan<- prometheus.Metric) {
+func (m *VoiceWatchMetrics) Collect(ch chan<- prometheus.Metric) {
 	m.DetectionCounter.Collect(ch)
 	m.ProcessTimeGauge.Collect(ch)
 
@@ -387,12 +387,12 @@ func (m *BirdNETMetrics) Collect(ch chan<- prometheus.Metric) {
 // It records operations related to BirdNET processing.
 // Supported operations: "prediction", "model_load", "detection"
 // Status values: "success", "error", or species name for "detection"
-func (m *BirdNETMetrics) RecordOperation(operation, status string) {
+func (m *VoiceWatchMetrics) RecordOperation(operation, status string) {
 	switch operation {
 	case OpPrediction:
-		m.PredictionTotal.WithLabelValues(LabelBirdnet, status).Inc()
+		m.PredictionTotal.WithLabelValues(LabelVoiceWatch, status).Inc()
 	case OpModelLoad:
-		m.ModelLoadTotal.WithLabelValues(LabelBirdnet, status).Inc()
+		m.ModelLoadTotal.WithLabelValues(LabelVoiceWatch, status).Inc()
 		if status == "success" {
 			m.ModelLoadedGauge.Set(1)
 		} else {
@@ -410,14 +410,14 @@ func (m *BirdNETMetrics) RecordOperation(operation, status string) {
 // RecordDuration implements the Recorder interface.
 // It records duration metrics for various BirdNET operations.
 // Supported operations: "prediction", "chunk_process", "model_invoke", "range_filter", "process_time_ms"
-func (m *BirdNETMetrics) RecordDuration(operation string, seconds float64) {
+func (m *VoiceWatchMetrics) RecordDuration(operation string, seconds float64) {
 	switch operation {
 	case OpPrediction:
-		m.PredictionDuration.WithLabelValues(LabelBirdnet).Observe(seconds)
+		m.PredictionDuration.WithLabelValues(LabelVoiceWatch).Observe(seconds)
 	case OpChunkProcess:
-		m.ChunkProcessDuration.WithLabelValues(LabelBirdnet).Observe(seconds)
+		m.ChunkProcessDuration.WithLabelValues(LabelVoiceWatch).Observe(seconds)
 	case OpModelInvoke:
-		m.ModelInvokeDuration.WithLabelValues(LabelBirdnet).Observe(seconds)
+		m.ModelInvokeDuration.WithLabelValues(LabelVoiceWatch).Observe(seconds)
 	case OpProcessTimeMs:
 		// Convert to milliseconds for backward compatibility
 		m.ProcessTimeGauge.Set(seconds * MillisecondsPerSecond)
@@ -428,11 +428,11 @@ func (m *BirdNETMetrics) RecordDuration(operation string, seconds float64) {
 // It records error metrics for BirdNET operations.
 // Supported operations: "prediction", "model_load"
 // Error types: "validation", "model_error", "tensor_error", "invoke_error", etc.
-func (m *BirdNETMetrics) RecordError(operation, errorType string) {
+func (m *VoiceWatchMetrics) RecordError(operation, errorType string) {
 	switch operation {
 	case OpPrediction:
-		m.PredictionErrors.WithLabelValues(LabelBirdnet, errorType).Inc()
+		m.PredictionErrors.WithLabelValues(LabelVoiceWatch, errorType).Inc()
 	case OpModelLoad:
-		m.ModelLoadErrors.WithLabelValues(LabelBirdnet, errorType).Inc()
+		m.ModelLoadErrors.WithLabelValues(LabelVoiceWatch, errorType).Inc()
 	}
 }

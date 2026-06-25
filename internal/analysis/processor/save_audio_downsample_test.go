@@ -49,7 +49,7 @@ func TestSaveAudioAction_BirdDownsampledTo48kHz(t *testing.T) {
 		ClipName:         "bird-192k.wav",
 		pcmData:          pcm,
 		sourceSampleRate: sourceRate,
-		modelName:        "BirdNET",
+		modelName:        "VoiceWatch",
 		CorrelationID:    "test-bird-downsample",
 	}
 
@@ -145,7 +145,7 @@ func TestSaveAudioAction_BirdAt48kHzNoResample(t *testing.T) {
 		ClipName:         "bird-48k.wav",
 		pcmData:          pcm,
 		sourceSampleRate: sourceRate,
-		modelName:        "BirdNET",
+		modelName:        "VoiceWatch",
 		CorrelationID:    "test-bird-48k",
 	}
 
@@ -210,8 +210,8 @@ func TestNeedsBatFormatFallback(t *testing.T) {
 		{"bat_high_rate_wav", "BattyBirdNET", 256000, "wav", false},
 		{"bat_high_rate_flac", "BattyBirdNET", 256000, "flac", false},
 		{"bat_low_rate_mp3", "BattyBirdNET", 48000, "mp3", false},
-		{"bird_high_rate_mp3", "BirdNET", 192000, "mp3", false},
-		{"bird_low_rate_wav", "BirdNET", 48000, "wav", false},
+		{"bird_high_rate_mp3", "VoiceWatch", 192000, "mp3", false},
+		{"bird_low_rate_wav", "VoiceWatch", 48000, "wav", false},
 		{"unknown_model", "Unknown", 256000, "mp3", false},
 	}
 

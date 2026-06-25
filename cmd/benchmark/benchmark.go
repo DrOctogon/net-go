@@ -15,7 +15,7 @@ import (
 func Command(settings *conf.Settings) *cobra.Command {
 	return &cobra.Command{
 		Use:   "benchmark",
-		Short: "Run BirdNET inference benchmark",
+		Short: "Run VoiceWatch inference benchmark",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// Apply the runtime memory policy before loading the model, so the
 			// benchmark reflects the same configuration serve runs under.
@@ -30,14 +30,14 @@ func runBenchmark(settings *conf.Settings) error {
 
 	// First run with XNNPACK
 	fmt.Println("🚀 Testing with XNNPACK delegate:")
-	settings.BirdNET.UseXNNPACK = true
+	settings.VoiceWatch.UseXNNPACK = true
 	if err := runInferenceBenchmark(settings, &xnnpackResults); err != nil {
 		fmt.Printf("❌ XNNPACK benchmark failed: %v\n", err)
 	}
 
 	// Then run without XNNPACK
 	fmt.Println("\n🐌 Testing standard CPU inference:")
-	settings.BirdNET.UseXNNPACK = false
+	settings.VoiceWatch.UseXNNPACK = false
 	if err := runInferenceBenchmark(settings, &standardResults); err != nil {
 		return fmt.Errorf("❌ standard CPU inference benchmark failed: %w", err)
 	}
@@ -92,10 +92,10 @@ type benchmarkResults struct {
 func runInferenceBenchmark(settings *conf.Settings, results *benchmarkResults) error {
 	// Initialize the human-voice model and inject it into the orchestrator.
 	model, err := humanvoice.New(&humanvoice.Config{
-		ModelPath:       settings.BirdNET.ModelPath,
-		ONNXRuntimePath: settings.BirdNET.ONNXRuntimePath,
-		Threads:         settings.BirdNET.Threads,
-		Threshold:       settings.BirdNET.Threshold,
+		ModelPath:       settings.VoiceWatch.ModelPath,
+		ONNXRuntimePath: settings.VoiceWatch.ONNXRuntimePath,
+		Threads:         settings.VoiceWatch.Threads,
+		Threshold:       settings.VoiceWatch.Threshold,
 	})
 	if err != nil {
 		return fmt.Errorf("failed to initialize human-voice model: %w", err)
@@ -149,7 +149,7 @@ func runInferenceBenchmark(settings *conf.Settings, results *benchmarkResults) e
 func getPerformanceRating(inferenceTime float64) (rating, description string) {
 	switch {
 	case inferenceTime > 3000:
-		return "❌ Failed", "System is too slow for BirdNET-Go real-time detection"
+		return "❌ Failed", "System is too slow for VoiceWatch real-time detection"
 	case inferenceTime > 2000:
 		return "❌ Very Poor", "System is too slow for reliable operation"
 	case inferenceTime > 1000:

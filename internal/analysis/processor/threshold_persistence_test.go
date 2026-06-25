@@ -439,7 +439,7 @@ func createTestProcessor() *Processor {
 	settings := &conf.Settings{}
 	settings.Realtime.DynamicThreshold.Enabled = true
 	settings.Realtime.DynamicThreshold.Debug = false
-	settings.BirdNET.Threshold = 0.7
+	settings.VoiceWatch.Threshold = 0.7
 	settings.Realtime.Species.Config = make(map[string]conf.SpeciesConfig)
 
 	mockDs := &MockDatastore{
@@ -479,7 +479,7 @@ func TestLoadDynamicThresholdsFromDB(t *testing.T) {
 		mockDs.thresholds = map[string]*datastore.DynamicThreshold{
 			"american crow": {
 				SpeciesName:   "american crow",
-				ModelName:     "BirdNET",
+				ModelName:     "VoiceWatch",
 				Level:         1,
 				CurrentValue:  0.75,
 				BaseThreshold: 0.7,
@@ -491,7 +491,7 @@ func TestLoadDynamicThresholdsFromDB(t *testing.T) {
 			},
 			"blue jay": {
 				SpeciesName:   "blue jay",
-				ModelName:     "BirdNET",
+				ModelName:     "VoiceWatch",
 				Level:         2,
 				CurrentValue:  0.8,
 				BaseThreshold: 0.7,
@@ -508,8 +508,8 @@ func TestLoadDynamicThresholdsFromDB(t *testing.T) {
 		require.NoError(t, err)
 		assert.Len(t, p.DynamicThresholds, 2)
 
-		// Verify american crow threshold (composite key: "BirdNET:american crow")
-		crowKey := dynamicThresholdKey("BirdNET", "american crow")
+		// Verify american crow threshold (composite key: "VoiceWatch:american crow")
+		crowKey := dynamicThresholdKey("VoiceWatch", "american crow")
 		crowThreshold := p.DynamicThresholds[crowKey]
 		require.NotNil(t, crowThreshold)
 		assert.Equal(t, 1, crowThreshold.Level)
@@ -517,8 +517,8 @@ func TestLoadDynamicThresholdsFromDB(t *testing.T) {
 		assert.Equal(t, 5, crowThreshold.HighConfCount)
 		assert.Equal(t, 48, crowThreshold.ValidHours)
 
-		// Verify blue jay threshold (composite key: "BirdNET:blue jay")
-		jayKey := dynamicThresholdKey("BirdNET", "blue jay")
+		// Verify blue jay threshold (composite key: "VoiceWatch:blue jay")
+		jayKey := dynamicThresholdKey("VoiceWatch", "blue jay")
 		jayThreshold := p.DynamicThresholds[jayKey]
 		require.NotNil(t, jayThreshold)
 		assert.Equal(t, 2, jayThreshold.Level)
@@ -534,14 +534,14 @@ func TestLoadDynamicThresholdsFromDB(t *testing.T) {
 		mockDs.thresholds = map[string]*datastore.DynamicThreshold{
 			"american crow": {
 				SpeciesName:  "american crow",
-				ModelName:    "BirdNET",
+				ModelName:    "VoiceWatch",
 				Level:        1,
 				CurrentValue: 0.75,
 				ExpiresAt:    now.Add(24 * time.Hour), // Valid
 			},
 			"blue jay": {
 				SpeciesName:  "blue jay",
-				ModelName:    "BirdNET",
+				ModelName:    "VoiceWatch",
 				Level:        2,
 				CurrentValue: 0.8,
 				ExpiresAt:    now.Add(-1 * time.Hour), // Expired
@@ -552,8 +552,8 @@ func TestLoadDynamicThresholdsFromDB(t *testing.T) {
 
 		require.NoError(t, err)
 		assert.Len(t, p.DynamicThresholds, 1, "Should only load non-expired threshold")
-		crowKey := dynamicThresholdKey("BirdNET", "american crow")
-		jayKey := dynamicThresholdKey("BirdNET", "blue jay")
+		crowKey := dynamicThresholdKey("VoiceWatch", "american crow")
+		jayKey := dynamicThresholdKey("VoiceWatch", "blue jay")
 		assert.Contains(t, p.DynamicThresholds, crowKey)
 		assert.NotContains(t, p.DynamicThresholds, jayKey)
 	})
@@ -567,8 +567,8 @@ func TestPersistDynamicThresholds(t *testing.T) {
 
 		now := time.Now()
 		// Add thresholds to in-memory map using composite keys
-		crowKey := dynamicThresholdKey("BirdNET", "american crow")
-		jayKey := dynamicThresholdKey("BirdNET", "blue jay")
+		crowKey := dynamicThresholdKey("VoiceWatch", "american crow")
+		jayKey := dynamicThresholdKey("VoiceWatch", "blue jay")
 		p.DynamicThresholds[crowKey] = &DynamicThreshold{
 			Level:         1,
 			CurrentValue:  0.75,
@@ -596,7 +596,7 @@ func TestPersistDynamicThresholds(t *testing.T) {
 		assert.Equal(t, 1, savedCrow.Level)
 		assert.InDelta(t, 0.75, savedCrow.CurrentValue, 0.001)
 		assert.Equal(t, 5, savedCrow.HighConfCount)
-		assert.Equal(t, "BirdNET", savedCrow.ModelName, "ModelName should be persisted")
+		assert.Equal(t, "VoiceWatch", savedCrow.ModelName, "ModelName should be persisted")
 	})
 
 	t.Run("EmptyThresholdsMap", func(t *testing.T) {
@@ -614,8 +614,8 @@ func TestPersistDynamicThresholds(t *testing.T) {
 		mockDs := p.Ds.(*MockDatastore)
 
 		now := time.Now()
-		crowKey := dynamicThresholdKey("BirdNET", "american crow")
-		jayKey := dynamicThresholdKey("BirdNET", "blue jay")
+		crowKey := dynamicThresholdKey("VoiceWatch", "american crow")
+		jayKey := dynamicThresholdKey("VoiceWatch", "blue jay")
 		p.DynamicThresholds[crowKey] = &DynamicThreshold{
 			Level:        1,
 			CurrentValue: 0.75,
@@ -647,7 +647,7 @@ func TestFlushDynamicThresholds(t *testing.T) {
 		mockDs := p.Ds.(*MockDatastore)
 
 		now := time.Now()
-		crowKey := dynamicThresholdKey("BirdNET", "american crow")
+		crowKey := dynamicThresholdKey("VoiceWatch", "american crow")
 		p.DynamicThresholds[crowKey] = &DynamicThreshold{
 			Level:        1,
 			CurrentValue: 0.75,
@@ -764,7 +764,7 @@ func TestBatchSaveWithBaseThreshold(t *testing.T) {
 		}
 
 		now := time.Now()
-		crowKey := dynamicThresholdKey("BirdNET", "american crow")
+		crowKey := dynamicThresholdKey("VoiceWatch", "american crow")
 		p.DynamicThresholds[crowKey] = &DynamicThreshold{
 			Level:        1,
 			CurrentValue: 0.75,

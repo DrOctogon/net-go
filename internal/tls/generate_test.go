@@ -89,7 +89,7 @@ func TestGenerateSelfSigned_ECKeyType(t *testing.T) {
 	require.NoError(t, err)
 
 	assert.Equal(t, x509.ECDSA, cert.PublicKeyAlgorithm)
-	assert.Contains(t, cert.Subject.CommonName, "BirdNET-Go")
+	assert.Contains(t, cert.Subject.CommonName, "VoiceWatch")
 }
 
 func TestGenerateSelfSigned_HasServerAuth(t *testing.T) {

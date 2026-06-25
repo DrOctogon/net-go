@@ -374,7 +374,7 @@ func TestInitDaylightFilterUnconfiguredLocation(t *testing.T) {
 
 	p := &Processor{
 		Settings: &conf.Settings{
-			BirdNET: conf.BirdNETConfig{
+			VoiceWatch: conf.VoiceWatchConfig{
 				Latitude:  0,
 				Longitude: 0,
 			},
@@ -406,7 +406,7 @@ func TestInitDaylightFilterEmptySpeciesList(t *testing.T) {
 
 	p := &Processor{
 		Settings: &conf.Settings{
-			BirdNET: conf.BirdNETConfig{
+			VoiceWatch: conf.VoiceWatchConfig{
 				Latitude:           60.1699,
 				Longitude:          24.9384,
 				LocationConfigured: true,

@@ -85,8 +85,8 @@ func PrintSystemDetails(settings *conf.Settings) {
 
 	// Log the start of BirdNET-Go Analyzer in realtime mode and its configurations.
 	log.Info("Starting analyzer in realtime mode",
-		logger.Float64("threshold", settings.BirdNET.Threshold),
-		logger.Float64("overlap", settings.BirdNET.Overlap),
-		logger.Float64("sensitivity", settings.BirdNET.Sensitivity),
+		logger.Float64("threshold", settings.VoiceWatch.Threshold),
+		logger.Float64("overlap", settings.VoiceWatch.Overlap),
+		logger.Float64("sensitivity", settings.VoiceWatch.Sensitivity),
 		logger.Int("interval", settings.Realtime.Interval))
 }

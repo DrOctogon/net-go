@@ -110,7 +110,7 @@ func createTestNoteWithAllFields() datastore.Note {
 		Longitude:      24.9384,
 		Threshold:      0.7,
 		Sensitivity:    1.0,
-		ClipName:       "/home/user/birdnet-go/clips/clip_001.wav",
+		ClipName:       "/home/user/voicewatch/clips/clip_001.wav",
 		ProcessingTime: 150 * time.Millisecond,
 		Verified:       "correct",
 		Locked:         true,
@@ -413,7 +413,7 @@ func TestSSEContract_SensitiveDataExcluded(t *testing.T) {
 
 	note := createTestNoteWithAllFields()
 	// Set a full filesystem path to verify it gets stripped to filename
-	note.ClipName = "/var/lib/birdnet-go/clips/2024/01/15/clip_001.wav"
+	note.ClipName = "/var/lib/voicewatch/clips/2024/01/15/clip_001.wav"
 	// Set source with credentials in SafeString
 	note.Source = datastore.AudioSource{
 		ID:          "rtsp_abc123",
@@ -429,7 +429,7 @@ func TestSSEContract_SensitiveDataExcluded(t *testing.T) {
 	jsonStr := string(jsonBytes)
 
 	// ClipName should be just the filename, not the full path
-	assert.NotContains(t, jsonStr, "/var/lib/birdnet-go",
+	assert.NotContains(t, jsonStr, "/var/lib/voicewatch",
 		"SSE payload must not contain filesystem paths")
 	assert.Contains(t, jsonStr, "clip_001.wav",
 		"SSE payload should contain the clip filename")

@@ -195,7 +195,7 @@ type DetectionRecord struct {
 type DynamicThreshold struct {
 	ID             uint      `gorm:"primaryKey"`
 	SpeciesName    string    `gorm:"uniqueIndex:idx_dt_species_model;not null;size:200"`                   // Common name (lowercase)
-	ModelName      string    `gorm:"uniqueIndex:idx_dt_species_model;not null;size:100;default:'BirdNET'"` // Model that produced this threshold
+	ModelName      string    `gorm:"uniqueIndex:idx_dt_species_model;not null;size:100;default:'VoiceWatch'"` // Model that produced this threshold
 	ScientificName string    `gorm:"size:200"`                                                             // Scientific name for thumbnails
 	Level          int       `gorm:"not null;default:0"`                                                   // Adjustment level (0-3)
 	CurrentValue   float64   `gorm:"not null"`                                                             // Current threshold value
@@ -214,7 +214,7 @@ type DynamicThreshold struct {
 type ThresholdEvent struct {
 	ID            uint      `gorm:"primaryKey"`
 	SpeciesName   string    `gorm:"index;not null;size:200"`             // Common name (lowercase)
-	ModelName     string    `gorm:"not null;size:100;default:'BirdNET'"` // Model that produced this event
+	ModelName     string    `gorm:"not null;size:100;default:'VoiceWatch'"` // Model that produced this event
 	PreviousLevel int       `gorm:"not null"`                            // Level before change
 	NewLevel      int       `gorm:"not null"`                            // Level after change
 	PreviousValue float64   `gorm:"not null"`                            // Threshold value before change

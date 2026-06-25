@@ -110,7 +110,7 @@ func TestEnrichEventWithUptime_PreservesExistingTags(t *testing.T) {
 		},
 		Contexts: map[string]sentry.Context{
 			"application": {
-				"name": "BirdNET-Go",
+				"name": "VoiceWatch",
 			},
 		},
 	}
@@ -122,7 +122,7 @@ func TestEnrichEventWithUptime_PreservesExistingTags(t *testing.T) {
 
 	appCtx, ok := event.Contexts["application"]
 	require.True(t, ok, "existing contexts must survive enrichment")
-	assert.Equal(t, "BirdNET-Go", appCtx["name"])
+	assert.Equal(t, "VoiceWatch", appCtx["name"])
 }
 
 // TestEnrichEventWithUptime_MergesExistingRuntimeContext verifies that if the

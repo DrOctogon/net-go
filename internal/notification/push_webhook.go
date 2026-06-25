@@ -222,7 +222,7 @@ func NewWebhookProvider(name string, enabled bool, endpoints []WebhookEndpoint, 
 
 	// Create HTTP client with production settings
 	cfg := httpclient.DefaultConfig()
-	cfg.UserAgent = "BirdNET-Go-Webhook/1.0"
+	cfg.UserAgent = "VoiceWatch-Webhook/1.0"
 	cfg.DefaultTimeout = defaultWebhookTimeout
 	wp.client = httpclient.New(&cfg)
 

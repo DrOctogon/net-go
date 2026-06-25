@@ -76,11 +76,11 @@ func TestPatchMissingSections(t *testing.T) {
 			name:    "models section accepts valid update",
 			section: "models",
 			body: map[string]any{
-				"enabled": []string{"birdnet", "perch_v2"},
+				"enabled": []string{"voicewatch", "perch_v2"},
 			},
 			verify: func(t *testing.T, settings *conf.Settings) {
 				t.Helper()
-				assert.Equal(t, []string{"birdnet", "perch_v2"}, settings.Models.Enabled)
+				assert.Equal(t, []string{"voicewatch", "perch_v2"}, settings.Models.Enabled)
 			},
 		},
 		{

@@ -44,28 +44,28 @@ var hotReloadRegistry = map[string]hotReloadEntry{
 	// --- Main ---
 	"Main": {categories: []hotReloadCategory{hotReloadDisplay}},
 
-	// --- BirdNET ---
-	"BirdNET.Debug":       {categories: []hotReloadCategory{hotReloadFresh}},
-	"BirdNET.Sensitivity": {categories: []hotReloadCategory{hotReloadFresh}},
-	"BirdNET.Threshold": {
+	// --- VoiceWatch ---
+	"VoiceWatch.Debug":       {categories: []hotReloadCategory{hotReloadFresh}},
+	"VoiceWatch.Sensitivity": {categories: []hotReloadCategory{hotReloadFresh}},
+	"VoiceWatch.Threshold": {
 		categories: []hotReloadCategory{hotReloadFresh},
 		action:     "recalculate_dynamic_thresholds",
 	},
-	"BirdNET.Overlap":            {categories: []hotReloadCategory{hotReloadFresh}},
-	"BirdNET.Longitude":          {categories: []hotReloadCategory{hotReloadDisplay}},
-	"BirdNET.Latitude":           {categories: []hotReloadCategory{hotReloadDisplay}},
-	"BirdNET.LocationConfigured": {categories: []hotReloadCategory{hotReloadDisplay}},
-	"BirdNET.Threads":            {categories: []hotReloadCategory{hotReloadFresh}, action: "reload_birdnet"},
-	"BirdNET.Locale":             {categories: []hotReloadCategory{hotReloadDisplay}, action: "reload_birdnet"},
-	"BirdNET.ModelPath":          {categories: []hotReloadCategory{hotReloadFresh}, action: "reload_birdnet"},
-	"BirdNET.LabelPath":          {categories: []hotReloadCategory{hotReloadFresh}, action: "reload_birdnet"},
-	"BirdNET.Labels":             {categories: []hotReloadCategory{hotReloadRuntime}},
-	"BirdNET.UseXNNPACK":         {categories: []hotReloadCategory{hotReloadFresh}, action: "reload_birdnet"},
-	"BirdNET.ONNXRuntimePath":    {categories: []hotReloadCategory{hotReloadRestart}},
-	"BirdNET.OpenVINOPath":       {categories: []hotReloadCategory{hotReloadRestart}},
-	"BirdNET.Backend":            {categories: []hotReloadCategory{hotReloadFresh}, action: "reload_birdnet"},
-	"BirdNET.OpenVINODevice":     {categories: []hotReloadCategory{hotReloadFresh}, action: "reload_birdnet"},
-	"BirdNET.Version":            {categories: []hotReloadCategory{hotReloadFresh}, action: "reload_birdnet"},
+	"VoiceWatch.Overlap":            {categories: []hotReloadCategory{hotReloadFresh}},
+	"VoiceWatch.Longitude":          {categories: []hotReloadCategory{hotReloadDisplay}},
+	"VoiceWatch.Latitude":           {categories: []hotReloadCategory{hotReloadDisplay}},
+	"VoiceWatch.LocationConfigured": {categories: []hotReloadCategory{hotReloadDisplay}},
+	"VoiceWatch.Threads":            {categories: []hotReloadCategory{hotReloadFresh}, action: "reload_voicewatch"},
+	"VoiceWatch.Locale":             {categories: []hotReloadCategory{hotReloadDisplay}, action: "reload_voicewatch"},
+	"VoiceWatch.ModelPath":          {categories: []hotReloadCategory{hotReloadFresh}, action: "reload_voicewatch"},
+	"VoiceWatch.LabelPath":          {categories: []hotReloadCategory{hotReloadFresh}, action: "reload_voicewatch"},
+	"VoiceWatch.Labels":             {categories: []hotReloadCategory{hotReloadRuntime}},
+	"VoiceWatch.UseXNNPACK":         {categories: []hotReloadCategory{hotReloadFresh}, action: "reload_voicewatch"},
+	"VoiceWatch.ONNXRuntimePath":    {categories: []hotReloadCategory{hotReloadRestart}},
+	"VoiceWatch.OpenVINOPath":       {categories: []hotReloadCategory{hotReloadRestart}},
+	"VoiceWatch.Backend":            {categories: []hotReloadCategory{hotReloadFresh}, action: "reload_voicewatch"},
+	"VoiceWatch.OpenVINODevice":     {categories: []hotReloadCategory{hotReloadFresh}, action: "reload_voicewatch"},
+	"VoiceWatch.Version":            {categories: []hotReloadCategory{hotReloadFresh}, action: "reload_voicewatch"},
 
 	// --- HumanVoice ---
 	"HumanVoice": {categories: []hotReloadCategory{hotReloadFresh}},

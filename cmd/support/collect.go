@@ -68,7 +68,7 @@ func CollectCommand() *cobra.Command {
 			}
 
 			// Save to file
-			filename := fmt.Sprintf("birdnet-go-support-%s.zip", dump.ID)
+			filename := fmt.Sprintf("voicewatch-support-%s.zip", dump.ID)
 			if err := os.WriteFile(filename, archiveData, 0o600); err != nil {
 				fmt.Printf("Error saving archive: %v\n", err)
 				os.Exit(1)

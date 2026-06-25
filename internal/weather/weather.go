@@ -327,9 +327,9 @@ func NewService(settings *conf.Settings, db datastore.Interface, weatherMetrics 
 		db:           db,
 		settings:     settings,
 		metrics:      weatherMetrics,
-		sunCalc:      suncalc.NewSunCalc(settings.BirdNET.Latitude, settings.BirdNET.Longitude),
-		sunCalcLat:   settings.BirdNET.Latitude,
-		sunCalcLon:   settings.BirdNET.Longitude,
+		sunCalc:      suncalc.NewSunCalc(settings.VoiceWatch.Latitude, settings.VoiceWatch.Longitude),
+		sunCalcLat:   settings.VoiceWatch.Latitude,
+		sunCalcLon:   settings.VoiceWatch.Longitude,
 		startupDelay: DefaultStartupDelay,
 	}, nil
 }
@@ -646,7 +646,7 @@ func (s *Service) Poll(ctx context.Context) error {
 func (s *Service) reconcileConfig(settings *conf.Settings) {
 	// Rebuild sunCalc on a location change. Coordinates are PII, so the change
 	// is logged without the values themselves.
-	lat, lon := settings.BirdNET.Latitude, settings.BirdNET.Longitude
+	lat, lon := settings.VoiceWatch.Latitude, settings.VoiceWatch.Longitude
 	if lat != s.sunCalcLat || lon != s.sunCalcLon {
 		getLogger().Info("Weather location changed, rebuilding sun time calculator",
 			logger.String("provider", s.providerName))

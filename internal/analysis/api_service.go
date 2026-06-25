@@ -30,7 +30,7 @@ const apiServerServiceName = "api-server"
 // cache, SunCalc, OAuth2 server, system monitor, and the control/audio-level channels.
 type APIServerService struct {
 	settings   *conf.Settings
-	bnAnalyzer *BirdNETAnalyzer
+	bnAnalyzer *VoiceWatchAnalyzer
 	dbService  *DatabaseService
 	metrics    *observability.Metrics
 	engine     *engine.AudioEngine
@@ -50,7 +50,7 @@ type APIServerService struct {
 
 // NewAPIServerService creates a new APIServerService with the given dependencies.
 // The service is not started; call Start() to initialize all subsystems.
-func NewAPIServerService(settings *conf.Settings, bnAnalyzer *BirdNETAnalyzer, dbService *DatabaseService, metrics *observability.Metrics, audioEngine *engine.AudioEngine) *APIServerService {
+func NewAPIServerService(settings *conf.Settings, bnAnalyzer *VoiceWatchAnalyzer, dbService *DatabaseService, metrics *observability.Metrics, audioEngine *engine.AudioEngine) *APIServerService {
 	return &APIServerService{
 		settings:   settings,
 		bnAnalyzer: bnAnalyzer,
@@ -66,7 +66,7 @@ func (s *APIServerService) Name() string {
 }
 
 // Start initializes and starts the API server and all dependent subsystems.
-// It fails fast if required dependencies (DataStore, BirdNET) are not available.
+// It fails fast if required dependencies (DataStore, VoiceWatch) are not available.
 //
 //nolint:gocognit // Orchestration function that initializes multiple subsystems in sequence.
 func (s *APIServerService) Start(ctx context.Context) error {
@@ -104,8 +104,8 @@ func (s *APIServerService) Start(ctx context.Context) error {
 			Context("operation", "start_precondition_check").
 			Build()
 	}
-	if s.bnAnalyzer == nil || s.bnAnalyzer.BirdNET() == nil {
-		return errors.Newf("api-server requires an initialized birdnet model; birdnet-analyzer service must be started first").
+	if s.bnAnalyzer == nil || s.bnAnalyzer.Orchestrator() == nil {
+		return errors.Newf("api-server requires an initialized voicewatch model; voicewatch-analyzer service must be started first").
 			Component("analysis.api_service").
 			Category(errors.CategorySystem).
 			Context("operation", "start_precondition_check").
@@ -113,13 +113,13 @@ func (s *APIServerService) Start(ctx context.Context) error {
 	}
 
 	dataStore := s.dbService.DataStore()
-	bn := s.bnAnalyzer.BirdNET()
+	bn := s.bnAnalyzer.Orchestrator()
 
-	// Update BirdNET model loaded metric.
-	UpdateBirdNETModelLoadedMetric(s.metrics.BirdNET, bn)
+	// Update VoiceWatch model loaded metric.
+	UpdateVoiceWatchModelLoadedMetric(s.metrics.VoiceWatch, bn)
 
 	// Create SunCalc for sunrise/sunset calculations.
-	s.sunCalc = suncalc.NewSunCalc(s.settings.BirdNET.Latitude, s.settings.BirdNET.Longitude)
+	s.sunCalc = suncalc.NewSunCalc(s.settings.VoiceWatch.Latitude, s.settings.VoiceWatch.Longitude)
 
 	// Create processor.
 	s.proc = processor.New(s.settings, dataStore, bn, s.metrics, GetLogger())

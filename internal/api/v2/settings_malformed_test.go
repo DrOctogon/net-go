@@ -42,7 +42,7 @@ func TestMalformedJSONData(t *testing.T) {
 		},
 		{
 			name:          "Unquoted keys",
-			section:       "birdnet",
+			section:       "voicewatch",
 			malformedData: `{latitude: 51.5074}`,
 			expectedError: "Failed to parse request body",
 		},
@@ -78,7 +78,7 @@ func TestMalformedJSONData(t *testing.T) {
 		},
 		{
 			name:          "Invalid number format",
-			section:       "birdnet",
+			section:       "voicewatch",
 			malformedData: `{"threshold": 0.1.2}`,
 			expectedError: "Failed to parse request body",
 		},

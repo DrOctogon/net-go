@@ -1,8 +1,8 @@
-// Package branding centralizes BirdNET-Go's project identity: the application
+// Package branding centralizes VoiceWatch's project identity: the application
 // name and the canonical repository, issue-tracker, support, and community
 // URLs. Each value is resolved at call time with the precedence
 //
-//	BIRDNET_GO_PROJECT_* env var > ldflags-baked var > built-in default
+//	VOICEWATCH_PROJECT_* env var > ldflags-baked var > built-in default
 //
 // so a fork can rebrand the running binary without editing source or
 // translations: bake values in at link time via -ldflags -X, or set the
@@ -55,7 +55,7 @@ var (
 // Built-in defaults, used when neither an environment override nor a baked-in
 // value is present. These are the upstream project's public identity.
 const (
-	defaultName         = "BirdNET-Go"
+	defaultName         = "VoiceWatch"
 	defaultRepoURL      = "https://github.com/tphakala/voicewatch"
 	defaultCommunityURL = "https://discord.gg/gcSCFGUtsd"
 
@@ -67,14 +67,14 @@ const (
 
 // Environment variables that override the build-time values at runtime.
 const (
-	envName           = "BIRDNET_GO_PROJECT_NAME"
-	envRepoURL        = "BIRDNET_GO_PROJECT_REPO_URL"
-	envIssuesURL      = "BIRDNET_GO_PROJECT_ISSUES_URL"
-	envNewIssueURL    = "BIRDNET_GO_PROJECT_NEW_ISSUE_URL"
-	envSupportURL     = "BIRDNET_GO_PROJECT_SUPPORT_URL"
-	envDiscussionsURL = "BIRDNET_GO_PROJECT_DISCUSSIONS_URL"
-	envReleasesURL    = "BIRDNET_GO_PROJECT_RELEASES_URL"
-	envCommunityURL   = "BIRDNET_GO_PROJECT_COMMUNITY_URL"
+	envName           = "VOICEWATCH_PROJECT_NAME"
+	envRepoURL        = "VOICEWATCH_PROJECT_REPO_URL"
+	envIssuesURL      = "VOICEWATCH_PROJECT_ISSUES_URL"
+	envNewIssueURL    = "VOICEWATCH_PROJECT_NEW_ISSUE_URL"
+	envSupportURL     = "VOICEWATCH_PROJECT_SUPPORT_URL"
+	envDiscussionsURL = "VOICEWATCH_PROJECT_DISCUSSIONS_URL"
+	envReleasesURL    = "VOICEWATCH_PROJECT_RELEASES_URL"
+	envCommunityURL   = "VOICEWATCH_PROJECT_COMMUNITY_URL"
 )
 
 // resolve returns the first non-empty candidate among the environment variable

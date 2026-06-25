@@ -110,7 +110,7 @@ func getRecommendedLevelForOverlap(overlap float64) (level int, overlapSufficien
 
 // calculateMinDetectionsForModel returns the minimum detection count for the
 // given model ID. All models now use the standard false-positive-filter
-// calculation based on the BirdNET overlap setting.
+// calculation based on the VoiceWatch overlap setting.
 func calculateMinDetectionsForModel(settings *conf.Settings, _ string) int {
 	return calculateMinDetectionsFromSettings(settings)
 }

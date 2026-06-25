@@ -272,7 +272,7 @@ func TestJSONRoundTrip(t *testing.T) {
 			ChannelStable: {
 				Version:    "v0.6.4",
 				Tag:        "v0.6.4",
-				Name:       "BirdNET-Go v0.6.4",
+				Name:       "VoiceWatch v0.6.4",
 				ReleasedAt: time.Date(2026, 6, 20, 10, 0, 0, 0, time.UTC),
 				ReleaseURL: "https://github.com/tphakala/voicewatch/releases/tag/v0.6.4",
 				Docker:     &Docker{ChannelTag: "ghcr.io/tphakala/birdnet-go:latest"},

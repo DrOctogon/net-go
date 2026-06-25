@@ -13,34 +13,34 @@ import (
 	"github.com/tphakala/voicewatch/internal/logger"
 )
 
-// birdNETAnalyzerName is the service name used for logging and diagnostics.
-const birdNETAnalyzerName = "birdnet-analyzer"
+// voiceWatchAnalyzerName is the service name used for logging and diagnostics.
+const voiceWatchAnalyzerName = "voicewatch-analyzer"
 
-// BirdNETAnalyzer wraps BirdNET model initialization as an app.Service
+// VoiceWatchAnalyzer wraps the VoiceWatch model initialization as an app.Service
 // and implements app.Analyzer for source-to-analyzer routing.
-type BirdNETAnalyzer struct {
+type VoiceWatchAnalyzer struct {
 	settings *conf.Settings
 	bn       *classifier.Orchestrator
 }
 
-// NewBirdNETAnalyzer creates a new BirdNETAnalyzer with the given settings.
-// The analyzer is not started; call Start() to initialize the BirdNET model.
-func NewBirdNETAnalyzer(settings *conf.Settings) *BirdNETAnalyzer {
-	return &BirdNETAnalyzer{settings: settings}
+// NewVoiceWatchAnalyzer creates a new VoiceWatchAnalyzer with the given settings.
+// The analyzer is not started; call Start() to initialize the VoiceWatch model.
+func NewVoiceWatchAnalyzer(settings *conf.Settings) *VoiceWatchAnalyzer {
+	return &VoiceWatchAnalyzer{settings: settings}
 }
 
 // Name returns a human-readable identifier for logging and diagnostics.
-func (a *BirdNETAnalyzer) Name() string {
-	return birdNETAnalyzerName
+func (a *VoiceWatchAnalyzer) Name() string {
+	return voiceWatchAnalyzerName
 }
 
-// Start initializes the BirdNET interpreter and builds the species range filter.
+// Start initializes the VoiceWatch speech model.
 // Model initialization failures are non-retryable (missing files, insufficient resources).
-func (a *BirdNETAnalyzer) Start(_ context.Context) error {
+func (a *VoiceWatchAnalyzer) Start(_ context.Context) error {
 	// Resolve the Silero VAD model path. When the operator has not configured an
 	// explicit path, extract the model embedded in the binary into the models
 	// directory and use that.
-	modelPath := a.settings.BirdNET.ModelPath
+	modelPath := a.settings.VoiceWatch.ModelPath
 	if modelPath == "" {
 		configDir, dirErr := conf.ResolveConfigDir()
 		if dirErr != nil {
@@ -67,9 +67,9 @@ func (a *BirdNETAnalyzer) Start(_ context.Context) error {
 	// classifier) avoids a humanvoice -> classifier import cycle.
 	model, err := humanvoice.New(&humanvoice.Config{
 		ModelPath:       modelPath,
-		ONNXRuntimePath: a.settings.BirdNET.ONNXRuntimePath,
-		Threads:         a.settings.BirdNET.Threads,
-		Threshold:       a.settings.BirdNET.Threshold,
+		ONNXRuntimePath: a.settings.VoiceWatch.ONNXRuntimePath,
+		Threads:         a.settings.VoiceWatch.Threads,
+		Threshold:       a.settings.VoiceWatch.Threshold,
 	})
 	if err != nil {
 		return errors.New(err).
@@ -98,13 +98,13 @@ func (a *BirdNETAnalyzer) Start(_ context.Context) error {
 	return nil
 }
 
-// Stop releases BirdNET model resources. It is safe to call before Start()
+// Stop releases VoiceWatch model resources. It is safe to call before Start()
 // or multiple times.
-func (a *BirdNETAnalyzer) Stop(_ context.Context) error {
+func (a *VoiceWatchAnalyzer) Stop(_ context.Context) error {
 	if a.bn != nil {
 		log := GetLogger()
-		log.Info("stopping BirdNET model",
-			logger.String("service", birdNETAnalyzerName))
+		log.Info("stopping VoiceWatch model",
+			logger.String("service", voiceWatchAnalyzerName))
 		a.bn.Delete()
 		a.bn = nil
 	}
@@ -112,14 +112,14 @@ func (a *BirdNETAnalyzer) Stop(_ context.Context) error {
 }
 
 // Compatible returns true if this analyzer can process audio from the given source.
-// BirdNETAnalyzer handles all source types except ultrasonic (bat detection).
-func (a *BirdNETAnalyzer) Compatible(source app.AudioSource) bool {
+// VoiceWatchAnalyzer handles all source types except ultrasonic (bat detection).
+func (a *VoiceWatchAnalyzer) Compatible(source app.AudioSource) bool {
 	return source.Type != app.SourceTypeUltrasonic
 }
 
-// BirdNET returns the underlying classifier orchestrator, or nil if the analyzer
+// Orchestrator returns the underlying classifier orchestrator, or nil if the analyzer
 // has not been started. Callers must not use the returned pointer after Stop().
-func (a *BirdNETAnalyzer) BirdNET() *classifier.Orchestrator {
+func (a *VoiceWatchAnalyzer) Orchestrator() *classifier.Orchestrator {
 	return a.bn
 }
 

@@ -20,14 +20,14 @@ func TestIsHumanVocalization(t *testing.T) {
 		want     bool
 	}{
 		// BirdNET v2.4 classes, English (matched via the locale-stable prefix).
-		{"BirdNET human vocal", "Human vocal_Human vocal", true},
-		{"BirdNET human non-vocal", "Human non-vocal_Human non-vocal", true},
-		{"BirdNET human whistle", "Human whistle_Human whistle", true},
+		{"speech model human vocal", "Human vocal_Human vocal", true},
+		{"speech model human non-vocal", "Human non-vocal_Human non-vocal", true},
+		{"speech model human whistle", "Human whistle_Human whistle", true},
 		// BirdNET v2.4 classes, non-English locale. The common name is localized
 		// ("Mensch Stimme"), so only raw-label matching catches these.
-		{"BirdNET human vocal (de)", "Human vocal_Mensch Stimme", true},
-		{"BirdNET human non-vocal (de)", "Human non-vocal_Mensch Geräusch", true},
-		{"BirdNET human whistle (de)", "Human whistle_Mensch Pfeifen", true},
+		{"speech model human vocal (de)", "Human vocal_Mensch Stimme", true},
+		{"speech model human non-vocal (de)", "Human non-vocal_Mensch Geräusch", true},
+		{"speech model human whistle (de)", "Human whistle_Mensch Pfeifen", true},
 		// Perch v2 speech/voice classes (exact raw-label match).
 		{"Perch Speech", "Speech", true},
 		{"Perch Human_voice", "Human_voice", true},
@@ -60,11 +60,11 @@ func TestIsHumanVocalization(t *testing.T) {
 		// Case-insensitive matching (custom/future label files may vary casing).
 		{"Perch speech lowercase", "speech", true},
 		{"Perch HUMAN_VOICE uppercase", "HUMAN_VOICE", true},
-		{"BirdNET human prefix lowercase", "human vocal_human vocal", true},
+		{"speech model human prefix lowercase", "human vocal_human vocal", true},
 		// Negatives: bird binomials that merely contain the substring "human".
 		{"cicada Pacarina schumanni", "Pacarina schumanni", false},
 		{"warbler Phylloscopus humei", "Phylloscopus humei", false},
-		{"BirdNET American Robin", "Turdus migratorius_American Robin", false},
+		{"speech model American Robin", "Turdus migratorius_American Robin", false},
 		// Negatives: non-human FSD50K classes that co-occur with people.
 		{"Perch Thump_and_thud", "Thump_and_thud", false},
 		{"Perch Car_passing_by", "Car_passing_by", false},
@@ -90,8 +90,8 @@ func TestIsDogDetection(t *testing.T) {
 		want     bool
 	}{
 		// BirdNET v2.4 dog class, English and a non-English locale.
-		{"BirdNET Dog (en)", "Dog_Dog", true},
-		{"BirdNET Dog (de)", "Dog_Hund", true},
+		{"speech model Dog (en)", "Dog_Dog", true},
+		{"speech model Dog (de)", "Dog_Hund", true},
 		// Perch v2 dog sound classes and the domestic dog taxon.
 		{"Perch Dog", "Dog", true},
 		{"Perch Bark", "Bark", true},
@@ -99,7 +99,7 @@ func TestIsDogDetection(t *testing.T) {
 		{"Perch Canis familiaris", "Canis familiaris", true},
 		// Case-insensitive matching.
 		{"Perch bark lowercase", "bark", true},
-		{"BirdNET DOG_DOG uppercase", "DOG_DOG", true},
+		{"speech model DOG_DOG uppercase", "DOG_DOG", true},
 		// Negatives: bird/insect binomials that merely contain the substring "dog".
 		// Tachyspiza rhodogaster is a real bird (Vinous-breasted Sparrowhawk); the
 		// old "dog" substring match would have wrongly filtered it.
@@ -155,11 +155,11 @@ func TestDetectionHandlers_RecordTimestamp(t *testing.T) {
 		wantStored bool
 	}{
 		{"privacy records Perch speech", "Speech", 0.9, enablePrivacy, (*Processor).handleHumanDetection, true, true},
-		{"privacy records localized BirdNET human", "Human vocal_Mensch Stimme", 0.9, enablePrivacy, (*Processor).handleHumanDetection, true, true},
+		{"privacy records localized speech model human", "Human vocal_Mensch Stimme", 0.9, enablePrivacy, (*Processor).handleHumanDetection, true, true},
 		{"privacy disabled does not record", "Speech", 0.9, func(_ *conf.Settings) {}, (*Processor).handleHumanDetection, true, false},
 		{"privacy below threshold does not record", "Speech", 0.01, enablePrivacy, (*Processor).handleHumanDetection, true, false},
 		{"dog records Perch bark", "Bark", 0.9, enableDog, (*Processor).handleDogDetection, false, true},
-		{"dog records localized BirdNET dog", "Dog_Hund", 0.9, enableDog, (*Processor).handleDogDetection, false, true},
+		{"dog records localized speech model dog", "Dog_Hund", 0.9, enableDog, (*Processor).handleDogDetection, false, true},
 		{"dog disabled does not record", "Bark", 0.9, func(_ *conf.Settings) {}, (*Processor).handleDogDetection, false, false},
 		{"dog below threshold does not record", "Bark", 0.01, enableDog, (*Processor).handleDogDetection, false, false},
 	}
@@ -271,7 +271,7 @@ func TestShouldFilterDetection_DropsHumanLabels(t *testing.T) {
 		wantFilter bool
 	}{
 		{"Perch speech is dropped", "Speech", true},
-		{"localized BirdNET human is dropped", "Human vocal_Mensch Stimme", true},
+		{"localized speech model human is dropped", "Human vocal_Mensch Stimme", true},
 		{"normal bird is not dropped by the human filter", "Turdus merula", false},
 	}
 

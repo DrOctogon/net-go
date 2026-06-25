@@ -216,18 +216,18 @@ func TestSettingsCreation(t *testing.T) {
 
 			require.NotNil(t, settings)
 			assert.Equal(t, provider, settings.Realtime.Weather.Provider)
-			assert.NotZero(t, settings.BirdNET.Latitude)
-			assert.NotZero(t, settings.BirdNET.Longitude)
+			assert.NotZero(t, settings.VoiceWatch.Latitude)
+			assert.NotZero(t, settings.VoiceWatch.Longitude)
 		})
 	}
 
 	t.Run("with_custom_options", func(t *testing.T) {
 		customLat := 40.7128
 		settings := createTestSettings(t, "yrno", func(s *conf.Settings) {
-			s.BirdNET.Latitude = customLat
+			s.VoiceWatch.Latitude = customLat
 		})
 
-		assert.InDelta(t, customLat, settings.BirdNET.Latitude, 0.001)
+		assert.InDelta(t, customLat, settings.VoiceWatch.Latitude, 0.001)
 	})
 }
 
@@ -1103,16 +1103,16 @@ func TestFetchAndSave_HotReloadCoordinates(t *testing.T) {
 	t.Cleanup(func() { conf.StoreSettings(prevSettings) })
 
 	initial := createTestSettings(t, "yrno", func(s *conf.Settings) {
-		s.BirdNET.Latitude = 0
-		s.BirdNET.Longitude = 0
+		s.VoiceWatch.Latitude = 0
+		s.VoiceWatch.Longitude = 0
 	})
 	conf.StoreSettings(initial)
 
 	var observedLat, observedLon float64
 	provider := &mockProvider{
 		fetchFunc: func(settings *conf.Settings) (*WeatherData, error) {
-			observedLat = settings.BirdNET.Latitude
-			observedLon = settings.BirdNET.Longitude
+			observedLat = settings.VoiceWatch.Latitude
+			observedLon = settings.VoiceWatch.Longitude
 			return nil, errors.New("short-circuit after observing coords")
 		},
 	}
@@ -1139,8 +1139,8 @@ func TestFetchAndSave_HotReloadCoordinates(t *testing.T) {
 	service.backoff.mu.Unlock()
 
 	updated := createTestSettings(t, "yrno", func(s *conf.Settings) {
-		s.BirdNET.Latitude = 60.1699
-		s.BirdNET.Longitude = 24.9384
+		s.VoiceWatch.Latitude = 60.1699
+		s.VoiceWatch.Longitude = 24.9384
 	})
 	conf.StoreSettings(updated)
 
@@ -1427,8 +1427,8 @@ func TestFetchAndSave_SunCalcRebuiltOnLocationChange(t *testing.T) {
 	// Start in Helsinki. sunCalc is left nil so reconcileConfig builds it on the
 	// first cycle from the configured coordinates.
 	helsinki := createTestSettings(t, "yrno", func(s *conf.Settings) {
-		s.BirdNET.Latitude = 60.1699
-		s.BirdNET.Longitude = 24.9384
+		s.VoiceWatch.Latitude = 60.1699
+		s.VoiceWatch.Longitude = 24.9384
 	})
 	conf.StoreSettings(helsinki)
 	service := &Service{
@@ -1444,8 +1444,8 @@ func TestFetchAndSave_SunCalcRebuiltOnLocationChange(t *testing.T) {
 	// Move to Sydney: a very different latitude/longitude yields different sun
 	// times for the same instant.
 	sydney := createTestSettings(t, "yrno", func(s *conf.Settings) {
-		s.BirdNET.Latitude = -33.8688
-		s.BirdNET.Longitude = 151.2093
+		s.VoiceWatch.Latitude = -33.8688
+		s.VoiceWatch.Longitude = 151.2093
 	})
 	conf.StoreSettings(sydney)
 

@@ -100,21 +100,21 @@ func TestDiscoveryPayloadStructure(t *testing.T) {
 
 	payload := DiscoveryPayload{
 		Name:              "Last Species",
-		UniqueID:          "birdnet_go_test_default_species",
-		StateTopic:        "birdnet/detections",
+		UniqueID:          "voicewatch_test_default_species",
+		StateTopic:        "voicewatch/detections",
 		ValueTemplate:     "{{ value_json.CommonName }}",
 		Icon:              "mdi:bird",
-		AvailabilityTopic: "birdnet/status",
+		AvailabilityTopic: "voicewatch/status",
 		Device: DiscoveryDevice{
-			Identifiers:  []string{"birdnet_go_test_default"},
-			Name:         "BirdNET-Go Default",
-			Manufacturer: "BirdNET-Go",
+			Identifiers:  []string{"voicewatch_test_default"},
+			Name:         "VoiceWatch Default",
+			Manufacturer: "VoiceWatch",
 			Model:        "Audio Analyzer",
 			SWVersion:    "1.0.0",
-			ViaDevice:    "birdnet_go_test_bridge",
+			ViaDevice:    "voicewatch_test_bridge",
 		},
 		Origin: &DiscoveryOrigin{
-			Name:       "BirdNET-Go",
+			Name:       "VoiceWatch",
 			SWVersion:  "1.0.0",
 			SupportURL: "https://github.com/tphakala/voicewatch",
 		},
@@ -131,25 +131,25 @@ func TestDiscoveryPayloadStructure(t *testing.T) {
 
 	// Verify required fields
 	assert.Equal(t, "Last Species", result["name"])
-	assert.Equal(t, "birdnet_go_test_default_species", result["unique_id"])
-	assert.Equal(t, "birdnet/detections", result["state_topic"])
+	assert.Equal(t, "voicewatch_test_default_species", result["unique_id"])
+	assert.Equal(t, "voicewatch/detections", result["state_topic"])
 	assert.Equal(t, "{{ value_json.CommonName }}", result["value_template"])
 	assert.Equal(t, "mdi:bird", result["icon"])
-	assert.Equal(t, "birdnet/status", result["availability_topic"])
+	assert.Equal(t, "voicewatch/status", result["availability_topic"])
 
 	// Verify device info
 	device, ok := result["device"].(map[string]any)
 	require.True(t, ok, "Device should be a map")
-	assert.Equal(t, "BirdNET-Go Default", device["name"])
-	assert.Equal(t, "BirdNET-Go", device["manufacturer"])
+	assert.Equal(t, "VoiceWatch Default", device["name"])
+	assert.Equal(t, "VoiceWatch", device["manufacturer"])
 	assert.Equal(t, "Audio Analyzer", device["model"])
 	assert.Equal(t, "1.0.0", device["sw_version"])
-	assert.Equal(t, "birdnet_go_test_bridge", device["via_device"])
+	assert.Equal(t, "voicewatch_test_bridge", device["via_device"])
 
 	// Verify origin info
 	origin, ok := result["origin"].(map[string]any)
 	require.True(t, ok, "Origin should be a map")
-	assert.Equal(t, "BirdNET-Go", origin["name"])
+	assert.Equal(t, "VoiceWatch", origin["name"])
 	assert.Equal(t, "1.0.0", origin["sw_version"])
 	assert.Equal(t, "https://github.com/tphakala/voicewatch", origin["support_url"])
 }
@@ -161,8 +161,8 @@ func TestPublishBridgeDiscovery(t *testing.T) {
 	mock := newMockPublisher()
 	config := DiscoveryConfig{
 		DiscoveryPrefix: "homeassistant",
-		BaseTopic:       "birdnet",
-		DeviceName:      "BirdNET-Go",
+		BaseTopic:       "voicewatch",
+		DeviceName:      "VoiceWatch",
 		NodeID:          "test-node",
 		Version:         "1.0.0",
 	}
@@ -183,8 +183,8 @@ func TestPublishBridgeDiscovery(t *testing.T) {
 	require.NoError(t, err, "Failed to parse bridge discovery payload")
 
 	assert.Equal(t, "Status", payload.Name)
-	assert.Equal(t, "birdnet_go_test-node_bridge_status", payload.UniqueID)
-	assert.Equal(t, "birdnet/status", payload.StateTopic)
+	assert.Equal(t, "voicewatch_test-node_bridge_status", payload.UniqueID)
+	assert.Equal(t, "voicewatch/status", payload.StateTopic)
 	assert.Equal(t, "connectivity", payload.DeviceClass)
 	assert.Equal(t, "diagnostic", payload.EntityCategory)
 	assert.Equal(t, StatusPayloadOnline, payload.PayloadOn)
@@ -195,11 +195,11 @@ func TestPublishBridgeDiscovery(t *testing.T) {
 	assert.Empty(t, payload.PayloadNotAvailable)
 
 	// Verify device info
-	assert.Equal(t, "BirdNET-Go", payload.Device.Name)
-	assert.Equal(t, "BirdNET-Go", payload.Device.Manufacturer)
+	assert.Equal(t, "VoiceWatch", payload.Device.Name)
+	assert.Equal(t, "VoiceWatch", payload.Device.Manufacturer)
 	assert.Equal(t, "Bridge", payload.Device.Model)
 	assert.Equal(t, "1.0.0", payload.Device.SWVersion)
-	assert.Contains(t, payload.Device.Identifiers, "birdnet_go_test-node_bridge")
+	assert.Contains(t, payload.Device.Identifiers, "voicewatch_test-node_bridge")
 }
 
 // TestPublishSourceDiscovery verifies source device discovery messages.
@@ -209,8 +209,8 @@ func TestPublishSourceDiscovery(t *testing.T) {
 	mock := newMockPublisher()
 	config := DiscoveryConfig{
 		DiscoveryPrefix: "homeassistant",
-		BaseTopic:       "birdnet",
-		DeviceName:      "BirdNET-Go",
+		BaseTopic:       "voicewatch",
+		DeviceName:      "VoiceWatch",
 		NodeID:          "test-node",
 		Version:         "1.0.0",
 	}
@@ -261,12 +261,12 @@ func TestPublishSourceDiscovery(t *testing.T) {
 
 	assert.Equal(t, "Last Species", speciesPayload.Name)
 	assert.Equal(t, "mdi:bird", speciesPayload.Icon)
-	assert.Equal(t, "birdnet", speciesPayload.StateTopic)
+	assert.Equal(t, "voicewatch", speciesPayload.StateTopic)
 	assert.Contains(t, speciesPayload.ValueTemplate, "hw:0,0") // Original source ID in template
 
 	// Verify device has via_device pointing to bridge
-	assert.Equal(t, "birdnet_go_test-node_bridge", speciesPayload.Device.ViaDevice)
-	assert.Equal(t, "BirdNET-Go USB Microphone", speciesPayload.Device.Name)
+	assert.Equal(t, "voicewatch_test-node_bridge", speciesPayload.Device.ViaDevice)
+	assert.Equal(t, "VoiceWatch USB Microphone", speciesPayload.Device.Name)
 }
 
 // TestPublishSourceDiscoveryWithoutSoundLevel verifies sound level sensor is not published when disabled.
@@ -276,8 +276,8 @@ func TestPublishSourceDiscoveryWithoutSoundLevel(t *testing.T) {
 	mock := newMockPublisher()
 	config := DiscoveryConfig{
 		DiscoveryPrefix: "homeassistant",
-		BaseTopic:       "birdnet",
-		DeviceName:      "BirdNET-Go",
+		BaseTopic:       "voicewatch",
+		DeviceName:      "VoiceWatch",
 		NodeID:          "test-node",
 		Version:         "1.0.0",
 	}
@@ -323,8 +323,8 @@ func TestRemoveDiscovery(t *testing.T) {
 	mock := newMockPublisher()
 	config := DiscoveryConfig{
 		DiscoveryPrefix: "homeassistant",
-		BaseTopic:       "birdnet",
-		DeviceName:      "BirdNET-Go",
+		BaseTopic:       "voicewatch",
+		DeviceName:      "VoiceWatch",
 		NodeID:          "test-node",
 		Version:         "1.0.0",
 	}
@@ -365,15 +365,15 @@ func TestDiscoveryConfigDefaults(t *testing.T) {
 
 	config := DiscoveryConfig{
 		DiscoveryPrefix: "homeassistant",
-		BaseTopic:       "birdnet",
-		DeviceName:      "BirdNET-Go",
+		BaseTopic:       "voicewatch",
+		DeviceName:      "VoiceWatch",
 		NodeID:          "my-node",
 		Version:         "1.2.3",
 	}
 
 	assert.Equal(t, "homeassistant", config.DiscoveryPrefix)
-	assert.Equal(t, "birdnet", config.BaseTopic)
-	assert.Equal(t, "BirdNET-Go", config.DeviceName)
+	assert.Equal(t, "voicewatch", config.BaseTopic)
+	assert.Equal(t, "VoiceWatch", config.DeviceName)
 	assert.Equal(t, "my-node", config.NodeID)
 	assert.Equal(t, "1.2.3", config.Version)
 }
@@ -387,8 +387,8 @@ func TestPublishDiscoveryErrorHandling(t *testing.T) {
 
 	config := DiscoveryConfig{
 		DiscoveryPrefix: "homeassistant",
-		BaseTopic:       "birdnet",
-		DeviceName:      "BirdNET-Go",
+		BaseTopic:       "voicewatch",
+		DeviceName:      "VoiceWatch",
 		NodeID:          "error-test",
 		Version:         "1.0.0",
 	}
@@ -415,8 +415,8 @@ func TestPublishDiscoveryMultipleSources(t *testing.T) {
 	mock := newMockPublisher()
 	config := DiscoveryConfig{
 		DiscoveryPrefix: "homeassistant",
-		BaseTopic:       "birdnet",
-		DeviceName:      "BirdNET-Go",
+		BaseTopic:       "voicewatch",
+		DeviceName:      "VoiceWatch",
 		NodeID:          "multi-source",
 		Version:         "1.0.0",
 	}
@@ -485,8 +485,8 @@ func TestSoundLevelValueTemplate_UsesCorrectBandKeyFormat(t *testing.T) {
 	mock := newMockPublisher()
 	config := DiscoveryConfig{
 		DiscoveryPrefix: "homeassistant",
-		BaseTopic:       "birdnet",
-		DeviceName:      "BirdNET-Go",
+		BaseTopic:       "voicewatch",
+		DeviceName:      "VoiceWatch",
 		NodeID:          "test-node",
 		Version:         "1.0.0",
 	}
@@ -566,8 +566,8 @@ func TestValueTemplates_UseNoneFallback(t *testing.T) {
 	mock := newMockPublisher()
 	config := DiscoveryConfig{
 		DiscoveryPrefix: "homeassistant",
-		BaseTopic:       "birdnet",
-		DeviceName:      "BirdNET-Go",
+		BaseTopic:       "voicewatch",
+		DeviceName:      "VoiceWatch",
 		NodeID:          "test-node",
 		Version:         "1.0.0",
 	}
@@ -646,8 +646,8 @@ func TestDeviceNaming_ShortDisplayNameWhenIDIsLong(t *testing.T) {
 	mock := newMockPublisher()
 	config := DiscoveryConfig{
 		DiscoveryPrefix: "homeassistant",
-		BaseTopic:       "birdnet",
-		DeviceName:      "BirdNET-Go",
+		BaseTopic:       "voicewatch",
+		DeviceName:      "VoiceWatch",
 		NodeID:          "test-node",
 		Version:         "1.0.0",
 	}
@@ -727,8 +727,8 @@ func TestDeviceNaming_PreservesShortDisplayName(t *testing.T) {
 	mock := newMockPublisher()
 	config := DiscoveryConfig{
 		DiscoveryPrefix: "homeassistant",
-		BaseTopic:       "birdnet",
-		DeviceName:      "BirdNET-Go",
+		BaseTopic:       "voicewatch",
+		DeviceName:      "VoiceWatch",
 		NodeID:          "test-node",
 		Version:         "1.0.0",
 	}
@@ -757,7 +757,7 @@ func TestDeviceNaming_PreservesShortDisplayName(t *testing.T) {
 	require.NoError(t, err, "Failed to parse discovery payload")
 
 	// DisplayName should be preserved exactly in the device name
-	assert.Equal(t, "BirdNET-Go Backyard Camera", payload.Device.Name,
+	assert.Equal(t, "VoiceWatch Backyard Camera", payload.Device.Name,
 		"Device name should use the provided DisplayName exactly")
 }
 
@@ -840,8 +840,8 @@ func TestRemoveDiscovery_CleansUpDefaultSource(t *testing.T) {
 	mock := newMockPublisher()
 	config := &DiscoveryConfig{
 		DiscoveryPrefix: "homeassistant",
-		BaseTopic:       "birdnet",
-		DeviceName:      "BirdNET-Go",
+		BaseTopic:       "voicewatch",
+		DeviceName:      "VoiceWatch",
 		NodeID:          "test",
 		Version:         "1.0.0",
 	}

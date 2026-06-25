@@ -166,7 +166,7 @@ func TestSettingsSaveAndLoad(t *testing.T) {
 		}{
 			Name: "TestNode",
 		},
-		BirdNET: BirdNETConfig{
+		VoiceWatch: VoiceWatchConfig{
 			Threshold: 0.3,
 			Locale:    "en",
 		},

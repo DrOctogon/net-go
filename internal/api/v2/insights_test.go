@@ -62,7 +62,7 @@ func setupInsightsTestController(t *testing.T, mock *mockInsightsRepo) (*echo.Ec
 	t.Helper()
 	e := echo.New()
 	settingsVal := &conf.Settings{
-		BirdNET: conf.BirdNETConfig{
+		VoiceWatch: conf.VoiceWatchConfig{
 			Labels: []string{
 				"Turdus merula_Eurasian Blackbird",
 				"Parus major_Great Tit",
@@ -74,7 +74,7 @@ func setupInsightsTestController(t *testing.T, mock *mockInsightsRepo) (*echo.Ec
 		insightsRepo: mock,
 	}
 	controller.Settings.Store(settingsVal)
-	controller.UpdateCommonNameMap(controller.Settings.Load().BirdNET.Labels)
+	controller.UpdateCommonNameMap(controller.Settings.Load().VoiceWatch.Labels)
 	return e, controller
 }
 

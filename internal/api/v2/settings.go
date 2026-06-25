@@ -63,11 +63,11 @@ func (c *Controller) initSettingsRoutes() {
 	// Routes for settings
 	// GET /api/v2/settings - Retrieves all application settings
 	settingsGroup.GET("", c.GetAllSettings)
-	// GET /api/v2/settings/locales - Retrieves available locales for BirdNET (must be before /:section)
+	// GET /api/v2/settings/locales - Retrieves available locales for VoiceWatch (must be before /:section)
 	settingsGroup.GET("/locales", c.GetLocales)
 	// GET /api/v2/settings/systemid - Retrieves the system ID for support tracking (must be before /:section)
 	settingsGroup.GET("/systemid", c.GetSystemID)
-	// GET /api/v2/settings/:section - Retrieves settings for a specific section (e.g., birdnet, webserver)
+	// GET /api/v2/settings/:section - Retrieves settings for a specific section (e.g., voicewatch, webserver)
 	// NOTE: /settings/dashboard is intentionally registered publicly above and
 	// will match before this parameterized route.
 	settingsGroup.GET("/:section", c.GetSectionSettings)
@@ -254,10 +254,10 @@ func (c *Controller) UpdateSettings(ctx echo.Context) error {
 		updated.Realtime.Species.Config = conf.NormalizeSpeciesConfigKeys(updated.Realtime.Species.Config)
 	}
 
-	// Ensure LocationConfigured is set when birdnet coordinates are present.
+	// Ensure LocationConfigured is set when voicewatch coordinates are present.
 	// Backward compatibility with older frontends that don't send the flag.
-	if updated.BirdNET.Latitude != 0 || updated.BirdNET.Longitude != 0 {
-		updated.BirdNET.LocationConfigured = true
+	if updated.VoiceWatch.Latitude != 0 || updated.VoiceWatch.Longitude != 0 {
+		updated.VoiceWatch.LocationConfigured = true
 	}
 
 	// Migrate legacy single audio source if a cached frontend sent it.
@@ -665,11 +665,11 @@ func (c *Controller) UpdateSectionSettings(ctx echo.Context) error {
 		return c.HandleError(ctx, err, "Cannot save: some secret fields contain the redacted placeholder because their identifying key was changed while the secret was hidden. Re-enter the secret values.", http.StatusBadRequest)
 	}
 
-	// Ensure LocationConfigured is set when birdnet coordinates are present.
+	// Ensure LocationConfigured is set when voicewatch coordinates are present.
 	// Backward compatibility with older frontends that don't send the flag.
-	if strings.EqualFold(section, SettingsSectionBirdnet) {
-		if updated.BirdNET.Latitude != 0 || updated.BirdNET.Longitude != 0 {
-			updated.BirdNET.LocationConfigured = true
+	if strings.EqualFold(section, SettingsSectionVoiceWatch) {
+		if updated.VoiceWatch.Latitude != 0 || updated.VoiceWatch.Longitude != 0 {
+			updated.VoiceWatch.LocationConfigured = true
 		}
 	}
 
@@ -958,8 +958,8 @@ func getSettingsSectionValue(settings *conf.Settings, section string) (any, erro
 
 	// Map section names to their corresponding pointers
 	switch section {
-	case SettingsSectionBirdnet:
-		return &settings.BirdNET, nil
+	case SettingsSectionVoiceWatch:
+		return &settings.VoiceWatch, nil
 	case SettingsSectionWebserver:
 		return &settings.WebServer, nil
 	case "security":
@@ -1022,12 +1022,12 @@ func handleGenericSection(sectionPtr any, data json.RawMessage, sectionName stri
 	}
 
 	// Apply field-level permissions if needed
-	// Note: getBlockedFieldMap uses capitalized section names (e.g., "BirdNET", "Realtime")
+	// Note: getBlockedFieldMap uses capitalized section names (e.g., "VoiceWatch", "Realtime")
 	// We need to map our lowercase section names to the expected capitalized format
 	capitalizedSectionName := ""
 	switch sectionName {
-	case SettingsSectionBirdnet:
-		capitalizedSectionName = "BirdNET"
+	case SettingsSectionVoiceWatch:
+		capitalizedSectionName = "VoiceWatch"
 	case SettingsSectionRealtime:
 		capitalizedSectionName = "Realtime"
 	case SettingsSectionWebserver:
@@ -1061,7 +1061,7 @@ func getSectionValidators() map[string]sectionValidator {
 		"rtsp":                   validateStreamsSection,
 		"security":               validateSecuritySection,
 		"main":                   validateMainSection,
-		SettingsSectionBirdnet:   validateBirdNETSection,
+		SettingsSectionVoiceWatch:   validateVoiceWatchSection,
 		SettingsSectionWebserver: validateWebServerSection,
 		SettingsSectionSpecies:   validateSpeciesSection,
 		SettingsSectionRealtime:  validateRealtimeSection,
@@ -1434,8 +1434,8 @@ func validateMainSectionValues(updateMap map[string]any) error {
 	return validateBoolField(updateMap, "timeAs24h", "timeAs24h")
 }
 
-// validateBirdNETSection validates BirdNET settings
-func validateBirdNETSection(data json.RawMessage) error {
+// validateVoiceWatchSection validates VoiceWatch settings
+func validateVoiceWatchSection(data json.RawMessage) error {
 	var updateMap map[string]any
 	if err := json.Unmarshal(data, &updateMap); err != nil {
 		return err
@@ -1591,8 +1591,8 @@ func getSettingsSection(settings *conf.Settings, section string) (any, error) {
 
 	// Check nested fields
 	switch section {
-	case SettingsSectionBirdnet:
-		return settings.BirdNET, nil
+	case SettingsSectionVoiceWatch:
+		return settings.VoiceWatch, nil
 	case SettingsSectionWebserver:
 		return settings.WebServer, nil
 	case "security":
@@ -2065,8 +2065,8 @@ func getBlockedFieldMap() map[string]any {
 		"ValidationWarnings": true, // Runtime validation state
 		"Input":              true, // File/directory analysis mode config
 
-		// BirdNET section - block runtime fields
-		"BirdNET": map[string]any{
+		// VoiceWatch section - block runtime fields
+		"VoiceWatch": map[string]any{
 			"Labels": true, // Runtime list populated from label file
 		},
 
@@ -2116,7 +2116,7 @@ const (
 // settingsChangeChecks defines all settings change detectors in order of execution.
 // Each check has a detection function, action to trigger, and toast notification.
 var settingsChangeChecks = []settingsChangeCheck{
-	{"BirdNET", "reload_birdnet", birdnetSettingsChanged, "Reloading BirdNET model with new settings...", notification.MsgSettingsReloadingBirdnet, "info", toastDurationLong},
+	{"VoiceWatch", "reload_voicewatch", voicewatchSettingsChanged, "Reloading VoiceWatch model with new settings...", notification.MsgSettingsReloadingVoiceWatch, "info", toastDurationLong},
 	{"Species interval", "update_detection_intervals", intervalSettingsChanged, "Updating detection intervals...", notification.MsgSettingsUpdatingIntervals, "info", toastDurationShort},
 	{"Base threshold", "recalculate_dynamic_thresholds", baseThresholdChanged, "Recalculating dynamic thresholds...", notification.MsgSettingsRecalculatingThresholds, "info", toastDurationShort},
 	{"Dynamic thresholds", "reconfigure_dynamic_thresholds", dynamicThresholdEnabledChanged, "Reconfiguring dynamic thresholds...", notification.MsgSettingsReconfiguringDynamicThresholds, "info", toastDurationMedium},
@@ -2238,39 +2238,39 @@ func intervalSettingsChanged(old, current *conf.Settings) bool {
 	return speciesIntervalSettingsChanged(old, current) || old.Realtime.Interval != current.Realtime.Interval
 }
 
-// birdnetSettingsChanged checks if BirdNET settings have changed
-func birdnetSettingsChanged(oldSettings, currentSettings *conf.Settings) bool {
-	// Check for changes in BirdNET locale
-	if oldSettings.BirdNET.Locale != currentSettings.BirdNET.Locale {
+// voicewatchSettingsChanged checks if VoiceWatch settings have changed
+func voicewatchSettingsChanged(oldSettings, currentSettings *conf.Settings) bool {
+	// Check for changes in VoiceWatch locale
+	if oldSettings.VoiceWatch.Locale != currentSettings.VoiceWatch.Locale {
 		return true
 	}
 
-	// Check for changes in BirdNET threads
-	if oldSettings.BirdNET.Threads != currentSettings.BirdNET.Threads {
+	// Check for changes in VoiceWatch threads
+	if oldSettings.VoiceWatch.Threads != currentSettings.VoiceWatch.Threads {
 		return true
 	}
 
-	// Check for changes in BirdNET model path
-	if oldSettings.BirdNET.ModelPath != currentSettings.BirdNET.ModelPath {
+	// Check for changes in VoiceWatch model path
+	if oldSettings.VoiceWatch.ModelPath != currentSettings.VoiceWatch.ModelPath {
 		return true
 	}
 
-	// Check for changes in BirdNET label path
-	if oldSettings.BirdNET.LabelPath != currentSettings.BirdNET.LabelPath {
+	// Check for changes in VoiceWatch label path
+	if oldSettings.VoiceWatch.LabelPath != currentSettings.VoiceWatch.LabelPath {
 		return true
 	}
 
-	// Check for changes in BirdNET XNNPACK acceleration
-	if oldSettings.BirdNET.UseXNNPACK != currentSettings.BirdNET.UseXNNPACK {
+	// Check for changes in VoiceWatch XNNPACK acceleration
+	if oldSettings.VoiceWatch.UseXNNPACK != currentSettings.VoiceWatch.UseXNNPACK {
 		return true
 	}
 
-	// Check for changes in BirdNET inference backend preference. OpenVINOPath is
+	// Check for changes in VoiceWatch inference backend preference. OpenVINOPath is
 	// intentionally NOT checked here: it is restart-required (the OpenVINO core
 	// loads the library once via InitOpenVINO and libopenvino_c cannot be safely
 	// unloaded), so a runtime path change is declared hotReloadRestart, matching
 	// ONNXRuntimePath.
-	if oldSettings.BirdNET.Backend != currentSettings.BirdNET.Backend {
+	if oldSettings.VoiceWatch.Backend != currentSettings.VoiceWatch.Backend {
 		return true
 	}
 
@@ -2278,22 +2278,22 @@ func birdnetSettingsChanged(oldSettings, currentSettings *conf.Settings) bool {
 	// recompiles the model on the new device, so a reload is needed; the OpenVINO
 	// core itself stays loaded (only the compiled model and infer request are
 	// rebuilt), so this is hot-reloadable, not restart-required. The reload path
-	// (handleReloadBirdnet) rebuilds the primary BirdNET classifier and then
+	// handleReloadVoiceWatch rebuilds the primary VoiceWatch classifier and then
 	// reloads the OV-capable secondary models (e.g. Perch) via
 	// Orchestrator.ReloadSecondaryModels, so a device/backend change applies to
 	// both without a restart.
-	if oldSettings.BirdNET.OpenVINODevice != currentSettings.BirdNET.OpenVINODevice {
+	if oldSettings.VoiceWatch.OpenVINODevice != currentSettings.VoiceWatch.OpenVINODevice {
 		return true
 	}
 
 	return false
 }
 
-// baseThresholdChanged checks if the global BirdNET confidence threshold has changed.
+// baseThresholdChanged checks if the global VoiceWatch confidence threshold has changed.
 // When this changes, dynamic threshold CurrentValue entries must be recalculated
 // since they store absolute values derived from the base threshold.
 func baseThresholdChanged(oldSettings, currentSettings *conf.Settings) bool {
-	return oldSettings.BirdNET.Threshold != currentSettings.BirdNET.Threshold
+	return oldSettings.VoiceWatch.Threshold != currentSettings.VoiceWatch.Threshold
 }
 
 // dynamicThresholdEnabledChanged checks if the DynamicThreshold.Enabled flag was toggled.
@@ -2333,7 +2333,7 @@ func mqttSettingsChanged(oldSettings, currentSettings *conf.Settings) bool {
 // requires the audio engine to reconfigure RTSP sources.
 //
 // Per-stream Models is included: when a user adds or removes a classifier on
-// a stream (e.g., enables Perch v2 alongside BirdNET) the orchestrator must
+// a stream (e.g., enables Perch v2 alongside VoiceWatch) the orchestrator must
 // rebind the stream's analysis pipeline. Without this check, the save
 // persists to disk but the running pipeline keeps using the previous model
 // set until a restart — silently breaking the hot-reload contract.

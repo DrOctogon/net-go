@@ -305,7 +305,7 @@ func (s *Settings) MigrateSourceModels() bool {
 			src.Models = []string{src.Model}
 			src.Model = ""
 		} else {
-			src.Models = []string{ModelIDBirdNET}
+			src.Models = []string{ModelIDVoiceWatch}
 		}
 		migrated = true
 	}
@@ -314,7 +314,7 @@ func (s *Settings) MigrateSourceModels() bool {
 		if len(stream.Models) > 0 {
 			continue
 		}
-		stream.Models = []string{ModelIDBirdNET}
+		stream.Models = []string{ModelIDVoiceWatch}
 		migrated = true
 	}
 
@@ -414,7 +414,7 @@ func (s *Settings) applyModelValidation() error {
 	// Default known IDs - matches classifier.KnownConfigIDs() at compile time.
 	// This fallback is used during config loading before the classifier package
 	// is available. The orchestrator re-validates with the authoritative list.
-	knownIDs := map[string]bool{ModelIDBirdNET: true, ModelIDHumanVoice: true}
+	knownIDs := map[string]bool{ModelIDVoiceWatch: true, ModelIDHumanVoice: true}
 	modelIssues := s.ValidateModelConfig(knownIDs, false)
 	var fatalErrors []string
 	for _, issue := range modelIssues {
@@ -440,14 +440,14 @@ func (s *Settings) applyModelValidation() error {
 // until the user explicitly sets coordinates (even 0,0).
 // Returns true when the flag was flipped (caller is responsible for persistence).
 func (s *Settings) MigrateLocationConfigured() bool {
-	if s.BirdNET.LocationConfigured {
+	if s.VoiceWatch.LocationConfigured {
 		return false
 	}
 
-	if s.BirdNET.Latitude == 0 && s.BirdNET.Longitude == 0 {
+	if s.VoiceWatch.Latitude == 0 && s.VoiceWatch.Longitude == 0 {
 		return false
 	}
 
-	s.BirdNET.LocationConfigured = true
+	s.VoiceWatch.LocationConfigured = true
 	return true
 }

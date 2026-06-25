@@ -155,8 +155,8 @@ func applyConfigDefaults(cfg *LoggingConfig) {
 	// Classifier orchestrator and scheduler logs
 	// ConsoleAlso is true so bat scheduler transitions and model reload events
 	// are visible in journal/container environments.
-	if _, exists := cfg.ModuleOutputs["birdnet"]; !exists {
-		cfg.ModuleOutputs["birdnet"] = ModuleOutput{
+	if _, exists := cfg.ModuleOutputs["voicewatch"]; !exists {
+		cfg.ModuleOutputs["voicewatch"] = ModuleOutput{
 			Enabled:     true,
 			FilePath:    DefaultClassifierLogPath,
 			ConsoleAlso: true,

@@ -65,7 +65,7 @@ func newPopulatedSettings() *Settings {
 	s.Logging.Console = &logger.ConsoleOutput{Enabled: true, Level: "info"}
 	s.Logging.FileOutput = &logger.FileOutput{Enabled: true, Path: "logs/app.log"}
 
-	s.BirdNET.Labels = []string{"alpha", "beta"}
+	s.VoiceWatch.Labels = []string{"alpha", "beta"}
 
 	s.Models.Enabled = []string{"birdnet", "perch_v2"}
 	s.Models.Installed = []string{"birdnet", "perch_v3"}
@@ -202,7 +202,7 @@ func mutateCloneEverywhere(dst *Settings) {
 	dst.Logging.Console.Level = mutated
 	dst.Logging.FileOutput.Path = mutated
 
-	dst.BirdNET.Labels[0] = mutated
+	dst.VoiceWatch.Labels[0] = mutated
 
 	dst.Models.Enabled[0] = mutated
 	dst.Models.Installed[0] = mutated
@@ -303,7 +303,7 @@ func assertSourceUnchanged(t *testing.T, src *Settings) {
 	require.NotNil(t, src.Logging.FileOutput)
 	assert.Equal(t, "logs/app.log", src.Logging.FileOutput.Path)
 
-	assert.Equal(t, []string{"alpha", "beta"}, src.BirdNET.Labels)
+	assert.Equal(t, []string{"alpha", "beta"}, src.VoiceWatch.Labels)
 
 	assert.Equal(t, []string{"birdnet", "perch_v2"}, src.Models.Enabled)
 	assert.Equal(t, []string{"birdnet", "perch_v3"}, src.Models.Installed)

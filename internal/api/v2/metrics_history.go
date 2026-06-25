@@ -243,7 +243,7 @@ func (c *Controller) initMetricsHistoryRoutes() {
 		// Wire per-model clip length for RTF computation. Inference counters and
 		// per-model RSS are not tracked in the human-voice facade (Phase 2c-3).
 		if c.Processor != nil {
-			if bn := c.Processor.GetBirdNET(); bn != nil {
+			if bn := c.Processor.GetOrchestrator(); bn != nil {
 				collector.SetModelClipFunc(func() map[string]float64 {
 					infos := bn.ModelInfos()
 					out := make(map[string]float64, len(infos))
@@ -254,9 +254,9 @@ func (c *Controller) initMetricsHistoryRoutes() {
 				})
 			}
 		}
-		if c.metrics != nil && c.metrics.BirdNET != nil {
-			collector.SetInferenceGaugeSetters(c.metrics.BirdNET.SetInferenceRTF, c.metrics.BirdNET.SetModelRSSBytes, c.metrics.BirdNET.DeleteInferenceMetrics)
-			collector.SetAudioGaugeSetters(c.metrics.BirdNET.SetAudioQueueDepth, c.metrics.BirdNET.SetAudioDroppedChunks)
+		if c.metrics != nil && c.metrics.VoiceWatch != nil {
+			collector.SetInferenceGaugeSetters(c.metrics.VoiceWatch.SetInferenceRTF, c.metrics.VoiceWatch.SetModelRSSBytes, c.metrics.VoiceWatch.DeleteInferenceMetrics)
+			collector.SetAudioGaugeSetters(c.metrics.VoiceWatch.SetAudioQueueDepth, c.metrics.VoiceWatch.SetAudioDroppedChunks)
 		}
 
 		// Wire health counter collection (drops, overruns, stream restarts)

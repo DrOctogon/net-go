@@ -23,8 +23,8 @@ const (
 	SensorSoundLevel     = "sound_level"
 )
 
-// deviceIDPrefix is the standard prefix for all BirdNET-Go device identifiers
-const deviceIDPrefix = "birdnet_go"
+// deviceIDPrefix is the standard prefix for all VoiceWatch device identifiers
+const deviceIDPrefix = "voicewatch"
 
 // Status payload constants for MQTT availability and state
 const (

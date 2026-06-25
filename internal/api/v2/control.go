@@ -79,7 +79,7 @@ func (c *Controller) GetAvailableActions(ctx echo.Context) error {
 		},
 		{
 			Action:      ActionReloadModel,
-			Description: "Reload the BirdNET model",
+			Description: "Reload the VoiceWatch model",
 		},
 		{
 			Action:      ActionRebuildFilter,

@@ -604,7 +604,7 @@ func (w *Worker) completeValidation(_ context.Context) runAction {
 			notification.TypeSystem,
 			notification.PriorityMedium,
 			"Database Migration Completed",
-			"Migration completed. Please restart BirdNET-Go to switch to the new database.",
+			"Migration completed. Please restart VoiceWatch to switch to the new database.",
 		).WithComponent("database").
 			WithTitleKey(notification.MsgMigrationCompletedTitle, nil).
 			WithMessageKey(notification.MsgMigrationCompletedMessage, nil)
@@ -854,7 +854,7 @@ func (w *Worker) handleCutoverState(ctx context.Context) runAction {
 			notification.TypeSystem,
 			notification.PriorityMedium,
 			"Database Migration Completed",
-			"Migration completed. Please restart BirdNET-Go to switch to the new database.",
+			"Migration completed. Please restart VoiceWatch to switch to the new database.",
 		).WithComponent("database").
 			WithTitleKey(notification.MsgMigrationCompletedTitle, nil).
 			WithMessageKey(notification.MsgMigrationCompletedMessage, nil)

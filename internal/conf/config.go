@@ -1198,7 +1198,7 @@ type InputConfig struct {
 	Watch     bool   `yaml:"-" json:"-"` // true to watch directory for new files
 }
 
-type BirdNETConfig struct {
+type VoiceWatchConfig struct {
 	Version            string              `yaml:"version,omitempty" json:"version,omitempty"`                 // model version: "2.4", "3.0"
 	Debug              bool                `yaml:"debug" json:"debug"`                                         // true to enable debug mode
 	Sensitivity        float64             `yaml:"sensitivity" json:"sensitivity"`                             // birdnet analysis sigmoid sensitivity
@@ -1624,7 +1624,7 @@ type Settings struct {
 		TimeAs24h bool   `yaml:"timeas24h" json:"timeAs24h"` // true 24-hour time format, false 12-hour time format
 	} `yaml:"main" json:"main"`
 
-	BirdNET    BirdNETConfig    `yaml:"birdnet" json:"birdnet"`       // BirdNET configuration
+	VoiceWatch VoiceWatchConfig `yaml:"voicewatch" json:"voicewatch"` // VoiceWatch configuration
 	HumanVoice HumanVoiceConfig `yaml:"humanvoice" json:"humanVoice"` // Human voice / speech detection configuration
 	Models     ModelsConfig     `yaml:"models" json:"models"`         // Global model enablement and management
 

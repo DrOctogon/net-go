@@ -340,7 +340,7 @@ func (ds *DataStore) CountDetectionsSince(ctx context.Context, since time.Time) 
 // NewDataStore creates a new DataStore instance based on the provided configuration context.
 func New(settings *conf.Settings) Interface {
 	// Create a SunCalc instance to be shared by all datastore implementations
-	sunCalc := suncalc.NewSunCalc(settings.BirdNET.Latitude, settings.BirdNET.Longitude)
+	sunCalc := suncalc.NewSunCalc(settings.VoiceWatch.Latitude, settings.VoiceWatch.Longitude)
 
 	switch {
 	case settings.Output.SQLite.Enabled:
@@ -393,7 +393,7 @@ func (ds *DataStore) UpdateNameMaps(_ []string) {}
 // SpeciesNameResolver resolves a scientific name to a localized common name,
 // returning "" when unknown. Satisfied by *openfauna.Resolver. The locale argument
 // is accepted for interface symmetry; resolvers are built for the active species
-// locale (settings.BirdNET.Locale), not a per-call locale.
+// locale (settings.VoiceWatch.Locale), not a per-call locale.
 type SpeciesNameResolver interface {
 	Resolve(scientificName, locale string) string
 	// ResolveLocal returns a name only if it is already resident in memory (no

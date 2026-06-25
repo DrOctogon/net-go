@@ -183,7 +183,7 @@ type Detections struct {
 	CorrelationID string                       // Unique detection identifier for log correlation
 	pcmData3s     []byte                       // 3s PCM data containing the detection
 	Result        detection.Result             // Detection result containing highest match
-	Results       []detection.AdditionalResult // Additional BirdNET prediction results
+	Results       []detection.AdditionalResult // Additional VoiceWatch prediction results
 }
 
 // PendingDetection struct represents a single detection held in memory,
@@ -319,7 +319,7 @@ func validateAndLogFilterConfig(settings *conf.Settings) {
 	}
 
 	level := settings.Realtime.FalsePositiveFilter.Level
-	overlap := settings.BirdNET.Overlap
+	overlap := settings.VoiceWatch.Overlap
 	minOverlap := getMinimumOverlapForLevel(level)
 
 	// Calculate what minDetections will be with current settings
@@ -376,7 +376,7 @@ func initSpeciesTracker(settings *conf.Settings, ds datastore.Interface) *specie
 	if hemisphereAwareTracking.SeasonalTracking.Enabled {
 		hemisphereAwareTracking.SeasonalTracking = conf.GetSeasonalTrackingWithHemisphere(
 			hemisphereAwareTracking.SeasonalTracking,
-			settings.BirdNET.Latitude,
+			settings.VoiceWatch.Latitude,
 		)
 	}
 
@@ -387,12 +387,12 @@ func initSpeciesTracker(settings *conf.Settings, ds datastore.Interface) *specie
 	// spurious "new species" notifications fire from the not-yet-populated maps.
 	tracker.InitFromDatabaseAsync()
 
-	hemisphere := conf.DetectHemisphere(settings.BirdNET.Latitude)
+	hemisphere := conf.DetectHemisphere(settings.VoiceWatch.Latitude)
 	GetLogger().Info("Species tracking enabled",
 		logger.Int("window_days", settings.Realtime.SpeciesTracking.NewSpeciesWindowDays),
 		logger.Int("sync_interval_minutes", settings.Realtime.SpeciesTracking.SyncIntervalMinutes),
 		logger.String("hemisphere", hemisphere),
-		logger.Float64("latitude", settings.BirdNET.Latitude),
+		logger.Float64("latitude", settings.VoiceWatch.Latitude),
 		logger.String("operation", "species_tracking_config"))
 
 	return tracker
@@ -640,7 +640,7 @@ func (p *Processor) processDetections(item classifier.Results) {
 				maxConf = r.Confidence
 			}
 		}
-		threshold := float32(settings.BirdNET.Threshold)
+		threshold := float32(settings.VoiceWatch.Threshold)
 		p.pipelineStats.RecordInference(item.Source.ID, item.ModelID, len(item.Results), len(detectionResults), maxConf, threshold)
 	}
 
@@ -737,7 +737,7 @@ func (p *Processor) processDetections(item classifier.Results) {
 	p.broadcastPendingSnapshot(snapshot)
 }
 
-// processResults processes the results from the BirdNET prediction and returns a list of detections.
+// processResults processes the results from the VoiceWatch prediction and returns a list of detections.
 //
 //nolint:gocritic // hugeParam: Pass by value is intentional - avoids pointer dereferencing in hot path
 func (p *Processor) processResults(settings *conf.Settings, item classifier.Results) []Detections {
@@ -745,8 +745,8 @@ func (p *Processor) processResults(settings *conf.Settings, item classifier.Resu
 	detections := make([]Detections, 0, len(item.Results))
 
 	// Collect processing time metric
-	if settings.Realtime.Telemetry.Enabled && p.Metrics != nil && p.Metrics.BirdNET != nil {
-		p.Metrics.BirdNET.SetProcessTime(float64(item.ElapsedTime.Milliseconds()))
+	if settings.Realtime.Telemetry.Enabled && p.Metrics != nil && p.Metrics.VoiceWatch != nil {
+		p.Metrics.VoiceWatch.SetProcessTime(float64(item.ElapsedTime.Milliseconds()))
 	}
 
 	// Sync species tracker if needed
@@ -838,7 +838,7 @@ func (p *Processor) parseAndValidateSpecies(settings *conf.Settings, result data
 	}
 
 	// Log placeholder taxonomy codes if using custom model
-	if settings.BirdNET.ModelPath != "" && settings.Debug && speciesCode != "" {
+	if settings.VoiceWatch.ModelPath != "" && settings.Debug && speciesCode != "" {
 		if len(speciesCode) == 8 && (speciesCode[:2] == "XX" || (speciesCode[0] >= 'A' && speciesCode[0] <= 'Z' && speciesCode[1] >= 'A' && speciesCode[1] <= 'Z')) {
 			GetLogger().Debug("using placeholder taxonomy code",
 				logger.String("taxonomy_code", speciesCode),
@@ -860,7 +860,7 @@ func (p *Processor) parseAndValidateSpecies(settings *conf.Settings, result data
 // shouldFilterDetection checks if a detection should be filtered out
 func (p *Processor) shouldFilterDetection(settings *conf.Settings, result datastore.Results, commonName, scientificName, speciesLowercase string, baseThreshold float32, source, modelID string) (shouldFilter bool, confidenceThreshold float32) {
 	// Check human detection privacy filter. Match the raw label so Perch v2's
-	// FSD50K human classes are caught too, not just BirdNET's "Human *" classes.
+	// FSD50K human classes are caught too, not just VoiceWatch "Human *" classes.
 	if isHumanVocalization(result.Species) && result.Confidence > baseThreshold {
 		return true, 0 // Filter out human detections for privacy
 	}
@@ -1010,10 +1010,10 @@ func (p *Processor) createDetectionResult(settings *conf.Settings,
 			Code:           speciesCode,
 		},
 		Confidence:     math.Round(confidence*100) / 100,
-		Latitude:       settings.BirdNET.Latitude,
-		Longitude:      settings.BirdNET.Longitude,
-		Threshold:      settings.BirdNET.Threshold,
-		Sensitivity:    settings.BirdNET.Sensitivity,
+		Latitude:       settings.VoiceWatch.Latitude,
+		Longitude:      settings.VoiceWatch.Longitude,
+		Threshold:      settings.VoiceWatch.Threshold,
+		Sensitivity:    settings.VoiceWatch.Sensitivity,
 		ClipName:       clipName,
 		ProcessingTime: elapsedTime,
 		Occurrence:     math.Max(0.0, math.Min(1.0, occurrence)),
@@ -1064,7 +1064,7 @@ func (p *Processor) resolveAudioSource(source datastore.AudioSource) detection.A
 // convertToAdditionalResults converts a slice of datastore.Results to detection.AdditionalResult,
 // deduplicating by scientific name and keeping the highest confidence for each species.
 // The primary species is excluded since it's already stored as Detection.LabelID.
-// Custom BirdNET classifiers can have the same species at multiple positions in the label file,
+// Custom VoiceWatch classifiers can have the same species at multiple positions in the label file,
 // producing duplicate entries in prediction results that would cause UNIQUE constraint violations.
 func convertToAdditionalResults(results []datastore.Results, primaryScientificName string) []detection.AdditionalResult {
 	additional := make([]detection.AdditionalResult, 0, len(results))
@@ -1162,7 +1162,7 @@ func (p *Processor) handleHumanDetection(settings *conf.Settings, item classifie
 
 // getBaseConfidenceThreshold retrieves the confidence threshold for a species, using custom or global thresholds.
 // It supports lookup by both common name and scientific name for consistency with include/exclude matching.
-// Per-species config takes precedence; otherwise settings.BirdNET.Threshold is used.
+// Per-species config takes precedence; otherwise settings.VoiceWatch.Threshold is used.
 func (p *Processor) getBaseConfidenceThreshold(settings *conf.Settings, commonName, scientificName, modelID string) float32 {
 	// Check if species has a custom threshold using both common and scientific name lookup
 	if config, exists := lookupSpeciesConfig(settings.Realtime.Species.Config, commonName, scientificName); exists {
@@ -1177,7 +1177,7 @@ func (p *Processor) getBaseConfidenceThreshold(settings *conf.Settings, commonNa
 	}
 
 	// Fall back to the global threshold.
-	return float32(settings.BirdNET.Threshold)
+	return float32(settings.VoiceWatch.Threshold)
 }
 
 // generateClipName generates a clip name for the given scientific name and confidence.
@@ -1385,9 +1385,9 @@ func (p *Processor) processApprovedDetection(item *PendingDetection, speciesName
 		}
 	}
 
-	// Update BirdNET metrics detection counter if enabled
-	if settings.Realtime.Telemetry.Enabled && p.Metrics != nil && p.Metrics.BirdNET != nil {
-		p.Metrics.BirdNET.IncrementDetectionCounter(item.Detection.Result.Species.CommonName)
+	// Update VoiceWatch metrics detection counter if enabled
+	if settings.Realtime.Telemetry.Enabled && p.Metrics != nil && p.Metrics.VoiceWatch != nil {
+		p.Metrics.VoiceWatch.IncrementDetectionCounter(item.Detection.Result.Species.CommonName)
 	}
 }
 
@@ -1427,7 +1427,7 @@ func (p *Processor) processApprovedDetection(item *PendingDetection, speciesName
 // calculateMinDetectionsFromSettings computes minimum detections from settings alone.
 // This is a standalone function that doesn't require a Processor instance.
 func calculateMinDetectionsFromSettings(settings *conf.Settings) int {
-	// BirdNET uses 3-second chunks for analysis
+	// VoiceWatch uses 3-second audio chunks for analysis
 	const chunkDurationSeconds = 3.0
 	// Bird vocalization reference window - typical duration of a bird call
 	// Used to calculate how many detections are possible within a single vocalization
@@ -1440,7 +1440,7 @@ func calculateMinDetectionsFromSettings(settings *conf.Settings) int {
 
 	// Get filtering level from settings
 	level := settings.Realtime.FalsePositiveFilter.Level
-	overlap := settings.BirdNET.Overlap
+	overlap := settings.VoiceWatch.Overlap
 
 	// Level 0: no filtering
 	if level == 0 {
@@ -2087,15 +2087,15 @@ func (p *Processor) GetJobQueueStats() jobqueue.JobStatsSnapshot {
 	return p.JobQueue.GetStats()
 }
 
-// GetBn returns the BirdNET instance
+// GetBn returns the VoiceWatch classifier orchestrator
 //
-// Deprecated: Use GetBirdNET instead
+// Deprecated: Use GetOrchestrator instead
 func (p *Processor) GetBn() *classifier.Orchestrator {
 	return p.Bn
 }
 
-// GetBirdNET returns the BirdNET instance
-func (p *Processor) GetBirdNET() *classifier.Orchestrator {
+// GetOrchestrator returns the VoiceWatch classifier orchestrator
+func (p *Processor) GetOrchestrator() *classifier.Orchestrator {
 	return p.Bn
 }
 

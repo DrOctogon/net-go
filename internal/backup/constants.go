@@ -15,7 +15,7 @@ const (
 	KeyFileMinLines = 3
 
 	// KeyFileHeader is the expected header in exported key files
-	KeyFileHeader = "BirdNET-Go Backup Encryption Key"
+	KeyFileHeader = "VoiceWatch Backup Encryption Key"
 )
 
 // File system permission constants

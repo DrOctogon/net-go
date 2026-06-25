@@ -27,14 +27,14 @@ func setDefaultConfig() {
 	// Per-module log files
 	// Core processing modules
 	setModuleLogDefaults("analysis", true)    // Bird detection analysis
-	setModuleLogDefaults("birdnet", true)     // BirdNET model inference
-	// Mirror the birdnet module to the console so backend selection, model-init,
+	setModuleLogDefaults("voicewatch", true)     // VoiceWatch model inference
+	// Mirror the voicewatch module to the console so backend selection, model-init,
 	// reload, and bat-scheduler lines are visible in journald/containers and not
-	// only in logs/birdnet.log. This realigns the viper default with the intent in
+	// only in logs/voicewatch.log. This realigns the viper default with the intent in
 	// logger/config.go (applyConfigDefaults), which the generated config was
 	// silently overriding. Console mirroring is filtered at the console level
 	// (info), so the module's debug-level per-inference file logs never reach stdout.
-	viper.SetDefault("logging.modules.birdnet.console_also", true)
+	viper.SetDefault("logging.modules.voicewatch.console_also", true)
 	setModuleLogDefaults("audio", true)       // Audio capture/processing
 	setModuleLogDefaults("datastore", true)   // Database operations
 	setModuleLogDefaults("spectrogram", true) // Spectrogram generation
@@ -64,28 +64,28 @@ func setDefaultConfig() {
 	setModuleLogDefaults("telemetry", true)                       // Telemetry/metrics
 
 	// Main configuration
-	viper.SetDefault("main.name", "BirdNET-Go")
+	viper.SetDefault("main.name", "VoiceWatch")
 	viper.SetDefault("main.timeas24h", true)
 
 	// Low-memory mode: auto-detect constrained systems by default.
 	viper.SetDefault("lowmemory.mode", LowMemoryModeAuto)
 
-	// BirdNET configuration
-	viper.SetDefault("birdnet.debug", false)
-	viper.SetDefault("birdnet.sensitivity", 1.0)
-	viper.SetDefault("birdnet.threshold", 0.8)
-	viper.SetDefault("birdnet.overlap", 0.0)
-	viper.SetDefault("birdnet.threads", 0)
-	viper.SetDefault("birdnet.locale", DefaultFallbackLocale)
-	viper.SetDefault("birdnet.latitude", 0.000)
-	viper.SetDefault("birdnet.longitude", 0.000)
-	viper.SetDefault("birdnet.modelpath", "")
-	viper.SetDefault("birdnet.labelpath", "")
-	viper.SetDefault("birdnet.usexnnpack", true)
+	// VoiceWatch configuration
+	viper.SetDefault("voicewatch.debug", false)
+	viper.SetDefault("voicewatch.sensitivity", 1.0)
+	viper.SetDefault("voicewatch.threshold", 0.8)
+	viper.SetDefault("voicewatch.overlap", 0.0)
+	viper.SetDefault("voicewatch.threads", 0)
+	viper.SetDefault("voicewatch.locale", DefaultFallbackLocale)
+	viper.SetDefault("voicewatch.latitude", 0.000)
+	viper.SetDefault("voicewatch.longitude", 0.000)
+	viper.SetDefault("voicewatch.modelpath", "")
+	viper.SetDefault("voicewatch.labelpath", "")
+	viper.SetDefault("voicewatch.usexnnpack", true)
 	viper.SetDefault("taxonomysynonyms", map[string]string{})
 
-	// Global model enablement (BirdNET only by default)
-	viper.SetDefault("models.enabled", []string{"birdnet"})
+	// Global model enablement (VoiceWatch only by default)
+	viper.SetDefault("models.enabled", []string{"voicewatch"})
 
 	// Realtime configuration
 	viper.SetDefault("realtime.interval", 15)
@@ -193,7 +193,7 @@ func setDefaultConfig() {
 
 	// Log configuration
 	viper.SetDefault("realtime.log.enabled", false)
-	viper.SetDefault("realtime.log.path", "birdnet.txt")
+	viper.SetDefault("realtime.log.path", "voicewatch.txt")
 
 	// BirdWeather configuration
 	viper.SetDefault("realtime.birdweather.enabled", false)
@@ -252,7 +252,7 @@ func setDefaultConfig() {
 	viper.SetDefault("realtime.mqtt.enabled", false)
 	viper.SetDefault("realtime.mqtt.debug", false)
 	viper.SetDefault("realtime.mqtt.broker", "tcp://localhost:1883")
-	viper.SetDefault("realtime.mqtt.topic", "birdnet")
+	viper.SetDefault("realtime.mqtt.topic", "voicewatch")
 	viper.SetDefault("realtime.mqtt.username", "")
 	viper.SetDefault("realtime.mqtt.password", "")
 	viper.SetDefault("realtime.mqtt.retain", false)
@@ -265,7 +265,7 @@ func setDefaultConfig() {
 	// Home Assistant MQTT auto-discovery configuration
 	viper.SetDefault("realtime.mqtt.homeassistant.enabled", false)
 	viper.SetDefault("realtime.mqtt.homeassistant.discovery_prefix", "homeassistant")
-	viper.SetDefault("realtime.mqtt.homeassistant.device_name", "BirdNET-Go")
+	viper.SetDefault("realtime.mqtt.homeassistant.device_name", "VoiceWatch")
 
 	// Privacy filter configuration
 	viper.SetDefault("realtime.privacyfilter.enabled", true)
@@ -339,13 +339,13 @@ func setDefaultConfig() {
 
 	// SQLite output configuration
 	viper.SetDefault("output.sqlite.enabled", true)
-	viper.SetDefault("output.sqlite.path", "birdnet.db")
+	viper.SetDefault("output.sqlite.path", "voicewatch.db")
 
 	// MySQL output configuration
 	viper.SetDefault("output.mysql.enabled", false)
-	viper.SetDefault("output.mysql.username", "birdnet")
+	viper.SetDefault("output.mysql.username", "voicewatch")
 	viper.SetDefault("output.mysql.password", "secret")
-	viper.SetDefault("output.mysql.database", "birdnet")
+	viper.SetDefault("output.mysql.database", "voicewatch")
 	viper.SetDefault("output.mysql.host", "localhost")
 	viper.SetDefault("output.mysql.port", 3306)
 
@@ -367,7 +367,7 @@ func setDefaultConfig() {
 	// Basic authentication configuration
 	viper.SetDefault("security.basicauth.enabled", false)
 	viper.SetDefault("security.basicauth.password", "")
-	viper.SetDefault("security.basicauth.clientid", "birdnet-client")
+	viper.SetDefault("security.basicauth.clientid", "voicewatch-client")
 	viper.SetDefault("security.basicauth.redirecturi", "/settings")
 	viper.SetDefault("security.basicauth.authcodeexp", "10m")
 	viper.SetDefault("security.basicauth.accesstokenexp", "1h")

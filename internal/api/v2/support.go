@@ -264,7 +264,7 @@ func (c *Controller) GenerateSupportDump(ctx echo.Context) error {
 	// If not uploading, provide download option
 	if !req.UploadToSentry {
 		// Store temporarily for download
-		tempFile := filepath.Join(os.TempDir(), fmt.Sprintf("birdnet-go-support-%s.zip", dump.ID))
+		tempFile := filepath.Join(os.TempDir(), fmt.Sprintf("voicewatch-support-%s.zip", dump.ID))
 		if err := os.WriteFile(tempFile, archiveData, FilePermOwnerOnly); err != nil {
 			c.logErrorIfEnabled("Failed to store temporary file",
 				logger.Error(err),
@@ -298,7 +298,7 @@ func (c *Controller) DownloadSupportDump(ctx echo.Context) error {
 	}
 
 	// Construct temp file path
-	tempFile := filepath.Join(os.TempDir(), fmt.Sprintf("birdnet-go-support-%s.zip", dumpID))
+	tempFile := filepath.Join(os.TempDir(), fmt.Sprintf("voicewatch-support-%s.zip", dumpID))
 
 	// Check if file exists
 	if _, err := os.Stat(tempFile); os.IsNotExist(err) {
@@ -307,7 +307,7 @@ func (c *Controller) DownloadSupportDump(ctx echo.Context) error {
 
 	// Set headers for download
 	ctx.Response().Header().Set("Content-Type", "application/zip")
-	ctx.Response().Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=\"birdnet-go-support-%s.zip\"", dumpID))
+	ctx.Response().Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=\"voicewatch-support-%s.zip\"", dumpID))
 
 	// Serve the file
 	err := ctx.File(tempFile)
@@ -388,7 +388,7 @@ func (c *Controller) startSupportDumpCleanup(ctx context.Context) {
 // cleanupOldSupportDumps removes temporary support dump files older than 1 hour
 func (c *Controller) cleanupOldSupportDumps() {
 	tempDir := os.TempDir()
-	pattern := filepath.Join(tempDir, "birdnet-go-support-*.zip")
+	pattern := filepath.Join(tempDir, "voicewatch-support-*.zip")
 
 	files, err := filepath.Glob(pattern)
 	if err != nil {

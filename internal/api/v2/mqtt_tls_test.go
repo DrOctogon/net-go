@@ -62,7 +62,7 @@ func TestGetMQTTTLSCertificate_WithManualPaths(t *testing.T) {
 	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &info))
 	require.NotNil(t, info.CA)
 	assert.True(t, info.CA.Installed, "CA should be installed")
-	assert.Equal(t, "CN=BirdNET-Go", info.CA.Subject)
+	assert.Equal(t, "CN=VoiceWatch", info.CA.Subject)
 	assert.False(t, info.Client.Installed, "client should not be installed")
 	assert.False(t, info.HasKey, "key should not be present")
 }
@@ -91,7 +91,7 @@ func TestUploadMQTTTLSCertificate_CAOnly(t *testing.T) {
 	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &info))
 	require.NotNil(t, info.CA)
 	assert.True(t, info.CA.Installed, "CA should be installed")
-	assert.Equal(t, "CN=BirdNET-Go", info.CA.Subject)
+	assert.Equal(t, "CN=VoiceWatch", info.CA.Subject)
 	assert.InDelta(t, 1, info.CA.DaysUntilExpiry, 1) // 24h cert ± 1 day
 	require.NotNil(t, info.Client)
 	assert.False(t, info.Client.Installed, "client should not be installed")
@@ -128,7 +128,7 @@ func TestUploadMQTTTLSCertificate_ClientCertAndKey(t *testing.T) {
 	assert.False(t, info.CA.Installed, "CA should not be installed")
 	require.NotNil(t, info.Client)
 	assert.True(t, info.Client.Installed, "client cert should be installed")
-	assert.Equal(t, "CN=BirdNET-Go", info.Client.Subject)
+	assert.Equal(t, "CN=VoiceWatch", info.Client.Subject)
 	assert.True(t, info.HasKey, "client key should be present")
 }
 

@@ -65,10 +65,10 @@ var (
 )
 
 // ValidAudioModels contains recognized AI model identifiers.
-// Empty string is also valid (defaults to birdnet).
+// Empty string is also valid (defaults to voicewatch).
 var ValidAudioModels = map[string]bool{
-	"":               true, // default (birdnet)
-	ModelIDBirdNET:   true,
+	"":               true, // default (voicewatch)
+	ModelIDVoiceWatch:   true,
 	ModelIDHumanVoice: true,
 }
 
@@ -198,14 +198,14 @@ func ValidateSettings(settings *Settings) error {
 		settings.LowMemory.Mode = LowMemoryModeAuto
 	}
 
-	// Default empty BirdNET locale to "en" so downstream label loading
+	// Default empty VoiceWatch locale to "en" so downstream label loading
 	// always has a valid locale to work with.
-	if settings.BirdNET.Locale == "" {
-		settings.BirdNET.Locale = "en"
+	if settings.VoiceWatch.Locale == "" {
+		settings.VoiceWatch.Locale = "en"
 	}
 
-	// Validate BirdNET settings
-	if err := validateBirdNETSettings(&settings.BirdNET); err != nil {
+	// Validate VoiceWatch settings
+	if err := validateVoiceWatchSettings(&settings.VoiceWatch); err != nil {
 		ve.Errors = append(ve.Errors, err.Error())
 	}
 

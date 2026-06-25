@@ -1,4 +1,4 @@
-# BirdNET-Go configuration
+# VoiceWatch configuration
 
 debug: false              # print debug messages, can help with problem solving
 
@@ -23,7 +23,7 @@ logging:
   # machine parsing and log aggregation (ELK, Loki, etc.)
   file_output:
     enabled: true         # enable file output
-    path: logs/birdnet.log # default log file path
+    path: logs/voicewatch.log # default log file path
     max_size: 100         # maximum size in MB before rotation
     max_age: 30           # maximum age in days to keep old logs
     max_rotated_files: 10 # maximum number of old log files to keep
@@ -39,9 +39,9 @@ logging:
       enabled: true
       file_path: logs/analysis.log
       level: info
-    birdnet:
+    voicewatch:
       enabled: true
-      file_path: logs/birdnet.log
+      file_path: logs/voicewatch.log
       level: info
     audio:
       enabled: true
@@ -144,11 +144,11 @@ logging:
 
 # Node specific settings
 main:
-  name: BirdNET-Go        # name of node, can be used to identify source of notes
+  name: VoiceWatch        # name of node, can be used to identify source of notes
   timeas24h: true         # true for 24-hour time format, false for 12-hour time format
 
-# BirdNET model specific settings
-birdnet:
+# VoiceWatch model specific settings
+voicewatch:
   sensitivity: 1.0        # sigmoid sensitivity, 0.1 to 1.5
   threshold: 0.7          # threshold for prediction confidence to report, 0.0 to 1.0
   overlap: 1.5            # overlap between chunks, 0.0 to 2.9
@@ -180,7 +180,7 @@ realtime:
       - name: "Sound Card 1"
         device: "sysdefault"  # ALSA device ID (e.g., "sysdefault", "hw:0,0", "Loopback")
         gain: 0               # input gain in dB (0 = no adjustment)
-        # model: ""           # AI model: "birdnet" (default), "perch_v2", "bat" (future)
+        # model: ""           # AI model: "voicewatch" (default), "perch_v2", "bat" (future)
         # equalizer:          # per-source EQ (omit to use global)
         # quiethours:         # per-source quiet hours
     soundlevel:
@@ -261,7 +261,7 @@ realtime:
   
   log:
     enabled: false        # true to enable OBS chat log
-    path: birdnet.txt     # path to OBS chat log
+    path: voicewatch.txt     # path to OBS chat log
 
   birdweather:
     enabled: false        # true to enable birdweather uploads
@@ -295,8 +295,8 @@ realtime:
     enabled: false        # true to enable MQTT
     debug: false          # true to enable MQTT debug
     broker: tcp://localhost:1883 # MQTT broker URL (tcp://, ssl://, tls://, or mqtts://)
-    topic: birdnet        # MQTT topic
-    username: birdnet     # MQTT username
+    topic: voicewatch        # MQTT topic
+    username: voicewatch     # MQTT username
     password: secret      # MQTT password
     retain: false         # true to retain messages
     retrysettings:
@@ -375,7 +375,7 @@ security:
   # - Notification URLs in push notifications
   #
   # Set this to your public hostname when using a reverse proxy
-  # (e.g., "birdnet.home.arpa", "birdnet.example.com")
+  # (e.g., "voicewatch.home.arpa", "voicewatch.example.com")
   #
   # Can also be set via BIRDNET_HOST environment variable
   # Falls back to "localhost" if not configured (works for direct access only)
@@ -388,7 +388,7 @@ security:
   #
   # This takes priority over host/autotls settings for URL generation
   # Use this when your reverse proxy handles SSL termination
-  # (e.g., "https://birdnet.example.com" or "https://birdnet.home.arpa:8443")
+  # (e.g., "https://voicewatch.example.com" or "https://voicewatch.home.arpa:8443")
   #
   # Can also be set via BIRDNET_URL environment variable
   baseurl: ""
@@ -456,12 +456,12 @@ output:
   # if both are enabled, SQLite will be used.
   sqlite:
     enabled: true         # true to enable sqlite output
-    path: birdnet.db      # path to sqlite database
+    path: voicewatch.db      # path to sqlite database
   mysql:
     enabled: false        # true to enable mysql output
-    username: birdnet     # mysql database username
+    username: voicewatch     # mysql database username
     password: secret      # mysql database user password
-    database: birdnet     # mysql database name
+    database: voicewatch     # mysql database name
     host: localhost       # mysql database host
     port: 3306            # mysql database port
 
@@ -551,7 +551,7 @@ notification:
       #   enabled: false
       #   name: "api-service"
       #   endpoints:
-      #     - url: "https://api.example.com/webhooks/birdnet"
+      #     - url: "https://api.example.com/webhooks/voicewatch"
       #       auth:
       #         type: bearer
       #         token_file: "/run/secrets/api_token"  # Read from mounted secret file
@@ -608,7 +608,7 @@ notification:
 
       # Security Best Practices:
       # 1. NEVER commit secrets to git - use environment variables or file references
-      # 2. For Docker: docker run -e WEBHOOK_TOKEN=xyz birdnet-go
+      # 2. For Docker: docker run -e WEBHOOK_TOKEN=xyz voicewatch
       # 3. For Kubernetes: Mount secrets as files in /run/secrets/
       # 4. For development: Create .env file (add to .gitignore!)
       # 5. Use ${VAR:-default} syntax for optional env vars with defaults

@@ -922,7 +922,7 @@ func (c *Controller) ProcessAudioByID(ctx echo.Context) error {
 	if err := os.MkdirAll(tmpDir, 0o700); err != nil {
 		return c.HandleError(ctx, err, "Failed to create temp directory", http.StatusInternalServerError)
 	}
-	tmpFile, err := os.CreateTemp(tmpDir, "birdnet-process-*.wav")
+	tmpFile, err := os.CreateTemp(tmpDir, "voicewatch-process-*.wav")
 	if err != nil {
 		return c.HandleError(ctx, err, "Failed to create temp file", http.StatusInternalServerError)
 	}

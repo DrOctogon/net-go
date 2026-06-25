@@ -160,7 +160,7 @@ func TestEQFilterRoundTrip_PUT_PerSource(t *testing.T) {
 	initial.Realtime.Audio.Sources = []conf.AudioSourceConfig{{
 		Name:   "Test Sound Card",
 		Device: "default",
-		Models: []string{"birdnet"},
+		Models: []string{"voicewatch"},
 	}}
 
 	e := echo.New()

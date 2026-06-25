@@ -92,7 +92,7 @@ func TestNewBufferManager_NilParams(t *testing.T) {
 
 	_, err := NewBufferManager(nil, nil, nil, nil)
 	require.Error(t, err)
-	assert.Contains(t, err.Error(), "BirdNET instance cannot be nil")
+	assert.Contains(t, err.Error(), "VoiceWatch classifier cannot be nil")
 }
 
 func TestMonitorConfig_OverlapSizeDefault(t *testing.T) {

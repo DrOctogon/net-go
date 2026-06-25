@@ -85,12 +85,12 @@ func (c *Controller) GetExternalMedia(ctx echo.Context) error {
 
 // buildGuidance returns copy-pasteable setup instructions for the given
 // container runtime. The commands set up the host mount: host dir
-// /mnt/birdnet-go/external, a self bind-mount made rshared so sub-mounts
+// /mnt/voicewatch/external, a self bind-mount made rshared so sub-mounts
 // propagate into the container, a chown to the container UID, and the
 // runtime-specific volume flag.
 func buildGuidance(envType string) *ExternalMediaGuidance {
 	const (
-		hostDir      = "/mnt/birdnet-go/external"
+		hostDir      = "/mnt/voicewatch/external"
 		containerDir = "/external"
 	)
 
@@ -108,7 +108,7 @@ func buildGuidance(envType string) *ExternalMediaGuidance {
 		steps = append(steps,
 			"# Add to your docker run command:",
 			"-v "+hostDir+":"+containerDir+":rslave",
-			"# Or in docker-compose.yml under the birdnet-go service volumes:",
+			"# Or in docker-compose.yml under the voicewatch service volumes:",
 			"volumes:",
 			"  - type: bind",
 			"    source: "+hostDir,
@@ -140,7 +140,7 @@ func buildGuidance(envType string) *ExternalMediaGuidance {
 		steps := slices.Clone(hostSetup)
 		steps = append(steps,
 			"# Mount the host directory into the container using your runtime's volume mechanism.",
-			"# Or re-run the BirdNET-Go installer (install.sh) to configure the mount automatically.",
+			"# Or re-run the VoiceWatch installer (install.sh) to configure the mount automatically.",
 		)
 		return &ExternalMediaGuidance{
 			Environment: envType,

@@ -66,7 +66,7 @@ func TestExtremeValues(t *testing.T) {
 		},
 		{
 			name:    "Extreme coordinates",
-			section: "birdnet",
+			section: "voicewatch",
 			extremeData: map[string]any{
 				"latitude":  91.0,  // Invalid latitude
 				"longitude": 181.0, // Invalid longitude
@@ -76,7 +76,7 @@ func TestExtremeValues(t *testing.T) {
 		},
 		{
 			name:    "Very small float values",
-			section: "birdnet",
+			section: "voicewatch",
 			extremeData: map[string]any{
 				"threshold": 0.0000000001,
 			},
@@ -104,7 +104,7 @@ func TestExtremeValues(t *testing.T) {
 		},
 		{
 			name:    "Zero values",
-			section: "birdnet",
+			section: "voicewatch",
 			extremeData: map[string]any{
 				"sensitivity": 0.0,
 				"threshold":   0.0,
@@ -115,7 +115,7 @@ func TestExtremeValues(t *testing.T) {
 		},
 		{
 			name:    "Maximum float values",
-			section: "birdnet",
+			section: "voicewatch",
 			extremeData: map[string]any{
 				"sensitivity": 1.7976931348623157e+308, // Close to max float64 - exceeds valid range 0-1.5
 			},
@@ -124,7 +124,7 @@ func TestExtremeValues(t *testing.T) {
 		},
 		{
 			name:    "Minimum positive float",
-			section: "birdnet",
+			section: "voicewatch",
 			extremeData: map[string]any{
 				"threshold": 5e-324, // Smallest positive float64
 			},
@@ -133,7 +133,7 @@ func TestExtremeValues(t *testing.T) {
 		},
 		{
 			name:    "Negative zero",
-			section: "birdnet",
+			section: "voicewatch",
 			extremeData: map[string]any{
 				"overlap": 0.0,
 			},

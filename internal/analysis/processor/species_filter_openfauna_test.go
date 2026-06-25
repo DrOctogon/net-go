@@ -13,7 +13,7 @@ import (
 // TestResolveSpeciesFilter_SecondaryModelScientificLabel verifies that a
 // scientific-only secondary-model label (a bat) in the label union matches a
 // config entry given by scientific name. Before sourcing labels from the model
-// union these never matched because the picker only saw primary BirdNET labels.
+// union these never matched because the picker only saw primary speech model labels.
 func TestResolveSpeciesFilter_SecondaryModelScientificLabel(t *testing.T) {
 	t.Parallel()
 

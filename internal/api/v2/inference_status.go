@@ -336,7 +336,7 @@ func (c *Controller) GetInferenceStatus(ctx echo.Context) error {
 
 	// Backends: TFLite is always compiled in; ORT and OpenVINO are probed.
 	resp.Backends.TFLite = BackendStatus{Available: true}
-	ort := inference.CheckORTAvailability(settings.BirdNET.ONNXRuntimePath)
+	ort := inference.CheckORTAvailability(settings.VoiceWatch.ONNXRuntimePath)
 	resp.Backends.ONNX = BackendStatus{Available: ort.Available, Initialized: ort.Initialized, Version: ort.Version}
 	ov := inference.CheckOpenVINOAvailability()
 	resp.Backends.OpenVINO = OpenVINOBackendStatus{Supported: ov.Supported, Active: ov.Active}
@@ -354,7 +354,7 @@ func (c *Controller) GetInferenceStatus(ctx echo.Context) error {
 	// they are left empty so buildModelStatus falls back to static model metadata.
 	var orch *classifier.Orchestrator
 	if c.Processor != nil {
-		orch = c.Processor.GetBirdNET()
+		orch = c.Processor.GetOrchestrator()
 	}
 	var infos []classifier.ModelInfo
 	primaryID := ""

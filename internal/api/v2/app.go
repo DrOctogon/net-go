@@ -314,7 +314,7 @@ func (c *Controller) hasZeroDetections(ctx context.Context) bool {
 // isExistingInstall returns true if multiple signals indicate this is a configured
 // installation rather than a genuinely fresh one. Checks are ordered cheapest-first.
 func (c *Controller) isExistingInstall(ctx context.Context, settings *conf.Settings) bool {
-	if settings.BirdNET.Latitude != 0 || settings.BirdNET.Longitude != 0 {
+	if settings.VoiceWatch.Latitude != 0 || settings.VoiceWatch.Longitude != 0 {
 		return true
 	}
 	if len(settings.Realtime.Audio.Sources) > 0 {

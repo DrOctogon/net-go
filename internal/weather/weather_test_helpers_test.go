@@ -15,7 +15,7 @@ func createTestSettings(t *testing.T, provider string, opts ...func(*conf.Settin
 	t.Helper()
 
 	settings := &conf.Settings{
-		BirdNET: conf.BirdNETConfig{
+		VoiceWatch: conf.VoiceWatchConfig{
 			Latitude:  60.1699, // Helsinki
 			Longitude: 24.9384,
 		},

@@ -527,7 +527,7 @@ func (c *Controller) testWeatherAPIConnectivity(ctx context.Context, settings *c
 		return "", fmt.Errorf("failed to create request: %w", err)
 	}
 
-	req.Header.Set("User-Agent", "BirdNET-Go Weather Test")
+	req.Header.Set("User-Agent", "VoiceWatch Weather Test")
 	resp, err := client.Do(req)
 	if err != nil {
 		return "", fmt.Errorf("failed to connect to %s API: %w", getProviderDisplayName(provider), err)
@@ -563,7 +563,7 @@ func (c *Controller) testWeatherAuthentication(ctx context.Context, settings *co
 			return "", fmt.Errorf("failed to create authentication request: %w", privacy.WrapError(err))
 		}
 
-		req.Header.Set("User-Agent", "BirdNET-Go Weather Test")
+		req.Header.Set("User-Agent", "VoiceWatch Weather Test")
 		resp, err := client.Do(req)
 		if err != nil {
 			// Scrub before wrapping: the transport *url.Error embeds the appid API key.
@@ -790,7 +790,7 @@ func (c *Controller) testEBirdConnectivity(ctx context.Context) (string, error) 
 		return "", fmt.Errorf("failed to create request: %w", err)
 	}
 
-	req.Header.Set("User-Agent", "BirdNET-Go eBird Test")
+	req.Header.Set("User-Agent", "VoiceWatch eBird Test")
 
 	resp, err := client.Do(req)
 	if err != nil {
@@ -824,7 +824,7 @@ func (c *Controller) testEBirdAuthentication(ctx context.Context, apiKey, locale
 
 	req.Header.Set("X-eBirdApiToken", apiKey)
 	req.Header.Set("Accept", "application/json")
-	req.Header.Set("User-Agent", "BirdNET-Go eBird Test")
+	req.Header.Set("User-Agent", "VoiceWatch eBird Test")
 
 	resp, err := client.Do(req)
 	if err != nil {

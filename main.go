@@ -65,7 +65,7 @@ func mainWithExitCode() int {
 	}()
 
 	// Check if profiling is enabled
-	if os.Getenv("BIRDNET_GO_PROFILE") == "1" {
+	if os.Getenv("VOICEWATCH_PROFILE") == "1" {
 		bootLog.Info("CPU profiling enabled")
 		// Create a unique profile name with timestamp
 		now := time.Now()
@@ -142,7 +142,7 @@ func mainWithExitCode() int {
 	}
 	settings.SystemID = systemID
 
-	mainLog.Info("BirdNET-Go starting",
+	mainLog.Info("VoiceWatch starting",
 		logger.String("version", settings.Version),
 		logger.String("build_date", settings.BuildDate),
 		logger.String("config_file", viper.ConfigFileUsed()))

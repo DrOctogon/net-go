@@ -70,7 +70,7 @@ func TestReconcileLegacyUniqueIndexes_SQLite_DropsStaleSpeciesName(t *testing.T)
 		CREATE TABLE dynamic_thresholds (
 			id INTEGER PRIMARY KEY AUTOINCREMENT,
 			species_name TEXT NOT NULL,
-			model_name TEXT NOT NULL DEFAULT 'BirdNET',
+			model_name TEXT NOT NULL DEFAULT 'VoiceWatch',
 			scientific_name TEXT,
 			level INTEGER NOT NULL DEFAULT 0,
 			current_value REAL NOT NULL,
@@ -245,7 +245,7 @@ func TestReconcileLegacyUniqueIndexes_SQLite_PreservesData(t *testing.T) {
 		CREATE TABLE dynamic_thresholds (
 			id INTEGER PRIMARY KEY AUTOINCREMENT,
 			species_name TEXT NOT NULL,
-			model_name TEXT NOT NULL DEFAULT 'BirdNET',
+			model_name TEXT NOT NULL DEFAULT 'VoiceWatch',
 			scientific_name TEXT,
 			level INTEGER NOT NULL DEFAULT 0,
 			current_value REAL NOT NULL,
@@ -263,7 +263,7 @@ func TestReconcileLegacyUniqueIndexes_SQLite_PreservesData(t *testing.T) {
 	require.NoError(t, db.Exec(`
 		INSERT INTO dynamic_thresholds
 		(species_name, model_name, current_value, base_threshold, valid_hours, expires_at, last_triggered, first_created, updated_at)
-		VALUES ('robin', 'BirdNET', 0.8, 0.5, 24, '2026-04-18', '2026-04-18', '2026-04-18', '2026-04-18')
+		VALUES ('robin', 'VoiceWatch', 0.8, 0.5, 24, '2026-04-18', '2026-04-18', '2026-04-18', '2026-04-18')
 	`).Error)
 
 	require.NoError(t, reconcileLegacyUniqueIndexes(db, "sqlite", "", []any{&DynamicThreshold{}}))

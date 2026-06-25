@@ -53,7 +53,7 @@ const (
 const (
 	backupJobMaxAge       = 1 * time.Hour     // Jobs expire after 1 hour
 	backupCleanupInterval = 5 * time.Minute   // Cleanup runs every 5 minutes
-	backupTempFilePrefix  = "birdnet-backup-" // Prefix for temp files
+	backupTempFilePrefix  = "voicewatch-backup-" // Prefix for temp files
 	backupDiskBuffer      = 100 * 1024 * 1024 // 100MB buffer for disk space check
 	backupVacuumRetries   = 3                 // Number of retries for locked database
 	backupVacuumRetryWait = 2 * time.Second   // Wait between retries
@@ -549,7 +549,7 @@ func (c *Controller) DownloadBackupFile(ctx echo.Context) error {
 	}
 
 	// Set headers and serve file
-	filename := fmt.Sprintf("birdnet-%s-backup-%s.db", job.DBType, job.StartedAt.Format("20060102-150405"))
+	filename := fmt.Sprintf("voicewatch-%s-backup-%s.db", job.DBType, job.StartedAt.Format("20060102-150405"))
 	ctx.Response().Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%q", filename))
 	ctx.Response().Header().Set("Content-Type", "application/octet-stream")
 

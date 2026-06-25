@@ -22,8 +22,8 @@ func main() {
 
 var rootCmd = &cobra.Command{
 	Use:   "dbexport",
-	Short: "Export BirdNET-Go data from SQLite to MySQL",
-	Long: `A tool for migrating BirdNET-Go legacy database data from SQLite to MySQL.
+	Short: "Export VoiceWatch data from SQLite to MySQL",
+	Long: `A tool for migrating VoiceWatch legacy database data from SQLite to MySQL.
 
 This tool is primarily used for testing the database normalization migration
 on MySQL backends by populating MySQL with real-world data from SQLite.
@@ -43,9 +43,9 @@ func init() {
 	rootCmd.Flags().StringVar(&cfg.MySQLDSN, "mysql-dsn", "", "MySQL connection string (e.g., user:pass@tcp(host:3306)/dbname)")
 	rootCmd.Flags().StringVar(&cfg.MySQLHost, "mysql-host", "localhost", "MySQL host (alternative to DSN)")
 	rootCmd.Flags().IntVar(&cfg.MySQLPort, "mysql-port", 3306, "MySQL port")
-	rootCmd.Flags().StringVar(&cfg.MySQLUser, "mysql-user", "birdnet", "MySQL username")
-	rootCmd.Flags().StringVar(&cfg.MySQLPass, "mysql-pass", "birdnet", "MySQL password")
-	rootCmd.Flags().StringVar(&cfg.MySQLDatabase, "mysql-database", "birdnet", "MySQL database name")
+	rootCmd.Flags().StringVar(&cfg.MySQLUser, "mysql-user", "voicewatch", "MySQL username")
+	rootCmd.Flags().StringVar(&cfg.MySQLPass, "mysql-pass", "voicewatch", "MySQL password")
+	rootCmd.Flags().StringVar(&cfg.MySQLDatabase, "mysql-database", "voicewatch", "MySQL database name")
 
 	// Migration options
 	rootCmd.Flags().IntVar(&cfg.BatchSize, "batch-size", 1000, "Number of records per batch")

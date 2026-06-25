@@ -76,7 +76,7 @@ func TestCalculateMinDetections_AllLevels(t *testing.T) {
 							},
 						},
 					},
-					BirdNET: conf.BirdNETConfig{
+					VoiceWatch: conf.VoiceWatchConfig{
 						Overlap: tt.overlap,
 					},
 				},
@@ -120,7 +120,7 @@ func TestCalculateMinDetections_OverlapVariation(t *testing.T) {
 							Level: tt.level,
 						},
 					},
-					BirdNET: conf.BirdNETConfig{
+					VoiceWatch: conf.VoiceWatchConfig{
 						Overlap: tt.overlap,
 					},
 				},
@@ -364,7 +364,7 @@ func TestCalculateMinDetections(t *testing.T) {
 							},
 						},
 					},
-					BirdNET: conf.BirdNETConfig{
+					VoiceWatch: conf.VoiceWatchConfig{
 						Overlap: tt.overlap,
 					},
 				},
@@ -435,7 +435,7 @@ func TestCalculateMinDetectionsIndependentOfClipLength(t *testing.T) {
 								},
 							},
 						},
-						BirdNET: conf.BirdNETConfig{
+						VoiceWatch: conf.VoiceWatchConfig{
 							Overlap: tt.overlap,
 						},
 					},
@@ -467,7 +467,7 @@ func TestCalculateMinDetectionsConsistency(t *testing.T) {
 					},
 				},
 			},
-			BirdNET: conf.BirdNETConfig{
+			VoiceWatch: conf.VoiceWatchConfig{
 				Overlap: 2.4,
 			},
 		},
@@ -500,7 +500,7 @@ func TestCalculateMinDetectionsIssue1314(t *testing.T) {
 					},
 				},
 			},
-			BirdNET: conf.BirdNETConfig{
+			VoiceWatch: conf.VoiceWatchConfig{
 				Overlap: 2.2, // or 2.35-2.36 based on logs
 			},
 		},
@@ -516,7 +516,7 @@ func TestCalculateMinDetectionsIssue1314(t *testing.T) {
 		"Issue #1314 regression: Long clip lengths should NOT increase detection requirements!\n"+
 			"Settings: level=%d, overlap=%.1f, captureLength=%ds, preCapture=%ds",
 		p.Settings.Realtime.FalsePositiveFilter.Level,
-		p.Settings.BirdNET.Overlap,
+		p.Settings.VoiceWatch.Overlap,
 		p.Settings.Realtime.Audio.Export.Length,
 		p.Settings.Realtime.Audio.Export.PreCapture)
 
@@ -855,7 +855,7 @@ func TestValidateAndLogFilterConfig_Integration(t *testing.T) {
 						},
 					},
 				},
-				BirdNET: conf.BirdNETConfig{
+				VoiceWatch: conf.VoiceWatchConfig{
 					Overlap: tt.overlap,
 				},
 			}
@@ -901,7 +901,7 @@ func TestValidateAndLogFilterConfig_InvalidLevel(t *testing.T) {
 						Level: tt.initialLevel,
 					},
 				},
-				BirdNET: conf.BirdNETConfig{
+				VoiceWatch: conf.VoiceWatchConfig{
 					Overlap: 2.4,
 				},
 			}
@@ -922,7 +922,7 @@ func TestCalculateMinDetectionsForModel(t *testing.T) {
 
 	settings := &conf.Settings{}
 	settings.Realtime.FalsePositiveFilter.Level = 3
-	settings.BirdNET.Overlap = 2.4
+	settings.VoiceWatch.Overlap = 2.4
 
 	// Single-model facade: the modelID is ignored; every model uses the standard
 	// false-positive-filter calculation.

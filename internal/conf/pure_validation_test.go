@@ -7,16 +7,16 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// TestValidateBirdNETSettings_Valid verifies valid BirdNET configurations pass.
-func TestValidateBirdNETSettings_Valid(t *testing.T) {
+// TestValidateVoiceWatchSettings_Valid verifies valid VoiceWatch configurations pass.
+func TestValidateVoiceWatchSettings_Valid(t *testing.T) {
 	t.Parallel()
 	tests := []struct {
 		name   string
-		config BirdNETConfig
+		config VoiceWatchConfig
 	}{
 		{
 			name: "all valid values",
-			config: BirdNETConfig{
+			config: VoiceWatchConfig{
 				Sensitivity: 1.0,
 				Threshold:   0.7,
 				Overlap:     1.5,
@@ -27,7 +27,7 @@ func TestValidateBirdNETSettings_Valid(t *testing.T) {
 		},
 		{
 			name: "maximum values",
-			config: BirdNETConfig{
+			config: VoiceWatchConfig{
 				Sensitivity: 1.5,
 				Threshold:   1.0,
 				Overlap:     2.99,
@@ -41,94 +41,94 @@ func TestValidateBirdNETSettings_Valid(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			result := ValidateBirdNETSettings(&tt.config)
+			result := ValidateVoiceWatchSettings(&tt.config)
 			assert.True(t, result.Valid, "expected valid config, got errors: %v", result.Errors)
 			assert.Empty(t, result.Errors, "expected no errors")
 		})
 	}
 }
 
-// TestValidateBirdNETSettings_Invalid verifies invalid configurations are rejected.
-func TestValidateBirdNETSettings_Invalid(t *testing.T) {
+// TestValidateVoiceWatchSettings_Invalid verifies invalid configurations are rejected.
+func TestValidateVoiceWatchSettings_Invalid(t *testing.T) {
 	t.Parallel()
 	tests := []struct {
 		name        string
-		config      BirdNETConfig
+		config      VoiceWatchConfig
 		expectError string
 	}{
 		{
 			name: "sensitivity too low",
-			config: BirdNETConfig{
+			config: VoiceWatchConfig{
 				Sensitivity: -0.1,
 			},
 			expectError: "sensitivity must be between 0 and 1.5",
 		},
 		{
 			name: "sensitivity too high",
-			config: BirdNETConfig{
+			config: VoiceWatchConfig{
 				Sensitivity: 1.6,
 			},
 			expectError: "sensitivity must be between 0 and 1.5",
 		},
 		{
 			name: "threshold too low",
-			config: BirdNETConfig{
+			config: VoiceWatchConfig{
 				Threshold: -0.1,
 			},
 			expectError: "threshold must be between 0 and 1",
 		},
 		{
 			name: "threshold too high",
-			config: BirdNETConfig{
+			config: VoiceWatchConfig{
 				Threshold: 1.1,
 			},
 			expectError: "threshold must be between 0 and 1",
 		},
 		{
 			name: "overlap too low",
-			config: BirdNETConfig{
+			config: VoiceWatchConfig{
 				Overlap: -0.1,
 			},
 			expectError: "overlap value must be between 0 and 2.99 seconds",
 		},
 		{
 			name: "overlap too high",
-			config: BirdNETConfig{
+			config: VoiceWatchConfig{
 				Overlap: 3.0,
 			},
 			expectError: "overlap value must be between 0 and 2.99 seconds",
 		},
 		{
 			name: "latitude too low",
-			config: BirdNETConfig{
+			config: VoiceWatchConfig{
 				Latitude: -91.0,
 			},
 			expectError: "latitude must be between -90 and 90",
 		},
 		{
 			name: "latitude too high",
-			config: BirdNETConfig{
+			config: VoiceWatchConfig{
 				Latitude: 91.0,
 			},
 			expectError: "latitude must be between -90 and 90",
 		},
 		{
 			name: "longitude too low",
-			config: BirdNETConfig{
+			config: VoiceWatchConfig{
 				Longitude: -181.0,
 			},
 			expectError: "longitude must be between -180 and 180",
 		},
 		{
 			name: "longitude too high",
-			config: BirdNETConfig{
+			config: VoiceWatchConfig{
 				Longitude: 181.0,
 			},
 			expectError: "longitude must be between -180 and 180",
 		},
 		{
 			name: "negative threads",
-			config: BirdNETConfig{
+			config: VoiceWatchConfig{
 				Threads: -1,
 			},
 			expectError: "threads must be at least 0",
@@ -138,7 +138,7 @@ func TestValidateBirdNETSettings_Invalid(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			result := ValidateBirdNETSettings(&tt.config)
+			result := ValidateVoiceWatchSettings(&tt.config)
 			assert.False(t, result.Valid, "expected invalid config to fail validation")
 			assert.NotEmpty(t, result.Errors, "expected validation errors but got none")
 
@@ -917,7 +917,7 @@ func TestValidateWebServerSettings_Invalid(t *testing.T) {
 				Port:    "8080",
 				// Missing leading "/" is a common typo. Reject loudly so users notice before the
 				// server silently routes nothing through the subpath middleware.
-				BasePath: "birdnet",
+				BasePath: "voicewatch",
 				LiveStream: LiveStreamSettings{
 					BitRate:       128,
 					SegmentLength: 5,
@@ -1039,9 +1039,9 @@ func TestValidateWebServerSettings_Invalid(t *testing.T) {
 	}
 }
 
-// BenchmarkValidateBirdNETSettings benchmarks BirdNET validation.
-func BenchmarkValidateBirdNETSettings(b *testing.B) {
-	cfg := &BirdNETConfig{
+// BenchmarkValidateVoiceWatchSettings benchmarks VoiceWatch validation.
+func BenchmarkValidateVoiceWatchSettings(b *testing.B) {
+	cfg := &VoiceWatchConfig{
 		Sensitivity: 1.0,
 		Threshold:   0.7,
 		Overlap:     1.5,
@@ -1053,7 +1053,7 @@ func BenchmarkValidateBirdNETSettings(b *testing.B) {
 	b.ReportAllocs()
 
 	for b.Loop() {
-		_ = ValidateBirdNETSettings(cfg)
+		_ = ValidateVoiceWatchSettings(cfg)
 	}
 }
 

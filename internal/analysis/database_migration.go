@@ -520,7 +520,7 @@ func initializeV2OnlyMode(settings *conf.Settings) (*v2only.Datastore, error) {
 		AppEvent:       appEventRepo,
 		Logger:         log,
 		Timezone:       time.Local,
-		Labels:         settings.BirdNET.Labels, // For GetThresholdEvents workaround (#1907)
+		Labels:         settings.VoiceWatch.Labels, // For GetThresholdEvents workaround (#1907)
 		SpeciesCodeMap: scientificIndex,
 	})
 	if err != nil {

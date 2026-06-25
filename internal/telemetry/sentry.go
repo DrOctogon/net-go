@@ -649,7 +649,7 @@ func configureSentryScope(settings *conf.Settings) {
 
 		// Set application context
 		scope.SetContext("application", map[string]any{
-			"name":      "BirdNET-Go",
+			"name":      "VoiceWatch",
 			"version":   settings.Version,
 			"system_id": settings.SystemID,
 		})

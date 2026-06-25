@@ -230,7 +230,7 @@ func (c *Controller) addMemoryThresholds(thresholdMap map[string]*DynamicThresho
 		return
 	}
 	memoryData := proc.GetDynamicThresholdData()
-	baseThreshold := c.currentSettings().BirdNET.Threshold
+	baseThreshold := c.currentSettings().VoiceWatch.Threshold
 
 	for _, dt := range memoryData {
 		key := strings.ToLower(dt.ModelName) + ":" + strings.ToLower(dt.SpeciesName)

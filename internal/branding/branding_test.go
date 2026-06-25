@@ -10,7 +10,7 @@ import (
 // ldflags-target package vars), so they intentionally do NOT call t.Parallel().
 
 // resetBrandingState makes a test hermetic against the caller's environment: it
-// clears every BIRDNET_GO_PROJECT_* env var and the ldflags-target package vars
+// clears every VOICEWATCH_PROJECT_* env var and the ldflags-target package vars
 // (restoring them after the test) so the getters resolve deterministically
 // regardless of any inherited env or baked-in build values.
 func resetBrandingState(t *testing.T) {
@@ -43,7 +43,7 @@ func TestDefaults(t *testing.T) {
 	resetBrandingState(t)
 	// With no environment overrides and empty (un-baked) ldflags vars, the
 	// getters fall back to the built-in upstream defaults.
-	assert.Equal(t, "BirdNET-Go", Name())
+	assert.Equal(t, "VoiceWatch", Name())
 	assert.Equal(t, "https://github.com/tphakala/voicewatch", RepoURL())
 	assert.Equal(t, "https://github.com/tphakala/voicewatch/issues", IssuesURL())
 	assert.Equal(t, "https://github.com/tphakala/voicewatch/issues/new", NewIssueURL())
@@ -107,7 +107,7 @@ func TestWhitespaceCountsAsUnset(t *testing.T) {
 	t.Setenv(envName, "\t")
 
 	assert.Equal(t, "https://github.com/tphakala/voicewatch", RepoURL())
-	assert.Equal(t, "BirdNET-Go", Name())
+	assert.Equal(t, "VoiceWatch", Name())
 }
 
 func TestLdflagsVarPrecedence(t *testing.T) {

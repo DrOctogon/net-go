@@ -50,8 +50,8 @@ func TestNightFilterExcludesSunriseSunsetWindows(t *testing.T) {
 
 	// Create test database with location settings
 	settings := &conf.Settings{}
-	settings.BirdNET.Latitude = latitude
-	settings.BirdNET.Longitude = longitude
+	settings.VoiceWatch.Latitude = latitude
+	settings.VoiceWatch.Longitude = longitude
 
 	ds := createDatabase(t, settings)
 

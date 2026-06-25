@@ -323,7 +323,7 @@ func mapToResult(row *SourceDetection, ts time.Time, sourceNode string) *detecti
 		Threshold:   row.Cutoff,
 		Sensitivity: row.Sensitivity,
 		Model: detection.ModelInfo{
-			Name:    "BirdNET",
+			Name:    "VoiceWatch",
 			Version: "birdnet-pi",
 			Variant: "import",
 		},

@@ -15,7 +15,7 @@ type ExampleComponent struct {
 }
 
 // NewExampleComponent creates a new component with a metrics recorder.
-// In production, pass a real metrics implementation (e.g., BirdNETMetrics).
+// In production, pass a real metrics implementation (e.g., VoiceWatchMetrics).
 // In tests, pass a TestRecorder or NoOpRecorder.
 func NewExampleComponent(recorder metrics.Recorder) *ExampleComponent {
 	return &ExampleComponent{
@@ -74,7 +74,7 @@ func Example_componentWithRecorder() {
 func Example_migrationPath() {
 	// Before: Component with concrete metric type
 	type OldComponent struct {
-		metrics *metrics.BirdNETMetrics
+		metrics *metrics.VoiceWatchMetrics
 	}
 
 	// After: Component with Recorder interface
@@ -88,9 +88,9 @@ func Example_migrationPath() {
 	// 3. No changes needed to metric recording calls
 
 	// Both approaches work with the same metrics instance:
-	// var birdnetMetrics *metrics.BirdNETMetrics
+	// var birdnetMetrics *metrics.VoiceWatchMetrics
 	// oldComp := &OldComponent{metrics: birdnetMetrics}
-	// newComp := &NewComponent{metrics: birdnetMetrics} // BirdNETMetrics implements Recorder
+	// newComp := &NewComponent{metrics: birdnetMetrics} // VoiceWatchMetrics implements Recorder
 
 	fmt.Println("Migration complete")
 	// Output: Migration complete

@@ -98,8 +98,8 @@ func buildOpenWeatherURL(settings *conf.Settings, apiKey string) (string, error)
 		return "", err
 	}
 	q := u.Query()
-	q.Set("lat", strconv.FormatFloat(settings.BirdNET.Latitude, 'f', openWeatherCoordPrecision, 64))
-	q.Set("lon", strconv.FormatFloat(settings.BirdNET.Longitude, 'f', openWeatherCoordPrecision, 64))
+	q.Set("lat", strconv.FormatFloat(settings.VoiceWatch.Latitude, 'f', openWeatherCoordPrecision, 64))
+	q.Set("lon", strconv.FormatFloat(settings.VoiceWatch.Longitude, 'f', openWeatherCoordPrecision, 64))
 	q.Set("appid", apiKey)
 	q.Set("units", settings.Realtime.Weather.OpenWeather.Units)
 	q.Set("lang", "en")

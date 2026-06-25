@@ -25,7 +25,7 @@ func TestAPIServerService_Start_FailsFastWithNilDataStore(t *testing.T) {
 	t.Parallel()
 
 	settings := &conf.Settings{}
-	bn := NewBirdNETAnalyzer(settings)
+	bn := NewVoiceWatchAnalyzer(settings)
 	db := NewDatabaseService(settings, nil)
 	// db.DataStore() returns nil since Start() was never called.
 	metrics, _ := observability.NewMetrics()
@@ -36,12 +36,12 @@ func TestAPIServerService_Start_FailsFastWithNilDataStore(t *testing.T) {
 	assert.Contains(t, err.Error(), "datastore", "error should mention datastore")
 }
 
-func TestAPIServerService_Start_FailsFastWithNilBirdNET(t *testing.T) {
+func TestAPIServerService_Start_FailsFastWithNilVoiceWatch(t *testing.T) {
 	t.Parallel()
 
 	settings := &conf.Settings{}
-	bn := NewBirdNETAnalyzer(settings)
-	// bn.BirdNET() returns nil since Start() was never called.
+	bn := NewVoiceWatchAnalyzer(settings)
+	// bn.Orchestrator() returns nil since Start() was never called.
 
 	db := NewDatabaseService(settings, nil)
 	// Set a non-nil dataStore so the first check passes.
@@ -51,8 +51,8 @@ func TestAPIServerService_Start_FailsFastWithNilBirdNET(t *testing.T) {
 
 	svc := NewAPIServerService(settings, bn, db, metrics, nil)
 	err := svc.Start(t.Context())
-	require.Error(t, err, "Start() should fail when BirdNET is nil")
-	assert.Contains(t, err.Error(), "birdnet", "error should mention birdnet")
+	require.Error(t, err, "Start() should fail when VoiceWatch is nil")
+	assert.Contains(t, err.Error(), "voicewatch", "error should mention voicewatch")
 }
 
 func TestAPIServerService_Stop_NilSafe(t *testing.T) {

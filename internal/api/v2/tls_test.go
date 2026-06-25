@@ -90,7 +90,7 @@ func TestTLSGetCertificate_WithCert(t *testing.T) {
 	var info TLSCertificateInfo
 	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &info))
 	assert.True(t, info.Installed, "should report certificate installed")
-	assert.Equal(t, "CN=BirdNET-Go", info.Subject)
+	assert.Equal(t, "CN=VoiceWatch", info.Subject)
 	assert.Equal(t, "selfsigned", info.Mode)
 	assert.NotEmpty(t, info.NotBefore)
 	assert.NotEmpty(t, info.NotAfter)
@@ -124,7 +124,7 @@ func TestTLSUploadCertificate_ValidPEM(t *testing.T) {
 	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &info))
 	assert.True(t, info.Installed)
 	assert.Equal(t, "manual", info.Mode)
-	assert.Equal(t, "CN=BirdNET-Go", info.Subject)
+	assert.Equal(t, "CN=VoiceWatch", info.Subject)
 
 	// Verify settings were updated
 	assert.Equal(t, conf.TLSModeManual, controller.Settings.Load().Security.TLSMode)
@@ -224,7 +224,7 @@ func TestTLSGenerateSelfSignedCertificate(t *testing.T) {
 	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &info))
 	assert.True(t, info.Installed)
 	assert.Equal(t, "selfsigned", info.Mode)
-	assert.Equal(t, "CN=BirdNET-Go", info.Subject)
+	assert.Equal(t, "CN=VoiceWatch", info.Subject)
 	assert.NotEmpty(t, info.SANs)
 	assert.Positive(t, info.DaysUntilExpiry)
 
@@ -270,7 +270,7 @@ func TestTLSDownloadCertificate(t *testing.T) {
 	err = controller.DownloadTLSCertificate(ctx)
 	require.NoError(t, err)
 	assert.Equal(t, http.StatusOK, rec.Code)
-	assert.Contains(t, rec.Header().Get("Content-Disposition"), "birdnet-go.crt")
+	assert.Contains(t, rec.Header().Get("Content-Disposition"), "voicewatch.crt")
 	assert.Contains(t, rec.Body.String(), "BEGIN CERTIFICATE")
 }
 

@@ -156,7 +156,7 @@ func NotifyStartup(version string) {
 		return
 	}
 
-	title := "BirdNET-Go Started"
+	title := "VoiceWatch Started"
 	message := fmt.Sprintf("Application started successfully (v%s)", version)
 
 	// Build notification fully before broadcast to ensure SSE subscribers see translation keys
@@ -182,7 +182,7 @@ func NotifyShutdown() {
 		return
 	}
 
-	title := "BirdNET-Go Shutting Down"
+	title := "VoiceWatch Shutting Down"
 	message := "Application is shutting down gracefully"
 
 	// Build notification fully before broadcast to ensure SSE subscribers see translation keys

@@ -135,7 +135,7 @@ func (c *Controller) registerHealthChecks() {
 		}),
 		checks.NewResultsQueueDropCheck(c.healthMetricsStore, c.healthEvents.Recent),
 		checks.NewORTAvailabilityCheck(func() (available, initialized bool, version, libraryPath, errMsg string) {
-			status := inference.CheckORTAvailability(c.currentSettings().BirdNET.ONNXRuntimePath)
+			status := inference.CheckORTAvailability(c.currentSettings().VoiceWatch.ONNXRuntimePath)
 			return status.Available, status.Initialized, status.Version, status.LibraryPath, status.Error
 		}),
 		checks.NewOpenVINOAvailabilityCheck(func() (supported, active bool) {
@@ -266,7 +266,7 @@ func (c *Controller) buildModelLoadInfoProvider() func() []checks.ModelLoadInfo 
 		if p == nil {
 			return nil
 		}
-		bn := p.GetBirdNET()
+		bn := p.GetOrchestrator()
 		if bn == nil {
 			return nil
 		}
@@ -298,7 +298,7 @@ func (c *Controller) buildPerModelInferenceProvider() func() []checks.ModelInfer
 		if p == nil {
 			return nil
 		}
-		bn := p.GetBirdNET()
+		bn := p.GetOrchestrator()
 		if bn == nil {
 			return nil
 		}

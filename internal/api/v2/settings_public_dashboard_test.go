@@ -99,7 +99,7 @@ func newSettingsAuthTestEnvWithNotifier(t *testing.T) (*echo.Echo, *notification
 			},
 		},
 		Security: securityConfig,
-		BirdNET: conf.BirdNETConfig{
+		VoiceWatch: conf.VoiceWatchConfig{
 			Latitude:  60.1699,
 			Longitude: 24.9384,
 		},
@@ -212,17 +212,17 @@ func TestPatchDashboardSettings_RequiresAuth(t *testing.T) {
 
 // TestGetBirdnetSettings_StillRequiresAuth is a regression guard ensuring that
 // exposing /settings/dashboard publicly did not accidentally expose other
-// settings sections. /settings/birdnet remains auth-protected.
+// settings sections. /settings/voicewatch remains auth-protected.
 func TestGetBirdnetSettings_StillRequiresAuth(t *testing.T) {
 	e := newSettingsAuthTestEnv(t)
 
-	req := httptest.NewRequest(http.MethodGet, "/api/v2/settings/birdnet", http.NoBody)
+	req := httptest.NewRequest(http.MethodGet, "/api/v2/settings/voicewatch", http.NoBody)
 	rec := httptest.NewRecorder()
 
 	e.ServeHTTP(rec, req)
 
 	assert.Equal(t, http.StatusUnauthorized, rec.Code,
-		"GET /settings/birdnet must still require auth")
+		"GET /settings/voicewatch must still require auth")
 }
 
 // TestGetAllSettings_StillRequiresAuth guards that the full /settings endpoint

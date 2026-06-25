@@ -9,14 +9,14 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// gatherMetricsByName creates a fresh BirdNETMetrics with a private registry,
+// gatherMetricsByName creates a fresh VoiceWatchMetrics with a private registry,
 // applies setup, gathers all metric families, and returns them indexed by name.
 // It is a test helper to reduce boilerplate in gauge tests.
-func gatherMetricsByName(t *testing.T, setup func(m *BirdNETMetrics)) map[string]*dto.MetricFamily {
+func gatherMetricsByName(t *testing.T, setup func(m *VoiceWatchMetrics)) map[string]*dto.MetricFamily {
 	t.Helper()
 	reg := prometheus.NewRegistry()
-	m, err := NewBirdNETMetrics(reg)
-	require.NoError(t, err, "NewBirdNETMetrics")
+	m, err := NewVoiceWatchMetrics(reg)
+	require.NoError(t, err, "NewVoiceWatchMetrics")
 	setup(m)
 	mfs, err := reg.Gather()
 	require.NoError(t, err, "Gather")
@@ -30,7 +30,7 @@ func gatherMetricsByName(t *testing.T, setup func(m *BirdNETMetrics)) map[string
 func TestInferenceGauges(t *testing.T) {
 	t.Parallel()
 
-	byName := gatherMetricsByName(t, func(m *BirdNETMetrics) {
+	byName := gatherMetricsByName(t, func(m *VoiceWatchMetrics) {
 		m.SetInferenceRTF("BirdNET_V2.4", 0.016)
 		m.SetModelRSSBytes("BirdNET_V2.4", 125_000_000)
 	})
@@ -68,7 +68,7 @@ func findGaugeValue(mf *dto.MetricFamily, labelName, labelValue string) *float64
 // SetInferenceRTF / SetModelRSSBytes must be nil-safe.
 func TestInferenceGauges_NilSafe(t *testing.T) {
 	t.Parallel()
-	var m *BirdNETMetrics
+	var m *VoiceWatchMetrics
 	m.SetInferenceRTF("x", 1) // must not panic
 	m.SetModelRSSBytes("x", 1)
 }
@@ -78,7 +78,7 @@ func TestInferenceGauges_NilSafe(t *testing.T) {
 func TestAudioGauges(t *testing.T) {
 	t.Parallel()
 
-	byName := gatherMetricsByName(t, func(m *BirdNETMetrics) {
+	byName := gatherMetricsByName(t, func(m *VoiceWatchMetrics) {
 		m.SetAudioQueueDepth("rtsp_source_1", 8.0)
 		m.SetAudioDroppedChunks("rtsp_source_1", 42.0)
 	})
@@ -98,7 +98,7 @@ func TestAudioGauges(t *testing.T) {
 // are nil-safe (no panic on nil receiver).
 func TestAudioGauges_NilSafe(t *testing.T) {
 	t.Parallel()
-	var m *BirdNETMetrics
+	var m *VoiceWatchMetrics
 	m.SetAudioQueueDepth("src", 1)    // must not panic
 	m.SetAudioDroppedChunks("src", 1) // must not panic
 }

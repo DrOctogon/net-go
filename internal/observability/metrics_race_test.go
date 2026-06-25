@@ -34,7 +34,7 @@ func TestNewMetricsConcurrency(t *testing.T) {
 			// Verify all metric fields are initialized
 			assert.NotNil(t, metrics.registry, "metrics.registry is nil")
 			assert.NotNil(t, metrics.MQTT, "metrics.MQTT is nil")
-			assert.NotNil(t, metrics.BirdNET, "metrics.BirdNET is nil")
+			assert.NotNil(t, metrics.VoiceWatch, "metrics.VoiceWatch is nil")
 			assert.NotNil(t, metrics.ImageProvider, "metrics.ImageProvider is nil")
 			assert.NotNil(t, metrics.DiskManager, "metrics.DiskManager is nil")
 			assert.NotNil(t, metrics.Weather, "metrics.Weather is nil")
@@ -68,16 +68,16 @@ func TestSetMetricsIdempotent(t *testing.T) {
 	// The second call should be ignored due to sync.Once
 
 	// Test BirdNET metrics
-	if firstMetrics.BirdNET != nil && secondMetrics.BirdNET != nil {
+	if firstMetrics.VoiceWatch != nil && secondMetrics.VoiceWatch != nil {
 		// Set metrics with first instance
-		initializeTracing(firstMetrics.BirdNET)
+		initializeTracing(firstMetrics.VoiceWatch)
 
 		// Try to set with second instance - should be ignored
-		initializeTracing(secondMetrics.BirdNET)
+		initializeTracing(secondMetrics.VoiceWatch)
 
 		// Verify by checking that a metric operation uses the first instance
 		// This is indirect but avoids exposing internal state
-		t.Log("BirdNET SetMetrics is idempotent - second call ignored as expected")
+		t.Log("VoiceWatch SetMetrics is idempotent - second call ignored as expected")
 	}
 
 	// Test concurrent SetMetrics calls
@@ -99,8 +99,8 @@ func TestSetMetricsIdempotent(t *testing.T) {
 			defer wg.Done()
 
 			// Try to set metrics with this instance
-			if metricsInstances[idx].BirdNET != nil {
-				initializeTracing(metricsInstances[idx].BirdNET)
+			if metricsInstances[idx].VoiceWatch != nil {
+				initializeTracing(metricsInstances[idx].VoiceWatch)
 			}
 		}(i)
 	}

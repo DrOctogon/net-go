@@ -54,7 +54,7 @@ func TestUpdateLabelType_ChangesLabelTypeID(t *testing.T) {
 	require.NotZero(t, ltB.ID)
 
 	// Seed a model (required FK for labels).
-	model := entities.AIModel{Name: "BirdNET", Version: "2.4", Variant: "default", ModelType: entities.ModelTypeBird}
+	model := entities.AIModel{Name: "VoiceWatch", Version: "2.4", Variant: "default", ModelType: entities.ModelTypeBird}
 	require.NoError(t, db.Create(&model).Error)
 
 	// Create a label with type A.

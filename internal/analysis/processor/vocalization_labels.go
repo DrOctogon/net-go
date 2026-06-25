@@ -3,7 +3,7 @@
 //
 // Why match the RAW label (result.Species) instead of the enriched common name:
 //
-//  1. Locale stability. BirdNET loads a locale-specific label file, so for a
+//  1. Locale stability. The speech model loads a locale-specific label file, so for a
 //     German user the dog class arrives as "Dog_Hund" and the human classes as
 //     "Human vocal_Mensch Stimme" etc. SplitSpeciesName uses the part after "_"
 //     as the common name ("Hund", "Mensch Stimme"), which contains no "dog" or
@@ -37,17 +37,17 @@ import (
 )
 
 const (
-	// birdnetHumanLabelPrefix matches BirdNET's human classes by the English
+	// humanLabelPrefix matches the speech model's human classes by the English
 	// scientific portion of the raw label ("Human vocal_...", "Human non-vocal_...",
 	// "Human whistle_..."), which is the same across every locale. The trailing
 	// space is load-bearing: "human vocal" matches, but the cicada "Pacarina
 	// schumanni" (which contains the substring "human") does not.
-	birdnetHumanLabelPrefix = "human "
-	// birdnetDogLabelPrefix matches BirdNET's "Dog" class by its raw-label form
+	humanLabelPrefix = "human "
+	// dogLabelPrefix matches the speech model's "Dog" class by its raw-label form
 	// "Dog_<localized common name>" (e.g. "Dog_Dog", "Dog_Hund"). The underscore
 	// is load-bearing: the class matches, but the katydid "Poecilimon doga"
 	// (which contains the substring "dog") does not.
-	birdnetDogLabelPrefix = "dog_"
+	dogLabelPrefix = "dog_"
 )
 
 // perchHumanExtraLabels holds human labels that the shared nonbird package does
@@ -80,7 +80,7 @@ var perchDogLabels = map[string]struct{}{
 //
 // The AudioSet/FSD50K portion is delegated to the shared nonbird package
 // (nonbird.CategoryHuman). The iNaturalist taxon "homo sapiens" and the
-// BirdNET locale-stable prefix are handled locally.
+// speech-model locale-stable prefix are handled locally.
 func isHumanVocalization(rawLabel string) bool {
 	if cat, ok := nonbird.CategoryOf(rawLabel); ok && cat == nonbird.CategoryHuman {
 		return true
@@ -89,17 +89,17 @@ func isHumanVocalization(rawLabel string) bool {
 	if _, ok := perchHumanExtraLabels[lowered]; ok {
 		return true
 	}
-	return strings.HasPrefix(lowered, birdnetHumanLabelPrefix)
+	return strings.HasPrefix(lowered, humanLabelPrefix)
 }
 
 // isDogDetection reports whether a raw classifier label represents a dog for the
 // dog bark filter. rawLabel is the untransformed result.Species value. Matching
-// is case-insensitive: Perch v2 classes are matched exactly; BirdNET's "Dog"
+// is case-insensitive: Perch v2 classes are matched exactly; speech model "Dog"
 // class is matched by the locale-stable English label prefix.
 func isDogDetection(rawLabel string) bool {
 	lowered := strings.ToLower(rawLabel)
 	if _, ok := perchDogLabels[lowered]; ok {
 		return true
 	}
-	return strings.HasPrefix(lowered, birdnetDogLabelPrefix)
+	return strings.HasPrefix(lowered, dogLabelPrefix)
 }

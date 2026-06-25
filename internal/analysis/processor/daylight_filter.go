@@ -31,7 +31,7 @@ func (p *Processor) initDaylightFilter() {
 	}
 
 	// Skip if location has not been explicitly configured by the user
-	if !settings.BirdNET.LocationConfigured {
+	if !settings.VoiceWatch.LocationConfigured {
 		GetLogger().Warn("Daylight filter enabled but location not configured, filter will not be active",
 			logger.String("operation", "daylight_filter_init"))
 		p.daylightFilterMu.Lock()
@@ -49,9 +49,9 @@ func (p *Processor) initDaylightFilter() {
 		labels = p.Bn.AllLabels()
 	}
 	if len(labels) == 0 {
-		labels = settings.BirdNET.Labels
+		labels = settings.VoiceWatch.Labels
 	}
-	locale := settings.BirdNET.Locale
+	locale := settings.VoiceWatch.Locale
 
 	isAll, resolved := resolveSpeciesFilter(
 		settings.Realtime.DaylightFilter.Species, labels, locale, "daylight_filter",

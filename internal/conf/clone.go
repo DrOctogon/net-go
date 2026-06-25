@@ -48,7 +48,7 @@ func CloneSettings(src *Settings) *Settings {
 	}
 
 	// BirdNET.
-	dst.BirdNET.Labels = slices.Clone(src.BirdNET.Labels)
+	dst.VoiceWatch.Labels = slices.Clone(src.VoiceWatch.Labels)
 
 	// Models.
 	dst.Models.Enabled = slices.Clone(src.Models.Enabled)

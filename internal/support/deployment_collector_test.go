@@ -21,7 +21,7 @@ func TestCollectSystemdServiceFile_MissingFile(t *testing.T) {
 func TestCollectSystemdServiceFile_BasicContent(t *testing.T) {
 	tmpDir := t.TempDir()
 	servicePath := filepath.Join(tmpDir, "birdnet-go.service")
-	serviceContent := "[Unit]\nDescription=BirdNET-Go\nAfter=network.target\n\n[Service]\nType=simple\nWorkingDirectory=/home/user/birdnet-go-app/data\nExecStart=/usr/local/bin/birdnet-go\nRestart=always\n\n[Install]\nWantedBy=multi-user.target\n"
+	serviceContent := "[Unit]\nDescription=VoiceWatch\nAfter=network.target\n\n[Service]\nType=simple\nWorkingDirectory=/home/user/birdnet-go-app/data\nExecStart=/usr/local/bin/birdnet-go\nRestart=always\n\n[Install]\nWantedBy=multi-user.target\n"
 	require.NoError(t, os.WriteFile(servicePath, []byte(serviceContent), 0o644))
 
 	c := &Collector{sensitiveKeys: DefaultSensitiveKeys()}

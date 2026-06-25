@@ -5,7 +5,7 @@ import "time"
 
 const (
 	// Model IDs identify the inference backends available for detection.
-	ModelIDBirdNET    = "birdnet"
+	ModelIDVoiceWatch    = "voicewatch"
 	ModelIDHumanVoice = "human_voice"
 
 	SampleRate     = 48000 // Sample rate of the audio fed to BirdNET Analyzer

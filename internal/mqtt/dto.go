@@ -45,7 +45,7 @@ type MQTTEventDTO struct {
 	// ===========================================================================
 	SourceType    string `json:"sourceType,omitempty"`    // "rtsp", "alsa", "pulseaudio"
 	SourceName    string `json:"sourceName,omitempty"`    // Display name
-	ModelName     string `json:"modelName,omitempty"`     // "BirdNET"
+	ModelName     string `json:"modelName,omitempty"`     // "VoiceWatch"
 	ModelVersion  string `json:"modelVersion,omitempty"`  // "2.4"
 	IsCustomModel bool   `json:"isCustomModel,omitempty"` // Custom model flag
 	Unlikely      bool   `json:"unlikely,omitempty"`      // Tagged by ultrasonic validation filter

@@ -47,7 +47,7 @@ const policyNone = "none"
 // weather polling, and the restart loop for audio capture.
 type AudioPipelineService struct {
 	settings   *conf.Settings
-	bnAnalyzer *BirdNETAnalyzer
+	bnAnalyzer *VoiceWatchAnalyzer
 	dbService  *DatabaseService
 	apiService *APIServerService
 	engine     *engine.AudioEngine
@@ -86,7 +86,7 @@ type AudioPipelineService struct {
 
 // NewAudioPipelineService creates a new AudioPipelineService with the given dependencies.
 // The service is not started; call Start() to initialize the audio pipeline.
-func NewAudioPipelineService(settings *conf.Settings, bnAnalyzer *BirdNETAnalyzer, dbService *DatabaseService, apiService *APIServerService, audioEngine *engine.AudioEngine) *AudioPipelineService {
+func NewAudioPipelineService(settings *conf.Settings, bnAnalyzer *VoiceWatchAnalyzer, dbService *DatabaseService, apiService *APIServerService, audioEngine *engine.AudioEngine) *AudioPipelineService {
 	return &AudioPipelineService{
 		settings:   settings,
 		bnAnalyzer: bnAnalyzer,
@@ -156,8 +156,8 @@ func (p *AudioPipelineService) Start(_ context.Context) error {
 			Context("operation", "start_precondition_check").
 			Build()
 	}
-	if p.bnAnalyzer == nil || p.bnAnalyzer.BirdNET() == nil {
-		return errors.Newf("audio-pipeline requires an initialized birdnet model; birdnet-analyzer service must be started first").
+	if p.bnAnalyzer == nil || p.bnAnalyzer.Orchestrator() == nil {
+		return errors.Newf("audio-pipeline requires an initialized voicewatch model; voicewatch-analyzer service must be started first").
 			Component("analysis.audio_pipeline").
 			Category(errors.CategorySystem).
 			Context("operation", "start_precondition_check").
@@ -172,7 +172,7 @@ func (p *AudioPipelineService) Start(_ context.Context) error {
 	}
 
 	settings := p.settings
-	bn := p.bnAnalyzer.BirdNET()
+	bn := p.bnAnalyzer.Orchestrator()
 	dataStore := p.dbService.DataStore()
 	metrics := p.apiService.Metrics()
 
@@ -886,14 +886,14 @@ func (p *AudioPipelineService) registerConsumersForSources(sourceIDs []string, s
 	log := audiocore.GetLogger()
 
 	// Build a lookup of all loaded model infos keyed by registry ID.
-	modelInfoSlice := p.bnAnalyzer.BirdNET().ModelInfos()
+	modelInfoSlice := p.bnAnalyzer.Orchestrator().ModelInfos()
 	allModelInfos := make(map[string]classifier.ModelInfo, len(modelInfoSlice))
 	for i := range modelInfoSlice {
 		allModelInfos[modelInfoSlice[i].ID] = modelInfoSlice[i]
 	}
 
 	// Primary model fallback targets for sources with no model config.
-	primaryTargets := []classifier.ModelInfo{p.bnAnalyzer.BirdNET().PrimaryModelInfo()}
+	primaryTargets := []classifier.ModelInfo{p.bnAnalyzer.Orchestrator().PrimaryModelInfo()}
 
 	bufMgr := p.engine.BufferManager()
 	currentSettings := conf.Setting()
@@ -1107,12 +1107,12 @@ func (p *AudioPipelineService) reconfigureChangedSources(audioLevelChan chan aud
 	var loadedModels map[string]classifier.ModelInfo
 	var primaryModelID string
 	if p.bnAnalyzer != nil {
-		modelInfoSlice := p.bnAnalyzer.BirdNET().ModelInfos()
+		modelInfoSlice := p.bnAnalyzer.Orchestrator().ModelInfos()
 		loadedModels = make(map[string]classifier.ModelInfo, len(modelInfoSlice))
 		for i := range modelInfoSlice {
 			loadedModels[modelInfoSlice[i].ID] = modelInfoSlice[i]
 		}
-		primaryModelID = p.bnAnalyzer.BirdNET().PrimaryModelID()
+		primaryModelID = p.bnAnalyzer.Orchestrator().PrimaryModelID()
 	}
 	bufMgr := p.engine.BufferManager()
 
@@ -1502,13 +1502,13 @@ func (p *AudioPipelineService) probeStreamSampleRate(url, name string) streamPro
 // monitorConfig gets the correct spec (sample rate + clip length).
 func (p *AudioPipelineService) buildMonitorConfigs(sourceModelMap map[string][]string, sourceIDs []string) map[string][]monitorConfig {
 	// Build lookup of loaded models by registry ID.
-	modelInfoSlice := p.bnAnalyzer.BirdNET().ModelInfos()
+	modelInfoSlice := p.bnAnalyzer.Orchestrator().ModelInfos()
 	loadedModels := make(map[string]classifier.ModelInfo, len(modelInfoSlice))
 	for i := range modelInfoSlice {
 		loadedModels[modelInfoSlice[i].ID] = modelInfoSlice[i]
 	}
 
-	primaryInfo := p.bnAnalyzer.BirdNET().PrimaryModelInfo()
+	primaryInfo := p.bnAnalyzer.Orchestrator().PrimaryModelInfo()
 	result := make(map[string][]monitorConfig, len(sourceIDs))
 
 	for _, sid := range sourceIDs {

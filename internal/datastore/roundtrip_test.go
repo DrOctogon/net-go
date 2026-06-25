@@ -23,8 +23,8 @@ import (
 func createTestSettings(t *testing.T) *conf.Settings {
 	t.Helper()
 	settings := &conf.Settings{}
-	settings.BirdNET.Latitude = 60.1699
-	settings.BirdNET.Longitude = 24.9384
+	settings.VoiceWatch.Latitude = 60.1699
+	settings.VoiceWatch.Longitude = 24.9384
 	return settings
 }
 

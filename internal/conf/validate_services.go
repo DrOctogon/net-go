@@ -15,41 +15,41 @@ import (
 	"github.com/tphakala/voicewatch/internal/templatefuncs"
 )
 
-// ValidateBirdNETSettings performs BirdNET validation without side effects.
+// ValidateVoiceWatchSettings performs VoiceWatch validation without side effects.
 // Returns normalized settings and any errors/warnings.
 // This pure function enables testing without log output or settings mutation.
 //
-// The private validateBirdNETSettings() calls this and handles side effects.
-func ValidateBirdNETSettings(cfg *BirdNETConfig) ValidationResult {
+// The private validateVoiceWatchSettings() calls this and handles side effects.
+func ValidateVoiceWatchSettings(cfg *VoiceWatchConfig) ValidationResult {
 	if cfg == nil {
-		return ValidationResult{Valid: false, Errors: []string{"BirdNET config is nil"}}
+		return ValidationResult{Valid: false, Errors: []string{"VoiceWatch config is nil"}}
 	}
 	result := ValidationResult{Valid: true, Warnings: []string{}}
 	normalized := *cfg
 
-	checkRange(&result, cfg.Sensitivity, 0, 1.5, "BirdNET sensitivity must be between 0 and 1.5")
-	checkRange(&result, cfg.Threshold, 0, 1, "BirdNET threshold must be between 0 and 1")
-	checkRange(&result, cfg.Overlap, 0, 2.99, "BirdNET overlap value must be between 0 and 2.99 seconds")
-	checkRange(&result, cfg.Longitude, -180, 180, "BirdNET longitude must be between -180 and 180")
-	checkRange(&result, cfg.Latitude, -90, 90, "BirdNET latitude must be between -90 and 90")
+	checkRange(&result, cfg.Sensitivity, 0, 1.5, "VoiceWatch sensitivity must be between 0 and 1.5")
+	checkRange(&result, cfg.Threshold, 0, 1, "VoiceWatch threshold must be between 0 and 1")
+	checkRange(&result, cfg.Overlap, 0, 2.99, "VoiceWatch overlap value must be between 0 and 2.99 seconds")
+	checkRange(&result, cfg.Longitude, -180, 180, "VoiceWatch longitude must be between -180 and 180")
+	checkRange(&result, cfg.Latitude, -90, 90, "VoiceWatch latitude must be between -90 and 90")
 
 	if cfg.Threads < 0 {
 		result.Valid = false
-		result.Errors = append(result.Errors, "BirdNET threads must be at least 0")
+		result.Errors = append(result.Errors, "VoiceWatch threads must be at least 0")
 	}
 
 	// Backend must be one of the known preference strings when non-empty.
 	// Unknown values fall back safely to auto, so this is a warning, not an error.
 	if cfg.Backend != "" && cfg.Backend != BackendPrefAuto && cfg.Backend != BackendPrefONNX && cfg.Backend != BackendPrefOpenVINO {
 		result.Warnings = append(result.Warnings,
-			fmt.Sprintf("BirdNET backend '%s' is not recognised; must be 'auto', 'onnx', or 'openvino' - will use 'auto'", cfg.Backend))
+			fmt.Sprintf("VoiceWatch backend '%s' is not recognised; must be 'auto', 'onnx', or 'openvino' - will use 'auto'", cfg.Backend))
 	}
 
 	// OpenVINODevice must be one of the known device strings when non-empty.
 	// Unknown values fall back safely to auto, so this is a warning, not an error.
 	if cfg.OpenVINODevice != "" && cfg.OpenVINODevice != OVDeviceAuto && cfg.OpenVINODevice != OVDeviceCPU && cfg.OpenVINODevice != OVDeviceGPU {
 		result.Warnings = append(result.Warnings,
-			fmt.Sprintf("BirdNET openvinodevice '%s' is not recognised; must be 'auto', 'cpu', or 'gpu' - will use 'auto'", cfg.OpenVINODevice))
+			fmt.Sprintf("VoiceWatch openvinodevice '%s' is not recognised; must be 'auto', 'cpu', or 'gpu' - will use 'auto'", cfg.OpenVINODevice))
 	}
 
 	// Locale validation and normalization (pure transformation)
@@ -57,7 +57,7 @@ func ValidateBirdNETSettings(cfg *BirdNETConfig) ValidationResult {
 		normalizedLocale, err := NormalizeLocale(cfg.Locale)
 		if err != nil {
 			// Locale normalization fell back to default - this is a warning, not an error
-			message := fmt.Sprintf("BirdNET locale '%s' is not supported, will use fallback '%s'", cfg.Locale, normalizedLocale)
+			message := fmt.Sprintf("VoiceWatch locale '%s' is not supported, will use fallback '%s'", cfg.Locale, normalizedLocale)
 			result.Warnings = append(result.Warnings, message)
 		}
 		// Update the normalized locale
@@ -392,17 +392,17 @@ func ValidateTelemetrySettings(settings *TelemetrySettings) ValidationResult {
 	return result
 }
 
-// validateBirdNETSettings validates the BirdNET-specific settings.
-// This function uses ValidateBirdNETSettings internally and handles side effects
+// validateVoiceWatchSettings validates the VoiceWatch-specific settings.
+// This function uses ValidateVoiceWatchSettings internally and handles side effects
 // (logging, mutation) to maintain backward compatibility.
-func validateBirdNETSettings(birdnetSettings *BirdNETConfig) error {
-	result := ValidateBirdNETSettings(birdnetSettings)
+func validateVoiceWatchSettings(voicewatchSettings *VoiceWatchConfig) error {
+	result := ValidateVoiceWatchSettings(voicewatchSettings)
 
-	normalized, err := extractNormalized[BirdNETConfig](result, "ValidateBirdNETSettings")
+	normalized, err := extractNormalized[VoiceWatchConfig](result, "ValidateVoiceWatchSettings")
 	if err != nil {
 		return err
 	}
-	*birdnetSettings = *normalized
+	*voicewatchSettings = *normalized
 
 	// Handle warnings (side effects: logging)
 	// Locale fallback warnings are debug-level since the fallback works correctly
@@ -413,9 +413,9 @@ func validateBirdNETSettings(birdnetSettings *BirdNETConfig) error {
 
 	// Return errors if validation failed
 	if !result.Valid {
-		return errors.Newf("birdnet settings errors: %v", result.Errors).
+		return errors.Newf("voicewatch settings errors: %v", result.Errors).
 			Category(errors.CategoryValidation).
-			Context("validation_type", "birdnet-settings-collection").
+			Context("validation_type", "voicewatch-settings-collection").
 			Build()
 	}
 
