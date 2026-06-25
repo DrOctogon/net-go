@@ -1,4 +1,4 @@
-// Package metrics provides custom Prometheus metrics for the BirdNET-Go application.
+// Package metrics provides custom Prometheus metrics for the VoiceWatch application.
 package metrics
 
 // Recorder defines a minimal interface for recording metrics.

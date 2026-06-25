@@ -1,4 +1,4 @@
-// Package api provides the HTTP API for BirdNET-Go.
+// Package api provides the HTTP API for VoiceWatch.
 package api
 
 import (

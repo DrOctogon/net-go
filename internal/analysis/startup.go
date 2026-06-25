@@ -83,7 +83,7 @@ func PrintSystemDetails(settings *conf.Settings) {
 			logger.String("hardware", hwModel))
 	}
 
-	// Log the start of BirdNET-Go Analyzer in realtime mode and its configurations.
+	// Log the start of VoiceWatch Analyzer in realtime mode and its configurations.
 	log.Info("Starting analyzer in realtime mode",
 		logger.Float64("threshold", settings.VoiceWatch.Threshold),
 		logger.Float64("overlap", settings.VoiceWatch.Overlap),

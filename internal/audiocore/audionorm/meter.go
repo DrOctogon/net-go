@@ -166,7 +166,7 @@ func (m *Meter) AddFloat64(interleaved []float64) {
 	}
 }
 
-// AddFloat32 feeds interleaved float32 samples, the native BirdNET-Go format.
+// AddFloat32 feeds interleaved float32 samples, the native VoiceWatch format.
 func (m *Meter) AddFloat32(interleaved []float32) {
 	frames := len(interleaved) / m.channels
 	if frames == 0 {

@@ -1,4 +1,4 @@
-// Package audiocore provides the core audio infrastructure for BirdNET-Go.
+// Package audiocore provides the core audio infrastructure for VoiceWatch.
 // capture.go - per-device malgo capture initialisation and callback.
 package audiocore
 

@@ -154,7 +154,7 @@ type DiscoveryOrigin struct {
 type DiscoveryConfig struct {
 	DiscoveryPrefix string // Home Assistant discovery topic prefix (default: homeassistant)
 	BaseTopic       string // Base MQTT topic for state messages (e.g., birdnet)
-	DeviceName      string // Base name for devices (e.g., BirdNET-Go)
+	DeviceName      string // Base name for devices (e.g., VoiceWatch)
 	NodeID          string // Node identifier (typically main.name from config)
 	Version         string // Software version
 }

@@ -693,7 +693,7 @@ func (m *MyAudioMetrics) RecordBufferWraparound(bufferType, source string) {
 	m.bufferWraparoundsTotal.WithLabelValues(bufferType, source).Inc()
 }
 
-// BirdNET processing buffer overrun recording methods
+// VoiceWatch processing buffer overrun recording methods
 
 // RecordVoiceWatchProcessingOverrun records a VoiceWatch processing buffer overrun event.
 // elapsed is the actual processing duration in seconds.
@@ -819,7 +819,7 @@ func (m *MyAudioMetrics) RecordAudioConversionError(conversionType string, bitDe
 	m.audioConversionErrors.WithLabelValues(conversionType, strconv.Itoa(bitDepth), errorType).Inc()
 }
 
-// RecordAudioInferenceDuration records the duration of BirdNET inference
+// RecordAudioInferenceDuration records the duration of VoiceWatch inference
 func (m *MyAudioMetrics) RecordAudioInferenceDuration(source string, duration float64) {
 	m.audioInferenceDuration.WithLabelValues(source).Observe(duration)
 }

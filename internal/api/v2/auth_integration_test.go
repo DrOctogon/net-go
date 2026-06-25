@@ -54,7 +54,7 @@ func setupAuthIntegrationTest(t *testing.T) (*echo.Echo, *Controller, *conf.Sett
 			BasicAuth: conf.BasicAuth{
 				Enabled:        true,
 				Password:       "testpassword123",
-				ClientID:       "birdnet-client",
+				ClientID:       "voicewatch-client",
 				AuthCodeExp:    5 * time.Minute,
 				AccessTokenExp: 24 * time.Hour,
 			},
@@ -107,7 +107,7 @@ func TestV2AuthFlow_CompleteLogin(t *testing.T) {
 	t.Run("complete login flow with V2 callback", func(t *testing.T) {
 		// Step 1: POST /api/v2/auth/login with valid credentials
 		loginPayload := `{
-			"username": "birdnet-client",
+			"username": "voicewatch-client",
 			"password": "testpassword123",
 			"redirectUrl": "/ui/dashboard"
 		}`
@@ -177,7 +177,7 @@ func TestV2AuthFlow_FilterQueryRedirectSurvives(t *testing.T) {
 	const wantFinalRedirect = "/ui/detections?queryType=species&q=a..b//c"
 
 	loginPayload := `{
-		"username": "birdnet-client",
+		"username": "voicewatch-client",
 		"password": "testpassword123",
 		"redirectUrl": "` + filteredRedirect + `",
 		"basePath": "/ui/"
@@ -226,7 +226,7 @@ func TestV2AuthFlow_ProxyPrefixedBasePathRedirect(t *testing.T) {
 	const wantFinalRedirect = "/api/hassio_ingress/aBcD-_1234567890/ui/detections?queryType=species"
 
 	loginPayload := `{
-		"username": "birdnet-client",
+		"username": "voicewatch-client",
 		"password": "testpassword123",
 		"redirectUrl": "/detections?queryType=species",
 		"basePath": "` + basePath + `"
@@ -255,7 +255,7 @@ func TestV2AuthFlow_InvalidCredentials(t *testing.T) {
 
 	t.Run("login fails with wrong password", func(t *testing.T) {
 		loginPayload := `{
-			"username": "birdnet-client",
+			"username": "voicewatch-client",
 			"password": "wrongpassword"
 		}`
 
@@ -490,7 +490,7 @@ func TestV2AuthFlow_MissingCredentials(t *testing.T) {
 		},
 		{
 			name:    "missing password",
-			payload: `{"username": "birdnet-client"}`,
+			payload: `{"username": "voicewatch-client"}`,
 		},
 		{
 			name:    "empty credentials",
@@ -555,7 +555,7 @@ func TestV2AuthFlow_RedirectURLInResponse(t *testing.T) {
 
 	t.Run("login response contains V2 callback URL", func(t *testing.T) {
 		loginPayload := `{
-			"username": "birdnet-client",
+			"username": "voicewatch-client",
 			"password": "testpassword123"
 		}`
 

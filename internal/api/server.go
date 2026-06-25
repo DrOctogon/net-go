@@ -36,7 +36,7 @@ import (
 	"golang.org/x/crypto/acme/autocert"
 )
 
-// Server is the main HTTP server for BirdNET-Go.
+// Server is the main HTTP server for VoiceWatch.
 // It manages the Echo framework instance, middleware, and all HTTP routes.
 type Server struct {
 	// Core components

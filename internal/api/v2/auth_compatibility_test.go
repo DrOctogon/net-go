@@ -15,7 +15,7 @@ import (
 )
 
 // Test constant for frontend hardcoded username - must match backend default
-const testFrontendUsername = "birdnet-client"
+const testFrontendUsername = "voicewatch-client"
 
 // TestAuthCompatibility_V1VsV2Differences documents and tests the authentication
 // differences between V1 (/login) and V2 (/api/v2/auth/login) endpoints.
@@ -26,7 +26,7 @@ const testFrontendUsername = "birdnet-client"
 //
 // This causes issues when:
 // 1. BasicAuth.ClientID is empty or not set
-// 2. BasicAuth.ClientID differs from the hardcoded "birdnet-client" in the frontend
+// 2. BasicAuth.ClientID differs from the hardcoded "voicewatch-client" in the frontend
 func TestAuthCompatibility_V1VsV2Differences(t *testing.T) {
 	testCases := []struct {
 		name            string
@@ -40,9 +40,9 @@ func TestAuthCompatibility_V1VsV2Differences(t *testing.T) {
 	}{
 		{
 			name:            "Both succeed - correct clientID and password",
-			storedClientID:  "birdnet-client",
+			storedClientID:  "voicewatch-client",
 			storedPassword:  "secret123",
-			inputUsername:   "birdnet-client",
+			inputUsername:   "voicewatch-client",
 			inputPassword:   "secret123",
 			v1ShouldSucceed: true,
 			v2ShouldSucceed: true,
@@ -52,7 +52,7 @@ func TestAuthCompatibility_V1VsV2Differences(t *testing.T) {
 			name:            "FIXED: Both succeed - empty clientID (V1 compatible mode)",
 			storedClientID:  "", // Empty ClientID - possible for old configs
 			storedPassword:  "secret123",
-			inputUsername:   "birdnet-client", // Frontend hardcodes this
+			inputUsername:   "voicewatch-client", // Frontend hardcodes this
 			inputPassword:   "secret123",
 			v1ShouldSucceed: true, // V1 doesn't check username
 			v2ShouldSucceed: true, // V2 now skips username check when ClientID is empty
@@ -62,17 +62,17 @@ func TestAuthCompatibility_V1VsV2Differences(t *testing.T) {
 			name:            "V1 succeeds, V2 fails - different clientID (expected behavior)",
 			storedClientID:  "admin", // Different ClientID explicitly configured
 			storedPassword:  "secret123",
-			inputUsername:   "birdnet-client", // Frontend hardcodes this
+			inputUsername:   "voicewatch-client", // Frontend hardcodes this
 			inputPassword:   "secret123",
 			v1ShouldSucceed: true,  // V1 doesn't check username
-			v2ShouldSucceed: false, // V2 correctly fails because "admin" != "birdnet-client"
+			v2ShouldSucceed: false, // V2 correctly fails because "admin" != "voicewatch-client"
 			description:     "When ClientID is explicitly set, V2 requires it to match",
 		},
 		{
 			name:            "Both fail - wrong password",
-			storedClientID:  "birdnet-client",
+			storedClientID:  "voicewatch-client",
 			storedPassword:  "secret123",
-			inputUsername:   "birdnet-client",
+			inputUsername:   "voicewatch-client",
 			inputPassword:   "wrongpassword",
 			v1ShouldSucceed: false,
 			v2ShouldSucceed: false,
@@ -80,7 +80,7 @@ func TestAuthCompatibility_V1VsV2Differences(t *testing.T) {
 		},
 		{
 			name:            "V1 succeeds, V2 fails - wrong username with correct password",
-			storedClientID:  "birdnet-client",
+			storedClientID:  "voicewatch-client",
 			storedPassword:  "secret123",
 			inputUsername:   "wrong-user",
 			inputPassword:   "secret123",

@@ -1,4 +1,4 @@
-// provider_wunderground.go: WeatherUnderground integration for BirdNET-Go
+// provider_wunderground.go: WeatherUnderground integration for VoiceWatch
 package weather
 
 import (

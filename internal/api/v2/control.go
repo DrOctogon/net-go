@@ -184,7 +184,7 @@ func (c *Controller) RestartAnalysis(ctx echo.Context) error {
 }
 
 // ReloadModel handles POST /api/v2/control/reload
-// Reloads the BirdNET model
+// Reloads the VoiceWatch model
 func (c *Controller) ReloadModel(ctx echo.Context) error {
 	return c.handleControlSignal(ctx, SignalReloadModel, ActionReloadModel,
 		"Received request to reload model", "Model reload signal sent")

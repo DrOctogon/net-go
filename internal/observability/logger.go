@@ -1,4 +1,4 @@
-// Package observability provides Prometheus metrics functionality for monitoring the BirdNET-Go application.
+// Package observability provides Prometheus metrics functionality for monitoring the VoiceWatch application.
 package observability
 
 import "github.com/tphakala/voicewatch/internal/logger"

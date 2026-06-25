@@ -1,4 +1,4 @@
-// Package metrics provides custom Prometheus metrics for the BirdNET-Go application.
+// Package metrics provides custom Prometheus metrics for the VoiceWatch application.
 package metrics
 
 import (
@@ -18,7 +18,7 @@ const (
 	labelSource                    = "source"
 )
 
-// VoiceWatchMetrics contains all Prometheus metrics related to BirdNET operations.
+// VoiceWatchMetrics contains all Prometheus metrics related to VoiceWatch operations.
 type VoiceWatchMetrics struct {
 	DetectionCounter *prometheus.CounterVec
 	ProcessTimeGauge prometheus.Gauge
@@ -190,12 +190,12 @@ func (m *VoiceWatchMetrics) initMetrics() error {
 }
 
 // IncrementDetectionCounter increments the detection counter for a given species.
-// It should be called each time BirdNET detects a species.
+// It should be called each time VoiceWatch detects a vocalization.
 func (m *VoiceWatchMetrics) IncrementDetectionCounter(speciesName string) {
 	m.DetectionCounter.WithLabelValues(speciesName).Inc()
 }
 
-// SetProcessTime sets the most recent processing time for a BirdNET detection request.
+// SetProcessTime sets the most recent processing time for a VoiceWatch detection request.
 func (m *VoiceWatchMetrics) SetProcessTime(milliseconds float64) {
 	m.ProcessTimeGauge.Set(milliseconds)
 }
@@ -384,7 +384,7 @@ func (m *VoiceWatchMetrics) Collect(ch chan<- prometheus.Metric) {
 }
 
 // RecordOperation implements the Recorder interface.
-// It records operations related to BirdNET processing.
+// It records operations related to VoiceWatch processing.
 // Supported operations: "prediction", "model_load", "detection"
 // Status values: "success", "error", or species name for "detection"
 func (m *VoiceWatchMetrics) RecordOperation(operation, status string) {
@@ -408,7 +408,7 @@ func (m *VoiceWatchMetrics) RecordOperation(operation, status string) {
 }
 
 // RecordDuration implements the Recorder interface.
-// It records duration metrics for various BirdNET operations.
+// It records duration metrics for various VoiceWatch operations.
 // Supported operations: "prediction", "chunk_process", "model_invoke", "range_filter", "process_time_ms"
 func (m *VoiceWatchMetrics) RecordDuration(operation string, seconds float64) {
 	switch operation {
@@ -425,7 +425,7 @@ func (m *VoiceWatchMetrics) RecordDuration(operation string, seconds float64) {
 }
 
 // RecordError implements the Recorder interface.
-// It records error metrics for BirdNET operations.
+// It records error metrics for VoiceWatch operations.
 // Supported operations: "prediction", "model_load"
 // Error types: "validation", "model_error", "tensor_error", "invoke_error", etc.
 func (m *VoiceWatchMetrics) RecordError(operation, errorType string) {

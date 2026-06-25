@@ -1,4 +1,4 @@
-// Package audiocore provides the core audio infrastructure for BirdNET-Go.
+// Package audiocore provides the core audio infrastructure for VoiceWatch.
 // device.go — DeviceManager for local audio capture device lifecycle management.
 package audiocore
 

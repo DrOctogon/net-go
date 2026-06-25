@@ -1,4 +1,4 @@
-// env.go - Environment variable configuration and validation for BirdNET-Go
+// env.go - Environment variable configuration and validation for VoiceWatch
 package conf
 
 import (

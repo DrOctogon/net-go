@@ -216,9 +216,9 @@ func (p *AudioPipelineService) Start(_ context.Context) error {
 	p.restartChan = make(chan struct{}, 10)
 	p.done = make(chan struct{})
 
-	// NOTE: Previously called birdnet.ResizeQueue(5) here, but this caused a race
+	// NOTE: Previously called the classifier queue ResizeQueue(5) here, but this caused a race
 	// condition: the detection processor goroutine (started by APIServerService)
-	// ranges over birdnet.ResultsQueue, and ResizeQueue closes the old channel
+	// ranges over the classifier ResultsQueue, and ResizeQueue closes the old channel
 	// and creates a new one. The processor's range loop exits on the closed
 	// channel, killing the detection pipeline. The default queue size of 100 is
 	// fine; shrinking to 5 added unnecessary backpressure with no benefit.

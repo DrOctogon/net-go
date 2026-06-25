@@ -266,7 +266,7 @@ func validateSoundLevelData(data *soundlevel.SoundLevelData) error {
 // CompactSoundLevelData is a space-efficient version for MQTT publishing
 type CompactSoundLevelData struct {
 	TS    string                     `json:"ts"`   // ISO8601 timestamp
-	Node  string                     `json:"node"` // Node name (BirdNET-Go instance)
+	Node  string                     `json:"node"` // Node name (VoiceWatch instance)
 	Src   string                     `json:"src"`  // Source
 	Name  string                     `json:"nm"`   // Name
 	Dur   int                        `json:"dur"`  // Duration in seconds

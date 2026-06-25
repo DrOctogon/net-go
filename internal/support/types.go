@@ -7,7 +7,7 @@ import (
 )
 
 // SupportDump represents a collection of support data including logs, configuration,
-// and system information used for troubleshooting and debugging BirdNET-Go issues.
+// and system information used for troubleshooting and debugging VoiceWatch issues.
 // The data is privacy-scrubbed before collection to remove sensitive information.
 type SupportDump struct {
 	ID             string                `json:"id"`
@@ -33,7 +33,7 @@ type LogEntry struct {
 	Source    string    `json:"source"`
 }
 
-// SystemInfo contains system information about the host environment where BirdNET-Go
+// SystemInfo contains system information about the host environment where VoiceWatch
 // is running, including OS details, hardware specifications, and runtime information.
 // This helps developers understand the deployment context when debugging issues.
 type SystemInfo struct {
@@ -56,7 +56,7 @@ type DiskInfo struct {
 	UsagePerc  float64 `json:"usage_percent"`
 }
 
-// DockerInfo contains Docker-specific information when BirdNET-Go is running in a container.
+// DockerInfo contains Docker-specific information when VoiceWatch is running in a container.
 // This includes the container ID and image details for container-specific debugging.
 type DockerInfo struct {
 	Version      string `json:"version"`

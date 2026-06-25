@@ -92,7 +92,7 @@
   const logger = loggers.settings;
 
   const MODEL_LOGOS: Record<string, string> = {
-    birdnet: logoBirdnet,
+    human_voice: logoBirdnet,
     perch: logoGoogle,
     bsg: logoJyu,
   };

@@ -1,4 +1,4 @@
-// Package middleware provides HTTP middleware for the BirdNET-Go API server.
+// Package middleware provides HTTP middleware for the VoiceWatch API server.
 package middleware
 
 import (

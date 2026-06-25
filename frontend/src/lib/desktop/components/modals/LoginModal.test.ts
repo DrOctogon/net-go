@@ -535,7 +535,7 @@ describe('LoginModal', () => {
         expect(postSpy).toHaveBeenCalledWith(
           '/api/v2/auth/login',
           expect.objectContaining({
-            username: 'birdnet-client',
+            username: 'voicewatch-client',
             password: 'valid-password',
             redirectUrl: '/dashboard', // Should be relative path
             basePath: '/ui/', // Should be base path
@@ -788,7 +788,7 @@ describe('LoginModal', () => {
         expect(postSpy).toHaveBeenCalledWith(
           '/api/v2/auth/login',
           expect.objectContaining({
-            username: 'birdnet-client',
+            username: 'voicewatch-client',
             password: 'valid-password',
           })
         );
@@ -851,7 +851,7 @@ describe('LoginModal', () => {
         expect(postSpy).toHaveBeenCalledWith(
           '/api/v2/auth/login',
           expect.objectContaining({
-            username: 'birdnet-client',
+            username: 'voicewatch-client',
             password: 'valid-password',
             redirectUrl: '/analytics/species', // Relative path prevents duplication
             basePath: '/ui/', // Base path sent separately

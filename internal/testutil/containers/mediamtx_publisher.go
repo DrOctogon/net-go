@@ -30,7 +30,7 @@ func PublishWAVToMediaMTX(ctx context.Context, wavPath, rtspURL string) (*Stream
 		"-i", wavPath, // Input file
 		"-c:a", "libopus", // Opus codec (RTSP-compatible, low CPU)
 		"-b:a", "64k", // Bitrate
-		"-ar", "48000", // Sample rate matching BirdNET-Go
+		"-ar", "48000", // Sample rate matching VoiceWatch
 		"-ac", "1", // Mono
 		"-f", "rtsp", // Output format
 		"-rtsp_transport", "tcp", // Use TCP for Docker compatibility

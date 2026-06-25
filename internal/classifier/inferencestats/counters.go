@@ -1,4 +1,4 @@
-// Package inferencestats tracks BirdNET model inference timing on the hot
+// Package inferencestats tracks model inference timing on the hot
 // analysis path. Count, total, and max are lock-free atomics; a small
 // low-contention mutex additionally guards a per-model ring buffer of recent
 // durations used to compute a rolling-window p95 latency for health checks.
@@ -27,7 +27,7 @@ const latencyWindowSize = 1024
 // catching a sustained inability to keep up with real time.
 const healthLatencyPercentile = 0.95
 
-// Counters tracks BirdNET inference timing using lock-free atomic operations.
+// Counters tracks inference timing using lock-free atomic operations.
 // Safe for concurrent use from the hot analysis path.
 type Counters struct {
 	InvokeCount   atomic.Int64 // total invocations since startup

@@ -1,4 +1,4 @@
-// Package datastore provides database operations for BirdNET-Go.
+// Package datastore provides database operations for VoiceWatch.
 package datastore
 
 import (

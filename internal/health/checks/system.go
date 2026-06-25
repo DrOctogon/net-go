@@ -1,4 +1,4 @@
-// Package checks provides concrete health check implementations for BirdNET-Go.
+// Package checks provides concrete health check implementations for VoiceWatch.
 package checks
 
 import (

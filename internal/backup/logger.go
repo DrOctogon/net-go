@@ -1,4 +1,4 @@
-// Package backup provides backup functionality for BirdNET-Go.
+// Package backup provides backup functionality for VoiceWatch.
 package backup
 
 import "github.com/tphakala/voicewatch/internal/logger"

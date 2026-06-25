@@ -166,7 +166,7 @@ type streamTestValidationError struct {
 
 // validateStreamTestURL checks that the URL uses an allowed scheme and does not
 // target cloud metadata or loopback endpoints. Private RFC1918 IPs are
-// allowed since BirdNET-Go runs on home networks.
+// allowed since VoiceWatch runs on home networks.
 func validateStreamTestURL(rawURL string) *streamTestValidationError {
 	if rawURL == "" {
 		return &streamTestValidationError{

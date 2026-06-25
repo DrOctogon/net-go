@@ -1,5 +1,5 @@
 // Package audiotemp centralizes the temp-file naming and atomic-finalize
-// contract shared by BirdNET-Go's audio clip writers: the FFmpeg exporter, the
+// contract shared by VoiceWatch's audio clip writers: the FFmpeg exporter, the
 // native FLAC encoder, and the WAV writer. Each writes a clip to a process-
 // unique temp file and atomically renames it into place, so two simultaneous
 // detections that resolve to the same clip path (see GitHub #3323) dedup safely

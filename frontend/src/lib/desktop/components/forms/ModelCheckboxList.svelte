@@ -39,7 +39,7 @@
   }: Props = $props();
 
   let availableBirdnet = $derived(
-    models.filter(m => m.id.startsWith('birdnet') && m.category === 'bird')
+    models.filter(m => m.id.startsWith('human_voice') && m.category === 'bird')
   );
   let availablePerch = $derived(
     models.filter(m => m.id.startsWith('perch') && m.category === 'bird')

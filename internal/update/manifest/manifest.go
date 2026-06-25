@@ -1,4 +1,4 @@
-// Package manifest defines the schema for the BirdNET-Go release manifest: a
+// Package manifest defines the schema for the VoiceWatch release manifest: a
 // machine-readable description of the most recent release on each distribution
 // channel (stable, nightly, beta).
 //

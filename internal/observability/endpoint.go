@@ -1,4 +1,4 @@
-// Package observability provides Prometheus metrics functionality for monitoring the BirdNET-Go application.
+// Package observability provides Prometheus metrics functionality for monitoring the VoiceWatch application.
 // Sentry-related monitoring and error telemetry are handled in the telemetry package.
 package observability
 

@@ -1,4 +1,4 @@
-// Package tls provides self-signed certificate generation for BirdNET-Go's HTTPS server.
+// Package tls provides self-signed certificate generation for VoiceWatch's HTTPS server.
 package tls
 
 import (

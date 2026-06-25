@@ -50,7 +50,7 @@ func NewONNXClassifier(modelPath string, opts ONNXClassifierOptions) (Classifier
 
 	classifierOpts := []ort.ClassifierOption{
 		ort.WithLabels(opts.Labels),
-		ort.WithTopK(0),          // We handle topK in BirdNET-Go's post-processing
+		ort.WithTopK(0),          // We handle topK in VoiceWatch's post-processing
 		ort.WithMinConfidence(0), // No filtering, return all raw scores
 	}
 	if opts.SkipLabelValidation {

@@ -1,4 +1,4 @@
-// Package audiocore provides the core audio infrastructure for BirdNET-Go.
+// Package audiocore provides the core audio infrastructure for VoiceWatch.
 // capabilities.go - device sample rate capability probing for high-frequency capture.
 package audiocore
 

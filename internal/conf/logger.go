@@ -1,4 +1,4 @@
-// Package conf provides configuration management for BirdNET-Go.
+// Package conf provides configuration management for VoiceWatch.
 package conf
 
 import "github.com/tphakala/voicewatch/internal/logger"

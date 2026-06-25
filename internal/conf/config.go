@@ -1,4 +1,4 @@
-// config.go defines the configuration types for the BirdNET-Go application.
+// config.go defines the configuration types for the VoiceWatch application.
 package conf
 
 import (
@@ -683,7 +683,7 @@ type MQTTTLSSettings struct {
 type HomeAssistantSettings struct {
 	Enabled         bool   `yaml:"enabled" mapstructure:"enabled" json:"enabled"`                           // true to enable HA auto-discovery
 	DiscoveryPrefix string `yaml:"discovery_prefix" mapstructure:"discovery_prefix" json:"discoveryPrefix"` // HA discovery topic prefix (default: homeassistant)
-	DeviceName      string `yaml:"device_name" mapstructure:"device_name" json:"deviceName"`                // base name for devices (default: BirdNET-Go)
+	DeviceName      string `yaml:"device_name" mapstructure:"device_name" json:"deviceName"`                // base name for devices (default: VoiceWatch)
 }
 
 // TelemetrySettings contains settings for telemetry.
@@ -1312,7 +1312,7 @@ type AllowSubnetBypass struct {
 
 // TrustedProxyCloudflarePreset is the reserved Security.TrustedProxies entry
 // that expands to Cloudflare's published edge IP ranges, sparing operators from
-// pasting the full CIDR list when fronting BirdNET-Go with Cloudflare.
+// pasting the full CIDR list when fronting VoiceWatch with Cloudflare.
 const TrustedProxyCloudflarePreset = "cloudflare"
 
 // PublicAccess defines which features are accessible without authentication.
@@ -1606,7 +1606,7 @@ type BackupConfig struct {
 	} `yaml:"operationtimeouts" json:"operationTimeouts"`
 }
 
-// Settings contains all configuration options for the BirdNET-Go application.
+// Settings contains all configuration options for the VoiceWatch application.
 type Settings struct {
 	Debug bool `yaml:"debug" json:"debug"` // true to enable debug mode
 
@@ -1620,7 +1620,7 @@ type Settings struct {
 	Logging logger.LoggingConfig `yaml:"logging" json:"logging" mapstructure:"logging"` // centralized logging configuration
 
 	Main struct {
-		Name      string `yaml:"name" json:"name"`           // name of BirdNET-Go node, can be used to identify source of notes
+		Name      string `yaml:"name" json:"name"`           // name of VoiceWatch node, can be used to identify source of notes
 		TimeAs24h bool   `yaml:"timeas24h" json:"timeAs24h"` // true 24-hour time format, false 12-hour time format
 	} `yaml:"main" json:"main"`
 
