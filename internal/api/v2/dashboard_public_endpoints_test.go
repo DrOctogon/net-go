@@ -108,7 +108,6 @@ func TestNotifications_MutationsRequireAuth(t *testing.T) {
 		{http.MethodPut, "/api/v2/notifications/some-id/read"},
 		{http.MethodPut, "/api/v2/notifications/some-id/acknowledge"},
 		{http.MethodDelete, "/api/v2/notifications/some-id"},
-		{http.MethodPost, "/api/v2/notifications/test/new-species"},
 		// /:id read and /check-ntfy-server stay auth-protected
 		{http.MethodGet, "/api/v2/notifications/some-id"},
 		{http.MethodGet, "/api/v2/notifications/check-ntfy-server?host=example.com"},

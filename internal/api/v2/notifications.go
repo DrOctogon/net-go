@@ -45,14 +45,6 @@ const (
 	rateLimitBurst             = 15 // Rate limit burst allowance (increased to handle quick navigation)
 )
 
-// Test notification constants
-const (
-	testNotificationConfidence   = 0.99     // Test confidence value for new species notification
-	testNotificationLatitude     = 42.3601  // Test latitude (Boston, MA) for new species notification
-	testNotificationLongitude    = -71.0589 // Test longitude (Boston, MA) for new species notification
-	newSpeciesNotificationExpiry = 24       // Hours until new species notification expires
-)
-
 // renderTemplateWithDefault renders a template, returning the default value if template is empty
 // or rendering fails. Logs errors if logError is provided.
 func renderTemplateWithDefault(name, template, defaultVal string, data *notification.TemplateData, logError func(string, ...any)) string {
@@ -213,7 +205,6 @@ func (c *Controller) SetupNotificationRoutes() {
 	notifServiceGroup.PUT("/:id/read", c.MarkNotificationRead)
 	notifServiceGroup.PUT("/:id/acknowledge", c.MarkNotificationAcknowledged)
 	notifServiceGroup.DELETE("/:id", c.DeleteNotification)
-	notifServiceGroup.POST("/test/new-species", c.CreateTestNewSpeciesNotification)
 
 	notificationsGroup.GET("/check-ntfy-server", c.CheckNtfyServer)
 }
@@ -914,85 +905,3 @@ func (c *Controller) GetUnreadCount(ctx echo.Context) error {
 	})
 }
 
-// CreateTestNewSpeciesNotification creates a test new species detection notification
-func (c *Controller) CreateTestNewSpeciesNotification(ctx echo.Context) error {
-	settings := c.currentSettings()
-	if settings == nil {
-		return c.HandleError(ctx, nil, "Settings not initialized", http.StatusServiceUnavailable)
-	}
-
-	service := c.getNotificationService()
-
-	// Build base URL for links
-	baseURL := settings.Security.GetBaseURL(settings.WebServer.Port)
-
-	// Format detection time according to user's time format preference
-	now := time.Now()
-	var detectionTime string
-	if settings.Main.TimeAs24h {
-		detectionTime = now.Format(time.TimeOnly)
-	} else {
-		detectionTime = now.Format("3:04:05 PM")
-	}
-
-	// Create test template data with realistic values
-	testTemplateData := &notification.TemplateData{
-		CommonName:         "Test Bird Species",
-		ScientificName:     "Testus birdicus",
-		Confidence:         testNotificationConfidence,
-		ConfidencePercent:  "99",
-		DetectionTime:      detectionTime,
-		DetectionDate:      now.Format(time.DateOnly),
-		Latitude:           testNotificationLatitude,
-		Longitude:          testNotificationLongitude,
-		Location:           "Test Location (Sample Data)",
-		DetectionID:        "test",
-		DetectionPath:      "/ui/detections/test",
-		DetectionURL:       baseURL + "/ui/detections/test",
-		ImageURL:           "https://static.avicommons.org/houfin-DzFZcHoKwyx9JOmg-320.jpg",
-		DaysSinceFirstSeen: 0,
-	}
-
-	// Render notification using templates with defaults
-	title := renderTemplateWithDefault("title",
-		settings.Notification.Templates.NewSpecies.Title,
-		"New Species: Test Bird Species",
-		testTemplateData, nil)
-
-	message := renderTemplateWithDefault("message",
-		settings.Notification.Templates.NewSpecies.Message,
-		"First detection of Test Bird Species (Testus birdicus) at Fake Test Location",
-		testTemplateData, nil)
-
-	testNotification := notification.NewNotification(notification.TypeDetection, notification.PriorityHigh, title, message).
-		WithComponent("detection").
-		WithMetadata("species", testTemplateData.CommonName).
-		WithMetadata("scientific_name", testTemplateData.ScientificName).
-		WithMetadata("confidence", testTemplateData.Confidence).
-		WithMetadata("location", testTemplateData.Location).
-		WithMetadata("is_new_species", true).
-		WithMetadata("days_since_first_seen", testTemplateData.DaysSinceFirstSeen).
-		WithMetadata("note_id", 1).
-		WithExpiry(newSpeciesNotificationExpiry * time.Hour) // New species notifications expire after 24 hours
-
-	// Expose all TemplateData fields with bg_ prefix for use in provider templates
-	// This ensures test notifications have the same metadata as real detections
-	// See: https://github.com/tphakala/birdnet-go/issues/1457
-	testNotification = notification.EnrichWithTemplateData(testNotification, testTemplateData)
-
-	// Use CreateWithMetadata to persist and broadcast
-	if err := service.CreateWithMetadata(testNotification); err != nil {
-		c.logErrorIfEnabled("failed to create test notification", logger.Error(err))
-		return c.HandleError(ctx, err, "Failed to create test notification", http.StatusInternalServerError)
-	}
-
-	if settings.WebServer.Debug {
-		c.logDebugIfEnabled("test new species notification created",
-			logger.String("notification_id", testNotification.ID),
-			logger.String("species", testTemplateData.CommonName),
-			logger.String("rendered_title", title),
-			logger.String("rendered_message", message))
-	}
-
-	return ctx.JSON(http.StatusOK, testNotification)
-}

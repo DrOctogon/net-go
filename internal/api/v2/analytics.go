@@ -46,12 +46,6 @@ const (
 	defaultSpeciesRidgelineLimit = 5
 	maxSpeciesRidgelineLimit     = 8
 
-	// Arrival/departure phenology top-N bounds. The default matches the chart's maxSpecies cap; the
-	// max keeps the Gantt's residency bars legible within the card's fixed height (one bar per species,
-	// so beyond ~20 rows the bars and labels crowd).
-	defaultSpeciesPhenologyLimit = 12
-	maxSpeciesPhenologyLimit     = 20
-
 	// Acoustic succession streamgraph top-N bounds. The default matches the chart's maxSpecies cap;
 	// the max keeps the stacked streamgraph readable (beyond ~10 bands the wiggle layers crowd within
 	// the card's fixed height).
@@ -202,8 +196,6 @@ func (c *Controller) initAnalyticsRoutes() {
 	speciesGroup.GET("/detections/new", c.GetNewSpeciesDetections) // Renamed endpoint
 	speciesGroup.GET("/thumbnails", c.GetSpeciesThumbnails)        // Batch thumbnail endpoint
 	speciesGroup.GET("/diversity", c.GetSpeciesDiversity)          // Species diversity over time
-	speciesGroup.GET("/accumulation", c.GetSpeciesAccumulation)    // Species accumulation curve (biodiversity collector's curve)
-	speciesGroup.GET("/phenology", c.GetSpeciesPhenology)          // Arrival/departure phenology (residency-bar Gantt)
 
 	// Time analytics routes (can be implemented later)
 	timeGroup := analyticsGroup.Group("/time")
@@ -212,7 +204,6 @@ func (c *Controller) initAnalyticsRoutes() {
 	timeGroup.GET("/daily", c.GetDailyAnalytics)
 	timeGroup.GET("/daily/batch", c.GetBatchDailySpeciesData)              // Batch daily trends for multiple species
 	timeGroup.GET("/distribution/hourly", c.GetTimeOfDayDistribution)      // Renamed endpoint for time-of-day distribution
-	timeGroup.GET("/distribution/species", c.GetSpeciesHourlyDistribution) // Who-sings-when ridgeline (top-N species hour-of-day)
 	timeGroup.GET("/heatmap", c.GetActivityHeatmap)                        // Seasonal density heatmap (date x intra-day slot)
 	timeGroup.GET("/dawn-onset", c.GetDawnChorusOnset)                     // Dawn-chorus onset tracker (daily onset vs civil dawn)
 	timeGroup.GET("/succession", c.GetAcousticSuccession)                  // Acoustic succession streamgraph (top-N species hour-of-day, stacked)
@@ -1250,30 +1241,6 @@ func (c *Controller) writeActivityHeatmapCSV(ctx echo.Context, data *datastore.A
 	return w.Error()
 }
 
-// speciesHourlyDistributionItem is one species' row in the ridgeline wire payload: the stable
-// scientific-name key, its 24 normalized hour-of-day buckets (index = station-local hour 0..23,
-// summing to 1.0), and the raw detection count. The localized common name is resolved client-side
-// (the v2 label schema stores no common name), matching the sibling species charts.
-type speciesHourlyDistributionItem struct {
-	ScientificName string      `json:"scientificName"`
-	Buckets        [24]float64 `json:"buckets"`
-	Total          int         `json:"total"`
-}
-
-// newSpeciesHourlyDistributionResponse maps the datastore aggregation onto the wire payload as a
-// JSON array (never null), preserving the descending-volume order.
-func newSpeciesHourlyDistributionResponse(data []datastore.SpeciesHourlyDistribution) []speciesHourlyDistributionItem {
-	items := make([]speciesHourlyDistributionItem, 0, len(data))
-	for i := range data {
-		items = append(items, speciesHourlyDistributionItem{
-			ScientificName: data[i].ScientificName,
-			Buckets:        data[i].Buckets,
-			Total:          data[i].Total,
-		})
-	}
-	return items
-}
-
 // dawnChorusOnsetItem is one calendar day's row in the dawn-chorus onset wire payload (design spec
 // section 6.3). OnsetRelMinutes is the onset minute-of-day minus civil dawn's minute-of-day
 // (negative = before civil dawn); it is null when the day had too few detections or civil dawn is
@@ -1621,19 +1588,6 @@ func serveTopNHourlyChart[T any](
 	return ctx.JSON(http.StatusOK, respond(data))
 }
 
-// GetSpeciesHourlyDistribution handles GET /api/v2/analytics/time/distribution/species
-// Returns the normalized hour-of-day activity distribution for the top N species by detection
-// volume over the date range, powering the who-sings-when ridgeline (design spec section 6.2).
-func (c *Controller) GetSpeciesHourlyDistribution(ctx echo.Context) error {
-	return serveTopNHourlyChart(c, ctx, "species hourly distribution",
-		defaultSpeciesRidgelineLimit, maxSpeciesRidgelineLimit,
-		c.DS.GetHourlyDistributionBySpecies,
-		func(data []datastore.SpeciesHourlyDistribution) any {
-			return newSpeciesHourlyDistributionResponse(data)
-		},
-	)
-}
-
 // acousticSuccessionItem is one species' row in the acoustic-succession wire payload: the stable
 // scientific-name key, its 24 raw hour-of-day detection counts (index = station-local hour 0..23),
 // and the total detection count. The localized common name is resolved client-side (the v2 label
@@ -1798,95 +1752,6 @@ func (c *Controller) GetConfidenceDistribution(ctx echo.Context) error {
 	)
 
 	return ctx.JSON(http.StatusOK, newConfidenceDistributionResponse(data))
-}
-
-// speciesAccumulationItem is one day on the wire payload for the species accumulation curve.
-// scientificName is intentionally absent: the curve is an all-species count, not a per-species series.
-type speciesAccumulationItem struct {
-	Date              string `json:"date"`
-	CumulativeSpecies int    `json:"cumulativeSpecies"`
-	NewSpecies        int    `json:"newSpecies"`
-}
-
-// newSpeciesAccumulationResponse maps the datastore aggregation onto the wire payload as a JSON array
-// (never null), one entry per calendar day in ascending date order.
-func newSpeciesAccumulationResponse(data []datastore.SpeciesAccumulationPoint) []speciesAccumulationItem {
-	items := make([]speciesAccumulationItem, 0, len(data))
-	for i := range data {
-		items = append(items, speciesAccumulationItem{
-			Date:              data[i].Date,
-			CumulativeSpecies: data[i].CumulativeSpecies,
-			NewSpecies:        data[i].NewSpecies,
-		})
-	}
-	return items
-}
-
-// GetSpeciesAccumulation handles GET /api/v2/analytics/species/accumulation
-// Returns the species accumulation curve (the biodiversity collector's curve): per calendar day, the
-// cumulative count of distinct species first detected within the selected range, powering the
-// accumulation chart in the Biodiversity tab. The metric is inherently all-species, so there is no
-// species filter; "first seen" is bounded to the queried window, not lifetime.
-func (c *Controller) GetSpeciesAccumulation(ctx echo.Context) error {
-	const operation = "species accumulation"
-
-	// Validate required parameter
-	if err := c.requireQueryParam(ctx, "start_date", operation); err != nil {
-		return err
-	}
-
-	startDate := ctx.QueryParam("start_date")
-	endDate := ctx.QueryParam("end_date")
-
-	// Validate date formats strictly using regex
-	if err := c.validateDateFormatStrictWithResponse(ctx, startDate, "start_date", operation); err != nil {
-		return err
-	}
-	if err := c.validateDateFormatStrictWithResponse(ctx, endDate, "end_date", operation); err != nil {
-		return err
-	}
-
-	// Validate date values and chronological order
-	if err := c.validateDateRangeWithResponse(ctx, startDate, endDate, operation); err != nil {
-		return err
-	}
-
-	// Default the end date to a 30-day window when omitted, matching the other range endpoints.
-	if endDate == "" {
-		startTime, _ := time.Parse(time.DateOnly, startDate) // Regex ensures this parse succeeds
-		endDate = startTime.AddDate(0, 0, defaultAnalyticsDays).Format(time.DateOnly)
-	}
-
-	c.logInfoIfEnabled("Retrieving species accumulation",
-		logger.String("start_date", startDate),
-		logger.String("end_date", endDate),
-		logger.String("ip", ctx.RealIP()),
-		logger.String("path", ctx.Request().URL.Path),
-	)
-
-	// Add timeout to prevent resource exhaustion
-	ctxWithTimeout, cancel := withAnalyticsTimeout(ctx)
-	defer cancel()
-
-	data, err := c.DS.GetSpeciesAccumulation(ctxWithTimeout, startDate, endDate)
-	if err != nil {
-		return c.handleAnalyticsQueryError(ctx, err, "Species accumulation", "Failed to get species accumulation",
-			logger.String("start_date", startDate),
-			logger.String("end_date", endDate),
-			logger.String("ip", ctx.RealIP()),
-			logger.String("path", ctx.Request().URL.Path),
-		)
-	}
-
-	c.logInfoIfEnabled("Species accumulation retrieved",
-		logger.String("start_date", startDate),
-		logger.String("end_date", endDate),
-		logger.Int("days", len(data)),
-		logger.String("ip", ctx.RealIP()),
-		logger.String("path", ctx.Request().URL.Path),
-	)
-
-	return ctx.JSON(http.StatusOK, newSpeciesAccumulationResponse(data))
 }
 
 // analyticsSourceItem is one audio source on the analytics source/mic filter wire payload: a stable
@@ -2102,102 +1967,6 @@ func (c *Controller) GetYearOverYear(ctx echo.Context) error {
 	)
 
 	return ctx.JSON(http.StatusOK, newYearOverYearResponse(data))
-}
-
-// speciesPhenologyItem is one species' residency row in the phenology wire payload: its
-// scientific-name key, its first and last station-local detection dates (YYYY-MM-DD), and the
-// in-range detection count. The localized common name is resolved client-side (the v2 label schema
-// stores no common name), matching the sibling species charts.
-type speciesPhenologyItem struct {
-	ScientificName string `json:"scientificName"`
-	FirstSeen      string `json:"firstSeen"`
-	LastSeen       string `json:"lastSeen"`
-	Count          int    `json:"count"`
-}
-
-// newSpeciesPhenologyResponse maps the datastore aggregation onto the wire payload as a JSON array
-// (never null), one entry per species in arrival order.
-func newSpeciesPhenologyResponse(data []datastore.SpeciesPhenologyPoint) []speciesPhenologyItem {
-	items := make([]speciesPhenologyItem, 0, len(data))
-	for i := range data {
-		items = append(items, speciesPhenologyItem{
-			ScientificName: data[i].ScientificName,
-			FirstSeen:      data[i].FirstSeen,
-			LastSeen:       data[i].LastSeen,
-			Count:          data[i].Count,
-		})
-	}
-	return items
-}
-
-// GetSpeciesPhenology handles GET /api/v2/analytics/species/phenology
-// Returns the arrival/departure phenology (residency spans) for the top-N species by detection
-// volume within the selected range: per species, the first and last detection date plus the in-range
-// detection count, powering the residency-bar Gantt in the Biodiversity tab. The metric is inherently
-// all-species top-N, so there is no species filter; spans are bounded to the queried window.
-func (c *Controller) GetSpeciesPhenology(ctx echo.Context) error {
-	const operation = "species phenology"
-
-	// Validate required parameter
-	if err := c.requireQueryParam(ctx, "start_date", operation); err != nil {
-		return err
-	}
-
-	startDate := ctx.QueryParam("start_date")
-	endDate := ctx.QueryParam("end_date")
-
-	// Validate date formats strictly using regex
-	if err := c.validateDateFormatStrictWithResponse(ctx, startDate, "start_date", operation); err != nil {
-		return err
-	}
-	if err := c.validateDateFormatStrictWithResponse(ctx, endDate, "end_date", operation); err != nil {
-		return err
-	}
-
-	// Validate date values and chronological order
-	if err := c.validateDateRangeWithResponse(ctx, startDate, endDate, operation); err != nil {
-		return err
-	}
-
-	// Default the end date to a 30-day window when omitted, matching the other range endpoints.
-	if endDate == "" {
-		startTime, _ := time.Parse(time.DateOnly, startDate) // Regex ensures this parse succeeds
-		endDate = startTime.AddDate(0, 0, defaultAnalyticsDays).Format(time.DateOnly)
-	}
-
-	limit := c.parsePaginationLimit(ctx.QueryParam("limit"), defaultSpeciesPhenologyLimit, maxSpeciesPhenologyLimit)
-
-	c.logInfoIfEnabled("Retrieving species phenology",
-		logger.String("start_date", startDate),
-		logger.String("end_date", endDate),
-		logger.Int("limit", limit),
-		logger.String("ip", ctx.RealIP()),
-		logger.String("path", ctx.Request().URL.Path),
-	)
-
-	// Add timeout to prevent resource exhaustion
-	ctxWithTimeout, cancel := withAnalyticsTimeout(ctx)
-	defer cancel()
-
-	data, err := c.DS.GetSpeciesPhenology(ctxWithTimeout, startDate, endDate, limit)
-	if err != nil {
-		return c.handleAnalyticsQueryError(ctx, err, "Species phenology", "Failed to get species phenology",
-			logger.String("start_date", startDate),
-			logger.String("end_date", endDate),
-			logger.String("ip", ctx.RealIP()),
-			logger.String("path", ctx.Request().URL.Path),
-		)
-	}
-
-	c.logInfoIfEnabled("Species phenology retrieved",
-		logger.String("start_date", startDate),
-		logger.String("end_date", endDate),
-		logger.Int("species_count", len(data)),
-		logger.String("ip", ctx.RealIP()),
-		logger.String("path", ctx.Request().URL.Path),
-	)
-
-	return ctx.JSON(http.StatusOK, newSpeciesPhenologyResponse(data))
 }
 
 // GetTimeOfDayDistribution handles GET /api/v2/analytics/time/distribution/hourly

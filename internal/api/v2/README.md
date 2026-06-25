@@ -88,12 +88,9 @@ Lightweight connectivity check. Returns a minimal response with no database quer
 | GET    | `/analytics/species/summary`          | `GetSpeciesSummary`        | ❌   | Overall species statistics         |
 | GET    | `/analytics/species/detections/new`   | `GetNewSpeciesDetections`  | ❌   | Recently detected new species      |
 | GET    | `/analytics/species/thumbnails`       | `GetSpeciesThumbnails`     | ❌   | Species thumbnail images           |
-| GET    | `/analytics/species/accumulation`     | `GetSpeciesAccumulation`   | ❌   | Species accumulation curve (biodiversity collector's curve): per calendar day, the cumulative count of distinct species first detected within the range (false positives excluded; "first seen" is bounded to the window, not lifetime). All-species (no species filter). `start_date` required; `end_date` optional (defaults to `start_date` + 30 days) |
-| GET    | `/analytics/species/phenology`        | `GetSpeciesPhenology`      | ❌   | Arrival/departure phenology (residency-bar Gantt): per species, the first and last detection date (station-local, false positives excluded) plus the in-range detection count, for the top-N species by volume. All-species top-N (no species filter). `start_date` required; `end_date` optional (defaults to `start_date` + 30 days); `limit` optional (default 12, max 20) |
 | GET    | `/analytics/time/hourly`              | `GetHourlyAnalytics`       | ❌   | Hourly detection patterns          |
 | GET    | `/analytics/time/daily`               | `GetDailyAnalytics`        | ❌   | Daily detection patterns           |
 | GET    | `/analytics/time/distribution/hourly` | `GetTimeOfDayDistribution` | ❌   | Time-of-day detection distribution |
-| GET    | `/analytics/time/distribution/species` | `GetSpeciesHourlyDistribution` | ❌ | Who-sings-when ridgeline: per-species hour-of-day distribution for the top N species by volume. `start_date` required; `end_date` optional (defaults to `start_date` + 30 days); `limit` optional (default 5, max 8) |
 | GET    | `/analytics/time/heatmap`             | `GetActivityHeatmap`       | ❌   | Seasonal density heatmap (date x intra-day slot; `?format=csv`) |
 | GET    | `/analytics/time/dawn-onset`          | `GetDawnChorusOnset`       | ❌   | Dawn-chorus onset tracker: per-day onset relative to civil dawn (minutes; negative = before civil dawn). `start_date` required; `end_date` optional (defaults to `start_date` + 30 days); `species` optional |
 | GET    | `/analytics/time/succession`          | `GetAcousticSuccession`    | ❌   | Acoustic succession streamgraph: per species, the raw hour-of-day detection counts (24 buckets, false positives excluded) for the top-N species by volume, stacked into a streamgraph showing the diel acoustic handover. All-species top-N (no species filter). `start_date` required; `end_date` optional (defaults to `start_date` + 30 days); `limit` optional (default 6, max 10) |
@@ -177,7 +174,6 @@ Lightweight connectivity check. Returns a minimal response with no database quer
 | PUT    | `/notifications/:id/acknowledge`   | `MarkNotificationAcknowledged`     | ✅   | Acknowledge notification                                                                                            |
 | DELETE | `/notifications/:id`               | `DeleteNotification`               | ✅   | Delete notification                                                                                                 |
 | GET    | `/notifications/unread/count`      | `GetUnreadCount`                   | ❌   | Count unread notifications (public read-only). Used by dashboard NotificationBell.                                  |
-| POST   | `/notifications/test/new-species`  | `CreateTestNewSpeciesNotification` | ✅   | Create test new-species notification                                                                                |
 | GET    | `/notifications/check-ntfy-server` | `CheckNtfyServer`                  | ✅   | Probe NTFY host for HTTPS/HTTP connectivity (authenticated to prevent SSRF relay). Query: `host=<hostname[:port]>`. |
 
 ### Search (`search.go`)
