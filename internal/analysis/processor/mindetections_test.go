@@ -915,37 +915,6 @@ func TestValidateAndLogFilterConfig_InvalidLevel(t *testing.T) {
 	}
 }
 
-// TestCalculateBatMinDetections verifies the bat-specific minDetections calculation
-// for all filter levels. The bat model uses a fixed 50% overlap (1.5s step for 3s clip),
-// yielding 4 possible detections in a 6-second reference window.
-func TestCalculateBatMinDetections(t *testing.T) {
-	t.Parallel()
-
-	tests := []struct {
-		name        string
-		level       int
-		expectedMin int
-	}{
-		{name: "level_0_off", level: 0, expectedMin: 1},
-		{name: "level_1_lenient", level: 1, expectedMin: 1},  // ceil(4 * 0.20) = 1
-		{name: "level_2_moderate", level: 2, expectedMin: 2}, // ceil(4 * 0.30) = 2
-		{name: "level_3_balanced", level: 3, expectedMin: 2}, // ceil(4 * 0.50) = 2
-		{name: "level_4_strict", level: 4, expectedMin: 3},   // ceil(4 * 0.60) = 3
-		{name: "level_5_maximum", level: 5, expectedMin: 3},  // ceil(4 * 0.70) = 3
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			t.Parallel()
-			settings := &conf.Settings{}
-			settings.Bat.FalsePositiveFilter.Level = tt.level
-			result := calculateBatMinDetections(settings)
-			assert.Equal(t, tt.expectedMin, result,
-				"bat level %d should require %d detections", tt.level, tt.expectedMin)
-		})
-	}
-}
-
 // TestCalculateMinDetectionsForModel verifies that the model-aware router
 // dispatches to the correct calculation based on model ID.
 func TestCalculateMinDetectionsForModel(t *testing.T) {
@@ -962,50 +931,3 @@ func TestCalculateMinDetectionsForModel(t *testing.T) {
 	assert.Equal(t, 5, result, "model should use the standard FP filter calculation")
 }
 
-// TestGetBaseConfidenceThreshold_CustomOverridesModel verifies that per-species
-// custom thresholds take precedence over model-specific global thresholds.
-func TestGetBaseConfidenceThreshold_CustomOverridesModel(t *testing.T) {
-	t.Parallel()
-
-	settings := &conf.Settings{}
-	settings.BirdNET.Threshold = 0.7
-	settings.Bat.Threshold = 0.3
-	settings.Realtime.Species.Config = map[string]conf.SpeciesConfig{
-		"common pipistrelle": {Threshold: 0.5},
-	}
-
-	p := &Processor{Settings: settings}
-
-	threshold := p.getBaseConfidenceThreshold(settings, "Common Pipistrelle", "Pipistrellus pipistrellus", "Bat")
-	assert.InDelta(t, 0.5, float64(threshold), 0.001, "custom species threshold should override bat global threshold")
-}
-
-// TestValidateAndLogBatFilterConfig verifies that invalid bat FP filter levels
-// are reset to 0 and valid levels are accepted.
-func TestValidateAndLogBatFilterConfig(t *testing.T) {
-	t.Parallel()
-
-	t.Run("valid_level_preserved", func(t *testing.T) {
-		t.Parallel()
-		settings := &conf.Settings{}
-		settings.Bat.FalsePositiveFilter.Level = 3
-		validateAndLogBatFilterConfig(settings)
-		assert.Equal(t, 3, settings.Bat.FalsePositiveFilter.Level)
-	})
-
-	t.Run("invalid_level_reset_to_0", func(t *testing.T) {
-		t.Parallel()
-		settings := &conf.Settings{}
-		settings.Bat.FalsePositiveFilter.Level = 99
-		validateAndLogBatFilterConfig(settings)
-		assert.Equal(t, 0, settings.Bat.FalsePositiveFilter.Level)
-	})
-
-	t.Run("level_0_accepted", func(t *testing.T) {
-		t.Parallel()
-		settings := &conf.Settings{}
-		settings.Bat.FalsePositiveFilter.Level = 0
-		validateAndLogBatFilterConfig(settings)
-		assert.Equal(t, 0, settings.Bat.FalsePositiveFilter.Level)
-	})
-}

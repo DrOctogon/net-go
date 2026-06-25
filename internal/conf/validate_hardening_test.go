@@ -601,7 +601,6 @@ func TestValidateBirdNETSettings_NaNInfinityRejected(t *testing.T) {
 			Longitude:   24.0,
 			Latitude:    61.0,
 			Locale:      "en",
-			RangeFilter: RangeFilterSettings{Threshold: 0.05},
 		}
 	}
 
@@ -619,7 +618,6 @@ func TestValidateBirdNETSettings_NaNInfinityRejected(t *testing.T) {
 		{"Inf longitude", func(c *BirdNETConfig) { c.Longitude = math.Inf(1) }},
 		{"NaN latitude", func(c *BirdNETConfig) { c.Latitude = math.NaN() }},
 		{"Inf latitude", func(c *BirdNETConfig) { c.Latitude = math.Inf(-1) }},
-		{"NaN rangeFilter threshold", func(c *BirdNETConfig) { c.RangeFilter.Threshold = float32(math.NaN()) }},
 	}
 
 	for _, tt := range tests {

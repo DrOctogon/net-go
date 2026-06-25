@@ -31,7 +31,6 @@ const (
 
 	// Settings change toasts
 	MsgSettingsReloadingBirdnet               = "notifications.content.settings.reloadingBirdnet"
-	MsgSettingsRebuildingRangeFilter          = "notifications.content.settings.rebuildingRangeFilter"
 	MsgSettingsUpdatingIntervals              = "notifications.content.settings.updatingIntervals"
 	MsgSettingsReconfiguringMqtt              = "notifications.content.settings.reconfiguringMqtt"
 	MsgSettingsReconfiguringBirdweather       = "notifications.content.settings.reconfiguringBirdweather"

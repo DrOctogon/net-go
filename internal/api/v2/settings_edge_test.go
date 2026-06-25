@@ -23,8 +23,7 @@ func isFieldSkipped(skippedFields []any, expectedSkip string) bool {
 			continue
 		}
 		if skippedStr == expectedSkip ||
-			skippedStr == "BirdNET."+expectedSkip ||
-			skippedStr == "BirdNET.RangeFilter."+expectedSkip {
+			skippedStr == "BirdNET."+expectedSkip {
 			return true
 		}
 	}
@@ -254,16 +253,6 @@ func TestSpecialCharacterHandling(t *testing.T) {
 			},
 			description: "Should handle HTML entities",
 		},
-		{
-			name:    "Mixed case field names",
-			section: "birdnet",
-			specialData: map[string]any{
-				"rangeFilter": map[string]any{
-					"threshold": 0.05,
-				},
-			},
-			description: "Should handle camelCase field names",
-		},
 	}
 
 	for _, tt := range tests {
@@ -314,19 +303,6 @@ func TestFieldPermissionEnforcement(t *testing.T) {
 			},
 			description: "Should skip runtime-only fields",
 			shouldSkip:  []string{"Labels"},
-		},
-		{
-			name:    "RangeFilter runtime fields",
-			section: "birdnet",
-			update: map[string]any{
-				"rangeFilter": map[string]any{
-					"species":     []string{"test species"}, // Runtime field
-					"lastUpdated": "2024-01-01T00:00:00Z",   // Runtime field
-					"threshold":   0.05,                     // Allowed field
-				},
-			},
-			description: "Should skip runtime fields in nested objects",
-			shouldSkip:  []string{"Species", "LastUpdated"},
 		},
 		{
 			name:    "Audio runtime fields",

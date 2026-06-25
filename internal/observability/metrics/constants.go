@@ -16,8 +16,6 @@ const (
 	OpChunkProcess = "chunk_process"
 	// OpModelInvoke represents TensorFlow model invocation operations.
 	OpModelInvoke = "model_invoke"
-	// OpRangeFilter represents range filter operations.
-	OpRangeFilter = "range_filter"
 	// OpProcessTimeMs represents process time in milliseconds.
 	OpProcessTimeMs = "process_time_ms"
 	// OpNoteCreate represents note creation operations.

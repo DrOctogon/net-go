@@ -66,35 +66,3 @@ func (e *LabelLoadError) Error() string {
 	return fmt.Sprintf("birdnet: failed to load labels from %s: %s", e.Path, e.Reason)
 }
 
-type InvalidCoordinatesError struct {
-	Latitude  float32
-	Longitude float32
-	Reason    string
-}
-
-func (e *InvalidCoordinatesError) Error() string {
-	return fmt.Sprintf("birdnet: invalid coordinates (%.2f, %.2f): %s", e.Latitude, e.Longitude, e.Reason)
-}
-
-type InvalidDateError struct {
-	Month  int
-	Day    int
-	Reason string
-}
-
-func (e *InvalidDateError) Error() string {
-	return fmt.Sprintf("birdnet: invalid date (month=%d, day=%d): %s", e.Month, e.Day, e.Reason)
-}
-
-// ErrEmptyRangeFilterBatch is returned when PredictBatchRaw receives zero inputs.
-var ErrEmptyRangeFilterBatch = errors.New("birdnet: range filter batch must contain at least one input")
-
-// RangeFilterBatchInputError is returned when the input slice length doesn't match batchSize * 3.
-type RangeFilterBatchInputError struct {
-	Expected int
-	Got      int
-}
-
-func (e *RangeFilterBatchInputError) Error() string {
-	return fmt.Sprintf("birdnet: range filter batch input has %d values, expected %d (batchSize * 3)", e.Got, e.Expected)
-}

@@ -66,7 +66,6 @@ func newPopulatedSettings() *Settings {
 	s.Logging.FileOutput = &logger.FileOutput{Enabled: true, Path: "logs/app.log"}
 
 	s.BirdNET.Labels = []string{"alpha", "beta"}
-	s.BirdNET.RangeFilter.Species = []string{"Turdus merula", "Parus major"}
 
 	s.Models.Enabled = []string{"birdnet", "perch_v2"}
 	s.Models.Installed = []string{"birdnet", "perch_v3"}
@@ -204,7 +203,6 @@ func mutateCloneEverywhere(dst *Settings) {
 	dst.Logging.FileOutput.Path = mutated
 
 	dst.BirdNET.Labels[0] = mutated
-	dst.BirdNET.RangeFilter.Species = append(dst.BirdNET.RangeFilter.Species, "Corvus corax")
 
 	dst.Models.Enabled[0] = mutated
 	dst.Models.Installed[0] = mutated
@@ -285,27 +283,6 @@ func mutateCloneEverywhere(dst *Settings) {
 	dst.Notification.Push.Providers[0] = pp
 }
 
-// TestCloneSettings_IncludedScientificNamesIndependence verifies that
-// IncludedScientificNames is deep-cloned so mutations on the copy do not
-// affect the original.
-func TestCloneSettings_IncludedScientificNamesIndependence(t *testing.T) {
-	t.Parallel()
-
-	src := &Settings{}
-	src.BirdNET.RangeFilter.IncludedScientificNames = map[string]struct{}{
-		"turdus merula": {},
-		"parus major":   {},
-	}
-
-	dst := CloneSettings(src)
-
-	dst.BirdNET.RangeFilter.IncludedScientificNames["corvus corax"] = struct{}{}
-
-	assert.Len(t, src.BirdNET.RangeFilter.IncludedScientificNames, 2,
-		"source map must not be modified by mutation of clone")
-	assert.Len(t, dst.BirdNET.RangeFilter.IncludedScientificNames, 3)
-}
-
 // assertSourceUnchanged verifies that every field touched by
 // mutateCloneEverywhere still holds its original value on src.
 func assertSourceUnchanged(t *testing.T, src *Settings) {
@@ -327,7 +304,6 @@ func assertSourceUnchanged(t *testing.T, src *Settings) {
 	assert.Equal(t, "logs/app.log", src.Logging.FileOutput.Path)
 
 	assert.Equal(t, []string{"alpha", "beta"}, src.BirdNET.Labels)
-	assert.Equal(t, []string{"Turdus merula", "Parus major"}, src.BirdNET.RangeFilter.Species)
 
 	assert.Equal(t, []string{"birdnet", "perch_v2"}, src.Models.Enabled)
 	assert.Equal(t, []string{"birdnet", "perch_v3"}, src.Models.Installed)

@@ -65,8 +65,6 @@ func getTestSettings(t *testing.T) *conf.Settings {
 	settings.BirdNET.Sensitivity = 1.0
 	settings.BirdNET.Threshold = 0.8
 	settings.BirdNET.Locale = "en"
-	settings.BirdNET.RangeFilter.Model = "latest"
-	settings.BirdNET.RangeFilter.Threshold = 0.03
 
 	// Audio settings
 	settings.Realtime.Audio.Sources = []conf.AudioSourceConfig{{

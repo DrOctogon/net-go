@@ -2,8 +2,6 @@
 package processor
 
 import (
-	"math"
-
 	"github.com/tphakala/birdnet-go/internal/conf"
 )
 
@@ -110,33 +108,11 @@ func getRecommendedLevelForOverlap(overlap float64) (level int, overlapSufficien
 	return 0, true
 }
 
-// calculateMinDetectionsForModel routes to the correct minDetections calculation
-// based on the model ID. Bat models use a fixed 50% overlap instead of the
-// user-configurable BirdNET overlap, and read from a separate filter config.
+// calculateMinDetectionsForModel returns the minimum detection count for the
+// given model ID. All models now use the standard false-positive-filter
+// calculation based on the BirdNET overlap setting.
 func calculateMinDetectionsForModel(settings *conf.Settings, _ string) int {
 	return calculateMinDetectionsFromSettings(settings)
-}
-
-// calculateBatMinDetections computes the minimum detection count for bat models.
-// The bat model's buffer overlap is fixed at 50% (hardcoded in BufferDimensions),
-// giving a 1.5-second step for a 3-second clip. Within a 6-second reference
-// window, this yields 4 possible detections.
-func calculateBatMinDetections(settings *conf.Settings) int {
-	const chunkDurationSeconds = 3.0
-	const referenceWindowSeconds = 6.0
-	const batOverlapSeconds = 1.5 // fixed 50% of 3s clip
-	const epsilon = 1e-9
-
-	level := settings.Bat.FalsePositiveFilter.Level
-	if level == 0 {
-		return 1
-	}
-
-	segmentLength := chunkDurationSeconds - batOverlapSeconds
-	maxDetections := referenceWindowSeconds / segmentLength
-	threshold := getThresholdForLevel(level)
-	required := maxDetections*threshold - epsilon
-	return int(math.Max(1, math.Ceil(required)))
 }
 
 // visibilityThresholds holds precomputed per-model visibility thresholds.

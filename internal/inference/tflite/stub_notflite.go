@@ -35,8 +35,3 @@ func errTFLiteUnavailable() error {
 func NewTFLiteClassifier(_ []byte, _ TFLiteClassifierOptions) (inference.Classifier, int, error) {
 	return nil, 0, errTFLiteUnavailable()
 }
-
-// NewTFLiteRangeFilter always returns an error in notflite builds.
-func NewTFLiteRangeFilter(_ []byte, _ LogFunc) (inference.RangeFilter, error) {
-	return nil, errTFLiteUnavailable()
-}

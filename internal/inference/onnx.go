@@ -208,68 +208,6 @@ func (c *onnxCustomClassifier) Close() {
 	}
 }
 
-// ONNXRangeFilterOptions configures the ONNX range filter.
-type ONNXRangeFilterOptions struct {
-	// Labels is the species label list. Required.
-	Labels []string
-}
-
-// onnxRangeFilter implements BatchRangeFilter using an ONNX Runtime session.
-type onnxRangeFilter struct {
-	filter     *ort.RangeFilter
-	numSpecies int
-}
-
-// NewONNXRangeFilter creates a BatchRangeFilter backed by an ONNX Runtime meta model.
-func NewONNXRangeFilter(modelPath string, opts ONNXRangeFilterOptions) (BatchRangeFilter, error) {
-	if len(opts.Labels) == 0 {
-		return nil, fmt.Errorf("ONNX range filter requires labels")
-	}
-
-	filter, err := ort.NewRangeFilter(modelPath,
-		ort.WithRangeFilterLabels(opts.Labels),
-	)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create ONNX range filter: %w", err)
-	}
-
-	return &onnxRangeFilter{
-		filter:     filter,
-		numSpecies: len(opts.Labels),
-	}, nil
-}
-
-// Predict returns species occurrence scores for a geographic location and week.
-func (r *onnxRangeFilter) Predict(latitude, longitude, week float32) ([]float32, error) {
-	if r.filter == nil {
-		return nil, ort.ErrSessionClosed
-	}
-	return r.filter.PredictRaw(latitude, longitude, week)
-}
-
-// PredictBatch runs batch inference on multiple location/week inputs.
-// inputs is a flat slice of [lat, lon, week] triples: len(inputs) must equal batchSize * 3.
-// Returns a flat slice of [batchSize * numSpecies] scores in row-major order.
-func (r *onnxRangeFilter) PredictBatch(inputs []float32, batchSize int) ([]float32, error) {
-	if r.filter == nil {
-		return nil, ort.ErrSessionClosed
-	}
-	return r.filter.PredictBatchRaw(inputs, batchSize)
-}
-
-// NumSpecies returns the number of species in the range filter model output.
-func (r *onnxRangeFilter) NumSpecies() int {
-	return r.numSpecies
-}
-
-// Close releases the ONNX range filter session resources.
-func (r *onnxRangeFilter) Close() {
-	if r.filter != nil {
-		_ = r.filter.Close()
-		r.filter = nil
-	}
-}
-
 // InitONNXRuntime initializes the ONNX Runtime with the given shared library path.
 // When libraryPath is empty, searches standard system library paths for
 // libonnxruntime.so (Linux) or onnxruntime.dll (Windows).

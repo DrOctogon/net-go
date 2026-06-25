@@ -335,31 +335,6 @@ func validateAndLogFilterConfig(settings *conf.Settings) {
 	}
 }
 
-// validateAndLogBatFilterConfig validates the bat false positive filter configuration
-// and logs the effective minDetections. The bat model uses a fixed 50% overlap,
-// so there are no overlap-related warnings.
-func validateAndLogBatFilterConfig(settings *conf.Settings) {
-	if err := settings.Bat.FalsePositiveFilter.Validate(); err != nil {
-		GetLogger().Error("Invalid bat false positive filter configuration, falling back to level 0",
-			logger.Error(err),
-			logger.Int("fallback_level", 0),
-			logger.String("operation", "bat_false_positive_filter_validation"))
-		settings.Bat.FalsePositiveFilter.Level = 0
-	}
-
-	level := settings.Bat.FalsePositiveFilter.Level
-	if level == 0 {
-		return
-	}
-
-	minDetections := calculateBatMinDetections(settings)
-	GetLogger().Info("Bat false positive filter active",
-		logger.Int("level", level),
-		logger.String("level_name", getLevelName(level)),
-		logger.Int("min_detections", minDetections),
-		logger.String("operation", "bat_false_positive_filter_config"))
-}
-
 // initLogDeduplicator creates and configures the log deduplicator.
 func initLogDeduplicator(settings *conf.Settings) *LogDeduplicator {
 	healthCheckInterval := 60 * time.Second
@@ -520,7 +495,6 @@ func New(settings *conf.Settings, ds datastore.Interface, bn *classifier.Orchest
 
 	// Validate and log false positive filter configuration
 	validateAndLogFilterConfig(settings)
-	validateAndLogBatFilterConfig(settings)
 
 	// Validate user-configured custom ExecuteCommand action paths up front
 	// so that a misconfigured command path produces a single user-facing
@@ -822,7 +796,7 @@ func (p *Processor) processResults(settings *conf.Settings, item classifier.Resu
 		// species passes the range filter. This is independent of whether the
 		// detection is saved below (saved detections also clear this bar).
 		if result.Confidence > baseThreshold {
-			inRange := !shouldApplyRangeFilter(item.ModelID, settings) || settings.IsSpeciesIncluded(result.Species)
+			inRange := true
 			p.updateLastDetection(item.ModelID, commonName, scientificName, float64(result.Confidence), feedTime, inRange, feedThrottle)
 		}
 
@@ -883,21 +857,6 @@ func (p *Processor) parseAndValidateSpecies(settings *conf.Settings, result data
 	return
 }
 
-// shouldApplyRangeFilter returns true if the given model should have its
-// detections filtered by the geographic range filter.
-// BirdNET (any version), Perch, and unknown models are filtered. Perch returns
-// scientific-name labels, and the included-species set stores scientific names
-// for O(1) lookup, so the normal range list applies even when the active range
-// model is the embedded BirdNET geomodel rather than v3.
-// Bat/BSG: never filtered (independent species sets, no geomodel coverage).
-func shouldApplyRangeFilter(modelID string, settings *conf.Settings) bool {
-	if settings == nil || !settings.BirdNET.LocationConfigured {
-		return false
-	}
-	mInfo := classifier.DetectionModelInfoForID(modelID)
-	return mInfo.Name == detection.DefaultModelName
-}
-
 // shouldFilterDetection checks if a detection should be filtered out
 func (p *Processor) shouldFilterDetection(settings *conf.Settings, result datastore.Results, commonName, scientificName, speciesLowercase string, baseThreshold float32, source, modelID string) (shouldFilter bool, confidenceThreshold float32) {
 	// Check human detection privacy filter. Match the raw label so Perch v2's
@@ -906,11 +865,8 @@ func (p *Processor) shouldFilterDetection(settings *conf.Settings, result datast
 		return true, 0 // Filter out human detections for privacy
 	}
 
-	// Check species exclusion filter (ignore list).
-	// This is the authoritative per-detection check. The range filter also excludes these
-	// species when building the included list, but that only works when the range filter
-	// model is active and location is configured. This check ensures excluded species are
-	// always filtered regardless of range filter state.
+	// Check species exclusion filter (ignore list). This is the authoritative
+	// per-detection check ensuring excluded species are always filtered out.
 	if isSpeciesExcluded(commonName, scientificName, settings.Realtime.Species.Exclude) {
 		if settings.Debug {
 			GetLogger().Debug("Detection filtered: species is on exclude list",
@@ -943,17 +899,6 @@ func (p *Processor) shouldFilterDetection(settings *conf.Settings, result datast
 				logger.String("source", p.getDisplayNameForSource(source)),
 				logger.String("model_id", modelID),
 				logger.String("operation", "confidence_filter"))
-		}
-		return true, confidenceThreshold
-	}
-
-	if shouldApplyRangeFilter(modelID, settings) && !settings.IsSpeciesIncluded(result.Species) {
-		if settings.Debug {
-			GetLogger().Debug("species not on included list",
-				logger.String("species", result.Species),
-				logger.Float32("confidence", result.Confidence),
-				logger.String("model_id", modelID),
-				logger.String("operation", "species_inclusion_filter"))
 		}
 		return true, confidenceThreshold
 	}
@@ -1217,8 +1162,7 @@ func (p *Processor) handleHumanDetection(settings *conf.Settings, item classifie
 
 // getBaseConfidenceThreshold retrieves the confidence threshold for a species, using custom or global thresholds.
 // It supports lookup by both common name and scientific name for consistency with include/exclude matching.
-// The modelID parameter selects which global threshold to use when no per-species config exists:
-// bat models use settings.Bat.Threshold, all others use settings.BirdNET.Threshold.
+// Per-species config takes precedence; otherwise settings.BirdNET.Threshold is used.
 func (p *Processor) getBaseConfidenceThreshold(settings *conf.Settings, commonName, scientificName, modelID string) float32 {
 	// Check if species has a custom threshold using both common and scientific name lookup
 	if config, exists := lookupSpeciesConfig(settings.Realtime.Species.Config, commonName, scientificName); exists {
@@ -1635,26 +1579,17 @@ func (p *Processor) flushPendingDetections() (pendingCount, flushedCount int) {
 	return pendingCount, flushedCount
 }
 
-// logMinDetectionsChanges logs when bird or bat minDetections values change
-// due to a config hot-reload, helping operators verify that FP filter
-// adjustments took effect.
-func logMinDetectionsChanges(settings *conf.Settings, lastBird, lastBat *int) {
+// logMinDetectionsChanges logs when minDetections changes due to a config hot-reload,
+// helping operators verify that FP filter adjustments took effect.
+func logMinDetectionsChanges(settings *conf.Settings, lastBird *int) {
 	bird := calculateMinDetectionsFromSettings(settings)
-	bat := calculateBatMinDetections(settings)
 	if *lastBird != -1 && bird != *lastBird {
-		GetLogger().Info("bird minDetections updated due to config change",
+		GetLogger().Info("minDetections updated due to config change",
 			logger.Int("old_value", *lastBird),
 			logger.Int("new_value", bird),
 			logger.String("operation", "pending_flusher_config_update"))
 	}
-	if *lastBat != -1 && bat != *lastBat {
-		GetLogger().Info("bat minDetections updated due to config change",
-			logger.Int("old_value", *lastBat),
-			logger.Int("new_value", bat),
-			logger.String("operation", "pending_flusher_config_update"))
-	}
 	*lastBird = bird
-	*lastBat = bat
 }
 
 // pendingDetectionsFlusher runs a goroutine that periodically checks the pending detections
@@ -1668,12 +1603,12 @@ func (p *Processor) pendingDetectionsFlusher() {
 		ticker := time.NewTicker(DefaultFlushInterval)
 		defer ticker.Stop()
 
-		lastBirdMinDet, lastBatMinDet := -1, -1
+		lastBirdMinDet := -1
 
 		for {
 			select {
 			case <-ticker.C:
-				logMinDetectionsChanges(p.currentSettings(), &lastBirdMinDet, &lastBatMinDet)
+				logMinDetectionsChanges(p.currentSettings(), &lastBirdMinDet)
 				pendingCount, flushedCount := p.flushPendingDetections()
 
 				if pendingCount > 0 || flushedCount > 0 {

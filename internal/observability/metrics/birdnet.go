@@ -27,7 +27,6 @@ type BirdNETMetrics struct {
 	PredictionDuration   *prometheus.HistogramVec
 	ChunkProcessDuration *prometheus.HistogramVec
 	ModelInvokeDuration  *prometheus.HistogramVec
-	RangeFilterDuration  *prometheus.HistogramVec
 
 	// Operation counters
 	PredictionTotal  *prometheus.CounterVec
@@ -105,15 +104,6 @@ func (m *BirdNETMetrics) initMetrics() error {
 			Name:    "birdnet_model_invoke_duration_seconds",
 			Help:    "Time taken for model invocation",
 			Buckets: prometheus.ExponentialBuckets(BucketStart1ms, BucketFactor2, BucketCount8), // 1ms to ~256ms
-		},
-		[]string{"model"},
-	)
-
-	m.RangeFilterDuration = prometheus.NewHistogramVec(
-		prometheus.HistogramOpts{
-			Name:    "birdnet_range_filter_duration_seconds",
-			Help:    "Time taken to apply range filter",
-			Buckets: prometheus.ExponentialBuckets(BucketStart100us, BucketFactor2, BucketCount8), // 0.1ms to ~25.6ms
 		},
 		[]string{"model"},
 	)
@@ -231,11 +221,6 @@ func (m *BirdNETMetrics) RecordModelInvoke(model string, durationSeconds float64
 	m.ModelInvokeDuration.WithLabelValues(model).Observe(durationSeconds)
 }
 
-// RecordRangeFilter records metrics for range filter operations
-func (m *BirdNETMetrics) RecordRangeFilter(model string, durationSeconds float64) {
-	m.RangeFilterDuration.WithLabelValues(model).Observe(durationSeconds)
-}
-
 // RecordModelLoad records metrics for model loading operations
 func (m *BirdNETMetrics) RecordModelLoad(model string, err error) {
 	if err != nil {
@@ -349,7 +334,6 @@ func (m *BirdNETMetrics) Describe(ch chan<- *prometheus.Desc) {
 	m.PredictionDuration.Describe(ch)
 	m.ChunkProcessDuration.Describe(ch)
 	m.ModelInvokeDuration.Describe(ch)
-	m.RangeFilterDuration.Describe(ch)
 
 	// Operation counters
 	m.PredictionTotal.Describe(ch)
@@ -379,7 +363,6 @@ func (m *BirdNETMetrics) Collect(ch chan<- prometheus.Metric) {
 	m.PredictionDuration.Collect(ch)
 	m.ChunkProcessDuration.Collect(ch)
 	m.ModelInvokeDuration.Collect(ch)
-	m.RangeFilterDuration.Collect(ch)
 
 	// Operation counters
 	m.PredictionTotal.Collect(ch)
@@ -435,8 +418,6 @@ func (m *BirdNETMetrics) RecordDuration(operation string, seconds float64) {
 		m.ChunkProcessDuration.WithLabelValues(LabelBirdnet).Observe(seconds)
 	case OpModelInvoke:
 		m.ModelInvokeDuration.WithLabelValues(LabelBirdnet).Observe(seconds)
-	case OpRangeFilter:
-		m.RangeFilterDuration.WithLabelValues(LabelBirdnet).Observe(seconds)
 	case OpProcessTimeMs:
 		// Convert to milliseconds for backward compatibility
 		m.ProcessTimeGauge.Set(seconds * MillisecondsPerSecond)

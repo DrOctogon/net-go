@@ -84,24 +84,6 @@ func setDefaultConfig() {
 	viper.SetDefault("birdnet.usexnnpack", true)
 	viper.SetDefault("taxonomysynonyms", map[string]string{})
 
-	// Range filter configuration
-	viper.SetDefault("birdnet.rangefilter.debug", false)
-	viper.SetDefault("birdnet.rangefilter.model", "latest")
-	viper.SetDefault("birdnet.rangefilter.threshold", 0.01)
-
-	// Perch model configuration
-	viper.SetDefault("perch.threshold", 0.5)
-
-	// Bat detection configuration
-	viper.SetDefault("bat.threshold", 0.5)
-	viper.SetDefault("bat.nighttimeonly", true)
-	viper.SetDefault("bat.falsepositivefilter.level", 2)
-	viper.SetDefault("bat.ultrasonicfilter.enabled", true)
-	viper.SetDefault("bat.ultrasonicfilter.cvthreshold", 0.15)
-	viper.SetDefault("bat.ultrasonicfilter.fftsize", 8192)
-	viper.SetDefault("bat.ultrasonicfilter.hopsize", 4096)
-	viper.SetDefault("bat.ultrasonicfilter.frequencysplithz", 20000)
-
 	// Global model enablement (BirdNET only by default)
 	viper.SetDefault("models.enabled", []string{"birdnet"})
 

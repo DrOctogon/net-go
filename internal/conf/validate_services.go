@@ -38,12 +38,6 @@ func ValidateBirdNETSettings(cfg *BirdNETConfig) ValidationResult {
 		result.Errors = append(result.Errors, "BirdNET threads must be at least 0")
 	}
 
-	// Empty string, "latest", "legacy", or "v3" are valid
-	if cfg.RangeFilter.Model != "" && cfg.RangeFilter.Model != "latest" && cfg.RangeFilter.Model != "legacy" && cfg.RangeFilter.Model != "v3" {
-		result.Valid = false
-		result.Errors = append(result.Errors, "RangeFilter model must be either empty (v2 default), 'latest', 'legacy', or 'v3'")
-	}
-
 	// Backend must be one of the known preference strings when non-empty.
 	// Unknown values fall back safely to auto, so this is a warning, not an error.
 	if cfg.Backend != "" && cfg.Backend != BackendPrefAuto && cfg.Backend != BackendPrefONNX && cfg.Backend != BackendPrefOpenVINO {
@@ -57,8 +51,6 @@ func ValidateBirdNETSettings(cfg *BirdNETConfig) ValidationResult {
 		result.Warnings = append(result.Warnings,
 			fmt.Sprintf("BirdNET openvinodevice '%s' is not recognised; must be 'auto', 'cpu', or 'gpu' - will use 'auto'", cfg.OpenVINODevice))
 	}
-
-	checkRange(&result, cfg.RangeFilter.Threshold, 0, 1, "RangeFilter threshold must be between 0 and 1")
 
 	// Locale validation and normalization (pure transformation)
 	if cfg.Locale != "" {

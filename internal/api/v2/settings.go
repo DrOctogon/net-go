@@ -221,7 +221,7 @@ func (c *Controller) UpdateSettings(ctx echo.Context) error {
 
 	// Publish to the global atomic pointer only when this controller owns
 	// it (production). Determined once at construction, so out-of-band
-	// StoreSettings calls (range filter, etc.) cannot desynchronize it.
+	// StoreSettings calls cannot desynchronize it.
 	publishGlobal := c.isGlobalOwner
 
 	// Parse the request body
@@ -585,10 +585,9 @@ func (c *Controller) publishAndSaveSettings(current, updated *conf.Settings) err
 
 // getSettingsOrFallback returns the current settings snapshot for write handlers.
 // When this controller owns the global singleton (production), it reads from
-// conf.GetSettings() so that out-of-band publishers (range filter rebuild,
-// ShouldUpdateRangeFilterToday, etc.) are not silently overwritten by a stale
-// per-controller pointer. For test controllers that inject a standalone *Settings,
-// the controller's own atomic snapshot is returned as-is.
+// conf.GetSettings() so that out-of-band publishers are not silently overwritten
+// by a stale per-controller pointer. For test controllers that inject a standalone
+// *Settings, the controller's own atomic snapshot is returned as-is.
 func (c *Controller) getSettingsOrFallback() *conf.Settings {
 	if c.isGlobalOwner {
 		if s := conf.GetSettings(); s != nil {
@@ -642,7 +641,7 @@ func (c *Controller) UpdateSectionSettings(ctx echo.Context) error {
 
 	// Publish globally when the controller owns the global singleton.
 	// Determined once at construction, immune to pointer desync from
-	// out-of-band StoreSettings calls (range filter rebuild, etc.).
+	// out-of-band StoreSettings calls.
 	publishGlobal := c.isGlobalOwner
 
 	requestBody, err := parseAndValidateJSON(ctx)
@@ -999,10 +998,6 @@ func getSettingsSectionValue(settings *conf.Settings, section string) (any, erro
 		return &settings.Backup, nil
 	case "output":
 		return &settings.Output, nil
-	case "perch":
-		return &settings.Perch, nil
-	case "bat":
-		return &settings.Bat, nil
 	case "models":
 		return &settings.Models, nil
 	case "taxonomysynonyms":
@@ -2073,12 +2068,6 @@ func getBlockedFieldMap() map[string]any {
 		// BirdNET section - block runtime fields
 		"BirdNET": map[string]any{
 			"Labels": true, // Runtime list populated from label file
-			// Block RangeFilter runtime fields
-			"RangeFilter": map[string]any{
-				"Model":       true, // Model type is configured in config.yaml, frontend should not overwrite
-				"Species":     true, // Runtime species list populated by range filter
-				"LastUpdated": true, // Runtime timestamp of last filter update
-			},
 		},
 
 		// Security section - block runtime/internal fields only
@@ -2128,7 +2117,6 @@ const (
 // Each check has a detection function, action to trigger, and toast notification.
 var settingsChangeChecks = []settingsChangeCheck{
 	{"BirdNET", "reload_birdnet", birdnetSettingsChanged, "Reloading BirdNET model with new settings...", notification.MsgSettingsReloadingBirdnet, "info", toastDurationLong},
-	{"Range filter", "rebuild_range_filter", rangeFilterSettingsChanged, "Rebuilding species range filter...", notification.MsgSettingsRebuildingRangeFilter, "info", toastDurationMedium},
 	{"Species interval", "update_detection_intervals", intervalSettingsChanged, "Updating detection intervals...", notification.MsgSettingsUpdatingIntervals, "info", toastDurationShort},
 	{"Base threshold", "recalculate_dynamic_thresholds", baseThresholdChanged, "Recalculating dynamic thresholds...", notification.MsgSettingsRecalculatingThresholds, "info", toastDurationShort},
 	{"Dynamic thresholds", "reconfigure_dynamic_thresholds", dynamicThresholdEnabledChanged, "Reconfiguring dynamic thresholds...", notification.MsgSettingsReconfiguringDynamicThresholds, "info", toastDurationMedium},
@@ -2313,29 +2301,6 @@ func baseThresholdChanged(oldSettings, currentSettings *conf.Settings) bool {
 // to match the new state.
 func dynamicThresholdEnabledChanged(oldSettings, currentSettings *conf.Settings) bool {
 	return oldSettings.Realtime.DynamicThreshold.Enabled != currentSettings.Realtime.DynamicThreshold.Enabled
-}
-
-// rangeFilterSettingsChanged checks if range filter settings have changed
-func rangeFilterSettingsChanged(oldSettings, currentSettings *conf.Settings) bool {
-	// Check for changes in species include/exclude lists
-	if !reflect.DeepEqual(oldSettings.Realtime.Species.Include, currentSettings.Realtime.Species.Include) {
-		return true
-	}
-	if !reflect.DeepEqual(oldSettings.Realtime.Species.Exclude, currentSettings.Realtime.Species.Exclude) {
-		return true
-	}
-
-	// Check for changes in BirdNET range filter settings
-	if !reflect.DeepEqual(oldSettings.BirdNET.RangeFilter, currentSettings.BirdNET.RangeFilter) {
-		return true
-	}
-
-	// Check for changes in BirdNET latitude and longitude
-	if oldSettings.BirdNET.Latitude != currentSettings.BirdNET.Latitude || oldSettings.BirdNET.Longitude != currentSettings.BirdNET.Longitude {
-		return true
-	}
-
-	return false
 }
 
 // mqttSettingsChanged checks if MQTT settings have changed

@@ -52,12 +52,11 @@ var hotReloadRegistry = map[string]hotReloadEntry{
 		action:     "recalculate_dynamic_thresholds",
 	},
 	"BirdNET.Overlap":            {categories: []hotReloadCategory{hotReloadFresh}},
-	"BirdNET.Longitude":          {categories: []hotReloadCategory{hotReloadDisplay}, action: "rebuild_range_filter"},
-	"BirdNET.Latitude":           {categories: []hotReloadCategory{hotReloadDisplay}, action: "rebuild_range_filter"},
+	"BirdNET.Longitude":          {categories: []hotReloadCategory{hotReloadDisplay}},
+	"BirdNET.Latitude":           {categories: []hotReloadCategory{hotReloadDisplay}},
 	"BirdNET.LocationConfigured": {categories: []hotReloadCategory{hotReloadDisplay}},
 	"BirdNET.Threads":            {categories: []hotReloadCategory{hotReloadFresh}, action: "reload_birdnet"},
 	"BirdNET.Locale":             {categories: []hotReloadCategory{hotReloadDisplay}, action: "reload_birdnet"},
-	"BirdNET.RangeFilter":        {categories: []hotReloadCategory{hotReloadFresh}, action: "rebuild_range_filter"},
 	"BirdNET.ModelPath":          {categories: []hotReloadCategory{hotReloadFresh}, action: "reload_birdnet"},
 	"BirdNET.LabelPath":          {categories: []hotReloadCategory{hotReloadFresh}, action: "reload_birdnet"},
 	"BirdNET.Labels":             {categories: []hotReloadCategory{hotReloadRuntime}},
@@ -67,15 +66,6 @@ var hotReloadRegistry = map[string]hotReloadEntry{
 	"BirdNET.Backend":            {categories: []hotReloadCategory{hotReloadFresh}, action: "reload_birdnet"},
 	"BirdNET.OpenVINODevice":     {categories: []hotReloadCategory{hotReloadFresh}, action: "reload_birdnet"},
 	"BirdNET.Version":            {categories: []hotReloadCategory{hotReloadFresh}, action: "reload_birdnet"},
-
-	// --- Perch ---
-	"Perch": {categories: []hotReloadCategory{hotReloadRestart}},
-
-	// --- Bat ---
-	"Bat": {categories: []hotReloadCategory{hotReloadFresh}},
-
-	// --- BSG ---
-	"BSG": {categories: []hotReloadCategory{hotReloadRestart}},
 
 	// --- HumanVoice ---
 	"HumanVoice": {categories: []hotReloadCategory{hotReloadFresh}},

@@ -23,25 +23,6 @@ func TestValidateBirdNETSettings_Valid(t *testing.T) {
 				Latitude:    45.0,
 				Longitude:   -122.0,
 				Threads:     4,
-				RangeFilter: RangeFilterSettings{
-					Model:     "",
-					Threshold: 0.03,
-				},
-			},
-		},
-		{
-			name: "legacy range filter",
-			config: BirdNETConfig{
-				Sensitivity: 0.5,
-				Threshold:   0.5,
-				Overlap:     0.0,
-				Latitude:    0.0,
-				Longitude:   0.0,
-				Threads:     0,
-				RangeFilter: RangeFilterSettings{
-					Model:     "legacy",
-					Threshold: 0.5,
-				},
 			},
 		},
 		{
@@ -53,10 +34,6 @@ func TestValidateBirdNETSettings_Valid(t *testing.T) {
 				Latitude:    90.0,
 				Longitude:   180.0,
 				Threads:     16,
-				RangeFilter: RangeFilterSettings{
-					Model:     "",
-					Threshold: 1.0,
-				},
 			},
 		},
 	}
@@ -155,33 +132,6 @@ func TestValidateBirdNETSettings_Invalid(t *testing.T) {
 				Threads: -1,
 			},
 			expectError: "threads must be at least 0",
-		},
-		{
-			name: "invalid range filter model",
-			config: BirdNETConfig{
-				RangeFilter: RangeFilterSettings{
-					Model: "invalid",
-				},
-			},
-			expectError: "RangeFilter model must be either empty (v2 default), 'latest', 'legacy', or 'v3'",
-		},
-		{
-			name: "range filter threshold too low",
-			config: BirdNETConfig{
-				RangeFilter: RangeFilterSettings{
-					Threshold: -0.1,
-				},
-			},
-			expectError: "RangeFilter threshold must be between 0 and 1",
-		},
-		{
-			name: "range filter threshold too high",
-			config: BirdNETConfig{
-				RangeFilter: RangeFilterSettings{
-					Threshold: 1.1,
-				},
-			},
-			expectError: "RangeFilter threshold must be between 0 and 1",
 		},
 	}
 
@@ -1098,10 +1048,6 @@ func BenchmarkValidateBirdNETSettings(b *testing.B) {
 		Latitude:    45.0,
 		Longitude:   -122.0,
 		Threads:     4,
-		RangeFilter: RangeFilterSettings{
-			Model:     "",
-			Threshold: 0.03,
-		},
 	}
 
 	b.ReportAllocs()

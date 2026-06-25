@@ -50,27 +50,3 @@ type CustomClassifier interface {
 	Close()
 }
 
-// RangeFilter abstracts the ML runtime for geographic range filtering.
-// Implementations are NOT goroutine-safe; callers must synchronize access.
-type RangeFilter interface {
-	// Predict returns species occurrence scores for a geographic location and week.
-	// Latitude: [-90, 90], Longitude: [-180, 180], Week: BirdNET week number.
-	// Returns one score per species in label order.
-	Predict(latitude, longitude, week float32) ([]float32, error)
-
-	// NumSpecies returns the number of species in the model output.
-	NumSpecies() int
-
-	// Close releases all runtime resources.
-	Close()
-}
-
-// BatchRangeFilter extends RangeFilter with batch inference support.
-// Implementations are NOT goroutine-safe; callers must synchronize access.
-type BatchRangeFilter interface {
-	RangeFilter
-	// PredictBatch runs inference on multiple location/week inputs in a single batch.
-	// inputs is a flat slice of [lat, lon, week] triples: len(inputs) must equal batchSize * 3.
-	// Returns a flat slice of [batchSize * numSpecies] scores in row-major order.
-	PredictBatch(inputs []float32, batchSize int) ([]float32, error)
-}

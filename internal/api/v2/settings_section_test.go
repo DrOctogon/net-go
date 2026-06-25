@@ -73,17 +73,6 @@ func TestPatchMissingSections(t *testing.T) {
 			},
 		},
 		{
-			name:    "perch section accepts valid update",
-			section: "perch",
-			body: map[string]any{
-				"threshold": 0.8,
-			},
-			verify: func(t *testing.T, settings *conf.Settings) {
-				t.Helper()
-				assert.InDelta(t, 0.8, settings.Perch.Threshold, 1e-9)
-			},
-		},
-		{
 			name:    "models section accepts valid update",
 			section: "models",
 			body: map[string]any{

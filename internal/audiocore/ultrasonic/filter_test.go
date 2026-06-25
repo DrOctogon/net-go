@@ -6,13 +6,10 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-
-	"github.com/tphakala/birdnet-go/internal/conf"
 )
 
-func defaultFilterConfig() conf.UltrasonicFilterConfig {
-	return conf.UltrasonicFilterConfig{
-		Enabled:          true,
+func defaultFilterConfig() FilterConfig {
+	return FilterConfig{
 		CVThreshold:      0.15,
 		FFTSize:          8192,
 		HopSize:          4096,

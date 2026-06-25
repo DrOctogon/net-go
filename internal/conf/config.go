@@ -1209,7 +1209,6 @@ type BirdNETConfig struct {
 	LocationConfigured bool                `yaml:"locationconfigured" json:"locationConfigured"`               // true when location has been explicitly configured by the user
 	Threads            int                 `yaml:"threads" json:"threads"`                                     // number of CPU threads to use for analysis
 	Locale             string              `yaml:"locale" json:"locale"`                                       // language to use for labels
-	RangeFilter        RangeFilterSettings `yaml:"rangefilter" json:"rangeFilter"`                             // range filter settings
 	ModelPath          string              `yaml:"modelpath,omitempty" json:"modelPath,omitempty"`             // path to external model file (empty for embedded)
 	LabelPath          string              `yaml:"labelpath,omitempty" json:"labelPath,omitempty"`             // path to external label file (empty for embedded)
 	Labels             []string            `yaml:"-" json:"-"`                                                 // list of available species labels, runtime value
@@ -1236,51 +1235,6 @@ const (
 	OVDeviceGPU  = "gpu"
 )
 
-// RangeFilterSettings contains settings for the range filter
-type RangeFilterSettings struct {
-	Debug                   bool                `yaml:"debug" json:"debug"`                               // true to enable debug mode
-	Model                   string              `yaml:"model" json:"model"`                               // range filter model version: "legacy" for v1, "v3" for geomodel v3.0, or empty/default for v2
-	ModelPath               string              `yaml:"modelpath" json:"modelPath"`                       // path to external meta model file (empty for embedded)
-	LabelsPath              string              `yaml:"labelspath,omitempty" json:"labelsPath,omitempty"` // path to geomodel labels file (required when geomodel differs from classifier labels)
-	Threshold               float32             `yaml:"threshold" json:"threshold"`                       // rangefilter species occurrence threshold
-	PassUnmappedSpecies     bool                `yaml:"passunmappedspecies" json:"passUnmappedSpecies"`   // true to pass through species absent from geomodel (score 1.0); false to filter them out (score 0.0)
-	Species                 []string            `yaml:"-" json:"species,omitempty"`                       // list of included species, runtime value
-	IncludedScientificNames map[string]struct{} `yaml:"-" json:"-"`                                       // O(1) lookup set of included scientific names (lowercase), runtime value
-	LastUpdated             time.Time           `yaml:"-" json:"lastUpdated"`                             // last time the species list was updated, runtime value
-}
-
-// PerchConfig holds configuration for the Google Perch v2 model.
-type PerchConfig struct {
-	ModelPath string  `yaml:"modelpath,omitempty" json:"modelPath,omitempty"` // path to Perch v2 ONNX model file
-	LabelPath string  `yaml:"labelpath,omitempty" json:"labelPath,omitempty"` // path to Perch v2 label CSV file
-	Threshold float64 `yaml:"threshold" json:"threshold"`                     // confidence threshold for detections
-	Locale    string  `yaml:"locale,omitempty" json:"locale,omitempty"`       // locale for species label translation
-}
-
-// BatConfig holds configuration for bat detection using BirdNET v2.4 embeddings.
-type BatConfig struct {
-	EmbeddingModel      string                      `yaml:"embeddingmodel,omitempty" json:"embeddingModel,omitempty"`   // path to BirdNET v2.4 embeddings ONNX model
-	ClassifierModel     string                      `yaml:"classifiermodel,omitempty" json:"classifierModel,omitempty"` // path to bat species classifier ONNX model
-	LabelPath           string                      `yaml:"labelpath,omitempty" json:"labelPath,omitempty"`             // path to bat species labels file
-	Threshold           float64                     `yaml:"threshold" json:"threshold"`                                 // confidence threshold for bat detections
-	Locale              string                      `yaml:"locale,omitempty" json:"locale,omitempty"`                   // locale for species label translation
-	NighttimeOnly       bool                        `yaml:"nighttimeonly" json:"nighttimeOnly"`                         // restrict bat detection to nighttime (civil dusk to civil dawn)
-	FalsePositiveFilter FalsePositiveFilterSettings `yaml:"falsepositivefilter" json:"falsePositiveFilter"`             // false positive filtering for bat detections (level 0-5)
-	UltrasonicFilter    UltrasonicFilterConfig      `yaml:"ultrasonicfilter" json:"ultrasonicFilter"`                   // post-detection ultrasonic validation filter
-}
-
-// UltrasonicFilterConfig controls the post-detection ultrasonic validation filter for bat detections.
-// The filter measures temporal variability of ultrasonic energy (US frame CV) in the source audio.
-// Real bat echolocation produces bursts of ultrasonic energy (high CV), while false positives
-// from audible-range sounds show flat ultrasonic energy at the noise floor (low CV).
-type UltrasonicFilterConfig struct {
-	Enabled          bool    `yaml:"enabled" json:"enabled"`                   // enable ultrasonic validation filter
-	CVThreshold      float64 `yaml:"cvthreshold" json:"cvThreshold"`           // detections with US frame CV below this are tagged unlikely
-	FFTSize          int     `yaml:"fftsize" json:"fftSize"`                   // FFT window size in samples (must be power of 2)
-	HopSize          int     `yaml:"hopsize" json:"hopSize"`                   // STFT hop size in samples
-	FrequencySplitHz int     `yaml:"frequencysplithz" json:"frequencySplitHz"` // boundary between audible and ultrasonic bands in Hz
-}
-
 // HumanVoiceConfig holds configuration for human voice / speech detection
 // using a Silero VAD ONNX model. Mirrors the simplest model config shape
 // (model path + confidence threshold). Phase 2 wires this into the model
@@ -1288,13 +1242,6 @@ type UltrasonicFilterConfig struct {
 type HumanVoiceConfig struct {
 	ModelPath string  `yaml:"modelpath,omitempty" json:"modelPath,omitempty"` // path to the Silero VAD ONNX model file
 	Threshold float64 `yaml:"threshold" json:"threshold"`                     // confidence threshold for human voice detections
-}
-
-// BSGConfig holds configuration for BSG regional bird models.
-type BSGConfig struct {
-	ModelPath string `yaml:"modelpath,omitempty" json:"modelPath,omitempty"` // path to BSG ONNX model file
-	LabelPath string `yaml:"labelpath,omitempty" json:"labelPath,omitempty"` // path to BSG label file
-	Locale    string `yaml:"locale,omitempty" json:"locale,omitempty"`       // locale for species label translation
 }
 
 // ModelsConfig holds global model enablement and management settings.
@@ -1678,9 +1625,6 @@ type Settings struct {
 	} `yaml:"main" json:"main"`
 
 	BirdNET    BirdNETConfig    `yaml:"birdnet" json:"birdnet"`       // BirdNET configuration
-	Perch      PerchConfig      `yaml:"perch" json:"perch"`           // Perch v2 model configuration
-	Bat        BatConfig        `yaml:"bat" json:"bat"`               // Bat detection configuration
-	BSG        BSGConfig        `yaml:"bsg" json:"bsg"`               // BSG regional bird model configuration
 	HumanVoice HumanVoiceConfig `yaml:"humanvoice" json:"humanVoice"` // Human voice / speech detection configuration
 	Models     ModelsConfig     `yaml:"models" json:"models"`         // Global model enablement and management
 

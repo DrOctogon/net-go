@@ -6,9 +6,15 @@ package ultrasonic
 import (
 	"math"
 	"math/cmplx"
-
-	"github.com/tphakala/birdnet-go/internal/conf"
 )
+
+// FilterConfig holds the parameters for the ultrasonic validation filter.
+type FilterConfig struct {
+	FFTSize          int     // FFT window size in samples (must be a power of 2)
+	HopSize          int     // Hop size in samples between successive frames
+	FrequencySplitHz int     // Frequency boundary in Hz above which energy is measured
+	CVThreshold      float64 // Coefficient-of-variation threshold below which a detection is flagged unlikely
+}
 
 // ComputeUSFrameCV computes the coefficient of variation of per-frame ultrasonic
 // energy for the given PCM audio samples. Returns the CV value and whether the
@@ -17,7 +23,7 @@ import (
 // samples contains the raw audio at sampleRate Hz. The function runs an STFT
 // with the configured FFT/hop sizes, sums energy above the frequency split for
 // each frame, and returns std(framePowers)/mean(framePowers).
-func ComputeUSFrameCV(samples []float64, sampleRate int, cfg conf.UltrasonicFilterConfig) (float64, bool) {
+func ComputeUSFrameCV(samples []float64, sampleRate int, cfg FilterConfig) (float64, bool) {
 	if len(samples) < cfg.FFTSize || sampleRate <= 0 || cfg.FFTSize < 2 || cfg.HopSize <= 0 {
 		return 0, false
 	}
@@ -68,7 +74,7 @@ func ComputeUSFrameCV(samples []float64, sampleRate int, cfg conf.UltrasonicFilt
 // IsUnlikely returns true if the given US frame CV falls below the configured
 // threshold, indicating the audio lacks ultrasonic temporal variability
 // consistent with bat echolocation.
-func IsUnlikely(cv float64, cfg conf.UltrasonicFilterConfig) bool {
+func IsUnlikely(cv float64, cfg FilterConfig) bool {
 	return cv < cfg.CVThreshold
 }
 

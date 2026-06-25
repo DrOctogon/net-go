@@ -85,9 +85,3 @@ type Result struct {
 	RawScores   []float32    // all scores after activation (sigmoid/softmax)
 }
 
-// LocationScore represents a species' occurrence probability at a given location and date.
-type LocationScore struct {
-	Species string
-	Score   float32
-	Index   int
-}
