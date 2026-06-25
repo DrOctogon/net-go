@@ -327,9 +327,6 @@ func (p *AudioPipelineService) Start(_ context.Context) error {
 		ctrl.SetSourceRestarter(p.RestartSource)
 	}
 
-	// Inject suncalc into the orchestrator for bat nighttime scheduling.
-	bn.SetSunCalc(p.apiService.SunCalc())
-
 	// Publish application started alert event.
 	alerting.TryPublish(&alerting.AlertEvent{
 		ObjectType: alerting.ObjectTypeApplication,

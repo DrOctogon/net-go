@@ -19,7 +19,7 @@ func TestResolveSpeciesFilter_SecondaryModelScientificLabel(t *testing.T) {
 
 	labels := []string{"Turdus merula_Eurasian Blackbird", "Barbastella barbastellus"}
 	isAll, resolved := resolveSpeciesFilter(
-		[]string{"Barbastella barbastellus"}, labels, nil, "", "test",
+		[]string{"Barbastella barbastellus"}, labels, "", "test",
 	)
 
 	assert.False(t, isAll)
@@ -37,7 +37,7 @@ func TestResolveSpeciesFilter_LocalizedCommonNameViaOpenFauna(t *testing.T) {
 
 	labels := []string{"Barbastella barbastellus"}
 	isAll, resolved := resolveSpeciesFilter(
-		[]string{"mopsilepakko"}, labels, nil, "fi", "test",
+		[]string{"mopsilepakko"}, labels, "fi", "test",
 	)
 
 	assert.False(t, isAll)
@@ -56,7 +56,7 @@ func TestResolveSpeciesFilter_ReverseHitNotInLabelsStaysUnresolved(t *testing.T)
 	// but that species is not in the loaded labels here (no bat model loaded).
 	labels := []string{"Turdus merula_Eurasian Blackbird"}
 	isAll, resolved := resolveSpeciesFilter(
-		[]string{"mopsilepakko"}, labels, nil, "fi", "test",
+		[]string{"mopsilepakko"}, labels, "fi", "test",
 	)
 
 	assert.False(t, isAll)
@@ -69,7 +69,7 @@ func TestResolveSpeciesFilter_UnknownEntryStaysUnresolved(t *testing.T) {
 	t.Parallel()
 
 	isAll, resolved := resolveSpeciesFilter(
-		[]string{"definitely-not-a-species-xyz"}, []string{"Turdus merula_Eurasian Blackbird"}, nil, "fi", "test",
+		[]string{"definitely-not-a-species-xyz"}, []string{"Turdus merula_Eurasian Blackbird"}, "fi", "test",
 	)
 
 	assert.False(t, isAll)

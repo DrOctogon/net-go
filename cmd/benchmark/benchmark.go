@@ -8,6 +8,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/tphakala/birdnet-go/internal/analysis"
 	"github.com/tphakala/birdnet-go/internal/classifier"
+	"github.com/tphakala/birdnet-go/internal/classifier/humanvoice"
 	"github.com/tphakala/birdnet-go/internal/conf"
 )
 
@@ -89,10 +90,20 @@ type benchmarkResults struct {
 }
 
 func runInferenceBenchmark(settings *conf.Settings, results *benchmarkResults) error {
-	// Initialize BirdNET
-	bn, err := classifier.NewOrchestrator(settings)
+	// Initialize the human-voice model and inject it into the orchestrator.
+	model, err := humanvoice.New(&humanvoice.Config{
+		ModelPath:       settings.BirdNET.ModelPath,
+		ONNXRuntimePath: settings.BirdNET.ONNXRuntimePath,
+		Threads:         settings.BirdNET.Threads,
+		Threshold:       settings.BirdNET.Threshold,
+	})
 	if err != nil {
-		return fmt.Errorf("failed to initialize BirdNET: %w", err)
+		return fmt.Errorf("failed to initialize human-voice model: %w", err)
+	}
+	bn, err := classifier.NewOrchestrator(settings, model)
+	if err != nil {
+		_ = model.Close()
+		return fmt.Errorf("failed to initialize orchestrator: %w", err)
 	}
 	defer bn.Delete()
 

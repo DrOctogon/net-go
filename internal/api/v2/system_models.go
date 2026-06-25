@@ -19,12 +19,16 @@ type ActiveModelResponse struct {
 // GetActiveModels returns metadata for all currently loaded models.
 // GET /api/v2/system/models
 func (c *Controller) GetActiveModels(ctx echo.Context) error {
-	if c.ModelManager == nil {
+	if c.Processor == nil {
+		return ctx.JSON(http.StatusOK, []ActiveModelResponse{})
+	}
+	bn := c.Processor.GetBirdNET()
+	if bn == nil {
 		return ctx.JSON(http.StatusOK, []ActiveModelResponse{})
 	}
 
-	infos := c.ModelManager.ModelInfos()
-	if infos == nil {
+	infos := bn.ModelInfos()
+	if len(infos) == 0 {
 		return ctx.JSON(http.StatusOK, []ActiveModelResponse{})
 	}
 

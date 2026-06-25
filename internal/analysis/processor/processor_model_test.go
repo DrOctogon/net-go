@@ -20,13 +20,6 @@ func TestCreateDetectionResult_ModelInfo(t *testing.T) {
 		expectedVariant string
 	}{
 		{
-			name:            "Perch_V2 resolves to Perch model",
-			modelID:         "Perch_V2",
-			expectedName:    "Perch",
-			expectedVersion: "V2",
-			expectedVariant: "default",
-		},
-		{
 			name:            "empty modelID defaults to BirdNET",
 			modelID:         "",
 			expectedName:    "BirdNET",

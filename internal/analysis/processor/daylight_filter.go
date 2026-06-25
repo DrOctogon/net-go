@@ -53,11 +53,8 @@ func (p *Processor) initDaylightFilter() {
 	}
 	locale := settings.BirdNET.Locale
 
-	// Get cached taxonomy database for genus/family/order resolution
-	taxonomyDB := p.getTaxonomyDB()
-
 	isAll, resolved := resolveSpeciesFilter(
-		settings.Realtime.DaylightFilter.Species, labels, taxonomyDB, locale, "daylight_filter",
+		settings.Realtime.DaylightFilter.Species, labels, locale, "daylight_filter",
 	)
 
 	// For an exclusionary filter, empty species list means "filter nothing",

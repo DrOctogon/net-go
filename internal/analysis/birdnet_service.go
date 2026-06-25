@@ -5,6 +5,7 @@ import (
 
 	"github.com/tphakala/birdnet-go/internal/app"
 	"github.com/tphakala/birdnet-go/internal/classifier"
+	"github.com/tphakala/birdnet-go/internal/classifier/humanvoice"
 	"github.com/tphakala/birdnet-go/internal/conf"
 	"github.com/tphakala/birdnet-go/internal/errors"
 	"github.com/tphakala/birdnet-go/internal/events"
@@ -17,9 +18,8 @@ const birdNETAnalyzerName = "birdnet-analyzer"
 // BirdNETAnalyzer wraps BirdNET model initialization as an app.Service
 // and implements app.Analyzer for source-to-analyzer routing.
 type BirdNETAnalyzer struct {
-	settings     *conf.Settings
-	bn           *classifier.Orchestrator
-	modelManager *classifier.ModelManager
+	settings *conf.Settings
+	bn       *classifier.Orchestrator
 }
 
 // NewBirdNETAnalyzer creates a new BirdNETAnalyzer with the given settings.
@@ -36,39 +36,38 @@ func (a *BirdNETAnalyzer) Name() string {
 // Start initializes the BirdNET interpreter and builds the species range filter.
 // Model initialization failures are non-retryable (missing files, insufficient resources).
 func (a *BirdNETAnalyzer) Start(_ context.Context) error {
-	// Load the user-editable model catalog before constructing the orchestrator
-	// so every catalog consumer (range-filter setup, the gallery API, the
-	// installed-model scan) sees the same active catalog. Non-fatal: any failure
-	// falls back to the built-in embedded catalog.
-	a.loadModelCatalog()
-
-	bn, err := classifier.NewOrchestrator(a.settings)
+	// Construct the single human-voice (Silero VAD) model in the analysis layer and
+	// inject it into the orchestrator. Building the model here (rather than inside
+	// classifier) avoids a humanvoice -> classifier import cycle.
+	model, err := humanvoice.New(&humanvoice.Config{
+		ModelPath:       a.settings.BirdNET.ModelPath,
+		ONNXRuntimePath: a.settings.BirdNET.ONNXRuntimePath,
+		Threads:         a.settings.BirdNET.Threads,
+		Threshold:       a.settings.BirdNET.Threshold,
+	})
 	if err != nil {
 		return errors.New(err).
 			Component("analysis").
 			Category(errors.CategoryModelInit).
-			Context("operation", "initialize_birdnet").
+			Context("operation", "initialize_humanvoice").
 			Build()
 	}
 
-	if err := classifier.BuildRangeFilter(bn); err != nil {
-		bn.Delete()
+	bn, err := classifier.NewOrchestrator(a.settings, model)
+	if err != nil {
+		_ = model.Close()
 		return errors.New(err).
 			Component("analysis").
 			Category(errors.CategoryModelInit).
-			Context("operation", "build_range_filter").
+			Context("operation", "initialize_orchestrator").
 			Build()
 	}
 
 	a.bn = bn
 
-	events.Emit(context.Background(), "detection", "model_loaded", "BirdNET model loaded", map[string]any{
+	events.Emit(context.Background(), "detection", "model_loaded", "Human-voice model loaded", map[string]any{
 		"species_count": bn.NumSpecies(),
 	})
-
-	// Initialize ModelManager for the model gallery. Failure is non-fatal
-	// because the gallery is an optional feature; core detection still works.
-	a.initModelManager(bn)
 
 	return nil
 }
@@ -83,7 +82,6 @@ func (a *BirdNETAnalyzer) Stop(_ context.Context) error {
 		a.bn.Delete()
 		a.bn = nil
 	}
-	a.modelManager = nil
 	return nil
 }
 
@@ -99,55 +97,3 @@ func (a *BirdNETAnalyzer) BirdNET() *classifier.Orchestrator {
 	return a.bn
 }
 
-// ModelManager returns the model gallery manager, or nil if initialization
-// was skipped or failed. Callers must not use the returned pointer after Stop().
-func (a *BirdNETAnalyzer) ModelManager() *classifier.ModelManager {
-	return a.modelManager
-}
-
-// initModelManager creates and populates the ModelManager for the model gallery.
-// If the models directory cannot be determined or the manager fails to scan,
-// a warning is logged and the analyzer continues without gallery support.
-// loadModelCatalog loads the user-editable model catalog into the active runtime
-// catalog: seed it on first run, refresh it when a new release ships a changed
-// built-in catalog, and fall back to the embedded catalog on any error. It runs
-// before the orchestrator and model manager so every catalog consumer sees the
-// same active catalog. The catalog file co-locates with config.yaml (the
-// resolved config directory), which is independent of the model-files directory
-// (conf.Settings.ResolveModelsDir); both coincide on a default install but can
-// differ for a system (/etc) or --config install. Failure is non-fatal: the
-// built-in embedded catalog is used and startup continues.
-func (a *BirdNETAnalyzer) loadModelCatalog() {
-	log := GetLogger()
-
-	configDir, err := conf.ResolveConfigDir()
-	if err != nil {
-		log.Warn("could not resolve config directory; using built-in model catalog",
-			logger.String("service", birdNETAnalyzerName),
-			logger.Error(err))
-		return
-	}
-	if err := classifier.LoadCatalog(configDir); err != nil {
-		log.Warn("model catalog could not be fully loaded or persisted; using built-in catalog",
-			logger.String("service", birdNETAnalyzerName),
-			logger.Error(err))
-	}
-}
-
-func (a *BirdNETAnalyzer) initModelManager(bn *classifier.Orchestrator) {
-	log := GetLogger()
-
-	modelsDir, ok := a.settings.ResolveModelsDir()
-	if !ok {
-		log.Warn("could not determine config or home directory; model gallery disabled",
-			logger.String("service", birdNETAnalyzerName))
-		return
-	}
-
-	a.modelManager = classifier.NewModelManager(modelsDir, bn, a.settings)
-	a.modelManager.ScanInstalled()
-
-	log.Info("model manager initialized",
-		logger.String("models_dir", modelsDir),
-		logger.String("service", birdNETAnalyzerName))
-}

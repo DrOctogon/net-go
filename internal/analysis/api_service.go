@@ -185,10 +185,6 @@ func (s *APIServerService) Start(ctx context.Context) error {
 	if buf := health.GlobalErrorBuffer(); buf != nil {
 		serverOpts = append(serverOpts, api.WithHealthErrorBuffer(buf))
 	}
-	if mm := s.bnAnalyzer.ModelManager(); mm != nil {
-		serverOpts = append(serverOpts, api.WithModelManager(mm))
-	}
-
 	apiServer, err := api.New(
 		s.settings,
 		serverOpts...,

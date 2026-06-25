@@ -86,6 +86,19 @@ func (o *Orchestrator) AllLabels() []string { return o.primary.Labels() }
 // ModelID returns the active model's registry ID.
 func (o *Orchestrator) ModelID() string { return o.primary.ModelID() }
 
+// PrimaryModelID returns the active model's registry ID. In the single-model host
+// the primary model is the only model, so this is identical to ModelID.
+func (o *Orchestrator) PrimaryModelID() string { return o.primary.ModelID() }
+
+// PrimaryModelInfo returns the metadata for the active model.
+func (o *Orchestrator) PrimaryModelInfo() ModelInfo {
+	infos := o.ModelInfos()
+	if len(infos) == 0 {
+		return ModelInfo{}
+	}
+	return infos[0]
+}
+
 // ModelInfos returns metadata for the loaded model.
 func (o *Orchestrator) ModelInfos() []ModelInfo {
 	info := ModelRegistry[o.primary.ModelID()]

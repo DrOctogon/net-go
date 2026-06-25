@@ -50,18 +50,6 @@ func TestShouldApplyRangeFilter(t *testing.T) {
 			expected:           false,
 		},
 		{
-			name:               "Bat never filtered",
-			modelID:            "Bat",
-			locationConfigured: true,
-			expected:           false,
-		},
-		{
-			name:               "BSG never filtered",
-			modelID:            "BSG",
-			locationConfigured: true,
-			expected:           false,
-		},
-		{
 			name:               "unknown model ID defaults to BirdNET via DetectionModelInfoForID",
 			modelID:            "SomeUnknownModel",
 			locationConfigured: true,

@@ -4,7 +4,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/classifier"
 	"github.com/tphakala/birdnet-go/internal/logger"
 	"github.com/tphakala/birdnet-go/internal/openfauna"
 )
@@ -17,22 +16,6 @@ const (
 	extendedCaptureLongThreshold   = 2 * time.Minute
 	extendedCaptureLongWait        = 60 * time.Second
 )
-
-// getTaxonomyDB returns the cached taxonomy database, loading it on first call.
-// Returns nil if the database cannot be loaded (with a warning logged).
-func (p *Processor) getTaxonomyDB() *classifier.TaxonomyDatabase {
-	p.taxonomyDBOnce.Do(func() {
-		db, err := classifier.LoadTaxonomyDatabase()
-		if err != nil {
-			GetLogger().Warn("Failed to load taxonomy database, genus/family/order filtering unavailable",
-				logger.Any("error", err),
-				logger.String("operation", "taxonomy_db_load"))
-			return
-		}
-		p.taxonomyDB = db
-	})
-	return p.taxonomyDB
-}
 
 // RebuildExtendedCaptureFilter re-resolves the extended capture species filter
 // from the current settings. This is called by the control monitor when
@@ -66,11 +49,8 @@ func (p *Processor) initExtendedCapture() {
 	}
 	locale := settings.BirdNET.Locale
 
-	// Get cached taxonomy database for genus/family/order resolution
-	taxonomyDB := p.getTaxonomyDB()
-
 	isAll, resolved := resolveSpeciesFilter(
-		settings.Realtime.ExtendedCapture.Species, labels, taxonomyDB, locale, "extended_capture",
+		settings.Realtime.ExtendedCapture.Species, labels, locale, "extended_capture",
 	)
 
 	p.extendedCaptureMu.Lock()
@@ -110,8 +90,7 @@ func (p *Processor) isExtendedCaptureSpecies(scientificName string) bool {
 
 // resolveSpeciesFilter resolves the config species list into a set of scientific names.
 // Returns (isAll, resolvedSet) where isAll=true means all species qualify.
-// taxonomyDB may be nil if taxonomy is unavailable.
-func resolveSpeciesFilter(configSpecies, labels []string, taxonomyDB *classifier.TaxonomyDatabase, locale, operationName string) (isAll bool, resolvedSet map[string]bool) {
+func resolveSpeciesFilter(configSpecies, labels []string, locale, operationName string) (isAll bool, resolvedSet map[string]bool) {
 	if len(configSpecies) == 0 {
 		return true, nil
 	}
@@ -152,35 +131,6 @@ func resolveSpeciesFilter(configSpecies, labels []string, taxonomyDB *classifier
 		if sci, ok := commonToScientific[entryLower]; ok {
 			resolved[sci] = true
 			continue
-		}
-
-		// Try taxonomy lookups if database is available.
-		// Use non-telemetry Lookup* methods to avoid Sentry noise for
-		// localized common names that don't match any genus/family/order.
-		if taxonomyDB != nil {
-			// Try as genus name
-			if genusSpecies := taxonomyDB.LookupAllSpeciesInGenus(entry); genusSpecies != nil {
-				for _, sp := range genusSpecies {
-					resolved[strings.ToLower(sp)] = true
-				}
-				continue
-			}
-
-			// Try as family name
-			if familySpecies := taxonomyDB.LookupAllSpeciesInFamily(entry); familySpecies != nil {
-				for _, sp := range familySpecies {
-					resolved[strings.ToLower(sp)] = true
-				}
-				continue
-			}
-
-			// Try as order name
-			if orderSpecies := taxonomyDB.LookupAllSpeciesInOrder(entry); orderSpecies != nil {
-				for _, sp := range orderSpecies {
-					resolved[strings.ToLower(sp)] = true
-				}
-				continue
-			}
 		}
 
 		// Defer to the OpenFauna reverse lookup below.

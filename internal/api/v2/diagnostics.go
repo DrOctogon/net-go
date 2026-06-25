@@ -302,17 +302,9 @@ func (c *Controller) buildPerModelInferenceProvider() func() []checks.ModelInfer
 		if bn == nil {
 			return nil
 		}
-		counters := classifier.GetInferenceCounters()
-		snapshots := counters.PeekAll()
-		if len(snapshots) == 0 {
-			return nil
-		}
-		infos := bn.ModelInfos()
-		infoMap := make(map[string]*classifier.ModelInfo, len(infos))
-		for i := range infos {
-			infoMap[infos[i].ID] = &infos[i]
-		}
-		return mapInferenceSnapshots(snapshots, infoMap)
+		// Per-model inference counters are not tracked in the human-voice facade
+		// (Phase 2c-3); the inference health chart is sourced from real stats in 2d.
+		return nil
 	}
 }
 

@@ -20,7 +20,6 @@ import (
 	"github.com/tphakala/birdnet-go/internal/audiocore"
 	"github.com/tphakala/birdnet-go/internal/audiocore/buffer"
 	"github.com/tphakala/birdnet-go/internal/audiocore/convert"
-	"github.com/tphakala/birdnet-go/internal/audiocore/ultrasonic"
 	"github.com/tphakala/birdnet-go/internal/classifier"
 	"github.com/tphakala/birdnet-go/internal/conf"
 	"github.com/tphakala/birdnet-go/internal/datastore"
@@ -144,10 +143,6 @@ type Processor struct {
 	daylightFilterAll     bool             // Currently unused; empty species list resolves to filter-nothing
 	daylightFilterMu      sync.RWMutex     // Protects daylightFilterSpecies and daylightFilterAll
 	sunCalc               *suncalc.SunCalc // Injected sun calculator for daylight determination
-
-	// Cached taxonomy database (lazy-loaded, shared across init functions)
-	taxonomyDB     *classifier.TaxonomyDatabase
-	taxonomyDBOnce sync.Once
 
 	// invalidCommandPaths records ExecuteCommand action command paths that
 	// have recently failed validation (missing, unreadable, non-executable,
@@ -672,9 +667,6 @@ func (p *Processor) processDetections(item classifier.Results) {
 			}
 		}
 		threshold := float32(settings.BirdNET.Threshold)
-		if item.ModelID == classifier.RegistryIDBat {
-			threshold = float32(settings.Bat.Threshold)
-		}
 		p.pipelineStats.RecordInference(item.Source.ID, item.ModelID, len(item.Results), len(detectionResults), maxConf, threshold)
 	}
 
@@ -843,74 +835,16 @@ func (p *Processor) processResults(settings *conf.Settings, item classifier.Resu
 		detections = append(detections, det)
 	}
 
-	// Run ultrasonic validation filter on bat detections. Computed once per chunk
-	// since all detections share the same source audio.
-	if len(detections) > 0 && item.ModelID == classifier.RegistryIDBat {
-		p.applyUltrasonicFilter(settings, item, detections)
-	}
-
 	return detections
-}
-
-// applyUltrasonicFilter runs the ultrasonic validation filter on a batch of bat detections.
-// It computes the US frame CV once from the shared PCM audio and tags all detections
-// as unlikely when the CV falls below the configured threshold. The PCM data is at
-// the source sample rate (e.g., 256kHz), not the model's internal 48kHz rate.
-//
-//nolint:gocritic // hugeParam: Pass by value is intentional for item
-func (p *Processor) applyUltrasonicFilter(settings *conf.Settings, item classifier.Results, detections []Detections) {
-	filterCfg := settings.Bat.UltrasonicFilter
-	if !filterCfg.Enabled {
-		return
-	}
-
-	resolved := p.resolveAudioSource(item.Source)
-	sourceRate := resolved.SampleRate
-	if sourceRate <= 0 || sourceRate <= filterCfg.FrequencySplitHz*2 {
-		return
-	}
-
-	if len(item.PCMdata) < 4 {
-		return
-	}
-
-	samples := convert.BytesToFloat64PCM16(item.PCMdata)
-	cv, ok := ultrasonic.ComputeUSFrameCV(samples, sourceRate, filterCfg)
-	sourceName := resolved.DisplayName
-	if !ok {
-		GetLogger().Debug("ultrasonic filter: insufficient data for CV computation",
-			logger.String("source", sourceName),
-			logger.Int("sample_count", len(samples)),
-			logger.Int("sample_rate", sourceRate))
-		return
-	}
-
-	unlikely := ultrasonic.IsUnlikely(cv, filterCfg)
-	logFields := []logger.Field{
-		logger.Float64("us_frame_cv", cv),
-		logger.Float64("threshold", filterCfg.CVThreshold),
-		logger.Bool("unlikely", unlikely),
-		logger.String("source", sourceName),
-		logger.Int("detections", len(detections)),
-	}
-	if unlikely {
-		GetLogger().Info("ultrasonic validation: detections tagged unlikely", logFields...)
-		for i := range detections {
-			detections[i].Result.Unlikely = true
-			detections[i].Result.UltrasonicCV = cv
-			detections[i].Result.UltrasonicCVThreshold = filterCfg.CVThreshold
-		}
-	} else {
-		GetLogger().Debug("ultrasonic validation filter result", logFields...)
-	}
 }
 
 // parseAndValidateSpecies parses species information and validates it
 //
 //nolint:gocritic // hugeParam: Pass by value is intentional - avoids pointer dereferencing in hot path
 func (p *Processor) parseAndValidateSpecies(settings *conf.Settings, result datastore.Results, item classifier.Results) (scientificName, commonName, speciesCode, speciesLowercase string) {
-	// Use BirdNET's EnrichResultWithTaxonomy to get species information
-	scientificName, commonName, speciesCode = p.Bn.EnrichResultWithTaxonomy(result.Species)
+	// Parse the species label into scientific/common/code components.
+	parsed := detection.ParseSpeciesString(result.Species)
+	scientificName, commonName, speciesCode = parsed.ScientificName, parsed.CommonName, parsed.Code
 
 	// Skip processing if scientific name is missing. Common name may be empty
 	// for models like Perch v2 that return scientific-name-only labels.
@@ -961,10 +895,7 @@ func shouldApplyRangeFilter(modelID string, settings *conf.Settings) bool {
 		return false
 	}
 	mInfo := classifier.DetectionModelInfoForID(modelID)
-	if mInfo.Name == detection.DefaultModelName || mInfo.Name == classifier.DetectionNamePerch {
-		return true
-	}
-	return false
+	return mInfo.Name == detection.DefaultModelName
 }
 
 // shouldFilterDetection checks if a detection should be filtered out
@@ -1066,8 +997,8 @@ func (p *Processor) createDetection(settings *conf.Settings, item classifier.Res
 	beginTime := item.StartTime
 	endTime := item.StartTime.Add(captureLength - preCaptureLength)
 
-	// Get occurrence probability for this species at detection time
-	occurrence := p.Bn.GetSpeciesOccurrenceAtTime(result.Species, item.StartTime)
+	// Occurrence probability is not available without taxonomy/range data.
+	occurrence := 0.0
 
 	// Compute detection time once to ensure Result has consistent timestamp
 	// This prevents date mismatch around midnight when time.Now() would be called separately
@@ -1301,10 +1232,7 @@ func (p *Processor) getBaseConfidenceThreshold(settings *conf.Settings, commonNa
 		return float32(config.Threshold)
 	}
 
-	// Fall back to model-specific global threshold
-	if modelID == classifier.RegistryIDBat {
-		return float32(settings.Bat.Threshold)
-	}
+	// Fall back to the global threshold.
 	return float32(settings.BirdNET.Threshold)
 }
 
@@ -2055,21 +1983,6 @@ func (p *Processor) getDefaultActions(det *Detections) []Action {
 	// (Sentry BIRDNET-GO-WD), preventing SSE/MQTT from ever firing.
 	if settings.Realtime.Audio.Export.Enabled && databaseAction != nil {
 		actions = append(actions, p.buildSaveAudioAction(det, detectionCtx))
-	}
-
-	// Check if UpdateRangeFilterAction needs to be executed for the day
-	// Use atomic check-and-set to prevent race conditions (see GitHub issue #1357)
-	// This ensures only ONE goroutine will trigger the daily range filter update,
-	// preventing concurrent updates that could cause species list inconsistencies
-	if conf.ShouldUpdateRangeFilterToday() {
-		GetLogger().Info("Scheduling daily range filter update",
-			logger.Time("last_updated", settings.GetLastRangeFilterUpdate()),
-			logger.String("operation", "update_range_filter"))
-		// Add UpdateRangeFilterAction if it hasn't been executed today
-		actions = append(actions, &UpdateRangeFilterAction{
-			Bn:       p.Bn,
-			Settings: settings,
-		})
 	}
 
 	return actions

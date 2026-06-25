@@ -6,7 +6,6 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/classifier"
 	"github.com/tphakala/birdnet-go/internal/conf"
 	"github.com/tphakala/birdnet-go/internal/detection"
 )
@@ -111,7 +110,7 @@ func TestResolveExtendedCaptureFilter(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			isAll, resolved := resolveSpeciesFilter(tt.configSpecies, tt.labels, nil, "", "test")
+			isAll, resolved := resolveSpeciesFilter(tt.configSpecies, tt.labels, "", "test")
 			assert.Equal(t, tt.expectAll, isAll)
 			if !tt.expectAll {
 				for _, expected := range tt.expectSpecies {
@@ -123,34 +122,6 @@ func TestResolveExtendedCaptureFilter(t *testing.T) {
 	}
 }
 
-func TestResolveExtendedCaptureFilter_WithTaxonomy(t *testing.T) {
-	t.Parallel()
-
-	db, err := classifier.LoadTaxonomyDatabase()
-	require.NoError(t, err)
-
-	// Resolve "Strigidae" (owl family) via taxonomy DB
-	isAll, resolved := resolveSpeciesFilter([]string{"Strigidae"}, nil, db, "", "test")
-	assert.False(t, isAll)
-	assert.NotEmpty(t, resolved)
-	// Should include well-known owls
-	assert.True(t, resolved["strix aluco"] || resolved["bubo bubo"] || len(resolved) > 5,
-		"Strigidae should resolve to multiple owl species, got %d", len(resolved))
-}
-
-func TestResolveExtendedCaptureFilter_WithGenus(t *testing.T) {
-	t.Parallel()
-
-	db, err := classifier.LoadTaxonomyDatabase()
-	require.NoError(t, err)
-
-	// Resolve "Strix" (genus) via taxonomy DB — should include Tawny Owl, Ural Owl, etc.
-	isAll, resolved := resolveSpeciesFilter([]string{"Strix"}, nil, db, "", "test")
-	assert.False(t, isAll)
-	assert.NotEmpty(t, resolved)
-	assert.True(t, resolved["strix aluco"],
-		"Strix genus should include Strix aluco (Tawny Owl), got %v", resolved)
-}
 
 func TestExtendedCapture_FlushDeadlineExtension(t *testing.T) {
 	t.Parallel()

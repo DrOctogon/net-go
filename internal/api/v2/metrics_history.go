@@ -10,7 +10,6 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"github.com/tphakala/birdnet-go/internal/classifier"
 	"github.com/tphakala/birdnet-go/internal/datastore"
 	"github.com/tphakala/birdnet-go/internal/logger"
 	"github.com/tphakala/birdnet-go/internal/observability"
@@ -241,10 +240,8 @@ func (c *Controller) initMetricsHistoryRoutes() {
 			}
 		}
 
-		// Wire BirdNET inference counters
-		collector.SetInferenceCounters(classifier.GetInferenceCounters())
-
-		// Wire per-model clip length and RSS functions for RTF computation and RSS gauges
+		// Wire per-model clip length for RTF computation. Inference counters and
+		// per-model RSS are not tracked in the human-voice facade (Phase 2c-3).
 		if c.Processor != nil {
 			if bn := c.Processor.GetBirdNET(); bn != nil {
 				collector.SetModelClipFunc(func() map[string]float64 {
@@ -255,7 +252,6 @@ func (c *Controller) initMetricsHistoryRoutes() {
 					}
 					return out
 				})
-				collector.SetModelRSSFunc(bn.ModelRSS)
 			}
 		}
 		if c.metrics != nil && c.metrics.BirdNET != nil {

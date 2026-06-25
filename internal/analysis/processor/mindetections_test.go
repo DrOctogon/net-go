@@ -954,33 +954,12 @@ func TestCalculateMinDetectionsForModel(t *testing.T) {
 	settings := &conf.Settings{}
 	settings.Realtime.FalsePositiveFilter.Level = 3
 	settings.BirdNET.Overlap = 2.4
-	settings.Bat.FalsePositiveFilter.Level = 3
 
-	birdResult := calculateMinDetectionsForModel(settings, "BirdNET_V2.4")
-	batResult := calculateMinDetectionsForModel(settings, "Bat")
-
-	// Bird: level 3, overlap 2.4, step 0.6s, max 10, 50% = 5
-	assert.Equal(t, 5, birdResult, "BirdNET model should use bird FP filter calculation")
-	// Bat: level 3, fixed 1.5s step, max 4, 50% = 2
-	assert.Equal(t, 2, batResult, "Bat model should use bat FP filter calculation")
-}
-
-// TestGetBaseConfidenceThreshold_BatModel verifies that bat detections
-// use settings.Bat.Threshold instead of settings.BirdNET.Threshold.
-func TestGetBaseConfidenceThreshold_BatModel(t *testing.T) {
-	t.Parallel()
-
-	settings := &conf.Settings{}
-	settings.BirdNET.Threshold = 0.7
-	settings.Bat.Threshold = 0.3
-
-	p := &Processor{Settings: settings}
-
-	birdThreshold := p.getBaseConfidenceThreshold(settings, "Common Pipistrelle", "Pipistrellus pipistrellus", "BirdNET_V2.4")
-	batThreshold := p.getBaseConfidenceThreshold(settings, "Common Pipistrelle", "Pipistrellus pipistrellus", "Bat")
-
-	assert.InDelta(t, 0.7, float64(birdThreshold), 0.001, "bird model should use BirdNET threshold")
-	assert.InDelta(t, 0.3, float64(batThreshold), 0.001, "bat model should use Bat threshold")
+	// Single-model facade: the modelID is ignored; every model uses the standard
+	// false-positive-filter calculation.
+	result := calculateMinDetectionsForModel(settings, "")
+	// level 3, overlap 2.4, step 0.6s, max 10, 50% = 5
+	assert.Equal(t, 5, result, "model should use the standard FP filter calculation")
 }
 
 // TestGetBaseConfidenceThreshold_CustomOverridesModel verifies that per-species

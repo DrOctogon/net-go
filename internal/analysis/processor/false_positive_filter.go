@@ -4,7 +4,6 @@ package processor
 import (
 	"math"
 
-	"github.com/tphakala/birdnet-go/internal/classifier"
 	"github.com/tphakala/birdnet-go/internal/conf"
 )
 
@@ -114,10 +113,7 @@ func getRecommendedLevelForOverlap(overlap float64) (level int, overlapSufficien
 // calculateMinDetectionsForModel routes to the correct minDetections calculation
 // based on the model ID. Bat models use a fixed 50% overlap instead of the
 // user-configurable BirdNET overlap, and read from a separate filter config.
-func calculateMinDetectionsForModel(settings *conf.Settings, modelID string) int {
-	if modelID == classifier.RegistryIDBat {
-		return calculateBatMinDetections(settings)
-	}
+func calculateMinDetectionsForModel(settings *conf.Settings, _ string) int {
 	return calculateMinDetectionsFromSettings(settings)
 }
 
@@ -152,10 +148,8 @@ type visibilityThresholds map[string]int
 // without recomputing inside a loop or under a lock.
 func precomputeVisibilityThresholds(settings *conf.Settings) visibilityThresholds {
 	birdVis := CalculateVisibilityThreshold(calculateMinDetectionsFromSettings(settings))
-	batVis := CalculateVisibilityThreshold(calculateBatMinDetections(settings))
 	return visibilityThresholds{
-		"":                       birdVis, // default for unknown model IDs
-		classifier.RegistryIDBat: batVis,
+		"": birdVis, // default for unknown model IDs
 	}
 }
 

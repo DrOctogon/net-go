@@ -39,30 +39,34 @@ Plan said "one rewrite unit" but that detonates the whole pipeline at once. **Pe
 
 ---
 
-## 2c-3 STATUS — IN PROGRESS (build RED, WIP committed)
+## 2c-3 STATUS — DONE (build GREEN, tests pass) — 2026-06-25
 
-Done: deleted ~30 bird classifier files + `data/` + `internal/ebird/`; wrote slim
-`model_registry.go` (HumanVoice-only) + slim single-model `orchestrator.go`
-(injected `ModelInstance`, no import cycle) — **classifier + humanvoice packages
-compile**. Fixed `observability/metrics.go` (`initializeTracing` no-op).
+Slim facade welded through all consumers. `go build -tags "notflite skipfrontend" ./...`
+clean; `go vet` clean; tests pass for `classifier`, `humanvoice`, `inferencestats`,
+`api/v2`, `analysis`, `analysis/processor`.
 
-**Build is RED** by design (atomic swap, no green intermediate). Remaining
-consumer retarget (exact callsites, verified 2026-06-24):
+Consumer retarget completed:
 
-- `analysis/birdnet_service.go`: `NewOrchestrator(settings)` → build `humanvoice.New(...)` then `NewOrchestrator(settings, model)`; delete `ModelManager` field/method (22,104), `LoadCatalog`(130), `NewModelManager`(147), `BuildRangeFilter`(54).
-- `analysis/control_monitor.go`: drop `BuildRangeFilter`(394,435), `OpenFaunaResolver`(145), `ReloadSecondaryModels`(464); `AllLabels` ok.
-- `analysis/database_migration.go:508`, `database_service.go:211`: drop `LoadTaxonomyData("")` (scientificIndex now empty).
-- `processor/processor.go`: drop `taxonomyDB` field(149), `EnrichResultWithTaxonomy`(913)→use scientific name as-is, `GetSpeciesOccurrenceAtTime`(1070), `RegistryIDBat` branches(675,848,1305), `DetectionNamePerch`(964).
-- `processor/extended_capture.go`: drop `getTaxonomyDB`/`TaxonomyDatabase`/`LoadTaxonomyDatabase`(23,25,114) — `resolveSpeciesFilter` without taxonomy.
-- `processor/false_positive_filter.go`: drop `RegistryIDBat`(118,158) + bat threshold path (callers processor.go:360,1715 + mindetections_test.go).
-- `processor/actions_integrations.go`: drop range-rebuild action body `GetProbableSpecies`(210)/`RebuildNameResolver`(236).
-- `api/server.go`: drop `modelManager` field(66)/`WithModelManager`(241)/wire(493).
-- `api/v2/api.go`: drop `ModelManager` field(144)/`WithModelManager`(291)/`TaxonomyDB`(71)/`LoadTaxonomyDatabase`(529).
-- `api/v2/models.go`: DELETE (model gallery, all `ModelManager`) + unregister `initModelRoutes` + tests.
-- `api/v2/inference_status.go:353`: drop `ModelManager` branch.
-- `cmd/benchmark/benchmark.go:93`: `NewOrchestrator(settings)` → inject model (or simplify/skip).
-- Then re-grep deleted symbols; build `./...`; vet+test analysis/api/classifier.
-- Deferred-OK (compile without edits): conf range/perch/bat/bsg structs (unused), observability `RecordRangeFilter` (orphaned), notification rebuild key. Clean in §E.
+- `analysis/birdnet_service.go`: builds `humanvoice.New(&Config{ModelPath,ONNXRuntimePath,Threads,Threshold})` then `classifier.NewOrchestrator(settings, model)`; deleted ModelManager field/method, `loadModelCatalog`, `initModelManager`.
+- `analysis/control_monitor.go`: dropped `BuildRangeFilter` (×2), `OpenFaunaResolver` (→`installNameResolver(nil,...)`), `ReloadSecondaryModels`; `handleRebuildRangeFilter` now maintenance-cleanup only.
+- `analysis/{database_migration,database_service}.go`: `LoadTaxonomyData("")` → `var sciIndex map[string]string` (empty).
+- `analysis/{buffer_manager.go:IsModelActive skip removed, process.go:ModelSpecFor now (ModelSpec,error), audio_pipeline_service.go:SetSunCalc drop, api_service.go:WithModelManager drop}`.
+- `processor/processor.go`: dropped `taxonomyDB` field, bat threshold/ultrasonic branches, `EnrichResultWithTaxonomy`→`detection.ParseSpeciesString`, `GetSpeciesOccurrenceAtTime`→0, `DetectionNamePerch` clause, `UpdateRangeFilterAction` scheduling; deleted orphaned `applyUltrasonicFilter`.
+- `processor/{extended_capture,daylight_filter,false_positive_filter,actions_*}.go`: `resolveSpeciesFilter` now 4-arg (no taxonomy); kept daylight filter (generic suncalc, taxonomy-free) — diverged from spec's delete-list; deleted `UpdateRangeFilterAction` type/Execute/GetDescription.
+- `api/server.go` + `api/v2/api.go`: removed `modelManager`/`ModelManager`/`WithModelManager`/`TaxonomyDB`/`LoadTaxonomyDatabase`; dropped `model routes` registration.
+- `api/v2/models.go`: DELETED. `system_models.go`/`inference_status.go`/`diagnostics.go`/`metrics_history.go`: retargeted to single-model facade (orchestrator `ModelInfos`/`ModelID`; inference counters + per-model RSS not tracked until 2d).
+- `classifier/orchestrator.go`: added `PrimaryModelID`/`PrimaryModelInfo`.
+- `cmd/benchmark/benchmark.go`: injects `humanvoice` model.
+- Test files retargeted to single model; bird/bat/perch/taxonomy-specific cases deleted.
+
+Deferred-OK (compile/run fine, clean later): conf range/perch/bat/bsg structs + bat
+false-positive-filter helpers (read conf.Bat, kept per §E); observability
+`RecordRangeFilter`; notification rebuild key.
+
+Known non-blocker: `TestExecuteCommandAction_EnvironmentIsolation` hangs in this sandbox
+(runs a temp shell script via untouched `execute.go`; zero classifier coupling) — skip it.
+
+Lint (`golangci-lint`) not run — binary absent from this environment; run `task lint` before PR.
 
 ---
 

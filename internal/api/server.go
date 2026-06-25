@@ -23,7 +23,6 @@ import (
 	apiv2 "github.com/tphakala/birdnet-go/internal/api/v2"
 	"github.com/tphakala/birdnet-go/internal/audiocore"
 	"github.com/tphakala/birdnet-go/internal/audiocore/engine"
-	"github.com/tphakala/birdnet-go/internal/classifier"
 	"github.com/tphakala/birdnet-go/internal/conf"
 	"github.com/tphakala/birdnet-go/internal/datastore"
 	datastoreV2 "github.com/tphakala/birdnet-go/internal/datastore/v2"
@@ -61,9 +60,6 @@ type Server struct {
 
 	// Audio engine (unified audio subsystem)
 	engine *engine.AudioEngine
-
-	// Model gallery manager (optional, nil when not configured)
-	modelManager *classifier.ModelManager
 
 	// Health error buffer shared between the logger and health checks
 	healthErrors *health.ErrorRingBuffer
@@ -234,13 +230,6 @@ func WithV2Manager(mgr datastoreV2.Manager) ServerOption {
 func WithAudioEngine(e *engine.AudioEngine) ServerOption {
 	return func(s *Server) {
 		s.engine = e
-	}
-}
-
-// WithModelManager sets the ModelManager for model gallery operations.
-func WithModelManager(mm *classifier.ModelManager) ServerOption {
-	return func(s *Server) {
-		s.modelManager = mm
 	}
 }
 
@@ -488,9 +477,6 @@ func (s *Server) setupRoutes() error {
 		apiv2.WithV2Manager(s.v2Manager),
 		apiv2.WithMetricsStore(observability.NewMemoryStore(apiv2.MetricsHistoryMaxPoints)),
 		apiv2.WithAudioEngine(s.engine),
-	}
-	if s.modelManager != nil {
-		v2Opts = append(v2Opts, apiv2.WithModelManager(s.modelManager))
 	}
 	if s.healthErrors != nil {
 		v2Opts = append(v2Opts, apiv2.WithHealthErrorBuffer(s.healthErrors))

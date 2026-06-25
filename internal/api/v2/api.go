@@ -25,7 +25,6 @@ import (
 	"github.com/tphakala/birdnet-go/internal/audiocore"
 	"github.com/tphakala/birdnet-go/internal/audiocore/engine"
 	"github.com/tphakala/birdnet-go/internal/audiocore/ffmpeg"
-	"github.com/tphakala/birdnet-go/internal/classifier"
 	"github.com/tphakala/birdnet-go/internal/conf"
 	"github.com/tphakala/birdnet-go/internal/datastore"
 	datastoreV2 "github.com/tphakala/birdnet-go/internal/datastore/v2"
@@ -68,7 +67,6 @@ type Controller struct {
 	Settings          atomic.Pointer[conf.Settings]
 	SunCalc           *suncalc.SunCalc
 	Processor         *processor.Processor
-	TaxonomyDB        *classifier.TaxonomyDatabase
 	controlChan       chan string
 	shutdownRequester ShutdownRequester // programmatic shutdown trigger (e.g., for restart)
 	shutdownMu        sync.RWMutex      // protects shutdownRequester
@@ -139,9 +137,6 @@ type Controller struct {
 	// nameResolver is the authoritative localized name source shared with the
 	// classifier orchestrator. Overrides label-derived names in the cached maps.
 	nameResolver atomic.Pointer[datastore.SpeciesNameResolver]
-
-	// Model gallery fields
-	ModelManager *classifier.ModelManager
 
 	// Audio processing fields
 	processingCache     *processingCache
@@ -284,17 +279,6 @@ func WithV2Manager(mgr datastoreV2.Manager) Option {
 func WithAudioEngine(e *engine.AudioEngine) Option {
 	return func(c *Controller) {
 		c.engine.Store(e)
-	}
-}
-
-// WithModelManager sets the ModelManager for model gallery operations.
-func WithModelManager(mm *classifier.ModelManager) Option {
-	return func(c *Controller) {
-		c.ModelManager = mm
-		// Wire the topology-changed callback so model add/remove broadcasts over
-		// the metrics SSE stream. The method value binds c; c.metricsStore is read
-		// lazily at call time, so option ordering is irrelevant.
-		mm.SetTopologyChangedCallback(c.BroadcastInferenceTopologyChanged)
 	}
 }
 
@@ -525,25 +509,6 @@ func NewWithOptions(e *echo.Echo, ds datastore.Interface, settings *conf.Setting
 	// logging, where admins look when debugging auth.
 	c.securityLogger = logger.Global().Module("security")
 
-	// Load local taxonomy database for fast species lookups
-	taxonomyDB, err := classifier.LoadTaxonomyDatabase()
-	if err != nil {
-		c.logWarnIfEnabled("Failed to load taxonomy database", logger.Error(err))
-		c.logWarnIfEnabled("Species taxonomy lookups will fall back to eBird API")
-		// Continue without taxonomy database - eBird API fallback will be used
-		c.TaxonomyDB = nil
-	} else {
-		c.TaxonomyDB = taxonomyDB
-		stats := taxonomyDB.Stats()
-		c.logInfoIfEnabled("Loaded taxonomy database",
-			logger.Any("genus_count", stats["genus_count"]),
-			logger.Any("family_count", stats["family_count"]),
-			logger.Any("species_count", stats["species_count"]),
-			logger.String("version", taxonomyDB.Version),
-			logger.String("updated_at", taxonomyDB.UpdatedAt),
-		)
-	}
-
 	// Apply functional options (auth middleware and service injected from server)
 	for _, opt := range opts {
 		opt(c)
@@ -697,7 +662,6 @@ func (c *Controller) initRoutes() {
 		{"debug routes", c.initDebugRoutes},
 		{"dynamic threshold routes", c.initDynamicThresholdRoutes},
 		{"alert routes", c.initAlertRoutes},
-		{"model routes", c.initModelRoutes},
 		{"insights routes", c.initInsightsRoutes},
 		{"tls routes", c.initTLSRoutes},
 		{"import routes", c.initImportRoutes},

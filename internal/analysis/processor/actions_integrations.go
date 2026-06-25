@@ -6,13 +6,10 @@ package processor
 import (
 	"context"
 	"encoding/json"
-	"time"
 
 	"github.com/tphakala/birdnet-go/internal/alerting"
-	"github.com/tphakala/birdnet-go/internal/conf"
 	"github.com/tphakala/birdnet-go/internal/datastore"
 	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/events"
 	"github.com/tphakala/birdnet-go/internal/logger"
 	"github.com/tphakala/birdnet-go/internal/mqtt"
 	"github.com/tphakala/birdnet-go/internal/privacy"
@@ -193,64 +190,6 @@ func (a *MqttAction) Execute(_ context.Context, data any) error {
 			logger.String("topic", a.Settings.Realtime.MQTT.Topic),
 			logger.String("operation", "mqtt_publish_success"))
 	}
-	return nil
-}
-
-// Execute updates the range filter species list, this is run every day
-// Note: The ShouldUpdateRangeFilterToday() check in processor.go ensures this action
-// is only created once per day, preventing duplicate concurrent updates (GitHub issue #1357)
-func (a *UpdateRangeFilterAction) Execute(ctx context.Context, data any) error {
-	a.mu.Lock()
-	defer a.mu.Unlock()
-
-	// Get current date for the range filter calculation
-	today := time.Now().Truncate(24 * time.Hour)
-
-	// Update location based species list
-	speciesScores, err := a.Bn.GetProbableSpecies(today, 0.0)
-	if err != nil {
-		// Reset the update flag to allow retry on next detection
-		// This prevents the issue where a failed update would block retries until tomorrow
-		conf.ResetRangeFilterUpdateFlag()
-
-		GetLogger().Error("Failed to get probable species for range filter",
-			logger.Error(err),
-			logger.String("date", today.Format(time.DateOnly)),
-			logger.String("operation", "update_range_filter"))
-		return err
-	}
-
-	// Convert the speciesScores slice to a slice of species labels
-	includedSpecies := make([]string, 0, len(speciesScores))
-	for _, speciesScore := range speciesScores {
-		includedSpecies = append(includedSpecies, speciesScore.Label)
-	}
-
-	// Update the species list (this also updates LastUpdated timestamp atomically)
-	conf.UpdateIncludedSpecies(includedSpecies)
-
-	// The daily rebuild bypasses classifier.BuildRangeFilter, so refresh the
-	// OpenFauna name-resolver working set here too. Non-fatal: on-demand Lookup
-	// still resolves names if this fails.
-	if a.Bn != nil {
-		if err := a.Bn.RebuildNameResolver(includedSpecies); err != nil {
-			GetLogger().Warn("Failed to rebuild OpenFauna name resolver after daily range filter update",
-				logger.Error(err))
-		}
-	}
-
-	events.Emit(ctx, "detection", "filter_reconfigured", "Range filter updated", map[string]any{
-		"species_count": len(includedSpecies),
-		"date":          today.Format(time.DateOnly),
-	})
-
-	if a.Settings.Debug {
-		GetLogger().Info("Range filter updated successfully",
-			logger.Int("species_count", len(includedSpecies)),
-			logger.String("date", today.Format(time.DateOnly)),
-			logger.String("operation", "update_range_filter_success"))
-	}
-
 	return nil
 }
 

@@ -10,7 +10,6 @@ import (
 
 	apiv2 "github.com/tphakala/birdnet-go/internal/api/v2"
 	"github.com/tphakala/birdnet-go/internal/app"
-	"github.com/tphakala/birdnet-go/internal/classifier"
 	"github.com/tphakala/birdnet-go/internal/conf"
 	"github.com/tphakala/birdnet-go/internal/datastore"
 	datastoreV2 "github.com/tphakala/birdnet-go/internal/datastore/v2"
@@ -206,9 +205,9 @@ func (d *DatabaseService) Start(_ context.Context) error {
 		}
 
 	case freshInstall:
-		// Fresh install: create at configured path with v2 schema
-		// Load eBird taxonomy for species code lookups in analytics endpoints.
-		_, freshSciIndex, _ := classifier.LoadTaxonomyData("")
+		// Fresh install: create at configured path with v2 schema.
+		// Taxonomy-backed species-code lookups were removed in the human-voice pivot.
+		var freshSciIndex map[string]string
 		var err error
 		v2OnlyDatastore, err = v2only.InitializeFreshInstall(settings, GetLogger(), freshSciIndex)
 		if err != nil {

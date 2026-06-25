@@ -142,7 +142,7 @@ func NewControlMonitor(wg *sync.WaitGroup, controlChan chan string, quitChan, re
 		if cm.apiController != nil {
 			api = cm.apiController
 		}
-		installNameResolver(cm.bn.OpenFaunaResolver(), cm.bn.AllLabels(), ds, api)
+		installNameResolver(nil, cm.bn.AllLabels(), ds, api)
 	}
 
 	// Initialize the sound level manager but don't start it yet
@@ -384,21 +384,9 @@ func (cm *ControlMonitor) handleReconfigureLiveStream() {
 
 // handleRebuildRangeFilter rebuilds the range filter
 func (cm *ControlMonitor) handleRebuildRangeFilter() {
-	// Guard the orchestrator dereference for consistency with NewControlMonitor,
-	// which only wires bn-dependent surfaces when cm.bn != nil. In realtime
-	// analysis cm.bn is always set; the guard is defensive. Use if/else rather
-	// than an early return so the opportunistic maintenance
-	// cleanup below still runs even when the rebuild itself is skipped.
-	if cm.bn == nil {
-		GetLogger().Warn("Cannot rebuild range filter: BirdNET orchestrator not initialized")
-	} else if err := classifier.BuildRangeFilter(cm.bn); err != nil {
-		GetLogger().Error("Failed to rebuild range filter", logger.Error(err))
-		cm.notifyError("Failed to rebuild range filter", err)
-	} else {
-		GetLogger().Info("Range filter rebuilt successfully")
-		cm.notifySuccess("Range filter rebuilt successfully")
-		emitHotReload("range_filter")
-	}
+	// Range filtering was removed in the human-voice pivot. This handler now only
+	// runs the opportunistic maintenance cleanup that was historically coupled to
+	// the periodic range-filter rebuild.
 
 	// Perform log deduplicator cleanup when range filter is rebuilt
 	// This coupling is for practicality - we wanted to avoid creating new goroutines
@@ -431,22 +419,8 @@ func (cm *ControlMonitor) handleReloadBirdnet() {
 	GetLogger().Info("BirdNET model reloaded successfully")
 	cm.notifySuccess("BirdNET model reloaded successfully")
 
-	// Rebuild range filter after model reload
-	if err := classifier.BuildRangeFilter(cm.bn); err != nil {
-		GetLogger().Error("Failed to rebuild range filter after model reload", logger.Error(err))
-		cm.notifyError("Failed to rebuild range filter", err)
-	} else {
-		GetLogger().Info("Range filter rebuilt successfully")
-		cm.notifySuccess("Range filter rebuilt successfully")
-	}
-
-	// Rebuild name maps with new locale labels (use fresh settings, not stale pointer).
-	// Order matters: BuildRangeFilter above already rebuilt the OpenFauna resolver for
-	// the new locale, and the resolver was installed on Ds/apiController at startup
-	// (NewControlMonitor), so these calls re-localize the cached maps via the
-	// now-current resolver.
-	// Use the full multi-model label set so secondary-model species (bats,
-	// Perch-unique) stay searchable after a locale/model reload, not just the primary.
+	// Rebuild name maps with the reloaded model's labels (use fresh settings, not a
+	// stale pointer) so the cached maps re-localize after a locale/model reload.
 	labels := cm.bn.AllLabels()
 	if cm.proc != nil && cm.proc.Ds != nil {
 		cm.proc.Ds.UpdateNameMaps(labels)
@@ -455,15 +429,6 @@ func (cm *ControlMonitor) handleReloadBirdnet() {
 	if cm.apiController != nil {
 		cm.apiController.UpdateCommonNameMap(labels)
 		GetLogger().Info("API controller common name map updated with new labels")
-	}
-
-	// Reload OV-capable secondary models (e.g. Perch) so a backend/OpenVINO-device
-	// change moves them onto the new device without a restart. No-ops when the
-	// backend/device is unchanged. The primary already reloaded above, so a
-	// secondary failure is surfaced but does not fail the overall reload.
-	if err := cm.bn.ReloadSecondaryModels(); err != nil {
-		GetLogger().Error("Failed to reload secondary models", logger.Error(err))
-		cm.notifyError("Failed to reload secondary models", err)
 	}
 
 	emitHotReload("birdnet_model")

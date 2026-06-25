@@ -351,7 +351,7 @@ func ProcessData(ctx context.Context, bn *classifier.Orchestrator, bufMgr *buffe
 	// Derive the analysis buffer interval from the model's spec. If
 	// inference exceeds this interval the pipeline falls behind real-time.
 	effectiveBufferDuration := 3 * time.Second / 2 // fallback: BirdNET v2.4
-	if spec, ok := bn.ModelSpecFor(modelID); ok {
+	if spec, err := bn.ModelSpecFor(modelID); err == nil {
 		effectiveBufferDuration = spec.BufferInterval()
 	}
 

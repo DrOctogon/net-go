@@ -139,14 +139,12 @@ func TestSourceModelsChanged(t *testing.T) {
 
 	const (
 		src            = "rtsp_abc123"
-		birdnetID      = "BirdNET_V2.4"
-		perchID        = "Perch_V2"
-		primaryModelID = birdnetID
+		humanVoiceID   = classifier.RegistryIDHumanVoice
+		primaryModelID = humanVoiceID
 	)
 
 	loaded := map[string]classifier.ModelInfo{
-		birdnetID: {ID: birdnetID},
-		perchID:   {ID: perchID},
+		humanVoiceID: {ID: humanVoiceID},
 	}
 
 	tests := []struct {
@@ -157,50 +155,20 @@ func TestSourceModelsChanged(t *testing.T) {
 	}{
 		{
 			name:             "no change, single model",
-			currentModels:    [][2]string{{src, birdnetID}},
-			desiredConfigIDs: []string{"birdnet"},
+			currentModels:    [][2]string{{src, humanVoiceID}},
+			desiredConfigIDs: []string{conf.ModelIDHumanVoice},
 			expected:         false,
-		},
-		{
-			name:             "no change, both models",
-			currentModels:    [][2]string{{src, birdnetID}, {src, perchID}},
-			desiredConfigIDs: []string{"birdnet", "perch_v2"},
-			expected:         false,
-		},
-		{
-			name:             "perch added",
-			currentModels:    [][2]string{{src, birdnetID}},
-			desiredConfigIDs: []string{"birdnet", "perch_v2"},
-			expected:         true,
-		},
-		{
-			name:             "perch removed",
-			currentModels:    [][2]string{{src, birdnetID}, {src, perchID}},
-			desiredConfigIDs: []string{"birdnet"},
-			expected:         true,
-		},
-		{
-			name:             "model swapped",
-			currentModels:    [][2]string{{src, birdnetID}},
-			desiredConfigIDs: []string{"perch_v2"},
-			expected:         true,
 		},
 		{
 			name:             "empty desired falls back to primary, no change",
-			currentModels:    [][2]string{{src, birdnetID}},
+			currentModels:    [][2]string{{src, humanVoiceID}},
 			desiredConfigIDs: []string{},
 			expected:         false,
 		},
 		{
-			name:             "empty desired falls back to primary, perch stale",
-			currentModels:    [][2]string{{src, birdnetID}, {src, perchID}},
-			desiredConfigIDs: []string{},
-			expected:         true,
-		},
-		{
 			name:             "unknown config ID ignored, no effective change",
-			currentModels:    [][2]string{{src, birdnetID}},
-			desiredConfigIDs: []string{"birdnet", "unknown_model"},
+			currentModels:    [][2]string{{src, humanVoiceID}},
+			desiredConfigIDs: []string{conf.ModelIDHumanVoice, "unknown_model"},
 			expected:         false,
 		},
 	}
@@ -219,39 +187,37 @@ func TestResolveDesiredModelSet(t *testing.T) {
 	t.Parallel()
 
 	loaded := map[string]classifier.ModelInfo{
-		"BirdNET_V2.4": {ID: "BirdNET_V2.4"},
-		"Perch_V2":     {ID: "Perch_V2"},
+		classifier.RegistryIDHumanVoice: {ID: classifier.RegistryIDHumanVoice},
 	}
 
 	t.Run("resolves known loaded models", func(t *testing.T) {
 		t.Parallel()
-		set := resolveDesiredModelSet([]string{"birdnet", "perch_v2"}, loaded, "BirdNET_V2.4")
-		assert.True(t, set["BirdNET_V2.4"])
-		assert.True(t, set["Perch_V2"])
-		assert.Len(t, set, 2)
+		set := resolveDesiredModelSet([]string{conf.ModelIDHumanVoice}, loaded, classifier.RegistryIDHumanVoice)
+		assert.True(t, set[classifier.RegistryIDHumanVoice])
+		assert.Len(t, set, 1)
 	})
 
 	t.Run("skips unknown config IDs", func(t *testing.T) {
 		t.Parallel()
-		set := resolveDesiredModelSet([]string{"birdnet", "unknown"}, loaded, "BirdNET_V2.4")
-		assert.True(t, set["BirdNET_V2.4"])
+		set := resolveDesiredModelSet([]string{conf.ModelIDHumanVoice, "unknown"}, loaded, classifier.RegistryIDHumanVoice)
+		assert.True(t, set[classifier.RegistryIDHumanVoice])
 		assert.Len(t, set, 1)
 	})
 
 	t.Run("skips unloaded models", func(t *testing.T) {
 		t.Parallel()
-		onlyBirdnet := map[string]classifier.ModelInfo{
-			"BirdNET_V2.4": {ID: "BirdNET_V2.4"},
-		}
-		set := resolveDesiredModelSet([]string{"birdnet", "perch_v2"}, onlyBirdnet, "BirdNET_V2.4")
-		assert.True(t, set["BirdNET_V2.4"])
+		// HumanVoice is the registered model but it is deliberately absent from the loaded map.
+		// The resolved set is empty so the function falls back to the primary model ID.
+		emptyLoaded := map[string]classifier.ModelInfo{}
+		set := resolveDesiredModelSet([]string{conf.ModelIDHumanVoice}, emptyLoaded, classifier.RegistryIDHumanVoice)
+		assert.True(t, set[classifier.RegistryIDHumanVoice], "primary fallback must be present when no model is loaded")
 		assert.Len(t, set, 1)
 	})
 
 	t.Run("empty config falls back to primary", func(t *testing.T) {
 		t.Parallel()
-		set := resolveDesiredModelSet(nil, loaded, "BirdNET_V2.4")
-		assert.True(t, set["BirdNET_V2.4"])
+		set := resolveDesiredModelSet(nil, loaded, classifier.RegistryIDHumanVoice)
+		assert.True(t, set[classifier.RegistryIDHumanVoice])
 		assert.Len(t, set, 1)
 	})
 }

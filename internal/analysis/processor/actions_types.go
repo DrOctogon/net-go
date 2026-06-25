@@ -12,7 +12,6 @@ import (
 	"github.com/tphakala/birdnet-go/internal/analysis/jobqueue"
 	"github.com/tphakala/birdnet-go/internal/analysis/species"
 	"github.com/tphakala/birdnet-go/internal/audiocore/buffer"
-	"github.com/tphakala/birdnet-go/internal/classifier"
 	"github.com/tphakala/birdnet-go/internal/conf"
 	"github.com/tphakala/birdnet-go/internal/datastore"
 	"github.com/tphakala/birdnet-go/internal/detection"
@@ -160,13 +159,6 @@ type MqttAction struct {
 	mu             sync.Mutex // Protect concurrent access to Result
 }
 
-type UpdateRangeFilterAction struct {
-	Bn          *classifier.Orchestrator
-	Settings    *conf.Settings
-	Description string
-	mu          sync.Mutex // Protect concurrent access to Settings
-}
-
 type SSEAction struct {
 	Settings      *conf.Settings
 	Result        detection.Result // Domain model (single source of truth)
@@ -246,14 +238,6 @@ func (a *MqttAction) GetDescription() string {
 		return a.Description
 	}
 	return "Publish detection to MQTT"
-}
-
-// GetDescription returns a human-readable description of the UpdateRangeFilterAction
-func (a *UpdateRangeFilterAction) GetDescription() string {
-	if a.Description != "" {
-		return a.Description
-	}
-	return "Update BirdNET range filter"
 }
 
 // GetDescription returns a human-readable description of the SSEAction
