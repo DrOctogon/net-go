@@ -84,6 +84,52 @@ func NewONNXClassifier(modelPath string, opts ONNXClassifierOptions) (Classifier
 	}, nil
 }
 
+// SileroVADOptions configures the Silero VAD speech detector.
+type SileroVADOptions struct {
+	// FrameSize is the per-inference window in samples (512 at 16 kHz). Required.
+	FrameSize int
+	// SampleRate is the value fed to the model's "sr" input (e.g. 16000). Required.
+	SampleRate int64
+	// Threads is the number of CPU threads for inference. 0 = ONNX defaults.
+	Threads int
+}
+
+// onnxSilero adapts an *onnx.SileroVAD to the Classifier interface. Predict
+// returns one speech probability per analysis frame (not per species); the
+// human voice model collapses these into its single class downstream.
+type onnxSilero struct {
+	vad *ort.SileroVAD
+}
+
+// NewSileroVAD creates a Classifier backed by a Silero VAD ONNX model. The ONNX
+// Runtime must be initialized via InitONNXRuntime before calling this.
+func NewSileroVAD(modelPath string, opts SileroVADOptions) (Classifier, error) {
+	vad, err := ort.NewSileroVAD(modelPath, opts.FrameSize, opts.SampleRate, opts.Threads)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create Silero VAD: %w", err)
+	}
+	return &onnxSilero{vad: vad}, nil
+}
+
+// Predict runs the VAD over the clip, returning one speech probability per frame.
+func (c *onnxSilero) Predict(samples []float32) ([]float32, error) {
+	if c.vad == nil {
+		return nil, ort.ErrSessionClosed
+	}
+	return c.vad.Predict(samples)
+}
+
+// NumSpecies returns 1: the human voice model has a single output class.
+func (c *onnxSilero) NumSpecies() int { return 1 }
+
+// Close releases the VAD session resources.
+func (c *onnxSilero) Close() {
+	if c.vad != nil {
+		_ = c.vad.Close()
+		c.vad = nil
+	}
+}
+
 // Predict runs ONNX inference, returning raw logits (pre-activation).
 func (c *onnxClassifier) Predict(samples []float32) ([]float32, error) {
 	if c.classifier == nil {

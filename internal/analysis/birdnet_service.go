@@ -2,6 +2,7 @@ package analysis
 
 import (
 	"context"
+	"path/filepath"
 
 	"github.com/tphakala/birdnet-go/internal/app"
 	"github.com/tphakala/birdnet-go/internal/classifier"
@@ -36,11 +37,36 @@ func (a *BirdNETAnalyzer) Name() string {
 // Start initializes the BirdNET interpreter and builds the species range filter.
 // Model initialization failures are non-retryable (missing files, insufficient resources).
 func (a *BirdNETAnalyzer) Start(_ context.Context) error {
+	// Resolve the Silero VAD model path. When the operator has not configured an
+	// explicit path, extract the model embedded in the binary into the models
+	// directory and use that.
+	modelPath := a.settings.BirdNET.ModelPath
+	if modelPath == "" {
+		configDir, dirErr := conf.ResolveConfigDir()
+		if dirErr != nil {
+			return errors.New(dirErr).
+				Component("analysis").
+				Category(errors.CategoryModelInit).
+				Context("operation", "resolve_models_dir").
+				Build()
+		}
+		modelsDir := filepath.Join(configDir, "models")
+		extracted, extractErr := humanvoice.WriteEmbeddedModel(modelsDir)
+		if extractErr != nil {
+			return errors.New(extractErr).
+				Component("analysis").
+				Category(errors.CategoryModelInit).
+				Context("operation", "extract_embedded_humanvoice_model").
+				Build()
+		}
+		modelPath = extracted
+	}
+
 	// Construct the single human-voice (Silero VAD) model in the analysis layer and
 	// inject it into the orchestrator. Building the model here (rather than inside
 	// classifier) avoids a humanvoice -> classifier import cycle.
 	model, err := humanvoice.New(&humanvoice.Config{
-		ModelPath:       a.settings.BirdNET.ModelPath,
+		ModelPath:       modelPath,
 		ONNXRuntimePath: a.settings.BirdNET.ONNXRuntimePath,
 		Threads:         a.settings.BirdNET.Threads,
 		Threshold:       a.settings.BirdNET.Threshold,

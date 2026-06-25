@@ -99,13 +99,13 @@ func New(cfg *Config) (*Model, error) {
 			Build()
 	}
 
-	// The Silero VAD output dimension is not the single-class label count, so
-	// label validation is skipped; the aggregation collapses frame outputs into
-	// the one "Human Voice" class.
-	vad, err := inference.NewONNXClassifier(cfg.ModelPath, inference.ONNXClassifierOptions{
-		Labels:              []string{labelHumanVoice},
-		Threads:             cfg.Threads,
-		SkipLabelValidation: true,
+	// The Silero VAD runs stateful per-frame inference (512-sample windows at
+	// 16 kHz with a recurrent state) and emits one speech probability per frame;
+	// aggregateClip collapses those into the single "Human Voice" class.
+	vad, err := inference.NewSileroVAD(cfg.ModelPath, inference.SileroVADOptions{
+		FrameSize:  sileroFrameSize,
+		SampleRate: sampleRateHz,
+		Threads:    cfg.Threads,
 	})
 	if err != nil {
 		return nil, errors.New(err).
