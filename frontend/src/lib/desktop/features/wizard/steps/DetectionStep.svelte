@@ -56,7 +56,7 @@
   onMount(() => {
     // Load current threshold and match to a preset
     const store = get(settingsStore);
-    const currentThreshold = store?.formData?.birdnet?.threshold;
+    const currentThreshold = store?.formData?.voicewatch?.threshold;
     if (currentThreshold !== undefined) {
       const match = presets.find(p => p.threshold === currentThreshold);
       if (match) {
@@ -76,7 +76,7 @@
       if (!dirty) return;
       const preset = presets.find(p => p.id === selectedPreset);
       if (preset) {
-        settingsActions.updateSection('birdnet', {
+        settingsActions.updateSection('voicewatch', {
           threshold: preset.threshold,
         });
         settingsActions.saveSettings().catch(err => {

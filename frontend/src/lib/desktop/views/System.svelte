@@ -42,7 +42,7 @@
   const SLOW_REFRESH_INTERVAL_MS = 30000;
 
   // Process name displayed in place of the Go binary name
-  const BIRDNET_PROCESS_NAME = 'BirdNET-Go';
+  const BIRDNET_PROCESS_NAME = 'VoiceWatch';
 
   // Type definitions
   interface SystemInfo {
@@ -107,7 +107,7 @@
   }
 
   const MODEL_COLORS: Record<string, string> = {
-    BirdNET: '#14b8a6',
+    VoiceWatch: '#14b8a6',
     Perch: '#f59e0b',
     Bat: '#f43f5e',
   };

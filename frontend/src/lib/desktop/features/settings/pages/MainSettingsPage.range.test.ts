@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import { get } from 'svelte/store';
 import { settingsStore, settingsActions } from '$lib/stores/settings';
-import type { BirdNetSettings, SettingsFormData } from '$lib/stores/settings';
+import type { VoiceWatchSettings, SettingsFormData } from '$lib/stores/settings';
 import { settingsAPI } from '$lib/utils/settingsApi.js';
 
 // Mock API module
@@ -36,7 +36,7 @@ describe('Settings Store - Range Filter Dynamic Updates', () => {
     // Initialize store with complete settings
     const formData: SettingsFormData = {
       main: { name: 'TestNode' },
-      birdnet: {
+      voicewatch: {
         modelPath: '',
         labelPath: '',
         sensitivity: 1.0,
@@ -83,27 +83,27 @@ describe('Settings Store - Range Filter Dynamic Updates', () => {
   it('should trigger range filter test when coordinates change', async () => {
     // Verify initial state
     const initialState = get(settingsStore);
-    expect(initialState.formData.birdnet.latitude).toBe(40.7128);
-    expect(initialState.formData.birdnet.longitude).toBe(-74.006);
+    expect(initialState.formData.voicewatch.latitude).toBe(40.7128);
+    expect(initialState.formData.voicewatch.longitude).toBe(-74.006);
 
     // Update coordinates
-    settingsActions.updateSection('birdnet', {
+    settingsActions.updateSection('voicewatch', {
       latitude: 51.5074,
       longitude: -0.1278,
     });
 
     // Verify coordinates were updated in the store
     const updatedState = get(settingsStore);
-    expect(updatedState.formData.birdnet.latitude).toBe(51.5074);
-    expect(updatedState.formData.birdnet.longitude).toBe(-0.1278);
+    expect(updatedState.formData.voicewatch.latitude).toBe(51.5074);
+    expect(updatedState.formData.voicewatch.longitude).toBe(-0.1278);
 
     // Verify range filter settings were preserved
-    expect(updatedState.formData.birdnet.rangeFilter.threshold).toBe(0.03);
+    expect(updatedState.formData.voicewatch.rangeFilter.threshold).toBe(0.03);
   });
 
   it('should trigger range filter test when threshold changes', async () => {
     // Update range filter threshold
-    settingsActions.updateSection('birdnet', {
+    settingsActions.updateSection('voicewatch', {
       rangeFilter: {
         threshold: 0.05,
         passUnmappedSpecies: false,
@@ -114,16 +114,16 @@ describe('Settings Store - Range Filter Dynamic Updates', () => {
 
     // Verify threshold was updated
     const updatedState = get(settingsStore);
-    expect(updatedState.formData.birdnet.rangeFilter.threshold).toBe(0.05);
+    expect(updatedState.formData.voicewatch.rangeFilter.threshold).toBe(0.05);
 
     // Verify coordinates were preserved
-    expect(updatedState.formData.birdnet.latitude).toBe(40.7128);
-    expect(updatedState.formData.birdnet.longitude).toBe(-74.006);
+    expect(updatedState.formData.voicewatch.latitude).toBe(40.7128);
+    expect(updatedState.formData.voicewatch.longitude).toBe(-74.006);
   });
 
   it('should preserve range filter settings when species list is updated', async () => {
     // Update range filter species list
-    settingsActions.updateSection('birdnet', {
+    settingsActions.updateSection('voicewatch', {
       rangeFilter: {
         threshold: 0.03,
         passUnmappedSpecies: false,
@@ -136,22 +136,22 @@ describe('Settings Store - Range Filter Dynamic Updates', () => {
     const updatedState = get(settingsStore);
 
     // Verify all settings were preserved
-    expect(updatedState.formData.birdnet.rangeFilter.threshold).toBe(0.03);
-    expect(updatedState.formData.birdnet.rangeFilter.speciesCount).toBe(150);
-    expect(updatedState.formData.birdnet.rangeFilter.species).toEqual(['species1', 'species2']);
-    expect(updatedState.formData.birdnet.latitude).toBe(40.7128);
-    expect(updatedState.formData.birdnet.longitude).toBe(-74.006);
+    expect(updatedState.formData.voicewatch.rangeFilter.threshold).toBe(0.03);
+    expect(updatedState.formData.voicewatch.rangeFilter.speciesCount).toBe(150);
+    expect(updatedState.formData.voicewatch.rangeFilter.species).toEqual(['species1', 'species2']);
+    expect(updatedState.formData.voicewatch.latitude).toBe(40.7128);
+    expect(updatedState.formData.voicewatch.longitude).toBe(-74.006);
   });
 
   it('should handle multiple sequential updates correctly', async () => {
     // Update coordinates
-    settingsActions.updateSection('birdnet', {
+    settingsActions.updateSection('voicewatch', {
       latitude: 48.8566,
       longitude: 2.3522,
     });
 
     // Update range filter threshold
-    settingsActions.updateSection('birdnet', {
+    settingsActions.updateSection('voicewatch', {
       rangeFilter: {
         threshold: 0.04,
         passUnmappedSpecies: false,
@@ -161,7 +161,7 @@ describe('Settings Store - Range Filter Dynamic Updates', () => {
     });
 
     // Update range filter species count
-    settingsActions.updateSection('birdnet', {
+    settingsActions.updateSection('voicewatch', {
       rangeFilter: {
         threshold: 0.04,
         passUnmappedSpecies: false,
@@ -172,7 +172,7 @@ describe('Settings Store - Range Filter Dynamic Updates', () => {
 
     // Verify all updates were applied
     const finalState = get(settingsStore);
-    const birdnet = finalState.formData.birdnet as BirdNetSettings;
+    const birdnet = finalState.formData.voicewatch as VoiceWatchSettings;
 
     expect(birdnet.latitude).toBe(48.8566);
     expect(birdnet.longitude).toBe(2.3522);
@@ -183,7 +183,7 @@ describe('Settings Store - Range Filter Dynamic Updates', () => {
 
   it('should not lose range filter data during coordinate updates', async () => {
     // Set initial range filter with custom values
-    settingsActions.updateSection('birdnet', {
+    settingsActions.updateSection('voicewatch', {
       rangeFilter: {
         threshold: 0.1,
         passUnmappedSpecies: false,
@@ -194,19 +194,19 @@ describe('Settings Store - Range Filter Dynamic Updates', () => {
 
     // Verify initial range filter state
     const initialState = get(settingsStore);
-    expect(initialState.formData.birdnet.rangeFilter.threshold).toBe(0.1);
-    expect(initialState.formData.birdnet.rangeFilter.speciesCount).toBe(250);
-    expect(initialState.formData.birdnet.rangeFilter.species).toEqual(['species1', 'species2']);
+    expect(initialState.formData.voicewatch.rangeFilter.threshold).toBe(0.1);
+    expect(initialState.formData.voicewatch.rangeFilter.speciesCount).toBe(250);
+    expect(initialState.formData.voicewatch.rangeFilter.species).toEqual(['species1', 'species2']);
 
     // Update only coordinates
-    settingsActions.updateSection('birdnet', {
+    settingsActions.updateSection('voicewatch', {
       latitude: 35.6762,
       longitude: 139.6503,
     });
 
     // Verify range filter data was preserved
     const updatedState = get(settingsStore);
-    const birdnet = updatedState.formData.birdnet as BirdNetSettings;
+    const birdnet = updatedState.formData.voicewatch as VoiceWatchSettings;
 
     expect(birdnet.latitude).toBe(35.6762);
     expect(birdnet.longitude).toBe(139.6503);
@@ -218,11 +218,11 @@ describe('Settings Store - Range Filter Dynamic Updates', () => {
   it('should preserve other birdnet settings during range filter updates', async () => {
     // Get initial values
     const initialState = get(settingsStore);
-    const initialSensitivity = initialState.formData.birdnet.sensitivity;
-    const initialThreshold = initialState.formData.birdnet.threshold;
+    const initialSensitivity = initialState.formData.voicewatch.sensitivity;
+    const initialThreshold = initialState.formData.voicewatch.threshold;
 
     // Update range filter
-    settingsActions.updateSection('birdnet', {
+    settingsActions.updateSection('voicewatch', {
       rangeFilter: {
         threshold: 0.08,
         passUnmappedSpecies: false,
@@ -233,7 +233,7 @@ describe('Settings Store - Range Filter Dynamic Updates', () => {
 
     // Verify only range filter changed
     const updatedState = get(settingsStore);
-    const birdnet = updatedState.formData.birdnet as BirdNetSettings;
+    const birdnet = updatedState.formData.voicewatch as VoiceWatchSettings;
 
     expect(birdnet.rangeFilter.threshold).toBe(0.08);
     expect(birdnet.sensitivity).toBe(initialSensitivity);
@@ -251,21 +251,21 @@ describe('Settings Store - Range Filter Dynamic Updates', () => {
     };
 
     // Update latitude
-    settingsActions.updateSection('birdnet', {
+    settingsActions.updateSection('voicewatch', {
       latitude: 51.5074,
     });
     changes.latitude = true;
     expect(changes).toEqual({ latitude: true, longitude: false, threshold: false });
 
     // Update longitude
-    settingsActions.updateSection('birdnet', {
+    settingsActions.updateSection('voicewatch', {
       longitude: -0.1278,
     });
     changes.longitude = true;
     expect(changes).toEqual({ latitude: true, longitude: true, threshold: false });
 
     // Update range filter threshold
-    settingsActions.updateSection('birdnet', {
+    settingsActions.updateSection('voicewatch', {
       rangeFilter: {
         threshold: 0.05,
         passUnmappedSpecies: false,
@@ -278,7 +278,7 @@ describe('Settings Store - Range Filter Dynamic Updates', () => {
 
     // Verify final state has all changes
     const finalState = get(settingsStore);
-    const birdnet = finalState.formData.birdnet as BirdNetSettings;
+    const birdnet = finalState.formData.voicewatch as VoiceWatchSettings;
 
     expect(birdnet.latitude).toBe(51.5074);
     expect(birdnet.longitude).toBe(-0.1278);
@@ -298,7 +298,7 @@ describe('Range Filter - View Species uses filtered threshold (#2393)', () => {
     // Initialize store with configured location and custom threshold
     const formData: SettingsFormData = {
       main: { name: 'TestNode' },
-      birdnet: {
+      voicewatch: {
         modelPath: '',
         labelPath: '',
         sensitivity: 1.0,

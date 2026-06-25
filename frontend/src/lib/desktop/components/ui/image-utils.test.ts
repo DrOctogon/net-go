@@ -15,7 +15,7 @@ describe('handleBirdImageError', () => {
   });
 
   it('includes the configured base path when one is set (regression)', () => {
-    // Simulates BirdNET-Go running behind a reverse proxy at /birdnet.
+    // Simulates VoiceWatch running behind a reverse proxy at /birdnet.
     // Without buildAppUrl, the placeholder request 404s under such setups.
     setBasePath('/birdnet');
 

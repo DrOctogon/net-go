@@ -1,7 +1,7 @@
 {
-  "name": "BirdNET-Go",
-  "short_name": "BirdNET-Go",
-  "description": "Real-time bird sound identification",
+  "name": "VoiceWatch",
+  "short_name": "VoiceWatch",
+  "description": "Real-time human voice detection",
   "start_url": "../../",
   "scope": "../../",
   "display": "standalone",

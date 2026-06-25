@@ -1,7 +1,7 @@
 /**
  * Integration Tests: Duplicate Key Validation with Real Database Data
  *
- * These tests run in a real browser against a real BirdNET-Go backend
+ * These tests run in a real browser against a real VoiceWatch backend
  * to validate that API responses won't cause duplicate key errors when
  * rendered by Svelte components.
  *

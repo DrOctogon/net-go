@@ -1,7 +1,7 @@
 <!--
   Main Settings Page Component
 
-  Purpose: Main configuration settings for BirdNET-Go including node settings,
+  Purpose: Main configuration settings for VoiceWatch including node settings,
   database configuration, and location-based filtering.
 
   Features:
@@ -38,7 +38,7 @@
     settingsStore,
     settingsActions,
     mainSettings,
-    birdnetSettings,
+    voicewatchSettings,
     outputSettings,
     realtimeSettings,
   } from '$lib/stores/settings';
@@ -87,7 +87,7 @@
   // PERFORMANCE OPTIMIZATION: Reactive settings with proper defaults
   let settings = $derived({
     main: $mainSettings || { name: '' },
-    birdnet: $birdnetSettings || {
+    voicewatch: $voicewatchSettings || {
       sensitivity: 1.0,
       threshold: 0.8,
       overlap: 0.0,
@@ -149,12 +149,12 @@
   let locationTabHasChanges = $derived(
     hasSettingsChanged(
       {
-        latitude: store.originalData.birdnet?.latitude,
-        longitude: store.originalData.birdnet?.longitude,
+        latitude: store.originalData.voicewatch?.latitude,
+        longitude: store.originalData.voicewatch?.longitude,
       },
       {
-        latitude: store.formData.birdnet?.latitude,
-        longitude: store.formData.birdnet?.longitude,
+        latitude: store.formData.voicewatch?.latitude,
+        longitude: store.formData.voicewatch?.longitude,
       }
     ) || hasSettingsChanged(store.originalData.realtime?.weather, store.formData.realtime?.weather)
   );
@@ -237,9 +237,9 @@
     }
 
     const hasActualCoordinates =
-      $birdnetSettings &&
-      $birdnetSettings.latitude !== undefined &&
-      $birdnetSettings.longitude !== undefined;
+      $voicewatchSettings &&
+      $voicewatchSettings.latitude !== undefined &&
+      $voicewatchSettings.longitude !== undefined;
 
     // Include `mapLibraryLoading` in the guard so a reactive cycle that
     // fires while the dynamic `import('maplibre-gl')` is in flight does NOT
@@ -288,8 +288,8 @@
 
   $effect(() => {
     if (initialLoadComplete && map && !mapModalOpen) {
-      const lat = settings.birdnet.latitude;
-      const lng = settings.birdnet.longitude;
+      const lat = settings.voicewatch.latitude;
+      const lng = settings.voicewatch.longitude;
 
       clearTimeout(coordinateUpdateTimer);
       coordinateUpdateTimer = setTimeout(() => {
@@ -303,7 +303,7 @@
 
           if (marker) {
             marker.setLngLat([lng, lat]);
-          } else if (maplibregl && settings.birdnet.locationConfigured) {
+          } else if (maplibregl && settings.voicewatch.locationConfigured) {
             marker = new maplibregl.Marker({ draggable: true }).setLngLat([lng, lat]).addTo(map!);
             marker.on('dragend', () => {
               const lngLat = marker!.getLngLat();
@@ -456,8 +456,8 @@
         }
       }
 
-      const initialLat = $birdnetSettings?.latitude ?? 0;
-      const initialLng = $birdnetSettings?.longitude ?? 0;
+      const initialLat = $voicewatchSettings?.latitude ?? 0;
+      const initialLng = $voicewatchSettings?.longitude ?? 0;
       const initialZoom = getInitialZoom(initialLat, initialLng);
 
       map = new maplibregl.Map({
@@ -497,7 +497,7 @@
       };
       mapElement.addEventListener('wheel', handleWheel as globalThis.EventListener, false);
 
-      if ($birdnetSettings?.locationConfigured && maplibregl) {
+      if ($voicewatchSettings?.locationConfigured && maplibregl) {
         marker = new maplibregl.Marker({ draggable: true })
           .setLngLat([initialLng, initialLat])
           .addTo(map);
@@ -532,7 +532,7 @@
 
   // Centralized location update: marks locationConfigured and pushes coordinates to the store
   function updateLocationSettings(lat: number, lng: number) {
-    settingsActions.updateSection('birdnet', {
+    settingsActions.updateSection('voicewatch', {
       latitude: lat,
       longitude: lng,
       locationConfigured: true,
@@ -622,8 +622,8 @@
     };
 
     try {
-      const currentLat = $birdnetSettings?.latitude ?? 0;
-      const currentLng = $birdnetSettings?.longitude ?? 0;
+      const currentLat = $voicewatchSettings?.latitude ?? 0;
+      const currentLng = $voicewatchSettings?.longitude ?? 0;
       const currentZoom = map?.getZoom() || getInitialZoom(currentLat, currentLng);
 
       modalMap = new maplibregl.Map({
@@ -647,7 +647,7 @@
         false
       );
 
-      if ($birdnetSettings?.locationConfigured) {
+      if ($voicewatchSettings?.locationConfigured) {
         modalMarker = new maplibregl!.Marker({ draggable: true })
           .setLngLat([currentLng, currentLat])
           .addTo(modalMap);
@@ -733,11 +733,11 @@
   function updateBirdnetSetting(key: string, value: string | number | boolean | null) {
     // When latitude or longitude is updated, mark location as explicitly configured
     if (key === 'latitude' || key === 'longitude') {
-      const currentLat = key === 'latitude' ? (value as number) : settings.birdnet.latitude;
-      const currentLng = key === 'longitude' ? (value as number) : settings.birdnet.longitude;
+      const currentLat = key === 'latitude' ? (value as number) : settings.voicewatch.latitude;
+      const currentLng = key === 'longitude' ? (value as number) : settings.voicewatch.longitude;
       updateLocationSettings(currentLat, currentLng);
     } else {
-      settingsActions.updateSection('birdnet', { [key]: value });
+      settingsActions.updateSection('voicewatch', { [key]: value });
     }
   }
 
@@ -1037,19 +1037,19 @@
       title={t('settings.main.sections.rangeFilter.stationLocation.label')}
       description={t('settings.main.sections.rangeFilter.stationLocation.helpText')}
       originalData={{
-        latitude: store.originalData.birdnet?.latitude,
-        longitude: store.originalData.birdnet?.longitude,
+        latitude: store.originalData.voicewatch?.latitude,
+        longitude: store.originalData.voicewatch?.longitude,
       }}
       currentData={{
-        latitude: settings.birdnet.latitude,
-        longitude: settings.birdnet.longitude,
+        latitude: settings.voicewatch.latitude,
+        longitude: settings.voicewatch.longitude,
       }}
     >
       <!-- Coordinates -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
         <NumberField
           label={t('settings.main.sections.rangeFilter.latitude.label')}
-          value={settings.birdnet.latitude}
+          value={settings.voicewatch.latitude}
           onUpdate={value => updateBirdnetSetting('latitude', value)}
           min={-90.0}
           max={90.0}
@@ -1060,7 +1060,7 @@
 
         <NumberField
           label={t('settings.main.sections.rangeFilter.longitude.label')}
-          value={settings.birdnet.longitude}
+          value={settings.voicewatch.longitude}
           onUpdate={value => updateBirdnetSetting('longitude', value)}
           min={-180.0}
           max={180.0}
@@ -1587,13 +1587,13 @@
             <span class="text-[var(--color-base-content)] opacity-60"
               >{t('settings.main.sections.rangeFilter.latitude.label')}</span
             >
-            <span class="font-medium ml-2">{settings.birdnet.latitude}</span>
+            <span class="font-medium ml-2">{settings.voicewatch.latitude}</span>
           </div>
           <div>
             <span class="text-[var(--color-base-content)] opacity-60"
               >{t('settings.main.sections.rangeFilter.longitude.label')}</span
             >
-            <span class="font-medium ml-2">{settings.birdnet.longitude}</span>
+            <span class="font-medium ml-2">{settings.voicewatch.longitude}</span>
           </div>
         </div>
       </div>

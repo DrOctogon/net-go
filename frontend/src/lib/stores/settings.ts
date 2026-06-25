@@ -1,8 +1,8 @@
 /**
  * settings.ts
  *
- * Comprehensive settings management store for BirdNET-Go application configuration.
- * Handles all application settings including BirdNET AI parameters, integrations, and system config.
+ * Comprehensive settings management store for VoiceWatch application configuration.
+ * Handles all application settings including VoiceWatch AI parameters, integrations, and system config.
  *
  * Usage:
  * - Settings pages for configuration management
@@ -20,7 +20,7 @@
  *
  * Settings Categories:
  * - Node: Basic node identification and location
- * - BirdNET: AI model parameters and thresholds
+ * - VoiceWatch: AI model parameters and thresholds
  * - Audio: Recording and processing settings
  * - Integrations: External service configurations
  * - Output: Data export and notification settings
@@ -63,7 +63,7 @@ export interface MainSettings {
   };
 }
 
-export interface BirdNetSettings {
+export interface VoiceWatchSettings {
   modelPath: string | null;
   labelPath: string | null;
   sensitivity: number; // 0.0-1.5
@@ -366,7 +366,7 @@ export interface BirdWeatherSettings {
 export interface HomeAssistantSettings {
   enabled: boolean;
   discoveryPrefix: string; // Topic prefix (default: "homeassistant")
-  deviceName: string; // Base device name (default: "BirdNET-Go")
+  deviceName: string; // Base device name (default: "VoiceWatch")
 }
 
 export interface MQTTSettings {
@@ -808,7 +808,7 @@ export interface SettingsFormData {
   buildDate?: string;
   systemId?: string;
   main: MainSettings;
-  birdnet: BirdNetSettings;
+  voicewatch: VoiceWatchSettings;
   bat?: BatSettings;
   input?: unknown; // Not exposed via JSON
   realtime?: RealtimeSettings;
@@ -852,7 +852,7 @@ function createEmptySettings(): SettingsFormData {
     main: {
       name: '',
     },
-    birdnet: {
+    voicewatch: {
       modelPath: '',
       labelPath: '',
       sensitivity: 1.0,
@@ -976,7 +976,7 @@ function createEmptySettings(): SettingsFormData {
         homeAssistant: {
           enabled: false,
           discoveryPrefix: 'homeassistant',
-          deviceName: 'BirdNET-Go',
+          deviceName: 'VoiceWatch',
         },
       },
       ebird: {
@@ -1107,7 +1107,7 @@ export const settingsDataLoaded = derived(settingsStore, $store => $store.dataLo
 // Section-specific derived stores matching backend structure
 export const mainSettings = derived(settingsStore, $store => $store.formData.main);
 
-export const birdnetSettings = derived(settingsStore, $store => $store.formData.birdnet);
+export const voicewatchSettings = derived(settingsStore, $store => $store.formData.voicewatch);
 
 export const batSettings = derived(settingsStore, $store => $store.formData.bat);
 
@@ -1328,11 +1328,11 @@ export const settingsActions = {
       // Convert empty strings to null for modelPath and labelPath to signal "revert to default"
       // This ensures the config file is properly cleaned when users clear these fields
       // Trim whitespace to handle cases like "   " which should also be treated as empty
-      if (coercedFormData.birdnet.modelPath?.trim() === '') {
-        coercedFormData.birdnet.modelPath = null;
+      if (coercedFormData.voicewatch.modelPath?.trim() === '') {
+        coercedFormData.voicewatch.modelPath = null;
       }
-      if (coercedFormData.birdnet.labelPath?.trim() === '') {
-        coercedFormData.birdnet.labelPath = null;
+      if (coercedFormData.voicewatch.labelPath?.trim() === '') {
+        coercedFormData.voicewatch.labelPath = null;
       }
 
       await settingsAPI.save(coercedFormData);
@@ -1436,7 +1436,7 @@ export const settingsActions = {
    */
   async loadRangeFilterSpecies(): Promise<RangeFilterSpeciesResult> {
     const state = get(settingsStore);
-    const birdnet = state.formData.birdnet;
+    const birdnet = state.formData.voicewatch;
 
     const data = await settingsAPI.rangeFilter.testSpecies(
       birdnet.latitude,

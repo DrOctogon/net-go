@@ -21,7 +21,7 @@ export function createEmptySettings(): SettingsFormData {
     main: {
       name: '',
     },
-    birdnet: {
+    voicewatch: {
       modelPath: '',
       labelPath: '',
       sensitivity: 1.0,

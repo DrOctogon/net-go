@@ -1,5 +1,5 @@
 <!--
-LogoBadge.svelte - Stylized badge logo for BirdNET-Go
+LogoBadge.svelte - Stylized badge logo for VoiceWatch
 
 A compact, stylized badge that can be used as an alternative to the bird image logo.
 Designed for use in collapsed sidebars or compact UI areas.

@@ -58,10 +58,10 @@
     hasGeolocation = typeof navigator !== 'undefined' && !!navigator.geolocation;
 
     const store = get(settingsStore);
-    if (store?.formData?.birdnet) {
-      latitude = store.formData.birdnet.latitude ?? 0;
-      longitude = store.formData.birdnet.longitude ?? 0;
-      speciesLocale = store.formData.birdnet.locale ?? 'en';
+    if (store?.formData?.voicewatch) {
+      latitude = store.formData.voicewatch.latitude ?? 0;
+      longitude = store.formData.voicewatch.longitude ?? 0;
+      speciesLocale = store.formData.voicewatch.locale ?? 'en';
     }
 
     api
@@ -129,7 +129,7 @@
       if (!dirty && !uiLocaleChanged) return;
 
       if (dirty) {
-        settingsActions.updateSection('birdnet', {
+        settingsActions.updateSection('voicewatch', {
           latitude,
           longitude,
           locale: speciesLocale,

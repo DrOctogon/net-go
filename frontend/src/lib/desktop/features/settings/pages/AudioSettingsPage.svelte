@@ -1,7 +1,7 @@
 <!--
   Audio Settings Page Component
 
-  Purpose: Audio configuration settings for BirdNET-Go including audio capture,
+  Purpose: Audio configuration settings for VoiceWatch including audio capture,
   filters, sound level monitoring, export settings, and retention policies.
 
   Features:

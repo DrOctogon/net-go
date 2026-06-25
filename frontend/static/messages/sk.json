@@ -200,7 +200,7 @@
     "hoursShort": "h"
   },
   "pageTitle": {
-    "settings": "Nastavenia - BirdNET-Go",
+    "settings": "Nastavenia - VoiceWatch",
     "pageNotFound": "404 - Stránka sa nenašla",
     "serverError": "500 - Interná chyba servera",
     "componentError": "Chyba načítania komponentu",
@@ -236,26 +236,26 @@
     "askQuestion": "Položiť otázku",
     "reportBugAriaLabel": "Nahlásiť chybu na GitHube (otvorí sa v novom okne)",
     "askQuestionAriaLabel": "Položiť otázku na GitHub Discussions (otvorí sa v novom okne)",
-    "viewOnGithubAriaLabel": "Zobraziť BirdNET-Go na GitHube (otvorí sa v novom okne)",
+    "viewOnGithubAriaLabel": "Zobraziť VoiceWatch na GitHube (otvorí sa v novom okne)",
     "health": "Health"
   },
   "about": {
-    "title": "BirdNET-Go",
+    "title": "VoiceWatch",
     "subtitle": "Moderné rozhranie pre detekciu a klasifikáciu vtáčieho spevu v reálnom čase",
-    "logoAlt": "Logo BirdNET-Go",
+    "logoAlt": "Logo VoiceWatch",
     "overview": "Prehľad",
-    "overviewText": "BirdNET-Go je implementácia založená na jazyku Go pre detekciu a klasifikáciu vtáčieho spevu v reálnom čase, postavená na základoch projektu BirdNET. Táto aplikácia poskytuje užívateľsky prívetivé rozhranie pre nepretržité monitorovanie a analýzu vtáčieho spevu.",
-    "birdnetProject": "Projekt BirdNET",
-    "birdnetDescription": "BirdNET-Go by nebol možný bez prelomovej práce projektu BirdNET. Model umelej inteligencie poháňajúci detekčné schopnosti BirdNET-Go je výsledkom inovatívneho výskumu a vývoja projektu BirdNET.",
+    "overviewText": "VoiceWatch je implementácia založená na jazyku Go pre detekciu a klasifikáciu vtáčieho spevu v reálnom čase, postavená na základoch projektu VoiceWatch. Táto aplikácia poskytuje užívateľsky prívetivé rozhranie pre nepretržité monitorovanie a analýzu vtáčieho spevu.",
+    "birdnetProject": "Projekt VoiceWatch",
+    "birdnetDescription": "VoiceWatch by nebol možný bez prelomovej práce projektu VoiceWatch. Model umelej inteligencie poháňajúci detekčné schopnosti VoiceWatch je výsledkom inovatívneho výskumu a vývoja projektu VoiceWatch.",
     "developedBy": "Vyvinuté",
     "developersText": "K. Lisa Yang Center for Conservation Bioacoustics v Cornell Lab of Ornithology v spolupráci s Chemnitz University of Technology:",
     "visitBirdnetAnalyzer": "Navštíviť projekt BirdNET-Analyzer",
     "visitBirdnetAnalyzerAriaLabel": "Navštíviť GitHub repozitár BirdNET-Analyzer",
     "contributors": "Prispievatelia",
-    "contributorsText": "BirdNET-Go rástol a zlepšoval sa vďaka spoločnému úsiliu mnohých jednotlivcov. Ich príspevky, od vylepšení kódu až po návrhy funkcií, boli neoceniteľné pri zlepšovaní tohto projektu.",
+    "contributorsText": "VoiceWatch rástol a zlepšoval sa vďaka spoločnému úsiliu mnohých jednotlivcov. Ich príspevky, od vylepšení kódu až po návrhy funkcií, boli neoceniteľné pri zlepšovaní tohto projektu.",
     "mainDeveloper": "Hlavný vývojár",
     "githubContributors": "GitHub prispievatelia",
-    "contributorsNote": "Špeciálne poďakovanie patrí týmto prispievateľom za ich cennú prácu na zlepšovaní BirdNET-Go:",
+    "contributorsNote": "Špeciálne poďakovanie patrí týmto prispievateľom za ich cennú prácu na zlepšovaní VoiceWatch:",
     "communityAcknowledgment": "Poďakovanie komunite",
     "communityText": "Radi by sme tiež vyjadrili vďaku všetkým používateľom, ktorí prispeli prostredníctvom:",
     "bugReports": "Hlásenia chýb a sledovanie problémov",
@@ -264,9 +264,9 @@
     "documentation": "Vylepšenia dokumentácie",
     "additionalCredits": "Ďalšie kredity",
     "birdnetPiProject": "Projekt BirdNET-Pi",
-    "birdnetPiDescription": "Špeciálne poďakovanie patrí Patrickovi McGuireovi za jeho inšpiratívnu prácu na BirdNET-Pi, ktorá ovplyvnila vývoj BirdNET-Go. BirdNET-Pi ukazuje potenciál detekcie vtáčieho spevu na vstavaných zariadeniach a nastavil vysoký štandard pre komunitný vývoj.",
+    "birdnetPiDescription": "Špeciálne poďakovanie patrí Patrickovi McGuireovi za jeho inšpiratívnu prácu na BirdNET-Pi, ktorá ovplyvnila vývoj VoiceWatch. BirdNET-Pi ukazuje potenciál detekcie vtáčieho spevu na vstavaných zariadeniach a nastavil vysoký štandard pre komunitný vývoj.",
     "visitBirdnetPi": "Navštíviť projekt BirdNET-Pi",
-    "labelTranslations": "Preklady štítkov BirdNET",
+    "labelTranslations": "Preklady štítkov VoiceWatch",
     "labelTranslationsBy": "Poskytol Patrick Levin pre projekt BirdNET-Pi od Patricka McGuirea",
     "patrickLevinGithub": "GitHub Patricka Levina",
     "versionInformation": "Informácie o verzii",
@@ -275,12 +275,12 @@
     "developmentBuild": "Vývojové zostavenie",
     "unknown": "Neznáme",
     "licenseInformation": "Informácie o licencii",
-    "licenseText": "Model BirdNET AI aj BirdNET-Go sú licencované pod",
+    "licenseText": "Model VoiceWatch AI aj VoiceWatch sú licencované pod",
     "ccLicense": "Creative Commons Uvedenie autora-Nekomerčné použitie-Zachovanie licencie 4.0 Medzinárodná licencia",
     "licenseDescription": "Táto licencia umožňuje ostatným upravovať, prispôsobovať a stavať na tomto diele nekomerčne, pokiaľ je uvedený náležitý kredit a nové výtvory sú licencované pod identickými podmienkami.",
     "dependencyLicenses": "Licencie závislostí",
     "taxonomyDataTitle": "Taxonomické údaje",
-    "taxonomyDataIntro": "BirdNET-Go obsahuje vložené údaje o taxonómii vtákov odvodené z eBird/Clements Checklist, čo poskytuje rýchle lokálne vyhľadávanie rodov a čeľadí.",
+    "taxonomyDataIntro": "VoiceWatch obsahuje vložené údaje o taxonómii vtákov odvodené z eBird/Clements Checklist, čo poskytuje rýchle lokálne vyhľadávanie rodov a čeľadí.",
     "source": "Zdroj",
     "ebirdApiV2": "eBird API v2",
     "copyright": "Autorské práva",
@@ -290,10 +290,10 @@
     "ebirdOrg": "eBird.org",
     "learnEbirdTaxonomy": "Dozvedieť sa o taxonómii eBird",
     "avicommonsTitle": "Náhľady vtákov",
-    "avicommonsDescription": "BirdNET-Go používa vybrané obrázky vtákov z Avicommons, knižnice ručne vybraných, orezaných a orientovaných fotografií vtákov licencovaných pod licenciami Creative Commons.",
-    "githubStarPrompt": "Ak považujete BirdNET-Go za hodnotný, zvážte pridanie hviezdičky projektu na GitHub. Hviezdičky pomáhajú ostatným objaviť tento projekt a podporujú jeho ďalší vývoj.",
+    "avicommonsDescription": "VoiceWatch používa vybrané obrázky vtákov z Avicommons, knižnice ručne vybraných, orezaných a orientovaných fotografií vtákov licencovaných pod licenciami Creative Commons.",
+    "githubStarPrompt": "Ak považujete VoiceWatch za hodnotný, zvážte pridanie hviezdičky projektu na GitHub. Hviezdičky pomáhajú ostatným objaviť tento projekt a podporujú jeho ďalší vývoj.",
     "viewOnGithub": "Zobraziť projekt na GitHub",
-    "visitGithubAriaLabel": "Navštíviť GitHub repozitár BirdNET-Go",
+    "visitGithubAriaLabel": "Navštíviť GitHub repozitár VoiceWatch",
     "visitAvicommonsGithub": "Navštíviť GitHub repozitár Avicommons"
   },
   "notifications": {
@@ -362,11 +362,11 @@
     },
     "content": {
       "startup": {
-        "title": "BirdNET-Go spustený",
+        "title": "VoiceWatch spustený",
         "message": "Aplikácia úspešne spustená (v{version})"
       },
       "shutdown": {
-        "title": "BirdNET-Go sa vypína",
+        "title": "VoiceWatch sa vypína",
         "message": "Aplikácia sa riadne vypína"
       },
       "detection": {
@@ -423,7 +423,7 @@
         "cancelledTitle": "Migrácia databázy zrušená",
         "cancelledMessage": "Migrácia databázy bola zrušená. Novú migráciu môžete kedykoľvek spustiť v nastaveniach databázy.",
         "completedTitle": "Migrácia databázy dokončená",
-        "completedMessage": "Migrácia dokončená. Reštartujte BirdNET-Go pre prepnutie na novú databázu.",
+        "completedMessage": "Migrácia dokončená. Reštartujte VoiceWatch pre prepnutie na novú databázu.",
         "errorTitle": "Chyba migrácie databázy",
         "errorMessage": "Migrácia pozastavená kvôli chybám. Skontrolujte záznamy a skúste pokračovať."
       },
@@ -435,7 +435,7 @@
       },
       "buffer": {
         "overloadTitle": "Analýza zvuku preťažená",
-        "overloadMessage": "Váš systém zahadzuje {dropRate} % zvukových vzoriek zo zdroja ''{sourceName}'', pretože nestíha analýzu. Znížte hodnotu prekrytia BirdNET v nastaveniach detekcie alebo zvážte rýchlejší procesor."
+        "overloadMessage": "Váš systém zahadzuje {dropRate} % zvukových vzoriek zo zdroja ''{sourceName}'', pretože nestíha analýzu. Znížte hodnotu prekrytia VoiceWatch v nastaveniach detekcie alebo zvážte rýchlejší procesor."
       },
       "ort": {
         "unavailableTitle": "ONNX Runtime nie je k dispozícii",
@@ -1018,13 +1018,13 @@
     },
     "synonyms": {
       "tabLabel": "Taxonomické synonymá",
-      "description": "Prepísať priradenie vedeckých názvov používaných na vyhľadávanie obrázkov vtákov. BirdNET používa taxonómiu 2021E, ale zdroje obrázkov môžu používať aktualizované názvy. Vstavané priradenia sa vždy načítajú; vaše prepísania ich dopĺňajú alebo nahrádzajú.",
-      "birdnetName": "Názov BirdNET",
+      "description": "Prepísať priradenie vedeckých názvov používaných na vyhľadávanie obrázkov vtákov. VoiceWatch používa taxonómiu 2021E, ale zdroje obrázkov môžu používať aktualizované názvy. Vstavané priradenia sa vždy načítajú; vaše prepísania ich dopĺňajú alebo nahrádzajú.",
+      "birdnetName": "Názov VoiceWatch",
       "updatedName": "Aktualizovaný názov",
       "addButton": "Pridať synonymum",
       "emptyState": "Žiadne vlastné taxonomické synonymá nie sú nakonfigurované.",
       "errors": {
-        "unknownSpecies": "Druh sa nenašiel v štítkoch BirdNET",
+        "unknownSpecies": "Druh sa nenašiel v štítkoch VoiceWatch",
         "duplicateKey": "Synonymum pre tento druh už existuje",
         "emptyUpdatedName": "Aktualizovaný názov je povinný"
       }
@@ -1133,7 +1133,7 @@
         "process": "Proces"
       },
       "showAll": "Zobraziť všetky procesy",
-      "showBirdnetOnly": "Zobraziť iba BirdNET",
+      "showBirdnetOnly": "Zobraziť iba VoiceWatch",
       "table": {
         "process": "Proces",
         "status": "Stav",
@@ -1311,9 +1311,9 @@
       "migration": {
         "title": "Migrácia databázy",
         "description": "Migrovať z pôvodnej schémy na normalizovanú schému v2",
-        "requiredNote": "Migrácia databázy je potrebná pre nadchádzajúce funkcie BirdNET-Go, ktoré sa spoliehajú na novú normalizovanú schému databázy. Nové funkcie nebudú k dispozícii, kým sa migrácia nedokončí.",
+        "requiredNote": "Migrácia databázy je potrebná pre nadchádzajúce funkcie VoiceWatch, ktoré sa spoliehajú na novú normalizovanú schému databázy. Nové funkcie nebudú k dispozícii, kým sa migrácia nedokončí.",
         "completedTitle": "Migrácia dokončená",
-        "completedNote": "Vaša databáza bola úspešne migrovaná na novú schému. Reštartujte BirdNET-Go, aby ste prepli na novú databázu. Poznámka: Nová databáza je menšia, pretože ukladá dáta efektívnejšie - je to očakávané a všetky vaše dáta sú zachované.",
+        "completedNote": "Vaša databáza bola úspešne migrovaná na novú schému. Reštartujte VoiceWatch, aby ste prepli na novú databázu. Poznámka: Nová databáza je menšia, pretože ukladá dáta efektívnejšie - je to očakávané a všetky vaše dáta sú zachované.",
         "starting": "Spúšťa sa migrácia...",
         "status": {
           "idle": "Pripravené na spustenie",
@@ -1990,7 +1990,7 @@
     }
   },
   "settings": {
-    "title": "Nastavenia - BirdNET-Go",
+    "title": "Nastavenia - VoiceWatch",
     "loading": "Načítavajú sa nastavenia...",
     "sections": {
       "analysis": "Analýza",
@@ -2047,20 +2047,20 @@
           "description": "Konfigurácia hlavných nastavení aplikácie"
         },
         "birdnet": {
-          "title": "Nastavenia BirdNET",
-          "description": "Konfigurácia nastavení špecifických pre model BirdNET AI"
+          "title": "Nastavenia VoiceWatch",
+          "description": "Konfigurácia nastavení špecifických pre model VoiceWatch AI"
         },
         "ui": {
           "title": "Nastavenia používateľského rozhrania",
           "description": "Prispôsobenie používateľského rozhrania"
         },
         "customClassifier": {
-          "title": "Vlastný klasifikátor BirdNET",
-          "description": "Konfigurácia vlastného modelu BirdNET a súborov štítkov pre špecializovanú detekciu",
+          "title": "Vlastný klasifikátor VoiceWatch",
+          "description": "Konfigurácia vlastného modelu VoiceWatch a súborov štítkov pre špecializovanú detekciu",
           "modelPath": {
             "label": "Cesta k modelu (vyžaduje reštart pre použitie)",
             "placeholder": "Cesta k súboru modelu",
-            "helpText": "Cesta k externému súboru modelu BirdNET. Zadajte absolútnu alebo relatívnu cestu k binárnemu súboru birdnet-go. Nechajte prázdne pre použitie predvoleného vloženého modelu."
+            "helpText": "Cesta k externému súboru modelu VoiceWatch. Zadajte absolútnu alebo relatívnu cestu k binárnemu súboru birdnet-go. Nechajte prázdne pre použitie predvoleného vloženého modelu."
           },
           "labelPath": {
             "label": "Cesta k štítkom (vyžaduje reštart pre použitie)",
@@ -2072,7 +2072,7 @@
           "title": "Dynamický prah",
           "description": "Automaticky upravovať citlivosť detekcie na základe predchádzajúcich pozorovaní",
           "enable": {
-            "label": "Povoliť dynamický prah (funkcia špecifická pre BirdNET-Go)",
+            "label": "Povoliť dynamický prah (funkcia špecifická pre VoiceWatch)",
             "helpText": "Povolí funkciu dynamického prahu istoty pre adaptívnejšiu detekciu vtáčieho spevu."
           },
           "trigger": {
@@ -2134,7 +2134,7 @@
           },
           "model": {
             "label": "Model filtra rozsahu",
-            "helpText": "Verzia modelu filtra rozsahu BirdNET: najnovšia (latest) alebo pôvodná (legacy)."
+            "helpText": "Verzia modelu filtra rozsahu VoiceWatch: najnovšia (latest) alebo pôvodná (legacy)."
           },
           "threshold": {
             "label": "Prah",
@@ -2399,7 +2399,7 @@
       "sections": {
         "telemetry": {
           "title": "Sledovanie chýb a telemetria",
-          "description": "Voliteľné sledovanie chýb, ktoré pomáha zlepšovať spoľahlivosť a výkon BirdNET-Go"
+          "description": "Voliteľné sledovanie chýb, ktoré pomáha zlepšovať spoľahlivosť a výkon VoiceWatch"
         },
         "diagnostics": {
           "title": "Podpora a diagnostika",
@@ -2411,7 +2411,7 @@
         "privacyPoints": {
           "noPersonalData": "Nezbierajú sa žiadne osobné údaje",
           "anonymousData": "Všetky telemetrické údaje sú anonymné",
-          "helpImprove": "Telemetrické údaje pomáhajú vývojárom identifikovať a opravovať problémy v BirdNET-Go"
+          "helpImprove": "Telemetrické údaje pomáhajú vývojárom identifikovať a opravovať problémy v VoiceWatch"
         },
         "enableTracking": "Povoliť sledovanie chýb (Opt-in)"
       },
@@ -2568,7 +2568,7 @@
       },
       "systemInfo": {
         "howToView": "Ako zobraziť upozornenia:",
-        "technicalDetails": "Technické podrobnosti o upozorneniach v BirdNET-Go:"
+        "technicalDetails": "Technické podrobnosti o upozorneniach v VoiceWatch:"
       },
       "privacy": {
         "title": "Oznámenie o ochrane osobných údajov pre externé webhooky",
@@ -2971,14 +2971,14 @@
         "homeAssistant": {
           "title": "Automatické zisťovanie Home Assistant",
           "enable": "Povoliť zisťovanie MQTT pre Home Assistant",
-          "description": "Keď je povolené, BirdNET-Go automaticky registruje zariadenia a senzory v Home Assistant prostredníctvom protokolu zisťovania MQTT. Zariadenia sa objavia v registri zariadení Home Assistant bez manuálnej konfigurácie YAML.",
+          "description": "Keď je povolené, VoiceWatch automaticky registruje zariadenia a senzory v Home Assistant prostredníctvom protokolu zisťovania MQTT. Zariadenia sa objavia v registri zariadení Home Assistant bez manuálnej konfigurácie YAML.",
           "discoveryPrefix": {
             "label": "Prefix zisťovania",
             "helpText": "Prefix témy MQTT pre správy o zisťovaní Home Assistant. Predvolená hodnota je 'homeassistant'. Toto zmeňte iba vtedy, ak ste v Home Assistant nakonfigurovali vlastný prefix zisťovania."
           },
           "deviceName": {
             "label": "Názov zariadenia",
-            "helpText": "Základný názov zariadení, ako sa zobrazujú v Home Assistant. Každý zdroj zvuku bude mať svoje vlastné zariadenie prepojené s týmto hlavným zariadením BirdNET-Go."
+            "helpText": "Základný názov zariadení, ako sa zobrazujú v Home Assistant. Každý zdroj zvuku bude mať svoje vlastné zariadenie prepojené s týmto hlavným zariadením VoiceWatch."
           },
           "sensorsNote": "<strong>Vytvorené senzory:</strong> Pre každý zdroj zvuku dostane Home Assistant: Posledný druh, Istotu, Vedecký názov a Úroveň zvuku (ak je povolená). Premosťovacie zariadenie zahŕňa stav dostupnosti online/offline.",
           "discovery": {
@@ -3003,7 +3003,7 @@
       },
       "observability": {
         "title": "Pozorovateľnosť (Observability)",
-        "description": "Monitorujte výkon BirdNET-Go a metriky detekcie vtákov prostredníctvom koncového bodu kompatibilného s Prometheus",
+        "description": "Monitorujte výkon VoiceWatch a metriky detekcie vtákov prostredníctvom koncového bodu kompatibilného s Prometheus",
         "enable": "Povoliť integráciu pozorovateľnosti",
         "disabled": "Integrácia pozorovateľnosti nie je povolená",
         "listenAddress": {
@@ -3172,7 +3172,7 @@
       },
       "noSources": {
         "warning": "Žiadne nakonfigurované zdroje zvuku",
-        "description": "BirdNET-Go potrebuje zvukový vstup na detekciu vtákov. Nakonfigurujte aspoň jeden zdroj na karte Zvuková karta alebo Streamy."
+        "description": "VoiceWatch potrebuje zvukový vstup na detekciu vtákov. Nakonfigurujte aspoň jeden zdroj na karte Zvuková karta alebo Streamy."
       },
       "soundCards": {
         "summary": "{count} zdroj(e/ov) zvukovej karty",
@@ -3198,12 +3198,12 @@
           "hints": {
             "device": "Vyberte z dostupných zvukových vstupných zariadení vo vašom systéme",
             "multiple": "Môžete nakonfigurovať viacero zvukových kariet pre rôzne umiestnenia",
-            "model": "Každý zdroj môže používať iný detekčný model (BirdNET, Perch, Bat)"
+            "model": "Každý zdroj môže používať iný detekčný model (VoiceWatch, Perch, Bat)"
           }
         },
         "models": {
-          "birdnetDefault": "BirdNET (Predvolený)",
-          "birdnet": "BirdNET",
+          "birdnetDefault": "VoiceWatch (Predvolený)",
+          "birdnet": "VoiceWatch",
           "perchV2": "Google Perch v2",
           "bat": "Detekcia netopierov"
         },
@@ -3551,8 +3551,8 @@
         "invalidRetentionPolicy": "Neplatná politika uchovávania"
       },
       "models": {
-        "recommendBoth": "Pre najlepšie pokrytie detekcie druhov sa odporúča spustiť oba modely BirdNET a Perch spoločne.",
-        "perchOnlyWarning": "Samotný Perch produkuje menej detekcií. Pre zmysluplné výsledky znížte prah spoľahlivosti na 0.50, alebo aktivujte aj BirdNET pre lepšie pokrytie."
+        "recommendBoth": "Pre najlepšie pokrytie detekcie druhov sa odporúča spustiť oba modely VoiceWatch a Perch spoločne.",
+        "perchOnlyWarning": "Samotný Perch produkuje menej detekcií. Pre zmysluplné výsledky znížte prah spoľahlivosti na 0.50, alebo aktivujte aj VoiceWatch pre lepšie pokrytie."
       }
     },
     "security": {
@@ -3846,7 +3846,7 @@
           },
           "fellBack": {
             "title": "Používa sa vstavaný filter rozsahu",
-            "description": "Nakonfigurovaný filter rozsahu geomodelu sa nepodarilo načítať, takže BirdNET-Go prešiel na vstavaný filter rozsahu. Filtrovanie stále funguje, ale skontrolujte Nastavenia, aby ste obnovili geomodel."
+            "description": "Nakonfigurovaný filter rozsahu geomodelu sa nepodarilo načítať, takže VoiceWatch prešiel na vstavaný filter rozsahu. Filtrovanie stále funguje, ale skontrolujte Nastavenia, aby ste obnovili geomodel."
           },
           "mappedZero": {
             "title": "Filter rozsahu nezodpovedá žiadnemu druhu",
@@ -3941,14 +3941,14 @@
       },
       "synonyms": {
         "tabLabel": "Synonymá",
-        "description": "Priraďte vedecké názvy BirdNET k ich aktualizovaným ekvivalentom v novšej taxonómii. Používa sa len ako záložná možnosť pri vyhľadávaní fotografií vtákov na Wikipédii a AviCommons; nepremenuje druhy v detekciách ani na ovládacom paneli.",
-        "helpText": "Ak chcete zmeniť, pod akým názvom sa druh zobrazuje v rozhraní, upravte súbor menoviek BirdNET (nastavenie \"Cesta k štítkom\" v hlavných nastaveniach).",
-        "birdnetName": "Názov BirdNET",
+        "description": "Priraďte vedecké názvy VoiceWatch k ich aktualizovaným ekvivalentom v novšej taxonómii. Používa sa len ako záložná možnosť pri vyhľadávaní fotografií vtákov na Wikipédii a AviCommons; nepremenuje druhy v detekciách ani na ovládacom paneli.",
+        "helpText": "Ak chcete zmeniť, pod akým názvom sa druh zobrazuje v rozhraní, upravte súbor menoviek VoiceWatch (nastavenie \"Cesta k štítkom\" v hlavných nastaveniach).",
+        "birdnetName": "Názov VoiceWatch",
         "updatedName": "Aktualizovaný vedecký názov",
         "addButton": "Pridať synonymum",
         "emptyState": "Žiadne taxonomické synonymá nie sú nakonfigurované",
         "errors": {
-          "unknownSpecies": "Druh sa nenašiel v štítkoch BirdNET",
+          "unknownSpecies": "Druh sa nenašiel v štítkoch VoiceWatch",
           "duplicateKey": "Pre tento druh už existuje synonymum",
           "emptyUpdatedName": "Aktualizovaný názov je povinný"
         }
@@ -4371,7 +4371,7 @@
       },
       "appearance": {
         "title": "Vzhľad",
-        "description": "Prispôsobte vzhľad vášho rozhrania BirdNET-Go"
+        "description": "Prispôsobte vzhľad vášho rozhrania VoiceWatch"
       },
       "language": {
         "title": "Jazyk a regionálne",
@@ -4389,14 +4389,14 @@
         "defaultGainUnit": "dB"
       }
     },
-    "restartRequired": "Niektoré zmeny vyžadujú reštart servera. Reštartujte BirdNET-Go."
+    "restartRequired": "Niektoré zmeny vyžadujú reštart servera. Reštartujte VoiceWatch."
   },
   "auth": {
     "login": "Prihlásenie",
     "logout": "Odhlásenie",
     "openLoginModal": "Otvoriť okno prihlásenia",
     "loginTitle": "Prihlásiť sa",
-    "loginSubtitle": "Prístup k vášmu BirdNET-Go prehľadu",
+    "loginSubtitle": "Prístup k vášmu VoiceWatch prehľadu",
     "password": "Heslo",
     "passwordPlaceholder": "Zadajte svoje heslo",
     "enterPassword": "Zadajte svoje heslo",
@@ -4581,7 +4581,7 @@
       "streamError": "Chyba pri spúšťaní streamu",
       "streamTitle": "Audio stream vtákov - {source}",
       "streamTitleDefault": "Audio stream vtákov",
-      "streamArtist": "BirdNET-Go",
+      "streamArtist": "VoiceWatch",
       "streamAlbum": "Živé vysielanie",
       "playbackError": "Chyba prehrávania: {details}"
     },
@@ -4880,10 +4880,10 @@
     "steps": {
       "welcome": {
         "title": "Vitajte",
-        "heading": "Vitajte v BirdNET-Go!",
-        "description": "BirdNET-Go je open source systém na identifikáciu vtáčích hlasov, ktorý počúva zvuk z mikrofónu alebo streamu a v reálnom čase identifikuje druhy vtákov.",
-        "credit": "BirdNET-Go používa AI model BirdNET vyvinutý K. Lisa Yang Center for Conservation Bioacoustics na Cornell Lab of Ornithology a Technickej univerzite v Chemnitz. BirdNET-Go je nezávislý komunitný projekt a nie je prepojený s tímom BirdNET.",
-        "learnMore": "Viac informácií o BirdNET",
+        "heading": "Vitajte v VoiceWatch!",
+        "description": "VoiceWatch je open source systém na identifikáciu vtáčích hlasov, ktorý počúva zvuk z mikrofónu alebo streamu a v reálnom čase identifikuje druhy vtákov.",
+        "credit": "VoiceWatch používa AI model VoiceWatch vyvinutý K. Lisa Yang Center for Conservation Bioacoustics na Cornell Lab of Ornithology a Technickej univerzite v Chemnitz. VoiceWatch je nezávislý komunitný projekt a nie je prepojený s tímom VoiceWatch.",
+        "learnMore": "Viac informácií o VoiceWatch",
         "cta": "Poďme nastaviť vašu stanicu na monitorovanie vtákov."
       },
       "locationLanguage": {
@@ -4942,11 +4942,11 @@
         "birdweatherIdLabel": "ID stanice BirdWeather",
         "birdweatherIdPlaceholder": "Zadajte ID vašej stanice BirdWeather",
         "errorReportingLabel": "Odosielať anonymné hlásenia o chybách",
-        "errorReportingHelp": "Pomôžte zlepšiť BirdNET-Go odosielaním anonymných hlásení o chybách, keď niečo zlyhá"
+        "errorReportingHelp": "Pomôžte zlepšiť VoiceWatch odosielaním anonymných hlásení o chybách, keď niečo zlyhá"
       },
       "responsibleUse": {
-        "title": "Zodpovedné používanie BirdNET-Go",
-        "intro": "BirdNET-Go je výkonný nástroj, ktorý vylepšuje váš zážitok z pozorovania vtákov prostredníctvom identifikácie pomocou AI. Pre zabezpečenie najlepších výsledkov pre pozorovanie aj ochranu:",
+        "title": "Zodpovedné používanie VoiceWatch",
+        "intro": "VoiceWatch je výkonný nástroj, ktorý vylepšuje váš zážitok z pozorovania vtákov prostredníctvom identifikácie pomocou AI. Pre zabezpečenie najlepších výsledkov pre pozorovanie aj ochranu:",
         "point1": "Skontrolujte a overte detekcie pred zdieľaním pozorovaní",
         "point2": "Použite skóre spoľahlivosti ako vodítko, nie absolútnu pravdu",
         "point3": "Krížové overenie s poľnými sprievodcami a miestnymi odborníkmi",
@@ -5009,7 +5009,7 @@
       "birdOnlyNote": "Filter rozsahu sa vzťahuje len na klasifikátory vtákov. Modely netopierov používajú vlastné zoznamy druhov.",
       "status": {
         "title": "Prehľad filtra rozsahu",
-        "geomodelInfo": "BirdNET Geomodel {version} - {species} známych druhov",
+        "geomodelInfo": "VoiceWatch Geomodel {version} - {species} známych druhov",
         "autoSelected": "Automaticky vybrané",
         "manual": "Manuálne",
         "classifier": "Klasifikátor",
@@ -5039,7 +5039,7 @@
       "loading": "Načítavajú sa modely...",
       "retry": "Skúsiť znova",
       "builtIn": "Vstavaný",
-      "builtInDescription": "Vstavaný klasifikátor vtáčích druhov od tímu BirdNET.",
+      "builtInDescription": "Vstavaný klasifikátor vtáčích druhov od tímu VoiceWatch.",
       "species": "{count} druhov",
       "install": "Inštalovať",
       "installing": "Inštaluje sa...",
@@ -5091,7 +5091,7 @@
       "reinstall": "Preinštalovať",
       "reinstalling": "Preinštalovanie...",
       "reinstallComplete": "Súbory úspešne overené",
-      "geomodelBadge": "Obsahuje BirdNET v3.0 geomodel",
+      "geomodelBadge": "Obsahuje VoiceWatch v3.0 geomodel",
       "onnxRuntimeRequired": "Vyžaduje ONNX Runtime, ktorý nie je v tomto systéme k dispozícii.",
       "onnxRuntimeMissing": "ONNX Runtime nie je k dispozícii. Tento model nie je možné spustiť.",
       "unavailable": "Nedostupné"
@@ -5167,7 +5167,7 @@
       },
       "step2": {
         "title": "Spôsob inštalácie",
-        "description": "Ako ste nainštalovali BirdNET-Go: skript install.sh, Docker Compose, manuálne zostavenie alebo inak."
+        "description": "Ako ste nainštalovali VoiceWatch: skript install.sh, Docker Compose, manuálne zostavenie alebo inak."
       },
       "step3": {
         "title": "Systémové informácie",
@@ -5236,7 +5236,7 @@
       "fetchFailed": "Failed to load diagnostics"
     },
     "export": {
-      "reportTitle": "BirdNET-Go System Health Report",
+      "reportTitle": "VoiceWatch System Health Report",
       "statusLabel": "Status",
       "timeLabel": "Time",
       "durationLabel": "Duration",

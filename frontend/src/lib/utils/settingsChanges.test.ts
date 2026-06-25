@@ -64,7 +64,7 @@ describe('settingsChanges', () => {
           },
         },
       },
-      birdnet: {
+      voicewatch: {
         sensitivity: 1.0,
         threshold: 0.3,
       },
@@ -112,7 +112,7 @@ describe('settingsChanges', () => {
         source: 'default',
         export: { enabled: false, format: 'wav' },
       },
-      birdnet: { sensitivity: 1.0 },
+      voicewatch: { sensitivity: 1.0 },
     };
 
     const modifiedData = {
@@ -120,12 +120,12 @@ describe('settingsChanges', () => {
         source: 'modified',
         export: { enabled: true, format: 'wav' },
       },
-      birdnet: { sensitivity: 1.0 },
+      voicewatch: { sensitivity: 1.0 },
     };
 
     it('detects changes in top-level section', () => {
       expect(hasSectionChanged(originalData, modifiedData, 'audio')).toBe(true);
-      expect(hasSectionChanged(originalData, modifiedData, 'birdnet')).toBe(false);
+      expect(hasSectionChanged(originalData, modifiedData, 'voicewatch')).toBe(false);
     });
 
     it('detects changes in nested section', () => {
@@ -145,23 +145,23 @@ describe('settingsChanges', () => {
   describe('hasAnySectionChanged', () => {
     const originalData = {
       audio: { source: 'default' },
-      birdnet: { sensitivity: 1.0 },
+      voicewatch: { sensitivity: 1.0 },
       filters: { enabled: false },
     };
 
     const modifiedData = {
       audio: { source: 'modified' },
-      birdnet: { sensitivity: 1.0 },
+      voicewatch: { sensitivity: 1.0 },
       filters: { enabled: false },
     };
 
     it('returns true if any section has changed', () => {
-      const sections = ['audio', 'birdnet', 'filters'];
+      const sections = ['audio', 'voicewatch', 'filters'];
       expect(hasAnySectionChanged(originalData, modifiedData, sections)).toBe(true);
     });
 
     it('returns false if no sections have changed', () => {
-      const sections = ['birdnet', 'filters'];
+      const sections = ['voicewatch', 'filters'];
       expect(hasAnySectionChanged(originalData, modifiedData, sections)).toBe(false);
     });
 

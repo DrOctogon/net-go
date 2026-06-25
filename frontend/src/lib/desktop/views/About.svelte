@@ -1,7 +1,7 @@
 <!--
   About Page Component
   
-  Purpose: Displays information about BirdNET-Go including overview, key features,
+  Purpose: Displays information about VoiceWatch including overview, key features,
   credits, technology stack, license, and version information.
   
   Features:
@@ -81,7 +81,7 @@
     </div>
   </div>
 
-  <!-- About BirdNET-Go Section -->
+  <!-- About VoiceWatch Section -->
   <Card title={t('about.overview')} className="bg-[var(--color-base-100)] shadow-sm">
     <p>
       {t('about.overviewText')}

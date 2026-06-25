@@ -1,6 +1,6 @@
 #!/usr/bin/env tsx
 /**
- * Translation usage validator for BirdNET-Go i18n
+ * Translation usage validator for VoiceWatch i18n
  *
  * Scans codebase for t() usage and validates against translation files:
  * - Finds missing translations (keys used in code but not in en.json)

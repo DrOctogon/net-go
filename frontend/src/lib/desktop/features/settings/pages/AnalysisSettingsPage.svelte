@@ -1,7 +1,7 @@
 <!--
   Analysis Settings Page Component
 
-  Purpose: Configure BirdNET-Go analysis settings including detection thresholds,
+  Purpose: Configure VoiceWatch analysis settings including detection thresholds,
   false positive filtering, range filter, dynamic threshold, and manage the
   model gallery (install/uninstall additional classifier models).
 
@@ -53,7 +53,7 @@
   import {
     settingsStore,
     settingsActions,
-    birdnetSettings,
+    voicewatchSettings,
     dynamicThresholdSettings,
     realtimeSettings,
     batSettings,
@@ -131,7 +131,7 @@
 
   // ── Store-derived state ───────────────────────────────────────────────
   let store = $derived($settingsStore);
-  let birdnet = $derived($birdnetSettings);
+  let birdnet = $derived($voicewatchSettings);
   let dynamicThreshold = $derived(
     $dynamicThresholdSettings ?? {
       enabled: false,
@@ -168,7 +168,7 @@
     catalog.filter(e => !e.installed && e.category === 'geomodel')
   );
 
-  // ── BirdNET locale loading ────────────────────────────────────────────
+  // ── VoiceWatch locale loading ────────────────────────────────────────────
   interface BirdnetLocaleOption extends SelectOption {
     localeCode: FlagLocale;
   }
@@ -302,7 +302,7 @@
     });
 
     if (currentOverlap < newMinOverlap) {
-      settingsActions.updateSection('birdnet', { overlap: newMinOverlap });
+      settingsActions.updateSection('voicewatch', { overlap: newMinOverlap });
       toastActions.info(
         t('settings.main.sections.falsePositiveFilter.overlapAdjusted', {
           overlap: newMinOverlap.toFixed(1),
@@ -312,7 +312,7 @@
       newMinOverlap < oldMinOverlap &&
       Math.abs(currentOverlap - oldMinOverlap) < OVERLAP_COMPARISON_TOLERANCE
     ) {
-      settingsActions.updateSection('birdnet', { overlap: newMinOverlap });
+      settingsActions.updateSection('voicewatch', { overlap: newMinOverlap });
       toastActions.info(
         t('settings.main.sections.falsePositiveFilter.overlapReduced', {
           overlap: newMinOverlap.toFixed(1),
@@ -547,10 +547,10 @@
   }
 
   // Narrow derived values so the effect only fires when coordinates or threshold change
-  const rangeFilterLat = $derived($birdnetSettings?.latitude);
-  const rangeFilterLng = $derived($birdnetSettings?.longitude);
-  const rangeFilterThreshold = $derived($birdnetSettings?.rangeFilter?.threshold);
-  const rangeFilterConfigured = $derived($birdnetSettings?.locationConfigured);
+  const rangeFilterLat = $derived($voicewatchSettings?.latitude);
+  const rangeFilterLng = $derived($voicewatchSettings?.longitude);
+  const rangeFilterThreshold = $derived($voicewatchSettings?.rangeFilter?.threshold);
+  const rangeFilterConfigured = $derived($voicewatchSettings?.locationConfigured);
 
   $effect(() => {
     const _lat = rangeFilterLat;
@@ -639,7 +639,7 @@
 
   // ── Update handlers ───────────────────────────────────────────────────
   function updateBirdnetSetting(key: string, value: string | number) {
-    settingsActions.updateSection('birdnet', { [key]: value });
+    settingsActions.updateSection('voicewatch', { [key]: value });
   }
 
   function updateDynamicThreshold(key: string, value: number | boolean) {
@@ -764,7 +764,7 @@
   }
 
   function updateThreshold(value: number) {
-    settingsActions.updateSection('birdnet', { threshold: value });
+    settingsActions.updateSection('voicewatch', { threshold: value });
   }
 
   // ── Gallery tab definitions ───────────────────────────────────────────
@@ -994,8 +994,8 @@
       description={t('analysis.bird.description')}
       defaultOpen={true}
       originalData={{
-        threshold: store.originalData.birdnet?.threshold,
-        locale: store.originalData.birdnet?.locale,
+        threshold: store.originalData.voicewatch?.threshold,
+        locale: store.originalData.voicewatch?.locale,
         fpFilter: store.originalData.realtime?.falsePositiveFilter?.level ?? 0,
       }}
       currentData={{
@@ -1145,7 +1145,7 @@
     <SettingsSection
       title={t('settings.main.sections.rangeFilter.title')}
       description={t('settings.main.sections.rangeFilter.description')}
-      originalData={store.originalData.birdnet?.rangeFilter}
+      originalData={store.originalData.voicewatch?.rangeFilter}
       currentData={birdnet?.rangeFilter}
     >
       <SettingsNote><span>{t('analysis.rangeFilter.birdOnlyNote')}</span></SettingsNote>
@@ -1155,7 +1155,7 @@
           label={t('settings.main.sections.rangeFilter.threshold.label')}
           value={birdnet?.rangeFilter?.threshold ?? 0.01}
           onUpdate={value =>
-            settingsActions.updateSection('birdnet', {
+            settingsActions.updateSection('voicewatch', {
               rangeFilter: { ...birdnet?.rangeFilter, threshold: value },
             })}
           min={0.0}
@@ -1305,7 +1305,7 @@
             label={t('analysis.rangeFilter.status.passUnmapped.label')}
             checked={birdnet?.rangeFilter?.passUnmappedSpecies ?? false}
             onchange={value =>
-              settingsActions.updateSection('birdnet', {
+              settingsActions.updateSection('voicewatch', {
                 rangeFilter: { ...birdnet?.rangeFilter, passUnmappedSpecies: value },
               })}
             helpText={t('analysis.rangeFilter.status.passUnmapped.helpText')}
@@ -1395,9 +1395,9 @@
       description={t('analysis.advanced.description')}
       defaultOpen={false}
       originalData={{
-        threads: store.originalData.birdnet?.threads,
-        modelPath: store.originalData.birdnet?.modelPath,
-        labelPath: store.originalData.birdnet?.labelPath,
+        threads: store.originalData.voicewatch?.threads,
+        modelPath: store.originalData.voicewatch?.modelPath,
+        labelPath: store.originalData.voicewatch?.labelPath,
       }}
       currentData={{
         threads: birdnet?.threads,
@@ -1481,7 +1481,7 @@
       </div>
     {:else}
       <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <!-- Built-in BirdNET model (always present) -->
+        <!-- Built-in VoiceWatch model (always present) -->
         <div
           class="rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-200)] p-4"
         >

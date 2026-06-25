@@ -200,7 +200,7 @@
     "hoursShort": "ó"
   },
   "pageTitle": {
-    "settings": "Beállítások - BirdNET-Go",
+    "settings": "Beállítások - VoiceWatch",
     "pageNotFound": "404 - Az oldal nem található",
     "serverError": "500 - Belső szerverhiba",
     "componentError": "Komponens betöltési hiba",
@@ -236,26 +236,26 @@
     "askQuestion": "Kérdés feltevése",
     "reportBugAriaLabel": "Hiba bejelentése a GitHubon (új ablakban nyílik meg)",
     "askQuestionAriaLabel": "Kérdés feltevése a GitHub Discussions oldalon (új ablakban nyílik meg)",
-    "viewOnGithubAriaLabel": "BirdNET-Go megtekintése a GitHubon (új ablakban nyílik meg)",
+    "viewOnGithubAriaLabel": "VoiceWatch megtekintése a GitHubon (új ablakban nyílik meg)",
     "health": "Rendszerállapot"
   },
   "about": {
-    "title": "BirdNET-Go",
+    "title": "VoiceWatch",
     "subtitle": "Modern felület valós idejű madárhang detektáláshoz és osztályozáshoz",
-    "logoAlt": "BirdNET-Go logó",
+    "logoAlt": "VoiceWatch logó",
     "overview": "Áttekintés",
-    "overviewText": "A BirdNET-Go egy Go-alapú megvalósítás valós idejű madárhang detektáláshoz és osztályozáshoz, amely a BirdNET projekt alapjaira épül. Ez az alkalmazás felhasználóbarát felületet biztosít a folyamatos madárhang megfigyeléshez és elemzéshez.",
-    "birdnetProject": "BirdNET projekt",
-    "birdnetDescription": "A BirdNET-Go nem lenne lehetséges a BirdNET projekt úttörő munkája nélkül. A BirdNET-Go detektálási képességeit működtető mesterséges intelligencia modell a BirdNET projekt innovatív kutatásának és fejlesztésének az eredménye.",
+    "overviewText": "A VoiceWatch egy Go-alapú megvalósítás valós idejű madárhang detektáláshoz és osztályozáshoz, amely a VoiceWatch projekt alapjaira épül. Ez az alkalmazás felhasználóbarát felületet biztosít a folyamatos madárhang megfigyeléshez és elemzéshez.",
+    "birdnetProject": "VoiceWatch projekt",
+    "birdnetDescription": "A VoiceWatch nem lenne lehetséges a VoiceWatch projekt úttörő munkája nélkül. A VoiceWatch detektálási képességeit működtető mesterséges intelligencia modell a VoiceWatch projekt innovatív kutatásának és fejlesztésének az eredménye.",
     "developedBy": "Fejlesztette",
     "developersText": "A Cornell Lab of Ornithology K. Lisa Yang Conservation Bioacoustics Központja a Chemnitzi Műszaki Egyetemmel együttműködésben:",
     "visitBirdnetAnalyzer": "BirdNET-Analyzer projekt meglátogatása",
     "visitBirdnetAnalyzerAriaLabel": "BirdNET-Analyzer GitHub tárhely meglátogatása",
     "contributors": "Közreműködők",
-    "contributorsText": "A BirdNET-Go számos egyén közös erőfeszítésének köszönhetően nőtt és fejlődött. A kódbeli javításoktól kezdve a funkciójavaslatokig mindannyian felbecsülhetetlen értékű munkával járultak hozzá a projekt jobbá tételéhez.",
+    "contributorsText": "A VoiceWatch számos egyén közös erőfeszítésének köszönhetően nőtt és fejlődött. A kódbeli javításoktól kezdve a funkciójavaslatokig mindannyian felbecsülhetetlen értékű munkával járultak hozzá a projekt jobbá tételéhez.",
     "mainDeveloper": "Fő fejlesztő",
     "githubContributors": "GitHub közreműködők",
-    "contributorsNote": "Külön köszönet ezeknek a közreműködőknek az értékes munkájukért a BirdNET-Go fejlesztésében:",
+    "contributorsNote": "Külön köszönet ezeknek a közreműködőknek az értékes munkájukért a VoiceWatch fejlesztésében:",
     "communityAcknowledgment": "Közösségi elismerés",
     "communityText": "Szeretnénk megköszönni minden felhasználónak is, aki hozzájárult:",
     "bugReports": "Hibajelentések és hibakövetés",
@@ -264,9 +264,9 @@
     "documentation": "Dokumentáció fejlesztések",
     "additionalCredits": "További elismerések",
     "birdnetPiProject": "BirdNET-Pi projekt",
-    "birdnetPiDescription": "Külön köszönet Patrick McGuire-nek a BirdNET-Pi-n végzett inspiráló munkájáért, amely befolyásolta a BirdNET-Go fejlesztését. A BirdNET-Pi bemutatja a madárhang detektálás lehetőségeit beágyazott eszközökön, és magas mércét állított a közösségvezérelt fejlesztés számára.",
+    "birdnetPiDescription": "Külön köszönet Patrick McGuire-nek a BirdNET-Pi-n végzett inspiráló munkájáért, amely befolyásolta a VoiceWatch fejlesztését. A BirdNET-Pi bemutatja a madárhang detektálás lehetőségeit beágyazott eszközökön, és magas mércét állított a közösségvezérelt fejlesztés számára.",
     "visitBirdnetPi": "BirdNET-Pi projekt meglátogatása",
-    "labelTranslations": "BirdNET címke fordítások",
+    "labelTranslations": "VoiceWatch címke fordítások",
     "labelTranslationsBy": "Patrick Levin által biztosítva a BirdNET-Pi projekt számára, Patrick McGuire tollából",
     "patrickLevinGithub": "Patrick Levin GitHub",
     "versionInformation": "Verzióinformáció",
@@ -275,12 +275,12 @@
     "developmentBuild": "Fejlesztői build",
     "unknown": "Ismeretlen",
     "licenseInformation": "Licenc információ",
-    "licenseText": "A BirdNET AI modell és a BirdNET-Go is a",
+    "licenseText": "A VoiceWatch AI modell és a VoiceWatch is a",
     "ccLicense": "Creative Commons Nevezd meg! - Ne add el! - Így add tovább! 4.0 Nemzetközi licenc",
     "licenseDescription": "Ez a licenc lehetővé teszi mások számára, hogy átdolgozzák, adaptálják és fejlesszék ezt a munkát nem kereskedelmi célból, amennyiben megfelelő hivatkozást adnak és az új alkotásokat azonos feltételek mellett licencelik.",
     "dependencyLicenses": "Függőségi licencek",
     "taxonomyDataTitle": "Taxonómia adatok",
-    "taxonomyDataIntro": "A BirdNET-Go beágyazott madár taxonómia adatokat tartalmaz az eBird/Clements listából, amelyek gyors helyi nemzetség- és családbeli kereséseket biztosítanak.",
+    "taxonomyDataIntro": "A VoiceWatch beágyazott madár taxonómia adatokat tartalmaz az eBird/Clements listából, amelyek gyors helyi nemzetség- és családbeli kereséseket biztosítanak.",
     "source": "Forrás",
     "ebirdApiV2": "eBird API v2",
     "copyright": "Szerzői jog",
@@ -290,10 +290,10 @@
     "ebirdOrg": "eBird.org",
     "learnEbirdTaxonomy": "Az eBird taxonómiáról",
     "avicommonsTitle": "Madár miniatűrök",
-    "avicommonsDescription": "A BirdNET-Go kurátusi madárképeket használ az Avicommons könyvtárból, kézzel válogatott, körülvágott és tájékozott madárfényképek Creative Commons licencek alatt.",
-    "githubStarPrompt": "Ha hasznosnak találja a BirdNET-Go-t, kérjük, fontolja meg a projekt csillagozását a GitHub-on. A csillagok segítenek másoknak felfedezni ezt a projektet és támogatják a folyamatos fejlesztést.",
+    "avicommonsDescription": "A VoiceWatch kurátusi madárképeket használ az Avicommons könyvtárból, kézzel válogatott, körülvágott és tájékozott madárfényképek Creative Commons licencek alatt.",
+    "githubStarPrompt": "Ha hasznosnak találja a VoiceWatch-t, kérjük, fontolja meg a projekt csillagozását a GitHub-on. A csillagok segítenek másoknak felfedezni ezt a projektet és támogatják a folyamatos fejlesztést.",
     "viewOnGithub": "Projekt megtekintése a GitHub-on",
-    "visitGithubAriaLabel": "BirdNET-Go GitHub tárhely meglátogatása",
+    "visitGithubAriaLabel": "VoiceWatch GitHub tárhely meglátogatása",
     "visitAvicommonsGithub": "Avicommons GitHub tárhely meglátogatása"
   },
   "notifications": {
@@ -362,11 +362,11 @@
     },
     "content": {
       "startup": {
-        "title": "BirdNET-Go elindult",
+        "title": "VoiceWatch elindult",
         "message": "Az alkalmazás sikeresen elindult (v{version})"
       },
       "shutdown": {
-        "title": "BirdNET-Go leáll",
+        "title": "VoiceWatch leáll",
         "message": "Az alkalmazás szabályosan leáll"
       },
       "detection": {
@@ -423,7 +423,7 @@
         "cancelledTitle": "Adatbázis migráció megszakítva",
         "cancelledMessage": "Az adatbázis migráció megszakítva. Bármikor indíthat új migrációt az Adatbázis beállításokból.",
         "completedTitle": "Adatbázis migráció befejezve",
-        "completedMessage": "A migráció befejeződött. Kérjük, indítsa újra a BirdNET-Go-t az új adatbázis használatához.",
+        "completedMessage": "A migráció befejeződött. Kérjük, indítsa újra a VoiceWatch-t az új adatbázis használatához.",
         "errorTitle": "Adatbázis migráció hiba",
         "errorMessage": "A migráció hibák miatt szünetelt. Ellenőrizze a naplókat és próbálja folytatni."
       },
@@ -435,7 +435,7 @@
       },
       "buffer": {
         "overloadTitle": "Hang elemzés túlterhelve",
-        "overloadMessage": "A rendszere {dropRate}% hangmintát dob el a ''{sourceName}'' forrásból, mert nem bírja az elemzést. Csökkentse a BirdNET átfedési értékét a detektálási beállításokban, vagy fontoljon meg egy gyorsabb CPU-ra való váltást."
+        "overloadMessage": "A rendszere {dropRate}% hangmintát dob el a ''{sourceName}'' forrásból, mert nem bírja az elemzést. Csökkentse a VoiceWatch átfedési értékét a detektálási beállításokban, vagy fontoljon meg egy gyorsabb CPU-ra való váltást."
       },
       "ort": {
         "unavailableTitle": "Az ONNX Runtime nem elérhető",
@@ -1018,13 +1018,13 @@
     },
     "synonyms": {
       "tabLabel": "Taxonómia szinonimák",
-      "description": "Felülbírálja a tudományos név leképezéseket a madár képkeresésekhez. A BirdNET 2021E taxonómiát használ, de a képek forrásai frissített neveket használhatnak. A beépített leképezések mindig betöltődnek; az Ön felülbírálásai hozzáadódnak vagy helyettesítik azokat.",
-      "birdnetName": "BirdNET név",
+      "description": "Felülbírálja a tudományos név leképezéseket a madár képkeresésekhez. A VoiceWatch 2021E taxonómiát használ, de a képek forrásai frissített neveket használhatnak. A beépített leképezések mindig betöltődnek; az Ön felülbírálásai hozzáadódnak vagy helyettesítik azokat.",
+      "birdnetName": "VoiceWatch név",
       "updatedName": "Frissített név",
       "addButton": "Szinonima hozzáadása",
       "emptyState": "Nincs konfigurálva egyedi taxonómia szinonima sem.",
       "errors": {
-        "unknownSpecies": "A faj nem található a BirdNET címkék között",
+        "unknownSpecies": "A faj nem található a VoiceWatch címkék között",
         "duplicateKey": "Ehhez a fajhoz már létezik szinonima",
         "emptyUpdatedName": "A frissített név kötelező"
       }
@@ -1133,7 +1133,7 @@
         "process": "Folyamat"
       },
       "showAll": "Összes folyamat megjelenítése",
-      "showBirdnetOnly": "Csak BirdNET megjelenítése",
+      "showBirdnetOnly": "Csak VoiceWatch megjelenítése",
       "table": {
         "process": "Folyamat",
         "status": "Állapot",
@@ -1311,9 +1311,9 @@
       "migration": {
         "title": "Adatbázis migráció",
         "description": "Migráció a régi sémáról a normalizált v2 sémára",
-        "requiredNote": "Az adatbázis migráció szükséges a közelgő BirdNET-Go funkciókhoz, amelyek az új normalizált adatbázis sémára támaszkodnak. Az új funkciók nem lesznek elérhetők, amíg a migráció be nem fejeződik.",
+        "requiredNote": "Az adatbázis migráció szükséges a közelgő VoiceWatch funkciókhoz, amelyek az új normalizált adatbázis sémára támaszkodnak. Az új funkciók nem lesznek elérhetők, amíg a migráció be nem fejeződik.",
         "completedTitle": "Migráció befejezve",
-        "completedNote": "Az adatbázisa sikeresen migrálva lett az új sémára. Kérjük, indítsa újra a BirdNET-Go-t az új adatbázis használatához. Megjegyzés: Az új adatbázis kisebb, mert hatékonyabban tárolja az adatokat - ez várható és minden adata megmarad.",
+        "completedNote": "Az adatbázisa sikeresen migrálva lett az új sémára. Kérjük, indítsa újra a VoiceWatch-t az új adatbázis használatához. Megjegyzés: Az új adatbázis kisebb, mert hatékonyabban tárolja az adatokat - ez várható és minden adata megmarad.",
         "starting": "Migráció indítása...",
         "status": {
           "idle": "Indításra kész",
@@ -1990,7 +1990,7 @@
     }
   },
   "settings": {
-    "title": "Beállítások - BirdNET-Go",
+    "title": "Beállítások - VoiceWatch",
     "loading": "Beállítások betöltése...",
     "sections": {
       "analysis": "Elemzés",
@@ -2047,20 +2047,20 @@
           "description": "Fő alkalmazás beállítások konfigurálása"
         },
         "birdnet": {
-          "title": "BirdNET beállítások",
-          "description": "BirdNET AI modell specifikus beállítások konfigurálása"
+          "title": "VoiceWatch beállítások",
+          "description": "VoiceWatch AI modell specifikus beállítások konfigurálása"
         },
         "ui": {
           "title": "Felhasználói felület beállítások",
           "description": "Felhasználói felület testreszabása"
         },
         "customClassifier": {
-          "title": "Egyedi BirdNET osztályozó",
-          "description": "Speciális detektáláshoz egyedi BirdNET modell és címke fájlok konfigurálása",
+          "title": "Egyedi VoiceWatch osztályozó",
+          "description": "Speciális detektáláshoz egyedi VoiceWatch modell és címke fájlok konfigurálása",
           "modelPath": {
             "label": "Modell útvonal (alkalmazás újraindítást igényel)",
             "placeholder": "Modell fájl útvonala",
-            "helpText": "Külső BirdNET modell fájl útvonala. Adjon meg abszolút vagy relatív útvonalat a birdnet-go binárishoz. Üresen hagyva az alapértelmezett beágyazott modellt használja."
+            "helpText": "Külső VoiceWatch modell fájl útvonala. Adjon meg abszolút vagy relatív útvonalat a birdnet-go binárishoz. Üresen hagyva az alapértelmezett beágyazott modellt használja."
           },
           "labelPath": {
             "label": "Címke útvonal (alkalmazás újraindítást igényel)",
@@ -2072,7 +2072,7 @@
           "title": "Dinamikus küszöbérték",
           "description": "Automatikusan állítja a detektálási érzékenységet a korábbi megfigyelések alapján",
           "enable": {
-            "label": "Dinamikus küszöbérték engedélyezése (BirdNET-Go specifikus funkció)",
+            "label": "Dinamikus küszöbérték engedélyezése (VoiceWatch specifikus funkció)",
             "helpText": "Engedélyezi a dinamikus megbízhatósági küszöbérték funkciót az adaptívabb madárhang detektáláshoz."
           },
           "trigger": {
@@ -2134,7 +2134,7 @@
           },
           "model": {
             "label": "Tartomány szűrő modell",
-            "helpText": "BirdNET tartomány szűrő modell verzió: legújabb vagy örökölt."
+            "helpText": "VoiceWatch tartomány szűrő modell verzió: legújabb vagy örökölt."
           },
           "threshold": {
             "label": "Küszöbérték",
@@ -2399,7 +2399,7 @@
       "sections": {
         "telemetry": {
           "title": "Hibakövetés és telemetria",
-          "description": "Opcionális hibakövetés a BirdNET-Go megbízhatóságának és teljesítményének javításához"
+          "description": "Opcionális hibakövetés a VoiceWatch megbízhatóságának és teljesítményének javításához"
         },
         "diagnostics": {
           "title": "Támogatás és diagnosztika",
@@ -2411,7 +2411,7 @@
         "privacyPoints": {
           "noPersonalData": "Személyes adat nem kerül gyűjtésre",
           "anonymousData": "Minden telemetria adat névtelen",
-          "helpImprove": "A telemetria adatok segítenek a fejlesztőknek azonosítani és javítani a BirdNET-Go problémákat"
+          "helpImprove": "A telemetria adatok segítenek a fejlesztőknek azonosítani és javítani a VoiceWatch problémákat"
         },
         "enableTracking": "Hibakövetés engedélyezése (önkéntes)"
       },
@@ -2568,7 +2568,7 @@
       },
       "systemInfo": {
         "howToView": "Értesítések megtekintése:",
-        "technicalDetails": "Műszaki részletek a BirdNET-Go értesítéseiről:"
+        "technicalDetails": "Műszaki részletek a VoiceWatch értesítéseiről:"
       },
       "privacy": {
         "title": "Adatvédelmi nyilatkozat külső webhookokhoz",
@@ -2971,14 +2971,14 @@
         "homeAssistant": {
           "title": "Home Assistant auto-felfedezés",
           "enable": "Home Assistant MQTT felfedezés engedélyezése",
-          "description": "Ha engedélyezve van, a BirdNET-Go automatikusan regisztrálja az eszközöket és érzékelőket a Home Assistant-nál az MQTT felfedezés protokollon keresztül. Az eszközök megjelennek a Home Assistant eszköz nyilvántartásában manuális YAML konfiguráció nélkül.",
+          "description": "Ha engedélyezve van, a VoiceWatch automatikusan regisztrálja az eszközöket és érzékelőket a Home Assistant-nál az MQTT felfedezés protokollon keresztül. Az eszközök megjelennek a Home Assistant eszköz nyilvántartásában manuális YAML konfiguráció nélkül.",
           "discoveryPrefix": {
             "label": "Felfedezés előtag",
             "helpText": "Az MQTT téma előtag a Home Assistant felfedezés üzenetekhez. Az alapértelmezett 'homeassistant'. Csak akkor változtassa meg, ha egyedi felfedezés előtagot konfigurált a Home Assistant-ban."
           },
           "deviceName": {
             "label": "Eszköz név",
-            "helpText": "Az alap nevet az eszközökhöz, ahogy megjelennek a Home Assistant-ban. Minden hang forrásnak saját eszköze lesz, amely ehhez a fő BirdNET-Go eszközhöz lesz kapcsolva."
+            "helpText": "Az alap nevet az eszközökhöz, ahogy megjelennek a Home Assistant-ban. Minden hang forrásnak saját eszköze lesz, amely ehhez a fő VoiceWatch eszközhöz lesz kapcsolva."
           },
           "sensorsNote": "<strong>Létrehozott érzékelők:</strong> Minden hang forráshoz a Home Assistant megkapja: Utolsó faj, Megbízhatóság, Tudományos név és Hangszint (ha engedélyezve van). A bridge eszköz tartalmazza az online/offline elérhetőségi állapotot.",
           "discovery": {
@@ -3003,7 +3003,7 @@
       },
       "observability": {
         "title": "Megfigyelhetőség",
-        "description": "A BirdNET-Go teljesítményének és madár detektálási metrikáinak monitorozása Prometheus-kompatibilis végponton keresztül",
+        "description": "A VoiceWatch teljesítményének és madár detektálási metrikáinak monitorozása Prometheus-kompatibilis végponton keresztül",
         "enable": "Megfigyelhetőség integráció engedélyezése",
         "disabled": "A megfigyelhetőség integráció nincs engedélyezve",
         "listenAddress": {
@@ -3172,7 +3172,7 @@
       },
       "noSources": {
         "warning": "Nincs hang forrás konfigurálva",
-        "description": "A BirdNET-Go-nak hang bemenetre van szüksége a madarak érzékeléséhez. Kérjük, konfiguráljon legalább egy forrást a Hangkártya vagy Streamek lapon."
+        "description": "A VoiceWatch-nak hang bemenetre van szüksége a madarak érzékeléséhez. Kérjük, konfiguráljon legalább egy forrást a Hangkártya vagy Streamek lapon."
       },
       "soundCards": {
         "summary": "{count} hangkártya forrás(ok)",
@@ -3198,12 +3198,12 @@
           "hints": {
             "device": "Válasszon a rendszerén elérhető hangbemeneti eszközök közül",
             "multiple": "Több hangkártyát is beállíthat különböző helyszínekhez",
-            "model": "Minden forrás más detekciós modellt használhat (BirdNET, Perch, Bat)"
+            "model": "Minden forrás más detekciós modellt használhat (VoiceWatch, Perch, Bat)"
           }
         },
         "models": {
-          "birdnetDefault": "BirdNET (Alapértelmezett)",
-          "birdnet": "BirdNET",
+          "birdnetDefault": "VoiceWatch (Alapértelmezett)",
+          "birdnet": "VoiceWatch",
           "perchV2": "Google Perch v2",
           "bat": "Denevérdetektálás"
         },
@@ -3551,8 +3551,8 @@
         "invalidRetentionPolicy": "Érvénytelen megőrzési szabályzat"
       },
       "models": {
-        "recommendBoth": "A legjobb fajészlelési lefedettség érdekében javasolt a BirdNET és a Perch modellek együttes futtatása.",
-        "perchOnlyWarning": "A Perch önmagában kevesebb észlelést produkál. Az érdemi eredményekhez csökkentse a megbízhatósági küszöböt 0.50-re, vagy aktiválja a BirdNET-et is a jobb lefedettség érdekében."
+        "recommendBoth": "A legjobb fajészlelési lefedettség érdekében javasolt a VoiceWatch és a Perch modellek együttes futtatása.",
+        "perchOnlyWarning": "A Perch önmagában kevesebb észlelést produkál. Az érdemi eredményekhez csökkentse a megbízhatósági küszöböt 0.50-re, vagy aktiválja a VoiceWatch-et is a jobb lefedettség érdekében."
       }
     },
     "security": {
@@ -3846,7 +3846,7 @@
           },
           "fellBack": {
             "title": "A beépített tartomány szűrő használata",
-            "description": "A beállított geomodell tartomány szűrőt nem sikerült betölteni, ezért a BirdNET-Go a beépített tartomány szűrőre váltott. A szűrés továbbra is működik, de a geomodell visszaállításához ellenőrizd a Beállítások oldalt."
+            "description": "A beállított geomodell tartomány szűrőt nem sikerült betölteni, ezért a VoiceWatch a beépített tartomány szűrőre váltott. A szűrés továbbra is működik, de a geomodell visszaállításához ellenőrizd a Beállítások oldalt."
           },
           "mappedZero": {
             "title": "A tartomány szűrő egyetlen fajra sem illeszkedett",
@@ -3941,14 +3941,14 @@
       },
       "synonyms": {
         "tabLabel": "Szinonimák",
-        "description": "Rendelje hozzá a BirdNET tudományos fajneveit újabb taxonómia szerinti megfelelőikhez. Csak tartalékként használatos a madárképek Wikipédiáról és AviCommonsról való lekérésekor; nem nevezi át a fajokat a detektálásokban vagy az irányítópulton.",
-        "helpText": "Ha módosítani szeretné egy faj felületen megjelenő nevét, szerkessze a BirdNET címkefájlját (a „Címke útvonal” beállítás a fő beállítások között).",
-        "birdnetName": "BirdNET név",
+        "description": "Rendelje hozzá a VoiceWatch tudományos fajneveit újabb taxonómia szerinti megfelelőikhez. Csak tartalékként használatos a madárképek Wikipédiáról és AviCommonsról való lekérésekor; nem nevezi át a fajokat a detektálásokban vagy az irányítópulton.",
+        "helpText": "Ha módosítani szeretné egy faj felületen megjelenő nevét, szerkessze a VoiceWatch címkefájlját (a „Címke útvonal” beállítás a fő beállítások között).",
+        "birdnetName": "VoiceWatch név",
         "updatedName": "Frissített tudományos név",
         "addButton": "Szinonima hozzáadása",
         "emptyState": "Nincs taxonómia szinonima konfigurálva",
         "errors": {
-          "unknownSpecies": "A faj nem található a BirdNET címkék között",
+          "unknownSpecies": "A faj nem található a VoiceWatch címkék között",
           "duplicateKey": "Ehhez a fajhoz már létezik szinonima",
           "emptyUpdatedName": "A frissített név kötelező"
         }
@@ -4371,7 +4371,7 @@
       },
       "appearance": {
         "title": "Megjelenés",
-        "description": "A BirdNET-Go felület megjelenésének és hangulatának testreszabása"
+        "description": "A VoiceWatch felület megjelenésének és hangulatának testreszabása"
       },
       "language": {
         "title": "Nyelv és terület",
@@ -4389,14 +4389,14 @@
         "defaultGainUnit": "dB"
       }
     },
-    "restartRequired": "Néhány változtatáshoz szerver újraindítás szükséges. Kérjük, indítsa újra a BirdNET-Go-t."
+    "restartRequired": "Néhány változtatáshoz szerver újraindítás szükséges. Kérjük, indítsa újra a VoiceWatch-t."
   },
   "auth": {
     "login": "Bejelentkezés",
     "logout": "Kijelentkezés",
     "openLoginModal": "Bejelentkezési ablak megnyitása",
     "loginTitle": "Bejelentkezés",
-    "loginSubtitle": "Hozzáférés a BirdNET-Go irányítópulthoz",
+    "loginSubtitle": "Hozzáférés a VoiceWatch irányítópulthoz",
     "password": "Jelszó",
     "passwordPlaceholder": "Adja meg a jelszavát",
     "enterPassword": "Adja meg a jelszavát",
@@ -4581,7 +4581,7 @@
       "streamError": "Hiba a stream indításakor",
       "streamTitle": "Madárhang stream - {source}",
       "streamTitleDefault": "Madárhang stream",
-      "streamArtist": "BirdNET-Go",
+      "streamArtist": "VoiceWatch",
       "streamAlbum": "Élő közvetítés",
       "playbackError": "Lejátszási hiba: {details}"
     },
@@ -4880,10 +4880,10 @@
     "steps": {
       "welcome": {
         "title": "Üdvözöljük",
-        "heading": "Üdvözöljük a BirdNET-Go-ban!",
-        "description": "A BirdNET-Go egy nyílt forráskódú madárhang-azonosító rendszer, amely a mikrofonjából vagy streamjéből hallgatja a hangot, és valós időben azonosítja a madárfajokat.",
-        "credit": "A BirdNET-Go a BirdNET AI modellt használja, amelyet a K. Lisa Yang Center for Conservation Bioacoustics fejlesztett a Cornell Lab of Ornithology-n és a Chemnitz-i Műszaki Egyetemen. A BirdNET-Go egy független közösségi projekt, és nem áll kapcsolatban a BirdNET csapattal.",
-        "learnMore": "Tudjon meg többet a BirdNET-ről",
+        "heading": "Üdvözöljük a VoiceWatch-ban!",
+        "description": "A VoiceWatch egy nyílt forráskódú madárhang-azonosító rendszer, amely a mikrofonjából vagy streamjéből hallgatja a hangot, és valós időben azonosítja a madárfajokat.",
+        "credit": "A VoiceWatch a VoiceWatch AI modellt használja, amelyet a K. Lisa Yang Center for Conservation Bioacoustics fejlesztett a Cornell Lab of Ornithology-n és a Chemnitz-i Műszaki Egyetemen. A VoiceWatch egy független közösségi projekt, és nem áll kapcsolatban a VoiceWatch csapattal.",
+        "learnMore": "Tudjon meg többet a VoiceWatch-ről",
         "cta": "Állítsuk be az Ön madármegfigyelő állomását."
       },
       "locationLanguage": {
@@ -4942,11 +4942,11 @@
         "birdweatherIdLabel": "BirdWeather állomás ID",
         "birdweatherIdPlaceholder": "Adja meg a BirdWeather állomás ID-jét",
         "errorReportingLabel": "Névtelen hiba jelentések küldése",
-        "errorReportingHelp": "Segítsen fejleszteni a BirdNET-Go-t névtelen hiba jelentések küldésével, amikor valami hibásan működik"
+        "errorReportingHelp": "Segítsen fejleszteni a VoiceWatch-t névtelen hiba jelentések küldésével, amikor valami hibásan működik"
       },
       "responsibleUse": {
-        "title": "A BirdNET-Go felelős használata",
-        "intro": "A BirdNET-Go egy hatékony eszköl, amely AI-asszisztált azonosítással javítja a madárlesési élményt. A madárlesés és a természetvédelem legjobb eredményeinek biztosításához:",
+        "title": "A VoiceWatch felelős használata",
+        "intro": "A VoiceWatch egy hatékony eszköl, amely AI-asszisztált azonosítással javítja a madárlesési élményt. A madárlesés és a természetvédelem legjobb eredményeinek biztosításához:",
         "point1": "Mielőtt megosztaná a megfigyeléseket, tekintse át és ellenőrizze a detektálásokat",
         "point2": "A megbízhatósági pontszámokat útmutatóként használja, ne abszolút igazságként",
         "point3": "Hasonlítsa össze a terepi útmutatókkal és a helyi szakértelemmel",
@@ -5009,7 +5009,7 @@
       "birdOnlyNote": "A területszűrő csak madár osztályozókra vonatkozik. A denevérmodellek saját fajlistákat használnak.",
       "status": {
         "title": "Területszűrő áttekintés",
-        "geomodelInfo": "BirdNET Geomodell {version} - {species} ismert faj",
+        "geomodelInfo": "VoiceWatch Geomodell {version} - {species} ismert faj",
         "autoSelected": "Automatikusan kiválasztott",
         "manual": "Kézi",
         "classifier": "Osztályozó",
@@ -5039,7 +5039,7 @@
       "loading": "Modellek betöltése...",
       "retry": "Újra",
       "builtIn": "Beépített",
-      "builtInDescription": "A BirdNET csapat beépített madárfaj-osztályozója.",
+      "builtInDescription": "A VoiceWatch csapat beépített madárfaj-osztályozója.",
       "species": "{count} faj",
       "install": "Telepítés",
       "installing": "Telepítés...",
@@ -5091,7 +5091,7 @@
       "reinstall": "Újratelepítés",
       "reinstalling": "Újratelepítés...",
       "reinstallComplete": "Fájlok sikeresen ellenőrizve",
-      "geomodelBadge": "Tartalmazza a BirdNET v3.0 geomodellt",
+      "geomodelBadge": "Tartalmazza a VoiceWatch v3.0 geomodellt",
       "onnxRuntimeRequired": "ONNX Runtime szükséges, amely nem elérhető ezen a rendszeren.",
       "onnxRuntimeMissing": "Az ONNX Runtime nem elérhető. Ez a modell nem futtatható.",
       "unavailable": "Nem elérhető"
@@ -5167,7 +5167,7 @@
       },
       "step2": {
         "title": "Telepítési módszer",
-        "description": "Hogyan telepítette a BirdNET-Go-t: install.sh szkript, Docker Compose, kézi fordítás vagy egyéb."
+        "description": "Hogyan telepítette a VoiceWatch-t: install.sh szkript, Docker Compose, kézi fordítás vagy egyéb."
       },
       "step3": {
         "title": "Rendszerinformációk",
@@ -5236,7 +5236,7 @@
       "fetchFailed": "Diagnosztika betöltése sikertelen"
     },
     "export": {
-      "reportTitle": "BirdNET-Go Rendszerállapot Jelentés",
+      "reportTitle": "VoiceWatch Rendszerállapot Jelentés",
       "statusLabel": "Állapot",
       "timeLabel": "Idő",
       "durationLabel": "Időtartam",

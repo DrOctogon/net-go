@@ -118,7 +118,7 @@ function updateNodeName(name: string) {
 }
 
 function updateDynamicThreshold(key: string, value: any) {
-  settingsActions.updateSection('birdnet', {
+  settingsActions.updateSection('voicewatch', {
     // correct parent section
     dynamicThreshold: { ...settings.dynamicThreshold, [key]: value },
   });

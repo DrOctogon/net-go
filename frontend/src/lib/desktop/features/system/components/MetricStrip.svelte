@@ -84,7 +84,7 @@
 
   let inferenceDatasets = $derived(modelsWithData.map(m => ({ data: m.history, color: m.color })));
 
-  // Prefer BirdNET for the header display; fall back to first model with data
+  // Prefer VoiceWatch for the header display; fall back to first model with data
   let primaryAvgMs = $derived.by(() => {
     if (modelsWithData.length === 0) return 0;
     const birdnet = modelsWithData.find(m => m.id.startsWith('BirdNET'));

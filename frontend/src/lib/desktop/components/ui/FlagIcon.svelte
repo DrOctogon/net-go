@@ -5,7 +5,7 @@
   This component provides a type-safe way to display flag icons.
 
   Props:
-  - locale: The locale code (en, de, fr, etc.) or BirdNET locale code
+  - locale: The locale code (en, de, fr, etc.) or VoiceWatch locale code
   - className: Optional CSS classes for sizing/styling
 
   Note: Uses {@html} for SVG rendering - safe because icons are static build-time
@@ -27,7 +27,7 @@
   import PlFlag from '$lib/assets/icons/flags/pl.svg?raw';
   import PtFlag from '$lib/assets/icons/flags/pt.svg?raw';
 
-  // Additional BirdNET locale flags
+  // Additional VoiceWatch locale flags
   import ZaFlag from '$lib/assets/icons/flags/za.svg?raw';
   import SaFlag from '$lib/assets/icons/flags/sa.svg?raw';
   import BgFlag from '$lib/assets/icons/flags/bg.svg?raw';
@@ -61,7 +61,7 @@
   import UaFlag from '$lib/assets/icons/flags/ua.svg?raw';
   import VnFlag from '$lib/assets/icons/flags/vn.svg?raw';
 
-  // Locale type definition - includes both UI locales and BirdNET locale codes
+  // Locale type definition - includes both UI locales and VoiceWatch locale codes
   export type FlagLocale =
     // UI language locales
     | 'en'
@@ -73,7 +73,7 @@
     | 'nl'
     | 'pl'
     | 'pt'
-    // BirdNET locale codes
+    // VoiceWatch locale codes
     | 'af'
     | 'ar'
     | 'bg'
@@ -130,7 +130,7 @@
     nl: NlFlag,
     pl: PlFlag,
     pt: PtFlag,
-    // BirdNET locale codes mapped to country flags
+    // VoiceWatch locale codes mapped to country flags
     af: ZaFlag, // Afrikaans -> South Africa
     ar: SaFlag, // Arabic -> Saudi Arabia
     bg: BgFlag, // Bulgarian -> Bulgaria

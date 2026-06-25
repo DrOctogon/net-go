@@ -56,7 +56,7 @@
      * When true (default), selecting a prediction immediately triggers onAdd and
      * clears the input. When false, selecting a prediction only populates the
      * input so callers can read the current value (used for non-list inputs like
-     * the synonym BirdNET name field, which is submitted via a separate button).
+     * the synonym VoiceWatch name field, which is submitted via a separate button).
      */
     addOnSelect?: boolean;
     /**

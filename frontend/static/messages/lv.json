@@ -200,7 +200,7 @@
     "hoursShort": "st"
   },
   "pageTitle": {
-    "settings": "Iestatījumi - BirdNET-Go",
+    "settings": "Iestatījumi - VoiceWatch",
     "pageNotFound": "404 - Lapa nav atrasta",
     "serverError": "500 - Iekšējā servera kļūda",
     "componentError": "Komponentes ielādes kļūda",
@@ -236,26 +236,26 @@
     "askQuestion": "Uzdot jautājumu",
     "reportBugAriaLabel": "Ziņot par kļūdu GitHub (atveras jaunā logā)",
     "askQuestionAriaLabel": "Uzdot jautājumu GitHub Discussions (atveras jaunā logā)",
-    "viewOnGithubAriaLabel": "Skatīt BirdNET-Go GitHub (atveras jaunā logā)",
+    "viewOnGithubAriaLabel": "Skatīt VoiceWatch GitHub (atveras jaunā logā)",
     "health": "Health"
   },
   "about": {
-    "title": "BirdNET-Go",
+    "title": "VoiceWatch",
     "subtitle": "Moderna saskarne reāllaika putnu skaņu noteikšanai un klasifikācijai",
-    "logoAlt": "BirdNET-Go logotips",
+    "logoAlt": "VoiceWatch logotips",
     "overview": "Pārskats",
-    "overviewText": "BirdNET-Go ir uz Go balstīta implementācija reāllaika putnu skaņu noteikšanai un klasifikācijai, kas veidota uz BirdNET projekta pamata. Šī lietotne nodrošina lietotājam draudzīgu saskarni nepārtrauktai putnu skaņu uzraudzībai un analīzei.",
-    "birdnetProject": "BirdNET projekts",
-    "birdnetDescription": "BirdNET-Go nebūtu iespējams bez BirdNET projekta novatoriskā darba. Mākslīgā intelekta modelis, kas nodrošina BirdNET-Go noteikšanas spējas, ir BirdNET projekta inovatīvās pētniecības un izstrādes rezultāts.",
+    "overviewText": "VoiceWatch ir uz Go balstīta implementācija reāllaika putnu skaņu noteikšanai un klasifikācijai, kas veidota uz VoiceWatch projekta pamata. Šī lietotne nodrošina lietotājam draudzīgu saskarni nepārtrauktai putnu skaņu uzraudzībai un analīzei.",
+    "birdnetProject": "VoiceWatch projekts",
+    "birdnetDescription": "VoiceWatch nebūtu iespējams bez VoiceWatch projekta novatoriskā darba. Mākslīgā intelekta modelis, kas nodrošina VoiceWatch noteikšanas spējas, ir VoiceWatch projekta inovatīvās pētniecības un izstrādes rezultāts.",
     "developedBy": "Izstrādāja",
     "developersText": "K. Lisa Yang Saglabāšanas bioakustikas centrs Kornela Ornitoloģijas laboratorijā sadarbībā ar Kemnicas Tehnoloģisko universitāti:",
     "visitBirdnetAnalyzer": "Apmeklēt BirdNET-Analyzer projektu",
     "visitBirdnetAnalyzerAriaLabel": "Apmeklēt BirdNET-Analyzer GitHub repozitoriju",
     "contributors": "Līdzstrādnieki",
-    "contributorsText": "BirdNET-Go ir audzis un uzlabojies, pateicoties daudzu cilvēku sadarbībai. Viņu ieguldījums, sākot no koda uzlabojumiem līdz funkciju ieteikumiem, ir bijis nenovērtējams, lai padarītu šo projektu labāku.",
+    "contributorsText": "VoiceWatch ir audzis un uzlabojies, pateicoties daudzu cilvēku sadarbībai. Viņu ieguldījums, sākot no koda uzlabojumiem līdz funkciju ieteikumiem, ir bijis nenovērtējams, lai padarītu šo projektu labāku.",
     "mainDeveloper": "Galvenais izstrādātājs",
     "githubContributors": "GitHub līdzstrādnieki",
-    "contributorsNote": "Īpaša pateicība šiem līdzstrādniekiem par viņu vērtīgo darbu BirdNET-Go uzlabošanā:",
+    "contributorsNote": "Īpaša pateicība šiem līdzstrādniekiem par viņu vērtīgo darbu VoiceWatch uzlabošanā:",
     "communityAcknowledgment": "Kopienas atzinība",
     "communityText": "Mēs vēlamies izteikt pateicību arī visiem lietotājiem, kuri ir snieguši ieguldījumu ar:",
     "bugReports": "Kļūdu ziņojumi un problēmu izsekošana",
@@ -264,9 +264,9 @@
     "documentation": "Dokumentācijas uzlabojumi",
     "additionalCredits": "Papildu atzinības",
     "birdnetPiProject": "BirdNET-Pi projekts",
-    "birdnetPiDescription": "Īpaša pateicība Patrick McGuire par viņa iedvesmojošo darbu pie BirdNET-Pi, kas ietekmēja BirdNET-Go izstrādi. BirdNET-Pi demonstrē putnu skaņu noteikšanas potenciālu iegultajās ierīcēs un ir noteicis augstu standartu kopienas virzītai izstrādei.",
+    "birdnetPiDescription": "Īpaša pateicība Patrick McGuire par viņa iedvesmojošo darbu pie BirdNET-Pi, kas ietekmēja VoiceWatch izstrādi. BirdNET-Pi demonstrē putnu skaņu noteikšanas potenciālu iegultajās ierīcēs un ir noteicis augstu standartu kopienas virzītai izstrādei.",
     "visitBirdnetPi": "Apmeklēt BirdNET-Pi projektu",
-    "labelTranslations": "BirdNET etiķešu tulkojumi",
+    "labelTranslations": "VoiceWatch etiķešu tulkojumi",
     "labelTranslationsBy": "Nodrošināja Patrick Levin BirdNET-Pi projektam, ko veidoja Patrick McGuire",
     "patrickLevinGithub": "Patrick Levin GitHub",
     "versionInformation": "Versijas informācija",
@@ -275,12 +275,12 @@
     "developmentBuild": "Izstrādes būvējums",
     "unknown": "Nezināms",
     "licenseInformation": "Licences informācija",
-    "licenseText": "Gan BirdNET AI modelis, gan BirdNET-Go ir licencēti saskaņā ar",
+    "licenseText": "Gan VoiceWatch AI modelis, gan VoiceWatch ir licencēti saskaņā ar",
     "ccLicense": "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International licenci",
     "licenseDescription": "Šī licence ļauj citiem pārveidot, pielāgot un veidot uz šī darba bāzes nekomerciālos nolūkos, ja tiek sniegta atbilstoša atsauce un jaunie darbi tiek licencēti ar identiskiem noteikumiem.",
     "dependencyLicenses": "Atkarību licences",
     "taxonomyDataTitle": "Taksonomijas dati",
-    "taxonomyDataIntro": "BirdNET-Go ietver iegultos putnu taksonomijas datus, kas iegūti no eBird/Clements kontrolsaraksta, nodrošinot ātru lokālu ģinšu un dzimtu meklēšanu.",
+    "taxonomyDataIntro": "VoiceWatch ietver iegultos putnu taksonomijas datus, kas iegūti no eBird/Clements kontrolsaraksta, nodrošinot ātru lokālu ģinšu un dzimtu meklēšanu.",
     "source": "Avots",
     "ebirdApiV2": "eBird API v2",
     "copyright": "Autortiesības",
@@ -290,10 +290,10 @@
     "ebirdOrg": "eBird.org",
     "learnEbirdTaxonomy": "Uzzināt par eBird taksonomiju",
     "avicommonsTitle": "Putnu sīktēli",
-    "avicommonsDescription": "BirdNET-Go izmanto rūpīgi atlasītus putnu attēlus no Avicommons — bibliotēkas ar rokām atlasītiem, apgrieztiem un orientētiem putnu fotoattēliem, kas licencēti saskaņā ar Creative Commons licencēm.",
-    "githubStarPrompt": "Ja BirdNET-Go jums šķiet noderīgs, lūdzu, apsveriet iespēju atzīmēt projektu ar zvaigznīti GitHub. Zvaigznītes palīdz citiem atrast šo projektu un atbalsta tā turpmāko izstrādi.",
+    "avicommonsDescription": "VoiceWatch izmanto rūpīgi atlasītus putnu attēlus no Avicommons — bibliotēkas ar rokām atlasītiem, apgrieztiem un orientētiem putnu fotoattēliem, kas licencēti saskaņā ar Creative Commons licencēm.",
+    "githubStarPrompt": "Ja VoiceWatch jums šķiet noderīgs, lūdzu, apsveriet iespēju atzīmēt projektu ar zvaigznīti GitHub. Zvaigznītes palīdz citiem atrast šo projektu un atbalsta tā turpmāko izstrādi.",
     "viewOnGithub": "Skatīt projektu GitHub",
-    "visitGithubAriaLabel": "Apmeklēt BirdNET-Go GitHub repozitoriju",
+    "visitGithubAriaLabel": "Apmeklēt VoiceWatch GitHub repozitoriju",
     "visitAvicommonsGithub": "Apmeklēt Avicommons GitHub repozitoriju"
   },
   "notifications": {
@@ -362,11 +362,11 @@
     },
     "content": {
       "startup": {
-        "title": "BirdNET-Go startēts",
+        "title": "VoiceWatch startēts",
         "message": "Lietotne veiksmīgi startēta (v{version})"
       },
       "shutdown": {
-        "title": "BirdNET-Go izslēdzas",
+        "title": "VoiceWatch izslēdzas",
         "message": "Lietotne tiek izslēgta"
       },
       "detection": {
@@ -423,7 +423,7 @@
         "cancelledTitle": "Datubāzes migrācija atcelta",
         "cancelledMessage": "Datubāzes migrācija ir atcelta. Jūs varat sākt jaunu migrāciju jebkurā laikā no datubāzes iestatījumiem.",
         "completedTitle": "Datubāzes migrācija pabeigta",
-        "completedMessage": "Migrācija pabeigta. Lūdzu, restartējiet BirdNET-Go, lai pārslēgtos uz jauno datubāzi.",
+        "completedMessage": "Migrācija pabeigta. Lūdzu, restartējiet VoiceWatch, lai pārslēgtos uz jauno datubāzi.",
         "errorTitle": "Datubāzes migrācijas kļūda",
         "errorMessage": "Migrācija apturēta kļūdu dēļ. Pārbaudiet žurnālus un mēģiniet atsākt."
       },
@@ -435,7 +435,7 @@
       },
       "buffer": {
         "overloadTitle": "Audio analīze pārslogota",
-        "overloadMessage": "Jūsu sistēma izlaiž {dropRate}% audio paraugu avotam ''{sourceName}'', jo tā nespēj sekot līdzi analīzei. Samaziniet BirdNET pārklāšanās vērtību noteikšanas iestatījumos vai apsveriet jaudīgāka procesora izmantošanu."
+        "overloadMessage": "Jūsu sistēma izlaiž {dropRate}% audio paraugu avotam ''{sourceName}'', jo tā nespēj sekot līdzi analīzei. Samaziniet VoiceWatch pārklāšanās vērtību noteikšanas iestatījumos vai apsveriet jaudīgāka procesora izmantošanu."
       },
       "ort": {
         "unavailableTitle": "ONNX Runtime nav pieejams",
@@ -1018,13 +1018,13 @@
     },
     "synonyms": {
       "tabLabel": "Taksonomijas sinonīmi",
-      "description": "Pārrakstīt zinātnisko nosaukumu kartējumus, kas tiek izmantoti putnu attēlu meklēšanai. BirdNET izmanto 2021E taksonomiju, bet attēlu avoti var izmantot atjauninātus nosaukumus. Iebūvētie kartējumi vienmēr tiek ielādēti; jūsu pārrakstījumi papildina vai aizstāj tos.",
-      "birdnetName": "BirdNET nosaukums",
+      "description": "Pārrakstīt zinātnisko nosaukumu kartējumus, kas tiek izmantoti putnu attēlu meklēšanai. VoiceWatch izmanto 2021E taksonomiju, bet attēlu avoti var izmantot atjauninātus nosaukumus. Iebūvētie kartējumi vienmēr tiek ielādēti; jūsu pārrakstījumi papildina vai aizstāj tos.",
+      "birdnetName": "VoiceWatch nosaukums",
       "updatedName": "Atjaunināts nosaukums",
       "addButton": "Pievienot sinonīmu",
       "emptyState": "Nav konfigurēti pielāgoti taksonomijas sinonīmi.",
       "errors": {
-        "unknownSpecies": "Suga nav atrasta BirdNET etiķetēs",
+        "unknownSpecies": "Suga nav atrasta VoiceWatch etiķetēs",
         "duplicateKey": "Sinonīms šai sugai jau pastāv",
         "emptyUpdatedName": "Atjaunināts nosaukums ir obligāts"
       }
@@ -1133,7 +1133,7 @@
         "process": "Process"
       },
       "showAll": "Rādīt visus procesus",
-      "showBirdnetOnly": "Rādīt tikai BirdNET",
+      "showBirdnetOnly": "Rādīt tikai VoiceWatch",
       "table": {
         "process": "Process",
         "status": "Statuss",
@@ -1311,9 +1311,9 @@
       "migration": {
         "title": "Datubāzes migrācija",
         "description": "Migrēt no mantotās shēmas uz normalizēto v2 shēmu",
-        "requiredNote": "Datubāzes migrācija ir nepieciešama gaidāmajām BirdNET-Go funkcijām, kas balstās uz jauno normalizēto datubāzes shēmu. Jaunās funkcijas nebūs pieejamas, kamēr migrācija nav pabeigta.",
+        "requiredNote": "Datubāzes migrācija ir nepieciešama gaidāmajām VoiceWatch funkcijām, kas balstās uz jauno normalizēto datubāzes shēmu. Jaunās funkcijas nebūs pieejamas, kamēr migrācija nav pabeigta.",
         "completedTitle": "Migrācija pabeigta",
-        "completedNote": "Jūsu datubāze ir veiksmīgi migrēta uz jauno shēmu. Lūdzu, restartējiet BirdNET-Go, lai pārslēgtos uz jauno datubāzi. Piezīme: jaunā datubāze ir mazāka, jo tā uzglabā datus efektīvāk — tas ir paredzēts un visi jūsu dati ir saglabāti.",
+        "completedNote": "Jūsu datubāze ir veiksmīgi migrēta uz jauno shēmu. Lūdzu, restartējiet VoiceWatch, lai pārslēgtos uz jauno datubāzi. Piezīme: jaunā datubāze ir mazāka, jo tā uzglabā datus efektīvāk — tas ir paredzēts un visi jūsu dati ir saglabāti.",
         "starting": "Sāk migrāciju...",
         "status": {
           "idle": "Gatavs sākšanai",
@@ -1990,7 +1990,7 @@
     }
   },
   "settings": {
-    "title": "Iestatījumi - BirdNET-Go",
+    "title": "Iestatījumi - VoiceWatch",
     "loading": "Ielādē iestatījumus...",
     "sections": {
       "analysis": "Analīze",
@@ -2047,20 +2047,20 @@
           "description": "Konfigurēt galvenos lietojumprogrammas iestatījumus"
         },
         "birdnet": {
-          "title": "BirdNET iestatījumi",
-          "description": "Konfigurēt BirdNET AI modeļa specifiskos iestatījumus"
+          "title": "VoiceWatch iestatījumi",
+          "description": "Konfigurēt VoiceWatch AI modeļa specifiskos iestatījumus"
         },
         "ui": {
           "title": "Lietotāja saskarnes iestatījumi",
           "description": "Pielāgot lietotāja saskarni"
         },
         "customClassifier": {
-          "title": "Pielāgots BirdNET klasifikators",
-          "description": "Konfigurēt pielāgota BirdNET modeļa un etiķešu failus specializētai noteikšanai",
+          "title": "Pielāgots VoiceWatch klasifikators",
+          "description": "Konfigurēt pielāgota VoiceWatch modeļa un etiķešu failus specializētai noteikšanai",
           "modelPath": {
             "label": "Modeļa ceļš (Piemērošanai nepieciešama restartēšana)",
             "placeholder": "Ceļš uz modeļa failu",
-            "helpText": "Ceļš uz ārējo BirdNET modeļa failu. Ievadiet absolūto vai relatīvo ceļu attiecībā pret birdnet-go bināro failu. Atstājiet tukšu, lai izmantotu noklusējuma iegulto modeli."
+            "helpText": "Ceļš uz ārējo VoiceWatch modeļa failu. Ievadiet absolūto vai relatīvo ceļu attiecībā pret birdnet-go bināro failu. Atstājiet tukšu, lai izmantotu noklusējuma iegulto modeli."
           },
           "labelPath": {
             "label": "Etiķešu ceļš (Piemērošanai nepieciešama restartēšana)",
@@ -2072,7 +2072,7 @@
           "title": "Dinamiskais slieksnis",
           "description": "Automātiski pielāgot noteikšanas jutību, pamatojoties uz iepriekšējiem novērojumiem",
           "enable": {
-            "label": "Iespējot dinamisko slieksni (BirdNET-Go specifiska funkcija)",
+            "label": "Iespējot dinamisko slieksni (VoiceWatch specifiska funkcija)",
             "helpText": "Iespējo dinamiskā ticamības sliekšņa funkciju adaptīvākai putnu balsu noteikšanai."
           },
           "trigger": {
@@ -2134,7 +2134,7 @@
           },
           "model": {
             "label": "Areāla filtra modelis",
-            "helpText": "BirdNET areāla filtra modeļa versija: jaunākā vai mantotā."
+            "helpText": "VoiceWatch areāla filtra modeļa versija: jaunākā vai mantotā."
           },
           "threshold": {
             "label": "Slieksnis",
@@ -2399,7 +2399,7 @@
       "sections": {
         "telemetry": {
           "title": "Kļūdu izsekošana un telemetrija",
-          "description": "Neobligāta kļūdu izsekošana, lai palīdzētu uzlabot BirdNET-Go uzticamību un veiktspēju"
+          "description": "Neobligāta kļūdu izsekošana, lai palīdzētu uzlabot VoiceWatch uzticamību un veiktspēju"
         },
         "diagnostics": {
           "title": "Atbalsts un diagnostika",
@@ -2411,7 +2411,7 @@
         "privacyPoints": {
           "noPersonalData": "Personiskie dati netiek vākti",
           "anonymousData": "Visi telemetrijas dati ir anonīmi",
-          "helpImprove": "Telemetrijas dati palīdz izstrādātājiem identificēt un novērst problēmas BirdNET-Go"
+          "helpImprove": "Telemetrijas dati palīdz izstrādātājiem identificēt un novērst problēmas VoiceWatch"
         },
         "enableTracking": "Iespējot kļūdu izsekošanu (piekrist)"
       },
@@ -2568,7 +2568,7 @@
       },
       "systemInfo": {
         "howToView": "Kā skatīt paziņojumus:",
-        "technicalDetails": "Tehniskie detaļas par paziņojumiem BirdNET-Go:"
+        "technicalDetails": "Tehniskie detaļas par paziņojumiem VoiceWatch:"
       },
       "privacy": {
         "title": "Privātuma paziņojums ārējiem tīmekļa āķiem",
@@ -2971,14 +2971,14 @@
         "homeAssistant": {
           "title": "Home Assistant automātiskā atklāšana",
           "enable": "Iespējot Home Assistant MQTT atklāšanu",
-          "description": "Kad iespējots, BirdNET-Go automātiski reģistrē ierīces un sensorus Home Assistant, izmantojot MQTT atklāšanas protokolu. Ierīces parādīsies Home Assistant ierīču reģistrā bez manuālas YAML konfigurācijas.",
+          "description": "Kad iespējots, VoiceWatch automātiski reģistrē ierīces un sensorus Home Assistant, izmantojot MQTT atklāšanas protokolu. Ierīces parādīsies Home Assistant ierīču reģistrā bez manuālas YAML konfigurācijas.",
           "discoveryPrefix": {
             "label": "Atklāšanas prefikss",
             "helpText": "MQTT tēmas prefikss Home Assistant atklāšanas ziņojumiem. Noklusējums ir 'homeassistant'. Mainiet tikai tad, ja esat konfigurējis pielāgotu atklāšanas prefiksu Home Assistant."
           },
           "deviceName": {
             "label": "Ierīces nosaukums",
-            "helpText": "Ierīču pamata nosaukums, kā tas parādās Home Assistant. Katram audio avotam būs sava ierīce, kas saistīta ar šo galveno BirdNET-Go ierīci."
+            "helpText": "Ierīču pamata nosaukums, kā tas parādās Home Assistant. Katram audio avotam būs sava ierīce, kas saistīta ar šo galveno VoiceWatch ierīci."
           },
           "sensorsNote": "<strong>Izveidotie sensori:</strong> Katram audio avotam Home Assistant saņems: Pēdējā suga, Ticamība, Zinātniskais nosaukums un Skaņas līmenis (ja iespējots). Tilta ierīce ietver tiešsaistes/bezsaistes pieejamības statusu.",
           "discovery": {
@@ -3003,7 +3003,7 @@
       },
       "observability": {
         "title": "Novērojamība",
-        "description": "Uzraudzīt BirdNET-Go veiktspēju un putnu noteikšanas metriku, izmantojot ar Prometheus saderīgu galapunktu",
+        "description": "Uzraudzīt VoiceWatch veiktspēju un putnu noteikšanas metriku, izmantojot ar Prometheus saderīgu galapunktu",
         "enable": "Iespējot novērojamības integrāciju",
         "disabled": "Novērojamības integrācija nav iespējota",
         "listenAddress": {
@@ -3172,7 +3172,7 @@
       },
       "noSources": {
         "warning": "Nav konfigurētu audio avotu",
-        "description": "BirdNET-Go nepieciešama audio ievade, lai noteiktu putnus. Lūdzu, konfigurējiet vismaz vienu avotu cilnē Skaņas karte vai Straumes."
+        "description": "VoiceWatch nepieciešama audio ievade, lai noteiktu putnus. Lūdzu, konfigurējiet vismaz vienu avotu cilnē Skaņas karte vai Straumes."
       },
       "soundCards": {
         "summary": "{count} skaņas kartes avots(-i)",
@@ -3198,12 +3198,12 @@
           "hints": {
             "device": "Izvēlieties no pieejamajām audio ievades ierīcēm jūsu sistēmā",
             "multiple": "Varat konfigurēt vairākas skaņas kartes dažādām atrašanās vietām",
-            "model": "Katrs avots var izmantot citu noteikšanas modeli (BirdNET, Perch, Bat)"
+            "model": "Katrs avots var izmantot citu noteikšanas modeli (VoiceWatch, Perch, Bat)"
           }
         },
         "models": {
-          "birdnetDefault": "BirdNET (Noklusējuma)",
-          "birdnet": "BirdNET",
+          "birdnetDefault": "VoiceWatch (Noklusējuma)",
+          "birdnet": "VoiceWatch",
           "perchV2": "Google Perch v2",
           "bat": "Sikspārņu noteikšana"
         },
@@ -3551,8 +3551,8 @@
         "invalidRetentionPolicy": "Nederīga saglabāšanas politika"
       },
       "models": {
-        "recommendBoth": "Labākai sugu noteikšanas pārklājumam ieteicams izmantot gan BirdNET, gan Perch modeļus kopā.",
-        "perchOnlyWarning": "Perch vien rada mazāk noteikšanu. Samaziniet ticamības slieksni līdz 0.50, lai iegūtu jēgpilnus rezultātus, vai aktivizējiet arī BirdNET labākam pārklājumam."
+        "recommendBoth": "Labākai sugu noteikšanas pārklājumam ieteicams izmantot gan VoiceWatch, gan Perch modeļus kopā.",
+        "perchOnlyWarning": "Perch vien rada mazāk noteikšanu. Samaziniet ticamības slieksni līdz 0.50, lai iegūtu jēgpilnus rezultātus, vai aktivizējiet arī VoiceWatch labākam pārklājumam."
       }
     },
     "security": {
@@ -3846,7 +3846,7 @@
           },
           "fellBack": {
             "title": "Tiek izmantots iebūvētais areāla filtrs",
-            "description": "Konfigurēto ģeomodeļa areāla filtru neizdevās ielādēt, tāpēc BirdNET-Go pārslēdzās uz iebūvēto areāla filtru. Filtrēšana joprojām darbojas, taču pārbaudiet Iestatījumu lapu, lai atjaunotu ģeomodeli."
+            "description": "Konfigurēto ģeomodeļa areāla filtru neizdevās ielādēt, tāpēc VoiceWatch pārslēdzās uz iebūvēto areāla filtru. Filtrēšana joprojām darbojas, taču pārbaudiet Iestatījumu lapu, lai atjaunotu ģeomodeli."
           },
           "mappedZero": {
             "title": "Areāla filtrs neatbilda nevienai sugai",
@@ -3941,14 +3941,14 @@
       },
       "synonyms": {
         "tabLabel": "Sinonīmi",
-        "description": "Saistiet BirdNET zinātniskos sugu nosaukumus ar to atjauninātajiem ekvivalentiem jaunākajā taksonomijā. Tiek izmantots tikai kā rezerves variants, meklējot putnu fotoattēlus Wikipedia un AviCommons; nepārsauc sugas atklājumos vai informācijas panelī.",
-        "helpText": "Lai mainītu, kā suga tiek attēlota saskarnē, rediģējiet savu BirdNET etiķešu failu (iestatījums \"Etiķešu ceļš\" galvenajos iestatījumos).",
-        "birdnetName": "BirdNET nosaukums",
+        "description": "Saistiet VoiceWatch zinātniskos sugu nosaukumus ar to atjauninātajiem ekvivalentiem jaunākajā taksonomijā. Tiek izmantots tikai kā rezerves variants, meklējot putnu fotoattēlus Wikipedia un AviCommons; nepārsauc sugas atklājumos vai informācijas panelī.",
+        "helpText": "Lai mainītu, kā suga tiek attēlota saskarnē, rediģējiet savu VoiceWatch etiķešu failu (iestatījums \"Etiķešu ceļš\" galvenajos iestatījumos).",
+        "birdnetName": "VoiceWatch nosaukums",
         "updatedName": "Atjaunināts zinātniskais nosaukums",
         "addButton": "Pievienot sinonīmu",
         "emptyState": "Nav konfigurēti taksonomijas sinonīmi",
         "errors": {
-          "unknownSpecies": "Suga nav atrasta BirdNET etiķetēs",
+          "unknownSpecies": "Suga nav atrasta VoiceWatch etiķetēs",
           "duplicateKey": "Šai sugai jau pastāv sinonīms",
           "emptyUpdatedName": "Atjauninātais nosaukums ir obligāts"
         }
@@ -4371,7 +4371,7 @@
       },
       "appearance": {
         "title": "Izskats",
-        "description": "Pielāgojiet savas BirdNET-Go saskarnes izskatu un sajūtu"
+        "description": "Pielāgojiet savas VoiceWatch saskarnes izskatu un sajūtu"
       },
       "language": {
         "title": "Valoda un reģions",
@@ -4389,14 +4389,14 @@
         "defaultGainUnit": "dB"
       }
     },
-    "restartRequired": "Dažām izmaiņām nepieciešama servera pārstartēšana, lai tās stātos spēkā. Lūdzu, pārstartējiet BirdNET-Go."
+    "restartRequired": "Dažām izmaiņām nepieciešama servera pārstartēšana, lai tās stātos spēkā. Lūdzu, pārstartējiet VoiceWatch."
   },
   "auth": {
     "login": "Pieteikties",
     "logout": "Izrakstīties",
     "openLoginModal": "Atvērt pieteikšanās logu",
     "loginTitle": "Pierakstīties",
-    "loginSubtitle": "Piekļūstiet savam BirdNET-Go paneļa skatam",
+    "loginSubtitle": "Piekļūstiet savam VoiceWatch paneļa skatam",
     "password": "Parole",
     "passwordPlaceholder": "Ievadiet savu paroli",
     "enterPassword": "Ievadiet savu paroli",
@@ -4581,7 +4581,7 @@
       "streamError": "Kļūda, startējot straumi",
       "streamTitle": "Putnu audio straume - {source}",
       "streamTitleDefault": "Putnu audio straume",
-      "streamArtist": "BirdNET-Go",
+      "streamArtist": "VoiceWatch",
       "streamAlbum": "Tiešraide",
       "playbackError": "Atskaņošanas kļūda: {details}"
     },
@@ -4880,10 +4880,10 @@
     "steps": {
       "welcome": {
         "title": "Sveicināti",
-        "heading": "Laipni lūdzam BirdNET-Go!",
-        "description": "BirdNET-Go ir atvērtā pirmkoda putnu skaņu identificēšanas sistēma, kas klausās audio no jūsu mikrofona vai straumes un reāllaikā identificē putnu sugas.",
-        "credit": "BirdNET-Go izmanto BirdNET AI modeli, ko izstrādājis K. Lisa Yang Center for Conservation Bioacoustics Cornell Lab of Ornithology un Kemnicas Tehniskajā universitātē. BirdNET-Go ir neatkarīgs kopienas projekts un nav saistīts ar BirdNET komandu.",
-        "learnMore": "Uzziniet vairāk par BirdNET",
+        "heading": "Laipni lūdzam VoiceWatch!",
+        "description": "VoiceWatch ir atvērtā pirmkoda putnu skaņu identificēšanas sistēma, kas klausās audio no jūsu mikrofona vai straumes un reāllaikā identificē putnu sugas.",
+        "credit": "VoiceWatch izmanto VoiceWatch AI modeli, ko izstrādājis K. Lisa Yang Center for Conservation Bioacoustics Cornell Lab of Ornithology un Kemnicas Tehniskajā universitātē. VoiceWatch ir neatkarīgs kopienas projekts un nav saistīts ar VoiceWatch komandu.",
+        "learnMore": "Uzziniet vairāk par VoiceWatch",
         "cta": "Iestatīsim jūsu putnu novērošanas staciju."
       },
       "locationLanguage": {
@@ -4942,11 +4942,11 @@
         "birdweatherIdLabel": "BirdWeather stacijas ID",
         "birdweatherIdPlaceholder": "Ievadiet savu BirdWeather stacijas ID",
         "errorReportingLabel": "Sūtīt anonīmus kļūdu ziņojumus",
-        "errorReportingHelp": "Palīdziet uzlabot BirdNET-Go, sūtot anonīmus kļūdu ziņojumus, kad kaut kas noiet greizi"
+        "errorReportingHelp": "Palīdziet uzlabot VoiceWatch, sūtot anonīmus kļūdu ziņojumus, kad kaut kas noiet greizi"
       },
       "responsibleUse": {
-        "title": "BirdNET-Go atbildīga lietošana",
-        "intro": "BirdNET-Go ir jaudīgs rīks, kas uzlabo jūsu putnu vērošanas pieredzi ar MI atbalstītu identifikāciju. Lai nodrošinātu labākos rezultātus gan putnu vērošanai, gan dabas aizsardzībai:",
+        "title": "VoiceWatch atbildīga lietošana",
+        "intro": "VoiceWatch ir jaudīgs rīks, kas uzlabo jūsu putnu vērošanas pieredzi ar MI atbalstītu identifikāciju. Lai nodrošinātu labākos rezultātus gan putnu vērošanai, gan dabas aizsardzībai:",
         "point1": "Pārskatiet un pārbaudiet noteikšanas pirms novērojumu kopīgošanas",
         "point2": "Izmantojiet ticamības rādītājus kā vadlīniju, nevis absolūtu patiesību",
         "point3": "Salīdziniet ar lauka noteicējiem un vietējo pieredzi",
@@ -5009,7 +5009,7 @@
       "birdOnlyNote": "Areāla filtrs attiecas tikai uz putnu klasifikatoriem. Sikspārņu modeļi izmanto savus sugu sarakstus.",
       "status": {
         "title": "Diapazona filtra pārskats",
-        "geomodelInfo": "BirdNET Geomodels {version} - {species} zināmas sugas",
+        "geomodelInfo": "VoiceWatch Geomodels {version} - {species} zināmas sugas",
         "autoSelected": "Automātiski atlasīts",
         "manual": "Manuāli",
         "classifier": "Klasifikators",
@@ -5039,7 +5039,7 @@
       "loading": "Ielādē modeļus...",
       "retry": "Mēģināt vēlreiz",
       "builtIn": "Iebūvēts",
-      "builtInDescription": "BirdNET komandas iebūvēts putnu sugu klasifikators.",
+      "builtInDescription": "VoiceWatch komandas iebūvēts putnu sugu klasifikators.",
       "species": "{count} sugas",
       "install": "Instalēt",
       "installing": "Instalē...",
@@ -5091,7 +5091,7 @@
       "reinstall": "Pārinstalēt",
       "reinstalling": "Pārinstalē...",
       "reinstallComplete": "Faili veiksmīgi pārbaudīti",
-      "geomodelBadge": "Ietver BirdNET v3.0 ģeomodelis",
+      "geomodelBadge": "Ietver VoiceWatch v3.0 ģeomodelis",
       "onnxRuntimeRequired": "Nepieciešams ONNX Runtime, kas šajā sistēmā nav pieejams.",
       "onnxRuntimeMissing": "ONNX Runtime nav pieejams. Šo modeli nevar palaist.",
       "unavailable": "Nav pieejams"
@@ -5167,7 +5167,7 @@
       },
       "step2": {
         "title": "Jūsu instalācijas metode",
-        "description": "Kā jūs instalējāt BirdNET-Go: install.sh skripts, Docker Compose, manuāla būvēšana vai cits."
+        "description": "Kā jūs instalējāt VoiceWatch: install.sh skripts, Docker Compose, manuāla būvēšana vai cits."
       },
       "step3": {
         "title": "Sistēmas informācija",
@@ -5236,7 +5236,7 @@
       "fetchFailed": "Failed to load diagnostics"
     },
     "export": {
-      "reportTitle": "BirdNET-Go System Health Report",
+      "reportTitle": "VoiceWatch System Health Report",
       "statusLabel": "Status",
       "timeLabel": "Time",
       "durationLabel": "Duration",

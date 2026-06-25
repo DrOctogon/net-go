@@ -70,7 +70,7 @@ Performance Optimizations:
   import { connectionState } from '$lib/stores/connectionState.svelte';
   import { appState } from '$lib/stores/appState.svelte';
   import {
-    birdnetSettings,
+    voicewatchSettings,
     dashboardLayout,
     settingsDataLoaded,
     settingsStore,
@@ -959,7 +959,7 @@ Performance Optimizations:
   const isViewingToday = $derived(selectedDate === serverTodayDate);
 
   // Location availability for banner map toggle
-  let birdnet = $derived($birdnetSettings);
+  let birdnet = $derived($voicewatchSettings);
   let hasLocation = $derived((birdnet?.latitude ?? 0) !== 0 || (birdnet?.longitude ?? 0) !== 0);
 
   // Queue daily summary updates with debouncing for rapid updates

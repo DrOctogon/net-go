@@ -1,7 +1,7 @@
 <!--
   Audio Equalizer Settings Component
   
-  Purpose: Manages audio filter/equalizer configuration for BirdNET-Go
+  Purpose: Manages audio filter/equalizer configuration for VoiceWatch
   
   Features:
   - Enable/disable equalizer

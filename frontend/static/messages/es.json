@@ -200,7 +200,7 @@
     "hoursShort": "h"
   },
   "pageTitle": {
-    "settings": "Configuración - BirdNET-Go",
+    "settings": "Configuración - VoiceWatch",
     "pageNotFound": "404 - Página no encontrada",
     "serverError": "500 - Error interno del servidor",
     "componentError": "Error de carga del componente",
@@ -236,26 +236,26 @@
     "askQuestion": "Hacer una pregunta",
     "reportBugAriaLabel": "Reportar un error en GitHub (abre en una nueva ventana)",
     "askQuestionAriaLabel": "Hacer una pregunta en GitHub Discussions (abre en una nueva ventana)",
-    "viewOnGithubAriaLabel": "Ver BirdNET-Go en GitHub (abre en una nueva ventana)",
+    "viewOnGithubAriaLabel": "Ver VoiceWatch en GitHub (abre en una nueva ventana)",
     "health": "Health"
   },
   "about": {
-    "title": "BirdNET-Go",
+    "title": "VoiceWatch",
     "subtitle": "Una interfaz moderna para la detección y clasificación de sonidos de aves en tiempo real",
-    "logoAlt": "Logo de BirdNET-Go",
+    "logoAlt": "Logo de VoiceWatch",
     "overview": "Resumen",
-    "overviewText": "BirdNET-Go es una implementación basada en Go para la detección y clasificación de sonidos de aves en tiempo real, construida sobre los cimientos del proyecto BirdNET. Esta aplicación proporciona una interfaz fácil de usar para el monitoreo y análisis continuo de sonidos de aves.",
-    "birdnetProject": "Proyecto BirdNET",
-    "birdnetDescription": "BirdNET-Go no sería posible sin el trabajo innovador del proyecto BirdNET. El modelo de inteligencia artificial que impulsa las capacidades de detección de BirdNET-Go es el resultado de la investigación y desarrollo innovadores del proyecto BirdNET.",
+    "overviewText": "VoiceWatch es una implementación basada en Go para la detección y clasificación de sonidos de aves en tiempo real, construida sobre los cimientos del proyecto VoiceWatch. Esta aplicación proporciona una interfaz fácil de usar para el monitoreo y análisis continuo de sonidos de aves.",
+    "birdnetProject": "Proyecto VoiceWatch",
+    "birdnetDescription": "VoiceWatch no sería posible sin el trabajo innovador del proyecto VoiceWatch. El modelo de inteligencia artificial que impulsa las capacidades de detección de VoiceWatch es el resultado de la investigación y desarrollo innovadores del proyecto VoiceWatch.",
     "developedBy": "Desarrollado por",
     "developersText": "El K. Lisa Yang Center for Conservation Bioacoustics en el Cornell Lab of Ornithology en colaboración con la Universidad Tecnológica de Chemnitz:",
     "visitBirdnetAnalyzer": "Visitar el proyecto BirdNET-Analyzer",
     "visitBirdnetAnalyzerAriaLabel": "Visitar el repositorio GitHub de BirdNET-Analyzer",
     "contributors": "Colaboradores",
-    "contributorsText": "BirdNET-Go ha crecido y mejorado gracias a los esfuerzos colaborativos de muchas personas. Sus contribuciones, desde mejoras en el código hasta sugerencias de funciones, han sido invaluables para mejorar este proyecto.",
+    "contributorsText": "VoiceWatch ha crecido y mejorado gracias a los esfuerzos colaborativos de muchas personas. Sus contribuciones, desde mejoras en el código hasta sugerencias de funciones, han sido invaluables para mejorar este proyecto.",
     "mainDeveloper": "Desarrollador principal",
     "githubContributors": "Colaboradores de GitHub",
-    "contributorsNote": "Agradecimientos especiales a estos colaboradores por su valioso trabajo en la mejora de BirdNET-Go:",
+    "contributorsNote": "Agradecimientos especiales a estos colaboradores por su valioso trabajo en la mejora de VoiceWatch:",
     "communityAcknowledgment": "Reconocimiento a la comunidad",
     "communityText": "También nos gustaría extender nuestra gratitud a todos los usuarios que han contribuido a través de:",
     "bugReports": "Informes de errores y seguimiento de problemas",
@@ -264,9 +264,9 @@
     "documentation": "Mejoras en la documentación",
     "additionalCredits": "Créditos adicionales",
     "birdnetPiProject": "Proyecto BirdNET-Pi",
-    "birdnetPiDescription": "Agradecimientos especiales a Patrick McGuire por su inspirador trabajo en BirdNET-Pi, que ha influido en el desarrollo de BirdNET-Go. BirdNET-Pi demuestra el potencial de la detección de sonidos de aves en dispositivos embebidos y ha establecido un alto estándar para el desarrollo impulsado por la comunidad.",
+    "birdnetPiDescription": "Agradecimientos especiales a Patrick McGuire por su inspirador trabajo en BirdNET-Pi, que ha influido en el desarrollo de VoiceWatch. BirdNET-Pi demuestra el potencial de la detección de sonidos de aves en dispositivos embebidos y ha establecido un alto estándar para el desarrollo impulsado por la comunidad.",
     "visitBirdnetPi": "Visitar el proyecto BirdNET-Pi",
-    "labelTranslations": "Traducciones de etiquetas BirdNET",
+    "labelTranslations": "Traducciones de etiquetas VoiceWatch",
     "labelTranslationsBy": "Proporcionadas por Patrick Levin para el proyecto BirdNET-Pi por Patrick McGuire",
     "patrickLevinGithub": "GitHub de Patrick Levin",
     "versionInformation": "Información de versión",
@@ -275,12 +275,12 @@
     "developmentBuild": "Versión de desarrollo",
     "unknown": "Desconocida",
     "licenseInformation": "Información de licencia",
-    "licenseText": "Tanto el modelo de IA BirdNET como BirdNET-Go están licenciados bajo la",
+    "licenseText": "Tanto el modelo de IA VoiceWatch como VoiceWatch están licenciados bajo la",
     "ccLicense": "Licencia Creative Commons Atribución-NoComercial-CompartirIgual 4.0 Internacional",
     "licenseDescription": "Esta licencia permite a otros remezclar, adaptar y construir sobre este trabajo de forma no comercial, siempre que se otorgue el crédito apropiado y las nuevas creaciones se licencien bajo términos idénticos.",
     "dependencyLicenses": "Licencias de dependencias",
     "taxonomyDataTitle": "Datos de taxonomía",
-    "taxonomyDataIntro": "BirdNET-Go incluye datos de taxonomía de aves incorporados derivados de la lista eBird/Clements, proporcionando búsquedas locales rápidas por género y familia.",
+    "taxonomyDataIntro": "VoiceWatch incluye datos de taxonomía de aves incorporados derivados de la lista eBird/Clements, proporcionando búsquedas locales rápidas por género y familia.",
     "source": "Fuente",
     "ebirdApiV2": "eBird API v2",
     "copyright": "Derechos de autor",
@@ -290,8 +290,8 @@
     "ebirdOrg": "eBird.org",
     "learnEbirdTaxonomy": "Más información sobre la taxonomía de eBird",
     "avicommonsTitle": "Miniaturas de aves",
-    "avicommonsDescription": "BirdNET-Go utiliza imágenes de aves seleccionadas de Avicommons, una biblioteca de fotos de aves seleccionadas a mano, recortadas y orientadas bajo licencias Creative Commons.",
-    "githubStarPrompt": "Si encuentra útil BirdNET-Go, considere darle una estrella al proyecto en GitHub. Las estrellas ayudan a otros a descubrir este proyecto y apoyan su desarrollo.",
+    "avicommonsDescription": "VoiceWatch utiliza imágenes de aves seleccionadas de Avicommons, una biblioteca de fotos de aves seleccionadas a mano, recortadas y orientadas bajo licencias Creative Commons.",
+    "githubStarPrompt": "Si encuentra útil VoiceWatch, considere darle una estrella al proyecto en GitHub. Las estrellas ayudan a otros a descubrir este proyecto y apoyan su desarrollo.",
     "viewOnGithub": "Ver proyecto en GitHub",
     "visitGithubAriaLabel": "Visita el repositorio de GitHub",
     "visitAvicommonsGithub": "Visita el repositorio de Avicommons en GitHub"
@@ -362,11 +362,11 @@
     },
     "content": {
       "startup": {
-        "title": "BirdNET-Go iniciado",
+        "title": "VoiceWatch iniciado",
         "message": "Aplicación iniciada correctamente (v{version})"
       },
       "shutdown": {
-        "title": "BirdNET-Go apagándose",
+        "title": "VoiceWatch apagándose",
         "message": "La aplicación se está apagando correctamente"
       },
       "detection": {
@@ -423,7 +423,7 @@
         "cancelledTitle": "Migración de base de datos cancelada",
         "cancelledMessage": "La migración de base de datos ha sido cancelada. Puede iniciar una nueva migración en cualquier momento desde los ajustes de base de datos.",
         "completedTitle": "Migración de base de datos completada",
-        "completedMessage": "Migración completada. Por favor, reinicie BirdNET-Go para cambiar a la nueva base de datos.",
+        "completedMessage": "Migración completada. Por favor, reinicie VoiceWatch para cambiar a la nueva base de datos.",
         "errorTitle": "Error de migración de base de datos",
         "errorMessage": "Migración pausada por errores. Revise los registros e intente reanudar."
       },
@@ -435,7 +435,7 @@
       },
       "buffer": {
         "overloadTitle": "Análisis de audio sobrecargado",
-        "overloadMessage": "Su sistema está descartando el {dropRate} % de las muestras de audio de la fuente ''{sourceName}'' porque no puede seguir el ritmo del análisis. Reduzca el valor de superposición de BirdNET en los ajustes de detección o considere actualizar a una CPU más rápida."
+        "overloadMessage": "Su sistema está descartando el {dropRate} % de las muestras de audio de la fuente ''{sourceName}'' porque no puede seguir el ritmo del análisis. Reduzca el valor de superposición de VoiceWatch en los ajustes de detección o considere actualizar a una CPU más rápida."
       },
       "ort": {
         "unavailableTitle": "ONNX Runtime no disponible",
@@ -1018,13 +1018,13 @@
     },
     "synonyms": {
       "tabLabel": "Sinónimos taxonómicos",
-      "description": "Anular las asignaciones de nombres científicos utilizadas para la búsqueda de imágenes de aves. BirdNET utiliza la taxonomía 2021E, pero las fuentes de imágenes pueden usar nombres actualizados. Las asignaciones integradas siempre se cargan; sus anulaciones se agregan o reemplazan.",
-      "birdnetName": "Nombre BirdNET",
+      "description": "Anular las asignaciones de nombres científicos utilizadas para la búsqueda de imágenes de aves. VoiceWatch utiliza la taxonomía 2021E, pero las fuentes de imágenes pueden usar nombres actualizados. Las asignaciones integradas siempre se cargan; sus anulaciones se agregan o reemplazan.",
+      "birdnetName": "Nombre VoiceWatch",
       "updatedName": "Nombre actualizado",
       "addButton": "Agregar sinónimo",
       "emptyState": "No hay sinónimos taxonómicos personalizados configurados.",
       "errors": {
-        "unknownSpecies": "Especie no encontrada en las etiquetas de BirdNET",
+        "unknownSpecies": "Especie no encontrada en las etiquetas de VoiceWatch",
         "duplicateKey": "Ya existe un sinónimo para esta especie",
         "emptyUpdatedName": "El nombre actualizado es obligatorio"
       }
@@ -1133,7 +1133,7 @@
         "process": "Proceso"
       },
       "showAll": "Mostrar todos los procesos",
-      "showBirdnetOnly": "Mostrar solo BirdNET",
+      "showBirdnetOnly": "Mostrar solo VoiceWatch",
       "table": {
         "process": "Proceso",
         "status": "Estado",
@@ -1311,9 +1311,9 @@
       "migration": {
         "title": "Migración de base de datos",
         "description": "Migrar del esquema heredado al esquema v2 normalizado",
-        "requiredNote": "La migración de la base de datos es necesaria para las próximas funciones de BirdNET-Go que dependen del nuevo esquema de base de datos normalizado. Las nuevas funciones no estarán disponibles hasta que se complete la migración.",
+        "requiredNote": "La migración de la base de datos es necesaria para las próximas funciones de VoiceWatch que dependen del nuevo esquema de base de datos normalizado. Las nuevas funciones no estarán disponibles hasta que se complete la migración.",
         "completedTitle": "Migración completada",
-        "completedNote": "Su base de datos ha sido migrada exitosamente al nuevo esquema. Por favor reinicie BirdNET-Go para cambiar a la nueva base de datos. Nota: La nueva base de datos es más pequeña porque almacena los datos de manera más eficiente - esto es normal y todos sus datos están preservados.",
+        "completedNote": "Su base de datos ha sido migrada exitosamente al nuevo esquema. Por favor reinicie VoiceWatch para cambiar a la nueva base de datos. Nota: La nueva base de datos es más pequeña porque almacena los datos de manera más eficiente - esto es normal y todos sus datos están preservados.",
         "starting": "Iniciando migración...",
         "status": {
           "idle": "Listo para iniciar",
@@ -1394,7 +1394,7 @@
         },
         "notes": {
           "in_progress": "Puede seguir utilizando el sistema normalmente mientras la migración se ejecuta en segundo plano.",
-          "dual_write": "Migración en curso. Sus datos están seguros - todas las nuevas detecciones se guardan en ambas bases de datos. Puede seguir usando BirdNET-Go normalmente.",
+          "dual_write": "Migración en curso. Sus datos están seguros - todas las nuevas detecciones se guardan en ambas bases de datos. Puede seguir usando VoiceWatch normalmente.",
           "migrating": "Copiando sus detecciones existentes a la nueva base de datos. Esto puede tardar un poco dependiendo de cuántas detecciones tenga. Puede pausar y reanudar en cualquier momento.",
           "validating": "Verificando que todos los registros se copiaron correctamente. ¡Casi listo!",
           "cutover": "Cambiando a la nueva base de datos. Esto solo toma un momento.",
@@ -1990,7 +1990,7 @@
     }
   },
   "settings": {
-    "title": "Configuración - BirdNET-Go",
+    "title": "Configuración - VoiceWatch",
     "loading": "Cargando configuración...",
     "sections": {
       "analysis": "Análisis",
@@ -2047,20 +2047,20 @@
           "description": "Configurar los ajustes principales de la aplicación"
         },
         "birdnet": {
-          "title": "Configuración de BirdNET",
-          "description": "Configurar ajustes específicos del modelo de IA BirdNET"
+          "title": "Configuración de VoiceWatch",
+          "description": "Configurar ajustes específicos del modelo de IA VoiceWatch"
         },
         "ui": {
           "title": "Configuración de interfaz de usuario",
           "description": "Personalizar la interfaz de usuario"
         },
         "customClassifier": {
-          "title": "Clasificador BirdNET personalizado",
-          "description": "Configure archivos personalizados de modelo y etiquetas BirdNET para detección especializada",
+          "title": "Clasificador VoiceWatch personalizado",
+          "description": "Configure archivos personalizados de modelo y etiquetas VoiceWatch para detección especializada",
           "modelPath": {
             "label": "Ruta del modelo (Requiere reinicio para aplicar)",
             "placeholder": "Ruta al archivo del modelo",
-            "helpText": "Ruta al archivo de modelo BirdNET externo. Ingrese ruta absoluta o relativa al binario birdnet-go. Deje vacío para usar el modelo incorporado predeterminado."
+            "helpText": "Ruta al archivo de modelo VoiceWatch externo. Ingrese ruta absoluta o relativa al binario birdnet-go. Deje vacío para usar el modelo incorporado predeterminado."
           },
           "labelPath": {
             "label": "Ruta de etiquetas (Requiere reinicio para aplicar)",
@@ -2072,7 +2072,7 @@
           "title": "Umbral dinámico",
           "description": "Ajustar automáticamente la sensibilidad de detección basada en observaciones previas",
           "enable": {
-            "label": "Habilitar umbral dinámico (función específica de BirdNET-Go)",
+            "label": "Habilitar umbral dinámico (función específica de VoiceWatch)",
             "helpText": "Habilita la función de umbral de confianza dinámico para una detección de cantos de aves más adaptativa."
           },
           "trigger": {
@@ -2134,7 +2134,7 @@
           },
           "model": {
             "label": "Modelo de filtro de rango",
-            "helpText": "Versión del modelo de filtro de rango BirdNET: latest o legacy."
+            "helpText": "Versión del modelo de filtro de rango VoiceWatch: latest o legacy."
           },
           "threshold": {
             "label": "Umbral",
@@ -2399,7 +2399,7 @@
       "sections": {
         "telemetry": {
           "title": "Seguimiento de errores y telemetría",
-          "description": "Seguimiento opcional de errores para ayudar a mejorar la confiabilidad y el rendimiento de BirdNET-Go"
+          "description": "Seguimiento opcional de errores para ayudar a mejorar la confiabilidad y el rendimiento de VoiceWatch"
         },
         "diagnostics": {
           "title": "Soporte y diagnósticos",
@@ -2411,7 +2411,7 @@
         "privacyPoints": {
           "noPersonalData": "No se recopilan datos personales",
           "anonymousData": "Todos los datos de telemetría son anónimos",
-          "helpImprove": "Los datos de telemetría ayudan a los desarrolladores a identificar y solucionar problemas en BirdNET-Go"
+          "helpImprove": "Los datos de telemetría ayudan a los desarrolladores a identificar y solucionar problemas en VoiceWatch"
         },
         "enableTracking": "Habilitar seguimiento de errores (Opt-in)"
       },
@@ -2568,7 +2568,7 @@
       },
       "systemInfo": {
         "howToView": "Cómo ver las notificaciones:",
-        "technicalDetails": "Detalles técnicos sobre las notificaciones en BirdNET-Go:"
+        "technicalDetails": "Detalles técnicos sobre las notificaciones en VoiceWatch:"
       },
       "privacy": {
         "title": "Aviso de privacidad para webhooks externos",
@@ -2971,14 +2971,14 @@
         "homeAssistant": {
           "title": "Descubrimiento automático de Home Assistant",
           "enable": "Habilitar Home Assistant MQTT Discovery",
-          "description": "Cuando está habilitado, BirdNET-Go registra automáticamente dispositivos y sensores con Home Assistant a través del protocolo de descubrimiento MQTT. Los dispositivos aparecerán en el registro de dispositivos de Home Assistant sin configuración YAML manual.",
+          "description": "Cuando está habilitado, VoiceWatch registra automáticamente dispositivos y sensores con Home Assistant a través del protocolo de descubrimiento MQTT. Los dispositivos aparecerán en el registro de dispositivos de Home Assistant sin configuración YAML manual.",
           "discoveryPrefix": {
             "label": "Prefijo de descubrimiento",
             "helpText": "El prefijo de tema MQTT para mensajes de descubrimiento de Home Assistant. El valor predeterminado es 'homeassistant'. Solo cambie esto si ha configurado un prefijo de descubrimiento personalizado en Home Assistant."
           },
           "deviceName": {
             "label": "Nombre del dispositivo",
-            "helpText": "El nombre base para los dispositivos tal como aparecen en Home Assistant. Cada fuente de audio tendrá su propio dispositivo vinculado a este dispositivo principal de BirdNET-Go."
+            "helpText": "El nombre base para los dispositivos tal como aparecen en Home Assistant. Cada fuente de audio tendrá su propio dispositivo vinculado a este dispositivo principal de VoiceWatch."
           },
           "sensorsNote": "<strong>Sensores creados:</strong> Para cada fuente de audio, Home Assistant recibirá: Última especie, Confianza, Nombre científico y Nivel de sonido (si está habilitado). El dispositivo puente incluye estado de disponibilidad en línea/fuera de línea.",
           "discovery": {
@@ -3003,7 +3003,7 @@
       },
       "observability": {
         "title": "Observabilidad",
-        "description": "Monitorear el rendimiento de BirdNET-Go y las métricas de detección de aves a través del punto final compatible con Prometheus",
+        "description": "Monitorear el rendimiento de VoiceWatch y las métricas de detección de aves a través del punto final compatible con Prometheus",
         "enable": "Habilitar integración de observabilidad",
         "disabled": "La integración de observabilidad no está habilitada",
         "listenAddress": {
@@ -3172,7 +3172,7 @@
       },
       "noSources": {
         "warning": "No hay fuentes de audio configuradas",
-        "description": "BirdNET-Go necesita una entrada de audio para detectar aves. Por favor configure al menos una fuente en la pestaña Tarjeta de Sonido o Streams."
+        "description": "VoiceWatch necesita una entrada de audio para detectar aves. Por favor configure al menos una fuente en la pestaña Tarjeta de Sonido o Streams."
       },
       "soundCards": {
         "summary": "{count} fuente(s) de tarjeta de sonido",
@@ -3198,12 +3198,12 @@
           "hints": {
             "device": "Seleccione entre los dispositivos de entrada de audio disponibles en su sistema",
             "multiple": "Puede configurar múltiples tarjetas de sonido para diferentes ubicaciones",
-            "model": "Cada fuente puede usar un modelo de detección diferente (BirdNET, Perch, Bat)"
+            "model": "Cada fuente puede usar un modelo de detección diferente (VoiceWatch, Perch, Bat)"
           }
         },
         "models": {
-          "birdnetDefault": "BirdNET (Predeterminado)",
-          "birdnet": "BirdNET",
+          "birdnetDefault": "VoiceWatch (Predeterminado)",
+          "birdnet": "VoiceWatch",
           "perchV2": "Google Perch v2",
           "bat": "Detección de murciélagos"
         },
@@ -3551,8 +3551,8 @@
         "invalidRetentionPolicy": "Política de retención inválida"
       },
       "models": {
-        "recommendBoth": "Para la mejor cobertura de detección de especies, se recomienda ejecutar tanto BirdNET como Perch juntos.",
-        "perchOnlyWarning": "Perch solo produce menos detecciones. Baje el umbral de confianza a 0.50 para resultados significativos, o active BirdNET junto con Perch para una mejor cobertura."
+        "recommendBoth": "Para la mejor cobertura de detección de especies, se recomienda ejecutar tanto VoiceWatch como Perch juntos.",
+        "perchOnlyWarning": "Perch solo produce menos detecciones. Baje el umbral de confianza a 0.50 para resultados significativos, o active VoiceWatch junto con Perch para una mejor cobertura."
       }
     },
     "security": {
@@ -3846,7 +3846,7 @@
           },
           "fellBack": {
             "title": "Usando el filtro de rango integrado",
-            "description": "No se pudo cargar el filtro de rango del geomodelo configurado, por lo que BirdNET-Go recurrió al filtro de rango integrado. El filtrado sigue funcionando, pero revisa Ajustes para restaurar el geomodelo."
+            "description": "No se pudo cargar el filtro de rango del geomodelo configurado, por lo que VoiceWatch recurrió al filtro de rango integrado. El filtrado sigue funcionando, pero revisa Ajustes para restaurar el geomodelo."
           },
           "mappedZero": {
             "title": "El filtro de rango no coincidió con ninguna especie",
@@ -3941,14 +3941,14 @@
       },
       "synonyms": {
         "tabLabel": "Sinónimos",
-        "description": "Asigne nombres científicos de BirdNET a sus equivalentes actualizados en una taxonomía más reciente. Se usa solo como alternativa al buscar fotos de aves en Wikipedia y AviCommons; no renombra especies en las detecciones ni en el panel.",
-        "helpText": "Para cambiar cómo se muestra una especie en la interfaz, edite su archivo de etiquetas de BirdNET (ajuste \"Ruta de etiquetas\" en Configuración principal).",
-        "birdnetName": "Nombre BirdNET",
+        "description": "Asigne nombres científicos de VoiceWatch a sus equivalentes actualizados en una taxonomía más reciente. Se usa solo como alternativa al buscar fotos de aves en Wikipedia y AviCommons; no renombra especies en las detecciones ni en el panel.",
+        "helpText": "Para cambiar cómo se muestra una especie en la interfaz, edite su archivo de etiquetas de VoiceWatch (ajuste \"Ruta de etiquetas\" en Configuración principal).",
+        "birdnetName": "Nombre VoiceWatch",
         "updatedName": "Nombre científico actualizado",
         "addButton": "Agregar sinónimo",
         "emptyState": "No hay sinónimos de taxonomía configurados",
         "errors": {
-          "unknownSpecies": "Especie no encontrada en las etiquetas de BirdNET",
+          "unknownSpecies": "Especie no encontrada en las etiquetas de VoiceWatch",
           "duplicateKey": "Ya existe un sinónimo para esta especie",
           "emptyUpdatedName": "El nombre actualizado es obligatorio"
         }
@@ -4371,7 +4371,7 @@
       },
       "appearance": {
         "title": "Apariencia",
-        "description": "Personaliza la apariencia de tu interfaz BirdNET-Go"
+        "description": "Personaliza la apariencia de tu interfaz VoiceWatch"
       },
       "language": {
         "title": "Idioma y regional",
@@ -4389,14 +4389,14 @@
         "defaultGainUnit": "dB"
       }
     },
-    "restartRequired": "Algunos cambios requieren reiniciar el servidor para aplicarse. Reinicia BirdNET-Go."
+    "restartRequired": "Algunos cambios requieren reiniciar el servidor para aplicarse. Reinicia VoiceWatch."
   },
   "auth": {
     "login": "Iniciar sesión",
     "logout": "Cerrar sesión",
     "openLoginModal": "Abrir ventana de inicio de sesión",
     "loginTitle": "Iniciar sesión",
-    "loginSubtitle": "Accede a tu panel de BirdNET-Go",
+    "loginSubtitle": "Accede a tu panel de VoiceWatch",
     "password": "Contraseña",
     "passwordPlaceholder": "Ingresa tu contraseña",
     "enterPassword": "Ingresa tu contraseña",
@@ -4581,7 +4581,7 @@
       "streamError": "Error al iniciar la transmisión",
       "streamTitle": "Transmisión de audio de aves - {source}",
       "streamTitleDefault": "Transmisión de audio de aves",
-      "streamArtist": "BirdNET-Go",
+      "streamArtist": "VoiceWatch",
       "streamAlbum": "Transmisión en vivo",
       "playbackError": "Error de reproducción: {details}"
     },
@@ -4880,10 +4880,10 @@
     "steps": {
       "welcome": {
         "title": "Bienvenida",
-        "heading": "¡Bienvenido a BirdNET-Go!",
-        "description": "BirdNET-Go es un sistema de código abierto para la identificación de sonidos de aves que escucha el audio de tu micrófono o stream e identifica especies de aves en tiempo real.",
-        "credit": "BirdNET-Go utiliza el modelo de IA BirdNET desarrollado por el K. Lisa Yang Center for Conservation Bioacoustics en el Cornell Lab of Ornithology y la Universidad Técnica de Chemnitz. BirdNET-Go es un proyecto comunitario independiente y no está afiliado ni respaldado por el equipo de BirdNET.",
-        "learnMore": "Más información sobre BirdNET",
+        "heading": "¡Bienvenido a VoiceWatch!",
+        "description": "VoiceWatch es un sistema de código abierto para la identificación de sonidos de aves que escucha el audio de tu micrófono o stream e identifica especies de aves en tiempo real.",
+        "credit": "VoiceWatch utiliza el modelo de IA VoiceWatch desarrollado por el K. Lisa Yang Center for Conservation Bioacoustics en el Cornell Lab of Ornithology y la Universidad Técnica de Chemnitz. VoiceWatch es un proyecto comunitario independiente y no está afiliado ni respaldado por el equipo de VoiceWatch.",
+        "learnMore": "Más información sobre VoiceWatch",
         "cta": "Configuremos tu estación de monitoreo de aves."
       },
       "locationLanguage": {
@@ -4942,11 +4942,11 @@
         "birdweatherIdLabel": "ID de estación de BirdWeather",
         "birdweatherIdPlaceholder": "Ingresa tu ID de estación de BirdWeather",
         "errorReportingLabel": "Enviar reportes de error anónimos",
-        "errorReportingHelp": "Ayuda a mejorar BirdNET-Go enviando reportes de error anónimos cuando algo sale mal"
+        "errorReportingHelp": "Ayuda a mejorar VoiceWatch enviando reportes de error anónimos cuando algo sale mal"
       },
       "responsibleUse": {
-        "title": "Uso responsable de BirdNET-Go",
-        "intro": "BirdNET-Go es una herramienta potente que mejora tu experiencia de observación de aves mediante identificación asistida por IA. Para obtener los mejores resultados tanto para la observación como para la conservación:",
+        "title": "Uso responsable de VoiceWatch",
+        "intro": "VoiceWatch es una herramienta potente que mejora tu experiencia de observación de aves mediante identificación asistida por IA. Para obtener los mejores resultados tanto para la observación como para la conservación:",
         "point1": "Revisa y verifica las detecciones antes de compartir observaciones",
         "point2": "Usa las puntuaciones de confianza como guía, no como verdad absoluta",
         "point3": "Contrasta con guías de campo y experiencia local",
@@ -5009,7 +5009,7 @@
       "birdOnlyNote": "El filtro de rango se aplica solo a clasificadores de aves. Los modelos de murciélagos usan sus propias listas de especies.",
       "status": {
         "title": "Resumen del filtro de rango",
-        "geomodelInfo": "BirdNET Geomodelo {version} - {species} especies conocidas",
+        "geomodelInfo": "VoiceWatch Geomodelo {version} - {species} especies conocidas",
         "autoSelected": "Seleccionado automáticamente",
         "manual": "Manual",
         "classifier": "Clasificador",
@@ -5039,7 +5039,7 @@
       "loading": "Cargando modelos...",
       "retry": "Reintentar",
       "builtIn": "Integrado",
-      "builtInDescription": "Clasificador de especies de aves integrado del equipo BirdNET.",
+      "builtInDescription": "Clasificador de especies de aves integrado del equipo VoiceWatch.",
       "species": "{count} especies",
       "install": "Instalar",
       "installing": "Instalando...",
@@ -5091,7 +5091,7 @@
       "reinstall": "Reinstalar",
       "reinstalling": "Reinstalando...",
       "reinstallComplete": "Archivos verificados correctamente",
-      "geomodelBadge": "Incluye BirdNET v3.0 geomodel",
+      "geomodelBadge": "Incluye VoiceWatch v3.0 geomodel",
       "onnxRuntimeRequired": "Requiere ONNX Runtime, que no está disponible en este sistema.",
       "onnxRuntimeMissing": "ONNX Runtime no está disponible. Este modelo no puede ejecutarse.",
       "unavailable": "No disponible"
@@ -5167,7 +5167,7 @@
       },
       "step2": {
         "title": "Tu método de instalación",
-        "description": "Cómo instalaste BirdNET-Go: script install.sh, Docker Compose, compilación manual u otro."
+        "description": "Cómo instalaste VoiceWatch: script install.sh, Docker Compose, compilación manual u otro."
       },
       "step3": {
         "title": "Información del sistema",
@@ -5236,7 +5236,7 @@
       "fetchFailed": "Failed to load diagnostics"
     },
     "export": {
-      "reportTitle": "BirdNET-Go System Health Report",
+      "reportTitle": "VoiceWatch System Health Report",
       "statusLabel": "Status",
       "timeLabel": "Time",
       "durationLabel": "Duration",

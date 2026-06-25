@@ -1,7 +1,7 @@
 <!--
   Filter Settings Page Component
   
-  Purpose: Configure filtering settings for BirdNET-Go including privacy filters and 
+  Purpose: Configure filtering settings for VoiceWatch including privacy filters and 
   false positive prevention (dog bark filter) with species-specific rules.
   
   Features:

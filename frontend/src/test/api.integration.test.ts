@@ -1,7 +1,7 @@
 /**
  * API Integration Tests
  *
- * Validates connectivity and functionality of the BirdNET-Go API.
+ * Validates connectivity and functionality of the VoiceWatch API.
  * These tests run in a real browser against a real backend.
  *
  * Usage:
@@ -164,7 +164,7 @@ describe('Settings API', () => {
     const settings = await response.json();
     expect(settings).toBeDefined();
     expect(settings).toHaveProperty('main');
-    expect(settings).toHaveProperty('birdnet');
+    expect(settings).toHaveProperty('voicewatch');
     expect(settings).toHaveProperty('realtime');
   });
 
@@ -176,8 +176,8 @@ describe('Settings API', () => {
     expect(settings.main).toHaveProperty('name');
 
     // Check birdnet settings
-    expect(settings.birdnet).toHaveProperty('sensitivity');
-    expect(settings.birdnet).toHaveProperty('threshold');
+    expect(settings.voicewatch).toHaveProperty('sensitivity');
+    expect(settings.voicewatch).toHaveProperty('threshold');
   });
 });
 

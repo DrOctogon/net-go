@@ -1,7 +1,7 @@
 <!--
   User Interface Settings Page
 
-  Purpose: Global appearance and display settings for BirdNET-Go.
+  Purpose: Global appearance and display settings for VoiceWatch.
   Contains settings moved from MainSettingsPage: color scheme, language,
   thumbnails, spectrograms, temperature unit.
 

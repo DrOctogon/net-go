@@ -1,7 +1,7 @@
 <!--
   Species Settings Page Component
   
-  Purpose: Configure species-specific settings for BirdNET-Go including always include/exclude
+  Purpose: Configure species-specific settings for VoiceWatch including always include/exclude
   lists and custom configurations with thresholds, intervals, and actions.
   
   Features:
@@ -334,7 +334,7 @@
       return;
     }
 
-    // Validate BirdNET name matches a known label (case-insensitive)
+    // Validate VoiceWatch name matches a known label (case-insensitive)
     if (!knownScientificNames.has(birdnetName.toLowerCase())) {
       synonymError = t('settings.species.synonyms.errors.unknownSpecies');
       return;
@@ -817,12 +817,12 @@
   // Auto-load active species when tab becomes active and settings are loaded
   $effect(() => {
     // Track these as dependencies - re-run when they change
-    // IMPORTANT: Use store.formData.birdnet directly instead of derived $birdnetSettings
+    // IMPORTANT: Use store.formData.voicewatch directly instead of derived $voicewatchSettings
     // to avoid timing issues where the derived store hasn't recalculated yet
     const currentTab = activeTab;
     const settingsLoading = store.isLoading;
-    const birdnetData = store.formData?.birdnet;
-    const hasOriginalData = store.originalData?.birdnet !== undefined;
+    const birdnetData = store.formData?.voicewatch;
+    const hasOriginalData = store.originalData?.voicewatch !== undefined;
 
     // Wait for main settings to actually be loaded (originalData is set when settings are fetched)
     // This prevents flash of "location not configured" with default empty values
@@ -863,8 +863,8 @@
   $effect(() => {
     const currentTab = activeTab;
     const settingsLoading = store.isLoading;
-    const birdnetData = store.formData?.birdnet;
-    const hasOriginalData = store.originalData?.birdnet !== undefined;
+    const birdnetData = store.formData?.voicewatch;
+    const hasOriginalData = store.originalData?.voicewatch !== undefined;
     if (settingsLoading || !hasOriginalData || !birdnetData) return;
 
     const hasRealCoordinates =
@@ -1360,7 +1360,7 @@
     {/if}
 
     <!-- Main Content -->
-    {#if activeSpeciesState.loading || store.isLoading || !store.originalData?.birdnet}
+    {#if activeSpeciesState.loading || store.isLoading || !store.originalData?.voicewatch}
       <div class="bg-[var(--surface-100)] border border-[var(--border-100)] rounded-xl shadow-sm">
         <div class="flex items-center justify-center py-12">
           <div
@@ -1380,7 +1380,7 @@
             type="button"
             class="mt-2 inline-flex items-center justify-center h-8 px-3 text-sm font-medium rounded-lg bg-[color-mix(in_srgb,var(--color-error)_20%,transparent)] hover:bg-[color-mix(in_srgb,var(--color-error)_30%,transparent)] text-[var(--color-error)] transition-colors"
             onclick={() => {
-              const birdnetData = store.formData?.birdnet;
+              const birdnetData = store.formData?.voicewatch;
               if (birdnetData?.latitude !== undefined && birdnetData?.longitude !== undefined) {
                 loadActiveSpecies(birdnetData);
               }

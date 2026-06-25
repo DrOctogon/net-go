@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { get } from 'svelte/store';
 import { settingsStore, settingsActions } from './settings';
-import type { BirdNetSettings, RealtimeSettings, SettingsFormData } from './settings';
+import type { VoiceWatchSettings, RealtimeSettings, SettingsFormData } from './settings';
 import { settingsAPI } from '$lib/utils/settingsApi.js';
 
 // Mock the settings API
@@ -34,7 +34,7 @@ describe('Settings Store - Dynamic Threshold and Range Filter', () => {
     settingsStore.set({
       formData: {
         main: { name: 'TestNode' },
-        birdnet: {
+        voicewatch: {
           modelPath: '',
           labelPath: '',
           sensitivity: 1.0,
@@ -74,24 +74,24 @@ describe('Settings Store - Dynamic Threshold and Range Filter', () => {
   it('should preserve rangeFilter when updating coordinates', () => {
     // Get initial state
     const initialState = get(settingsStore);
-    expect(initialState.formData.birdnet).toBeDefined();
-    const birdnetSettings = initialState.formData.birdnet as BirdNetSettings;
+    expect(initialState.formData.voicewatch).toBeDefined();
+    const voicewatchSettings = initialState.formData.voicewatch as VoiceWatchSettings;
 
-    const initialRangeFilter = birdnetSettings.rangeFilter;
+    const initialRangeFilter = voicewatchSettings.rangeFilter;
     expect(initialRangeFilter).toBeDefined();
 
     // Verify initial range filter values
     expect(initialRangeFilter.threshold).toBe(0.03);
 
     // Update coordinates (simulating what happens when clicking on the map)
-    settingsActions.updateSection('birdnet', {
+    settingsActions.updateSection('voicewatch', {
       latitude: 51.5074,
       longitude: -0.1278,
     });
 
     // Get updated state
     const updatedState = get(settingsStore);
-    const updatedBirdnet = updatedState.formData.birdnet as BirdNetSettings;
+    const updatedBirdnet = updatedState.formData.voicewatch as VoiceWatchSettings;
 
     // Verify coordinates were updated
     expect(updatedBirdnet.latitude).toBe(51.5074);
@@ -105,14 +105,14 @@ describe('Settings Store - Dynamic Threshold and Range Filter', () => {
   it('should preserve coordinates when updating rangeFilter threshold', () => {
     // Get initial coordinates
     const initialState = get(settingsStore);
-    expect(initialState.formData.birdnet).toBeDefined();
-    const birdnetSettings = initialState.formData.birdnet as BirdNetSettings;
+    expect(initialState.formData.voicewatch).toBeDefined();
+    const voicewatchSettings = initialState.formData.voicewatch as VoiceWatchSettings;
 
-    const initialLat = birdnetSettings.latitude;
-    const initialLng = birdnetSettings.longitude;
+    const initialLat = voicewatchSettings.latitude;
+    const initialLng = voicewatchSettings.longitude;
 
     // Update range filter threshold
-    settingsActions.updateSection('birdnet', {
+    settingsActions.updateSection('voicewatch', {
       rangeFilter: {
         threshold: 0.05,
         passUnmappedSpecies: false,
@@ -123,7 +123,7 @@ describe('Settings Store - Dynamic Threshold and Range Filter', () => {
 
     // Get updated state
     const updatedState = get(settingsStore);
-    const updatedBirdnet = updatedState.formData.birdnet as BirdNetSettings;
+    const updatedBirdnet = updatedState.formData.voicewatch as VoiceWatchSettings;
 
     // Verify range filter was updated
     expect(updatedBirdnet.rangeFilter.threshold).toBe(0.05);
@@ -135,12 +135,12 @@ describe('Settings Store - Dynamic Threshold and Range Filter', () => {
 
   it('should handle nested updates correctly', () => {
     // Update multiple nested properties in sequence
-    settingsActions.updateSection('birdnet', {
+    settingsActions.updateSection('voicewatch', {
       latitude: 48.8566,
       longitude: 2.3522,
     });
 
-    settingsActions.updateSection('birdnet', {
+    settingsActions.updateSection('voicewatch', {
       rangeFilter: {
         threshold: 0.01,
         passUnmappedSpecies: false,
@@ -149,14 +149,14 @@ describe('Settings Store - Dynamic Threshold and Range Filter', () => {
       },
     });
 
-    settingsActions.updateSection('birdnet', {
+    settingsActions.updateSection('voicewatch', {
       sensitivity: 1.2,
       threshold: 0.85,
     });
 
     // Get final state
     const finalState = get(settingsStore);
-    const finalBirdnet = finalState.formData.birdnet as BirdNetSettings;
+    const finalBirdnet = finalState.formData.voicewatch as VoiceWatchSettings;
 
     // Verify all updates were applied correctly
     expect(finalBirdnet.latitude).toBe(48.8566);
@@ -169,13 +169,13 @@ describe('Settings Store - Dynamic Threshold and Range Filter', () => {
   it('should merge partial rangeFilter updates correctly', () => {
     // Update only the range filter threshold (partial update)
     const storeState = get(settingsStore);
-    expect(storeState.formData.birdnet).toBeDefined();
-    const birdnetSettings = storeState.formData.birdnet as BirdNetSettings;
+    expect(storeState.formData.voicewatch).toBeDefined();
+    const voicewatchSettings = storeState.formData.voicewatch as VoiceWatchSettings;
 
-    const currentRangeFilter = birdnetSettings.rangeFilter;
+    const currentRangeFilter = voicewatchSettings.rangeFilter;
     expect(currentRangeFilter).toBeDefined();
 
-    settingsActions.updateSection('birdnet', {
+    settingsActions.updateSection('voicewatch', {
       rangeFilter: {
         ...currentRangeFilter,
         threshold: 0.07,
@@ -184,7 +184,7 @@ describe('Settings Store - Dynamic Threshold and Range Filter', () => {
 
     // Get updated state
     const updatedState = get(settingsStore);
-    const updatedBirdnet = updatedState.formData.birdnet as BirdNetSettings;
+    const updatedBirdnet = updatedState.formData.voicewatch as VoiceWatchSettings;
 
     // Verify only threshold was updated, other fields preserved
     expect(updatedBirdnet.rangeFilter.threshold).toBe(0.07);
@@ -230,7 +230,7 @@ describe('Settings Store - Dynamic Threshold and Range Filter', () => {
   it('should not have dynamicThreshold in birdnet section', () => {
     // Verify that birdnet section doesn't contain dynamicThreshold
     const state = get(settingsStore);
-    const birdnetData = state.formData.birdnet as BirdNetSettings | undefined;
+    const birdnetData = state.formData.voicewatch as VoiceWatchSettings | undefined;
 
     expect(birdnetData).not.toHaveProperty('dynamicThreshold');
     expect(state.formData.realtime?.dynamicThreshold).toBeDefined();
@@ -244,7 +244,7 @@ describe('Settings Store - Model/Label Path Null Conversion', () => {
     settingsStore.set({
       formData: {
         main: { name: 'TestNode' },
-        birdnet: {
+        voicewatch: {
           modelPath: '',
           labelPath: '',
           sensitivity: 1.0,
@@ -265,7 +265,7 @@ describe('Settings Store - Model/Label Path Null Conversion', () => {
       },
       originalData: {
         main: { name: 'TestNode' },
-        birdnet: {
+        voicewatch: {
           modelPath: '',
           labelPath: '',
           sensitivity: 1.0,
@@ -294,7 +294,7 @@ describe('Settings Store - Model/Label Path Null Conversion', () => {
 
   it('should convert empty modelPath to null when saving', async () => {
     // Set empty string for modelPath
-    settingsActions.updateSection('birdnet', {
+    settingsActions.updateSection('voicewatch', {
       modelPath: '',
     });
 
@@ -304,7 +304,7 @@ describe('Settings Store - Model/Label Path Null Conversion', () => {
     // Verify settingsAPI.save was called with null instead of empty string
     expect(settingsAPI.save).toHaveBeenCalledWith(
       expect.objectContaining({
-        birdnet: expect.objectContaining({
+        voicewatch: expect.objectContaining({
           modelPath: null,
         }),
       })
@@ -313,7 +313,7 @@ describe('Settings Store - Model/Label Path Null Conversion', () => {
 
   it('should convert empty labelPath to null when saving', async () => {
     // Set empty string for labelPath
-    settingsActions.updateSection('birdnet', {
+    settingsActions.updateSection('voicewatch', {
       labelPath: '',
     });
 
@@ -323,7 +323,7 @@ describe('Settings Store - Model/Label Path Null Conversion', () => {
     // Verify settingsAPI.save was called with null instead of empty string
     expect(settingsAPI.save).toHaveBeenCalledWith(
       expect.objectContaining({
-        birdnet: expect.objectContaining({
+        voicewatch: expect.objectContaining({
           labelPath: null,
         }),
       })
@@ -332,7 +332,7 @@ describe('Settings Store - Model/Label Path Null Conversion', () => {
 
   it('should convert whitespace-only modelPath to null when saving', async () => {
     // Set whitespace-only string for modelPath
-    settingsActions.updateSection('birdnet', {
+    settingsActions.updateSection('voicewatch', {
       modelPath: '   ',
     });
 
@@ -342,7 +342,7 @@ describe('Settings Store - Model/Label Path Null Conversion', () => {
     // Verify settingsAPI.save was called with null
     expect(settingsAPI.save).toHaveBeenCalledWith(
       expect.objectContaining({
-        birdnet: expect.objectContaining({
+        voicewatch: expect.objectContaining({
           modelPath: null,
         }),
       })
@@ -351,7 +351,7 @@ describe('Settings Store - Model/Label Path Null Conversion', () => {
 
   it('should convert whitespace-only labelPath to null when saving', async () => {
     // Set whitespace-only string for labelPath
-    settingsActions.updateSection('birdnet', {
+    settingsActions.updateSection('voicewatch', {
       labelPath: '  \t  ',
     });
 
@@ -361,7 +361,7 @@ describe('Settings Store - Model/Label Path Null Conversion', () => {
     // Verify settingsAPI.save was called with null
     expect(settingsAPI.save).toHaveBeenCalledWith(
       expect.objectContaining({
-        birdnet: expect.objectContaining({
+        voicewatch: expect.objectContaining({
           labelPath: null,
         }),
       })
@@ -371,7 +371,7 @@ describe('Settings Store - Model/Label Path Null Conversion', () => {
   it('should preserve non-empty modelPath when saving', async () => {
     // Set valid path for modelPath
     const validPath = '/path/to/model.tflite';
-    settingsActions.updateSection('birdnet', {
+    settingsActions.updateSection('voicewatch', {
       modelPath: validPath,
     });
 
@@ -381,7 +381,7 @@ describe('Settings Store - Model/Label Path Null Conversion', () => {
     // Verify settingsAPI.save was called with the actual path
     expect(settingsAPI.save).toHaveBeenCalledWith(
       expect.objectContaining({
-        birdnet: expect.objectContaining({
+        voicewatch: expect.objectContaining({
           modelPath: validPath,
         }),
       })
@@ -391,7 +391,7 @@ describe('Settings Store - Model/Label Path Null Conversion', () => {
   it('should preserve non-empty labelPath when saving', async () => {
     // Set valid path for labelPath
     const validPath = '/path/to/labels.txt';
-    settingsActions.updateSection('birdnet', {
+    settingsActions.updateSection('voicewatch', {
       labelPath: validPath,
     });
 
@@ -401,7 +401,7 @@ describe('Settings Store - Model/Label Path Null Conversion', () => {
     // Verify settingsAPI.save was called with the actual path
     expect(settingsAPI.save).toHaveBeenCalledWith(
       expect.objectContaining({
-        birdnet: expect.objectContaining({
+        voicewatch: expect.objectContaining({
           labelPath: validPath,
         }),
       })
@@ -410,13 +410,13 @@ describe('Settings Store - Model/Label Path Null Conversion', () => {
 
   it('should handle both paths being cleared simultaneously', async () => {
     // First set valid paths
-    settingsActions.updateSection('birdnet', {
+    settingsActions.updateSection('voicewatch', {
       modelPath: '/path/to/model.tflite',
       labelPath: '/path/to/labels.txt',
     });
 
     // Then clear both
-    settingsActions.updateSection('birdnet', {
+    settingsActions.updateSection('voicewatch', {
       modelPath: '',
       labelPath: '',
     });
@@ -427,7 +427,7 @@ describe('Settings Store - Model/Label Path Null Conversion', () => {
     // Verify both are converted to null
     expect(settingsAPI.save).toHaveBeenCalledWith(
       expect.objectContaining({
-        birdnet: expect.objectContaining({
+        voicewatch: expect.objectContaining({
           modelPath: null,
           labelPath: null,
         }),
@@ -437,7 +437,7 @@ describe('Settings Store - Model/Label Path Null Conversion', () => {
 
   it('should handle mixed empty and non-empty paths', async () => {
     // Set one path empty, one valid
-    settingsActions.updateSection('birdnet', {
+    settingsActions.updateSection('voicewatch', {
       modelPath: '/path/to/model.tflite',
       labelPath: '',
     });
@@ -448,7 +448,7 @@ describe('Settings Store - Model/Label Path Null Conversion', () => {
     // Verify correct conversion
     expect(settingsAPI.save).toHaveBeenCalledWith(
       expect.objectContaining({
-        birdnet: expect.objectContaining({
+        voicewatch: expect.objectContaining({
           modelPath: '/path/to/model.tflite',
           labelPath: null,
         }),
@@ -476,7 +476,7 @@ describe('Settings Store - UI Locale Preservation (#2756/#2760)', () => {
   const seedStore = (backendLocale: string) => {
     const snapshot: SettingsFormData = {
       main: { name: 'TestNode' },
-      birdnet: {
+      voicewatch: {
         modelPath: '/path/to/model.tflite',
         labelPath: '/path/to/labels.txt',
         sensitivity: 1.0,
@@ -595,12 +595,12 @@ describe('Settings Store - syncTLSMode preserves unsaved Security edits', () => 
     settingsStore.set({
       formData: {
         main: { name: 'TestNode' },
-        birdnet: {} as BirdNetSettings,
+        voicewatch: {} as VoiceWatchSettings,
         security: formSecurity,
       } as SettingsFormData,
       originalData: {
         main: { name: 'TestNode' },
-        birdnet: {} as BirdNetSettings,
+        voicewatch: {} as VoiceWatchSettings,
         security: originalSecurity,
       } as SettingsFormData,
       isLoading: false,
@@ -690,7 +690,10 @@ describe('Settings Store - syncTLSMode preserves unsaved Security edits', () => 
     // The sync must still yield a complete security object, not a bare
     // { tlsMode, autoTls } that strips required fields.
     settingsStore.set({
-      formData: { main: { name: 'TestNode' }, birdnet: {} as BirdNetSettings } as SettingsFormData,
+      formData: {
+        main: { name: 'TestNode' },
+        voicewatch: {} as VoiceWatchSettings,
+      } as SettingsFormData,
       originalData: {} as SettingsFormData,
       isLoading: false,
       isSaving: false,

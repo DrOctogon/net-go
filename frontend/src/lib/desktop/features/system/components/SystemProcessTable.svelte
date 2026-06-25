@@ -22,7 +22,7 @@
   let {
     processes,
     showAllProcesses,
-    processName = 'BirdNET-Go',
+    processName = 'VoiceWatch',
     onToggleShowAll,
   }: Props = $props();
 

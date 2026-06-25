@@ -44,7 +44,7 @@ vi.mock('$lib/stores/settings', async () => {
   const { writable } = await vi.importActual<typeof import('svelte/store')>('svelte/store');
 
   const initialFormData = {
-    birdnet: {
+    voicewatch: {
       latitude: 40,
       longitude: -74,
       locale: 'en',
@@ -121,7 +121,7 @@ describe('LocationLanguageStep - UI locale persistence on unmount', () => {
       dataLoaded: false,
       activeSection: 'main',
       originalData: {
-        birdnet: {
+        voicewatch: {
           latitude: 40,
           longitude: -74,
           locale: 'en',
@@ -140,7 +140,7 @@ describe('LocationLanguageStep - UI locale persistence on unmount', () => {
         },
       } as unknown as SettingsFormData,
       formData: {
-        birdnet: {
+        voicewatch: {
           latitude: 40,
           longitude: -74,
           locale: 'en',
@@ -185,7 +185,7 @@ describe('LocationLanguageStep - UI locale persistence on unmount', () => {
     // Birdnet section should NOT have been updated because dirty is false
     const birdnetCall = (
       settingsActions.updateSection as unknown as ReturnType<typeof vi.fn>
-    ).mock.calls.find(([section]) => section === 'birdnet');
+    ).mock.calls.find(([section]) => section === 'voicewatch');
     expect(birdnetCall).toBeUndefined();
 
     expect(settingsActions.saveSettings).toHaveBeenCalledTimes(1);
@@ -300,7 +300,7 @@ describe('LocationLanguageStep - UI locale persistence on unmount', () => {
     const updateCalls = (settingsActions.updateSection as unknown as ReturnType<typeof vi.fn>).mock
       .calls;
     const realtimeCall = updateCalls.find(([section]) => section === 'realtime');
-    const birdnetCall = updateCalls.find(([section]) => section === 'birdnet');
+    const birdnetCall = updateCalls.find(([section]) => section === 'voicewatch');
 
     expect(realtimeCall).toBeDefined();
     expect(birdnetCall).toBeDefined();

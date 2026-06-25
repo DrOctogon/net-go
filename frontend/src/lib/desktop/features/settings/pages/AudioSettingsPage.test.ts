@@ -95,7 +95,7 @@ vi.mock('$lib/stores/settings', async () => {
         logLevel: 'info',
         logRotation: { enabled: false, maxSize: '10MB', maxAge: '30d', maxBackups: 5 },
       },
-      birdnet: {
+      voicewatch: {
         modelPath: '',
         labelPath: '',
         sensitivity: 1.0,
@@ -119,7 +119,7 @@ vi.mock('$lib/stores/settings', async () => {
         logLevel: 'info',
         logRotation: { enabled: false, maxSize: '10MB', maxAge: '30d', maxBackups: 5 },
       },
-      birdnet: {
+      voicewatch: {
         modelPath: '',
         labelPath: '',
         sensitivity: 1.0,
@@ -221,7 +221,7 @@ describe('AudioSettingsPage - Stream Configuration', () => {
           logLevel: 'info',
           logRotation: { enabled: false, maxSize: '10MB', maxAge: '30d', maxBackups: 5 },
         },
-        birdnet: {
+        voicewatch: {
           modelPath: '',
           labelPath: '',
           sensitivity: 1.0,
@@ -274,7 +274,7 @@ describe('AudioSettingsPage - Stream Configuration', () => {
           logLevel: 'info',
           logRotation: { enabled: false, maxSize: '10MB', maxAge: '30d', maxBackups: 5 },
         },
-        birdnet: {
+        voicewatch: {
           modelPath: '',
           labelPath: '',
           sensitivity: 1.0,
@@ -621,7 +621,7 @@ describe('AudioSettingsPage - Stream Configuration', () => {
             logLevel: 'info',
             logRotation: { enabled: false, maxSize: '10MB', maxAge: '30d', maxBackups: 5 },
           },
-          birdnet: {
+          voicewatch: {
             modelPath: '',
             labelPath: '',
             sensitivity: 1.0,
@@ -650,7 +650,7 @@ describe('AudioSettingsPage - Stream Configuration', () => {
             logLevel: 'info',
             logRotation: { enabled: false, maxSize: '10MB', maxAge: '30d', maxBackups: 5 },
           },
-          birdnet: {
+          voicewatch: {
             modelPath: '',
             labelPath: '',
             sensitivity: 1.0,

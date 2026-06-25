@@ -200,7 +200,7 @@
     "hoursShort": "t"
   },
   "pageTitle": {
-    "settings": "Asetukset - BirdNET-Go",
+    "settings": "Asetukset - VoiceWatch",
     "pageNotFound": "404 - Sivua ei löydy",
     "serverError": "500 - Sisäinen palvelinvirhe",
     "componentError": "Komponentin latausvirhe",
@@ -236,26 +236,26 @@
     "askQuestion": "Esitä kysymys",
     "reportBugAriaLabel": "Ilmoita virheestä GitHubissa (avautuu uuteen ikkunaan)",
     "askQuestionAriaLabel": "Esitä kysymys GitHub Discussions -foorumilla (avautuu uuteen ikkunaan)",
-    "viewOnGithubAriaLabel": "Näytä BirdNET-Go GitHubissa (avautuu uuteen ikkunaan)",
+    "viewOnGithubAriaLabel": "Näytä VoiceWatch GitHubissa (avautuu uuteen ikkunaan)",
     "health": "Health"
   },
   "about": {
-    "title": "BirdNET-Go",
+    "title": "VoiceWatch",
     "subtitle": "Moderni käyttöliittymä reaaliaikaiseen lintuäänten tunnistukseen ja luokitteluun",
-    "logoAlt": "BirdNET-Go logo",
+    "logoAlt": "VoiceWatch logo",
     "overview": "Yleiskatsaus",
-    "overviewText": "BirdNET-Go on Go-pohjainen toteutus reaaliaikaiseen lintuäänten tunnistukseen ja luokitteluun, joka perustuu BirdNET-projektiin. Tämä sovellus tarjoaa käyttäjäystävällisen käyttöliittymän jatkuvaan lintuäänten seurantaan ja analysointiin.",
-    "birdnetProject": "BirdNET-projekti",
-    "birdnetDescription": "BirdNET-Go ei olisi mahdollinen ilman BirdNET-projektin uraauurtavaa työtä. BirdNET-Go:n tunnistusominaisuuksia käyttävä tekoälymalli on BirdNET-projektin innovatiivisen tutkimuksen ja kehityksen tulos.",
+    "overviewText": "VoiceWatch on Go-pohjainen toteutus reaaliaikaiseen lintuäänten tunnistukseen ja luokitteluun, joka perustuu VoiceWatch-projektiin. Tämä sovellus tarjoaa käyttäjäystävällisen käyttöliittymän jatkuvaan lintuäänten seurantaan ja analysointiin.",
+    "birdnetProject": "VoiceWatch-projekti",
+    "birdnetDescription": "VoiceWatch ei olisi mahdollinen ilman VoiceWatch-projektin uraauurtavaa työtä. VoiceWatch:n tunnistusominaisuuksia käyttävä tekoälymalli on VoiceWatch-projektin innovatiivisen tutkimuksen ja kehityksen tulos.",
     "developedBy": "Kehittäjät",
     "developersText": "K. Lisa Yang Center for Conservation Bioacoustics Cornell Lab of Ornithologyssa yhteistyössä Chemnitzin teknillisen yliopiston kanssa:",
     "visitBirdnetAnalyzer": "Käy BirdNET-Analyzer projektissa",
     "visitBirdnetAnalyzerAriaLabel": "Vieraile BirdNET-Analyzer GitHub-repositoriossa",
     "contributors": "Avustajat",
-    "contributorsText": "BirdNET-Go on kasvanut ja parantunut monien ihmisten yhteistyön ansiosta. Heidän panoksensa koodin parannuksista ominaisuusehdotuksiin on ollut korvaamatonta tämän projektin parantamisessa.",
+    "contributorsText": "VoiceWatch on kasvanut ja parantunut monien ihmisten yhteistyön ansiosta. Heidän panoksensa koodin parannuksista ominaisuusehdotuksiin on ollut korvaamatonta tämän projektin parantamisessa.",
     "mainDeveloper": "Pääkehittäjä",
     "githubContributors": "GitHub-avustajat",
-    "contributorsNote": "Erityiskiitos näille avustajille heidän arvokkaasta työstään BirdNET-Go:n parantamisessa:",
+    "contributorsNote": "Erityiskiitos näille avustajille heidän arvokkaasta työstään VoiceWatch:n parantamisessa:",
     "communityAcknowledgment": "Yhteisön tunnustus",
     "communityText": "Haluamme myös ilmaista kiitollisuutemme kaikille käyttäjille, jotka ovat osallistuneet:",
     "bugReports": "Vikaraporttien ja ongelmien seurannan kautta",
@@ -264,9 +264,9 @@
     "documentation": "Dokumentaation parannusten kautta",
     "additionalCredits": "Lisäkiitokset",
     "birdnetPiProject": "BirdNET-Pi projekti",
-    "birdnetPiDescription": "Erityiskiitos Patrick McGuirelle hänen inspiroivasta työstään BirdNET-Pi:n parissa, mikä on vaikuttanut BirdNET-Go:n kehitykseen. BirdNET-Pi osoittaa lintuäänten tunnistuksen potentiaalin sulautetuissa laitteissa ja on asettanut korkean standardin yhteisövetoiselle kehitykselle.",
+    "birdnetPiDescription": "Erityiskiitos Patrick McGuirelle hänen inspiroivasta työstään BirdNET-Pi:n parissa, mikä on vaikuttanut VoiceWatch:n kehitykseen. BirdNET-Pi osoittaa lintuäänten tunnistuksen potentiaalin sulautetuissa laitteissa ja on asettanut korkean standardin yhteisövetoiselle kehitykselle.",
     "visitBirdnetPi": "Käy BirdNET-Pi projektissa",
-    "labelTranslations": "BirdNET-nimikkeiden käännökset",
+    "labelTranslations": "VoiceWatch-nimikkeiden käännökset",
     "labelTranslationsBy": "Toimittanut Patrick Levin BirdNET-Pi projektille Patrick McGuiren toimesta",
     "patrickLevinGithub": "Patrick Levinin GitHub",
     "versionInformation": "Versiotiedot",
@@ -275,12 +275,12 @@
     "developmentBuild": "Kehitysversio",
     "unknown": "Tuntematon",
     "licenseInformation": "Lisenssitiedot",
-    "licenseText": "Sekä BirdNET AI-malli että BirdNET-Go on lisensoitu",
+    "licenseText": "Sekä VoiceWatch AI-malli että VoiceWatch on lisensoitu",
     "ccLicense": "Creative Commons Nimeä-EiKaupallinen-JaaSamoin 4.0 Kansainvälinen -lisenssillä",
     "licenseDescription": "Tämä lisenssi sallii muiden remiksata, muokata ja rakentaa tämän työn pohjalta ei-kaupallisiin tarkoituksiin, kunhan asianmukainen tunnustus annetaan ja uudet luomukset lisensoidaan samoin ehdoin.",
     "dependencyLicenses": "Riippuvuuksien lisenssit",
     "taxonomyDataTitle": "Taksonomiatiedot",
-    "taxonomyDataIntro": "BirdNET-Go sisältää upotetut lintutaksonomiatiedot, jotka on johdettu eBird/Clements-tarkistuslistasta, tarjoten nopeat paikalliset suku- ja perhehaut.",
+    "taxonomyDataIntro": "VoiceWatch sisältää upotetut lintutaksonomiatiedot, jotka on johdettu eBird/Clements-tarkistuslistasta, tarjoten nopeat paikalliset suku- ja perhehaut.",
     "source": "Lähde",
     "ebirdApiV2": "eBird API v2",
     "copyright": "Tekijänoikeus",
@@ -290,10 +290,10 @@
     "ebirdOrg": "eBird.org",
     "learnEbirdTaxonomy": "Lue lisää eBird-taksonomiasta",
     "avicommonsTitle": "Lintukuvat",
-    "avicommonsDescription": "BirdNET-Go käyttää Avicommons-palvelun kuratoituja lintukuvia. Avicommons on kirjasto käsin valittuja, rajattuja ja suunnattuja lintuvalokuvia Creative Commons -lisenssillä.",
-    "githubStarPrompt": "Jos pidät BirdNET-Go:ta hyödyllisenä, harkitse projektin tähdittämistä GitHubissa. Tähdet auttavat muita löytämään projektin ja tukevat sen kehitystä.",
+    "avicommonsDescription": "VoiceWatch käyttää Avicommons-palvelun kuratoituja lintukuvia. Avicommons on kirjasto käsin valittuja, rajattuja ja suunnattuja lintuvalokuvia Creative Commons -lisenssillä.",
+    "githubStarPrompt": "Jos pidät VoiceWatch:ta hyödyllisenä, harkitse projektin tähdittämistä GitHubissa. Tähdet auttavat muita löytämään projektin ja tukevat sen kehitystä.",
     "viewOnGithub": "Näytä projekti GitHubissa",
-    "visitGithubAriaLabel": "Vieraile BirdNET-Go GitHub-arkistossa",
+    "visitGithubAriaLabel": "Vieraile VoiceWatch GitHub-arkistossa",
     "visitAvicommonsGithub": "Vieraile Avicommons GitHub-arkistossa"
   },
   "notifications": {
@@ -362,11 +362,11 @@
     },
     "content": {
       "startup": {
-        "title": "BirdNET-Go käynnistetty",
+        "title": "VoiceWatch käynnistetty",
         "message": "Sovellus käynnistyi onnistuneesti (v{version})"
       },
       "shutdown": {
-        "title": "BirdNET-Go sammutetaan",
+        "title": "VoiceWatch sammutetaan",
         "message": "Sovellus sammutetaan hallitusti"
       },
       "detection": {
@@ -423,7 +423,7 @@
         "cancelledTitle": "Tietokannan siirto peruutettu",
         "cancelledMessage": "Tietokannan siirto on peruutettu. Voit aloittaa uuden siirron milloin tahansa Tietokanta-asetuksista.",
         "completedTitle": "Tietokannan siirto valmis",
-        "completedMessage": "Siirto valmis. Käynnistä BirdNET-Go uudelleen siirtyäksesi uuteen tietokantaan.",
+        "completedMessage": "Siirto valmis. Käynnistä VoiceWatch uudelleen siirtyäksesi uuteen tietokantaan.",
         "errorTitle": "Tietokannan siirtovirhe",
         "errorMessage": "Siirto keskeytetty virheiden vuoksi. Tarkista lokit ja yritä jatkaa."
       },
@@ -435,7 +435,7 @@
       },
       "buffer": {
         "overloadTitle": "Äänianalyysi ylikuormitettu",
-        "overloadMessage": "Järjestelmäsi hylkää {dropRate} % lähteen ''{sourceName}'' ääninäytteistä, koska se ei pysy analyysin tahdissa. Pienennä BirdNET-päällekkäisyysarvoa tunnistusasetuksista tai harkitse nopeamman suorittimen hankkimista."
+        "overloadMessage": "Järjestelmäsi hylkää {dropRate} % lähteen ''{sourceName}'' ääninäytteistä, koska se ei pysy analyysin tahdissa. Pienennä VoiceWatch-päällekkäisyysarvoa tunnistusasetuksista tai harkitse nopeamman suorittimen hankkimista."
       },
       "ort": {
         "unavailableTitle": "ONNX Runtime ei ole käytettävissä",
@@ -1018,13 +1018,13 @@
     },
     "synonyms": {
       "tabLabel": "Taksonomiasynonyymit",
-      "description": "Ohita tieteellisten nimien yhdistämiset lintukuvahaussa. BirdNET käyttää 2021E-taksonomiaa, mutta kuvalähteet voivat käyttää päivitettyjä nimiä. Sisäänrakennetut yhdistämiset ladataan aina; omat ohituksesi lisäävät tai korvaavat niitä.",
-      "birdnetName": "BirdNET-nimi",
+      "description": "Ohita tieteellisten nimien yhdistämiset lintukuvahaussa. VoiceWatch käyttää 2021E-taksonomiaa, mutta kuvalähteet voivat käyttää päivitettyjä nimiä. Sisäänrakennetut yhdistämiset ladataan aina; omat ohituksesi lisäävät tai korvaavat niitä.",
+      "birdnetName": "VoiceWatch-nimi",
       "updatedName": "Päivitetty nimi",
       "addButton": "Lisää synonyymi",
       "emptyState": "Ei mukautettuja taksonomiasynonyymejä määritetty.",
       "errors": {
-        "unknownSpecies": "Lajia ei löydy BirdNET-tunnisteista",
+        "unknownSpecies": "Lajia ei löydy VoiceWatch-tunnisteista",
         "duplicateKey": "Synonyymi tälle lajille on jo olemassa",
         "emptyUpdatedName": "Päivitetty nimi on pakollinen"
       }
@@ -1133,7 +1133,7 @@
         "process": "Prosessi"
       },
       "showAll": "Näytä kaikki prosessit",
-      "showBirdnetOnly": "Näytä vain BirdNET",
+      "showBirdnetOnly": "Näytä vain VoiceWatch",
       "table": {
         "process": "Prosessi",
         "status": "Tila",
@@ -1311,9 +1311,9 @@
       "migration": {
         "title": "Tietokantamigraatio",
         "description": "Migroi vanhasta skeemasta normalisoituun v2-skeemaan",
-        "requiredNote": "Tietokannan migraatio vaaditaan tulevien BirdNET-Go-ominaisuuksien vuoksi, jotka hyödyntävät uutta normalisoitua tietokantaskeemaa. Uudet ominaisuudet eivät ole käytettävissä ennen migraation valmistumista.",
+        "requiredNote": "Tietokannan migraatio vaaditaan tulevien VoiceWatch-ominaisuuksien vuoksi, jotka hyödyntävät uutta normalisoitua tietokantaskeemaa. Uudet ominaisuudet eivät ole käytettävissä ennen migraation valmistumista.",
         "completedTitle": "Migraatio valmis",
-        "completedNote": "Tietokantasi on siirretty onnistuneesti uuteen skeemaan. Käynnistä BirdNET-Go uudelleen siirtyäksesi uuteen tietokantaan. Huom: Uusi tietokanta on pienempi, koska se tallentaa tiedot tehokkaammin - tämä on normaalia ja kaikki tietosi on säilytetty.",
+        "completedNote": "Tietokantasi on siirretty onnistuneesti uuteen skeemaan. Käynnistä VoiceWatch uudelleen siirtyäksesi uuteen tietokantaan. Huom: Uusi tietokanta on pienempi, koska se tallentaa tiedot tehokkaammin - tämä on normaalia ja kaikki tietosi on säilytetty.",
         "starting": "Käynnistetään migraatiota...",
         "status": {
           "idle": "Valmis aloitettavaksi",
@@ -1394,7 +1394,7 @@
         },
         "notes": {
           "in_progress": "Voit jatkaa järjestelmän normaalia käyttöä migraation suorittaessa taustalla.",
-          "dual_write": "Migraatio käynnissä. Tietosi ovat turvassa - kaikki uudet havainnot tallennetaan molempiin tietokantoihin. Voit jatkaa BirdNET-Go:n käyttöä normaalisti.",
+          "dual_write": "Migraatio käynnissä. Tietosi ovat turvassa - kaikki uudet havainnot tallennetaan molempiin tietokantoihin. Voit jatkaa VoiceWatch:n käyttöä normaalisti.",
           "migrating": "Kopioidaan olemassa olevia havaintojasi uuteen tietokantaan. Tämä voi kestää jonkin aikaa havaintojen määrästä riippuen. Voit keskeyttää ja jatkaa milloin tahansa.",
           "validating": "Tarkistetaan, että kaikki tietueet kopioitiin oikein. Melkein valmis!",
           "cutover": "Vaihdetaan uuteen tietokantaan. Tämä kestää vain hetken.",
@@ -1990,7 +1990,7 @@
     }
   },
   "settings": {
-    "title": "Asetukset - BirdNET-Go",
+    "title": "Asetukset - VoiceWatch",
     "loading": "Ladataan asetuksia...",
     "sections": {
       "analysis": "Analyysi",
@@ -2047,20 +2047,20 @@
           "description": "Määritä sovelluksen pääasetukset"
         },
         "birdnet": {
-          "title": "BirdNET-asetukset",
-          "description": "Määritä BirdNET AI-mallin erityisasetukset"
+          "title": "VoiceWatch-asetukset",
+          "description": "Määritä VoiceWatch AI-mallin erityisasetukset"
         },
         "ui": {
           "title": "Käyttöliittymäasetukset",
           "description": "Mukauta käyttöliittymää"
         },
         "customClassifier": {
-          "title": "Mukautettu BirdNET-luokittelija",
-          "description": "Määritä mukautetut BirdNET-mallin ja nimiketiedostot erikoistuneeseen tunnistukseen",
+          "title": "Mukautettu VoiceWatch-luokittelija",
+          "description": "Määritä mukautetut VoiceWatch-mallin ja nimiketiedostot erikoistuneeseen tunnistukseen",
           "modelPath": {
             "label": "Mallin polku (Vaatii uudelleenkäynnistyksen)",
             "placeholder": "Polku mallitiedostoon",
-            "helpText": "Polku ulkoiseen BirdNET-mallitiedostoon. Syötä absoluuttinen tai suhteellinen polku birdnet-go-binääriin. Jätä tyhjäksi käyttääksesi oletussisäänrakennettua mallia."
+            "helpText": "Polku ulkoiseen VoiceWatch-mallitiedostoon. Syötä absoluuttinen tai suhteellinen polku birdnet-go-binääriin. Jätä tyhjäksi käyttääksesi oletussisäänrakennettua mallia."
           },
           "labelPath": {
             "label": "Nimikkeiden polku (Vaatii uudelleenkäynnistyksen)",
@@ -2072,7 +2072,7 @@
           "title": "Dynaaminen kynnysarvo",
           "description": "Säädä tunnistusherkkyyttä automaattisesti aikaisempien havaintojen perusteella",
           "enable": {
-            "label": "Ota käyttöön dynaaminen kynnysarvo (BirdNET-Go-erityisominaisuus)",
+            "label": "Ota käyttöön dynaaminen kynnysarvo (VoiceWatch-erityisominaisuus)",
             "helpText": "Ottaa käyttöön dynaamisen luottamuskynnysarvon mukautuvampaa lintuäänten tunnistusta varten."
           },
           "trigger": {
@@ -2134,7 +2134,7 @@
           },
           "model": {
             "label": "Aluesuodatinmalli",
-            "helpText": "BirdNET-aluesuodatinmallin versio: latest tai legacy."
+            "helpText": "VoiceWatch-aluesuodatinmallin versio: latest tai legacy."
           },
           "threshold": {
             "label": "Kynnysarvo",
@@ -2399,7 +2399,7 @@
       "sections": {
         "telemetry": {
           "title": "Virheiden seuranta ja telemetria",
-          "description": "Vapaaehtoinen virheiden seuranta BirdNET-Go:n luotettavuuden ja suorituskyvyn parantamiseksi"
+          "description": "Vapaaehtoinen virheiden seuranta VoiceWatch:n luotettavuuden ja suorituskyvyn parantamiseksi"
         },
         "diagnostics": {
           "title": "Tuki ja diagnostiikka",
@@ -2411,7 +2411,7 @@
         "privacyPoints": {
           "noPersonalData": "Henkilötietoja ei kerätä",
           "anonymousData": "Kaikki telemetriatiedot ovat anonyymejä",
-          "helpImprove": "Telemetriatiedot auttavat kehittäjiä tunnistamaan ja korjaamaan ongelmia BirdNET-Go:ssa"
+          "helpImprove": "Telemetriatiedot auttavat kehittäjiä tunnistamaan ja korjaamaan ongelmia VoiceWatch:ssa"
         },
         "enableTracking": "Ota virheiden seuranta käyttöön (Opt-in)"
       },
@@ -2568,7 +2568,7 @@
       },
       "systemInfo": {
         "howToView": "Kuinka tarkastella ilmoituksia:",
-        "technicalDetails": "Tekniset tiedot ilmoituksista BirdNET-Go:ssa:"
+        "technicalDetails": "Tekniset tiedot ilmoituksista VoiceWatch:ssa:"
       },
       "privacy": {
         "title": "Tietosuojailmoitus ulkoisille webhokeille",
@@ -2971,14 +2971,14 @@
         "homeAssistant": {
           "title": "Home Assistant -automaattitunnistus",
           "enable": "Ota käyttöön Home Assistant MQTT Discovery",
-          "description": "Kun käytössä, BirdNET-Go rekisteröi automaattisesti laitteet ja anturit Home Assistantiin MQTT-discovery-protokollan kautta. Laitteet ilmestyvät Home Assistantin laiterekisteriin ilman manuaalista YAML-konfiguraatiota.",
+          "description": "Kun käytössä, VoiceWatch rekisteröi automaattisesti laitteet ja anturit Home Assistantiin MQTT-discovery-protokollan kautta. Laitteet ilmestyvät Home Assistantin laiterekisteriin ilman manuaalista YAML-konfiguraatiota.",
           "discoveryPrefix": {
             "label": "Discovery-etuliite",
             "helpText": "MQTT-aiheen etuliite Home Assistant discovery -viesteille. Oletusarvo on 'homeassistant'. Muuta tätä vain, jos olet määrittänyt mukautetun discovery-etuliitteen Home Assistantissa."
           },
           "deviceName": {
             "label": "Laitteen nimi",
-            "helpText": "Laitteiden perusnimi sellaisena kuin ne näkyvät Home Assistantissa. Jokaisella äänilähteellä on oma laite, joka on linkitetty tähän BirdNET-Go-päälaitteeseen."
+            "helpText": "Laitteiden perusnimi sellaisena kuin ne näkyvät Home Assistantissa. Jokaisella äänilähteellä on oma laite, joka on linkitetty tähän VoiceWatch-päälaitteeseen."
           },
           "sensorsNote": "<strong>Luodut anturit:</strong> Jokaista äänilähdettä kohden Home Assistant saa: Viimeisin laji, Luottamus, Tieteellinen nimi ja Äänitaso (jos käytössä). Siltalaitteessa on online/offline-saatavuustila.",
           "discovery": {
@@ -3003,7 +3003,7 @@
       },
       "observability": {
         "title": "Havainnointi",
-        "description": "Seuraa BirdNET-Go:n suorituskykyä ja lintuhavaintomittareita Prometheus-yhteensopivan päätepisteen kautta",
+        "description": "Seuraa VoiceWatch:n suorituskykyä ja lintuhavaintomittareita Prometheus-yhteensopivan päätepisteen kautta",
         "enable": "Ota käyttöön havainnointi-integraatio",
         "disabled": "Havainnointi-integraatio ei ole käytössä",
         "listenAddress": {
@@ -3172,7 +3172,7 @@
       },
       "noSources": {
         "warning": "Äänilähteita ei ole määritetty",
-        "description": "BirdNET-Go tarvitsee äänen syötteen lintujen havaitsemiseen. Määritä vähintään yksi lähde Äänikortti- tai Striimit-välilehdellä."
+        "description": "VoiceWatch tarvitsee äänen syötteen lintujen havaitsemiseen. Määritä vähintään yksi lähde Äänikortti- tai Striimit-välilehdellä."
       },
       "soundCards": {
         "summary": "{count} äänikorttilähdettä",
@@ -3198,12 +3198,12 @@
           "hints": {
             "device": "Valitse järjestelmän käytettävissä olevista äänen syöttölaitteista",
             "multiple": "Voit määrittää useita äänikortteja eri sijainneille",
-            "model": "Jokainen lähde voi käyttää eri tunnistusmallia (BirdNET, Perch, Bat)"
+            "model": "Jokainen lähde voi käyttää eri tunnistusmallia (VoiceWatch, Perch, Bat)"
           }
         },
         "models": {
-          "birdnetDefault": "BirdNET (Oletus)",
-          "birdnet": "BirdNET",
+          "birdnetDefault": "VoiceWatch (Oletus)",
+          "birdnet": "VoiceWatch",
           "perchV2": "Google Perch v2",
           "bat": "Lepakkotunnistus"
         },
@@ -3551,8 +3551,8 @@
         "invalidRetentionPolicy": "Virheellinen säilytyskäytäntö"
       },
       "models": {
-        "recommendBoth": "Parhaan lajien havainnointikattavuuden saavuttamiseksi suositellaan käyttämään sekä BirdNET- että Perch-malleja yhdessä.",
-        "perchOnlyWarning": "Perch yksinään tuottaa vähemmän havaintoja. Laske luottamuskynnys arvoon 0.50 mielekkäiden tulosten saamiseksi tai ota BirdNET käyttöön rinnalle paremman kattavuuden saavuttamiseksi."
+        "recommendBoth": "Parhaan lajien havainnointikattavuuden saavuttamiseksi suositellaan käyttämään sekä VoiceWatch- että Perch-malleja yhdessä.",
+        "perchOnlyWarning": "Perch yksinään tuottaa vähemmän havaintoja. Laske luottamuskynnys arvoon 0.50 mielekkäiden tulosten saamiseksi tai ota VoiceWatch käyttöön rinnalle paremman kattavuuden saavuttamiseksi."
       }
     },
     "security": {
@@ -3846,7 +3846,7 @@
           },
           "fellBack": {
             "title": "Käytössä sisäänrakennettu aluesuodatin",
-            "description": "Määritettyä geomallin aluesuodatinta ei voitu ladata, joten BirdNET-Go siirtyi käyttämään sisäänrakennettua aluesuodatinta. Suodatus toimii edelleen, mutta tarkista Asetukset-sivulta, miten saat geomallin takaisin käyttöön."
+            "description": "Määritettyä geomallin aluesuodatinta ei voitu ladata, joten VoiceWatch siirtyi käyttämään sisäänrakennettua aluesuodatinta. Suodatus toimii edelleen, mutta tarkista Asetukset-sivulta, miten saat geomallin takaisin käyttöön."
           },
           "mappedZero": {
             "title": "Aluesuodatin ei vastannut yhtäkään lajia",
@@ -3941,14 +3941,14 @@
       },
       "synonyms": {
         "tabLabel": "Synonyymit",
-        "description": "Yhdistä BirdNETin tieteelliset lajinimet niiden päivitettyihin vastineisiin uudemmassa taksonomiassa. Käytetään vain varasijana haettaessa lintukuvia Wikipediasta ja AviCommonsista; ei nimeä lajeja uudelleen havainnoissa tai koontinäytöllä.",
-        "helpText": "Muuttaaksesi lajin käyttöliittymässä näkyvää nimeä, muokkaa BirdNETin tunnistetiedostoa (asetus \"Nimikkeiden polku\" pääasetuksissa).",
-        "birdnetName": "BirdNET-nimi",
+        "description": "Yhdistä VoiceWatchin tieteelliset lajinimet niiden päivitettyihin vastineisiin uudemmassa taksonomiassa. Käytetään vain varasijana haettaessa lintukuvia Wikipediasta ja AviCommonsista; ei nimeä lajeja uudelleen havainnoissa tai koontinäytöllä.",
+        "helpText": "Muuttaaksesi lajin käyttöliittymässä näkyvää nimeä, muokkaa VoiceWatchin tunnistetiedostoa (asetus \"Nimikkeiden polku\" pääasetuksissa).",
+        "birdnetName": "VoiceWatch-nimi",
         "updatedName": "Päivitetty tieteellinen nimi",
         "addButton": "Lisää synonyymi",
         "emptyState": "Ei määritettyjä taksonomiasynonyymejä",
         "errors": {
-          "unknownSpecies": "Lajia ei löydy BirdNET-tunnisteista",
+          "unknownSpecies": "Lajia ei löydy VoiceWatch-tunnisteista",
           "duplicateKey": "Tälle lajille on jo olemassa synonyymi",
           "emptyUpdatedName": "Päivitetty nimi on pakollinen"
         }
@@ -4371,7 +4371,7 @@
       },
       "appearance": {
         "title": "Ulkoasu",
-        "description": "Mukauta BirdNET-Go-käyttöliittymän ulkoasua"
+        "description": "Mukauta VoiceWatch-käyttöliittymän ulkoasua"
       },
       "language": {
         "title": "Kieli ja alue",
@@ -4389,14 +4389,14 @@
         "defaultGainUnit": "dB"
       }
     },
-    "restartRequired": "Jotkin muutokset vaativat palvelimen uudelleenkäynnistyksen astuakseen voimaan. Käynnistä BirdNET-Go uudelleen."
+    "restartRequired": "Jotkin muutokset vaativat palvelimen uudelleenkäynnistyksen astuakseen voimaan. Käynnistä VoiceWatch uudelleen."
   },
   "auth": {
     "login": "Kirjaudu",
     "logout": "Kirjaudu ulos",
     "openLoginModal": "Avaa kirjautumisikkuna",
     "loginTitle": "Kirjaudu sisään",
-    "loginSubtitle": "Siirry BirdNET-Go-hallintapaneeliin",
+    "loginSubtitle": "Siirry VoiceWatch-hallintapaneeliin",
     "password": "Salasana",
     "passwordPlaceholder": "Syötä salasanasi",
     "enterPassword": "Syötä salasana",
@@ -4581,7 +4581,7 @@
       "streamError": "Virhe striimin käynnistyksessä",
       "streamTitle": "Lintujen äänistriimi - {source}",
       "streamTitleDefault": "Lintujen äänistriimi",
-      "streamArtist": "BirdNET-Go",
+      "streamArtist": "VoiceWatch",
       "streamAlbum": "Suora lähetys",
       "playbackError": "Toistovirhe: {details}"
     },
@@ -4880,10 +4880,10 @@
     "steps": {
       "welcome": {
         "title": "Tervetuloa",
-        "heading": "Tervetuloa BirdNET-Go:hon!",
-        "description": "BirdNET-Go on avoimen lähdekoodin linnunäänitunnistusjärjestelmä, joka kuuntelee ääntä mikrofonistasi tai streamistä ja tunnistaa lintulajeja reaaliajassa.",
-        "credit": "BirdNET-Go käyttää BirdNET-tekoälymallia, jonka on kehittänyt K. Lisa Yang Center for Conservation Bioacoustics Cornell Lab of Ornithologyssa ja Chemnitzin teknillisessä yliopistossa. BirdNET-Go on itsenäinen yhteisöprojekti eikä ole sidoksissa BirdNET-tiimiin.",
-        "learnMore": "Lue lisää BirdNETistä",
+        "heading": "Tervetuloa VoiceWatch:hon!",
+        "description": "VoiceWatch on avoimen lähdekoodin linnunäänitunnistusjärjestelmä, joka kuuntelee ääntä mikrofonistasi tai streamistä ja tunnistaa lintulajeja reaaliajassa.",
+        "credit": "VoiceWatch käyttää VoiceWatch-tekoälymallia, jonka on kehittänyt K. Lisa Yang Center for Conservation Bioacoustics Cornell Lab of Ornithologyssa ja Chemnitzin teknillisessä yliopistossa. VoiceWatch on itsenäinen yhteisöprojekti eikä ole sidoksissa VoiceWatch-tiimiin.",
+        "learnMore": "Lue lisää VoiceWatchistä",
         "cta": "Määritetään lintuseuranta-asemasi."
       },
       "locationLanguage": {
@@ -4942,11 +4942,11 @@
         "birdweatherIdLabel": "BirdWeather-aseman ID",
         "birdweatherIdPlaceholder": "Syötä BirdWeather-asemasi ID",
         "errorReportingLabel": "Lähetä nimettömiä virheilmoituksia",
-        "errorReportingHelp": "Auta parantamaan BirdNET-Go:ta lähettämällä nimettömiä virheilmoituksia ongelmatilanteissa"
+        "errorReportingHelp": "Auta parantamaan VoiceWatch:ta lähettämällä nimettömiä virheilmoituksia ongelmatilanteissa"
       },
       "responsibleUse": {
-        "title": "BirdNET-Go:n vastuullinen käyttö",
-        "intro": "BirdNET-Go on tehokas työkalu, joka parantaa lintuhavaintokokemustasi tekoälyavusteisen tunnistuksen avulla. Parhaiden tulosten saavuttamiseksi sekä lintuharrastuksessa että luonnonsuojelussa:",
+        "title": "VoiceWatch:n vastuullinen käyttö",
+        "intro": "VoiceWatch on tehokas työkalu, joka parantaa lintuhavaintokokemustasi tekoälyavusteisen tunnistuksen avulla. Parhaiden tulosten saavuttamiseksi sekä lintuharrastuksessa että luonnonsuojelussa:",
         "point1": "Tarkista ja varmista havainnot ennen jakamista",
         "point2": "Käytä luottamuspisteitä ohjeena, ei ehdottomana totuutena",
         "point3": "Vertaa kenttäoppaisiin ja paikalliseen asiantuntemukseen",
@@ -5009,7 +5009,7 @@
       "birdOnlyNote": "Aluesuodatin koskee vain lintuluokittimia. Lepakkomallit käyttävät omia lajilistojaan.",
       "status": {
         "title": "Aluesuodattimen yhteenveto",
-        "geomodelInfo": "BirdNET-geomalli {version} - {species} tunnettua lajia",
+        "geomodelInfo": "VoiceWatch-geomalli {version} - {species} tunnettua lajia",
         "autoSelected": "Automaattisesti valittu",
         "manual": "Manuaalinen",
         "classifier": "Luokittelija",
@@ -5039,7 +5039,7 @@
       "loading": "Ladataan malleja...",
       "retry": "Yritä uudelleen",
       "builtIn": "Sisäänrakennettu",
-      "builtInDescription": "BirdNET-tiimin sisäänrakennettu lintulajien luokittelija.",
+      "builtInDescription": "VoiceWatch-tiimin sisäänrakennettu lintulajien luokittelija.",
       "species": "{count} lajia",
       "install": "Asenna",
       "installing": "Asennetaan...",
@@ -5091,7 +5091,7 @@
       "reinstall": "Asenna uudelleen",
       "reinstalling": "Asennetaan uudelleen...",
       "reinstallComplete": "Tiedostot tarkistettu onnistuneesti",
-      "geomodelBadge": "Sisältää BirdNET v3.0 -geomallin",
+      "geomodelBadge": "Sisältää VoiceWatch v3.0 -geomallin",
       "onnxRuntimeRequired": "Vaatii ONNX Runtimen, joka ei ole käytettävissä tässä järjestelmässä.",
       "onnxRuntimeMissing": "ONNX Runtime ei ole käytettävissä. Tätä mallia ei voi suorittaa.",
       "unavailable": "Ei käytettävissä"
@@ -5167,7 +5167,7 @@
       },
       "step2": {
         "title": "Asennustapasi",
-        "description": "Miten asensit BirdNET-Go:n: install.sh-skripti, Docker Compose, manuaalinen käännös tai muu."
+        "description": "Miten asensit VoiceWatch:n: install.sh-skripti, Docker Compose, manuaalinen käännös tai muu."
       },
       "step3": {
         "title": "Järjestelmätiedot",
@@ -5236,7 +5236,7 @@
       "fetchFailed": "Failed to load diagnostics"
     },
     "export": {
-      "reportTitle": "BirdNET-Go System Health Report",
+      "reportTitle": "VoiceWatch System Health Report",
       "statusLabel": "Status",
       "timeLabel": "Time",
       "durationLabel": "Duration",

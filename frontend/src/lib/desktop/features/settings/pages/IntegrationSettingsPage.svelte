@@ -1,7 +1,7 @@
 <!--
   Integration Settings Page Component
   
-  Purpose: Configure external service integrations for BirdNET-Go including BirdWeather,
+  Purpose: Configure external service integrations for VoiceWatch including BirdWeather,
   MQTT, observability (Prometheus), and weather provider integrations.
   
   Features:
@@ -110,7 +110,7 @@
         homeAssistant: {
           enabled: false,
           discoveryPrefix: 'homeassistant',
-          deviceName: 'BirdNET-Go',
+          deviceName: 'VoiceWatch',
         },
       },
       observability: {
@@ -390,7 +390,7 @@
   const DEFAULT_HOME_ASSISTANT_SETTINGS = {
     enabled: false,
     discoveryPrefix: 'homeassistant',
-    deviceName: 'BirdNET-Go',
+    deviceName: 'VoiceWatch',
   };
 
   // Generic Home Assistant update function to reduce duplication
@@ -1486,9 +1486,9 @@
 
                   <TextInput
                     id="mqtt-ha-device-name"
-                    value={settings.mqtt?.homeAssistant?.deviceName ?? 'BirdNET-Go'}
+                    value={settings.mqtt?.homeAssistant?.deviceName ?? 'VoiceWatch'}
                     label={t('settings.integration.mqtt.homeAssistant.deviceName.label')}
-                    placeholder="BirdNET-Go"
+                    placeholder="VoiceWatch"
                     disabled={!settings.mqtt?.enabled || store.isLoading || store.isSaving}
                     onchange={updateMQTTHomeAssistantDeviceName}
                   />
