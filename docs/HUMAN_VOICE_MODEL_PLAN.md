@@ -116,12 +116,12 @@ birdnet.go, perch_onnx.go, bat_onnx.go, orchestrator_bat_onnx.go, orchestrator_p
 ### D. api/v2 — remaining classifier coupling (deferred from 2c-1, MUST handle here)
 `api.go` still has `TaxonomyDB *classifier.TaxonomyDatabase` (field + `LoadTaxonomyDatabase` at ~531) and `ModelManager *classifier.ModelManager` (field + `WithModelManager` + `initModelRoutes`). Both types are deleted here. Remove the fields, the load call, the option, and the model-gallery routes (`models.go` + tests). Re-grep `c.TaxonomyDB` / `ModelManager` for stragglers.
 
-### E. conf + observability + notification (range/secondary peripherals)
+### E. conf + observability + notification (range/secondary peripherals) — DONE (commit 6cefa1a2, 2026-06-25)
 - `conf/config.go`: drop `RangeFilterSettings`, `PerchConfig`, `BatConfig`, `BSGConfig` + their `Settings` fields + bird fields on `BirdNETConfig` (keep struct for lat/long/threads/threshold/onnxruntimepath that humanvoice config reads). `conf/range_filter.go` helpers + `conf/clone.go`/`validate_services.go` refs.
 - `observability/metrics/birdnet.go`: drop `RangeFilterDuration`/`RecordRangeFilter`.
 - `notification/message_keys.go`: drop `MsgSettingsRebuildingRangeFilter`.
 
-### F. species-analytics deletion (user-chosen, datastore-only, no classifier coupling)
+### F. species-analytics deletion (user-chosen, datastore-only, no classifier coupling) — DONE (commit 73b40ffe, 2026-06-25)
 `analytics.go`: remove `GetSpeciesAccumulation`, `GetSpeciesPhenology`, `GetSpeciesHourlyDistribution` handlers + routes. `notifications.go`: remove `CreateTestNewSpeciesNotification` + route. Delete tests: analytics_species_accumulation/distribution/phenology_test.go, notifications_new_species_test.go. (Can be its own small commit.)
 
 ### G. Verify
