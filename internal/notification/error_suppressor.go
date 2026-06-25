@@ -13,7 +13,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 const (

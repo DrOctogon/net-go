@@ -4,8 +4,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/openfauna"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/openfauna"
 )
 
 // Extended capture timeout thresholds.

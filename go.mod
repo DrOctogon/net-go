@@ -1,4 +1,4 @@
-module github.com/tphakala/birdnet-go
+module github.com/tphakala/voicewatch
 
 go 1.26.1
 

@@ -23,9 +23,9 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/tphakala/birdnet-go/internal/csvutil"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/csvutil"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 // loggerModule is the module name used for structured logging from this package.

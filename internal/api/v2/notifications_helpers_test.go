@@ -8,8 +8,8 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/notification"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/notification"
 )
 
 // assertMapContainsExpected checks that result map contains all expected key-value pairs.

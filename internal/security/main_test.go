@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/tphakala/birdnet-go/internal/conf/conftest"
+	"github.com/tphakala/voicewatch/internal/conf/conftest"
 )
 
 func TestMain(m *testing.M) {

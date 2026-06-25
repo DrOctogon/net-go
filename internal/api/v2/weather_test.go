@@ -13,8 +13,8 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	"github.com/tphakala/birdnet-go/internal/datastore/mocks"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/datastore/mocks"
 )
 
 // runGetHourlyWeatherForDayNoDataTest runs the hourly weather endpoint test with no data for a given date

@@ -27,7 +27,7 @@ Both registries contain identical images and can be used interchangeably. The ex
    ```
 
 2. **Create the docker-compose.yml file:**
-   Create a file named `docker-compose.yml` in this directory and copy the content from the [premade docker-compose.yml](https://github.com/tphakala/birdnet-go/blob/main/Docker/docker-compose.yml) file in the repository, or the example below.
+   Create a file named `docker-compose.yml` in this directory and copy the content from the [premade docker-compose.yml](https://github.com/tphakala/voicewatch/blob/main/Docker/docker-compose.yml) file in the repository, or the example below.
 
 3. **Create config and data directories:**
 

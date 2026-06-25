@@ -11,10 +11,10 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/analysis/jobqueue"
-	"github.com/tphakala/birdnet-go/internal/analysis/processor"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/restart"
+	"github.com/tphakala/voicewatch/internal/analysis/jobqueue"
+	"github.com/tphakala/voicewatch/internal/analysis/processor"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/restart"
 )
 
 // setupSystemTestEnvironment creates a test environment for system API tests

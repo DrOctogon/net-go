@@ -12,14 +12,14 @@ import (
 
 	"github.com/getsentry/sentry-go"
 	"github.com/spf13/viper"
-	"github.com/tphakala/birdnet-go/cmd"
-	"github.com/tphakala/birdnet-go/internal/analysis"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/health"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/restart"
-	"github.com/tphakala/birdnet-go/internal/telemetry"
+	"github.com/tphakala/voicewatch/cmd"
+	"github.com/tphakala/voicewatch/internal/analysis"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/health"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/restart"
+	"github.com/tphakala/voicewatch/internal/telemetry"
 )
 
 // buildTime is the time when the binary was built.

@@ -16,7 +16,7 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 // Mode represents the kind of digital filters.

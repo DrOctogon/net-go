@@ -15,13 +15,13 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/patrickmn/go-cache"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	detectionPkg "github.com/tphakala/birdnet-go/internal/detection"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/notification"
-	"github.com/tphakala/birdnet-go/internal/suncalc"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	detectionPkg "github.com/tphakala/voicewatch/internal/detection"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/notification"
+	"github.com/tphakala/voicewatch/internal/suncalc"
 )
 
 // dateValidationError represents a date parameter validation failure.

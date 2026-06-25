@@ -12,16 +12,16 @@ import (
 	"time"
 
 	"github.com/getsentry/sentry-go"
-	"github.com/tphakala/birdnet-go/internal/audiocore/buffer"
-	"github.com/tphakala/birdnet-go/internal/audiocore/convert"
-	"github.com/tphakala/birdnet-go/internal/classifier"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/observability"
-	"github.com/tphakala/birdnet-go/internal/observability/metrics"
-	"github.com/tphakala/birdnet-go/internal/telemetry"
+	"github.com/tphakala/voicewatch/internal/audiocore/buffer"
+	"github.com/tphakala/voicewatch/internal/audiocore/convert"
+	"github.com/tphakala/voicewatch/internal/classifier"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/observability"
+	"github.com/tphakala/voicewatch/internal/observability/metrics"
+	"github.com/tphakala/voicewatch/internal/telemetry"
 )
 
 var processMetrics atomic.Pointer[metrics.MyAudioMetrics]

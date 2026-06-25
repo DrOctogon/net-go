@@ -19,7 +19,7 @@ import (
 	// timezone operations work consistently on Linux, macOS, and Windows.
 	_ "time/tzdata"
 
-	"github.com/tphakala/birdnet-go/internal/errors"
+	"github.com/tphakala/voicewatch/internal/errors"
 )
 
 // Constants for logger configuration

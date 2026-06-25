@@ -186,8 +186,8 @@ Configure security in the web interface under **Settings** → **Security**.
 ### Getting Help
 
 1. **Check Logs**: View container logs in Unraid Docker tab
-2. **Community Support**: Visit [BirdNET-Go Discussions](https://github.com/tphakala/birdnet-go/discussions)
-3. **Report Issues**: [GitHub Issues](https://github.com/tphakala/birdnet-go/issues)
+2. **Community Support**: Visit [BirdNET-Go Discussions](https://github.com/tphakala/voicewatch/discussions)
+3. **Report Issues**: [GitHub Issues](https://github.com/tphakala/voicewatch/issues)
 4. **Unraid Forums**: Post in the Unraid Community Applications section
 
 ## Integration Examples
@@ -242,4 +242,4 @@ Use Unraid's built-in backup tools or third-party plugins to backup the entire a
 
 ## License
 
-BirdNET-Go is open source software. See the [main repository](https://github.com/tphakala/birdnet-go) for license details.
+BirdNET-Go is open source software. See the [main repository](https://github.com/tphakala/voicewatch) for license details.

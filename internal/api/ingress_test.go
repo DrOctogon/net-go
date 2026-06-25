@@ -10,7 +10,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
-	"github.com/tphakala/birdnet-go/internal/conf"
+	"github.com/tphakala/voicewatch/internal/conf"
 )
 
 // TestIngressPath tests the ingressPath helper priority chain:

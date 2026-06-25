@@ -6,8 +6,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	"github.com/tphakala/birdnet-go/internal/detection"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/detection"
 )
 
 func TestNoteFromResult(t *testing.T) {

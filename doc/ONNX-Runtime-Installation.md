@@ -315,4 +315,4 @@ If it shows `armv7l`, you are running a 32-bit OS and need to switch to a 64-bit
 
 - [ONNX Runtime GitHub](https://github.com/microsoft/onnxruntime) - official releases and documentation
 - [BirdNET-Go documentation](https://birdnet-go.dev)
-- [BirdNET-Go GitHub](https://github.com/tphakala/birdnet-go) - issues and discussions
+- [BirdNET-Go GitHub](https://github.com/tphakala/voicewatch) - issues and discussions

@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/privacy"
+	"github.com/tphakala/voicewatch/internal/privacy"
 )
 
 // SimpleDeduplicator provides basic error deduplication using a map

@@ -10,8 +10,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/privacy"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/privacy"
 )
 
 // MinBatSampleRate is the minimum source capture rate in Hz for bat detection

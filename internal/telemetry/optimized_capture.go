@@ -4,7 +4,7 @@ import (
 	"sync/atomic"
 
 	"github.com/getsentry/sentry-go"
-	"github.com/tphakala/birdnet-go/internal/conf"
+	"github.com/tphakala/voicewatch/internal/conf"
 )
 
 // telemetryEnabled is an atomic flag for fast checking if telemetry is enabled

@@ -5,9 +5,9 @@ import (
 	"math"
 	"strings"
 
-	"github.com/tphakala/birdnet-go/internal/datastore/v2/entities"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/notification"
+	"github.com/tphakala/voicewatch/internal/datastore/v2/entities"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/notification"
 )
 
 // NotificationCreator abstracts the notification service for testability.

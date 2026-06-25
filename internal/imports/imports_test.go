@@ -13,11 +13,11 @@ import (
 	"gorm.io/gorm"
 	gormlogger "gorm.io/gorm/logger"
 
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	"github.com/tphakala/birdnet-go/internal/detection"
-	"github.com/tphakala/birdnet-go/internal/imports"
-	"github.com/tphakala/birdnet-go/internal/imports/birdnetpi"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/detection"
+	"github.com/tphakala/voicewatch/internal/imports"
+	"github.com/tphakala/voicewatch/internal/imports/birdnetpi"
 )
 
 // --- fixture helpers ---

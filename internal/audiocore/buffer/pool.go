@@ -11,7 +11,7 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/tphakala/birdnet-go/internal/errors"
+	"github.com/tphakala/voicewatch/internal/errors"
 )
 
 // ErrBufferNotFound is returned by Manager when a requested buffer has not

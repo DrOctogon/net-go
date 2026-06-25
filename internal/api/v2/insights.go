@@ -9,9 +9,9 @@ import (
 	"time"
 
 	"github.com/labstack/echo/v4"
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	datastoreV2 "github.com/tphakala/birdnet-go/internal/datastore/v2"
-	"github.com/tphakala/birdnet-go/internal/datastore/v2/repository"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	datastoreV2 "github.com/tphakala/voicewatch/internal/datastore/v2"
+	"github.com/tphakala/voicewatch/internal/datastore/v2/repository"
 	"golang.org/x/text/unicode/norm"
 )
 

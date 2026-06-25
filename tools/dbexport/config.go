@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/spf13/viper"
-	"github.com/tphakala/birdnet-go/internal/conf"
+	"github.com/tphakala/voicewatch/internal/conf"
 )
 
 // Config holds the configuration for the export tool.

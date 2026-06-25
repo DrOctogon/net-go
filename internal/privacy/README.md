@@ -146,7 +146,7 @@ package main
 
 import (
     "fmt"
-    "github.com/tphakala/birdnet-go/internal/privacy"
+    "github.com/tphakala/voicewatch/internal/privacy"
 )
 
 func main() {

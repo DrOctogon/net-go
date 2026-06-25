@@ -10,7 +10,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/notification"
+	"github.com/tphakala/voicewatch/internal/notification"
 )
 
 // awaitNotification waits for a notification with timeout.

@@ -991,7 +991,7 @@ internal/datastore/mocks/
 import (
     "testing"
     "github.com/stretchr/testify/mock"
-    "github.com/tphakala/birdnet-go/internal/datastore/mocks"
+    "github.com/tphakala/voicewatch/internal/datastore/mocks"
 )
 
 func TestDetectionSave(t *testing.T) {

@@ -18,10 +18,10 @@ import (
 
 	"golang.org/x/sync/singleflight"
 
-	"github.com/tphakala/birdnet-go/internal/audiocore"
-	"github.com/tphakala/birdnet-go/internal/audiocore/convert"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/errors"
+	"github.com/tphakala/voicewatch/internal/audiocore"
+	"github.com/tphakala/voicewatch/internal/audiocore/convert"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/errors"
 )
 
 // ffmpegTimeoutParam is the FFmpeg flag name for the connection timeout parameter.

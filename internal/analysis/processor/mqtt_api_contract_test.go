@@ -9,7 +9,7 @@
 // 3. Documentation in release notes
 //
 // Breaking changes to these field names will break user integrations.
-// See: https://github.com/tphakala/birdnet-go/discussions/1759
+// See: https://github.com/tphakala/voicewatch/discussions/1759
 package processor
 
 import (
@@ -19,7 +19,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/datastore"
 
 )
 

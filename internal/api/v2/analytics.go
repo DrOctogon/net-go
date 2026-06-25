@@ -15,12 +15,12 @@ import (
 	"time"
 
 	"github.com/labstack/echo/v4"
-	"github.com/tphakala/birdnet-go/internal/analysis/species"
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	"github.com/tphakala/birdnet-go/internal/datastore/v2/entities"
-	"github.com/tphakala/birdnet-go/internal/errors"
+	"github.com/tphakala/voicewatch/internal/analysis/species"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/datastore/v2/entities"
+	"github.com/tphakala/voicewatch/internal/errors"
 
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 const placeholderImageURL = "/ui/assets/bird-placeholder.svg"

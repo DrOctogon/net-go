@@ -1,7 +1,7 @@
 package telemetry
 
 import (
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 // GetLogger returns the telemetry module logger.

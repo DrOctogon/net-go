@@ -17,7 +17,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/testutil/containers"
+	"github.com/tphakala/voicewatch/internal/testutil/containers"
 	gormmysql "gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	gormlogger "gorm.io/gorm/logger"

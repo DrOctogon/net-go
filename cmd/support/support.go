@@ -2,7 +2,7 @@ package support
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/tphakala/birdnet-go/internal/conf"
+	"github.com/tphakala/voicewatch/internal/conf"
 )
 
 // Command creates the support parent command

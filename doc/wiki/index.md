@@ -5,7 +5,7 @@ Welcome to the BirdNET-Go documentation. This index will help you navigate throu
 ## Getting Started
 
 - [Frequently Asked Questions](faq.md) - Common questions, problems, and quick fixes
-- [BirdNET‐Go Guide](https://github.com/tphakala/birdnet-go/wiki/BirdNET%E2%80%90Go-Guide) - Overview and basic concepts
+- [BirdNET‐Go Guide](https://github.com/tphakala/voicewatch/wiki/BirdNET%E2%80%90Go-Guide) - Overview and basic concepts
 - [Installation Guide](installation.md) - Comprehensive installation instructions for all methods
 - [Recommended Hardware](hardware.md) - Hardware recommendations for optimal performance
 
@@ -16,7 +16,7 @@ Welcome to the BirdNET-Go documentation. This index will help you navigate throu
 - [Manual Docker Installation](installation.md#manual-docker-installation-advanced-linux-only) - Advanced Docker setup
 - [Manual Binary Installation](installation.md#manual-binary-installation-all-platforms) - Windows, macOS, and Linux binary installation
 
-**Note**: Docker images are available from both [GitHub Container Registry](https://github.com/tphakala/birdnet-go/pkgs/container/birdnet-go) and [Docker Hub](https://hub.docker.com/r/tphakala/birdnet-go).
+**Note**: Docker images are available from both [GitHub Container Registry](https://github.com/tphakala/voicewatch/pkgs/container/birdnet-go) and [Docker Hub](https://hub.docker.com/r/tphakala/birdnet-go).
 
 ## Advanced Features
 

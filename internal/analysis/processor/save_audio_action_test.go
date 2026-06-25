@@ -15,9 +15,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	audioBuffer "github.com/tphakala/birdnet-go/internal/audiocore/buffer"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/conf/conftest"
+	audioBuffer "github.com/tphakala/voicewatch/internal/audiocore/buffer"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/conf/conftest"
 )
 
 func TestSaveAudioActionExecute_DefersUntilCaptureReady(t *testing.T) {

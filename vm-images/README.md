@@ -110,8 +110,8 @@ birdnet-go-vm-arm64-v1.0.0.qcow2.zst.sha256   # Checksum
 
 ```bash
 # Download and verify
-wget https://github.com/tphakala/birdnet-go/releases/latest/download/birdnet-go-vm-amd64-v1.0.0.qcow2.zst
-wget https://github.com/tphakala/birdnet-go/releases/latest/download/birdnet-go-vm-amd64-v1.0.0.qcow2.zst.sha256
+wget https://github.com/tphakala/voicewatch/releases/latest/download/birdnet-go-vm-amd64-v1.0.0.qcow2.zst
+wget https://github.com/tphakala/voicewatch/releases/latest/download/birdnet-go-vm-amd64-v1.0.0.qcow2.zst.sha256
 sha256sum -c birdnet-go-vm-amd64-v1.0.0.qcow2.zst.sha256
 
 # Decompress
@@ -300,7 +300,7 @@ sudo tar -czf birdnet-go-backup-$(date +%Y%m%d).tar.gz \
 
 ```bash
 # Clone repository
-git clone https://github.com/tphakala/birdnet-go.git
+git clone https://github.com/tphakala/voicewatch.git
 cd birdnet-go/vm-images
 
 # Build custom image
@@ -377,10 +377,10 @@ Download the latest compressed VM image for your architecture:
 
 ```bash
 # AMD64
-wget https://github.com/tphakala/birdnet-go/releases/download/v1.x.x/birdnet-go-vm-amd64-v1.x.x.qcow2.zst
+wget https://github.com/tphakala/voicewatch/releases/download/v1.x.x/birdnet-go-vm-amd64-v1.x.x.qcow2.zst
 
 # ARM64
-wget https://github.com/tphakala/birdnet-go/releases/download/v1.x.x/birdnet-go-vm-arm64-v1.x.x.qcow2.zst
+wget https://github.com/tphakala/voicewatch/releases/download/v1.x.x/birdnet-go-vm-arm64-v1.x.x.qcow2.zst
 ```
 
 ### 2. Extract Image
@@ -687,10 +687,10 @@ Perfect for:
 
    ```bash
    # Download for your architecture
-   wget https://github.com/tphakala/birdnet-go/releases/latest/download/birdnet-go-vm-amd64-VERSION.qcow2.zst
+   wget https://github.com/tphakala/voicewatch/releases/latest/download/birdnet-go-vm-amd64-VERSION.qcow2.zst
 
    # Verify checksum
-   wget https://github.com/tphakala/birdnet-go/releases/latest/download/birdnet-go-vm-amd64-VERSION.qcow2.zst.sha256
+   wget https://github.com/tphakala/voicewatch/releases/latest/download/birdnet-go-vm-amd64-VERSION.qcow2.zst.sha256
    sha256sum -c birdnet-go-vm-amd64-VERSION.qcow2.zst.sha256
 
    # Decompress
@@ -916,8 +916,8 @@ sudo ufw status
 
 ### Getting Help
 
-- **GitHub Issues**: https://github.com/tphakala/birdnet-go/issues
-- **Documentation**: https://github.com/tphakala/birdnet-go
+- **GitHub Issues**: https://github.com/tphakala/voicewatch/issues
+- **Documentation**: https://github.com/tphakala/voicewatch
 - **Community**: Check GitHub discussions
 
 ## 📋 Technical Specifications

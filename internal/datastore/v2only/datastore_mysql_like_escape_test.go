@@ -10,9 +10,9 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	v2 "github.com/tphakala/birdnet-go/internal/datastore/v2"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/testutil/containers"
+	v2 "github.com/tphakala/voicewatch/internal/datastore/v2"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/testutil/containers"
 )
 
 // setupMySQLDatastore starts a MySQL testcontainer and builds a fully-wired

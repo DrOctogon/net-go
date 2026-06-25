@@ -10,7 +10,7 @@ This directory contains automatically generated mocks for the datastore interfac
 import (
     "testing"
     "github.com/stretchr/testify/mock"
-    "github.com/tphakala/birdnet-go/internal/datastore/mocks"
+    "github.com/tphakala/voicewatch/internal/datastore/mocks"
 )
 
 func TestMyFunction(t *testing.T) {
@@ -70,7 +70,7 @@ func (m *MockSpeciesDatastore) GetActiveNotificationHistory(after time.Time) ([]
 **New approach**:
 
 ```go
-import "github.com/tphakala/birdnet-go/internal/datastore/mocks"
+import "github.com/tphakala/voicewatch/internal/datastore/mocks"
 
 func TestSpeciesTracker(t *testing.T) {
     // Use generated mock instead

@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/tphakala/birdnet-go/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/datastore"
 )
 
 func TestFilterBatchByConfidence(t *testing.T) {

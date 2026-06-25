@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/tphakala/birdnet-go/internal/csvutil"
+	"github.com/tphakala/voicewatch/internal/csvutil"
 )
 
 // LoadLabels reads species labels from a file. Supports .csv (auto-detects

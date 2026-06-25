@@ -12,7 +12,7 @@ import (
 	"strings"
 
 	"github.com/spf13/viper"
-	"github.com/tphakala/birdnet-go/internal/errors"
+	"github.com/tphakala/voicewatch/internal/errors"
 )
 
 // BirdNET core configuration keys for viper config paths.

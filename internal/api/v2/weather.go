@@ -8,10 +8,10 @@ import (
 	"time"
 
 	"github.com/labstack/echo/v4"
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	errors_pkg "github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/suncalc"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	errors_pkg "github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/suncalc"
 	"gorm.io/gorm"
 )
 

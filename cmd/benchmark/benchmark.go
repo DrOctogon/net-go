@@ -6,10 +6,10 @@ import (
 	"time"
 
 	"github.com/spf13/cobra"
-	"github.com/tphakala/birdnet-go/internal/analysis"
-	"github.com/tphakala/birdnet-go/internal/classifier"
-	"github.com/tphakala/birdnet-go/internal/classifier/humanvoice"
-	"github.com/tphakala/birdnet-go/internal/conf"
+	"github.com/tphakala/voicewatch/internal/analysis"
+	"github.com/tphakala/voicewatch/internal/classifier"
+	"github.com/tphakala/voicewatch/internal/classifier/humanvoice"
+	"github.com/tphakala/voicewatch/internal/conf"
 )
 
 func Command(settings *conf.Settings) *cobra.Command {

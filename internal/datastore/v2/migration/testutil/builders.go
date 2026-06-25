@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/datastore"
 )
 
 // DetectionBuilder provides a fluent API for building test Note (legacy detection) data.

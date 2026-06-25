@@ -129,7 +129,7 @@ type Config struct {
 ### Basic Usage
 
 ```go
-import "github.com/tphakala/birdnet-go/internal/logger"
+import "github.com/tphakala/voicewatch/internal/logger"
 
 func setupMQTT(settings *conf.Settings, metrics *observability.Metrics) error {
     log := logger.Global().Module("mqtt")

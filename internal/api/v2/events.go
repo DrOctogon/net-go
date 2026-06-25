@@ -12,8 +12,8 @@ import (
 	"time"
 
 	"github.com/labstack/echo/v4"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/logger/reader"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/logger/reader"
 )
 
 // detectionOperations lists the log operations consumed by the detection events endpoint.

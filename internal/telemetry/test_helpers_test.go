@@ -7,9 +7,9 @@ import (
 	"time"
 
 	"github.com/getsentry/sentry-go"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/events"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/events"
 )
 
 // testFlushTimeout is the timeout for flushing events during test cleanup

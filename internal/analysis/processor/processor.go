@@ -15,23 +15,23 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/analysis/jobqueue"
-	"github.com/tphakala/birdnet-go/internal/analysis/species"
-	"github.com/tphakala/birdnet-go/internal/audiocore"
-	"github.com/tphakala/birdnet-go/internal/audiocore/buffer"
-	"github.com/tphakala/birdnet-go/internal/audiocore/convert"
-	"github.com/tphakala/birdnet-go/internal/classifier"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	"github.com/tphakala/birdnet-go/internal/detection"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/mqtt"
-	"github.com/tphakala/birdnet-go/internal/notification"
-	"github.com/tphakala/birdnet-go/internal/observability"
-	"github.com/tphakala/birdnet-go/internal/privacy"
-	"github.com/tphakala/birdnet-go/internal/securefs"
-	"github.com/tphakala/birdnet-go/internal/spectrogram"
-	"github.com/tphakala/birdnet-go/internal/suncalc"
+	"github.com/tphakala/voicewatch/internal/analysis/jobqueue"
+	"github.com/tphakala/voicewatch/internal/analysis/species"
+	"github.com/tphakala/voicewatch/internal/audiocore"
+	"github.com/tphakala/voicewatch/internal/audiocore/buffer"
+	"github.com/tphakala/voicewatch/internal/audiocore/convert"
+	"github.com/tphakala/voicewatch/internal/classifier"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/detection"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/mqtt"
+	"github.com/tphakala/voicewatch/internal/notification"
+	"github.com/tphakala/voicewatch/internal/observability"
+	"github.com/tphakala/voicewatch/internal/privacy"
+	"github.com/tphakala/voicewatch/internal/securefs"
+	"github.com/tphakala/voicewatch/internal/spectrogram"
+	"github.com/tphakala/voicewatch/internal/suncalc"
 )
 
 // Compile-time assertion to ensure *spectrogram.PreRenderer implements PreRendererSubmit
@@ -1884,8 +1884,8 @@ func (p *Processor) getDefaultActions(det *Detections) []Action {
 	// race where a client requests audio before export completes, using server-side
 	// wait with retries and 503 + Retry-After responses.
 	//
-	// See: https://github.com/tphakala/birdnet-go/issues/1158 (race condition)
-	// See: https://github.com/tphakala/birdnet-go/issues/1748 (detection ID in MQTT)
+	// See: https://github.com/tphakala/voicewatch/issues/1158 (race condition)
+	// See: https://github.com/tphakala/voicewatch/issues/1748 (detection ID in MQTT)
 	var sequentialActions []Action
 	if databaseAction != nil {
 		sequentialActions = append(sequentialActions, databaseAction)

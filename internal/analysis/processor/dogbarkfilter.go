@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/conf"
+	"github.com/tphakala/voicewatch/internal/conf"
 )
 
 // dogBarkFilterTimeLimit returns the current time limit for filtering

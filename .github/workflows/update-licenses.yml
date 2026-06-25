@@ -53,14 +53,14 @@ jobs:
           echo "" >> frontend/static/LICENSES.md
 
           # Get licenses excluding internal packages unless they have a LICENSE file
-          go-licenses csv github.com/tphakala/birdnet-go/... | while IFS=, read -r package license source; do
+          go-licenses csv github.com/tphakala/voicewatch/... | while IFS=, read -r package license source; do
             # Skip internal packages and cmd packages unless they contain a LICENSE file
             if [[ $package == *"/internal/"* || $package == *"/cmd/"* ]] && ! [[ -f "${source}/LICENSE" ]]; then
               continue
             fi
 
             # Skip the main module
-            if [[ $package == "github.com/tphakala/birdnet-go" ]]; then
+            if [[ $package == "github.com/tphakala/voicewatch" ]]; then
               continue
             fi
 

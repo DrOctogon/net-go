@@ -5,8 +5,8 @@ import (
 	"sync/atomic"
 
 	"github.com/getsentry/sentry-go"
-	"github.com/tphakala/birdnet-go/internal/privacy"
-	"github.com/tphakala/birdnet-go/internal/telemetry"
+	"github.com/tphakala/voicewatch/internal/privacy"
+	"github.com/tphakala/voicewatch/internal/telemetry"
 )
 
 const (

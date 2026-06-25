@@ -7,11 +7,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/conf"
-	apperrors "github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/events"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/notification"
+	"github.com/tphakala/voicewatch/internal/conf"
+	apperrors "github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/events"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/notification"
 )
 
 // Default configuration values for notification and event bus

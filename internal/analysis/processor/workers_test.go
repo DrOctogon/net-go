@@ -10,10 +10,10 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/analysis/jobqueue"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/detection"
-	"github.com/tphakala/birdnet-go/internal/privacy"
+	"github.com/tphakala/voicewatch/internal/analysis/jobqueue"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/detection"
+	"github.com/tphakala/voicewatch/internal/privacy"
 )
 
 // Mock types are now defined in test_helpers_test.go:

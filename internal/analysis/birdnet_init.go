@@ -1,8 +1,8 @@
 package analysis
 
 import (
-	"github.com/tphakala/birdnet-go/internal/classifier"
-	"github.com/tphakala/birdnet-go/internal/observability/metrics"
+	"github.com/tphakala/voicewatch/internal/classifier"
+	"github.com/tphakala/voicewatch/internal/observability/metrics"
 )
 
 // modelNameBirdNET is the model name used for metrics tracking

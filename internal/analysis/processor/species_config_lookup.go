@@ -4,7 +4,7 @@ package processor
 import (
 	"strings"
 
-	"github.com/tphakala/birdnet-go/internal/conf"
+	"github.com/tphakala/voicewatch/internal/conf"
 )
 
 // lookupSpeciesConfig looks up a species configuration by either common name or scientific name.

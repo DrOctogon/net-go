@@ -4,8 +4,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/tphakala/birdnet-go/internal/app"
-	"github.com/tphakala/birdnet-go/internal/conf"
+	"github.com/tphakala/voicewatch/internal/app"
+	"github.com/tphakala/voicewatch/internal/conf"
 )
 
 // Compile-time interface compliance check.

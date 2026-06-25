@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/testutil"
+	"github.com/tphakala/voicewatch/internal/testutil"
 )
 
 // Re-export timeout constants from testutil for convenience.

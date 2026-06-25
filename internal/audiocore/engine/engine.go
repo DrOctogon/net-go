@@ -8,13 +8,13 @@ import (
 	"fmt"
 	"sync/atomic"
 
-	"github.com/tphakala/birdnet-go/internal/audiocore"
-	"github.com/tphakala/birdnet-go/internal/audiocore/buffer"
-	"github.com/tphakala/birdnet-go/internal/audiocore/ffmpeg"
-	"github.com/tphakala/birdnet-go/internal/audiocore/schedule"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/audiocore"
+	"github.com/tphakala/voicewatch/internal/audiocore/buffer"
+	"github.com/tphakala/voicewatch/internal/audiocore/ffmpeg"
+	"github.com/tphakala/voicewatch/internal/audiocore/schedule"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 // ErrEngineStopped is the cause passed to the engine's context cancellation

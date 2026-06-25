@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/tphakala/birdnet-go/internal/errors"
+	"github.com/tphakala/voicewatch/internal/errors"
 )
 
 const (

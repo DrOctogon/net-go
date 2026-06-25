@@ -19,9 +19,9 @@ import (
 	"time"
 
 	"github.com/jlaffaye/ftp"
-	"github.com/tphakala/birdnet-go/internal/backup"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/backup"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 // FTP-specific constants (shared constants imported from common.go)

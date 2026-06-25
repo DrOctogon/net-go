@@ -6,7 +6,7 @@
 
 ```go
 // ✅ CORRECT
-import "github.com/tphakala/birdnet-go/internal/errors"
+import "github.com/tphakala/voicewatch/internal/errors"
 
 // ❌ DO NOT import standard errors, unless it is to avoid circular dependency
 import "errors"  // FORBIDDEN

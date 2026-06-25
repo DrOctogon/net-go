@@ -73,8 +73,8 @@ The server uses functional options pattern for configuration:
 
 ```go
 import (
-    "github.com/tphakala/birdnet-go/internal/api"
-    "github.com/tphakala/birdnet-go/internal/conf"
+    "github.com/tphakala/voicewatch/internal/api"
+    "github.com/tphakala/voicewatch/internal/conf"
 )
 
 // Create server with options

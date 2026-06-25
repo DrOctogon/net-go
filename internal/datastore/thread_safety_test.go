@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/tphakala/birdnet-go/internal/observability/metrics"
-	"github.com/tphakala/birdnet-go/internal/suncalc"
+	"github.com/tphakala/voicewatch/internal/observability/metrics"
+	"github.com/tphakala/voicewatch/internal/suncalc"
 )
 
 // TestDataStoreMetricsThreadSafety tests that metrics field access is thread-safe

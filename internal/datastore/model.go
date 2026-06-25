@@ -4,7 +4,7 @@ package datastore
 import (
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/detection"
+	"github.com/tphakala/voicewatch/internal/detection"
 )
 
 // AudioSource represents a structured audio source with ID, safe string, and display name

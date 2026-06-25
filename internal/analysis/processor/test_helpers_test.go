@@ -10,11 +10,11 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/tphakala/birdnet-go/internal/analysis/jobqueue"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	"github.com/tphakala/birdnet-go/internal/detection"
-	"github.com/tphakala/birdnet-go/internal/testutil"
+	"github.com/tphakala/voicewatch/internal/analysis/jobqueue"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/detection"
+	"github.com/tphakala/voicewatch/internal/testutil"
 )
 
 // --- Audio Source Helpers ---

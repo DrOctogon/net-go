@@ -4,11 +4,11 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/tphakala/birdnet-go/internal/audiocore"
-	"github.com/tphakala/birdnet-go/internal/audiocore/convert"
-	"github.com/tphakala/birdnet-go/internal/audiocore/soundlevel"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/audiocore"
+	"github.com/tphakala/voicewatch/internal/audiocore/convert"
+	"github.com/tphakala/voicewatch/internal/audiocore/soundlevel"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 // soundLevelChanSize is the default capacity for the sound level output channel.

@@ -71,7 +71,7 @@ vars:
       if [ -n "{{.EXTRA_BUILD_TAGS}}" ]; then
         echo "-tags {{.EXTRA_BUILD_TAGS}}"
       fi
-  LDFLAGS: -ldflags "-s -w -X 'main.buildDate={{.BUILD_DATE}}' -X 'main.version={{.VERSION}}' -X 'github.com/tphakala/birdnet-go/internal/telemetry.sentryDSN={{.SENTRY_DSN}}' -X 'github.com/tphakala/birdnet-go/internal/branding.projectName={{.PROJECT_NAME}}' -X 'github.com/tphakala/birdnet-go/internal/branding.projectRepoURL={{.PROJECT_REPO_URL}}' -X 'github.com/tphakala/birdnet-go/internal/branding.projectCommunityURL={{.PROJECT_COMMUNITY_URL}}'"
+  LDFLAGS: -ldflags "-s -w -X 'main.buildDate={{.BUILD_DATE}}' -X 'main.version={{.VERSION}}' -X 'github.com/tphakala/voicewatch/internal/telemetry.sentryDSN={{.SENTRY_DSN}}' -X 'github.com/tphakala/voicewatch/internal/branding.projectName={{.PROJECT_NAME}}' -X 'github.com/tphakala/voicewatch/internal/branding.projectRepoURL={{.PROJECT_REPO_URL}}' -X 'github.com/tphakala/voicewatch/internal/branding.projectCommunityURL={{.PROJECT_COMMUNITY_URL}}'"
   BUILD_FLAGS: '{{.BUILD_TAGS_FLAG}} {{.LDFLAGS}}'
   # System paths for native library installation (used by download/verify tasks)
   SYSTEM_LIB_DIR: /usr/lib

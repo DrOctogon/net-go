@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/audiocore/ffmpeg"
-	"github.com/tphakala/birdnet-go/internal/health"
-	"github.com/tphakala/birdnet-go/internal/observability"
+	"github.com/tphakala/voicewatch/internal/audiocore/ffmpeg"
+	"github.com/tphakala/voicewatch/internal/health"
+	"github.com/tphakala/voicewatch/internal/observability"
 )
 
 // StreamHealthInfo is a snapshot of a single RTSP stream's health.

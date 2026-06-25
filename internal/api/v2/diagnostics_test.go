@@ -6,9 +6,9 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/classifier"
-	"github.com/tphakala/birdnet-go/internal/classifier/inferencestats"
-	"github.com/tphakala/birdnet-go/internal/health/checks"
+	"github.com/tphakala/voicewatch/internal/classifier"
+	"github.com/tphakala/voicewatch/internal/classifier/inferencestats"
+	"github.com/tphakala/voicewatch/internal/health/checks"
 )
 
 // TestMapInferenceSnapshotsKeepsUnmappedModel verifies that a counter whose

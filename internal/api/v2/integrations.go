@@ -13,12 +13,12 @@ import (
 	"time"
 
 	"github.com/labstack/echo/v4"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/mqtt"
-	"github.com/tphakala/birdnet-go/internal/notification"
-	"github.com/tphakala/birdnet-go/internal/privacy"
-	"github.com/tphakala/birdnet-go/internal/weather"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/mqtt"
+	"github.com/tphakala/voicewatch/internal/notification"
+	"github.com/tphakala/voicewatch/internal/privacy"
+	"github.com/tphakala/voicewatch/internal/weather"
 )
 
 // Integration constants (file-local)

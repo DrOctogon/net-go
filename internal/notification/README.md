@@ -19,7 +19,7 @@ The notification package provides a centralized system for managing application 
 Initialize the notification service at application startup:
 
 ```go
-import "github.com/tphakala/birdnet-go/internal/notification"
+import "github.com/tphakala/voicewatch/internal/notification"
 
 // Use default configuration
 notification.Initialize(nil)

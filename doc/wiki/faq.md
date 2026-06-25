@@ -2,7 +2,7 @@
 
 Common questions, problems, and fixes for BirdNET-Go. For step-by-step guides see the [Installation Guide](installation.md), [Recommended Hardware](hardware.md), [RTSP Troubleshooting](rtsp-troubleshooting.md), [Detection Pipeline](detection-pipeline.md), and [Remote Access / Cloudflare Tunnel](cloudflare_tunnel_guide.md).
 
-If your problem isn't covered here, generate a support dump from **Settings > Support** (it bundles your config and logs) and open a [discussion](https://github.com/tphakala/birdnet-go/discussions) or [issue](https://github.com/tphakala/birdnet-go/issues).
+If your problem isn't covered here, generate a support dump from **Settings > Support** (it bundles your config and logs) and open a [discussion](https://github.com/tphakala/voicewatch/discussions) or [issue](https://github.com/tphakala/voicewatch/issues).
 
 ## Read this first: a few things that explain most problems
 
@@ -22,7 +22,7 @@ Re-run `install.sh` as your normal user and choose **"Check for updates"** (opti
 
 ### My detection history is empty after an update
 
-The app opened a fresh, empty database instead of your real one. Your old detections are still in `birdnet.db`, do not delete it. This is usually caused by the data directory not being where the app expected (often the sudo-vs-normal-user issue above). Run the [Database Doctor](https://github.com/tphakala/birdnet-go/wiki/Database-Doctor): diagnose, then `--fix` (it backs up the DB first).
+The app opened a fresh, empty database instead of your real one. Your old detections are still in `birdnet.db`, do not delete it. This is usually caused by the data directory not being where the app expected (often the sudo-vs-normal-user issue above). Run the [Database Doctor](https://github.com/tphakala/voicewatch/wiki/Database-Doctor): diagnose, then `--fix` (it backs up the DB first).
 
 ### Does install.sh work on macOS?
 
@@ -205,7 +205,7 @@ Keep your SQLite database in place, enable MySQL in config, and start BirdNET-Go
 
 ### Startup fails after an upgrade with a database/schema error
 
-Use the [Database Doctor](https://github.com/tphakala/birdnet-go/wiki/Database-Doctor) to diagnose and `--fix` (it backs up first). Don't drop tables yourself, several hold real data.
+Use the [Database Doctor](https://github.com/tphakala/voicewatch/wiki/Database-Doctor) to diagnose and `--fix` (it backs up first). Don't drop tables yourself, several hold real data.
 
 ## Remote access, TLS, and authentication
 
@@ -282,7 +282,7 @@ The main dashboard shows a limited number of species (30 by default) and is filt
 
 ### How do I get help with a problem?
 
-Generate a support dump from **Settings > Support** (it bundles your config and logs, and uploads independently of the telemetry setting). Reference it in a [discussion](https://github.com/tphakala/birdnet-go/discussions) or [issue](https://github.com/tphakala/birdnet-go/issues). If the upload times out on a Pi (large logs), stop your audio streams first or rotate the log, then try again, it often completes in the background despite the UI error.
+Generate a support dump from **Settings > Support** (it bundles your config and logs, and uploads independently of the telemetry setting). Reference it in a [discussion](https://github.com/tphakala/voicewatch/discussions) or [issue](https://github.com/tphakala/voicewatch/issues). If the upload times out on a Pi (large logs), stop your audio streams first or rotate the log, then try again, it often completes in the background despite the UI error.
 
 ### Can BirdNET-Go batch-analyze my existing audio files?
 

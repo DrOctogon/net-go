@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/tphakala/birdnet-go/internal/audiocore/audionorm"
+	"github.com/tphakala/voicewatch/internal/audiocore/audionorm"
 )
 
 // toneInt16 builds a mono 1 kHz sine at the given peak dBFS, 48 kHz.

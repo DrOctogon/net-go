@@ -11,8 +11,8 @@ import (
 	shoutrrr "github.com/nicholas-fedor/shoutrrr"
 	router "github.com/nicholas-fedor/shoutrrr/pkg/router"
 	stypes "github.com/nicholas-fedor/shoutrrr/pkg/types"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/privacy"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/privacy"
 )
 
 // shoutrrrDefaultTimeout is applied when no per-provider timeout is configured,

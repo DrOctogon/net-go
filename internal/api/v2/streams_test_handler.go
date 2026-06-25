@@ -12,8 +12,8 @@ import (
 	"strings"
 
 	"github.com/labstack/echo/v4"
-	"github.com/tphakala/birdnet-go/internal/audiocore/ffmpeg"
-	"github.com/tphakala/birdnet-go/internal/conf"
+	"github.com/tphakala/voicewatch/internal/audiocore/ffmpeg"
+	"github.com/tphakala/voicewatch/internal/conf"
 )
 
 type testStreamRequest struct {

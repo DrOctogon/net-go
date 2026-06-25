@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/tphakala/birdnet-go/internal/health"
+	"github.com/tphakala/voicewatch/internal/health"
 )
 
 func TestBirdWeatherCheck_NilGetStatus(t *testing.T) {

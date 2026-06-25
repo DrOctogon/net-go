@@ -6,7 +6,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/audiocore/engine"
+	"github.com/tphakala/voicewatch/internal/audiocore/engine"
 )
 
 func TestEngineAtomicLoadStore(t *testing.T) {

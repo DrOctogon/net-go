@@ -10,8 +10,8 @@ import (
 	"sync"
 
 	"github.com/labstack/echo/v4"
-	"github.com/tphakala/birdnet-go/frontend"
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/frontend"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 // StaticFileServer handles serving static files for the frontend.

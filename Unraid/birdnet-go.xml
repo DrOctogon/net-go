@@ -7,8 +7,8 @@
   <MyIP/>
   <Shell>bash</Shell>
   <Privileged>false</Privileged>
-  <Support>https://github.com/tphakala/birdnet-go/discussions</Support>
-  <Project>https://github.com/tphakala/birdnet-go</Project>
+  <Support>https://github.com/tphakala/voicewatch/discussions</Support>
+  <Project>https://github.com/tphakala/voicewatch</Project>
   <Overview>Real-time bird species identification from audio using BirdNET deep learning models. BirdNET-Go captures and analyzes live audio from your microphone or RTSP streams, providing instant bird species identification with confidence scores. Perfect for backyard birding enthusiasts, researchers, and wildlife monitoring setups. Features a beautiful web dashboard with spectrograms, audio clips, species filtering, and comprehensive detection statistics.</Overview>
   <Category>Tools: MediaApp:Music MediaApp:Video</Category>
   <WebUI>http://[IP]:[PORT:8080]/</WebUI>

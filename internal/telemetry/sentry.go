@@ -12,10 +12,10 @@ import (
 	"unicode"
 
 	"github.com/getsentry/sentry-go"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	internalerrors "github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/privacy"
+	"github.com/tphakala/voicewatch/internal/conf"
+	internalerrors "github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/privacy"
 )
 
 // Error title truncation limits
@@ -131,7 +131,7 @@ func enrichEventWithUptime(event *sentry.Event) {
 // and forks do NOT inherit the upstream project's DSN. Official release and
 // nightly builds bake the real DSN in at link time via
 //
-//	-ldflags "-X 'github.com/tphakala/birdnet-go/internal/telemetry.sentryDSN=<dsn>'"
+//	-ldflags "-X 'github.com/tphakala/voicewatch/internal/telemetry.sentryDSN=<dsn>'"
 //
 // fed from the SENTRY_DSN build secret. At runtime the BIRDNET_GO_SENTRY_DSN
 // environment variable takes precedence over the baked-in value (see

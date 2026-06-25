@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 // startConnectionPoolMonitoring starts a goroutine that periodically monitors

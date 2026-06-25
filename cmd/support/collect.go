@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"github.com/spf13/cobra"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/support"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/support"
 )
 
 // CollectCommand creates the support data collection subcommand

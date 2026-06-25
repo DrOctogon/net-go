@@ -9,7 +9,7 @@ Thank you for your interest in contributing to BirdNET-Go!
 **Automated Setup (Linux/macOS):**
 
 ```bash
-git clone https://github.com/tphakala/birdnet-go.git && cd birdnet-go
+git clone https://github.com/tphakala/voicewatch.git && cd birdnet-go
 # install Task
 sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b /usr/local/bin
 # install development tools (compilers, linters, etc)
@@ -23,7 +23,7 @@ air realtime
 **Dev Container (All Platforms):**
 
 ```bash
-git clone https://github.com/tphakala/birdnet-go.git && cd birdnet-go
+git clone https://github.com/tphakala/voicewatch.git && cd birdnet-go
 code .
 # Press F1 → "Dev Containers: Reopen in Container"
 air realtime
@@ -93,7 +93,7 @@ Before contributing:
 
 1. **Read the [License](#license-and-legal)** and [Privacy Policy](PRIVACY.md)
 2. **Review [ARCHITECTURE.md](ARCHITECTURE.md)** - Understand the tech stack
-3. **Check [existing issues](https://github.com/tphakala/birdnet-go/issues)** - Avoid duplicates
+3. **Check [existing issues](https://github.com/tphakala/voicewatch/issues)** - Avoid duplicates
 4. **Join [Discord](https://discord.gg/gcSCFGUtsd)** - For discussions and support
 5. **Read relevant CLAUDE.md files** - Development guidelines:
    - [CLAUDE.md](CLAUDE.md) - Project overview and universal rules
@@ -141,7 +141,7 @@ go install github.com/go-task/task/v3/cmd/task@latest
 **Step 2: Clone and Setup**
 
 ```bash
-git clone https://github.com/tphakala/birdnet-go.git
+git clone https://github.com/tphakala/voicewatch.git
 cd birdnet-go
 task setup-dev
 ```
@@ -166,7 +166,7 @@ air realtime      # Hot reload dev server (or: task dev_server)
 
 **Setup:**
 
-1. Clone: `git clone https://github.com/tphakala/birdnet-go.git && cd birdnet-go`
+1. Clone: `git clone https://github.com/tphakala/voicewatch.git && cd birdnet-go`
 2. Open: `code .`
 3. Press `F1` → "Dev Containers: Reopen in Container"
 4. Wait ~5-10 minutes for setup (frontend will be built automatically)
@@ -523,9 +523,9 @@ Fixes #123
 
 ### Community
 
-- [GitHub Repository](https://github.com/tphakala/birdnet-go)
+- [GitHub Repository](https://github.com/tphakala/voicewatch)
 - [Discord Community](https://discord.gg/gcSCFGUtsd)
-- [Issue Tracker](https://github.com/tphakala/birdnet-go/issues)
+- [Issue Tracker](https://github.com/tphakala/voicewatch/issues)
 - [BirdNET Upstream](https://github.com/birdnet-team/BirdNET-Analyzer)
 
 ### Quick Command Reference
@@ -557,4 +557,4 @@ task clean              # Clean artifacts
 
 **Thank you for contributing to BirdNET-Go!** 🎉
 
-**Questions?** [Discord](https://discord.gg/gcSCFGUtsd) | [Discussions](https://github.com/tphakala/birdnet-go/discussions) | [Issues](https://github.com/tphakala/birdnet-go/issues)
+**Questions?** [Discord](https://discord.gg/gcSCFGUtsd) | [Discussions](https://github.com/tphakala/voicewatch/discussions) | [Issues](https://github.com/tphakala/voicewatch/issues)

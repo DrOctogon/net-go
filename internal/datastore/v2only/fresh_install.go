@@ -7,12 +7,12 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/conf"
-	v2 "github.com/tphakala/birdnet-go/internal/datastore/v2"
-	"github.com/tphakala/birdnet-go/internal/datastore/v2/entities"
-	"github.com/tphakala/birdnet-go/internal/datastore/v2/repository"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/conf"
+	v2 "github.com/tphakala/voicewatch/internal/datastore/v2"
+	"github.com/tphakala/voicewatch/internal/datastore/v2/entities"
+	"github.com/tphakala/voicewatch/internal/datastore/v2/repository"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 // InitializeFreshInstall creates a new v2-only datastore for fresh installations.

@@ -7,7 +7,7 @@ import (
 
 	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/conf"
+	"github.com/tphakala/voicewatch/internal/conf"
 )
 
 // createTestSettings creates test settings with configurable provider.

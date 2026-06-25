@@ -19,10 +19,10 @@ import (
 	paho "github.com/eclipse/paho.mqtt.golang"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/mqtt"
-	"github.com/tphakala/birdnet-go/internal/observability"
-	"github.com/tphakala/birdnet-go/internal/testutil/containers"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/mqtt"
+	"github.com/tphakala/voicewatch/internal/observability"
+	"github.com/tphakala/voicewatch/internal/testutil/containers"
 )
 
 // integrationTestTopic is the base topic used across integration tests.

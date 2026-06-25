@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 
-	"github.com/tphakala/birdnet-go/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/datastore"
 )
 
 // dawnOnsetJSON mirrors the dawn-chorus onset wire shape. OnsetRelMinutes is a pointer so a null

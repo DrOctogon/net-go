@@ -5,8 +5,8 @@ import (
 	"context"
 
 	"github.com/labstack/echo/v4"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 // GetLogger returns the auth package logger. Authentication events (basic-auth

@@ -769,4 +769,4 @@ When modifying the webhook provider:
 
 - [Push Notification System Documentation](./METRICS_AND_HEALTH_CHECKS.md)
 - [DoS Protection Guide](./DOS_PROTECTION.md)
-- [GitHub Issue #882](https://github.com/tphakala/birdnet-go/issues/882)
+- [GitHub Issue #882](https://github.com/tphakala/voicewatch/issues/882)

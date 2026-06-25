@@ -6,7 +6,7 @@ import (
 	"slices"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/logger/reader"
+	"github.com/tphakala/voicewatch/internal/logger/reader"
 )
 
 // topDiscardedCount is the number of most-discarded species to include in metrics.

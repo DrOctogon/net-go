@@ -333,7 +333,7 @@ For other privacy questions, please report them through GitHub Issues:
 
 **📋 How to Report Privacy Issues:**
 
-1. **Go to**: [BirdNET-Go Issues](https://github.com/tphakala/birdnet-go/issues)
+1. **Go to**: [BirdNET-Go Issues](https://github.com/tphakala/voicewatch/issues)
 2. **Click**: "New Issue"
 3. **Title Format**: Use one of these prefixes:
    - `[PRIVACY]` - General privacy questions or concerns

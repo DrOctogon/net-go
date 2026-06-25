@@ -5,12 +5,12 @@ package mocks
 import (
 	context "context"
 
-	datastore "github.com/tphakala/birdnet-go/internal/datastore"
-	detection "github.com/tphakala/birdnet-go/internal/detection"
+	datastore "github.com/tphakala/voicewatch/internal/datastore"
+	detection "github.com/tphakala/voicewatch/internal/detection"
 
 	gorm "gorm.io/gorm"
 
-	metrics "github.com/tphakala/birdnet-go/internal/observability/metrics"
+	metrics "github.com/tphakala/voicewatch/internal/observability/metrics"
 
 	mock "github.com/stretchr/testify/mock"
 

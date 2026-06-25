@@ -3,9 +3,9 @@ package telemetry
 
 import (
 	"github.com/getsentry/sentry-go"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/notification"
-	"github.com/tphakala/birdnet-go/internal/privacy"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/notification"
+	"github.com/tphakala/voicewatch/internal/privacy"
 )
 
 // Why Interface-Based Design for Notification Telemetry?

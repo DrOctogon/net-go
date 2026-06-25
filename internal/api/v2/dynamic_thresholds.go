@@ -10,8 +10,8 @@ import (
 	"time"
 
 	"github.com/labstack/echo/v4"
-	"github.com/tphakala/birdnet-go/internal/analysis/processor"
-	"github.com/tphakala/birdnet-go/internal/errors"
+	"github.com/tphakala/voicewatch/internal/analysis/processor"
+	"github.com/tphakala/voicewatch/internal/errors"
 )
 
 // Pagination defaults for dynamic threshold endpoints

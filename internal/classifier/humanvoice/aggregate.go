@@ -3,7 +3,7 @@
 // unit-tested without a real Silero VAD model binary present.
 package humanvoice
 
-import "github.com/tphakala/birdnet-go/internal/datastore"
+import "github.com/tphakala/voicewatch/internal/datastore"
 
 // Confidence bounds for an aggregated speech probability.
 const (

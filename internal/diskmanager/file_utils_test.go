@@ -10,8 +10,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/tphakala/birdnet-go/internal/conf/conftest"
-	"github.com/tphakala/birdnet-go/internal/errors"
+	"github.com/tphakala/voicewatch/internal/conf/conftest"
+	"github.com/tphakala/voicewatch/internal/errors"
 )
 
 // TestInvalidFileNameErrorMessages tests that the error messages for invalid file names are detailed

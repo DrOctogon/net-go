@@ -5,7 +5,7 @@
 </p>
 <p align="center">
   <!-- Project Status -->
-  <a href="https://github.com/tphakala/birdnet-go/releases">
+  <a href="https://github.com/tphakala/voicewatch/releases">
     <img src="https://img.shields.io/github/v/release/tphakala/birdnet-go?include_prereleases&style=flat-square&color=blue">
   </a>
   <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
@@ -19,20 +19,20 @@
   <a href="https://golang.org">
     <img src="https://img.shields.io/badge/Built%20with-Go-teal?style=flat-square&logo=go">
   </a>
-  <a href="https://goreportcard.com/report/github.com/tphakala/birdnet-go">
-    <img src="https://goreportcard.com/badge/github.com/tphakala/birdnet-go?style=flat-square">
+  <a href="https://goreportcard.com/report/github.com/tphakala/voicewatch">
+    <img src="https://goreportcard.com/badge/github.com/tphakala/voicewatch?style=flat-square">
   </a>
 
   <br>
 
   <!-- Community -->
-  <a href="https://github.com/tphakala/birdnet-go/network/members">
+  <a href="https://github.com/tphakala/voicewatch/network/members">
     <img src="https://img.shields.io/github/forks/tphakala/birdnet-go?style=flat-square&color=purple">
-  <a href="https://github.com/tphakala/birdnet-go/graphs/contributors">
+  <a href="https://github.com/tphakala/voicewatch/graphs/contributors">
     <img src="https://img.shields.io/github/contributors/tphakala/birdnet-go?style=flat-square&color=orange">
   </a>
   </a>
-  <a href="https://github.com/tphakala/birdnet-go/issues">
+  <a href="https://github.com/tphakala/voicewatch/issues">
     <img src="https://img.shields.io/github/issues/tphakala/birdnet-go?style=flat-square&color=red">
   </a>
   <a href="https://discord.gg/gcSCFGUtsd">
@@ -65,11 +65,11 @@ Self-hosted, 24/7, local AI inference. BirdNET-Go ingests soundcard input or net
 Debian, Ubuntu, and Raspberry Pi OS:
 
 ```bash
-curl -fsSL https://github.com/tphakala/birdnet-go/raw/main/install.sh -o install.sh
+curl -fsSL https://github.com/tphakala/voicewatch/raw/main/install.sh -o install.sh
 bash ./install.sh
 ```
 
-Docker images are published for `linux/amd64` and `linux/arm64`. Pre-built binaries for Linux, Windows, and macOS ship with each [release](https://github.com/tphakala/birdnet-go/releases). See the [installation guide](https://github.com/tphakala/birdnet-go/wiki/installation.md), [hardware recommendations](https://github.com/tphakala/birdnet-go/wiki/hardware.md), and [security guide](doc/wiki/security.md) for details.
+Docker images are published for `linux/amd64` and `linux/arm64`. Pre-built binaries for Linux, Windows, and macOS ship with each [release](https://github.com/tphakala/voicewatch/releases). See the [installation guide](https://github.com/tphakala/voicewatch/wiki/installation.md), [hardware recommendations](https://github.com/tphakala/voicewatch/wiki/hardware.md), and [security guide](doc/wiki/security.md) for details.
 
 ## Web Dashboard
 
@@ -96,7 +96,7 @@ Docker images are published for `linux/amd64` and `linux/arm64`. Pre-built binar
 - Svelte 5 + TypeScript single-page app
 - Installable as a Progressive Web App (PWA)
 - Onboarding wizard for first-run setup
-- Live spectrogram visualization for active streams ([live audio streaming](https://github.com/tphakala/birdnet-go/wiki/BirdNET%E2%80%90Go-Guide#live-audio-streaming))
+- Live spectrogram visualization for active streams ([live audio streaming](https://github.com/tphakala/voicewatch/wiki/BirdNET%E2%80%90Go-Guide#live-audio-streaming))
 - Customizable dashboard layout, color schemes, and a "Currently Hearing" card
 - Multiselect and bulk actions on the detections list
 - Browser terminal (xterm.js over WebSocket PTY) for in-app administration
@@ -131,19 +131,19 @@ Docker images are published for `linux/amd64` and `linux/arm64`. Pre-built binar
 
 - Linux, Windows, and macOS
 - Single binary with the Silero VAD model embedded
-- Requires the ONNX Runtime shared library ([install guide](https://github.com/tphakala/birdnet-go/wiki/ONNX-Runtime-Installation))
+- Requires the ONNX Runtime shared library ([install guide](https://github.com/tphakala/voicewatch/wiki/ONNX-Runtime-Installation))
 - Multi-arch Docker images
 - Runs comfortably on a Raspberry Pi 4 or equivalent 64-bit single-board computer
 
 ## Documentation
 
-- [FAQ](https://github.com/tphakala/birdnet-go/wiki/FAQ) - common questions, issues, and workarounds
-- [User guide](https://github.com/tphakala/birdnet-go/wiki/BirdNET%E2%80%90Go-Guide)
-- [Installation](https://github.com/tphakala/birdnet-go/wiki/installation.md)
-- [Hardware recommendations](https://github.com/tphakala/birdnet-go/wiki/hardware.md)
-- [ONNX Runtime installation](https://github.com/tphakala/birdnet-go/wiki/ONNX-Runtime-Installation)
-- [Database Doctor](https://github.com/tphakala/birdnet-go/wiki/Database-Doctor)
-- [Cloudflare Tunnel](https://github.com/tphakala/birdnet-go/wiki/cloudflare_tunnel_guide.md)
+- [FAQ](https://github.com/tphakala/voicewatch/wiki/FAQ) - common questions, issues, and workarounds
+- [User guide](https://github.com/tphakala/voicewatch/wiki/BirdNET%E2%80%90Go-Guide)
+- [Installation](https://github.com/tphakala/voicewatch/wiki/installation.md)
+- [Hardware recommendations](https://github.com/tphakala/voicewatch/wiki/hardware.md)
+- [ONNX Runtime installation](https://github.com/tphakala/voicewatch/wiki/ONNX-Runtime-Installation)
+- [Database Doctor](https://github.com/tphakala/voicewatch/wiki/Database-Doctor)
+- [Cloudflare Tunnel](https://github.com/tphakala/voicewatch/wiki/cloudflare_tunnel_guide.md)
 - [Security](doc/wiki/security.md)
 - [Telemetry and privacy](doc/wiki/telemetry-privacy.md)
 - [RTSP troubleshooting](doc/wiki/rtsp-troubleshooting.md)
@@ -153,7 +153,7 @@ Docker images are published for `linux/amd64` and `linux/arm64`. Pre-built binar
 > See [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide.
 
 ```bash
-git clone https://github.com/tphakala/birdnet-go.git
+git clone https://github.com/tphakala/voicewatch.git
 cd birdnet-go
 
 # Install Task (if not already installed)
@@ -202,7 +202,7 @@ Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International.
 
 Created and maintained by Tomi P. Hakala.
 
-A growing list of community contributors keeps the project moving forward. The current list lives on the [GitHub contributors page](https://github.com/tphakala/birdnet-go/graphs/contributors).
+A growing list of community contributors keeps the project moving forward. The current list lives on the [GitHub contributors page](https://github.com/tphakala/voicewatch/graphs/contributors).
 
 Speech detection uses the [Silero VAD](https://github.com/snakers4/silero-vad) model by Silero Team, used under the MIT license.
 

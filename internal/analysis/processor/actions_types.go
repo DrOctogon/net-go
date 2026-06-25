@@ -9,13 +9,13 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/analysis/jobqueue"
-	"github.com/tphakala/birdnet-go/internal/analysis/species"
-	"github.com/tphakala/birdnet-go/internal/audiocore/buffer"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	"github.com/tphakala/birdnet-go/internal/detection"
-	"github.com/tphakala/birdnet-go/internal/mqtt"
+	"github.com/tphakala/voicewatch/internal/analysis/jobqueue"
+	"github.com/tphakala/voicewatch/internal/analysis/species"
+	"github.com/tphakala/voicewatch/internal/audiocore/buffer"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/detection"
+	"github.com/tphakala/voicewatch/internal/mqtt"
 )
 
 // Timeout and interval constants

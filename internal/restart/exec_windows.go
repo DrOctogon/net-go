@@ -8,7 +8,7 @@ import (
 	"os/exec"
 	"syscall"
 
-	"github.com/tphakala/birdnet-go/internal/errors"
+	"github.com/tphakala/voicewatch/internal/errors"
 )
 
 // Exec starts a new instance of the binary and exits the current process.

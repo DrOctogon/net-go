@@ -11,8 +11,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/backup"
-	"github.com/tphakala/birdnet-go/internal/conf"
+	"github.com/tphakala/voicewatch/internal/backup"
+	"github.com/tphakala/voicewatch/internal/conf"
 )
 
 // Common constants for file operations and limits

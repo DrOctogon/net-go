@@ -212,7 +212,7 @@ All components accept a `logger.Logger` interface. If `nil` is passed, they defa
 Use the typed field constructors for structured logging:
 
 ```go
-import "github.com/tphakala/birdnet-go/internal/logger"
+import "github.com/tphakala/voicewatch/internal/logger"
 
 log.Info("Backup completed",
     logger.String("target", "local"),
@@ -243,11 +243,11 @@ package main
 import (
     "fmt"
 
-    "github.com/tphakala/birdnet-go/internal/backup"
-    "github.com/tphakala/birdnet-go/internal/backup/sources"
-    "github.com/tphakala/birdnet-go/internal/backup/targets"
-    "github.com/tphakala/birdnet-go/internal/conf"
-    "github.com/tphakala/birdnet-go/internal/logger"
+    "github.com/tphakala/voicewatch/internal/backup"
+    "github.com/tphakala/voicewatch/internal/backup/sources"
+    "github.com/tphakala/voicewatch/internal/backup/targets"
+    "github.com/tphakala/voicewatch/internal/conf"
+    "github.com/tphakala/voicewatch/internal/logger"
 )
 
 func initializeBackup(config *conf.Settings) error {

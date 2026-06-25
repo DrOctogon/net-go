@@ -10,7 +10,7 @@ The manifest is a single JSON asset on a dedicated, never-deleted `manifest`
 GitHub release. The stable URL always resolves to the current manifest:
 
 ```text
-https://github.com/tphakala/birdnet-go/releases/download/manifest/manifest.json
+https://github.com/tphakala/voicewatch/releases/download/manifest/manifest.json
 ```
 
 The `manifest` release is marked as a pre-release so it never occupies the
@@ -111,7 +111,7 @@ Release authors can annotate a GitHub release body to influence the manifest:
       "released_at": "2025-03-15T10:36:58Z",
       "prerelease": false,
       "critical": false,
-      "release_url": "https://github.com/tphakala/birdnet-go/releases/tag/v0.6.4",
+      "release_url": "https://github.com/tphakala/voicewatch/releases/tag/v0.6.4",
       "notes": "...",
       "docker": {
         "ghcr": "ghcr.io/tphakala/birdnet-go:v0.6.4",
@@ -123,7 +123,7 @@ Release authors can annotate a GitHub release body to influence the manifest:
           "platform": "linux",
           "arch": "amd64",
           "filename": "birdnet-go-linux-amd64-v0.6.4.tar.gz",
-          "url": "https://github.com/tphakala/birdnet-go/releases/download/v0.6.4/birdnet-go-linux-amd64-v0.6.4.tar.gz",
+          "url": "https://github.com/tphakala/voicewatch/releases/download/v0.6.4/birdnet-go-linux-amd64-v0.6.4.tar.gz",
           "size": 82091332,
           "sha256": "5f3a..."
         }

@@ -6,7 +6,7 @@ import (
 	"slices"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 // warmingSpeciesStatus is the suppressed status returned while the background

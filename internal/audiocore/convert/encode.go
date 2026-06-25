@@ -9,9 +9,9 @@ import (
 
 	"github.com/go-audio/audio"
 	"github.com/go-audio/wav"
-	"github.com/tphakala/birdnet-go/internal/audiocore/audiotemp"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/errors"
+	"github.com/tphakala/voicewatch/internal/audiocore/audiotemp"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/errors"
 )
 
 const (

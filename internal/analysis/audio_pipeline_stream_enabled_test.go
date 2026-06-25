@@ -5,10 +5,10 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/audiocore"
-	enginepkg "github.com/tphakala/birdnet-go/internal/audiocore/engine"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/conf/conftest"
+	"github.com/tphakala/voicewatch/internal/audiocore"
+	enginepkg "github.com/tphakala/voicewatch/internal/audiocore/engine"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/conf/conftest"
 )
 
 func TestBuildSourceConfigsWithModels_SkipsDisabledStreams(t *testing.T) {

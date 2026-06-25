@@ -7,10 +7,10 @@ import (
 	"time"
 
 	"github.com/getsentry/sentry-go"
-	"github.com/tphakala/birdnet-go/internal/datastore/v2/entities"
-	"github.com/tphakala/birdnet-go/internal/events"
-	"github.com/tphakala/birdnet-go/internal/privacy"
-	"github.com/tphakala/birdnet-go/internal/telemetry"
+	"github.com/tphakala/voicewatch/internal/datastore/v2/entities"
+	"github.com/tphakala/voicewatch/internal/events"
+	"github.com/tphakala/voicewatch/internal/privacy"
+	"github.com/tphakala/voicewatch/internal/telemetry"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )

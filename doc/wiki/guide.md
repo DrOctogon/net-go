@@ -46,7 +46,7 @@ Note: TPU accelerators such as Coral.AI are not supported due to incompatibility
 The easiest way to install BirdNET-Go on Debian, Ubuntu, or Raspberry Pi OS is using the provided installation script which sets up BirdNET-Go as a Docker container:
 
 ```bash
-curl -fsSL https://github.com/tphakala/birdnet-go/raw/main/install.sh -o install.sh
+curl -fsSL https://github.com/tphakala/voicewatch/raw/main/install.sh -o install.sh
 bash ./install.sh
 ```
 
@@ -78,7 +78,7 @@ The installation script includes several features:
 
 For users who prefer Docker Compose for container management, BirdNET-Go can also be set up using this approach. Docker Compose offers more flexibility and makes it easier to manage container configurations.
 
-A [premade docker-compose.yml](https://github.com/tphakala/birdnet-go/blob/main/Docker/docker-compose.yml) file is available in the repository. This file includes:
+A [premade docker-compose.yml](https://github.com/tphakala/voicewatch/blob/main/Docker/docker-compose.yml) file is available in the repository. This file includes:
 
 - The BirdNET-Go container configuration with the latest nightly image
 - Environment variables for customization (timezone, user permissions, etc.)
@@ -91,7 +91,7 @@ See the [Docker Compose Guide](docker_compose_guide.md) for detailed instruction
 
 ### Manual Installation
 
-Pre-compiled BirdNET-Go executables are also available at https://github.com/tphakala/birdnet-go/releases/. To install manually, download and unzip birdnet-go in any directory you wish to run it in, on Windows for example c:\users\username\birdnet-go.
+Pre-compiled BirdNET-Go executables are also available at https://github.com/tphakala/voicewatch/releases/. To install manually, download and unzip birdnet-go in any directory you wish to run it in, on Windows for example c:\users\username\birdnet-go.
 
 #### External Dependencies
 
@@ -574,7 +574,7 @@ If you installed BirdNET-Go using the recommended `install.sh` script, you can u
 
 1.  It is **recommended to download a fresh copy** of the script each time, as it may contain improvements:
     ```bash
-    curl -fsSL https://github.com/tphakala/birdnet-go/raw/main/install.sh -o install.sh
+    curl -fsSL https://github.com/tphakala/voicewatch/raw/main/install.sh -o install.sh
     ```
 2.  Run the downloaded script:
     ```bash
@@ -710,7 +710,7 @@ Or add it to your startup script or systemd service file if you've created one m
 For more comprehensive troubleshooting, BirdNET-Go provides a support script that collects diagnostic information while protecting your privacy:
 
 ```bash
-curl -fsSL https://github.com/tphakala/birdnet-go/raw/main/support.sh -o support.sh
+curl -fsSL https://github.com/tphakala/voicewatch/raw/main/support.sh -o support.sh
 sudo bash ./support.sh
 ```
 
@@ -727,7 +727,7 @@ The script will:
 
 If you encounter problems that you can't resolve, please open an issue on the GitHub repository:
 
-1. Go to https://github.com/tphakala/birdnet-go/issues
+1. Go to https://github.com/tphakala/voicewatch/issues
 2. Click "New Issue"
 3. Fill out the issue template carefully, including:
    - What you expected to happen
@@ -1584,7 +1584,7 @@ graph TD
 
 #### Reference
 
-[[GitHub Discussion #302](https://github.com/tphakala/birdnet-go/discussions/302)]
+[[GitHub Discussion #302](https://github.com/tphakala/voicewatch/discussions/302)]
 
 ### Live Audio Streaming
 
@@ -3018,7 +3018,7 @@ BirdNET-Go provides a Server-Sent Events (SSE) API that streams bird detections 
 
 The endpoints include built-in rate limiting (10 requests per minute per IP) to prevent abuse while maintaining open access.
 
-> **🔒 Need Authentication?** If you require password protection for the detection stream API, please file a feature request by creating a GitHub issue at [https://github.com/tphakala/birdnet-go/issues](https://github.com/tphakala/birdnet-go/issues). Include your specific use case and security requirements to help guide the implementation.
+> **🔒 Need Authentication?** If you require password protection for the detection stream API, please file a feature request by creating a GitHub issue at [https://github.com/tphakala/voicewatch/issues](https://github.com/tphakala/voicewatch/issues). Include your specific use case and security requirements to help guide the implementation.
 
 ### API Endpoints
 

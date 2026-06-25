@@ -33,7 +33,7 @@ package processor
 import (
 	"strings"
 
-	"github.com/tphakala/birdnet-go/internal/labels/nonbird"
+	"github.com/tphakala/voicewatch/internal/labels/nonbird"
 )
 
 const (

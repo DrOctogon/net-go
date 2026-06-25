@@ -7,7 +7,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/conf"
+	"github.com/tphakala/voicewatch/internal/conf"
 )
 
 type hotReloadCategory string
@@ -423,5 +423,5 @@ func isProjectType(t reflect.Type) bool {
 	if pkg == "" {
 		return true // anonymous struct
 	}
-	return strings.HasPrefix(pkg, "github.com/tphakala/birdnet-go")
+	return strings.HasPrefix(pkg, "github.com/tphakala/voicewatch")
 }

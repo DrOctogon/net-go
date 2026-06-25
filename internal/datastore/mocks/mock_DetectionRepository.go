@@ -5,8 +5,8 @@ package mocks
 import (
 	context "context"
 
-	datastore "github.com/tphakala/birdnet-go/internal/datastore"
-	detection "github.com/tphakala/birdnet-go/internal/detection"
+	datastore "github.com/tphakala/voicewatch/internal/datastore"
+	detection "github.com/tphakala/voicewatch/internal/detection"
 
 	mock "github.com/stretchr/testify/mock"
 )

@@ -22,13 +22,13 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/api/auth"
-	"github.com/tphakala/birdnet-go/internal/branding"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/datastore/mocks"
-	"github.com/tphakala/birdnet-go/internal/observability"
-	"github.com/tphakala/birdnet-go/internal/security/securitytest"
-	"github.com/tphakala/birdnet-go/internal/suncalc"
+	"github.com/tphakala/voicewatch/internal/api/auth"
+	"github.com/tphakala/voicewatch/internal/branding"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/datastore/mocks"
+	"github.com/tphakala/voicewatch/internal/observability"
+	"github.com/tphakala/voicewatch/internal/security/securitytest"
+	"github.com/tphakala/voicewatch/internal/suncalc"
 )
 
 // =============================================================================

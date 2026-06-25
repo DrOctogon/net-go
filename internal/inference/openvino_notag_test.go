@@ -7,7 +7,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	ov "github.com/tphakala/birdnet-go/internal/inference/openvino"
+	ov "github.com/tphakala/voicewatch/internal/inference/openvino"
 )
 
 // These tests assert the no-tag stub behaviour and are scoped to the !openvino

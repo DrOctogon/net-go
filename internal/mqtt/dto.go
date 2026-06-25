@@ -2,7 +2,7 @@
 package mqtt
 
 import (
-	"github.com/tphakala/birdnet-go/internal/detection"
+	"github.com/tphakala/voicewatch/internal/detection"
 )
 
 // MQTTEventDTO is the data transfer object for MQTT publishing.

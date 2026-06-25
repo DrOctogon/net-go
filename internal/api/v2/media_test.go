@@ -18,10 +18,10 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/api/middleware"
-	"github.com/tphakala/birdnet-go/internal/audiocore/ffmpeg"
-	"github.com/tphakala/birdnet-go/internal/datastore/mocks"
-	"github.com/tphakala/birdnet-go/internal/securefs"
+	"github.com/tphakala/voicewatch/internal/api/middleware"
+	"github.com/tphakala/voicewatch/internal/audiocore/ffmpeg"
+	"github.com/tphakala/voicewatch/internal/datastore/mocks"
+	"github.com/tphakala/voicewatch/internal/securefs"
 	"gorm.io/gorm"
 )
 

@@ -24,7 +24,7 @@ Every package should define a `GetLogger()` function:
 ```go
 package mypackage
 
-import "github.com/tphakala/birdnet-go/internal/logger"
+import "github.com/tphakala/voicewatch/internal/logger"
 
 // GetLogger returns the logger for this package.
 // Fetched dynamically to ensure it uses the current centralized logger.

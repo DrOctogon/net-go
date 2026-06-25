@@ -5,7 +5,7 @@
 Use the Bash tool to run screenshot commands:
 
 ```bash
-cd /home/thakala/go/src/github.com/tphakala/birdnet-go/frontend/tools
+cd /home/thakala/go/src/github.com/tphakala/voicewatch/frontend/tools
 node screenshot.js http://192.168.4.152:8080/ui/dashboard
 ```
 

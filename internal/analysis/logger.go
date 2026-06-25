@@ -2,8 +2,8 @@
 package analysis
 
 import (
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/privacy"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/privacy"
 )
 
 // ComponentSoundLevel is the component identifier for sound level logging.

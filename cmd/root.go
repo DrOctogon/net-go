@@ -7,13 +7,13 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/tphakala/birdnet-go/cmd/authors"
-	"github.com/tphakala/birdnet-go/cmd/benchmark"
-	"github.com/tphakala/birdnet-go/cmd/license"
-	"github.com/tphakala/birdnet-go/cmd/notify"
-	"github.com/tphakala/birdnet-go/cmd/serve"
-	"github.com/tphakala/birdnet-go/cmd/support"
-	"github.com/tphakala/birdnet-go/internal/conf"
+	"github.com/tphakala/voicewatch/cmd/authors"
+	"github.com/tphakala/voicewatch/cmd/benchmark"
+	"github.com/tphakala/voicewatch/cmd/license"
+	"github.com/tphakala/voicewatch/cmd/notify"
+	"github.com/tphakala/voicewatch/cmd/serve"
+	"github.com/tphakala/voicewatch/cmd/support"
+	"github.com/tphakala/voicewatch/internal/conf"
 )
 
 // RootCommand creates and returns the root command

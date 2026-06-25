@@ -7,7 +7,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 // Note: CSRF constants (csrfCookieName, csrfCookieMaxAge, csrfTokenLength)

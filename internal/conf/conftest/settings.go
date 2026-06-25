@@ -5,7 +5,7 @@
 // importable from other packages' tests.
 package conftest
 
-import "github.com/tphakala/birdnet-go/internal/conf"
+import "github.com/tphakala/voicewatch/internal/conf"
 
 // SetTestSettings allows tests to inject their own settings instance.
 // Subsequent conf.GetSettings()/conf.Setting() calls observe the new snapshot

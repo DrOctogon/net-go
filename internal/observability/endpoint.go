@@ -8,9 +8,9 @@ import (
 	"net/http"
 	"sync"
 
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	metricspkg "github.com/tphakala/birdnet-go/internal/observability/metrics"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/logger"
+	metricspkg "github.com/tphakala/voicewatch/internal/observability/metrics"
 )
 
 // Endpoint handles all operations related to Prometheus-compatible telemetry.

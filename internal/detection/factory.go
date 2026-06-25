@@ -4,7 +4,7 @@ import (
 	"math"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/conf"
+	"github.com/tphakala/voicewatch/internal/conf"
 )
 
 // DetectionTimeOffset is subtracted from the current time when creating detections.

@@ -7,12 +7,12 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/tphakala/birdnet-go/internal/alerting"
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/mqtt"
-	"github.com/tphakala/birdnet-go/internal/privacy"
+	"github.com/tphakala/voicewatch/internal/alerting"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/mqtt"
+	"github.com/tphakala/voicewatch/internal/privacy"
 )
 
 // NoteWithBirdImage wraps a Note with source metadata for MQTT publishing.
@@ -20,7 +20,7 @@ import (
 //
 // IMPORTANT: JSON field names are part of the public MQTT API contract.
 // Changing them breaks existing Home Assistant and other MQTT integrations.
-// See: https://github.com/tphakala/birdnet-go/discussions/1759
+// See: https://github.com/tphakala/voicewatch/discussions/1759
 type NoteWithBirdImage struct {
 	datastore.Note
 

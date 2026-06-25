@@ -4,7 +4,7 @@ import (
 	"slices"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 // Pending broadcast constants.

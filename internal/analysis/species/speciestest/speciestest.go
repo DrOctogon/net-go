@@ -8,7 +8,7 @@ package speciestest
 import (
 	"testing"
 
-	"github.com/tphakala/birdnet-go/internal/analysis/species"
+	"github.com/tphakala/voicewatch/internal/analysis/species"
 )
 
 // SetCurrentYearForTesting sets the tracker's current year to a deterministic

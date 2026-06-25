@@ -10,7 +10,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/datastore/mocks"
+	"github.com/tphakala/voicewatch/internal/datastore/mocks"
 	"gorm.io/gorm"
 )
 

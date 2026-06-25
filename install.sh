@@ -5045,7 +5045,7 @@ start_birdnet_go() {
         print_message "1. Check port availability and permissions" "$YELLOW"
         print_message "2. Verify your audio device is properly connected and accessible" "$YELLOW"
         print_message "3. If the issue persists, please open a ticket at:" "$YELLOW"
-        print_message "   https://github.com/tphakala/birdnet-go/issues" "$GREEN"
+        print_message "   https://github.com/tphakala/voicewatch/issues" "$GREEN"
         print_message "   Include the logs above in your issue report for faster troubleshooting" "$YELLOW"
 
         exit 1
@@ -5092,7 +5092,7 @@ start_birdnet_go() {
             print_message "\n❗ If you need help with this issue:" "$RED"
             print_message "1. The service started but then crashed" "$YELLOW"
             print_message "2. Please open a ticket at:" "$YELLOW"
-            print_message "   https://github.com/tphakala/birdnet-go/issues" "$GREEN"
+            print_message "   https://github.com/tphakala/voicewatch/issues" "$GREEN"
             print_message "   Include the logs above in your issue report for faster troubleshooting" "$YELLOW"
             
             exit 1
@@ -5114,7 +5114,7 @@ start_birdnet_go() {
         print_message "\n❗ If you need help with this issue:" "$RED"
         print_message "1. The service started but container didn't initialize properly" "$YELLOW"
         print_message "2. Please open a ticket at:" "$YELLOW"
-        print_message "   https://github.com/tphakala/birdnet-go/issues" "$GREEN"
+        print_message "   https://github.com/tphakala/voicewatch/issues" "$GREEN"
         print_message "   Include the logs above in your issue report for faster troubleshooting" "$YELLOW"
         
         exit 1

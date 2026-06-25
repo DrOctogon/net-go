@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/datastore/mapper"
-	"github.com/tphakala/birdnet-go/internal/detection"
+	"github.com/tphakala/voicewatch/internal/datastore/mapper"
+	"github.com/tphakala/voicewatch/internal/detection"
 )
 
 const (

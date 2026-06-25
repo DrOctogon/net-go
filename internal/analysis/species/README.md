@@ -288,8 +288,8 @@ All public methods use read-write mutex for safe concurrent access:
 
 ```go
 import (
-    "github.com/tphakala/birdnet-go/internal/analysis/species"
-    "github.com/tphakala/birdnet-go/internal/conf"
+    "github.com/tphakala/voicewatch/internal/analysis/species"
+    "github.com/tphakala/voicewatch/internal/conf"
 )
 
 // Create settings

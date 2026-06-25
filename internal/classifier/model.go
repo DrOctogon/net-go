@@ -5,8 +5,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/datastore"
 )
 
 // Device name strings reported by ModelInstance.RuntimeInfo(). CPU-bound backends

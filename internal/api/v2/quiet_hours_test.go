@@ -22,7 +22,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/privacy"
+	"github.com/tphakala/voicewatch/internal/privacy"
 )
 
 // streamPlaceholderPattern matches the opaque placeholder keys that the

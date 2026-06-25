@@ -6,8 +6,8 @@ package securitytest
 import (
 	"testing"
 
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/security"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/security"
 )
 
 // NewOAuth2ServerForTesting creates an OAuth2Server with the provided settings

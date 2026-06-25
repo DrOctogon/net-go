@@ -4,7 +4,7 @@ package serviceapi
 
 import (
 	"github.com/labstack/echo/v4"
-	"github.com/tphakala/birdnet-go/internal/classifier"
+	"github.com/tphakala/voicewatch/internal/classifier"
 )
 
 // BirdNETProvider defines the minimal interface for accessing BirdNET functionality

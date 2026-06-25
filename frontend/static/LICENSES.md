@@ -372,32 +372,32 @@ Source: BSD-3-Clause
 License: https://github.com/tklauser/numcpus/blob/v0.11.0/LICENSE
 Source: Apache-2.0
 
-### github.com/tphakala/birdnet-go/cmd
+### github.com/tphakala/voicewatch/cmd
 
 License: Unknown
 Source: Unknown
 
-### github.com/tphakala/birdnet-go/frontend
+### github.com/tphakala/voicewatch/frontend
 
 License: Unknown
 Source: Unknown
 
-### github.com/tphakala/birdnet-go/frontend/node_modules/flatted/golang/pkg/flatted
+### github.com/tphakala/voicewatch/frontend/node_modules/flatted/golang/pkg/flatted
 
-License: https://github.com/tphakala/birdnet-go/blob/HEAD/frontend/node_modules/flatted/LICENSE
+License: https://github.com/tphakala/voicewatch/blob/HEAD/frontend/node_modules/flatted/LICENSE
 Source: ISC
 
-### github.com/tphakala/birdnet-go/scripts
+### github.com/tphakala/voicewatch/scripts
 
 License: Unknown
 Source: Unknown
 
-### github.com/tphakala/birdnet-go/scripts/generate-multi-taxa
+### github.com/tphakala/voicewatch/scripts/generate-multi-taxa
 
 License: Unknown
 Source: Unknown
 
-### github.com/tphakala/birdnet-go/tools/dbexport
+### github.com/tphakala/voicewatch/tools/dbexport
 
 License: Unknown
 Source: Unknown

@@ -3,7 +3,7 @@ package security
 import (
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/conf"
+	"github.com/tphakala/voicewatch/internal/conf"
 )
 
 // NewOAuth2ServerForTest is a lightweight settings-injecting OAuth2Server

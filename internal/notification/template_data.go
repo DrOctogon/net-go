@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/events"
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/events"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 type TemplateData struct {

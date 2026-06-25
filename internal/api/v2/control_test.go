@@ -22,8 +22,8 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/restart"
-	"github.com/tphakala/birdnet-go/internal/sysinfo"
+	"github.com/tphakala/voicewatch/internal/restart"
+	"github.com/tphakala/voicewatch/internal/sysinfo"
 )
 
 // runControlEndpointTest runs a control endpoint test with the given parameters

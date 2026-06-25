@@ -8,10 +8,10 @@ import (
 
 	"github.com/getsentry/sentry-go"
 	"github.com/labstack/echo/v4"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/restart"
-	"github.com/tphakala/birdnet-go/internal/sysinfo"
-	"github.com/tphakala/birdnet-go/internal/telemetry"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/restart"
+	"github.com/tphakala/voicewatch/internal/sysinfo"
+	"github.com/tphakala/voicewatch/internal/telemetry"
 )
 
 // ControlAction represents a control action request

@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"github.com/spf13/cobra"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/notification"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/notification"
 )
 
 // Command returns a cobra command that sends a test notification via the notification service

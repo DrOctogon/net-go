@@ -190,9 +190,9 @@ COPY --from=build /home/dev-user/src/BirdNET-Go/bin /usr/bin/
 # Add container labels for metadata and compatibility information
 LABEL org.opencontainers.image.title="BirdNET-Go"
 LABEL org.opencontainers.image.description="Real-time bird sound identification using BirdNET with ONNX Runtime support"
-LABEL org.opencontainers.image.source="https://github.com/tphakala/birdnet-go"
-LABEL org.opencontainers.image.documentation="https://github.com/tphakala/birdnet-go/blob/main/README.md"
-LABEL org.opencontainers.image.url="https://github.com/tphakala/birdnet-go"
+LABEL org.opencontainers.image.source="https://github.com/tphakala/voicewatch"
+LABEL org.opencontainers.image.documentation="https://github.com/tphakala/voicewatch/blob/main/README.md"
+LABEL org.opencontainers.image.url="https://github.com/tphakala/voicewatch"
 LABEL org.opencontainers.image.vendor="tphakala"
 
 # Container runtime compatibility labels

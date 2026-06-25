@@ -9,8 +9,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	mock_diskmanager "github.com/tphakala/birdnet-go/internal/diskmanager/mocks"
+	"github.com/tphakala/voicewatch/internal/conf"
+	mock_diskmanager "github.com/tphakala/voicewatch/internal/diskmanager/mocks"
 )
 
 // MockFileInfo implements os.FileInfo for testing

@@ -1,8 +1,8 @@
 package audiocore
 
 import (
-	"github.com/tphakala/birdnet-go/internal/audiocore/buffer"
-	"github.com/tphakala/birdnet-go/internal/errors"
+	"github.com/tphakala/voicewatch/internal/audiocore/buffer"
+	"github.com/tphakala/voicewatch/internal/errors"
 )
 
 // ErrSourceNotFound is returned when a source ID is not found in the registry.

@@ -455,7 +455,7 @@ func quickComponentLookup(depth int) string {
 	funcName := fn.Name()
 
 	// Skip if it's our own error package
-	if strings.Contains(funcName, "github.com/tphakala/birdnet-go/internal/errors") {
+	if strings.Contains(funcName, "github.com/tphakala/voicewatch/internal/errors") {
 		return ""
 	}
 
@@ -500,7 +500,7 @@ func detectComponentFull() string {
 		funcName := fn.Name()
 
 		// Skip internal error package functions
-		if strings.Contains(funcName, "github.com/tphakala/birdnet-go/internal/errors") {
+		if strings.Contains(funcName, "github.com/tphakala/voicewatch/internal/errors") {
 			continue
 		}
 

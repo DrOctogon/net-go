@@ -11,10 +11,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	"github.com/tphakala/birdnet-go/internal/datastore/mocks"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/datastore/mocks"
 
-	datastoreV2 "github.com/tphakala/birdnet-go/internal/datastore/v2"
+	datastoreV2 "github.com/tphakala/voicewatch/internal/datastore/v2"
 )
 
 // TestGetPrerequisites_AllPassed tests the prerequisites endpoint when all checks pass.

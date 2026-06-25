@@ -12,7 +12,7 @@ import (
 	"net"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/errors"
+	"github.com/tphakala/voicewatch/internal/errors"
 )
 
 // SelfSignedOptions configures self-signed certificate generation.

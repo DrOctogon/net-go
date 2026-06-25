@@ -7,8 +7,8 @@ import (
 	"time"
 
 	gomysql "github.com/go-sql-driver/mysql"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
 	"gorm.io/gorm"
 	gormlogger "gorm.io/gorm/logger"
 )

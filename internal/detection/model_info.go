@@ -1,6 +1,6 @@
 package detection
 
-import "github.com/tphakala/birdnet-go/internal/datastore/v2/entities"
+import "github.com/tphakala/voicewatch/internal/datastore/v2/entities"
 
 // Default model constants.
 const (

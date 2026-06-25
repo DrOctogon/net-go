@@ -158,12 +158,12 @@ interface AppState {
  */
 const DEFAULT_PROJECT_LINKS: ProjectLinks = {
   name: 'BirdNET-Go',
-  repoUrl: 'https://github.com/tphakala/birdnet-go',
-  issuesUrl: 'https://github.com/tphakala/birdnet-go/issues',
-  newIssueUrl: 'https://github.com/tphakala/birdnet-go/issues/new',
-  supportUrl: 'https://github.com/tphakala/birdnet-go',
-  discussionsUrl: 'https://github.com/tphakala/birdnet-go/discussions',
-  releasesUrl: 'https://github.com/tphakala/birdnet-go/releases',
+  repoUrl: 'https://github.com/tphakala/voicewatch',
+  issuesUrl: 'https://github.com/tphakala/voicewatch/issues',
+  newIssueUrl: 'https://github.com/tphakala/voicewatch/issues/new',
+  supportUrl: 'https://github.com/tphakala/voicewatch',
+  discussionsUrl: 'https://github.com/tphakala/voicewatch/discussions',
+  releasesUrl: 'https://github.com/tphakala/voicewatch/releases',
   communityUrl: 'https://discord.gg/gcSCFGUtsd',
 };
 

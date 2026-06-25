@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/tphakala/birdnet-go/internal/health"
+	"github.com/tphakala/voicewatch/internal/health"
 )
 
 // streamProvider returns a getStreams function yielding the given streams.

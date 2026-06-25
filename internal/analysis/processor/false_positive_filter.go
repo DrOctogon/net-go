@@ -2,7 +2,7 @@
 package processor
 
 import (
-	"github.com/tphakala/birdnet-go/internal/conf"
+	"github.com/tphakala/voicewatch/internal/conf"
 )
 
 // getMinimumOverlapForLevel returns the minimum overlap required for each filtering level.

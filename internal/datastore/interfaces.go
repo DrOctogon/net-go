@@ -22,14 +22,14 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/datastore/dbstats"
-	"github.com/tphakala/birdnet-go/internal/datastore/entities"
-	"github.com/tphakala/birdnet-go/internal/detection"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/observability/metrics"
-	"github.com/tphakala/birdnet-go/internal/suncalc" // Import suncalc
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/datastore/dbstats"
+	"github.com/tphakala/voicewatch/internal/datastore/entities"
+	"github.com/tphakala/voicewatch/internal/detection"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/observability/metrics"
+	"github.com/tphakala/voicewatch/internal/suncalc" // Import suncalc
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	gormlogger "gorm.io/gorm/logger"

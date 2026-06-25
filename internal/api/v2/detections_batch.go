@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/labstack/echo/v4"
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 // deduplicateIDs returns a new slice with duplicate IDs removed, preserving order.

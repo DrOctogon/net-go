@@ -8,8 +8,8 @@ import (
 	"slices"
 
 	"github.com/labstack/echo/v4"
-	"github.com/tphakala/birdnet-go/internal/audiocore/schedule"
-	"github.com/tphakala/birdnet-go/internal/privacy"
+	"github.com/tphakala/voicewatch/internal/audiocore/schedule"
+	"github.com/tphakala/voicewatch/internal/privacy"
 )
 
 // QuietHoursStatusResponse represents the current quiet hours suppression state.

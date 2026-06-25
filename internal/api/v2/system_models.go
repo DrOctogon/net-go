@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
-	"github.com/tphakala/birdnet-go/internal/classifier/inferencestats"
+	"github.com/tphakala/voicewatch/internal/classifier/inferencestats"
 )
 
 // ActiveModelResponse describes a single loaded model for the /system/models endpoint.

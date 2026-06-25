@@ -11,8 +11,8 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	tlspkg "github.com/tphakala/birdnet-go/internal/tls"
+	"github.com/tphakala/voicewatch/internal/conf"
+	tlspkg "github.com/tphakala/voicewatch/internal/tls"
 )
 
 // generateTestCertKeyPair creates a valid self-signed cert+key pair for testing.

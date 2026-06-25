@@ -10,9 +10,9 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/health"
-	"github.com/tphakala/birdnet-go/internal/health/checks"
-	"github.com/tphakala/birdnet-go/internal/observability"
+	"github.com/tphakala/voicewatch/internal/health"
+	"github.com/tphakala/voicewatch/internal/health/checks"
+	"github.com/tphakala/voicewatch/internal/observability"
 )
 
 // setupDiagnosticsTest creates a test Controller wired for diagnostics

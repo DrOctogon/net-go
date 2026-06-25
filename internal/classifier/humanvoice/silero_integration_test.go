@@ -8,8 +8,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/tphakala/birdnet-go/internal/classifier/humanvoice"
-	"github.com/tphakala/birdnet-go/internal/inference"
+	"github.com/tphakala/voicewatch/internal/classifier/humanvoice"
+	"github.com/tphakala/voicewatch/internal/inference"
 )
 
 // sampleCount is one 3-second clip at the model's 16 kHz native rate.

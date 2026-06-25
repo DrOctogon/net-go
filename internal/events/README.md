@@ -123,7 +123,7 @@ eventBus, err := events.Initialize(config)
 ### Registering Consumers
 
 ```go
-import "github.com/tphakala/birdnet-go/internal/logger"
+import "github.com/tphakala/voicewatch/internal/logger"
 
 // Implement EventConsumer interface
 type MyConsumer struct {

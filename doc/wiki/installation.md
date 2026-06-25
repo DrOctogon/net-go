@@ -48,7 +48,7 @@ This script streamlines the installation process on compatible Linux systems (De
 2.  Download and execute the script:
 
     ```bash
-    curl -fsSL https://github.com/tphakala/birdnet-go/raw/main/install.sh -o install.sh
+    curl -fsSL https://github.com/tphakala/voicewatch/raw/main/install.sh -o install.sh
     bash ./install.sh
     ```
 
@@ -76,7 +76,7 @@ If you installed BirdNET-Go using the `install.sh` script, updating is straightf
 
 1.  It is **recommended to download a fresh copy** of the script each time, as it may contain improvements:
     ```bash
-    curl -fsSL https://github.com/tphakala/birdnet-go/raw/main/install.sh -o install.sh
+    curl -fsSL https://github.com/tphakala/voicewatch/raw/main/install.sh -o install.sh
     ```
 2.  Run the downloaded script:
     ```bash
@@ -94,7 +94,7 @@ If you installed BirdNET-Go using the `install.sh` script, updating is straightf
 
 For a more flexible containerized approach than the manual Docker installation, you can use Docker Compose which offers better configurability and easier management.
 
-A [premade docker-compose.yml](https://github.com/tphakala/birdnet-go/blob/main/Docker/docker-compose.yml) file is available in the repository. This file includes:
+A [premade docker-compose.yml](https://github.com/tphakala/voicewatch/blob/main/Docker/docker-compose.yml) file is available in the repository. This file includes:
 
 - The BirdNET-Go container configuration with the latest nightly image
 - Environment variables for customization (timezone, user permissions, etc.)
@@ -164,7 +164,7 @@ docker run -ti --rm \\
 
 This method does not use Docker but requires manual dependency installation.
 
-1.  **Download Binary:** Go to the [BirdNET-Go Releases page](https://github.com/tphakala/birdnet-go/releases) and download the pre-compiled binary suitable for your operating system (Linux, macOS, Windows) and architecture.
+1.  **Download Binary:** Go to the [BirdNET-Go Releases page](https://github.com/tphakala/voicewatch/releases) and download the pre-compiled binary suitable for your operating system (Linux, macOS, Windows) and architecture.
 2.  **Download TFLite Library:** Download the corresponding TensorFlow Lite C library from [tphakala/tflite_c Releases](https://github.com/tphakala/tflite_c/releases). Follow the installation instructions there (copying the `.so`, `.dylib`, or `.dll` file to the correct system path or the BirdNET-Go executable directory). Version `v2.17.1` or newer is recommended for best performance (XNNPACK support).
 3.  **(Optional) Install ONNX Runtime:** Required for BirdNET v3.0 models (currently in development preview). The release tarballs bundle the library. See the [ONNX Runtime Installation Guide](../ONNX-Runtime-Installation.md) for platform-specific instructions.
 4.  **Install Dependencies:**

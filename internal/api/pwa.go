@@ -7,8 +7,8 @@ import (
 	"strings"
 
 	"github.com/labstack/echo/v4"
-	"github.com/tphakala/birdnet-go/frontend"
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/frontend"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 // registerPWARoutes registers routes for PWA support files.

@@ -6,8 +6,8 @@ import (
 	"strings"
 
 	"github.com/spf13/viper"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 // persistMigration saves the config file after a successful migration.

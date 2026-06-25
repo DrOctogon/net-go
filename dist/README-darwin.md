@@ -152,5 +152,5 @@ xattr -d com.apple.quarantine birdnet-go
 ## More Information
 
 - Documentation: https://birdnet-go.dev
-- GitHub: https://github.com/tphakala/birdnet-go
-- Discussions: https://github.com/tphakala/birdnet-go/discussions
+- GitHub: https://github.com/tphakala/voicewatch
+- Discussions: https://github.com/tphakala/voicewatch/discussions

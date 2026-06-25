@@ -7,12 +7,12 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	datastoreV2 "github.com/tphakala/birdnet-go/internal/datastore/v2"
-	"github.com/tphakala/birdnet-go/internal/datastore/v2/entities"
-	"github.com/tphakala/birdnet-go/internal/datastore/v2/repository"
-	"github.com/tphakala/birdnet-go/internal/detection"
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	datastoreV2 "github.com/tphakala/voicewatch/internal/datastore/v2"
+	"github.com/tphakala/voicewatch/internal/datastore/v2/entities"
+	"github.com/tphakala/voicewatch/internal/datastore/v2/repository"
+	"github.com/tphakala/voicewatch/internal/detection"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 // defaultRelatedDataBatchSize is the batch size for fetching related data during migration.

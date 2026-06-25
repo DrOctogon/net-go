@@ -15,7 +15,7 @@ import (
 	_ "github.com/mattn/go-sqlite3" // SQLite driver for safety check test
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/conf"
+	"github.com/tphakala/voicewatch/internal/conf"
 )
 
 // createTestSettings creates settings for SQLite-based legacy cleanup tests.

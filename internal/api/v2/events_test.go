@@ -8,7 +8,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/logger/reader"
+	"github.com/tphakala/voicewatch/internal/logger/reader"
 )
 
 // baseTime is a fixed reference point for all event tests (2024-06-15 10:30:00 UTC).

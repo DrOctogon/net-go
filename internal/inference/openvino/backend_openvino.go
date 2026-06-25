@@ -421,7 +421,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/tphakala/birdnet-go/internal/errors"
+	"github.com/tphakala/voicewatch/internal/errors"
 )
 
 // Supported reports whether the OpenVINO backend is compiled into this build.

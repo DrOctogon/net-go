@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/privacy"
+	"github.com/tphakala/voicewatch/internal/privacy"
 )
 
 // FFmpeg error type constants for categorizing error conditions.

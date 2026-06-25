@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/tphakala/birdnet-go/internal/audiocore/ffmpeg"
+	"github.com/tphakala/voicewatch/internal/audiocore/ffmpeg"
 )
 
 // Test error type constant for connection timeout scenarios

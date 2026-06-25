@@ -404,7 +404,7 @@ collect_install_info() {
         "/home/*/install.sh"
         "/root/install.sh"
         "/tmp/install.sh"
-        "/home/*/go/src/github.com/tphakala/birdnet-go/install.sh"  # Common dev location
+        "/home/*/go/src/github.com/tphakala/voicewatch/install.sh"  # Common dev location
     )
     
     INSTALL_FOUND=false

@@ -7,7 +7,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/audiocore/soundlevel"
+	"github.com/tphakala/voicewatch/internal/audiocore/soundlevel"
 )
 
 // TestCompactSoundLevelData_IncludesNodeName tests that the node name is included in MQTT messages
