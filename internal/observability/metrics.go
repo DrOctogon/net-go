@@ -9,7 +9,6 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"github.com/tphakala/birdnet-go/internal/classifier"
 	"github.com/tphakala/birdnet-go/internal/diskmanager"
 	"github.com/tphakala/birdnet-go/internal/observability/metrics"
 )
@@ -128,7 +127,7 @@ func (m *Metrics) metricsHandler(w http.ResponseWriter, r *http.Request) {
 	h.ServeHTTP(w, r)
 }
 
-// initializeTracing sets up the birdnet tracing system with metrics
-func initializeTracing(birdnetMetrics *metrics.BirdNETMetrics) {
-	classifier.SetMetrics(birdnetMetrics)
-}
+// initializeTracing previously wired metrics into the classifier tracing layer.
+// The classifier tracing/span subsystem was removed in the human-voice pivot, so
+// this is now a no-op retained for call-site and test compatibility.
+func initializeTracing(_ *metrics.BirdNETMetrics) {}

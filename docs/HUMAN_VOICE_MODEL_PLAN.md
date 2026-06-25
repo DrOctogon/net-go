@@ -39,6 +39,33 @@ Plan said "one rewrite unit" but that detonates the whole pipeline at once. **Pe
 
 ---
 
+## 2c-3 STATUS — IN PROGRESS (build RED, WIP committed)
+
+Done: deleted ~30 bird classifier files + `data/` + `internal/ebird/`; wrote slim
+`model_registry.go` (HumanVoice-only) + slim single-model `orchestrator.go`
+(injected `ModelInstance`, no import cycle) — **classifier + humanvoice packages
+compile**. Fixed `observability/metrics.go` (`initializeTracing` no-op).
+
+**Build is RED** by design (atomic swap, no green intermediate). Remaining
+consumer retarget (exact callsites, verified 2026-06-24):
+
+- `analysis/birdnet_service.go`: `NewOrchestrator(settings)` → build `humanvoice.New(...)` then `NewOrchestrator(settings, model)`; delete `ModelManager` field/method (22,104), `LoadCatalog`(130), `NewModelManager`(147), `BuildRangeFilter`(54).
+- `analysis/control_monitor.go`: drop `BuildRangeFilter`(394,435), `OpenFaunaResolver`(145), `ReloadSecondaryModels`(464); `AllLabels` ok.
+- `analysis/database_migration.go:508`, `database_service.go:211`: drop `LoadTaxonomyData("")` (scientificIndex now empty).
+- `processor/processor.go`: drop `taxonomyDB` field(149), `EnrichResultWithTaxonomy`(913)→use scientific name as-is, `GetSpeciesOccurrenceAtTime`(1070), `RegistryIDBat` branches(675,848,1305), `DetectionNamePerch`(964).
+- `processor/extended_capture.go`: drop `getTaxonomyDB`/`TaxonomyDatabase`/`LoadTaxonomyDatabase`(23,25,114) — `resolveSpeciesFilter` without taxonomy.
+- `processor/false_positive_filter.go`: drop `RegistryIDBat`(118,158) + bat threshold path (callers processor.go:360,1715 + mindetections_test.go).
+- `processor/actions_integrations.go`: drop range-rebuild action body `GetProbableSpecies`(210)/`RebuildNameResolver`(236).
+- `api/server.go`: drop `modelManager` field(66)/`WithModelManager`(241)/wire(493).
+- `api/v2/api.go`: drop `ModelManager` field(144)/`WithModelManager`(291)/`TaxonomyDB`(71)/`LoadTaxonomyDatabase`(529).
+- `api/v2/models.go`: DELETE (model gallery, all `ModelManager`) + unregister `initModelRoutes` + tests.
+- `api/v2/inference_status.go:353`: drop `ModelManager` branch.
+- `cmd/benchmark/benchmark.go:93`: `NewOrchestrator(settings)` → inject model (or simplify/skip).
+- Then re-grep deleted symbols; build `./...`; vet+test analysis/api/classifier.
+- Deferred-OK (compile without edits): conf range/perch/bat/bsg structs (unused), observability `RecordRangeFilter` (orphaned), notification rebuild key. Clean in §E.
+
+---
+
 ## 2c-3 EXECUTION SPEC (turn-key — read before cutting)
 
 Atomic commit; no green intermediate. Order: slim the facade → delete bird files → delete ebird → retarget consumers → build/fix/test. Verified against the codebase 2026-06-24.
