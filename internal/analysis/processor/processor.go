@@ -907,8 +907,7 @@ func (p *Processor) shouldFilterDetection(settings *conf.Settings, result datast
 }
 
 // isSpeciesExcluded checks if a species (by common or scientific name) matches any entry
-// in the exclude list. Matching is case-insensitive and supports either name form, consistent
-// with the range filter's matchesSpecies logic (see birdnet/range_filter.go).
+// in the exclude list. Matching is case-insensitive and supports either name form.
 func isSpeciesExcluded(commonName, scientificName string, excludeList []string) bool {
 	for _, excluded := range excludeList {
 		if strings.EqualFold(commonName, excluded) || strings.EqualFold(scientificName, excluded) {
