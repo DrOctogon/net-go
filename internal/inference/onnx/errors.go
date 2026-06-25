@@ -6,10 +6,10 @@ import (
 )
 
 var (
-	ErrModelPathRequired = errors.New("birdnet: model path is required")
-	ErrLabelsRequired    = errors.New("birdnet: labels are required")
-	ErrEmptyBatch        = errors.New("birdnet: batch must contain at least one segment")
-	ErrSessionClosed     = errors.New("birdnet: session is closed")
+	ErrModelPathRequired = errors.New("voicewatch: model path is required")
+	ErrLabelsRequired    = errors.New("voicewatch: labels are required")
+	ErrEmptyBatch        = errors.New("voicewatch: batch must contain at least one segment")
+	ErrSessionClosed     = errors.New("voicewatch: session is closed")
 )
 
 type EmbeddingDimMismatchError struct {
@@ -18,7 +18,7 @@ type EmbeddingDimMismatchError struct {
 }
 
 func (e *EmbeddingDimMismatchError) Error() string {
-	return fmt.Sprintf("birdnet: embedding dimension mismatch: classifier expects %d, got %d", e.Expected, e.Got)
+	return fmt.Sprintf("voicewatch: embedding dimension mismatch: classifier expects %d, got %d", e.Expected, e.Got)
 }
 
 type LabelCountError struct {
@@ -27,7 +27,7 @@ type LabelCountError struct {
 }
 
 func (e *LabelCountError) Error() string {
-	return fmt.Sprintf("birdnet: label count mismatch: model has %d classes but %d labels were provided", e.Expected, e.Got)
+	return fmt.Sprintf("voicewatch: label count mismatch: model has %d classes but %d labels were provided", e.Expected, e.Got)
 }
 
 type ModelDetectionError struct {
@@ -35,7 +35,7 @@ type ModelDetectionError struct {
 }
 
 func (e *ModelDetectionError) Error() string {
-	return fmt.Sprintf("birdnet: cannot detect model type: %s", e.Reason)
+	return fmt.Sprintf("voicewatch: cannot detect model type: %s", e.Reason)
 }
 
 type LabelLoadError struct {
@@ -44,6 +44,6 @@ type LabelLoadError struct {
 }
 
 func (e *LabelLoadError) Error() string {
-	return fmt.Sprintf("birdnet: failed to load labels from %s: %s", e.Path, e.Reason)
+	return fmt.Sprintf("voicewatch: failed to load labels from %s: %s", e.Path, e.Reason)
 }
 

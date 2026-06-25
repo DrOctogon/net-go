@@ -78,7 +78,7 @@ func (b *CustomClassifierBuilder) Build() (*CustomClassifier, error) {
 
 	inputInfos, outputInfos, err := ort.GetInputOutputInfo(b.modelPath)
 	if err != nil {
-		return nil, fmt.Errorf("birdnet: failed to load custom model metadata: %w", err)
+		return nil, fmt.Errorf("voicewatch: failed to load custom model metadata: %w", err)
 	}
 
 	if len(inputInfos) == 0 || len(outputInfos) == 0 {
@@ -155,19 +155,19 @@ func (c *CustomClassifier) PredictRaw(embeddings []float32) ([]float32, error) {
 
 	inputTensor, err := ort.NewTensor(ort.NewShape(1, int64(c.inputDim)), embeddings)
 	if err != nil {
-		return nil, fmt.Errorf("birdnet: failed to create embedding tensor: %w", err)
+		return nil, fmt.Errorf("voicewatch: failed to create embedding tensor: %w", err)
 	}
 	defer func() { _ = inputTensor.Destroy() }()
 
 	outputTensor, err := ort.NewEmptyTensor[float32](ort.NewShape(1, int64(c.numClasses)))
 	if err != nil {
-		return nil, fmt.Errorf("birdnet: failed to create output tensor: %w", err)
+		return nil, fmt.Errorf("voicewatch: failed to create output tensor: %w", err)
 	}
 	defer func() { _ = outputTensor.Destroy() }()
 
 	err = c.session.Run([]ort.Value{inputTensor}, []ort.Value{outputTensor})
 	if err != nil {
-		return nil, fmt.Errorf("birdnet: custom classifier inference failed: %w", err)
+		return nil, fmt.Errorf("voicewatch: custom classifier inference failed: %w", err)
 	}
 
 	return sigmoidSlice(outputTensor.GetData()), nil
@@ -186,7 +186,7 @@ func (c *CustomClassifier) PredictBatch(embeddings [][]float32) ([][]Prediction,
 	flat := make([]float32, 0, batchSize*c.inputDim)
 	for i, emb := range embeddings {
 		if len(emb) != c.inputDim {
-			return nil, fmt.Errorf("birdnet: embedding %d: %w", i, &EmbeddingDimMismatchError{
+			return nil, fmt.Errorf("voicewatch: embedding %d: %w", i, &EmbeddingDimMismatchError{
 				Expected: c.inputDim, Got: len(emb),
 			})
 		}
@@ -195,19 +195,19 @@ func (c *CustomClassifier) PredictBatch(embeddings [][]float32) ([][]Prediction,
 
 	inputTensor, err := ort.NewTensor(ort.NewShape(int64(batchSize), int64(c.inputDim)), flat)
 	if err != nil {
-		return nil, fmt.Errorf("birdnet: failed to create batch embedding tensor: %w", err)
+		return nil, fmt.Errorf("voicewatch: failed to create batch embedding tensor: %w", err)
 	}
 	defer func() { _ = inputTensor.Destroy() }()
 
 	outputTensor, err := ort.NewEmptyTensor[float32](ort.NewShape(int64(batchSize), int64(c.numClasses)))
 	if err != nil {
-		return nil, fmt.Errorf("birdnet: failed to create batch output tensor: %w", err)
+		return nil, fmt.Errorf("voicewatch: failed to create batch output tensor: %w", err)
 	}
 	defer func() { _ = outputTensor.Destroy() }()
 
 	err = c.session.Run([]ort.Value{inputTensor}, []ort.Value{outputTensor})
 	if err != nil {
-		return nil, fmt.Errorf("birdnet: custom classifier batch inference failed: %w", err)
+		return nil, fmt.Errorf("voicewatch: custom classifier batch inference failed: %w", err)
 	}
 
 	allLogits := outputTensor.GetData()
@@ -216,7 +216,7 @@ func (c *CustomClassifier) PredictBatch(embeddings [][]float32) ([][]Prediction,
 		start := i * c.numClasses
 		end := start + c.numClasses
 		if end > len(allLogits) {
-			return nil, fmt.Errorf("birdnet: custom classifier output too small for batch index %d: need %d, have %d", i, end, len(allLogits))
+			return nil, fmt.Errorf("voicewatch: custom classifier output too small for batch index %d: need %d, have %d", i, end, len(allLogits))
 		}
 		scores := sigmoidSlice(allLogits[start:end])
 		results[i] = topK(scores, c.labels, c.topK, c.minConf)

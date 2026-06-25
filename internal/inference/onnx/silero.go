@@ -45,12 +45,12 @@ func NewSileroVAD(modelPath string, frameSize int, sampleRate int64, threads int
 		return nil, ErrModelPathRequired
 	}
 	if frameSize <= 0 {
-		return nil, fmt.Errorf("birdnet: silero frame size must be positive, got %d", frameSize)
+		return nil, fmt.Errorf("voicewatch: silero frame size must be positive, got %d", frameSize)
 	}
 
 	inputInfos, outputInfos, err := ort.GetInputOutputInfo(modelPath)
 	if err != nil {
-		return nil, fmt.Errorf("birdnet: failed to load silero model metadata: %w", err)
+		return nil, fmt.Errorf("voicewatch: failed to load silero model metadata: %w", err)
 	}
 	inputNames := make([]string, len(inputInfos))
 	for i := range inputInfos {
@@ -116,13 +116,13 @@ func (s *SileroVAD) Predict(clip []float32) ([]float32, error) {
 func (s *SileroVAD) runFrame(window, state []float32, sr []int64) (prob float32, newState []float32, err error) {
 	inputTensor, err := ort.NewTensor(ort.NewShape(sileroBatch, int64(len(window))), window)
 	if err != nil {
-		return 0, nil, fmt.Errorf("birdnet: silero input tensor: %w", err)
+		return 0, nil, fmt.Errorf("voicewatch: silero input tensor: %w", err)
 	}
 	defer func() { _ = inputTensor.Destroy() }()
 
 	stateTensor, err := ort.NewTensor(ort.NewShape(sileroStateRank, sileroBatch, sileroStateDim), state)
 	if err != nil {
-		return 0, nil, fmt.Errorf("birdnet: silero state tensor: %w", err)
+		return 0, nil, fmt.Errorf("voicewatch: silero state tensor: %w", err)
 	}
 	defer func() { _ = stateTensor.Destroy() }()
 
@@ -131,19 +131,19 @@ func (s *SileroVAD) runFrame(window, state []float32, sr []int64) (prob float32,
 	// shape is used, which the runtime accepts for the scalar input.
 	srTensor, err := ort.NewTensor(ort.NewShape(1), sr)
 	if err != nil {
-		return 0, nil, fmt.Errorf("birdnet: silero sr tensor: %w", err)
+		return 0, nil, fmt.Errorf("voicewatch: silero sr tensor: %w", err)
 	}
 	defer func() { _ = srTensor.Destroy() }()
 
 	outProb, err := ort.NewEmptyTensor[float32](ort.NewShape(sileroBatch, 1))
 	if err != nil {
-		return 0, nil, fmt.Errorf("birdnet: silero output tensor: %w", err)
+		return 0, nil, fmt.Errorf("voicewatch: silero output tensor: %w", err)
 	}
 	defer func() { _ = outProb.Destroy() }()
 
 	outState, err := ort.NewEmptyTensor[float32](ort.NewShape(sileroStateRank, sileroBatch, sileroStateDim))
 	if err != nil {
-		return 0, nil, fmt.Errorf("birdnet: silero stateN tensor: %w", err)
+		return 0, nil, fmt.Errorf("voicewatch: silero stateN tensor: %w", err)
 	}
 	defer func() { _ = outState.Destroy() }()
 
@@ -157,7 +157,7 @@ func (s *SileroVAD) runFrame(window, state []float32, sr []int64) (prob float32,
 		case sileroSRName:
 			inputs[i] = srTensor
 		default:
-			return 0, nil, fmt.Errorf("birdnet: unexpected silero input %q", name)
+			return 0, nil, fmt.Errorf("voicewatch: unexpected silero input %q", name)
 		}
 	}
 
@@ -169,17 +169,17 @@ func (s *SileroVAD) runFrame(window, state []float32, sr []int64) (prob float32,
 		case sileroStateNName:
 			outputs[i] = outState
 		default:
-			return 0, nil, fmt.Errorf("birdnet: unexpected silero output %q", name)
+			return 0, nil, fmt.Errorf("voicewatch: unexpected silero output %q", name)
 		}
 	}
 
 	if err := s.session.Run(inputs, outputs); err != nil {
-		return 0, nil, fmt.Errorf("birdnet: silero inference failed: %w", err)
+		return 0, nil, fmt.Errorf("voicewatch: silero inference failed: %w", err)
 	}
 
 	probData := outProb.GetData()
 	if len(probData) == 0 {
-		return 0, nil, fmt.Errorf("birdnet: silero produced empty output")
+		return 0, nil, fmt.Errorf("voicewatch: silero produced empty output")
 	}
 	updated := outState.GetData()
 	newState = make([]float32, len(updated))
