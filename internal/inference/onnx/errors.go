@@ -12,25 +12,6 @@ var (
 	ErrSessionClosed     = errors.New("birdnet: session is closed")
 )
 
-type InputSizeError struct {
-	Expected int
-	Got      int
-}
-
-func (e *InputSizeError) Error() string {
-	return fmt.Sprintf("birdnet: expected %d audio samples, got %d", e.Expected, e.Got)
-}
-
-type BatchInputSizeError struct {
-	Index    int
-	Expected int
-	Got      int
-}
-
-func (e *BatchInputSizeError) Error() string {
-	return fmt.Sprintf("birdnet: segment %d has %d audio samples, expected %d", e.Index, e.Got, e.Expected)
-}
-
 type EmbeddingDimMismatchError struct {
 	Expected int
 	Got      int

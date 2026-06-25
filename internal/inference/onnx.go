@@ -23,67 +23,6 @@ func IsORTInitialized() bool {
 	return ortInitialized
 }
 
-// ONNXClassifierOptions configures the ONNX species classifier.
-type ONNXClassifierOptions struct {
-	// Labels is the species label list. Required.
-	Labels []string
-	// Threads is the number of CPU threads for ONNX inference. 0 = use ONNX defaults.
-	Threads int
-	// SkipLabelValidation disables the label-count-vs-model-output check.
-	// Use when the model is loaded only for embedding extraction and the
-	// caller's label list may not match the model's logits dimension.
-	SkipLabelValidation bool
-}
-
-// onnxClassifier implements Classifier using an ONNX Runtime session.
-type onnxClassifier struct {
-	classifier *ort.Classifier
-	numSpecies int
-}
-
-// NewONNXClassifier creates a Classifier backed by an ONNX Runtime model.
-// The ONNX Runtime must be initialized via InitONNXRuntime before calling this.
-func NewONNXClassifier(modelPath string, opts ONNXClassifierOptions) (Classifier, error) {
-	if len(opts.Labels) == 0 {
-		return nil, fmt.Errorf("ONNX classifier requires labels")
-	}
-
-	classifierOpts := []ort.ClassifierOption{
-		ort.WithLabels(opts.Labels),
-		ort.WithTopK(0),          // We handle topK in VoiceWatch's post-processing
-		ort.WithMinConfidence(0), // No filtering, return all raw scores
-	}
-	if opts.SkipLabelValidation {
-		classifierOpts = append(classifierOpts, ort.WithSkipLabelValidation())
-	}
-	threads := opts.Threads
-	if threads <= 0 {
-		threads = runtime.NumCPU()
-	}
-	var configErr error
-	classifierOpts = append(classifierOpts, ort.WithSessionOptions(func(so *ortlib.SessionOptions) {
-		if err := so.SetIntraOpNumThreads(threads); err != nil && configErr == nil {
-			configErr = fmt.Errorf("failed to set IntraOpNumThreads to %d: %w", threads, err)
-		}
-		if err := so.SetInterOpNumThreads(threads); err != nil && configErr == nil {
-			configErr = fmt.Errorf("failed to set InterOpNumThreads to %d: %w", threads, err)
-		}
-	}))
-	classifier, err := ort.NewClassifier(modelPath, classifierOpts...)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create ONNX classifier: %w", err)
-	}
-	if configErr != nil {
-		_ = classifier.Close()
-		return nil, fmt.Errorf("failed to configure ONNX session options: %w", configErr)
-	}
-
-	return &onnxClassifier{
-		classifier: classifier,
-		numSpecies: len(opts.Labels),
-	}, nil
-}
-
 // SileroVADOptions configures the Silero VAD speech detector.
 type SileroVADOptions struct {
 	// FrameSize is the per-inference window in samples (512 at 16 kHz). Required.
@@ -127,35 +66,6 @@ func (c *onnxSilero) Close() {
 	if c.vad != nil {
 		_ = c.vad.Close()
 		c.vad = nil
-	}
-}
-
-// Predict runs ONNX inference, returning raw logits (pre-activation).
-func (c *onnxClassifier) Predict(samples []float32) ([]float32, error) {
-	if c.classifier == nil {
-		return nil, ort.ErrSessionClosed
-	}
-	return c.classifier.PredictRaw(samples)
-}
-
-// PredictWithEmbeddings runs ONNX inference, returning both raw logits and embedding vector.
-func (c *onnxClassifier) PredictWithEmbeddings(samples []float32) (logits, embeddings []float32, err error) {
-	if c.classifier == nil {
-		return nil, nil, ort.ErrSessionClosed
-	}
-	return c.classifier.PredictRawWithEmbeddings(samples)
-}
-
-// NumSpecies returns the number of species in the model output.
-func (c *onnxClassifier) NumSpecies() int {
-	return c.numSpecies
-}
-
-// Close releases the ONNX session resources.
-func (c *onnxClassifier) Close() {
-	if c.classifier != nil {
-		_ = c.classifier.Close()
-		c.classifier = nil
 	}
 }
 
