@@ -513,6 +513,16 @@ export interface SupportSettings {
   };
 }
 
+// Transcription and keyword-flagging settings (matches backend conf.TranscriptionSettings)
+export interface TranscriptionSettings {
+  enabled: boolean;
+  model: string;
+  binary: string;
+  language: string;
+  keywords: string[];
+  keywordCaseSensitive: boolean;
+}
+
 // Realtime settings matching backend structure
 export interface RealtimeSettings {
   interval?: number;
@@ -536,6 +546,7 @@ export interface RealtimeSettings {
   weather?: WeatherSettings;
   speciesTracking?: SpeciesTrackingSettings;
   extendedCapture?: ExtendedCaptureSettings;
+  transcription?: TranscriptionSettings;
 }
 
 // WebServer settings
@@ -953,6 +964,14 @@ function createEmptySettings(): SettingsFormData {
         exclude: [],
         config: {},
       },
+      transcription: {
+        enabled: false,
+        model: '',
+        binary: 'whisper-cli',
+        language: 'en',
+        keywords: [],
+        keywordCaseSensitive: false,
+      },
       weather: weatherDefaults,
       dashboard: {
         thumbnails: {
@@ -1156,6 +1175,12 @@ export const speciesTrackingSettings = derived(
 export const extendedCaptureSettings = derived(
   settingsStore,
   $store => $store.formData.realtime?.extendedCapture
+);
+
+// Transcription settings derived store
+export const transcriptionSettings = derived(
+  settingsStore,
+  $store => $store.formData.realtime?.transcription
 );
 
 // Settings actions

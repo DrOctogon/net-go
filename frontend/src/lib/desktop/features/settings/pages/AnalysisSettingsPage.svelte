@@ -57,6 +57,8 @@
     dynamicThresholdSettings,
     realtimeSettings,
     batSettings,
+    transcriptionSettings,
+    type TranscriptionSettings,
   } from '$lib/stores/settings';
   import { cn } from '$lib/utils/cn.js';
   import { api, ApiError, getCsrfToken } from '$lib/utils/api';
@@ -82,6 +84,7 @@
     XCircle,
     X,
     Check,
+    Plus,
     Settings as SettingsIcon,
   } from '@lucide/svelte';
 
@@ -666,6 +669,60 @@
     settingsActions.updateSection('bat', {
       falsePositiveFilter: { level: newLevel },
     });
+  }
+
+  // ── Transcription & keyword-flagging state ────────────────────────────
+  const defaultTranscription: TranscriptionSettings = {
+    enabled: false,
+    model: '',
+    binary: 'whisper-cli',
+    language: 'en',
+    keywords: [],
+    keywordCaseSensitive: false,
+  };
+
+  let transcription = $derived($transcriptionSettings ?? defaultTranscription);
+
+  /** Indicates a configuration error: enabled but no model path set. */
+  let transcriptionModelMissing = $derived(transcription.enabled && !transcription.model.trim());
+
+  function updateTranscription<K extends keyof TranscriptionSettings>(
+    key: K,
+    value: TranscriptionSettings[K]
+  ) {
+    settingsActions.updateSection('realtime', {
+      transcription: { ...transcription, [key]: value },
+    });
+  }
+
+  // Local state for the keyword input field
+  let keywordInput = $state('');
+
+  function addKeyword() {
+    const trimmed = keywordInput.trim();
+    if (!trimmed) return;
+    const current = Array.isArray(transcription.keywords) ? transcription.keywords : [];
+    if (current.includes(trimmed)) {
+      keywordInput = '';
+      return;
+    }
+    updateTranscription('keywords', [...current, trimmed]);
+    keywordInput = '';
+  }
+
+  function removeKeyword(index: number) {
+    const current = Array.isArray(transcription.keywords) ? transcription.keywords : [];
+    updateTranscription(
+      'keywords',
+      current.filter((_, i) => i !== index)
+    );
+  }
+
+  function handleKeywordKeydown(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      addKeyword();
+    }
   }
 
   // ── FP filter level definitions for the shared component ─────────────
@@ -1437,6 +1494,160 @@
           helpText={t('settings.main.sections.customClassifier.labelPath.helpText')}
           disabled={store.isLoading || store.isSaving}
           onchange={value => updateBirdnetSetting('labelPath', value)}
+        />
+      </div>
+    </SettingsSection>
+
+    <!-- 6. Transcription & Keyword Flagging -->
+    <SettingsSection
+      title={t('analysis.transcription.title')}
+      description={t('analysis.transcription.description')}
+      defaultOpen={false}
+      originalData={store.originalData.realtime?.transcription}
+      currentData={store.formData.realtime?.transcription}
+    >
+      <!-- Enable toggle -->
+      <Checkbox
+        checked={transcription.enabled}
+        label={t('analysis.transcription.enable.label')}
+        helpText={t('analysis.transcription.enable.helpText')}
+        disabled={store.isLoading || store.isSaving}
+        onchange={value => updateTranscription('enabled', value)}
+      />
+
+      <!-- Model path + language -->
+      <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <TextInput
+            id="transcription-model-path"
+            value={transcription.model}
+            label={t('analysis.transcription.modelPath.label')}
+            placeholder={t('analysis.transcription.modelPath.placeholder')}
+            helpText={transcriptionModelMissing
+              ? undefined
+              : t('analysis.transcription.modelPath.helpText')}
+            disabled={store.isLoading || store.isSaving}
+            onchange={value => updateTranscription('model', value)}
+          />
+          {#if transcriptionModelMissing}
+            <p
+              id="transcription-model-required"
+              class="mt-1 text-sm text-[var(--color-error)]"
+              role="alert"
+              aria-live="polite"
+            >
+              {t('analysis.transcription.modelPath.required')}
+            </p>
+          {/if}
+        </div>
+
+        <TextInput
+          id="transcription-language"
+          value={transcription.language}
+          label={t('analysis.transcription.language.label')}
+          placeholder={t('analysis.transcription.language.placeholder')}
+          helpText={t('analysis.transcription.language.helpText')}
+          disabled={store.isLoading || store.isSaving}
+          onchange={value => updateTranscription('language', value)}
+        />
+      </div>
+
+      <!-- Advanced: binary path -->
+      <details
+        class="mt-4 rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-200)]/50"
+      >
+        <summary
+          class="cursor-pointer select-none px-4 py-3 text-sm font-medium text-[var(--color-base-content)] hover:bg-[var(--color-base-200)] rounded-lg transition-colors"
+        >
+          {t('analysis.transcription.advanced.title')}
+        </summary>
+        <div class="px-4 pb-4 pt-2">
+          <TextInput
+            id="transcription-binary"
+            value={transcription.binary}
+            label={t('analysis.transcription.advanced.binary.label')}
+            placeholder={t('analysis.transcription.advanced.binary.placeholder')}
+            helpText={t('analysis.transcription.advanced.binary.helpText')}
+            disabled={store.isLoading || store.isSaving}
+            onchange={value => updateTranscription('binary', value)}
+          />
+        </div>
+      </details>
+
+      <!-- Keyword list editor -->
+      <div class="mt-6 space-y-3">
+        <div>
+          <label class="label justify-start" for="transcription-keyword-input">
+            <span class="label-text capitalize">{t('analysis.transcription.keywords.label')}</span>
+          </label>
+          <div class="flex gap-2">
+            <input
+              id="transcription-keyword-input"
+              type="text"
+              class="input input-sm flex-1"
+              placeholder={t('analysis.transcription.keywords.inputPlaceholder')}
+              bind:value={keywordInput}
+              disabled={store.isLoading || store.isSaving}
+              onkeydown={handleKeywordKeydown}
+              aria-label={t('analysis.transcription.keywords.label')}
+              aria-describedby="transcription-keyword-help"
+            />
+            <button
+              type="button"
+              class="inline-flex items-center justify-center gap-1.5 h-8 px-3 text-sm font-medium rounded-lg bg-[var(--color-primary)] text-[var(--color-primary-content)] hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={store.isLoading || store.isSaving || !keywordInput.trim()}
+              onclick={addKeyword}
+              aria-label={t('analysis.transcription.keywords.addButton')}
+            >
+              <Plus class="size-4" />
+              {t('analysis.transcription.keywords.addButton')}
+            </button>
+          </div>
+          <span id="transcription-keyword-help" class="help-text mt-1 block">
+            {t('analysis.transcription.keywords.helpText')}
+          </span>
+        </div>
+
+        <!-- Keyword chips -->
+        {#if transcription.keywords.length === 0}
+          <p class="text-sm text-[var(--color-base-content)]/60 italic">
+            {t('analysis.transcription.keywords.emptyState')}
+          </p>
+        {:else}
+          <div
+            class="flex flex-wrap gap-2"
+            role="list"
+            aria-label={t('analysis.transcription.keywords.label')}
+          >
+            {#each transcription.keywords as keyword, i (keyword)}
+              <span
+                class="inline-flex items-center gap-1 rounded-full bg-[var(--color-primary)]/15 pl-3 pr-1.5 py-1 text-sm font-medium text-[var(--color-primary)]"
+                role="listitem"
+              >
+                {keyword}
+                <button
+                  type="button"
+                  class="inline-flex items-center justify-center size-5 rounded-full hover:bg-[var(--color-primary)]/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-1 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={store.isLoading || store.isSaving}
+                  onclick={() => removeKeyword(i)}
+                  aria-label={t('analysis.transcription.keywords.removeAriaLabel', { keyword })}
+                >
+                  <X class="size-3.5" />
+                </button>
+              </span>
+            {/each}
+          </div>
+        {/if}
+      </div>
+
+      <!-- Case-sensitive toggle -->
+      <div class="mt-4">
+        <Checkbox
+          checked={transcription.keywordCaseSensitive}
+          label={t('analysis.transcription.caseSensitive.label')}
+          helpText={t('analysis.transcription.caseSensitive.helpText')}
+          disabled={store.isLoading || store.isSaving}
+          onchange={value => updateTranscription('keywordCaseSensitive', value)}
         />
       </div>
     </SettingsSection>

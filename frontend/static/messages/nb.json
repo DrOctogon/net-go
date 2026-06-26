@@ -5009,6 +5009,45 @@
     },
     "dynamicThreshold": {
       "birdOnlyNote": "Dynamisk terskel gjelder kun for fugleklassifikatorer."
+    },
+    "transcription": {
+      "title": "Transcription & Keyword Flagging",
+      "description": "Transcribe audio clips offline with Whisper and flag detections whose transcription contains defined keywords.",
+      "enable": {
+        "label": "Enable Transcription",
+        "helpText": "Enables offline speech-to-text transcription for detected audio clips using whisper.cpp."
+      },
+      "modelPath": {
+        "label": "Whisper Model Path",
+        "placeholder": "ggml-tiny.en.bin",
+        "helpText": "Path to the GGML model file used for transcription. Required when transcription is enabled.",
+        "required": "A model path is required when transcription is enabled. Enter the path to a GGML model file (e.g. ggml-tiny.en.bin)."
+      },
+      "language": {
+        "label": "Language",
+        "placeholder": "en",
+        "helpText": "BCP-47 language code for transcription (e.g. en, de, fr). Leave as en for English-only models."
+      },
+      "advanced": {
+        "title": "Advanced",
+        "binary": {
+          "label": "Whisper Binary",
+          "placeholder": "whisper-cli",
+          "helpText": "Name or absolute path of the whisper-cli executable. Defaults to whisper-cli on PATH."
+        }
+      },
+      "keywords": {
+        "label": "Flag Keywords",
+        "inputPlaceholder": "Add a keyword...",
+        "helpText": "Detections whose transcription contains any of these words will be flagged for review.",
+        "addButton": "Add",
+        "emptyState": "No keywords added yet. Enter a word above and click Add.",
+        "removeAriaLabel": "Remove keyword \"{keyword}\""
+      },
+      "caseSensitive": {
+        "label": "Case-Sensitive Matching",
+        "helpText": "When enabled, keyword matching distinguishes uppercase from lowercase letters (e.g. \"Fire\" will not match \"fire\")."
+      }
     }
   },
   "restart": {

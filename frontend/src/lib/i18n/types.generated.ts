@@ -3650,6 +3650,29 @@ export type TranslationKey =
   | 'analysis.bat.title'
   | 'analysis.bat.description'
   | 'analysis.dynamicThreshold.birdOnlyNote'
+  | 'analysis.transcription.title'
+  | 'analysis.transcription.description'
+  | 'analysis.transcription.enable.label'
+  | 'analysis.transcription.enable.helpText'
+  | 'analysis.transcription.modelPath.label'
+  | 'analysis.transcription.modelPath.placeholder'
+  | 'analysis.transcription.modelPath.helpText'
+  | 'analysis.transcription.modelPath.required'
+  | 'analysis.transcription.language.label'
+  | 'analysis.transcription.language.placeholder'
+  | 'analysis.transcription.language.helpText'
+  | 'analysis.transcription.advanced.title'
+  | 'analysis.transcription.advanced.binary.label'
+  | 'analysis.transcription.advanced.binary.placeholder'
+  | 'analysis.transcription.advanced.binary.helpText'
+  | 'analysis.transcription.keywords.label'
+  | 'analysis.transcription.keywords.inputPlaceholder'
+  | 'analysis.transcription.keywords.helpText'
+  | 'analysis.transcription.keywords.addButton'
+  | 'analysis.transcription.keywords.emptyState'
+  | 'analysis.transcription.keywords.removeAriaLabel' // params: keyword
+  | 'analysis.transcription.caseSensitive.label'
+  | 'analysis.transcription.caseSensitive.helpText'
   | 'restart.applicationRestart'
   | 'restart.containerRestart'
   | 'restart.confirmTitle'
@@ -4138,6 +4161,7 @@ export type TranslationParams = {
   };
   'analysis.gallery.species': { count: string | number };
   'analysis.gallery.removeDialog.title': { name: string | number };
+  'analysis.transcription.keywords.removeAriaLabel': { keyword: string | number };
 };
 
 /**
