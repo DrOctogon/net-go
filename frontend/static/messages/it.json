@@ -786,6 +786,7 @@
   },
   "detections": {
     "title": "Rilevamenti",
+    "humanVoice": "Human Voice",
     "flaggedByKeywords": "Flagged by keywords: {keywords}",
     "titles": {
       "hourly": "Risultati orari per le {hour}:00 del {date}",
@@ -795,7 +796,6 @@
       "allDetections": "Tutti i rilevamenti del {date}"
     },
     "detail": {
-      "species": "Specie",
       "observation": "Osservazione",
       "transcript": {
         "title": "Transcript",
@@ -806,7 +806,6 @@
       "aria": {
         "downloadAudioClip": "Download audio clip for {name} detection",
         "audioRecordingFor": "Audio recording and spectrogram for {name}",
-        "scientificName": "Nome scientifico",
         "classificationBadges": "Badge di classificazione della specie",
         "confidence": "Confidenza del rilevamento {confidence}%",
         "metadata": "Metadati del rilevamento",
@@ -816,8 +815,7 @@
         "commentTimestamp": "Data e ora del commento",
         "mainRegion": "Dettagli del rilevamento",
         "tabsHeading": "Schede informazioni rilevamento",
-        "tabList": "Schede dettagli rilevamento",
-        "speciesHeadingSuffix": "dettagli del rilevamento"
+        "tabList": "Schede dettagli rilevamento"
       }
     },
     "headers": {
@@ -997,33 +995,6 @@
     }
   },
   "species": {
-    "rarity": {
-      "title": "Rarità Specie",
-      "score": "Punteggio",
-      "basedOnLocation": "Basato sulla posizione: {latitude}, {longitude}",
-      "statuses": {
-        "very_common": "Molto comune",
-        "common": "Comune",
-        "uncommon": "Non comune",
-        "rare": "Raro",
-        "very_rare": "Molto raro",
-        "unknown": "Sconosciuto"
-      }
-    },
-    "taxonomy": {
-      "hierarchy": "Classificazione Tassonomica",
-      "subspecies": "Sottospecie",
-      "noData": "Nessun dato tassonomico disponibile.",
-      "labels": {
-        "kingdom": "Regno",
-        "phylum": "Phylum",
-        "class": "Classe",
-        "order": "Ordine",
-        "family": "Famiglia",
-        "genus": "Genere",
-        "species": "Specie"
-      }
-    },
     "synonyms": {
       "tabLabel": "Sinonimi tassonomici",
       "description": "Sovrascrivi le corrispondenze dei nomi scientifici utilizzate per la ricerca delle immagini degli uccelli. VoiceWatch utilizza la tassonomia 2021E, ma le fonti delle immagini potrebbero utilizzare nomi aggiornati. Le corrispondenze integrate vengono sempre caricate; le tue sovrascritture si aggiungono o le sostituiscono.",

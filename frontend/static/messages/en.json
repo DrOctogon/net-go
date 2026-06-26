@@ -786,6 +786,7 @@
   },
   "detections": {
     "title": "Detections",
+    "humanVoice": "Human Voice",
     "flaggedByKeywords": "Flagged by keywords: {keywords}",
     "titles": {
       "hourly": "Hourly Results for {hour}:00 on {date}",
@@ -795,7 +796,6 @@
       "allDetections": "All Detections for {date}"
     },
     "detail": {
-      "species": "Species",
       "observation": "Observation",
       "transcript": {
         "title": "Transcript",
@@ -806,8 +806,7 @@
       "aria": {
         "downloadAudioClip": "Download audio clip for {name} detection",
         "audioRecordingFor": "Audio recording and spectrogram for {name}",
-        "scientificName": "Scientific name",
-        "classificationBadges": "Species classification badges",
+        "classificationBadges": "Detection classification badges",
         "confidence": "Detection confidence {confidence}%",
         "metadata": "Detection metadata",
         "weatherConditions": "Weather conditions at time of detection",
@@ -816,8 +815,7 @@
         "commentTimestamp": "Comment timestamp",
         "mainRegion": "Detection details",
         "tabsHeading": "Detection information tabs",
-        "tabList": "Detection details tabs",
-        "speciesHeadingSuffix": "detection details"
+        "tabList": "Detection details tabs"
       }
     },
     "headers": {
@@ -997,33 +995,6 @@
     }
   },
   "species": {
-    "rarity": {
-      "title": "Species Rarity",
-      "score": "Score",
-      "basedOnLocation": "Based on location: {latitude}, {longitude}",
-      "statuses": {
-        "very_common": "Very Common",
-        "common": "Common",
-        "uncommon": "Uncommon",
-        "rare": "Rare",
-        "very_rare": "Very Rare",
-        "unknown": "Unknown"
-      }
-    },
-    "taxonomy": {
-      "hierarchy": "Taxonomic Classification",
-      "subspecies": "Subspecies",
-      "noData": "No taxonomy data available.",
-      "labels": {
-        "kingdom": "Kingdom",
-        "phylum": "Phylum",
-        "class": "Class",
-        "order": "Order",
-        "family": "Family",
-        "genus": "Genus",
-        "species": "Species"
-      }
-    },
     "synonyms": {
       "tabLabel": "Taxonomy Synonyms",
       "description": "Override scientific name mappings used for bird image lookups. VoiceWatch uses 2021E taxonomy, but image sources may use updated names. Built-in mappings are always loaded; your overrides add to or replace them.",

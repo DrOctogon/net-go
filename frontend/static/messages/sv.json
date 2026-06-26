@@ -786,6 +786,7 @@
   },
   "detections": {
     "title": "Detekteringar",
+    "humanVoice": "Human Voice",
     "flaggedByKeywords": "Flagged by keywords: {keywords}",
     "titles": {
       "hourly": "Timresultat för {hour}:00 den {date}",
@@ -795,7 +796,6 @@
       "allDetections": "Alla detekteringar för {date}"
     },
     "detail": {
-      "species": "Art",
       "observation": "Observation",
       "transcript": {
         "title": "Transcript",
@@ -806,7 +806,6 @@
       "aria": {
         "downloadAudioClip": "Download audio clip for {name} detection",
         "audioRecordingFor": "Audio recording and spectrogram for {name}",
-        "scientificName": "Vetenskapligt namn",
         "classificationBadges": "Märken för artklassificering",
         "confidence": "Detekteringskonfidens {confidence}%",
         "metadata": "Detekteringsmetadata",
@@ -816,8 +815,7 @@
         "commentTimestamp": "Tidsstämpel för kommentar",
         "mainRegion": "Detekteringsinformation",
         "tabsHeading": "Flikar med detekteringsinformation",
-        "tabList": "Flikar med detekteringsdetaljer",
-        "speciesHeadingSuffix": "detekteringsinformation"
+        "tabList": "Flikar med detekteringsdetaljer"
       }
     },
     "headers": {
@@ -997,33 +995,6 @@
     }
   },
   "species": {
-    "rarity": {
-      "title": "Arternas sällsynthet",
-      "score": "Poäng",
-      "basedOnLocation": "Baserat på plats: {latitude}, {longitude}",
-      "statuses": {
-        "very_common": "Mycket vanlig",
-        "common": "Vanlig",
-        "uncommon": "Ovanlig",
-        "rare": "Sällsynt",
-        "very_rare": "Mycket sällsynt",
-        "unknown": "Okänd"
-      }
-    },
-    "taxonomy": {
-      "hierarchy": "Taxonomisk klassificering",
-      "subspecies": "Underart",
-      "noData": "Inga taxonomidata tillgängliga.",
-      "labels": {
-        "kingdom": "Rike",
-        "phylum": "Stam",
-        "class": "Klass",
-        "order": "Ordning",
-        "family": "Familj",
-        "genus": "Släkte",
-        "species": "Art"
-      }
-    },
     "synonyms": {
       "tabLabel": "Taxonomiska synonymer",
       "description": "Åsidosätt vetenskapliga namntilldelningar som används för fågelbildsökning. VoiceWatch använder 2021E-taxonomin, men bildkällor kan använda uppdaterade namn. Inbyggda tilldelningar laddas alltid; dina åsidosättningar läggs till eller ersätter dem.",

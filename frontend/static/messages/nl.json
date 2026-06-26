@@ -786,6 +786,7 @@
   },
   "detections": {
     "title": "Herkend",
+    "humanVoice": "Human Voice",
     "flaggedByKeywords": "Flagged by keywords: {keywords}",
     "titles": {
       "hourly": "Herkend om {hour}:00 uur op {date}",
@@ -795,7 +796,6 @@
       "allDetections": "Alles herkend op {date}"
     },
     "detail": {
-      "species": "Soort",
       "observation": "Waarneming",
       "transcript": {
         "title": "Transcript",
@@ -806,7 +806,6 @@
       "aria": {
         "downloadAudioClip": "Download audio clip for {name} detection",
         "audioRecordingFor": "Audio recording and spectrogram for {name}",
-        "scientificName": "Wetenschappelijke naam",
         "classificationBadges": "Soortclassificatie-badges",
         "confidence": "Betrouwbaarheid herkenning {confidence}%",
         "metadata": "Meta informatie herkenning",
@@ -816,8 +815,7 @@
         "commentTimestamp": "Tijdstempel van notitie",
         "mainRegion": "Herkenningsdetails",
         "tabsHeading": "Tabbladen met herkenningsinformatie",
-        "tabList": "Tabbladen met herkenningsdetails",
-        "speciesHeadingSuffix": "herkenningsdetails"
+        "tabList": "Tabbladen met herkenningsdetails"
       }
     },
     "headers": {
@@ -997,33 +995,6 @@
     }
   },
   "species": {
-    "rarity": {
-      "title": "Soort zeldzaamheid",
-      "score": "Score",
-      "basedOnLocation": "Gebaseerd op locatie: {latitude}, {longitude}",
-      "statuses": {
-        "very_common": "Zeer algemeen",
-        "common": "Algemeen",
-        "uncommon": "Ongewoon",
-        "rare": "Zeldzaam",
-        "very_rare": "Zeer zeldzaam",
-        "unknown": "Onbekend"
-      }
-    },
-    "taxonomy": {
-      "hierarchy": "Taxonomische klassificatie",
-      "subspecies": "Ondersoort",
-      "noData": "Geen taxonomische informatie beschikbaar.",
-      "labels": {
-        "kingdom": "Rijk",
-        "phylum": "Stam",
-        "class": "Klasse",
-        "order": "Orde",
-        "family": "Familie",
-        "genus": "Geslacht",
-        "species": "Soort"
-      }
-    },
     "synonyms": {
       "tabLabel": "Taxonomie-synoniemen",
       "description": "Overschrijf de toewijzingen van wetenschappelijke namen die worden gebruikt voor het zoeken naar vogelafbeeldingen. VoiceWatch gebruikt de 2021E-taxonomie, maar afbeeldingsbronnen kunnen bijgewerkte namen gebruiken. Ingebouwde toewijzingen worden altijd geladen; uw overschrijvingen worden toegevoegd of vervangen deze.",

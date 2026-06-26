@@ -786,6 +786,7 @@
   },
   "detections": {
     "title": "Detekcje",
+    "humanVoice": "Human Voice",
     "flaggedByKeywords": "Flagged by keywords: {keywords}",
     "titles": {
       "hourly": "Wyniki Godzinowe dla {hour}:00 dnia {date}",
@@ -795,7 +796,6 @@
       "allDetections": "Wszystkie Detekcje dla {date}"
     },
     "detail": {
-      "species": "Gatunek",
       "observation": "Obserwacja",
       "transcript": {
         "title": "Transcript",
@@ -806,7 +806,6 @@
       "aria": {
         "downloadAudioClip": "Download audio clip for {name} detection",
         "audioRecordingFor": "Audio recording and spectrogram for {name}",
-        "scientificName": "Nazwa naukowa",
         "classificationBadges": "Odznaki klasyfikacji gatunku",
         "confidence": "Pewność detekcji {confidence}%",
         "metadata": "Metadane detekcji",
@@ -816,8 +815,7 @@
         "commentTimestamp": "Znacznik czasu komentarza",
         "mainRegion": "Szczegóły detekcji",
         "tabsHeading": "Karty informacji o detekcji",
-        "tabList": "Karty szczegółów detekcji",
-        "speciesHeadingSuffix": "szczegóły detekcji"
+        "tabList": "Karty szczegółów detekcji"
       }
     },
     "headers": {
@@ -997,33 +995,6 @@
     }
   },
   "species": {
-    "rarity": {
-      "title": "Rzadkość Gatunku",
-      "score": "Wynik",
-      "basedOnLocation": "Na podstawie lokalizacji: {latitude}, {longitude}",
-      "statuses": {
-        "very_common": "Bardzo pospolity",
-        "common": "Pospolity",
-        "uncommon": "Niepospolity",
-        "rare": "Rzadki",
-        "very_rare": "Bardzo rzadki",
-        "unknown": "Nieznany"
-      }
-    },
-    "taxonomy": {
-      "hierarchy": "Klasyfikacja Taksonomiczna",
-      "subspecies": "Podgatunek",
-      "noData": "Brak dostępnych danych taksonomicznych.",
-      "labels": {
-        "kingdom": "Królestwo",
-        "phylum": "Typ",
-        "class": "Klasa",
-        "order": "Rząd",
-        "family": "Rodzina",
-        "genus": "Rodzaj",
-        "species": "Gatunek"
-      }
-    },
     "synonyms": {
       "tabLabel": "Synonimy taksonomiczne",
       "description": "Nadpisz mapowania nazw naukowych używane do wyszukiwania zdjęć ptaków. VoiceWatch używa taksonomii 2021E, ale źródła zdjęć mogą używać zaktualizowanych nazw. Wbudowane mapowania są zawsze ładowane; Twoje nadpisania dodają się lub je zastępują.",

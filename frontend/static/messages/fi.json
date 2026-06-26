@@ -786,6 +786,7 @@
   },
   "detections": {
     "title": "Havainnot",
+    "humanVoice": "Human Voice",
     "flaggedByKeywords": "Flagged by keywords: {keywords}",
     "titles": {
       "hourly": "Tunnittaiset tulokset klo {hour}.00 päivänä {date}",
@@ -795,7 +796,6 @@
       "allDetections": "Kaikki havainnot päivänä {date}"
     },
     "detail": {
-      "species": "Laji",
       "observation": "Havainto",
       "transcript": {
         "title": "Transcript",
@@ -806,7 +806,6 @@
       "aria": {
         "downloadAudioClip": "Download audio clip for {name} detection",
         "audioRecordingFor": "Audio recording and spectrogram for {name}",
-        "scientificName": "Tieteellinen nimi",
         "classificationBadges": "Lajin luokitusmerkit",
         "confidence": "Havainnon luottamus {confidence}%",
         "metadata": "Havainnon metatiedot",
@@ -816,8 +815,7 @@
         "commentTimestamp": "Kommentin aikaleima",
         "mainRegion": "Havainnon tiedot",
         "tabsHeading": "Havaintotietojen välilehdet",
-        "tabList": "Havainnon tietojen välilehdet",
-        "speciesHeadingSuffix": "havainnon tiedot"
+        "tabList": "Havainnon tietojen välilehdet"
       }
     },
     "headers": {
@@ -997,33 +995,6 @@
     }
   },
   "species": {
-    "rarity": {
-      "title": "Lajin harvinaisuus",
-      "score": "Pisteet",
-      "basedOnLocation": "Sijainnin perusteella: {latitude}, {longitude}",
-      "statuses": {
-        "very_common": "Hyvin yleinen",
-        "common": "Yleinen",
-        "uncommon": "Melko harvinainen",
-        "rare": "Harvinainen",
-        "very_rare": "Hyvin harvinainen",
-        "unknown": "Tuntematon"
-      }
-    },
-    "taxonomy": {
-      "hierarchy": "Taksonomiluokitus",
-      "subspecies": "Alalajit",
-      "noData": "Taksonomiatietoja ei ole saatavilla.",
-      "labels": {
-        "kingdom": "Kunta",
-        "phylum": "Pääjakso",
-        "class": "Luokka",
-        "order": "Lahko",
-        "family": "Heimo",
-        "genus": "Suku",
-        "species": "Laji"
-      }
-    },
     "synonyms": {
       "tabLabel": "Taksonomiasynonyymit",
       "description": "Ohita tieteellisten nimien yhdistämiset lintukuvahaussa. VoiceWatch käyttää 2021E-taksonomiaa, mutta kuvalähteet voivat käyttää päivitettyjä nimiä. Sisäänrakennetut yhdistämiset ladataan aina; omat ohituksesi lisäävät tai korvaavat niitä.",

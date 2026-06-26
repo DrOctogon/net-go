@@ -786,6 +786,7 @@
   },
   "detections": {
     "title": "Detecções",
+    "humanVoice": "Human Voice",
     "flaggedByKeywords": "Flagged by keywords: {keywords}",
     "titles": {
       "hourly": "Resultados por hora às {hour}:00 em {date}",
@@ -795,7 +796,6 @@
       "allDetections": "Todas as detecções em {date}"
     },
     "detail": {
-      "species": "Espécie",
       "observation": "Observação",
       "transcript": {
         "title": "Transcript",
@@ -806,7 +806,6 @@
       "aria": {
         "downloadAudioClip": "Download audio clip for {name} detection",
         "audioRecordingFor": "Audio recording and spectrogram for {name}",
-        "scientificName": "Nome científico",
         "classificationBadges": "Distintivos de classificação da espécie",
         "confidence": "Confiança da detecção {confidence}%",
         "metadata": "Metadados da detecção",
@@ -816,8 +815,7 @@
         "commentTimestamp": "Data e hora do comentário",
         "mainRegion": "Detalhes de detecção",
         "tabsHeading": "Abas de informação da detecção",
-        "tabList": "Abas de detalhes da detecção",
-        "speciesHeadingSuffix": "detalhes de detecção"
+        "tabList": "Abas de detalhes da detecção"
       }
     },
     "headers": {
@@ -997,33 +995,6 @@
     }
   },
   "species": {
-    "rarity": {
-      "title": "Raridade da espécie",
-      "score": "Pontuação",
-      "basedOnLocation": "Baseado na localização: {latitude}, {longitude}",
-      "statuses": {
-        "very_common": "Muito comum",
-        "common": "Comum",
-        "uncommon": "Incomum",
-        "rare": "Raro",
-        "very_rare": "Muito raro",
-        "unknown": "Desconhecido"
-      }
-    },
-    "taxonomy": {
-      "hierarchy": "Classificação taxonômica",
-      "subspecies": "Subespécie",
-      "noData": "Sem dados de taxonomia disponíveis.",
-      "labels": {
-        "kingdom": "Reino",
-        "phylum": "Filo",
-        "class": "Classe",
-        "order": "Ordem",
-        "family": "Família",
-        "genus": "Gênero",
-        "species": "Espécie"
-      }
-    },
     "synonyms": {
       "tabLabel": "Sinónimos taxonómicos",
       "description": "Substituir os mapeamentos de nomes científicos utilizados para a pesquisa de imagens de aves. O VoiceWatch utiliza a taxonomia 2021E, mas as fontes de imagens podem utilizar nomes atualizados. Os mapeamentos integrados são sempre carregados; as suas substituições adicionam-se ou substituem-nos.",

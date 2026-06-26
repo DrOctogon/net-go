@@ -632,13 +632,13 @@ export type TranslationKey =
   | 'dashboard.elements.liveSpectrogram'
   | 'dashboard.elements.videoEmbed'
   | 'detections.title'
+  | 'detections.humanVoice'
   | 'detections.flaggedByKeywords' // params: keywords
   | 'detections.titles.hourly' // params: hour, date
   | 'detections.titles.hourlyRange' // params: startHour, endHour, date
   | 'detections.titles.species' // params: species, date
   | 'detections.titles.search' // params: query
   | 'detections.titles.allDetections' // params: date
-  | 'detections.detail.species'
   | 'detections.detail.observation'
   | 'detections.detail.transcript.title'
   | 'detections.detail.transcript.matchedKeywords'
@@ -646,7 +646,6 @@ export type TranslationKey =
   | 'detections.detail.transcript.empty'
   | 'detections.detail.aria.downloadAudioClip' // params: name
   | 'detections.detail.aria.audioRecordingFor' // params: name
-  | 'detections.detail.aria.scientificName'
   | 'detections.detail.aria.classificationBadges'
   | 'detections.detail.aria.confidence' // params: confidence
   | 'detections.detail.aria.metadata'
@@ -657,7 +656,6 @@ export type TranslationKey =
   | 'detections.detail.aria.mainRegion'
   | 'detections.detail.aria.tabsHeading'
   | 'detections.detail.aria.tabList'
-  | 'detections.detail.aria.speciesHeadingSuffix'
   | 'detections.headers.dateTime'
   | 'detections.headers.weather'
   | 'detections.headers.source'
@@ -791,25 +789,6 @@ export type TranslationKey =
   | 'detections.errors.loadFailed' // params: status
   | 'detections.errors.noIdProvided'
   | 'detections.errors.fetchFailed'
-  | 'species.rarity.title'
-  | 'species.rarity.score'
-  | 'species.rarity.basedOnLocation' // params: latitude, longitude
-  | 'species.rarity.statuses.very_common'
-  | 'species.rarity.statuses.common'
-  | 'species.rarity.statuses.uncommon'
-  | 'species.rarity.statuses.rare'
-  | 'species.rarity.statuses.very_rare'
-  | 'species.rarity.statuses.unknown'
-  | 'species.taxonomy.hierarchy'
-  | 'species.taxonomy.subspecies'
-  | 'species.taxonomy.noData'
-  | 'species.taxonomy.labels.kingdom'
-  | 'species.taxonomy.labels.phylum'
-  | 'species.taxonomy.labels.class'
-  | 'species.taxonomy.labels.order'
-  | 'species.taxonomy.labels.family'
-  | 'species.taxonomy.labels.genus'
-  | 'species.taxonomy.labels.species'
   | 'species.synonyms.tabLabel'
   | 'species.synonyms.description'
   | 'species.synonyms.birdnetName'
@@ -3946,7 +3925,6 @@ export type TranslationParams = {
   'detections.aria.thumbnailLoading': { species: string | number };
   'detections.aria.thumbnailLoaded': { species: string | number };
   'detections.errors.loadFailed': { status: string | number };
-  'species.rarity.basedOnLocation': { latitude: string | number; longitude: string | number };
   'spectrogram.gain.level': { value: string | number };
   'system.systemInfo.temperatureValue': { temp: string | number };
   'system.errors.systemInfo': { error: string | number };

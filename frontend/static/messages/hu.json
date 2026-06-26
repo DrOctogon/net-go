@@ -786,6 +786,7 @@
   },
   "detections": {
     "title": "Detektálások",
+    "humanVoice": "Human Voice",
     "flaggedByKeywords": "Flagged by keywords: {keywords}",
     "titles": {
       "hourly": "Órási eredmények {date}-án {hour}:00-kor",
@@ -795,7 +796,6 @@
       "allDetections": "Összes detektálás {date}-án"
     },
     "detail": {
-      "species": "Faj",
       "observation": "Megfigyelés",
       "transcript": {
         "title": "Transcript",
@@ -806,7 +806,6 @@
       "aria": {
         "downloadAudioClip": "Download audio clip for {name} detection",
         "audioRecordingFor": "Audio recording and spectrogram for {name}",
-        "scientificName": "Tudományos név",
         "classificationBadges": "Faj besorolási jelvények",
         "confidence": "Detektálás megbízhatósága {confidence}%",
         "metadata": "Detektálás metaadatok",
@@ -816,8 +815,7 @@
         "commentTimestamp": "Megjegyzés időbélyege",
         "mainRegion": "Detektálás részletei",
         "tabsHeading": "Detektálási információk lapjai",
-        "tabList": "Detektálás részleteinek lapjai",
-        "speciesHeadingSuffix": "detektálás részletei"
+        "tabList": "Detektálás részleteinek lapjai"
       }
     },
     "headers": {
@@ -997,33 +995,6 @@
     }
   },
   "species": {
-    "rarity": {
-      "title": "Faj ritkasága",
-      "score": "Pontszám",
-      "basedOnLocation": "Helyszín alapján: {latitude}, {longitude}",
-      "statuses": {
-        "very_common": "Nagyon gyakori",
-        "common": "Gyakori",
-        "uncommon": "Ritka",
-        "rare": "Nagyon ritka",
-        "very_rare": "Rendkívül ritka",
-        "unknown": "Ismeretlen"
-      }
-    },
-    "taxonomy": {
-      "hierarchy": "Taxonómiai besorolás",
-      "subspecies": "Alfajok",
-      "noData": "Nem érhető el taxonómia adat.",
-      "labels": {
-        "kingdom": "Ország",
-        "phylum": "Törzs",
-        "class": "Osztály",
-        "order": "Rend",
-        "family": "Család",
-        "genus": "Nemzetség",
-        "species": "Faj"
-      }
-    },
     "synonyms": {
       "tabLabel": "Taxonómia szinonimák",
       "description": "Felülbírálja a tudományos név leképezéseket a madár képkeresésekhez. A VoiceWatch 2021E taxonómiát használ, de a képek forrásai frissített neveket használhatnak. A beépített leképezések mindig betöltődnek; az Ön felülbírálásai hozzáadódnak vagy helyettesítik azokat.",

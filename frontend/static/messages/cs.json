@@ -786,6 +786,7 @@
   },
   "detections": {
     "title": "Detekce",
+    "humanVoice": "Human Voice",
     "flaggedByKeywords": "Flagged by keywords: {keywords}",
     "titles": {
       "hourly": "Hodinové výsledky pro {hour}:00 dne {date}",
@@ -795,7 +796,6 @@
       "allDetections": "Všechny detekce ze dne {date}"
     },
     "detail": {
-      "species": "Druh",
       "observation": "Pozorování",
       "transcript": {
         "title": "Transcript",
@@ -806,7 +806,6 @@
       "aria": {
         "downloadAudioClip": "Download audio clip for {name} detection",
         "audioRecordingFor": "Audio recording and spectrogram for {name}",
-        "scientificName": "Vědecký název",
         "classificationBadges": "Odznaky klasifikace druhu",
         "confidence": "Spolehlivost detekce {confidence}%",
         "metadata": "Metadata detekce",
@@ -816,8 +815,7 @@
         "commentTimestamp": "Časové razítko komentáře",
         "mainRegion": "Podrobnosti detekce",
         "tabsHeading": "Karty s informacemi o detekci",
-        "tabList": "Karty podrobností detekce",
-        "speciesHeadingSuffix": "podrobnosti detekce"
+        "tabList": "Karty podrobností detekce"
       }
     },
     "headers": {
@@ -997,33 +995,6 @@
     }
   },
   "species": {
-    "rarity": {
-      "title": "Vzácnost druhu",
-      "score": "Skóre",
-      "basedOnLocation": "Na základě polohy: {latitude}, {longitude}",
-      "statuses": {
-        "very_common": "Velmi běžný",
-        "common": "Běžný",
-        "uncommon": "Méně častý",
-        "rare": "Vzácný",
-        "very_rare": "Velmi vzácný",
-        "unknown": "Neznámý"
-      }
-    },
-    "taxonomy": {
-      "hierarchy": "Taxonomická klasifikace",
-      "subspecies": "Poddruh",
-      "noData": "Taxonomická data nejsou k dispozici.",
-      "labels": {
-        "kingdom": "Říše",
-        "phylum": "Kmen",
-        "class": "Třída",
-        "order": "Řád",
-        "family": "Čeleď",
-        "genus": "Rod",
-        "species": "Druh"
-      }
-    },
     "synonyms": {
       "tabLabel": "Taxonomická synonyma",
       "description": "Přepsat mapování vědeckých názvů používaných pro vyhledávání obrázků ptáků. VoiceWatch používá taxonomii 2021E, ale zdroje obrázků mohou používat aktualizované názvy. Vestavěná mapování jsou vždy načtena; vaše přepisy je doplňují nebo nahrazují.",

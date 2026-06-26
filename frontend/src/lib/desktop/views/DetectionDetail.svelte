@@ -1,15 +1,15 @@
 <!--
   DetectionDetail.svelte - Single Detection View Component
 
-  Purpose: Display comprehensive details for a single bird detection
+  Purpose: Display comprehensive details for a single human voice detection
 
   Features:
-  - Editorial hero section with large species thumbnail and display typography
-  - Horizontal metadata stat bar (confidence, date/time, weather, download)
+  - Hero section with mic icon, detection title, confidence indicator
+  - Metadata card (date/time, source, weather, download)
   - Audio player with large spectrogram visualization
-  - Tabbed content: overview, taxonomy, history, notes, review
+  - Tabbed content: overview, history, notes, review
+  - Transcript with keyword highlighting
   - Weather and environmental context
-  - Species rarity and taxonomy information
 
   Props:
   - detectionId: string - The ID of the detection to display
@@ -20,18 +20,16 @@
   import AudioPlayer from '$lib/desktop/components/media/AudioPlayer.svelte';
   import VerificationBadges from '$lib/desktop/components/ui/VerificationBadges.svelte';
   import ErrorAlert from '$lib/desktop/components/ui/ErrorAlert.svelte';
-  import { handleBirdImageError } from '$lib/desktop/components/ui/image-utils.js';
   import { t } from '$lib/i18n';
-  import type { Detection, ImageAttribution } from '$lib/types/detection.types';
+  import type { Detection } from '$lib/types/detection.types';
   import { hasReviewPermission, isAuthenticated } from '$lib/utils/auth';
   import { formatLocalDateTime } from '$lib/utils/date';
   import { buildAppUrl, getCurrentPathWithQuery } from '$lib/utils/urlHelpers';
   import { loggers } from '$lib/utils/logger';
-  import { localizeSpeciesName } from '$lib/utils/speciesDisplay';
   import SourceBadge from '$lib/desktop/features/dashboard/components/SourceBadge.svelte';
   import {
     Download,
-    Camera,
+    Mic,
     Clock,
     Flag,
     History,
@@ -41,41 +39,6 @@
     Sunrise,
     Sunset,
   } from '@lucide/svelte';
-
-  // Interface definitions for API responses
-  interface SpeciesRarity {
-    status: string;
-    score: number;
-    location_based: boolean;
-    latitude: number;
-    longitude: number;
-  }
-
-  interface SpeciesInfo {
-    rarity?: SpeciesRarity;
-    [key: string]: unknown;
-  }
-
-  interface TaxonomyHierarchy {
-    kingdom: string;
-    phylum: string;
-    class: string;
-    order: string;
-    family: string;
-    family_common?: string;
-    genus: string;
-    species: string;
-  }
-
-  interface Subspecies {
-    scientific_name: string;
-    common_name?: string;
-  }
-
-  interface TaxonomyInfo {
-    taxonomy?: TaxonomyHierarchy;
-    subspecies?: Subspecies[];
-  }
 
   // ReviewCard component type (Svelte 5 component)
   type ReviewCardComponent =
@@ -107,25 +70,11 @@
   let canReview = $derived($hasReviewPermission);
   let clipExtractionEnabled = $derived($isAuthenticated);
   let detection = $state<Detection | null>(null);
-  let speciesInfo = $state<SpeciesInfo | null>(null);
-  let taxonomyInfo = $state<TaxonomyInfo | null>(null);
   let isLoadingDetection = $state(true);
-  let isLoadingTaxonomy = $state(false);
   let detectionError = $state<string | null>(null);
-  let imageAttribution = $state<ImageAttribution | null>(null);
-
-  // Derived state for subspecies with proper typing
-  let subspeciesList = $derived<Subspecies[]>(
-    taxonomyInfo?.subspecies && Array.isArray(taxonomyInfo.subspecies)
-      ? taxonomyInfo.subspecies
-      : []
-  );
 
   // AbortController for preventing race conditions
   let detectionController: AbortController | null = null;
-  let speciesController: AbortController | null = null;
-  let taxonomyController: AbortController | null = null;
-  let attributionController: AbortController | null = null;
 
   // Validate detection ID to prevent path traversal attacks
   // Only allow alphanumeric characters, hyphens, and underscores
@@ -171,9 +120,6 @@
 
     return () => {
       detectionController?.abort();
-      speciesController?.abort();
-      taxonomyController?.abort();
-      attributionController?.abort();
     };
   });
 
@@ -192,13 +138,9 @@
 
     isLoadingDetection = true;
     detectionError = null;
-    // Reset the detail and its dependent data so a newer detection never briefly
-    // shows the previously viewed one's species/taxonomy/attribution while the
-    // secondary fetches are still in flight.
+    // Reset the detail so a newer detection never briefly shows the
+    // previously viewed one while the fetch is still in flight.
     detection = null;
-    speciesInfo = null;
-    taxonomyInfo = null;
-    imageAttribution = null;
 
     try {
       const response = await fetch(buildAppUrl(`/api/v2/detections/${resolvedDetectionId}`), {
@@ -236,12 +178,6 @@
         }
         throw new Error(errorMessage);
       }
-
-      if (detection) {
-        fetchSpeciesInfo();
-        fetchTaxonomy();
-        fetchImageAttribution();
-      }
     } catch (error) {
       if (signal.aborted || (error instanceof Error && error.name === 'AbortError')) {
         return;
@@ -255,106 +191,6 @@
       if (detectionController === controller) {
         isLoadingDetection = false;
         detectionController = null;
-      }
-    }
-  }
-
-  // Fetch image attribution metadata
-  async function fetchImageAttribution() {
-    if (!detection?.scientificName?.trim()) return;
-
-    attributionController?.abort();
-    const controller = new AbortController();
-    attributionController = controller;
-    const { signal } = controller;
-
-    try {
-      const url = buildAppUrl(
-        `/api/v2/media/species-image/info?name=${encodeURIComponent(detection.scientificName)}`
-      );
-      const response = await fetch(url, { signal });
-      if (signal.aborted) return;
-      if (response.ok) {
-        const data = await response.json();
-        if (signal.aborted) return;
-        imageAttribution = data as ImageAttribution;
-      }
-    } catch (error) {
-      if (signal.aborted || (error instanceof Error && error.name === 'AbortError')) return;
-      // Attribution is non-critical - fail silently
-    } finally {
-      if (attributionController === controller) {
-        attributionController = null;
-      }
-    }
-  }
-
-  // Fetch species information (public data - no auth required)
-  async function fetchSpeciesInfo() {
-    if (!detection?.scientificName?.trim()) return;
-
-    speciesController?.abort();
-    const controller = new AbortController();
-    speciesController = controller;
-    const { signal } = controller;
-
-    try {
-      const response = await fetch(
-        buildAppUrl(
-          `/api/v2/species?scientific_name=${encodeURIComponent(detection.scientificName)}`
-        ),
-        { signal }
-      );
-      if (signal.aborted) return;
-      if (response.ok) {
-        const data = await response.json();
-        if (signal.aborted) return;
-        speciesInfo = data;
-      }
-    } catch (error) {
-      if (signal.aborted || (error instanceof Error && error.name === 'AbortError')) {
-        return;
-      }
-      logger.error('Error fetching species info:', error);
-    } finally {
-      if (speciesController === controller) {
-        speciesController = null;
-      }
-    }
-  }
-
-  // Fetch taxonomy information (public data - no auth required)
-  async function fetchTaxonomy() {
-    if (!detection?.scientificName?.trim()) return;
-
-    taxonomyController?.abort();
-    const controller = new AbortController();
-    taxonomyController = controller;
-    const { signal } = controller;
-
-    isLoadingTaxonomy = true;
-    try {
-      const response = await fetch(
-        buildAppUrl(
-          `/api/v2/species/taxonomy?scientific_name=${encodeURIComponent(detection.scientificName)}`
-        ),
-        { signal }
-      );
-      if (signal.aborted) return;
-      if (response.ok) {
-        const data = await response.json();
-        if (signal.aborted) return;
-        taxonomyInfo = data;
-      }
-    } catch (error) {
-      if (signal.aborted || (error instanceof Error && error.name === 'AbortError')) {
-        return;
-      }
-      logger.error('Error fetching taxonomy info:', error);
-    } finally {
-      if (taxonomyController === controller) {
-        isLoadingTaxonomy = false;
-        taxonomyController = null;
       }
     }
   }
@@ -462,58 +298,20 @@
 <!-- Snippets for better organization -->
 
 {#snippet heroSection(det: Detection)}
-  {@const displayName = localizeSpeciesName(det.scientificName, det.commonName)}
   <section class="detection-hero-grid" aria-labelledby="species-heading">
     <!-- Identity Card -->
     <div class="hero-card hero-identity-card">
-      <h3 class="section-heading">{t('detections.detail.species')}</h3>
       <div class="hero-identity-row">
-        <!-- Species thumbnail with credit overlay -->
-        <div class="hero-thumbnail">
-          <img
-            src={buildAppUrl(
-              `/api/v2/media/species-image?name=${encodeURIComponent(det.scientificName)}`
-            )}
-            alt={displayName}
-            class="w-full h-full object-contain"
-            onerror={handleBirdImageError}
-            loading="eager"
-          />
-          {#if imageAttribution?.authorName}
-            <div
-              class="thumbnail-credit"
-              aria-label={t('common.aria.imageCredit', { name: imageAttribution.authorName })}
-            >
-              <Camera size={10} class="credit-icon" />
-              <span class="credit-text">{imageAttribution.authorName}</span>
-              {#if imageAttribution.licenseName}
-                <span class="credit-separator">·</span>
-                {#if imageAttribution.licenseURL}
-                  <a
-                    href={imageAttribution.licenseURL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="credit-license">{imageAttribution.licenseName}</a
-                  >
-                {:else}
-                  <span class="credit-license">{imageAttribution.licenseName}</span>
-                {/if}
-              {/if}
-            </div>
-          {/if}
+        <!-- Mic icon - decorative -->
+        <div class="hero-icon" aria-hidden="true">
+          <Mic class="hero-mic-icon" />
         </div>
 
-        <!-- Species identity -->
+        <!-- Detection identity -->
         <div class="hero-species">
           <h1 id="species-heading" class="species-display-name">
-            {displayName}
-            <span class="sr-only">{t('detections.detail.aria.speciesHeadingSuffix')}</span>
+            {t('detections.humanVoice')}
           </h1>
-          <p class="species-scientific-name">
-            <span class="sr-only"
-              >{t('detections.detail.aria.scientificName')}:
-            </span>{det.scientificName}
-          </p>
           <div class="mt-3" aria-label={t('detections.detail.aria.classificationBadges')}>
             <VerificationBadges detection={det} size="sm" />
           </div>
@@ -530,65 +328,6 @@
         </div>
       </div>
     </div>
-
-    <!-- Taxonomy Card -->
-    {#if isLoadingTaxonomy || taxonomyInfo?.taxonomy}
-      <div class="hero-card hero-taxonomy-card" aria-labelledby="hero-taxonomy-heading">
-        <h3 id="hero-taxonomy-heading" class="section-heading">
-          {t('species.taxonomy.hierarchy')}
-        </h3>
-        {#if isLoadingTaxonomy}
-          <div class="animate-pulse space-y-2.5">
-            {#each Array(5) as _, i (i)}
-              <div class="flex items-center gap-2" style:padding-left="{i * 1.25}rem">
-                <div class="h-3 rounded bg-[var(--color-base-300)]/60 w-12"></div>
-                <div class="h-3 rounded bg-[var(--color-base-300)]/60 w-20"></div>
-              </div>
-            {/each}
-          </div>
-        {:else if taxonomyInfo?.taxonomy}
-          <div class="taxonomy-tree">
-            {#each [{ key: 'class', value: taxonomyInfo.taxonomy.class, depth: 0 }, { key: 'order', value: taxonomyInfo.taxonomy.order, depth: 1 }, { key: 'family', value: taxonomyInfo.taxonomy.family, depth: 2 }, { key: 'genus', value: taxonomyInfo.taxonomy.genus, depth: 3 }, { key: 'species', value: taxonomyInfo.taxonomy.species, depth: 4 }] as rank, i (rank.key)}
-              <div class="taxonomy-node" style:--depth={rank.depth}>
-                {#if i > 0}
-                  <div class="taxonomy-connector" aria-hidden="true">
-                    <div class="connector-vert"></div>
-                    <div class="connector-horiz"></div>
-                  </div>
-                {/if}
-                <span class="taxonomy-rank-label">
-                  {t(`species.taxonomy.labels.${rank.key}`)}
-                </span>
-                <span class="taxonomy-rank-value" class:italic={rank.key === 'species'}>
-                  {rank.value}
-                </span>
-              </div>
-            {/each}
-          </div>
-
-          {#if subspeciesList.length > 0}
-            <div class="taxonomy-subspecies">
-              <h4 class="taxonomy-subspecies-heading">{t('species.taxonomy.subspecies')}</h4>
-              <div class="taxonomy-subspecies-list">
-                {#each subspeciesList as subspecies, index (`${subspecies.scientific_name}_${index}`)}
-                  <div class="taxonomy-subspecies-item">
-                    <span class="italic">{subspecies.scientific_name}</span>
-                    {#if subspecies.common_name}
-                      <span class="taxonomy-subspecies-common"
-                        >{localizeSpeciesName(
-                          subspecies.scientific_name,
-                          subspecies.common_name
-                        )}</span
-                      >
-                    {/if}
-                  </div>
-                {/each}
-              </div>
-            </div>
-          {/if}
-        {/if}
-      </div>
-    {/if}
 
     <!-- Metadata Card -->
     <div
@@ -654,7 +393,9 @@
             href={buildAppUrl(`/api/v2/media/audio/${det.clipName}`)}
             download
             class="meta-download"
-            aria-label={t('detections.detail.aria.downloadAudioClip', { name: displayName })}
+            aria-label={t('detections.detail.aria.downloadAudioClip', {
+              name: t('detections.humanVoice'),
+            })}
           >
             <Download class="w-4 h-4" />
             <span>{t('media.audio.download')}</span>
@@ -713,31 +454,6 @@
   {/if}
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-    <!-- Species Rarity -->
-    {#if speciesInfo?.rarity}
-      <section aria-labelledby="rarity-heading">
-        <h3 id="rarity-heading" class="section-heading">{t('species.rarity.title')}</h3>
-        <div class="content-panel">
-          <div class="flex items-center gap-3 mb-1">
-            <span class="rarity-label"
-              >{t(`species.rarity.statuses.${speciesInfo.rarity.status}`)}</span
-            >
-            <span class="rarity-score">
-              {(speciesInfo.rarity.score * 100).toFixed(0)}%
-            </span>
-          </div>
-          {#if speciesInfo.rarity.location_based}
-            <p class="text-xs text-[var(--color-base-content)]/40">
-              {t('species.rarity.basedOnLocation', {
-                latitude: speciesInfo.rarity.latitude.toFixed(2),
-                longitude: speciesInfo.rarity.longitude.toFixed(2),
-              })}
-            </p>
-          {/if}
-        </div>
-      </section>
-    {/if}
-
     <!-- Species Tracking -->
     {#if det.isNewSpecies || det.isNewThisYear || det.isNewThisSeason || (det.daysSinceFirstSeen != null && det.daysSinceFirstSeen > 0)}
       <section aria-labelledby="tracking-heading">
@@ -824,7 +540,7 @@
       {t('detections.aria.loading')}
     {:else if detection}
       {t('detections.aria.loaded', {
-        species: localizeSpeciesName(detection.scientificName, detection.commonName),
+        species: t('detections.humanVoice'),
       })}
     {:else if detectionError}
       {t('detections.aria.error', { error: detectionError })}
@@ -836,13 +552,11 @@
     <div class="detection-hero-grid" aria-hidden="true">
       <!-- Identity card skeleton -->
       <div class="hero-card hero-identity-card">
-        <div class="skeleton-line w-20 h-3 mb-4"></div>
         <div class="hero-identity-row">
-          <div class="hero-thumbnail skeleton-block"></div>
+          <div class="hero-icon skeleton-block" style:width="64px" style:height="64px"></div>
           <div class="hero-species">
             <div class="skeleton-line w-48 h-6 mb-2"></div>
-            <div class="skeleton-line w-32 h-4 mb-3"></div>
-            <div class="flex gap-2">
+            <div class="flex gap-2 mt-3">
               <div class="skeleton-line w-16 h-5 rounded-full"></div>
               <div class="skeleton-line w-16 h-5 rounded-full"></div>
             </div>
@@ -911,7 +625,7 @@
         <div
           role="region"
           aria-label={t('detections.detail.aria.audioRecordingFor', {
-            name: localizeSpeciesName(detection.scientificName, detection.commonName),
+            name: t('detections.humanVoice'),
           })}
         >
           <div class="detail-audio-container">
@@ -1045,7 +759,7 @@
     gap: 1rem;
   }
 
-  /* Two columns: identity + metadata, taxonomy spans below */
+  /* Two columns: identity + metadata */
   @media (min-width: 1024px) {
     .detection-hero-grid {
       grid-template-columns: 1fr minmax(220px, 280px);
@@ -1058,32 +772,6 @@
 
     .hero-metadata-card {
       grid-column: 2;
-      grid-row: 1;
-    }
-
-    .hero-taxonomy-card {
-      grid-column: 1 / -1;
-    }
-  }
-
-  /* Three columns: all cards in one row */
-  @media (min-width: 1440px) {
-    .detection-hero-grid {
-      grid-template-columns: 1fr auto minmax(220px, 280px);
-    }
-
-    .hero-identity-card {
-      grid-column: 1;
-      grid-row: 1;
-    }
-
-    .hero-taxonomy-card {
-      grid-column: 2;
-      grid-row: 1;
-    }
-
-    .hero-metadata-card {
-      grid-column: 3;
       grid-row: 1;
     }
   }
@@ -1191,71 +879,23 @@
     opacity: 1;
   }
 
-  /* Species thumbnail - 4:3 to match avicommons 320×240 source images */
-  .hero-thumbnail {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    max-height: 160px;
-    border-radius: 0.75rem;
-    overflow: hidden;
-    background: linear-gradient(135deg, var(--color-base-200), var(--color-base-300));
-    box-shadow: var(--shadow-md);
-    flex-shrink: 0;
-  }
-
-  @media (min-width: 768px) {
-    .hero-thumbnail {
-      width: 220px;
-      min-width: 220px;
-      max-height: none;
-    }
-  }
-
-  /* Photo credit - bottom-right corner of thumbnail */
-  .thumbnail-credit {
-    position: absolute;
-    right: 0;
-    bottom: 0;
+  /* Mic icon container - decorative hero placeholder */
+  .hero-icon {
+    width: 64px;
+    height: 64px;
     display: flex;
     align-items: center;
-    gap: 0.2rem;
-    padding: 0.2rem 0.4rem;
-    background: oklch(10% 0 0deg / 0.55);
-    border-top-left-radius: 0.375rem;
-  }
-
-  .credit-icon {
-    color: oklch(85% 0 0deg);
+    justify-content: center;
+    border-radius: 0.75rem;
+    background: linear-gradient(135deg, var(--color-base-200), var(--color-base-300));
     flex-shrink: 0;
   }
 
-  .credit-text {
-    font-size: 0.5625rem;
-    color: oklch(95% 0 0deg);
-    line-height: 1;
-    white-space: nowrap;
-  }
-
-  .credit-separator {
-    font-size: 0.5625rem;
-    color: oklch(70% 0 0deg);
-    flex-shrink: 0;
-    line-height: 1;
-  }
-
-  .credit-license {
-    font-size: 0.5625rem;
-    color: oklch(80% 0 0deg);
-    text-decoration: none;
-    line-height: 1;
-    flex-shrink: 0;
-    white-space: nowrap;
-  }
-
-  a.credit-license:hover {
-    color: white;
-    text-decoration: underline;
+  .hero-mic-icon {
+    width: 2rem;
+    height: 2rem;
+    color: var(--color-base-content);
+    opacity: 0.35;
   }
 
   /* Species identity - takes available space */
@@ -1280,16 +920,6 @@
     .species-display-name {
       font-size: 1.875rem;
     }
-  }
-
-  .species-scientific-name {
-    font-style: italic;
-    font-size: 0.875rem;
-    font-weight: 400;
-    color: var(--color-base-content);
-    opacity: 0.5;
-    margin-top: 0.125rem;
-    letter-spacing: 0.01em;
   }
 
   /* Time of day badge - theme-safe via alpha transparency */
@@ -1387,123 +1017,6 @@
   .metadata-row dd {
     font-weight: 500;
     color: var(--color-base-content);
-  }
-
-  /* ----- Rarity display ----- */
-  .rarity-label {
-    font-size: 0.9375rem;
-    font-weight: 600;
-    color: var(--color-base-content);
-    text-transform: capitalize;
-  }
-
-  .rarity-score {
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: var(--color-base-content);
-    opacity: 0.65;
-  }
-
-  /* ----- Taxonomy tree with connector lines ----- */
-
-  .taxonomy-tree {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
-
-  .taxonomy-node {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding-left: calc(var(--depth) * 1.25rem);
-    min-height: 2rem;
-    position: relative;
-  }
-
-  /* Connector lines */
-  .taxonomy-connector {
-    position: absolute;
-    left: calc(var(--depth) * 1.25rem - 0.75rem);
-    top: 0;
-    width: 0.75rem;
-    height: 100%;
-    pointer-events: none;
-  }
-
-  .connector-vert {
-    position: absolute;
-    left: 0;
-    top: -0.25rem;
-    width: 1px;
-    height: calc(50% + 0.25rem);
-    background-color: var(--border-200);
-  }
-
-  .connector-horiz {
-    position: absolute;
-    left: 0;
-    top: 50%;
-    width: 100%;
-    height: 1px;
-    background-color: var(--border-200);
-  }
-
-  .taxonomy-rank-label {
-    font-size: 0.6875rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--color-base-content);
-    opacity: 0.35;
-    flex-shrink: 0;
-    min-width: 3.5rem;
-  }
-
-  .taxonomy-rank-value {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--color-base-content);
-  }
-
-  /* Subspecies section */
-  .taxonomy-subspecies {
-    margin-top: 1rem;
-    padding-top: 0.75rem;
-    border-top: 1px solid var(--border-100);
-  }
-
-  .taxonomy-subspecies-heading {
-    font-size: 0.6875rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--color-base-content);
-    opacity: 0.35;
-    margin-bottom: 0.5rem;
-  }
-
-  .taxonomy-subspecies-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-
-  .taxonomy-subspecies-item {
-    display: flex;
-    align-items: baseline;
-    gap: 0.375rem;
-    font-size: 0.8125rem;
-    color: var(--color-base-content);
-    padding: 0.25rem 0.625rem;
-    background-color: var(--color-base-100);
-    border: 1px solid var(--border-100);
-    border-radius: var(--radius-field);
-  }
-
-  .taxonomy-subspecies-common {
-    font-size: 0.75rem;
-    opacity: 0.5;
   }
 
   /* ----- Tab Navigation ----- */

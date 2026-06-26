@@ -32,10 +32,11 @@ function makeDetection(overrides: Partial<Detection>): Detection {
   };
 }
 
-// Sentinel scientific names referenced by both the fixtures and the assertions,
-// so a typo cannot silently desync the two.
-const FRESH_SCIENTIFIC = 'Fresh-sci-B';
-const STALE_SCIENTIFIC = 'Stale-sci-A';
+// Sentinel dates referenced by both the fixtures and the assertions.
+// The hero renders det.date directly, so dates are the most visible
+// unique field now that scientific names are no longer shown in the UI.
+const FRESH_DATE = '2024-12-31';
+const STALE_DATE = '2020-01-01';
 
 /** Minimal fetch Response stub carrying a JSON body. */
 function jsonResponse(body: unknown): Response {
@@ -87,11 +88,7 @@ describe('DetectionDetail stale-response race (#978)', () => {
         }
         // Detection B: resolves immediately and becomes the current detection.
         if (url.includes('/api/v2/detections/det-b')) {
-          return Promise.resolve(
-            jsonResponse(
-              makeDetection({ id: 2, scientificName: FRESH_SCIENTIFIC, commonName: 'Fresh B' })
-            )
-          );
+          return Promise.resolve(jsonResponse(makeDetection({ id: 2, date: FRESH_DATE })));
         }
         // Secondary species/taxonomy/attribution endpoints: irrelevant here.
         return Promise.resolve(jsonResponse({}));
@@ -103,15 +100,11 @@ describe('DetectionDetail stale-response race (#978)', () => {
     // Switch to detection B before A resolves.
     await rerender({ detectionId: 'det-b' });
     await waitFor(() => {
-      expect(container.textContent).toContain(FRESH_SCIENTIFIC);
+      expect(container.textContent).toContain(FRESH_DATE);
     });
 
     // A's response now arrives late; the captured-signal guard must drop it.
-    resolveStale(
-      jsonResponse(
-        makeDetection({ id: 1, scientificName: STALE_SCIENTIFIC, commonName: 'Stale A' })
-      )
-    );
+    resolveStale(jsonResponse(makeDetection({ id: 1, date: STALE_DATE })));
     // Flush the production stale-handling path: await the promise it awaits, then
     // a macrotask so every microtask hop (response.json, the captured-signal
     // guard) and the Svelte DOM flush complete before asserting. A microtask-only
@@ -119,7 +112,7 @@ describe('DetectionDetail stale-response race (#978)', () => {
     await staleResponse;
     await new Promise(resolve => setTimeout(resolve, 0));
 
-    expect(container.textContent).toContain(FRESH_SCIENTIFIC);
-    expect(container.textContent).not.toContain(STALE_SCIENTIFIC);
+    expect(container.textContent).toContain(FRESH_DATE);
+    expect(container.textContent).not.toContain(STALE_DATE);
   });
 });

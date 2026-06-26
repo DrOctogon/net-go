@@ -786,6 +786,7 @@
   },
   "detections": {
     "title": "Atklāšanas",
+    "humanVoice": "Human Voice",
     "flaggedByKeywords": "Flagged by keywords: {keywords}",
     "titles": {
       "hourly": "Stundu rezultāti plkst. {hour}:00, {date}",
@@ -795,7 +796,6 @@
       "allDetections": "Visas atklāšanas datumā {date}"
     },
     "detail": {
-      "species": "Suga",
       "observation": "Novērojums",
       "transcript": {
         "title": "Transcript",
@@ -806,7 +806,6 @@
       "aria": {
         "downloadAudioClip": "Download audio clip for {name} detection",
         "audioRecordingFor": "Audio recording and spectrogram for {name}",
-        "scientificName": "Zinātniskais nosaukums",
         "classificationBadges": "Sugas klasifikācijas nozīmītes",
         "confidence": "Atklāšanas ticamība {confidence}%",
         "metadata": "Atklāšanas metadati",
@@ -816,8 +815,7 @@
         "commentTimestamp": "Komentāra laika zīmogs",
         "mainRegion": "Atklāšanas informācija",
         "tabsHeading": "Atklāšanas informācijas cilnes",
-        "tabList": "Atklāšanas detaļu cilnes",
-        "speciesHeadingSuffix": "atklāšanas informācija"
+        "tabList": "Atklāšanas detaļu cilnes"
       }
     },
     "headers": {
@@ -997,33 +995,6 @@
     }
   },
   "species": {
-    "rarity": {
-      "title": "Sugas retums",
-      "score": "Vērtējums",
-      "basedOnLocation": "Pamatojoties uz atrašanās vietu: {latitude}, {longitude}",
-      "statuses": {
-        "very_common": "Ļoti izplatīta",
-        "common": "Izplatīta",
-        "uncommon": "Neizplatīta",
-        "rare": "Reta",
-        "very_rare": "Ļoti reta",
-        "unknown": "Nezināma"
-      }
-    },
-    "taxonomy": {
-      "hierarchy": "Taksonomiskā klasifikācija",
-      "subspecies": "Pasugas",
-      "noData": "Taksonomijas dati nav pieejami.",
-      "labels": {
-        "kingdom": "Valsts",
-        "phylum": "Tips",
-        "class": "Klase",
-        "order": "Kārta",
-        "family": "Dzimta",
-        "genus": "Ģints",
-        "species": "Suga"
-      }
-    },
     "synonyms": {
       "tabLabel": "Taksonomijas sinonīmi",
       "description": "Pārrakstīt zinātnisko nosaukumu kartējumus, kas tiek izmantoti putnu attēlu meklēšanai. VoiceWatch izmanto 2021E taksonomiju, bet attēlu avoti var izmantot atjauninātus nosaukumus. Iebūvētie kartējumi vienmēr tiek ielādēti; jūsu pārrakstījumi papildina vai aizstāj tos.",

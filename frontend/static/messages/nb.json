@@ -786,6 +786,7 @@
   },
   "detections": {
     "title": "Registreringer",
+    "humanVoice": "Human Voice",
     "flaggedByKeywords": "Flagged by keywords: {keywords}",
     "titles": {
       "hourly": "Timeresultater for {hour}:00 den {date}",
@@ -795,7 +796,6 @@
       "allDetections": "Alle registreringer for {date}"
     },
     "detail": {
-      "species": "Art",
       "observation": "Observasjon",
       "transcript": {
         "title": "Transcript",
@@ -806,7 +806,6 @@
       "aria": {
         "downloadAudioClip": "Download audio clip for {name} detection",
         "audioRecordingFor": "Audio recording and spectrogram for {name}",
-        "scientificName": "Vitenskapelig navn",
         "classificationBadges": "Merker for artsklassifisering",
         "confidence": "Registreringssikkerhet {confidence}%",
         "metadata": "Registreringsmetadata",
@@ -816,8 +815,7 @@
         "commentTimestamp": "Tidsstempel for kommentar",
         "mainRegion": "Registreringsdetaljer",
         "tabsHeading": "Faner med registreringsinformasjon",
-        "tabList": "Faner for registreringsdetaljer",
-        "speciesHeadingSuffix": "registreringsdetaljer"
+        "tabList": "Faner for registreringsdetaljer"
       }
     },
     "headers": {
@@ -997,33 +995,6 @@
     }
   },
   "species": {
-    "rarity": {
-      "title": "Sjeldenhetsgrad",
-      "score": "Score",
-      "basedOnLocation": "Basert på posisjon: {latitude}, {longitude}",
-      "statuses": {
-        "very_common": "Svært vanlig",
-        "common": "Vanlig",
-        "uncommon": "Uvanlig",
-        "rare": "Sjelden",
-        "very_rare": "Svært sjelden",
-        "unknown": "Ukjent"
-      }
-    },
-    "taxonomy": {
-      "hierarchy": "Taksonomisk klassifisering",
-      "subspecies": "Underart",
-      "noData": "Ingen taksonomidata tilgjengelig.",
-      "labels": {
-        "kingdom": "Rike",
-        "phylum": "Rekke",
-        "class": "Klasse",
-        "order": "Orden",
-        "family": "Familie",
-        "genus": "Slekt",
-        "species": "Art"
-      }
-    },
     "synonyms": {
       "tabLabel": "Taksonomiske synonymer",
       "description": "Overstyr vitenskapelige navnemappinger brukt til fuglebildeoppslag. VoiceWatch bruker 2021E-taksonomi, men bildekilder kan bruke oppdaterte navn. Innebygde mappinger lastes alltid; dine overstyringer legges til eller erstatter disse.",

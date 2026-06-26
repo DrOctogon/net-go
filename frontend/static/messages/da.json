@@ -786,6 +786,7 @@
   },
   "detections": {
     "title": "Registreringer",
+    "humanVoice": "Human Voice",
     "flaggedByKeywords": "Flagged by keywords: {keywords}",
     "titles": {
       "hourly": "Timeresultater for {hour}:00 den {date}",
@@ -795,7 +796,6 @@
       "allDetections": "Alle registreringer for {date}"
     },
     "detail": {
-      "species": "Art",
       "observation": "Observation",
       "transcript": {
         "title": "Transcript",
@@ -806,7 +806,6 @@
       "aria": {
         "downloadAudioClip": "Download audio clip for {name} detection",
         "audioRecordingFor": "Audio recording and spectrogram for {name}",
-        "scientificName": "Videnskabeligt navn",
         "classificationBadges": "Mærker for artsklassifikation",
         "confidence": "Registreringssikkerhed {confidence}%",
         "metadata": "Registreringsmetadata",
@@ -816,8 +815,7 @@
         "commentTimestamp": "Tidsstempel for kommentar",
         "mainRegion": "Registreringsdetaljer",
         "tabsHeading": "Faner med registreringsoplysninger",
-        "tabList": "Faner for registreringsdetaljer",
-        "speciesHeadingSuffix": "registreringsdetaljer"
+        "tabList": "Faner for registreringsdetaljer"
       }
     },
     "headers": {
@@ -997,33 +995,6 @@
     }
   },
   "species": {
-    "rarity": {
-      "title": "Artens sjældenhed",
-      "score": "Score",
-      "basedOnLocation": "Baseret på lokation: {latitude}, {longitude}",
-      "statuses": {
-        "very_common": "Meget almindelig",
-        "common": "Almindelig",
-        "uncommon": "Ualmindelig",
-        "rare": "Sjælden",
-        "very_rare": "Meget sjælden",
-        "unknown": "Ukendt"
-      }
-    },
-    "taxonomy": {
-      "hierarchy": "Taksonomisk klassifikation",
-      "subspecies": "Underart",
-      "noData": "Ingen taksonomiske data tilgængelige.",
-      "labels": {
-        "kingdom": "Rige",
-        "phylum": "Række",
-        "class": "Klasse",
-        "order": "Orden",
-        "family": "Familie",
-        "genus": "Slægt",
-        "species": "Art"
-      }
-    },
     "synonyms": {
       "tabLabel": "Taksonomiske synonymer",
       "description": "Tilsidesæt videnskabelige navnetilknytninger brugt til fuglebilledsøgning. VoiceWatch bruger 2021E-taksonomien, men billedkilder kan bruge opdaterede navne. Indbyggede tilknytninger indlæses altid; dine tilsidesættelser tilføjes til eller erstatter dem.",
