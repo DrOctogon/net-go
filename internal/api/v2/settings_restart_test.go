@@ -152,8 +152,9 @@ func TestHotReloadRestartFieldsCovered(t *testing.T) {
 	// registry restart-category field path -> the settingsChangeChecks entry
 	// (by name) that marks restart when it changes.
 	restartCovered := map[string]string{
-		"Logging": "Logging",
-		"Output":  "Database",
+		"Logging":                   "Logging",
+		"Output":                    "Database",
+		"Realtime.Audio.Continuous": "Continuous recording",
 	}
 	// registry restart-category field paths intentionally NOT wired to a restart
 	// marker yet, with the reason. See docs/superpowers/specs/2026-06-16-restart-required-tracking.md.
@@ -163,9 +164,8 @@ func TestHotReloadRestartFieldsCovered(t *testing.T) {
 		"Models":                  "model registry path; restart-vs-reload undecided",
 		"Perch":                   "perch model path; not wired",
 		"BSG":                     "BSG model path; not wired",
-		"Realtime.Audio.Watchdog":   "no UI controls (project decision)",
-		"Realtime.Audio.Continuous": "continuous recorder is constructed once at pipeline start; restart-required detection not wired yet",
-		"LowMemory":                 "startup-only memory policy; not exposed via the live settings API",
+		"Realtime.Audio.Watchdog": "no UI controls (project decision)",
+		"LowMemory":               "startup-only memory policy; not exposed via the live settings API",
 	}
 
 	for path, entry := range hotReloadRegistry {

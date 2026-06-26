@@ -2099,8 +2099,9 @@ type settingsChangeCheck struct {
 const (
 	reasonWebserverRestart = "restart.reasons.webserver"
 	reasonDatabaseRestart  = "restart.reasons.database"
-	reasonLoggingRestart   = "restart.reasons.logging"
-	reasonTLSCertRestart   = "restart.reasons.tlsCertificate"
+	reasonLoggingRestart    = "restart.reasons.logging"
+	reasonTLSCertRestart    = "restart.reasons.tlsCertificate"
+	reasonContinuousRestart = "restart.reasons.continuousRecording"
 )
 
 // settingsChangeChecks defines all settings change detectors in order of execution.
@@ -2119,6 +2120,7 @@ var settingsChangeChecks = []settingsChangeCheck{
 	{"Web server", "", webserverSettingsChanged, "Web server settings changed. Restart required to apply.", notification.MsgSettingsWebserverRestart, "warning", toastDurationExtended},
 	{"Database", "", outputSettingsChanged, "Database settings changed. Restart required to apply.", notification.MsgSettingsDatabaseRestart, "warning", toastDurationExtended},
 	{"Logging", "", loggingSettingsChanged, "Logging settings changed. Restart required to apply.", notification.MsgSettingsLoggingRestart, "warning", toastDurationExtended},
+	{"Continuous recording", "", continuousRecordingSettingsChanged, "Continuous recording settings changed. Restart required to apply.", "", "warning", toastDurationExtended},
 	{"Log deduplication", "reconfigure_log_deduplication", logDeduplicationSettingsChanged, "Reconfiguring log deduplication...", "", "info", toastDurationShort},
 	{"RTSP health", "reconfigure_rtsp_health", rtspHealthSettingsChanged, "Reconfiguring RTSP health monitoring...", "", "info", toastDurationShort},
 	{"Monitoring", "reconfigure_monitoring", monitoringSettingsChanged, "Reconfiguring system monitoring...", "", "info", toastDurationShort},
@@ -2132,9 +2134,10 @@ var settingsChangeChecks = []settingsChangeCheck{
 // above; settings_restart_test.go cross-validates these keys against the table
 // names and against the hot-reload registry's `restart` category.
 var restartRequiringChecks = map[string]string{
-	"Web server": reasonWebserverRestart,
-	"Database":   reasonDatabaseRestart,
-	"Logging":    reasonLoggingRestart,
+	"Web server":           reasonWebserverRestart,
+	"Database":             reasonDatabaseRestart,
+	"Logging":              reasonLoggingRestart,
+	"Continuous recording": reasonContinuousRestart,
 }
 
 // handleSettingsChanges checks if important settings have changed and triggers appropriate actions
@@ -2221,6 +2224,15 @@ func (c *Controller) sendReconfigActions(actions []string, debugEnabled bool) {
 		case <-time.After(actionDelay):
 		}
 	}
+}
+
+// continuousRecordingSettingsChanged reports whether the continuous full-audio
+// recorder configuration changed. The recorder is constructed once at pipeline
+// start (audio_pipeline_service) with no live reconfigure path, so any change
+// requires a restart to take effect. All Continuous fields are scalars, so a
+// struct comparison is sufficient.
+func continuousRecordingSettingsChanged(old, current *conf.Settings) bool {
+	return old.Realtime.Audio.Continuous != current.Realtime.Audio.Continuous
 }
 
 // intervalSettingsChanged checks if species interval or global interval settings have changed.

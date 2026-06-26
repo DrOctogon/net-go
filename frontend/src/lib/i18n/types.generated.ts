@@ -3420,6 +3420,7 @@ export type TranslationKey =
   | 'restart.reasons.database'
   | 'restart.reasons.logging'
   | 'restart.reasons.tlsCertificate'
+  | 'restart.reasons.continuousRecording'
   | 'help.title'
   | 'help.subtitle'
   | 'help.reportBug.description'
