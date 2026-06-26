@@ -156,7 +156,8 @@
         "falsePositive": "Virheellinen havainto",
         "notReviewed": "Ei tarkistettu",
         "locked": "Lukittu",
-        "unlikely": "Epätodennäköinen"
+        "unlikely": "Epätodennäköinen",
+        "flagged": "Flagged"
       },
       "form": {
         "correctDetection": "Oikea havainto",
@@ -396,7 +397,6 @@
         "rebuildingRangeFilter": "Rakennetaan lajien aluesuodatinta uudelleen...",
         "updatingIntervals": "Päivitetään havaintovälejä...",
         "reconfiguringMqtt": "Päivitetään MQTT-yhteyttä...",
-        "reconfiguringBirdweather": "Päivitetään BirdWeather-integraatiota...",
         "reconfiguringStreams": "Päivitetään äänistriimejä...",
         "reconfiguringTelemetry": "Päivitetään telemetria-asetuksia...",
         "reconfiguringPushNotifications": "Määritetään push-ilmoitusten tarjoajia uudelleen...",
@@ -796,6 +796,12 @@
     "detail": {
       "species": "Laji",
       "observation": "Havainto",
+      "transcript": {
+        "title": "Transcript",
+        "matchedKeywords": "Matched keywords",
+        "flaggedNotice": "Flagged by keyword",
+        "empty": "No transcript available"
+      },
       "aria": {
         "downloadAudioClip": "Download audio clip for {name} detection",
         "audioRecordingFor": "Audio recording and spectrogram for {name}",
@@ -2894,31 +2900,6 @@
       }
     },
     "integration": {
-      "birdweather": {
-        "title": "BirdWeather",
-        "description": "Lähetä havainnot BirdWeatheriin",
-        "ffmpegWarning": {
-          "title": "FFmpeg ei havaittu",
-          "message": "Asenna FFmpeg ottaaksesi käyttöön FLAC-koodauksen tuen, BirdWeather on lopettamassa WAV-tiedostojen tuen pakattujen FLAC-äänitiedostojen hyväksi."
-        },
-        "enable": "Ota käyttöön BirdWeather-lähetykset",
-        "token": {
-          "label": "BirdWeather-tunnus",
-          "helpText": "Yksilöllinen BirdWeather-tunnuksesi."
-        },
-        "threshold": {
-          "label": "Lähetyskynnys",
-          "helpText": "Vähimmäisluottamuskynnys ennusteiden lähettämiseen BirdWeatheriin."
-        },
-        "test": {
-          "button": "Testaa BirdWeather-yhteys",
-          "loading": "Testataan...",
-          "enabledRequired": "BirdWeather täytyy olla käytössä testaukseen",
-          "tokenRequired": "BirdWeather-tunnus täytyy määrittää",
-          "inProgress": "Testaus käynnissä...",
-          "description": "Testaa BirdWeather-yhteys"
-        }
-      },
       "mqtt": {
         "title": "MQTT",
         "description": "Määritä MQTT-välittäjän yhteys",
@@ -3091,33 +3072,6 @@
         "responseStreamFailed": "Vastausvirran lukeminen epäonnistui",
         "configurationCheck": "Asetustarkistus",
         "testStageFallback": "Testausvaihe"
-      },
-      "ebird": {
-        "title": "eBird",
-        "description": "Yhdistä eBird-taksonomiatietokantaan rikastettujen lajitietojen saamiseksi, mukaan lukien taksonominen luokittelu ja alalajitiedot.",
-        "enable": "Ota eBird-integraatio käyttöön",
-        "enabledRequired": "eBird-integraatio ei ole käytössä",
-        "apiKey": {
-          "label": "eBird API-avain",
-          "helpText": "eBird API-avaimesi. Hanki avain eBird API-portaalista."
-        },
-        "locale": {
-          "label": "Lajinimien kieli"
-        },
-        "cacheTTL": {
-          "label": "Välimuistin kesto (tuntia)",
-          "helpText": "Kuinka kauan eBirdin taksonomiatietoja säilytetään välimuistissa. Taksonomia muuttuu harvoin, joten pidempi välimuistiaika vähentää API-kutsuja."
-        },
-        "note": "eBird tarjoaa taksonomiatietoja lajien luokitteluun ja analyyseihin. API-avain on saatavilla ilmaiseksi Cornellin ornitologian laboratoriosta.",
-        "apiKeyInfo": "Henkilökohtainen eBird API -avain vaaditaan tämän integraation käyttöön. Voit pyytää ilmaisen avaimen osoitteesta <a href=\"https://ebird.org/api/keygen\" class=\"link link-primary\" target=\"_blank\" rel=\"noopener noreferrer\">ebird.org/api/keygen</a>.",
-        "test": {
-          "button": "Testaa eBird-yhteys",
-          "loading": "Testataan...",
-          "enabledRequired": "Ota ensin eBird-integraatio käyttöön",
-          "apiKeyRequired": "API-avain vaaditaan",
-          "inProgress": "Testi käynnissä...",
-          "description": "Testaa eBird API:n yhteyttä ja tunnistautumista"
-        }
       }
     },
     "audio": {
@@ -4263,7 +4217,6 @@
           "detection_occurred": "Havainto tehty",
           "application_started": "Sovellus käynnistetty",
           "application_stopped": "Sovellus pysäytetty",
-          "integration_birdweather_failed": "BirdWeather-lähetys epäonnistui",
           "integration_mqtt_connected": "MQTT yhdistetty",
           "integration_mqtt_disconnected": "MQTT-yhteys katkaistu",
           "integration_mqtt_publish_failed": "MQTT-julkaisu epäonnistui",
@@ -4341,10 +4294,6 @@
         "mqttPublishFailed": {
           "name": "MQTT-julkaisu epäonnistui",
           "description": "Ilmoittaa kun MQTT-viestin julkaisu epäonnistuu"
-        },
-        "birdWeatherFailed": {
-          "name": "BirdWeather-lähetys epäonnistui",
-          "description": "Ilmoittaa kun BirdWeather-lähetys epäonnistuu"
         }
       }
     },
@@ -4800,9 +4749,6 @@
       "mqttNotConfigured": "MQTT-välittäjää ei ole määritetty",
       "mqttMetricsUnavailable": "Mittaripalvelu ei ole käytettävissä MQTT-testiin",
       "mqttClientFailed": "MQTT-asiakasohjelman luominen epäonnistui",
-      "birdweatherDisabled": "BirdWeather-integraatio ei ole käytössä",
-      "birdweatherNotConfigured": "BirdWeather-aseman tunnistetta ei ole määritetty",
-      "birdweatherClientFailed": "BirdWeather-asiakasohjelman luominen epäonnistui",
       "noWeatherProvider": "Sääpalvelua ei ole valittu",
       "openWeatherKeyRequired": "OpenWeather API-avain on pakollinen",
       "processorUnavailable": "Prosessori ei ole käytettävissä",
@@ -4937,10 +4883,6 @@
         "title": "Yksityisyys ja integraatiot",
         "privacyFilterLabel": "Ota yksityisyyssuodatin käyttöön",
         "privacyFilterHelp": "Suodattaa havainnot, kun mikrofonin lähellä havaitaan ihmisen puhetta",
-        "birdweatherLabel": "Jaa havainnot BirdWeatheriin",
-        "birdweatherHelp": "Osallistu lintuhavainnoillasi BirdWeather-yhteisöverkkoon",
-        "birdweatherIdLabel": "BirdWeather-aseman ID",
-        "birdweatherIdPlaceholder": "Syötä BirdWeather-asemasi ID",
         "errorReportingLabel": "Lähetä nimettömiä virheilmoituksia",
         "errorReportingHelp": "Auta parantamaan VoiceWatch:ta lähettämällä nimettömiä virheilmoituksia ongelmatilanteissa"
       },

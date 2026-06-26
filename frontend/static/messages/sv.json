@@ -156,7 +156,8 @@
         "falsePositive": "Falskt positiv",
         "notReviewed": "Ej granskad",
         "locked": "Låst",
-        "unlikely": "Osannolik"
+        "unlikely": "Osannolik",
+        "flagged": "Flagged"
       },
       "form": {
         "correctDetection": "Korrekt detektion",
@@ -396,7 +397,6 @@
         "rebuildingRangeFilter": "Bygger om artområdesfilter...",
         "updatingIntervals": "Uppdaterar detektionsintervall...",
         "reconfiguringMqtt": "Uppdaterar MQTT-anslutning...",
-        "reconfiguringBirdweather": "Uppdaterar BirdWeather-integration...",
         "reconfiguringStreams": "Uppdaterar ljudströmmar...",
         "reconfiguringTelemetry": "Uppdaterar telemetriinställningar...",
         "reconfiguringPushNotifications": "Omkonfigurerar push-aviseringsleverantörer...",
@@ -796,6 +796,12 @@
     "detail": {
       "species": "Art",
       "observation": "Observation",
+      "transcript": {
+        "title": "Transcript",
+        "matchedKeywords": "Matched keywords",
+        "flaggedNotice": "Flagged by keyword",
+        "empty": "No transcript available"
+      },
       "aria": {
         "downloadAudioClip": "Download audio clip for {name} detection",
         "audioRecordingFor": "Audio recording and spectrogram for {name}",
@@ -2894,31 +2900,6 @@
       }
     },
     "integration": {
-      "birdweather": {
-        "title": "BirdWeather",
-        "description": "Ladda upp detektioner till BirdWeather",
-        "ffmpegWarning": {
-          "title": "FFmpeg inte detekterat",
-          "message": "Installera FFmpeg för att aktivera stöd för FLAC-kodning, BirdWeather fasar ut WAV-uppladdningar till förmån för komprimerade FLAC-ljudfiler."
-        },
-        "enable": "Aktivera BirdWeather-uppladdningar",
-        "token": {
-          "label": "BirdWeather-token",
-          "helpText": "Din unika BirdWeather-token."
-        },
-        "threshold": {
-          "label": "Uppladdningströskelvärde",
-          "helpText": "Minsta konfidenströskelvärde för uppladdning av prediktioner till BirdWeather."
-        },
-        "test": {
-          "button": "Testa BirdWeather-anslutning",
-          "loading": "Testar...",
-          "enabledRequired": "BirdWeather måste vara aktiverat för att testa",
-          "tokenRequired": "BirdWeather-token måste anges",
-          "inProgress": "Test pågår...",
-          "description": "Testa BirdWeather-anslutning"
-        }
-      },
       "mqtt": {
         "title": "MQTT",
         "description": "Konfigurera MQTT-mäklaranslutning",
@@ -3091,33 +3072,6 @@
         "responseStreamFailed": "Kunde inte läsa svarsströmmen",
         "configurationCheck": "Konfigurationskontroll",
         "testStageFallback": "Teststeg"
-      },
-      "ebird": {
-        "title": "eBird",
-        "description": "Anslut till eBird-taxonomidatabasen för utökad artdata inklusive taxonomisk klassificering och underartsinformation.",
-        "enable": "Aktivera eBird-integration",
-        "enabledRequired": "eBird-integration är inte aktiverad",
-        "apiKey": {
-          "label": "eBird API-nyckel",
-          "helpText": "Din eBird API-nyckel. Skaffa en från eBird API-portalen."
-        },
-        "locale": {
-          "label": "Språk för artnamn"
-        },
-        "cacheTTL": {
-          "label": "Cachevaraktighet (timmar)",
-          "helpText": "Hur länge taxonomidata från eBird ska cachelagras. Taxonomi ändras sällan, så längre cachevaraktighet minskar API-anrop."
-        },
-        "note": "eBird tillhandahåller taxonomidata som används för artklassificering och insikter. API-nyckeln är gratis att erhålla från Cornell Lab of Ornithology.",
-        "apiKeyInfo": "En personlig eBird API-nyckel krävs för att använda denna integration. Du kan begära en gratis nyckel från <a href=\"https://ebird.org/api/keygen\" class=\"link link-primary\" target=\"_blank\" rel=\"noopener noreferrer\">ebird.org/api/keygen</a>.",
-        "test": {
-          "button": "Testa eBird-anslutning",
-          "loading": "Testar...",
-          "enabledRequired": "Aktivera eBird-integration först",
-          "apiKeyRequired": "API-nyckel krävs",
-          "inProgress": "Test pågår...",
-          "description": "Testa eBird API-anslutning och autentisering"
-        }
       }
     },
     "audio": {
@@ -4263,7 +4217,6 @@
           "detection_occurred": "Detektering utförd",
           "application_started": "Applikation startad",
           "application_stopped": "Applikation stoppad",
-          "integration_birdweather_failed": "BirdWeather-uppladdning misslyckades",
           "integration_mqtt_connected": "MQTT ansluten",
           "integration_mqtt_disconnected": "MQTT frånkopplad",
           "integration_mqtt_publish_failed": "MQTT-publicering misslyckades",
@@ -4341,10 +4294,6 @@
         "mqttPublishFailed": {
           "name": "MQTT-publicering misslyckades",
           "description": "Meddelar när publicering av MQTT-meddelande misslyckas"
-        },
-        "birdWeatherFailed": {
-          "name": "BirdWeather-uppladdning misslyckades",
-          "description": "Meddelar när en BirdWeather-uppladdning misslyckas"
         }
       }
     },
@@ -4800,9 +4749,6 @@
       "mqttNotConfigured": "MQTT-broker inte konfigurerad",
       "mqttMetricsUnavailable": "Metriktjänst inte tillgänglig för MQTT-test",
       "mqttClientFailed": "Kunde inte skapa MQTT-klient",
-      "birdweatherDisabled": "BirdWeather-integrationen är inte aktiverad",
-      "birdweatherNotConfigured": "BirdWeather-stations-ID inte konfigurerat",
-      "birdweatherClientFailed": "Kunde inte skapa BirdWeather-klient",
       "noWeatherProvider": "Ingen väderleverantör vald",
       "openWeatherKeyRequired": "OpenWeather API-nyckel krävs",
       "processorUnavailable": "Processor inte tillgänglig",
@@ -4937,10 +4883,6 @@
         "title": "Integritet och integration",
         "privacyFilterLabel": "Aktivera integritetsfilter",
         "privacyFilterHelp": "Filtrerar bort detekteringar när mänskliga röster upptäcks nära mikrofonen",
-        "birdweatherLabel": "Dela detekteringar med BirdWeather",
-        "birdweatherHelp": "Bidra med dina fågeldetekteringar till BirdWeather-gemenskapsnätverket",
-        "birdweatherIdLabel": "BirdWeather stations-ID",
-        "birdweatherIdPlaceholder": "Ange ditt BirdWeather stations-ID",
         "errorReportingLabel": "Skicka anonyma felrapporter",
         "errorReportingHelp": "Hjälp till att förbättra VoiceWatch genom att skicka anonyma felrapporter när något går fel"
       },

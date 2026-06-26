@@ -1,31 +1,29 @@
 <!--
   Integration Settings Page Component
-  
-  Purpose: Configure external service integrations for VoiceWatch including BirdWeather,
+
+  Purpose: Configure external service integrations for VoiceWatch including
   MQTT, observability (Prometheus), and weather provider integrations.
-  
+
   Features:
-  - BirdWeather integration with threshold settings and connection testing
   - MQTT broker configuration with authentication and TLS support
   - Prometheus metrics endpoint configuration
   - Weather provider selection (YR.no, OpenWeather) with API testing
   - Multi-stage operation feedback for connection testing
   - Real-time validation and change detection
-  
+
   Props: None - This is a page component that uses global settings stores
-  
+
   Performance Optimizations:
   - Removed page-level loading spinner to prevent flickering
   - Cached CSRF token to avoid repeated DOM queries
   - Reactive change detection with $derived
   - Efficient state management for test operations
   - Streaming response handling for test endpoints
-  
+
   @component
 -->
 <script lang="ts">
   import Checkbox from '$lib/desktop/components/forms/Checkbox.svelte';
-  import NumberField from '$lib/desktop/components/forms/NumberField.svelte';
   import PasswordField from '$lib/desktop/components/forms/PasswordField.svelte';
   import TextInput from '$lib/desktop/components/forms/TextInput.svelte';
   import ListenAddressSelector from '$lib/desktop/features/settings/components/ListenAddressSelector.svelte';
@@ -39,14 +37,12 @@
   import SettingsTabs from '$lib/desktop/features/settings/components/SettingsTabs.svelte';
   import type { TabDefinition } from '$lib/desktop/features/settings/components/SettingsTabs.svelte';
   import { t } from '$lib/i18n';
-  import SelectDropdown from '$lib/desktop/components/forms/SelectDropdown.svelte';
-  import { Bird, Radio, Activity, Binoculars } from '@lucide/svelte';
+  import { Radio, Activity } from '@lucide/svelte';
   import {
     integrationSettings,
     realtimeSettings,
     settingsActions,
     settingsStore,
-    settingsValidationErrors,
     type MQTTSettings,
     type SettingsFormData,
   } from '$lib/stores/settings';
@@ -86,15 +82,6 @@
   // PERFORMANCE OPTIMIZATION: Reactive settings with proper defaults
   let settings = $derived(
     $integrationSettings || {
-      birdweather: {
-        enabled: false,
-        id: '',
-        latitude: 0,
-        longitude: 0,
-        locationAccuracy: 1000,
-        threshold: 0.7,
-        debug: false,
-      },
       mqtt: {
         enabled: false,
         broker: '',
@@ -120,25 +107,12 @@
           path: '/metrics',
         },
       },
-      ebird: {
-        enabled: false,
-        apiKey: '',
-        cacheTTL: 24,
-        locale: 'en',
-      },
     }
   );
 
   let store = $derived($settingsStore);
 
   // PERFORMANCE OPTIMIZATION: Reactive change detection with $derived
-  let birdweatherHasChanges = $derived(
-    hasSettingsChanged(
-      (store.originalData as SettingsFormData)?.realtime?.birdweather,
-      (store.formData as SettingsFormData)?.realtime?.birdweather
-    )
-  );
-
   let mqttHasChanges = $derived(
     hasSettingsChanged(
       (store.originalData as SettingsFormData)?.realtime?.mqtt,
@@ -154,56 +128,15 @@
     )
   );
 
-  let ebirdHasChanges = $derived(
-    hasSettingsChanged(
-      (store.originalData as SettingsFormData)?.realtime?.ebird,
-      (store.formData as SettingsFormData)?.realtime?.ebird
-    )
-  );
-
-  // Validate eBird: enabled requires API key
-  $effect(() => {
-    const EBIRD_ERROR_KEY = 'ebird-api-key-required';
-    const ebirdEnabled = settings.ebird?.enabled ?? false;
-    const ebirdApiKey = settings.ebird?.apiKey?.trim() ?? '';
-    const needsError = ebirdEnabled && !ebirdApiKey;
-
-    // Use .update() to avoid reading the store inside this effect,
-    // which would create an infinite reactive loop (read → write → re-trigger).
-    // Return the original array reference when unchanged to skip subscriber notifications.
-    settingsValidationErrors.update(errors => {
-      const hasError = errors.includes(EBIRD_ERROR_KEY);
-      if (needsError && !hasError) {
-        return [...errors, EBIRD_ERROR_KEY];
-      }
-      if (!needsError && hasError) {
-        return errors.filter(e => e !== EBIRD_ERROR_KEY);
-      }
-      return errors;
-    });
-
-    return () => {
-      // Clear only eBird validation errors when leaving this page
-      settingsValidationErrors.update(errors => errors.filter(e => e !== EBIRD_ERROR_KEY));
-    };
-  });
-
   // Test states for multi-stage operations
   let testStates = $state<{
-    birdweather: { stages: Stage[]; isRunning: boolean; showSuccessNote: boolean };
     mqtt: { stages: Stage[]; isRunning: boolean; showSuccessNote: boolean };
-    ebird: { stages: Stage[]; isRunning: boolean; showSuccessNote: boolean };
   }>({
-    birdweather: { stages: [], isRunning: false, showSuccessNote: false },
     mqtt: { stages: [], isRunning: false, showSuccessNote: false },
-    ebird: { stages: [], isRunning: false, showSuccessNote: false },
   });
 
-  // FFmpeg availability check
-  let ffmpegAvailable = $state(true);
-
   // Tab state
-  let activeTab = $state('birdweather');
+  let activeTab = $state('mqtt');
 
   // MQTT TLS certificate state
   let mqttCertInfo = $state<MQTTTLSCertificateInfo | null>(null);
@@ -289,25 +222,11 @@
   // Tab definitions
   let tabs = $derived<TabDefinition[]>([
     {
-      id: 'birdweather',
-      label: t('settings.integration.birdweather.title'),
-      icon: Bird,
-      content: birdweatherTabContent,
-      hasChanges: birdweatherHasChanges,
-    },
-    {
       id: 'mqtt',
       label: t('settings.integration.mqtt.title'),
       icon: Radio,
       content: mqttTabContent,
       hasChanges: mqttHasChanges,
-    },
-    {
-      id: 'ebird',
-      label: t('settings.integration.ebird.title'),
-      icon: Binoculars,
-      content: ebirdTabContent,
-      hasChanges: ebirdHasChanges,
     },
     {
       id: 'prometheus',
@@ -317,25 +236,6 @@
       hasChanges: observabilityHasChanges,
     },
   ]);
-
-  // BirdWeather update handlers
-  function updateBirdWeatherEnabled(enabled: boolean) {
-    settingsActions.updateSection('realtime', {
-      birdweather: { ...settings.birdweather!, enabled },
-    });
-  }
-
-  function updateBirdWeatherId(id: string) {
-    settingsActions.updateSection('realtime', {
-      birdweather: { ...settings.birdweather!, id },
-    });
-  }
-
-  function updateBirdWeatherThreshold(threshold: number) {
-    settingsActions.updateSection('realtime', {
-      birdweather: { ...settings.birdweather!, threshold },
-    });
-  }
 
   // MQTT update handlers
   function updateMQTTEnabled(enabled: boolean) {
@@ -479,264 +379,7 @@
     });
   }
 
-  // eBird update handlers
-  function updateEBirdEnabled(enabled: boolean) {
-    settingsActions.updateSection('realtime', {
-      ebird: { ...settings.ebird!, enabled },
-    });
-  }
-
-  function updateEBirdApiKey(apiKey: string) {
-    settingsActions.updateSection('realtime', {
-      ebird: { ...settings.ebird!, apiKey },
-    });
-  }
-
-  function updateEBirdLocale(locale: string) {
-    settingsActions.updateSection('realtime', {
-      ebird: { ...settings.ebird!, locale },
-    });
-  }
-
-  function updateEBirdCacheTTL(cacheTTL: number) {
-    settingsActions.updateSection('realtime', {
-      ebird: { ...settings.ebird!, cacheTTL },
-    });
-  }
-
-  // eBird locale options
-  const ebirdLocaleOptions = [
-    { value: 'en', label: 'English' },
-    { value: 'de', label: 'Deutsch' },
-    { value: 'es', label: 'Español' },
-    { value: 'fi', label: 'Suomi' },
-    { value: 'fr', label: 'Français' },
-    { value: 'it', label: 'Italiano' },
-    { value: 'nl', label: 'Nederlands' },
-    { value: 'pl', label: 'Polski' },
-    { value: 'pt', label: 'Português' },
-    { value: 'sk', label: 'Slovenčina' },
-  ];
-
   // Test functions with multi-stage operations
-  async function testBirdWeather() {
-    logger.debug('Starting BirdWeather test...');
-    testStates.birdweather.isRunning = true;
-    testStates.birdweather.stages = [];
-
-    try {
-      // Get current form values (unsaved changes) instead of saved settings
-      const currentBirdweather = store.formData?.realtime?.birdweather || settings.birdweather!;
-      // Exclude latitude/longitude (PII) and redact station ID before logging
-      logger.debug(
-        'BirdWeather test config:',
-        redactForLogging(currentBirdweather, ['id', 'latitude', 'longitude'])
-      );
-
-      // Prepare test payload
-      const testPayload = {
-        enabled: currentBirdweather.enabled || false,
-        id: currentBirdweather.id || '',
-        threshold: currentBirdweather.threshold || 0.7,
-        locationAccuracy: currentBirdweather.locationAccuracy || 1000,
-        debug: currentBirdweather.debug || false,
-      };
-
-      // Make request to the real API with CSRF token
-      const headers = new Headers({
-        'Content-Type': 'application/json',
-      });
-
-      const token = getCsrfToken();
-      if (token) {
-        headers.set('X-CSRF-Token', token);
-      }
-
-      logger.debug(
-        'Sending BirdWeather test request with payload:',
-        redactForLogging(testPayload, ['id'])
-      );
-
-      const response = await fetch(buildAppUrl('/api/v2/integrations/birdweather/test'), {
-        method: 'POST',
-        headers,
-        credentials: 'same-origin',
-        body: JSON.stringify(testPayload),
-      });
-
-      logger.debug('BirdWeather test response status:', response.status, response.statusText);
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-
-      // Read the streaming response
-      const reader = response.body?.getReader();
-      const decoder = new TextDecoder();
-
-      if (!reader) {
-        throw new Error(t('settings.integration.errors.responseStreamFailed'));
-      }
-
-      let remaining = '';
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        // Append chunk to any leftover partial data from previous iteration
-        remaining += decoder.decode(value, { stream: true });
-        logger.debug('Raw BirdWeather chunk received:', remaining);
-
-        // Split by both newlines and by '}{'  pattern to handle concatenated JSON objects
-        const jsonObjects = [];
-
-        while (remaining.trim()) {
-          try {
-            // Find the end of the first complete JSON object
-            let braceCount = 0;
-            let jsonEnd = -1;
-
-            for (let i = 0; i < remaining.length; i++) {
-              // eslint-disable-next-line security/detect-object-injection
-              const char = remaining[i] || '';
-              if (char === '{') braceCount++;
-              if (char === '}') braceCount--;
-              if (braceCount === 0) {
-                jsonEnd = i + 1;
-                break;
-              }
-            }
-
-            if (jsonEnd === -1) break; // No complete JSON object found
-
-            const jsonStr = remaining.substring(0, jsonEnd).trim();
-            if (jsonStr) {
-              jsonObjects.push(jsonStr);
-            }
-
-            remaining = remaining.substring(jsonEnd).trim();
-          } catch (e) {
-            logger.error('Error splitting JSON objects:', e);
-            break;
-          }
-        }
-
-        for (const jsonStr of jsonObjects) {
-          try {
-            const stageResult = JSON.parse(jsonStr);
-            logger.debug('BirdWeather test result received:', stageResult);
-
-            // Handle initial failure responses that don't have a stage
-            if (!stageResult.stage) {
-              // If this is a failed result without stages, show it as an error
-              if (stageResult.success === false && stageResult.message) {
-                logger.debug('Handling initial error response:', stageResult);
-                testStates.birdweather.stages.push({
-                  id: 'initial-error',
-                  title: t('settings.integration.errors.configurationCheck'),
-                  status: 'error',
-                  message: stageResult.message,
-                  error: stageResult.message,
-                });
-              } else {
-                logger.debug('Skipping result without stage:', stageResult);
-              }
-              continue;
-            }
-
-            // Convert BirdWeather TestResult to Stage format
-            const stageId = stageResult.stage.toLowerCase().replace(/\\s+/g, '');
-
-            // Determine status based on the BirdWeather TestResult structure
-            let status: 'pending' | 'in_progress' | 'completed' | 'error' | 'skipped';
-            if (stageResult.isProgress) {
-              status = 'in_progress';
-            } else if (stageResult.success) {
-              status = 'completed';
-            } else {
-              status = 'error';
-            }
-
-            const stage = {
-              id: stageId,
-              title: stageResult.stage || t('settings.integration.errors.testStageFallback'),
-              status,
-              message: stageResult.message || '',
-              error: stageResult.error || '',
-            };
-
-            logger.debug('Adding/updating BirdWeather stage:', stage);
-
-            // Find existing stage or create new one
-            let existingIndex = testStates.birdweather.stages.findIndex(s => s.id === stage.id);
-            if (existingIndex === -1) {
-              // Add new stage
-              testStates.birdweather.stages.push(stage);
-            } else {
-              // Update existing stage safely
-              const existingStage = safeArrayAccess(testStates.birdweather.stages, existingIndex);
-              if (
-                existingStage &&
-                existingIndex >= 0 &&
-                existingIndex < testStates.birdweather.stages.length
-              ) {
-                testStates.birdweather.stages.splice(existingIndex, 1, {
-                  ...existingStage,
-                  ...stage,
-                });
-              }
-            }
-
-            logger.debug('Current BirdWeather stages:', testStates.birdweather.stages);
-          } catch (parseError) {
-            logger.error('Failed to parse BirdWeather test result:', parseError, jsonStr);
-          }
-        }
-      }
-    } catch (error) {
-      logger.error('BirdWeather test failed:', error);
-
-      // Add error stage if no stages exist
-      if (testStates.birdweather.stages.length === 0) {
-        testStates.birdweather.stages.push({
-          id: 'error',
-          title: t('settings.integration.errors.connectionError'),
-          status: 'error',
-          error: error instanceof Error ? error.message : t('common.errors.unknownError'),
-        });
-      } else {
-        // Mark current stage as failed
-        const lastIndex = testStates.birdweather.stages.length - 1;
-        const lastStage = safeArrayAccess(testStates.birdweather.stages, lastIndex);
-        if (lastStage && lastStage.status !== 'completed') {
-          const updatedStage = {
-            ...lastStage,
-            status: 'error' as const,
-            error: error instanceof Error ? error.message : t('common.errors.unknownError'),
-          };
-          testStates.birdweather.stages.splice(lastIndex, 1, updatedStage);
-        }
-      }
-    } finally {
-      testStates.birdweather.isRunning = false;
-      logger.debug('BirdWeather test finished, stages:', testStates.birdweather.stages);
-
-      // Check if all stages completed successfully and there are unsaved changes
-      const allStagesCompleted =
-        testStates.birdweather.stages.length > 0 &&
-        testStates.birdweather.stages.every(stage => stage.status === 'completed');
-      testStates.birdweather.showSuccessNote = allStagesCompleted && birdweatherHasChanges;
-
-      // Increase timeout to 30 seconds so users can see the results
-      setTimeout(() => {
-        logger.debug('Clearing BirdWeather test results after timeout');
-        testStates.birdweather.stages = [];
-        testStates.birdweather.showSuccessNote = false;
-      }, 30000);
-    }
-  }
-
   async function testMQTT() {
     logger.debug('Starting MQTT test...');
     testStates.mqtt.isRunning = true;
@@ -945,292 +588,7 @@
       }, 30000);
     }
   }
-
-  async function testEBird() {
-    logger.debug('Starting eBird test...');
-    testStates.ebird.isRunning = true;
-    testStates.ebird.stages = [];
-
-    try {
-      const currentEbird = store.formData?.realtime?.ebird || settings.ebird!;
-
-      const testPayload = {
-        enabled: currentEbird.enabled || false,
-        apiKey: currentEbird.apiKey || '',
-        locale: currentEbird.locale || 'en',
-      };
-
-      const headers = new Headers({
-        'Content-Type': 'application/json',
-      });
-
-      const token = getCsrfToken();
-      if (token) {
-        headers.set('X-CSRF-Token', token);
-      }
-
-      logger.debug(
-        'Sending eBird test request with payload:',
-        redactForLogging(testPayload, ['apiKey'])
-      );
-
-      const response = await fetch(buildAppUrl('/api/v2/integrations/ebird/test'), {
-        method: 'POST',
-        headers,
-        credentials: 'same-origin',
-        body: JSON.stringify(testPayload),
-      });
-
-      logger.debug('eBird test response status:', response.status, response.statusText);
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-
-      const reader = response.body?.getReader();
-      const decoder = new TextDecoder();
-
-      if (!reader) {
-        throw new Error(t('settings.integration.errors.responseStreamFailed'));
-      }
-
-      let remaining = '';
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        remaining += decoder.decode(value, { stream: true });
-        logger.debug('Raw eBird chunk received:', remaining);
-
-        const lines = remaining.split('\n');
-        remaining = lines.pop() || '';
-
-        for (const line of lines) {
-          const trimmed = line.trim();
-          if (!trimmed) continue;
-
-          try {
-            const stageResult = JSON.parse(trimmed);
-            logger.debug('eBird test result received:', stageResult);
-
-            if (!stageResult.id) continue;
-
-            const stage: Stage = {
-              id: stageResult.id,
-              title: stageResult.title || t('settings.integration.errors.testStageFallback'),
-              status: stageResult.status || 'pending',
-              message: stageResult.message || '',
-              error: stageResult.error || '',
-            };
-
-            const existingIndex = testStates.ebird.stages.findIndex(s => s.id === stage.id);
-            if (existingIndex === -1) {
-              testStates.ebird.stages.push(stage);
-            } else {
-              const existingStage = safeArrayAccess(testStates.ebird.stages, existingIndex);
-              if (
-                existingStage &&
-                existingIndex >= 0 &&
-                existingIndex < testStates.ebird.stages.length
-              ) {
-                testStates.ebird.stages.splice(existingIndex, 1, { ...existingStage, ...stage });
-              }
-            }
-          } catch (parseError) {
-            logger.error('Failed to parse eBird test result:', parseError, trimmed);
-          }
-        }
-      }
-
-      // Flush decoder and process any final non-newline-terminated line
-      remaining += decoder.decode();
-      const finalLine = remaining.trim();
-      if (finalLine) {
-        try {
-          const stageResult = JSON.parse(finalLine);
-          logger.debug('eBird test final result received:', stageResult);
-
-          if (stageResult.id) {
-            const stage: Stage = {
-              id: stageResult.id,
-              title: stageResult.title || t('settings.integration.errors.testStageFallback'),
-              status: stageResult.status || 'pending',
-              message: stageResult.message || '',
-              error: stageResult.error || '',
-            };
-
-            const existingIndex = testStates.ebird.stages.findIndex(s => s.id === stage.id);
-            if (existingIndex === -1) {
-              testStates.ebird.stages.push(stage);
-            } else {
-              const existingStage = safeArrayAccess(testStates.ebird.stages, existingIndex);
-              if (
-                existingStage &&
-                existingIndex >= 0 &&
-                existingIndex < testStates.ebird.stages.length
-              ) {
-                testStates.ebird.stages.splice(existingIndex, 1, { ...existingStage, ...stage });
-              }
-            }
-          }
-        } catch (parseError) {
-          logger.error('Failed to parse eBird test final result:', parseError, finalLine);
-        }
-      }
-    } catch (error) {
-      logger.error('eBird test failed:', error);
-
-      if (testStates.ebird.stages.length === 0) {
-        testStates.ebird.stages.push({
-          id: 'error',
-          title: t('settings.integration.errors.connectionError'),
-          status: 'error',
-          error: error instanceof Error ? error.message : t('common.errors.unknownError'),
-        });
-      } else {
-        const lastIndex = testStates.ebird.stages.length - 1;
-        const lastStage = safeArrayAccess(testStates.ebird.stages, lastIndex);
-        if (lastStage && lastStage.status !== 'completed' && lastStage.status !== 'error') {
-          testStates.ebird.stages.splice(lastIndex, 1, {
-            ...lastStage,
-            status: 'error' as const,
-            error: error instanceof Error ? error.message : t('common.errors.unknownError'),
-          });
-        }
-      }
-    } finally {
-      testStates.ebird.isRunning = false;
-      logger.debug('eBird test finished, stages:', testStates.ebird.stages);
-
-      const allStagesCompleted =
-        testStates.ebird.stages.length > 0 &&
-        testStates.ebird.stages.every(stage => stage.status === 'completed');
-      testStates.ebird.showSuccessNote = allStagesCompleted && ebirdHasChanges;
-
-      setTimeout(() => {
-        logger.debug('Clearing eBird test results after timeout');
-        testStates.ebird.stages = [];
-        testStates.ebird.showSuccessNote = false;
-      }, 30000);
-    }
-  }
 </script>
-
-{#snippet birdweatherTabContent()}
-  <div class="space-y-6">
-    <!-- BirdWeather Settings Card -->
-    <SettingsSection
-      title={t('settings.integration.birdweather.title')}
-      description={t('settings.integration.birdweather.description')}
-      originalData={(store.originalData as SettingsFormData)?.realtime?.birdweather}
-      currentData={(store.formData as SettingsFormData)?.realtime?.birdweather}
-    >
-      <div class="space-y-4">
-        <!-- FFmpeg Warning -->
-        {#if !ffmpegAvailable}
-          <ErrorAlert type="warning">
-            {#snippet children()}
-              <div>
-                <h3 class="font-bold">
-                  {t('settings.integration.birdweather.ffmpegWarning.title')}
-                </h3>
-                <p>{t('settings.integration.birdweather.ffmpegWarning.message')}</p>
-              </div>
-            {/snippet}
-          </ErrorAlert>
-        {/if}
-
-        <Checkbox
-          checked={settings.birdweather!.enabled}
-          label={t('settings.integration.birdweather.enable')}
-          disabled={store.isLoading || store.isSaving}
-          onchange={updateBirdWeatherEnabled}
-        />
-
-        <!-- Fieldset for accessible disabled state - all inputs greyed out when feature disabled -->
-        <fieldset
-          disabled={!settings.birdweather?.enabled || store.isLoading || store.isSaving}
-          class="contents"
-          aria-describedby="birdweather-status"
-        >
-          <span id="birdweather-status" class="sr-only">
-            {settings.birdweather?.enabled
-              ? t('settings.integration.birdweather.enable')
-              : t('settings.integration.birdweather.test.enabledRequired')}
-          </span>
-          <div
-            class="transition-opacity duration-200"
-            class:opacity-50={!settings.birdweather?.enabled}
-          >
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <PasswordField
-                label={t('settings.integration.birdweather.token.label')}
-                value={settings.birdweather!.id}
-                onUpdate={updateBirdWeatherId}
-                placeholder=""
-                helpText={t('settings.integration.birdweather.token.helpText')}
-                disabled={!settings.birdweather?.enabled || store.isLoading || store.isSaving}
-                allowReveal={true}
-              />
-
-              <NumberField
-                label={t('settings.integration.birdweather.threshold.label')}
-                value={settings.birdweather!.threshold}
-                onUpdate={updateBirdWeatherThreshold}
-                min={0}
-                max={1}
-                step={0.01}
-                placeholder="0.7"
-                helpText={t('settings.integration.birdweather.threshold.helpText')}
-                disabled={!settings.birdweather?.enabled || store.isLoading || store.isSaving}
-              />
-            </div>
-
-            <!-- Test Connection -->
-            <div class="space-y-4 mt-4">
-              <div class="flex items-center gap-3">
-                <SettingsButton
-                  onclick={testBirdWeather}
-                  loading={testStates.birdweather.isRunning}
-                  loadingText={t('settings.integration.birdweather.test.loading')}
-                  disabled={!(
-                    store.formData?.realtime?.birdweather?.enabled ?? settings.birdweather?.enabled
-                  ) ||
-                    !(store.formData?.realtime?.birdweather?.id ?? settings.birdweather?.id) ||
-                    testStates.birdweather.isRunning}
-                >
-                  {t('settings.integration.birdweather.test.button')}
-                </SettingsButton>
-                <span class="text-sm text-[var(--color-base-content)] opacity-70">
-                  {#if !(store.formData?.realtime?.birdweather?.enabled ?? settings.birdweather?.enabled)}
-                    {t('settings.integration.birdweather.test.enabledRequired')}
-                  {:else if !(store.formData?.realtime?.birdweather?.id ?? settings.birdweather?.id)}
-                    {t('settings.integration.birdweather.test.tokenRequired')}
-                  {:else if testStates.birdweather.isRunning}
-                    {t('settings.integration.birdweather.test.inProgress')}
-                  {:else}
-                    {t('settings.integration.birdweather.test.description')}
-                  {/if}
-                </span>
-              </div>
-
-              {#if testStates.birdweather.stages.length > 0}
-                <MultiStageOperation
-                  stages={testStates.birdweather.stages}
-                  variant="compact"
-                  showProgress={false}
-                />
-              {/if}
-
-              <TestSuccessNote show={testStates.birdweather.showSuccessNote} />
-            </div>
-          </div>
-        </fieldset>
-      </div>
-    </SettingsSection>
-  </div>
-{/snippet}
 
 {#snippet mqttTabContent()}
   <div class="space-y-6">
@@ -1616,125 +974,6 @@
                 store.isLoading ||
                 store.isSaving}
             />
-          </div>
-        </fieldset>
-      </div>
-    </SettingsSection>
-  </div>
-{/snippet}
-
-{#snippet ebirdTabContent()}
-  <div class="space-y-6">
-    <!-- eBird Settings Card -->
-    <SettingsSection
-      title={t('settings.integration.ebird.title')}
-      description={t('settings.integration.ebird.description')}
-      originalData={(store.originalData as SettingsFormData)?.realtime?.ebird}
-      currentData={(store.formData as SettingsFormData)?.realtime?.ebird}
-    >
-      <div class="space-y-4">
-        <Checkbox
-          checked={settings.ebird!.enabled}
-          label={t('settings.integration.ebird.enable')}
-          disabled={store.isLoading || store.isSaving}
-          onchange={updateEBirdEnabled}
-        />
-
-        <!-- Fieldset for accessible disabled state -->
-        <fieldset
-          disabled={!settings.ebird?.enabled || store.isLoading || store.isSaving}
-          class="contents"
-          aria-describedby="ebird-status"
-        >
-          <span id="ebird-status" class="sr-only">
-            {settings.ebird?.enabled
-              ? t('settings.integration.ebird.enable')
-              : t('settings.integration.ebird.enabledRequired')}
-          </span>
-          <div class="transition-opacity duration-200" class:opacity-50={!settings.ebird?.enabled}>
-            <!-- API Key Info Banner -->
-            <ErrorAlert type="info" className="mb-4">
-              {#snippet children()}
-                {@html t('settings.integration.ebird.apiKeyInfo')}
-              {/snippet}
-            </ErrorAlert>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <PasswordField
-                label={t('settings.integration.ebird.apiKey.label')}
-                value={settings.ebird!.apiKey}
-                onUpdate={updateEBirdApiKey}
-                placeholder=""
-                helpText={t('settings.integration.ebird.apiKey.helpText')}
-                disabled={!settings.ebird?.enabled || store.isLoading || store.isSaving}
-                allowReveal={true}
-              />
-
-              <SelectDropdown
-                value={settings.ebird!.locale}
-                options={ebirdLocaleOptions}
-                label={t('settings.integration.ebird.locale.label')}
-                disabled={!settings.ebird?.enabled || store.isLoading || store.isSaving}
-                onChange={value => updateEBirdLocale(value as string)}
-              />
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-              <NumberField
-                label={t('settings.integration.ebird.cacheTTL.label')}
-                value={settings.ebird!.cacheTTL}
-                onUpdate={updateEBirdCacheTTL}
-                min={1}
-                max={168}
-                step={1}
-                placeholder="24"
-                helpText={t('settings.integration.ebird.cacheTTL.helpText')}
-                disabled={!settings.ebird?.enabled || store.isLoading || store.isSaving}
-              />
-            </div>
-
-            <!-- Test Connection -->
-            <div class="space-y-4 mt-4">
-              <div class="flex items-center gap-3">
-                <SettingsButton
-                  onclick={testEBird}
-                  loading={testStates.ebird.isRunning}
-                  loadingText={t('settings.integration.ebird.test.loading')}
-                  disabled={!(
-                    store.formData?.realtime?.ebird?.enabled ?? settings.ebird?.enabled
-                  ) ||
-                    !(store.formData?.realtime?.ebird?.apiKey ?? settings.ebird?.apiKey) ||
-                    testStates.ebird.isRunning}
-                >
-                  {t('settings.integration.ebird.test.button')}
-                </SettingsButton>
-                <span class="text-sm text-[var(--color-base-content)] opacity-70">
-                  {#if !(store.formData?.realtime?.ebird?.enabled ?? settings.ebird?.enabled)}
-                    {t('settings.integration.ebird.test.enabledRequired')}
-                  {:else if !(store.formData?.realtime?.ebird?.apiKey ?? settings.ebird?.apiKey)}
-                    {t('settings.integration.ebird.test.apiKeyRequired')}
-                  {:else if testStates.ebird.isRunning}
-                    {t('settings.integration.ebird.test.inProgress')}
-                  {:else}
-                    {t('settings.integration.ebird.test.description')}
-                  {/if}
-                </span>
-              </div>
-
-              {#if testStates.ebird.stages.length > 0}
-                <MultiStageOperation
-                  stages={testStates.ebird.stages}
-                  variant="compact"
-                  showProgress={false}
-                />
-              {/if}
-
-              <TestSuccessNote show={testStates.ebird.showSuccessNote} />
-            </div>
-
-            <SettingsNote>
-              <span>{t('settings.integration.ebird.note')}</span>
-            </SettingsNote>
           </div>
         </fieldset>
       </div>

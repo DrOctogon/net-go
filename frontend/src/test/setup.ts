@@ -325,15 +325,6 @@ vi.mock('$lib/utils/settingsApi.js', () => {
       },
     },
     integration: {
-      birdweather: {
-        enabled: false,
-        id: '',
-        latitude: 0,
-        longitude: 0,
-        locationAccuracy: 500,
-        threshold: 0.8,
-        debug: false,
-      },
       mqtt: {
         enabled: false,
         broker: 'localhost',
@@ -409,7 +400,6 @@ vi.mock('$lib/utils/settingsApi.js', () => {
       load: vi.fn().mockResolvedValue(defaultSettings),
       save: vi.fn().mockResolvedValue({ success: true }),
       test: {
-        birdweather: vi.fn().mockResolvedValue({ success: true, message: 'Test successful' }),
         mqtt: vi.fn().mockResolvedValue({ success: true, message: 'Test successful' }),
         database: vi.fn().mockResolvedValue({ success: true, message: 'Test successful' }),
         audio: vi.fn().mockResolvedValue({ success: true, message: 'Test successful' }),

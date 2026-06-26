@@ -156,7 +156,8 @@
         "falsePositive": "Hamis pozitív",
         "notReviewed": "Nincs áttekintve",
         "locked": "Zárolva",
-        "unlikely": "Valószínűtlen"
+        "unlikely": "Valószínűtlen",
+        "flagged": "Flagged"
       },
       "form": {
         "correctDetection": "Helyes detektálás",
@@ -396,7 +397,6 @@
         "rebuildingRangeFilter": "Faj tartomány szűrő újraépítése...",
         "updatingIntervals": "Detektálási intervallumok frissítése...",
         "reconfiguringMqtt": "MQTT kapcsolat frissítése...",
-        "reconfiguringBirdweather": "BirdWeather integráció frissítése...",
         "reconfiguringStreams": "Hang streamek frissítése...",
         "reconfiguringTelemetry": "Telemetria beállítások frissítése...",
         "reconfiguringPushNotifications": "Push értesítési szolgáltatók újrakonfigurálása...",
@@ -796,6 +796,12 @@
     "detail": {
       "species": "Faj",
       "observation": "Megfigyelés",
+      "transcript": {
+        "title": "Transcript",
+        "matchedKeywords": "Matched keywords",
+        "flaggedNotice": "Flagged by keyword",
+        "empty": "No transcript available"
+      },
       "aria": {
         "downloadAudioClip": "Download audio clip for {name} detection",
         "audioRecordingFor": "Audio recording and spectrogram for {name}",
@@ -2894,31 +2900,6 @@
       }
     },
     "integration": {
-      "birdweather": {
-        "title": "BirdWeather",
-        "description": "Detektálások feltöltése a BirdWeather-re",
-        "ffmpegWarning": {
-          "title": "FFmpeg nem észlelhető",
-          "message": "Kérjük, telepítse az FFmpeg-et a FLAC kódolás támogatásához, a BirdWeather megszünteti a WAV feltöltéseket a tömörített FLAC hangfájlok javára."
-        },
-        "enable": "BirdWeather feltöltések engedélyezése",
-        "token": {
-          "label": "BirdWeather token",
-          "helpText": "Az Ön egyedi BirdWeather token-je."
-        },
-        "threshold": {
-          "label": "Feltöltési küszöbérték",
-          "helpText": "Minimális megbízhatósági küszöbérték a BirdWeather-re történő feltöltésekhez."
-        },
-        "test": {
-          "button": "BirdWeather kapcsolat tesztelése",
-          "loading": "Tesztelés...",
-          "enabledRequired": "A BirdWeather-t engedélyezni kell a teszthez",
-          "tokenRequired": "A BirdWeather token-t meg kell adni",
-          "inProgress": "Teszt folyamatban...",
-          "description": "BirdWeather kapcsolat tesztelése"
-        }
-      },
       "mqtt": {
         "title": "MQTT",
         "description": "MQTT broker kapcsolat konfigurálása",
@@ -3091,33 +3072,6 @@
         "responseStreamFailed": "A válasz stream olvasása sikertelen",
         "configurationCheck": "Konfiguráció ellenőrzés",
         "testStageFallback": "Teszt szint fallback"
-      },
-      "ebird": {
-        "title": "eBird",
-        "description": "Csatlakozás az eBird taxonómia adatbázishoz a gazdagított faj adatokhoz, beleértve a taxonómiai besorolást és alfaj információkat.",
-        "enable": "eBird integráció engedélyezése",
-        "enabledRequired": "Az eBird integráció nincs engedélyezve",
-        "apiKey": {
-          "label": "eBird API kulcs",
-          "helpText": "Az Ön eBird API kulcsa. Szerezze be az eBird API portálról."
-        },
-        "locale": {
-          "label": "Faj név nyelv"
-        },
-        "cacheTTL": {
-          "label": "Gyorsítótár időtartam (óra)",
-          "helpText": "Mennyi ideig gyorsítótárazza az eBird taxonómia adatokat. A taxonómia ritkán változik, így a hosszabb gyorsítótár időtartamok csökkentik az API hívásokat."
-        },
-        "note": "Az eBird taxonómiai adatokat biztosít a faj osztályozáshoz és betekintésekhez. Az API kulcs ingyenesen beszerezhető a Cornell Lab of Ornithology-tól.",
-        "apiKeyInfo": "Személyes eBird API kulcs szükséges ehhez az integrációhoz. Ingyenes kulcsot kérhet a <a href=\"https://ebird.org/api/keygen\" class=\"link link-primary\" target=\"_blank\" rel=\"noopener noreferrer\">ebird.org/api/keygen</a> oldalon.",
-        "test": {
-          "button": "eBird kapcsolat tesztelése",
-          "loading": "Tesztelés...",
-          "enabledRequired": "Először engedélyezze az eBird integrációt",
-          "apiKeyRequired": "Az API kulcs szükséges",
-          "inProgress": "Teszt folyamatban...",
-          "description": "eBird API kapcsolat és hitelesítés tesztelése"
-        }
       }
     },
     "audio": {
@@ -4263,7 +4217,6 @@
           "detection_occurred": "Detektálás történt",
           "application_started": "Alkalmazás indítva",
           "application_stopped": "Alkalmazás leállítva",
-          "integration_birdweather_failed": "BirdWeather feltöltés sikertelen",
           "integration_mqtt_connected": "MQTT csatlakoztatva",
           "integration_mqtt_disconnected": "MQTT leválasztva",
           "integration_mqtt_publish_failed": "MQTT publikálás sikertelen",
@@ -4341,10 +4294,6 @@
         "mqttPublishFailed": {
           "name": "MQTT publikálás sikertelen",
           "description": "Értesít, amikor egy MQTT üzenet publikálása sikertelen"
-        },
-        "birdWeatherFailed": {
-          "name": "BirdWeather feltöltés sikertelen",
-          "description": "Értesít, amikor egy BirdWeather feltöltés sikertelen"
         }
       }
     },
@@ -4800,9 +4749,6 @@
       "mqttNotConfigured": "Az MQTT broker nincs konfigurálva",
       "mqttMetricsUnavailable": "A metrikus példány nem elérhető az MQTT teszthez",
       "mqttClientFailed": "Az MQTT kliens létrehozása sikertelen",
-      "birdweatherDisabled": "A BirdWeather integráció nincs engedélyezve",
-      "birdweatherNotConfigured": "A BirdWeather állomás ID nincs konfigurálva",
-      "birdweatherClientFailed": "A BirdWeather kliens létrehozása sikertelen",
       "noWeatherProvider": "Nincs időjárás szolgáltató kiválasztva",
       "openWeatherKeyRequired": "Az OpenWeather API kulcs kötelező",
       "processorUnavailable": "A processzor nem elérhető",
@@ -4937,10 +4883,6 @@
         "title": "Adatvédelem és integráció",
         "privacyFilterLabel": "Adatvédelmi szűrő engedélyezése",
         "privacyFilterHelp": "Kiszűri a detektálásokat, amikor emberi hangok észlelhetők a mikrofon közelében",
-        "birdweatherLabel": "Detektálások megosztása a BirdWeather-rel",
-        "birdweatherHelp": " Ossza meg madár detektálásait a BirdWeather közösségi hálózattal",
-        "birdweatherIdLabel": "BirdWeather állomás ID",
-        "birdweatherIdPlaceholder": "Adja meg a BirdWeather állomás ID-jét",
         "errorReportingLabel": "Névtelen hiba jelentések küldése",
         "errorReportingHelp": "Segítsen fejleszteni a VoiceWatch-t névtelen hiba jelentések küldésével, amikor valami hibásan működik"
       },

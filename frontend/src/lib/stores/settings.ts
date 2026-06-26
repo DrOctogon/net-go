@@ -338,29 +338,10 @@ export interface DaylightFilterSettings {
   species: string[];
 }
 
-export interface EBirdSettings {
-  enabled: boolean;
-  apiKey: string;
-  cacheTTL: number; // cache time-to-live in hours (default: 24)
-  locale: string; // locale for eBird data (e.g., "en", "es")
-}
-
 export interface IntegrationSettings {
-  birdweather: BirdWeatherSettings;
   mqtt: MQTTSettings;
   observability: ObservabilitySettings;
   weather: WeatherSettings;
-  ebird: EBirdSettings;
-}
-
-export interface BirdWeatherSettings {
-  enabled: boolean;
-  id: string;
-  latitude: number;
-  longitude: number;
-  locationAccuracy: number;
-  threshold: number;
-  debug: boolean;
 }
 
 export interface HomeAssistantSettings {
@@ -544,7 +525,6 @@ export interface RealtimeSettings {
     enabled: boolean;
     path: string;
   };
-  birdweather?: BirdWeatherSettings;
   privacyFilter?: PrivacyFilterSettings;
   dogBarkFilter?: DogBarkFilterSettings;
   daylightFilter?: DaylightFilterSettings;
@@ -556,7 +536,6 @@ export interface RealtimeSettings {
   weather?: WeatherSettings;
   speciesTracking?: SpeciesTrackingSettings;
   extendedCapture?: ExtendedCaptureSettings;
-  ebird?: EBirdSettings;
 }
 
 // WebServer settings
@@ -954,15 +933,6 @@ function createEmptySettings(): SettingsFormData {
         captureBufferSeconds: 0,
         species: [],
       },
-      birdweather: {
-        enabled: false,
-        id: '',
-        latitude: 0,
-        longitude: 0,
-        locationAccuracy: 1000,
-        threshold: 0.7,
-        debug: false,
-      },
       mqtt: {
         enabled: false,
         broker: '',
@@ -978,12 +948,6 @@ function createEmptySettings(): SettingsFormData {
           discoveryPrefix: 'homeassistant',
           deviceName: 'VoiceWatch',
         },
-      },
-      ebird: {
-        enabled: false,
-        apiKey: '',
-        cacheTTL: 24,
-        locale: 'en',
       },
       species: {
         include: [],
@@ -1130,11 +1094,6 @@ export const daylightFilterSettings = derived(
   $store => $store.formData.realtime?.daylightFilter
 );
 
-export const birdweatherSettings = derived(
-  settingsStore,
-  $store => $store.formData.realtime?.birdweather
-);
-
 export const mqttSettings = derived(settingsStore, $store => $store.formData.realtime?.mqtt);
 
 export const homeAssistantSettings = derived(
@@ -1165,7 +1124,6 @@ export const outputSettings = derived(settingsStore, $store => $store.formData.o
 export const notificationSettings = derived(settingsStore, $store => $store.formData.notification);
 
 export const integrationSettings = derived(settingsStore, $store => ({
-  birdweather: $store.formData.realtime?.birdweather,
   mqtt: $store.formData.realtime?.mqtt,
   observability: {
     prometheus: {
@@ -1177,12 +1135,6 @@ export const integrationSettings = derived(settingsStore, $store => ({
     },
   },
   weather: $store.formData.realtime?.weather,
-  ebird: $store.formData.realtime?.ebird ?? {
-    enabled: false,
-    apiKey: '',
-    cacheTTL: 24,
-    locale: 'en',
-  },
 }));
 
 export const supportSettings = derived(settingsStore, $store => ({

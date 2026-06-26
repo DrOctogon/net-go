@@ -156,7 +156,8 @@
         "falsePositive": "Faux positif",
         "notReviewed": "Non examiné",
         "locked": "Verrouillé",
-        "unlikely": "Improbable"
+        "unlikely": "Improbable",
+        "flagged": "Flagged"
       },
       "form": {
         "correctDetection": "Détection correcte",
@@ -396,7 +397,6 @@
         "rebuildingRangeFilter": "Reconstruction du filtre de répartition des espèces...",
         "updatingIntervals": "Mise à jour des intervalles de détection...",
         "reconfiguringMqtt": "Mise à jour de la connexion MQTT...",
-        "reconfiguringBirdweather": "Mise à jour de l'intégration BirdWeather...",
         "reconfiguringStreams": "Mise à jour des flux audio...",
         "reconfiguringTelemetry": "Mise à jour des paramètres de télémétrie...",
         "reconfiguringPushNotifications": "Reconfiguration des fournisseurs de notifications push...",
@@ -796,6 +796,12 @@
     "detail": {
       "species": "Espèce",
       "observation": "Observation",
+      "transcript": {
+        "title": "Transcript",
+        "matchedKeywords": "Matched keywords",
+        "flaggedNotice": "Flagged by keyword",
+        "empty": "No transcript available"
+      },
       "aria": {
         "downloadAudioClip": "Download audio clip for {name} detection",
         "audioRecordingFor": "Audio recording and spectrogram for {name}",
@@ -2894,31 +2900,6 @@
       }
     },
     "integration": {
-      "birdweather": {
-        "title": "BirdWeather",
-        "description": "Téléverser les détections vers BirdWeather",
-        "ffmpegWarning": {
-          "title": "FFmpeg non détecté",
-          "message": "Veuillez installer FFmpeg pour activer la prise en charge de l'encodage FLAC, BirdWeather déprécie les téléchargements WAV au profit des fichiers audio FLAC compressés."
-        },
-        "enable": "Activer les téléchargements BirdWeather",
-        "token": {
-          "label": "Jeton BirdWeather",
-          "helpText": "Votre jeton BirdWeather unique."
-        },
-        "threshold": {
-          "label": "Seuil de téléchargement",
-          "helpText": "Seuil de confiance minimum pour télécharger les prédictions vers BirdWeather."
-        },
-        "test": {
-          "button": "Tester la connexion BirdWeather",
-          "loading": "Test en cours...",
-          "enabledRequired": "BirdWeather doit être activé pour tester",
-          "tokenRequired": "Le jeton BirdWeather doit être spécifié",
-          "inProgress": "Test en cours...",
-          "description": "Tester la connexion BirdWeather"
-        }
-      },
       "mqtt": {
         "title": "MQTT",
         "description": "Configurer la connexion au courtier MQTT",
@@ -3091,33 +3072,6 @@
         "responseStreamFailed": "Échec de la lecture du flux de réponse",
         "configurationCheck": "Vérification de la configuration",
         "testStageFallback": "Étape de test"
-      },
-      "ebird": {
-        "title": "eBird",
-        "description": "Connexion à la base de données taxonomique d'eBird pour des données enrichies sur les espèces, y compris la classification taxonomique et les informations sur les sous-espèces.",
-        "enable": "Activer l'intégration eBird",
-        "enabledRequired": "L'intégration eBird n'est pas activée",
-        "apiKey": {
-          "label": "Clé API eBird",
-          "helpText": "Votre clé API eBird. Obtenez-en une sur le portail API d'eBird."
-        },
-        "locale": {
-          "label": "Langue des noms d'espèces"
-        },
-        "cacheTTL": {
-          "label": "Durée du cache (heures)",
-          "helpText": "Durée de mise en cache des données taxonomiques d'eBird. La taxonomie change rarement, donc des durées plus longues réduisent les appels API."
-        },
-        "note": "eBird fournit des données taxonomiques utilisées pour la classification des espèces et les analyses. La clé API est gratuite et disponible auprès du Cornell Lab of Ornithology.",
-        "apiKeyInfo": "Une clé API eBird personnelle est requise pour utiliser cette intégration. Vous pouvez demander une clé gratuite sur <a href=\"https://ebird.org/api/keygen\" class=\"link link-primary\" target=\"_blank\" rel=\"noopener noreferrer\">ebird.org/api/keygen</a>.",
-        "test": {
-          "button": "Tester la connexion eBird",
-          "loading": "Test en cours...",
-          "enabledRequired": "Activez d'abord l'intégration eBird",
-          "apiKeyRequired": "La clé API est requise",
-          "inProgress": "Test en cours...",
-          "description": "Tester la connectivité et l'authentification de l'API eBird"
-        }
       }
     },
     "audio": {
@@ -4263,7 +4217,6 @@
           "detection_occurred": "Détection effectuée",
           "application_started": "Application démarrée",
           "application_stopped": "Application arrêtée",
-          "integration_birdweather_failed": "Envoi BirdWeather échoué",
           "integration_mqtt_connected": "MQTT connecté",
           "integration_mqtt_disconnected": "MQTT déconnecté",
           "integration_mqtt_publish_failed": "Publication MQTT échouée",
@@ -4341,10 +4294,6 @@
         "mqttPublishFailed": {
           "name": "Publication MQTT échouée",
           "description": "Notifie lorsque la publication d'un message MQTT échoue"
-        },
-        "birdWeatherFailed": {
-          "name": "Envoi BirdWeather échoué",
-          "description": "Notifie lorsqu'un envoi BirdWeather échoue"
         }
       }
     },
@@ -4800,9 +4749,6 @@
       "mqttNotConfigured": "Broker MQTT non configuré",
       "mqttMetricsUnavailable": "Instance de métriques non disponible pour le test MQTT",
       "mqttClientFailed": "Impossible de créer le client MQTT",
-      "birdweatherDisabled": "L'intégration BirdWeather n'est pas activée",
-      "birdweatherNotConfigured": "ID de station BirdWeather non configuré",
-      "birdweatherClientFailed": "Impossible de créer le client BirdWeather",
       "noWeatherProvider": "Aucun fournisseur météo sélectionné",
       "openWeatherKeyRequired": "La clé API OpenWeather est requise",
       "processorUnavailable": "Processeur non disponible",
@@ -4937,10 +4883,6 @@
         "title": "Confidentialité et intégration",
         "privacyFilterLabel": "Activer le filtre de confidentialité",
         "privacyFilterHelp": "Filtre les détections lorsque des voix humaines sont détectées à proximité du microphone",
-        "birdweatherLabel": "Partager les détections avec BirdWeather",
-        "birdweatherHelp": "Contribuez vos détections d'oiseaux au réseau communautaire BirdWeather",
-        "birdweatherIdLabel": "ID de station BirdWeather",
-        "birdweatherIdPlaceholder": "Entrez votre ID de station BirdWeather",
         "errorReportingLabel": "Envoyer des rapports d'erreurs anonymes",
         "errorReportingHelp": "Aidez à améliorer VoiceWatch en envoyant des rapports d'erreurs anonymes lorsque quelque chose ne fonctionne pas"
       },

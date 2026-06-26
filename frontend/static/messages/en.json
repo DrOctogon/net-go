@@ -397,7 +397,6 @@
         "rebuildingRangeFilter": "Rebuilding species range filter...",
         "updatingIntervals": "Updating detection intervals...",
         "reconfiguringMqtt": "Updating MQTT connection...",
-        "reconfiguringBirdweather": "Updating BirdWeather integration...",
         "reconfiguringStreams": "Updating audio streams...",
         "reconfiguringTelemetry": "Updating telemetry settings...",
         "reconfiguringPushNotifications": "Reconfiguring push notification providers...",
@@ -2901,31 +2900,6 @@
       }
     },
     "integration": {
-      "birdweather": {
-        "title": "BirdWeather",
-        "description": "Upload detections to BirdWeather",
-        "ffmpegWarning": {
-          "title": "FFmpeg not detected",
-          "message": "Please install FFmpeg to enable FLAC encoding support, BirdWeather is deprecating WAV uploads in favor of compressed FLAC audio files."
-        },
-        "enable": "Enable BirdWeather Uploads",
-        "token": {
-          "label": "BirdWeather token",
-          "helpText": "Your unique BirdWeather token."
-        },
-        "threshold": {
-          "label": "Upload Threshold",
-          "helpText": "Minimum confidence threshold for uploading predictions to BirdWeather."
-        },
-        "test": {
-          "button": "Test BirdWeather Connection",
-          "loading": "Testing...",
-          "enabledRequired": "BirdWeather must be enabled to test",
-          "tokenRequired": "BirdWeather token must be specified",
-          "inProgress": "Test in progress...",
-          "description": "Test BirdWeather connection"
-        }
-      },
       "mqtt": {
         "title": "MQTT",
         "description": "Configure MQTT broker connection",
@@ -3098,33 +3072,6 @@
         "responseStreamFailed": "Failed to read response stream",
         "configurationCheck": "Configuration Check",
         "testStageFallback": "Test Stage"
-      },
-      "ebird": {
-        "title": "eBird",
-        "description": "Connect to the eBird taxonomy database for enriched species data including taxonomic classification and subspecies information.",
-        "enable": "Enable eBird Integration",
-        "enabledRequired": "eBird integration is not enabled",
-        "apiKey": {
-          "label": "eBird API Key",
-          "helpText": "Your eBird API key. Obtain one from the eBird API portal."
-        },
-        "locale": {
-          "label": "Species Name Language"
-        },
-        "cacheTTL": {
-          "label": "Cache Duration (hours)",
-          "helpText": "How long to cache taxonomy data from eBird. Taxonomy rarely changes, so longer cache durations reduce API calls."
-        },
-        "note": "eBird provides taxonomic data used for species classification and insights. The API key is free to obtain from the Cornell Lab of Ornithology.",
-        "apiKeyInfo": "A personal eBird API key is required to use this integration. You can request a free key from <a href=\"https://ebird.org/api/keygen\" class=\"link link-primary\" target=\"_blank\" rel=\"noopener noreferrer\">ebird.org/api/keygen</a>.",
-        "test": {
-          "button": "Test eBird Connection",
-          "loading": "Testing...",
-          "enabledRequired": "Enable eBird integration first",
-          "apiKeyRequired": "API key is required",
-          "inProgress": "Test in progress...",
-          "description": "Test eBird API connectivity and authentication"
-        }
       }
     },
     "audio": {
@@ -4270,7 +4217,6 @@
           "detection_occurred": "Detection Occurred",
           "application_started": "Application Started",
           "application_stopped": "Application Stopped",
-          "integration_birdweather_failed": "BirdWeather Upload Failed",
           "integration_mqtt_connected": "MQTT Connected",
           "integration_mqtt_disconnected": "MQTT Disconnected",
           "integration_mqtt_publish_failed": "MQTT Publish Failed",
@@ -4348,10 +4294,6 @@
         "mqttPublishFailed": {
           "name": "MQTT publish failed",
           "description": "Notifies when an MQTT message publish fails"
-        },
-        "birdWeatherFailed": {
-          "name": "BirdWeather upload failed",
-          "description": "Notifies when a BirdWeather upload fails"
         }
       }
     },
@@ -4807,9 +4749,6 @@
       "mqttNotConfigured": "MQTT broker not configured",
       "mqttMetricsUnavailable": "Metrics instance not available for MQTT test",
       "mqttClientFailed": "Failed to create MQTT client",
-      "birdweatherDisabled": "BirdWeather integration is not enabled",
-      "birdweatherNotConfigured": "BirdWeather station ID not configured",
-      "birdweatherClientFailed": "Failed to create BirdWeather client",
       "noWeatherProvider": "No weather provider selected",
       "openWeatherKeyRequired": "OpenWeather API key is required",
       "processorUnavailable": "Processor not available",
@@ -4944,10 +4883,6 @@
         "title": "Privacy & Integration",
         "privacyFilterLabel": "Enable privacy filter",
         "privacyFilterHelp": "Filters out detections when human voices are detected near the microphone",
-        "birdweatherLabel": "Share detections with BirdWeather",
-        "birdweatherHelp": "Contribute your bird detections to the BirdWeather community network",
-        "birdweatherIdLabel": "BirdWeather Station ID",
-        "birdweatherIdPlaceholder": "Enter your BirdWeather station ID",
         "errorReportingLabel": "Send anonymous error reports",
         "errorReportingHelp": "Help improve VoiceWatch by sending anonymous error reports when something goes wrong"
       },

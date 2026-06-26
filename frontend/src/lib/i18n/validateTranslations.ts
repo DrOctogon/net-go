@@ -54,7 +54,6 @@ const SKIP_UNTRANSLATED_KEYWORDS = [
   'shoutrrr',
   'webhook',
   'mqtt',
-  'birdweather',
   'ifttt',
   'google',
   'oauth',
@@ -81,7 +80,6 @@ const SKIP_UNTRANSLATED_KEYWORDS = [
   // Brand names
   'voicewatch',
   'birdnet',
-  'ebird',
   'github',
   'flickr',
   'wikipedia',

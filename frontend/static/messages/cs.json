@@ -156,7 +156,8 @@
         "falsePositive": "Falešně pozitivní",
         "notReviewed": "Nezkontrolováno",
         "locked": "Uzamčeno",
-        "unlikely": "Nepravděpodobné"
+        "unlikely": "Nepravděpodobné",
+        "flagged": "Flagged"
       },
       "form": {
         "correctDetection": "Správná detekce",
@@ -396,7 +397,6 @@
         "rebuildingRangeFilter": "Přestavuji filtr výskytu druhů…",
         "updatingIntervals": "Aktualizuji intervaly detekce…",
         "reconfiguringMqtt": "Aktualizuji připojení MQTT…",
-        "reconfiguringBirdweather": "Aktualizuji integraci BirdWeather…",
         "reconfiguringStreams": "Aktualizuji audio streamy…",
         "reconfiguringTelemetry": "Aktualizuji nastavení telemetrie…",
         "reconfiguringPushNotifications": "Překonfiguruji poskytovatele push oznámení…",
@@ -796,6 +796,12 @@
     "detail": {
       "species": "Druh",
       "observation": "Pozorování",
+      "transcript": {
+        "title": "Transcript",
+        "matchedKeywords": "Matched keywords",
+        "flaggedNotice": "Flagged by keyword",
+        "empty": "No transcript available"
+      },
       "aria": {
         "downloadAudioClip": "Download audio clip for {name} detection",
         "audioRecordingFor": "Audio recording and spectrogram for {name}",
@@ -2894,31 +2900,6 @@
       }
     },
     "integration": {
-      "birdweather": {
-        "title": "BirdWeather",
-        "description": "Nahrávat detekce do BirdWeather",
-        "ffmpegWarning": {
-          "title": "FFmpeg nebyl nalezen",
-          "message": "Nainstalujte prosím FFmpeg pro povolení podpory kódování FLAC. BirdWeather ukončuje podporu nahrávání WAV ve prospěch komprimovaných zvukových souborů FLAC."
-        },
-        "enable": "Povolit nahrávání do BirdWeather",
-        "token": {
-          "label": "Token BirdWeather",
-          "helpText": "Váš jedinečný token BirdWeather."
-        },
-        "threshold": {
-          "label": "Práh nahrávání",
-          "helpText": "Minimální práh jistoty pro nahrávání predikcí do BirdWeather."
-        },
-        "test": {
-          "button": "Otestovat připojení k BirdWeather",
-          "loading": "Testuje se...",
-          "enabledRequired": "Pro testování musí být BirdWeather povolen",
-          "tokenRequired": "Musí být zadán token BirdWeather",
-          "inProgress": "Test probíhá...",
-          "description": "Otestovat připojení k BirdWeather"
-        }
-      },
       "mqtt": {
         "title": "MQTT",
         "description": "Konfigurace připojení k MQTT brokeru",
@@ -3091,33 +3072,6 @@
         "responseStreamFailed": "Nepodařilo se přečíst stream odpovědi",
         "configurationCheck": "Kontrola konfigurace",
         "testStageFallback": "Fáze testu"
-      },
-      "ebird": {
-        "title": "eBird",
-        "description": "Připojení k taxonomické databázi eBird pro obohacená data o druzích včetně taxonomické klasifikace a informací o poddruzích.",
-        "enable": "Povolit integraci eBird",
-        "enabledRequired": "Integrace eBird není povolena",
-        "apiKey": {
-          "label": "API klíč eBird",
-          "helpText": "Váš API klíč eBird. Získejte ho na portálu API eBird."
-        },
-        "locale": {
-          "label": "Jazyk názvů druhů"
-        },
-        "cacheTTL": {
-          "label": "Doba platnosti cache (hodiny)",
-          "helpText": "Jak dlouho uchovávat taxonomická data z eBird ve vyrovnávací paměti. Taxonomie se mění zřídka, proto delší doby cache snižují počet volání API."
-        },
-        "note": "eBird poskytuje taxonomická data používaná pro klasifikaci druhů a analýzy. API klíč je zdarma a dostupný z Cornell Lab of Ornithology.",
-        "apiKeyInfo": "Pro použití této integrace je potřeba osobní API klíč eBird. Bezplatný klíč si můžete vyžádat na <a href=\"https://ebird.org/api/keygen\" class=\"link link-primary\" target=\"_blank\" rel=\"noopener noreferrer\">ebird.org/api/keygen</a>.",
-        "test": {
-          "button": "Otestovat připojení k eBird",
-          "loading": "Testuje se...",
-          "enabledRequired": "Nejprve povolte integraci eBird",
-          "apiKeyRequired": "API klíč je povinný",
-          "inProgress": "Test probíhá...",
-          "description": "Otestovat připojení a ověření API eBird"
-        }
       }
     },
     "audio": {
@@ -4263,7 +4217,6 @@
           "detection_occurred": "Proběhla detekce",
           "application_started": "Aplikace spuštěna",
           "application_stopped": "Aplikace zastavena",
-          "integration_birdweather_failed": "Nahrání do BirdWeather selhalo",
           "integration_mqtt_connected": "MQTT připojeno",
           "integration_mqtt_disconnected": "MQTT odpojeno",
           "integration_mqtt_publish_failed": "Publikování MQTT selhalo",
@@ -4341,10 +4294,6 @@
         "mqttPublishFailed": {
           "name": "Publikování MQTT selhalo",
           "description": "Upozorní, když selže publikování zprávy MQTT"
-        },
-        "birdWeatherFailed": {
-          "name": "Nahrání do BirdWeather selhalo",
-          "description": "Upozorní, když selže nahrávání do BirdWeather"
         }
       }
     },
@@ -4800,9 +4749,6 @@
       "mqttNotConfigured": "MQTT broker není nakonfigurován",
       "mqttMetricsUnavailable": "Instance metrik není k dispozici pro test MQTT",
       "mqttClientFailed": "MQTT klienta se nepodařilo vytvořit",
-      "birdweatherDisabled": "Integrace BirdWeather není povolena",
-      "birdweatherNotConfigured": "ID stanice BirdWeather není nakonfigurováno",
-      "birdweatherClientFailed": "BirdWeather klienta se nepodařilo vytvořit",
       "noWeatherProvider": "Není vybrán žádný poskytovatel počasí",
       "openWeatherKeyRequired": "API klíč OpenWeather je povinný",
       "processorUnavailable": "Procesor není k dispozici",
@@ -4937,10 +4883,6 @@
         "title": "Soukromí a integrace",
         "privacyFilterLabel": "Povolit filtr soukromí",
         "privacyFilterHelp": "Odfiltruje detekce, když jsou v blízkosti mikrofonu zachyceny lidské hlasy",
-        "birdweatherLabel": "Sdílet detekce se službou BirdWeather",
-        "birdweatherHelp": "Přispějte svými detekcemi ptáků do komunitní sítě BirdWeather",
-        "birdweatherIdLabel": "ID stanice BirdWeather",
-        "birdweatherIdPlaceholder": "Zadejte ID vaší stanice BirdWeather",
         "errorReportingLabel": "Odesílat anonymní hlášení chyb",
         "errorReportingHelp": "Pomozte vylepšit VoiceWatch odesíláním anonymních hlášení chyb, když něco selže"
       },

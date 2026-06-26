@@ -367,15 +367,6 @@ describe('Integrations API', () => {
     const status = await response.json();
     expect(status).toBeDefined();
   });
-
-  it('can fetch BirdWeather status', async () => {
-    const response = await apiCall('/integrations/birdweather/status');
-
-    expect(response.ok).toBe(true);
-
-    const status = await response.json();
-    expect(status).toBeDefined();
-  });
 });
 
 // ============================================================================

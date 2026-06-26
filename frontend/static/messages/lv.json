@@ -156,7 +156,8 @@
         "falsePositive": "Kļūdaini pozitīvs",
         "notReviewed": "Nav pārskatīts",
         "locked": "Bloķēts",
-        "unlikely": "Maz ticams"
+        "unlikely": "Maz ticams",
+        "flagged": "Flagged"
       },
       "form": {
         "correctDetection": "Pareiza noteikšana",
@@ -396,7 +397,6 @@
         "rebuildingRangeFilter": "Pārbūvē sugu areāla filtru...",
         "updatingIntervals": "Atjaunina noteikšanas intervālus...",
         "reconfiguringMqtt": "Atjaunina MQTT savienojumu...",
-        "reconfiguringBirdweather": "Atjaunina BirdWeather integrāciju...",
         "reconfiguringStreams": "Atjaunina audio straumes...",
         "reconfiguringTelemetry": "Atjaunina telemetrijas iestatījumus...",
         "reconfiguringPushNotifications": "Pārkonfigurē push paziņojumu pakalpojumu sniedzējus...",
@@ -796,6 +796,12 @@
     "detail": {
       "species": "Suga",
       "observation": "Novērojums",
+      "transcript": {
+        "title": "Transcript",
+        "matchedKeywords": "Matched keywords",
+        "flaggedNotice": "Flagged by keyword",
+        "empty": "No transcript available"
+      },
       "aria": {
         "downloadAudioClip": "Download audio clip for {name} detection",
         "audioRecordingFor": "Audio recording and spectrogram for {name}",
@@ -2894,31 +2900,6 @@
       }
     },
     "integration": {
-      "birdweather": {
-        "title": "BirdWeather",
-        "description": "Augšupielādēt noteikšanas uz BirdWeather",
-        "ffmpegWarning": {
-          "title": "FFmpeg nav atrasts",
-          "message": "Lūdzu, instalējiet FFmpeg, lai iespējotu FLAC kodēšanas atbalstu. BirdWeather pārtrauc WAV augšupielādes par labu saspiestiem FLAC audio failiem."
-        },
-        "enable": "Iespējot BirdWeather augšupielādes",
-        "token": {
-          "label": "BirdWeather tokens",
-          "helpText": "Jūsu unikālais BirdWeather tokens."
-        },
-        "threshold": {
-          "label": "Augšupielādes slieksnis",
-          "helpText": "Minimālais ticamības slieksnis prognožu augšupielādei uz BirdWeather."
-        },
-        "test": {
-          "button": "Pārbaudīt BirdWeather savienojumu",
-          "loading": "Pārbauda...",
-          "enabledRequired": "BirdWeather jābūt iespējotam, lai pārbaudītu",
-          "tokenRequired": "BirdWeather tokens jābūt norādītam",
-          "inProgress": "Pārbaude noris...",
-          "description": "Pārbaudīt BirdWeather savienojumu"
-        }
-      },
       "mqtt": {
         "title": "MQTT",
         "description": "Konfigurēt MQTT brokera savienojumu",
@@ -3091,33 +3072,6 @@
         "responseStreamFailed": "Neizdevās nolasīt atbildes plūsmu",
         "configurationCheck": "Konfigurācijas pārbaude",
         "testStageFallback": "Pārbaudes posms"
-      },
-      "ebird": {
-        "title": "eBird",
-        "description": "Savienojieties ar eBird taksonomijas datubāzi bagātinātiem sugu datiem, tostarp taksonomisku klasifikāciju un pasugas informāciju.",
-        "enable": "Iespējot eBird integrāciju",
-        "enabledRequired": "eBird integrācija nav iespējota",
-        "apiKey": {
-          "label": "eBird API atslēga",
-          "helpText": "Jūsu eBird API atslēga. Iegūstiet to no eBird API portāla."
-        },
-        "locale": {
-          "label": "Sugu nosaukumu valoda"
-        },
-        "cacheTTL": {
-          "label": "Kešatmiņas ilgums (stundas)",
-          "helpText": "Cik ilgi saglabāt kešatmiņā taksonomijas datus no eBird. Taksonomija mainās reti, tāpēc garāks kešatmiņas ilgums samazina API pieprasījumus."
-        },
-        "note": "eBird nodrošina taksonomijas datus, ko izmanto sugu klasifikācijai un ieskatu iegūšanai. API atslēga ir bezmaksas, un to var iegūt no Cornell Lab of Ornithology.",
-        "apiKeyInfo": "Šīs integrācijas izmantošanai nepieciešama personīga eBird API atslēga. Bezmaksas atslēgu var pieprasīt no <a href=\"https://ebird.org/api/keygen\" class=\"link link-primary\" target=\"_blank\" rel=\"noopener noreferrer\">ebird.org/api/keygen</a>.",
-        "test": {
-          "button": "Pārbaudīt eBird savienojumu",
-          "loading": "Pārbauda...",
-          "enabledRequired": "Vispirms iespējojiet eBird integrāciju",
-          "apiKeyRequired": "API atslēga ir nepieciešama",
-          "inProgress": "Pārbaude noris...",
-          "description": "Pārbaudīt eBird API savienojamību un autentifikāciju"
-        }
       }
     },
     "audio": {
@@ -4263,7 +4217,6 @@
           "detection_occurred": "Noteikšana notikusi",
           "application_started": "Lietojumprogramma palaista",
           "application_stopped": "Lietojumprogramma apturēta",
-          "integration_birdweather_failed": "BirdWeather augšupielāde neizdevās",
           "integration_mqtt_connected": "MQTT savienots",
           "integration_mqtt_disconnected": "MQTT atvienots",
           "integration_mqtt_publish_failed": "MQTT publicēšana neizdevās",
@@ -4341,10 +4294,6 @@
         "mqttPublishFailed": {
           "name": "MQTT publicēšana neizdevās",
           "description": "Paziņo, kad MQTT ziņojuma publicēšana neizdodas"
-        },
-        "birdWeatherFailed": {
-          "name": "BirdWeather augšupielāde neizdevās",
-          "description": "Paziņo, kad BirdWeather augšupielāde neizdodas"
         }
       }
     },
@@ -4800,9 +4749,6 @@
       "mqttNotConfigured": "MQTT brokeris nav konfigurēts",
       "mqttMetricsUnavailable": "Metrikas instance nav pieejama MQTT testam",
       "mqttClientFailed": "Neizdevās izveidot MQTT klientu",
-      "birdweatherDisabled": "BirdWeather integrācija nav iespējota",
-      "birdweatherNotConfigured": "BirdWeather stacijas ID nav konfigurēts",
-      "birdweatherClientFailed": "Neizdevās izveidot BirdWeather klientu",
       "noWeatherProvider": "Nav izvēlēts laikapstākļu pakalpojuma sniedzējs",
       "openWeatherKeyRequired": "Nepieciešama OpenWeather API atslēga",
       "processorUnavailable": "Procesors nav pieejams",
@@ -4937,10 +4883,6 @@
         "title": "Privātums un integrācija",
         "privacyFilterLabel": "Ieslēgt privātuma filtru",
         "privacyFilterHelp": "Filtrē noteikšanas, kad pie mikrofona tiek noteiktas cilvēku balsis",
-        "birdweatherLabel": "Dalīties ar noteikšanām BirdWeather",
-        "birdweatherHelp": "Sniedziet savu putnu noteikšanu ieguldījumu BirdWeather kopienas tīklā",
-        "birdweatherIdLabel": "BirdWeather stacijas ID",
-        "birdweatherIdPlaceholder": "Ievadiet savu BirdWeather stacijas ID",
         "errorReportingLabel": "Sūtīt anonīmus kļūdu ziņojumus",
         "errorReportingHelp": "Palīdziet uzlabot VoiceWatch, sūtot anonīmus kļūdu ziņojumus, kad kaut kas noiet greizi"
       },

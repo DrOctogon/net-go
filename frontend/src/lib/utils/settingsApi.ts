@@ -2,7 +2,6 @@ import { api } from './api.js';
 import type {
   SettingsFormData,
   TestResult,
-  BirdWeatherSettings,
   MQTTSettings,
   RangeFilterSpeciesEntry,
 } from '$lib/stores/settings.js';
@@ -64,13 +63,6 @@ export const settingsAPI = {
    * Test endpoints for validating settings
    */
   test: {
-    /**
-     * Test BirdWeather integration
-     */
-    birdweather: (config: BirdWeatherSettings): Promise<TestResult> => {
-      return api.post<TestResult>('/api/v2/test/birdweather', config);
-    },
-
     /**
      * Test MQTT connection
      */

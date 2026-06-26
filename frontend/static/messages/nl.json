@@ -156,7 +156,8 @@
         "falsePositive": "Afgekeurd",
         "notReviewed": "Niet beoordeeld",
         "locked": "Vergrendeld",
-        "unlikely": "Onwaarschijnlijk"
+        "unlikely": "Onwaarschijnlijk",
+        "flagged": "Flagged"
       },
       "form": {
         "correctDetection": "Herkenning goedgekeurd",
@@ -396,7 +397,6 @@
         "rebuildingRangeFilter": "Soortenverspreidingsfilter wordt opnieuw opgebouwd...",
         "updatingIntervals": "Detectie-intervallen worden bijgewerkt...",
         "reconfiguringMqtt": "MQTT-verbinding wordt bijgewerkt...",
-        "reconfiguringBirdweather": "BirdWeather-integratie wordt bijgewerkt...",
         "reconfiguringStreams": "Audiostreams worden bijgewerkt...",
         "reconfiguringTelemetry": "Telemetrie-instellingen worden bijgewerkt...",
         "reconfiguringPushNotifications": "Pushmeldingsproviders herconfigureren...",
@@ -796,6 +796,12 @@
     "detail": {
       "species": "Soort",
       "observation": "Waarneming",
+      "transcript": {
+        "title": "Transcript",
+        "matchedKeywords": "Matched keywords",
+        "flaggedNotice": "Flagged by keyword",
+        "empty": "No transcript available"
+      },
       "aria": {
         "downloadAudioClip": "Download audio clip for {name} detection",
         "audioRecordingFor": "Audio recording and spectrogram for {name}",
@@ -2894,31 +2900,6 @@
       }
     },
     "integration": {
-      "birdweather": {
-        "title": "BirdWeather",
-        "description": "Upload herkenningen naar BirdWeather",
-        "ffmpegWarning": {
-          "title": "FFmpeg niet gedetecteerd",
-          "message": "Installeer FFmpeg om FLAC encoding ondersteuning in te schakelen, BirdWeather stopt met WAV uploads ten gunste van gecomprimeerde FLAC audio bestanden."
-        },
-        "enable": "Schakel BirdWeather Uploads in",
-        "token": {
-          "label": "BirdWeather-token",
-          "helpText": "Jouw unieke BirdWeather token."
-        },
-        "threshold": {
-          "label": "Upload Drempelwaarde",
-          "helpText": "Minimum betrouwbaarheids drempelwaarde voor het uploaden van voorspellingen naar BirdWeather."
-        },
-        "test": {
-          "button": "Test BirdWeather Verbinding",
-          "loading": "Testen...",
-          "enabledRequired": "BirdWeather moet ingeschakeld zijn om te testen",
-          "tokenRequired": "BirdWeather token moet worden opgegeven",
-          "inProgress": "Test bezig...",
-          "description": "Test BirdWeather verbinding"
-        }
-      },
       "mqtt": {
         "title": "MQTT",
         "description": "Configureer MQTT broker verbinding",
@@ -3091,33 +3072,6 @@
         "responseStreamFailed": "Antwoordstroom kon niet worden gelezen",
         "configurationCheck": "Configuratiecontrole",
         "testStageFallback": "Testfase"
-      },
-      "ebird": {
-        "title": "eBird",
-        "description": "Verbind met de eBird-taxonomiedatabase voor verrijkte soortengegevens inclusief taxonomische classificatie en ondersoortinformatie.",
-        "enable": "eBird-integratie inschakelen",
-        "enabledRequired": "eBird-integratie is niet ingeschakeld",
-        "apiKey": {
-          "label": "eBird API-sleutel",
-          "helpText": "Uw eBird API-sleutel. Verkrijg er een via het eBird API-portaal."
-        },
-        "locale": {
-          "label": "Taal van soortnamen"
-        },
-        "cacheTTL": {
-          "label": "Cacheduur (uren)",
-          "helpText": "Hoe lang taxonomiegegevens van eBird in de cache worden bewaard. Taxonomie verandert zelden, dus langere cachetijden verminderen API-aanroepen."
-        },
-        "note": "eBird levert taxonomische gegevens voor soortclassificatie en inzichten. De API-sleutel is gratis verkrijgbaar bij het Cornell Lab of Ornithology.",
-        "apiKeyInfo": "Een persoonlijke eBird API-sleutel is vereist voor deze integratie. Je kunt een gratis sleutel aanvragen op <a href=\"https://ebird.org/api/keygen\" class=\"link link-primary\" target=\"_blank\" rel=\"noopener noreferrer\">ebird.org/api/keygen</a>.",
-        "test": {
-          "button": "eBird-verbinding testen",
-          "loading": "Testen...",
-          "enabledRequired": "Schakel eerst eBird-integratie in",
-          "apiKeyRequired": "API-sleutel is vereist",
-          "inProgress": "Test wordt uitgevoerd...",
-          "description": "Test eBird API-connectiviteit en authenticatie"
-        }
       }
     },
     "audio": {
@@ -4263,7 +4217,6 @@
           "detection_occurred": "Detectie uitgevoerd",
           "application_started": "Applicatie gestart",
           "application_stopped": "Applicatie gestopt",
-          "integration_birdweather_failed": "BirdWeather-upload mislukt",
           "integration_mqtt_connected": "MQTT verbonden",
           "integration_mqtt_disconnected": "MQTT verbroken",
           "integration_mqtt_publish_failed": "MQTT-publicatie mislukt",
@@ -4341,10 +4294,6 @@
         "mqttPublishFailed": {
           "name": "MQTT publicatie mislukt",
           "description": "Meldt wanneer het publiceren van een MQTT-bericht mislukt"
-        },
-        "birdWeatherFailed": {
-          "name": "BirdWeather-upload mislukt",
-          "description": "Meldt wanneer een BirdWeather-upload mislukt"
         }
       }
     },
@@ -4800,9 +4749,6 @@
       "mqttNotConfigured": "MQTT-broker niet geconfigureerd",
       "mqttMetricsUnavailable": "Metriekinstantie niet beschikbaar voor MQTT-test",
       "mqttClientFailed": "Kan MQTT-client niet aanmaken",
-      "birdweatherDisabled": "BirdWeather-integratie is niet ingeschakeld",
-      "birdweatherNotConfigured": "BirdWeather-station-ID niet geconfigureerd",
-      "birdweatherClientFailed": "Kan BirdWeather-client niet aanmaken",
       "noWeatherProvider": "Geen weerprovider geselecteerd",
       "openWeatherKeyRequired": "OpenWeather API-sleutel is vereist",
       "processorUnavailable": "Processor niet beschikbaar",
@@ -4937,10 +4883,6 @@
         "title": "Privacy en integratie",
         "privacyFilterLabel": "Privacyfilter inschakelen",
         "privacyFilterHelp": "Filtert detecties uit wanneer menselijke stemmen worden gedetecteerd bij de microfoon",
-        "birdweatherLabel": "Detecties delen met BirdWeather",
-        "birdweatherHelp": "Draag je vogeldetecties bij aan het BirdWeather-gemeenschapsnetwerk",
-        "birdweatherIdLabel": "BirdWeather Station-ID",
-        "birdweatherIdPlaceholder": "Voer je BirdWeather station-ID in",
         "errorReportingLabel": "Anonieme foutrapporten verzenden",
         "errorReportingHelp": "Help VoiceWatch te verbeteren door anonieme foutrapporten te verzenden wanneer er iets misgaat"
       },
