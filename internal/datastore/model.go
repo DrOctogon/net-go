@@ -49,6 +49,12 @@ type Note struct {
 	// TranscriptLang is the language the transcript was produced in (e.g. "en").
 	// Additive nullable column; empty when no transcript was produced.
 	TranscriptLang string
+	// Flagged marks detections whose transcript matched a configured keyword.
+	// Additive column defaulting to false.
+	Flagged bool `gorm:"default:false"`
+	// KeywordsHit is the comma-joined list of keywords matched in the transcript.
+	// Additive nullable column; empty when no keyword matched.
+	KeywordsHit    string
 	ProcessingTime time.Duration
 	Unlikely       bool    `gorm:"default:false"`                 // Tagged by ultrasonic validation filter
 	Occurrence     float64 `gorm:"-" json:"occurrence,omitempty"` // Runtime only, occurrence probability (0-1) based on location/time

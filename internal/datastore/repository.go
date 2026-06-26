@@ -66,6 +66,11 @@ type DetectionRepository interface {
 	// any previously stored value.
 	UpdateTranscript(ctx context.Context, id, transcript, language string) error
 
+	// UpdateKeywordFlag marks a detection as flagged and stores the comma-joined
+	// list of matched keywords. Both fields are additive; this only updates the
+	// flag columns and leaves all other fields untouched.
+	UpdateKeywordFlag(ctx context.Context, id string, flagged bool, keywordsHit string) error
+
 	// GetAdditionalResults returns the secondary predictions for a detection.
 	GetAdditionalResults(ctx context.Context, id string) ([]detection.AdditionalResult, error)
 

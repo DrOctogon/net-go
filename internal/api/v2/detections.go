@@ -191,6 +191,10 @@ type DetectionResponse struct {
 	Verified           string            `json:"verified"`
 	Locked             bool              `json:"locked"`
 	Unlikely           bool              `json:"unlikely,omitempty"`
+	Transcript         string            `json:"transcript,omitempty"`     // Speech-to-text transcript of the clip
+	TranscriptLang     string            `json:"transcriptLang,omitempty"` // Language of the transcript (e.g. "en")
+	Flagged            bool              `json:"flagged,omitempty"`        // True when the transcript matched a configured keyword
+	KeywordsHit        []string          `json:"keywordsHit,omitempty"`    // Keywords that matched the transcript
 	Comments           []CommentResponse `json:"comments,omitempty"`
 	Weather            *WeatherInfo      `json:"weather,omitempty"`
 	TimeOfDay          string            `json:"timeOfDay,omitempty"`
@@ -270,6 +274,7 @@ type detectionQueryParams struct {
 	Verified   string
 	Location   string
 	Locked     string
+	Flagged    string
 	// Sorting
 	SortBy string
 	// Include additional data
@@ -279,10 +284,10 @@ type detectionQueryParams struct {
 // advancedSearchCacheKey generates a deterministic cache key for advanced search queries.
 // Includes all filter parameters to avoid cache collisions.
 func (p *detectionQueryParams) advancedSearchCacheKey() string {
-	return fmt.Sprintf("adv_search:%s:%d:%d:%s:%s:%s:%s:%s:%s:%s:%s:%s:%s:%s:%s:%d",
+	return fmt.Sprintf("adv_search:%s:%d:%d:%s:%s:%s:%s:%s:%s:%s:%s:%s:%s:%s:%s:%s:%d",
 		p.Search, p.NumResults, p.Offset,
 		p.Confidence, p.TimeOfDay, p.HourRange,
-		p.Verified, p.Location, p.Locked,
+		p.Verified, p.Location, p.Locked, p.Flagged,
 		p.Species, p.Date, p.StartDate+":"+p.EndDate,
 		p.SortBy, p.QueryType, p.Hour, p.Duration)
 }
@@ -304,6 +309,7 @@ func (c *Controller) parseDetectionQueryParams(ctx echo.Context) (*detectionQuer
 		Verified:   ctx.QueryParam("verified"),
 		Location:   ctx.QueryParam("location"),
 		Locked:     ctx.QueryParam("locked"),
+		Flagged:    ctx.QueryParam("flagged"),
 		// Sorting
 		SortBy: ctx.QueryParam("sortBy"),
 		// Include weather data
@@ -618,7 +624,7 @@ func (c *Controller) GetDetections(ctx echo.Context) error {
 func (p *detectionQueryParams) needsAdvancedRouting() bool {
 	if p.Confidence != "" || p.TimeOfDay != "" ||
 		p.HourRange != "" || p.Verified != "" ||
-		p.Location != "" || p.Locked != "" ||
+		p.Location != "" || p.Locked != "" || p.Flagged != "" ||
 		p.StartDate != "" || p.EndDate != "" {
 		return true
 	}
@@ -711,6 +717,25 @@ func (c *Controller) convertNotesToDetectionResponses(notes []datastore.Note, in
 	return detections
 }
 
+// splitKeywordsHit converts the comma-joined KeywordsHit column into a slice for
+// the API response. Returns nil (omitted from JSON) when no keywords matched.
+func splitKeywordsHit(keywordsHit string) []string {
+	if keywordsHit == "" {
+		return nil
+	}
+	parts := strings.Split(keywordsHit, ",")
+	out := make([]string, 0, len(parts))
+	for _, p := range parts {
+		if trimmed := strings.TrimSpace(p); trimmed != "" {
+			out = append(out, trimmed)
+		}
+	}
+	if len(out) == 0 {
+		return nil
+	}
+	return out
+}
+
 // noteToDetectionResponse converts a single note to a detection response
 func (c *Controller) noteToDetectionResponse(note *datastore.Note, includeWeather bool, weatherCache map[string][]datastore.HourlyWeather) DetectionResponse {
 	detection := DetectionResponse{
@@ -725,6 +750,10 @@ func (c *Controller) noteToDetectionResponse(note *datastore.Note, includeWeathe
 		Confidence:     note.Confidence,
 		Locked:         note.Locked,
 		Unlikely:       note.Unlikely,
+		Transcript:     note.Transcript,
+		TranscriptLang: note.TranscriptLang,
+		Flagged:        note.Flagged,
+		KeywordsHit:    splitKeywordsHit(note.KeywordsHit),
 	}
 
 	// populate source info if available
@@ -1126,6 +1155,10 @@ func (c *Controller) buildAdvancedSearchFilters(params *detectionQueryParams) da
 	if params.Locked != "" {
 		locked := params.Locked == QueryValueTrue
 		filters.Locked = &locked
+	}
+	if params.Flagged != "" {
+		flagged := params.Flagged == QueryValueTrue
+		filters.Flagged = &flagged
 	}
 
 	// Apply sorting

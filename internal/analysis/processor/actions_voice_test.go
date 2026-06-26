@@ -13,9 +13,11 @@ import (
 	"context"
 	"sync/atomic"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/tphakala/voicewatch/internal/alerting"
 	"github.com/tphakala/voicewatch/internal/conf"
 	"github.com/tphakala/voicewatch/internal/transcription"
 )
@@ -148,6 +150,121 @@ func TestTranscribeAction_HappyPath_PersistsAndSharesTranscript(t *testing.T) {
 	require.NotNil(t, shared, "transcript should be shared via the context")
 	assert.Equal(t, "hello there", shared.Text)
 	assert.Equal(t, "en", shared.Language)
+}
+
+// settingsWithKeywords builds enabled-transcription Settings with a keyword list.
+func settingsWithKeywords(keywords []string, caseSensitive bool) *conf.Settings {
+	s := settingsWithTranscription(true)
+	s.Realtime.Transcription.Keywords = keywords
+	s.Realtime.Transcription.KeywordCaseSensitive = caseSensitive
+	return s
+}
+
+func TestTranscribeAction_KeywordHit_FlagsAndAlerts(t *testing.T) {
+	// Not parallel: mutates the package-level alert bus singleton.
+	bus := alerting.NewAlertEventBus(nil)
+	t.Cleanup(bus.Stop)
+	alerting.SetGlobalBus(bus)
+	t.Cleanup(func() { alerting.SetGlobalBus(nil) })
+
+	var got atomic.Pointer[alerting.AlertEvent]
+	bus.Subscribe(func(e *alerting.AlertEvent) { got.Store(e) })
+
+	transcriber := &fakeTranscriber{
+		available: true,
+		result:    transcription.Result{Text: "the house is on fire", Language: "en"},
+	}
+	repo := NewMockDetectionRepository()
+	ctxData := &DetectionContext{}
+	ctxData.NoteID.Store(42)
+
+	action := &TranscribeAction{
+		Settings:     settingsWithKeywords([]string{"fire"}, false),
+		Result:       testDetection().Result,
+		Transcriber:  transcriber,
+		Repo:         repo,
+		DetectionCtx: ctxData,
+		ClipName:     "clip.wav",
+	}
+
+	require.NoError(t, action.Execute(t.Context(), nil))
+
+	// Flag persisted exactly once with the matched keyword.
+	require.Equal(t, 1, repo.GetKeywordFlagCalls(), "keyword hit must persist the flag once")
+	id, flagged, hits := repo.GetLastKeywordFlag()
+	assert.Equal(t, "42", id)
+	assert.True(t, flagged)
+	assert.Equal(t, "fire", hits)
+
+	// Alert fired with the expected shape.
+	require.Eventually(t, func() bool { return got.Load() != nil }, time.Second, 5*time.Millisecond)
+	event := got.Load()
+	assert.Equal(t, alerting.ObjectTypeKeywordFlag, event.ObjectType)
+	assert.Equal(t, alerting.EventKeywordMatched, event.EventName)
+	assert.Equal(t, "fire", event.Properties[alerting.PropertyKeywords])
+	assert.Equal(t, "the house is on fire", event.Properties[alerting.PropertyTranscript])
+	assert.Equal(t, uint(42), event.Properties[alerting.PropertyDetectionID])
+}
+
+func TestTranscribeAction_NoKeywordHit_DoesNotFlagOrAlert(t *testing.T) {
+	// Not parallel: mutates the package-level alert bus singleton.
+	bus := alerting.NewAlertEventBus(nil)
+	t.Cleanup(bus.Stop)
+	alerting.SetGlobalBus(bus)
+	t.Cleanup(func() { alerting.SetGlobalBus(nil) })
+
+	var fired atomic.Int32
+	bus.Subscribe(func(_ *alerting.AlertEvent) { fired.Add(1) })
+
+	transcriber := &fakeTranscriber{
+		available: true,
+		result:    transcription.Result{Text: "everything is calm and quiet", Language: "en"},
+	}
+	repo := NewMockDetectionRepository()
+	ctxData := &DetectionContext{}
+	ctxData.NoteID.Store(42)
+
+	action := &TranscribeAction{
+		Settings:     settingsWithKeywords([]string{"fire", "help"}, false),
+		Result:       testDetection().Result,
+		Transcriber:  transcriber,
+		Repo:         repo,
+		DetectionCtx: ctxData,
+		ClipName:     "clip.wav",
+	}
+
+	require.NoError(t, action.Execute(t.Context(), nil))
+
+	// Transcript still persisted, but no keyword flag and no alert.
+	assert.Equal(t, 1, repo.GetTranscriptCalls())
+	assert.Equal(t, 0, repo.GetKeywordFlagCalls(), "no keyword match must not persist a flag")
+
+	// Give the async bus a moment; it must remain silent.
+	assert.Never(t, func() bool { return fired.Load() != 0 }, 100*time.Millisecond, 10*time.Millisecond)
+}
+
+func TestTranscribeAction_EmptyKeywordList_IsNoOp(t *testing.T) {
+	t.Parallel()
+
+	transcriber := &fakeTranscriber{
+		available: true,
+		result:    transcription.Result{Text: "the house is on fire", Language: "en"},
+	}
+	repo := NewMockDetectionRepository()
+	ctxData := &DetectionContext{}
+	ctxData.NoteID.Store(42)
+
+	action := &TranscribeAction{
+		Settings:     settingsWithKeywords(nil, false), // no keywords configured
+		Result:       testDetection().Result,
+		Transcriber:  transcriber,
+		Repo:         repo,
+		DetectionCtx: ctxData,
+		ClipName:     "clip.wav",
+	}
+
+	require.NoError(t, action.Execute(t.Context(), nil))
+	assert.Equal(t, 0, repo.GetKeywordFlagCalls(), "empty keyword list must be a no-op")
 }
 
 func TestTranscribeAction_NoDetectionID_ReturnsRetryableError(t *testing.T) {

@@ -26,6 +26,10 @@ export interface Detection {
   verified: 'correct' | 'false_positive' | 'unverified';
   locked: boolean;
   unlikely?: boolean;
+  transcript?: string; // Speech-to-text transcript of the clip
+  transcriptLang?: string; // Language of the transcript (e.g. "en")
+  flagged?: boolean; // True when the transcript matched a configured keyword
+  keywordsHit?: string[]; // Keywords that matched the transcript
   comments?: Comment[];
   clipName?: string;
   weather?: Weather;

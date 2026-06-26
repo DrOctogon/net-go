@@ -331,6 +331,28 @@ func (r *detectionRepository) UpdateTranscript(ctx context.Context, id, transcri
 	return nil
 }
 
+// UpdateKeywordFlag marks a detection as flagged and stores the comma-joined list
+// of matched keywords. It updates only the flag columns, leaving all other fields
+// untouched, mirroring the targeted-update convention of UpdateTranscript.
+func (r *detectionRepository) UpdateKeywordFlag(ctx context.Context, id string, flagged bool, keywordsHit string) error {
+	noteID, err := r.parseID(id)
+	if err != nil {
+		return err
+	}
+	if err := r.store.Transaction(func(tx *gorm.DB) error {
+		return tx.WithContext(ctx).
+			Model(&Note{}).
+			Where("id = ?", noteID).
+			Updates(map[string]any{
+				"flagged":      flagged,
+				"keywords_hit": keywordsHit,
+			}).Error
+	}); err != nil {
+		return fmt.Errorf("failed to update keyword flag for detection %s: %w", id, err)
+	}
+	return nil
+}
+
 // GetAdditionalResults returns the secondary predictions for a detection.
 func (r *detectionRepository) GetAdditionalResults(ctx context.Context, id string) ([]detection.AdditionalResult, error) {
 	results, err := r.store.GetNoteResults(id)

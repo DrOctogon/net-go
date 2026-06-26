@@ -862,6 +862,13 @@ type TranscriptionSettings struct {
 	Model    string `yaml:"model" json:"model"`       // path to the GGML model file (e.g. ggml-tiny.en.bin); required when enabled
 	Binary   string `yaml:"binary" json:"binary"`     // whisper.cpp CLI executable (name on PATH or absolute path; default: whisper-cli)
 	Language string `yaml:"language" json:"language"` // spoken language hint passed to whisper (e.g. "en", "auto")
+	// Keywords is an optional list of words/phrases to flag in transcripts. When a
+	// transcript contains any keyword (word-boundary match), the detection is
+	// flagged and an alert is emitted. Empty list disables keyword flagging.
+	Keywords []string `yaml:"keywords" json:"keywords"`
+	// KeywordCaseSensitive controls whether keyword matching respects letter case.
+	// Defaults to false (case-insensitive matching).
+	KeywordCaseSensitive bool `yaml:"keywordCaseSensitive" json:"keywordCaseSensitive"`
 }
 
 // SpeciesAction represents a single action configuration

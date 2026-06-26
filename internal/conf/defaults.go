@@ -228,6 +228,8 @@ func setDefaultConfig() {
 	viper.SetDefault("realtime.transcription.model", "")
 	viper.SetDefault("realtime.transcription.binary", "whisper-cli")
 	viper.SetDefault("realtime.transcription.language", "en")
+	viper.SetDefault("realtime.transcription.keywords", []string{})
+	viper.SetDefault("realtime.transcription.keywordCaseSensitive", false)
 
 	// OpenWeather configuration
 	/*

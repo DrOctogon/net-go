@@ -156,7 +156,8 @@
         "falsePositive": "False Positive",
         "notReviewed": "Not Reviewed",
         "locked": "Locked",
-        "unlikely": "Unlikely"
+        "unlikely": "Unlikely",
+        "flagged": "Flagged"
       },
       "form": {
         "correctDetection": "Correct Detection",
@@ -796,6 +797,12 @@
     "detail": {
       "species": "Species",
       "observation": "Observation",
+      "transcript": {
+        "title": "Transcript",
+        "matchedKeywords": "Matched keywords",
+        "flaggedNotice": "Flagged by keyword",
+        "empty": "No transcript available"
+      },
       "aria": {
         "downloadAudioClip": "Download audio clip for {name} detection",
         "audioRecordingFor": "Audio recording and spectrogram for {name}",

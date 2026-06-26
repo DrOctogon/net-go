@@ -13,6 +13,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/tphakala/voicewatch/internal/alerting"
 	"github.com/tphakala/voicewatch/internal/analysis/jobqueue"
 	"github.com/tphakala/voicewatch/internal/conf"
 	"github.com/tphakala/voicewatch/internal/datastore"
@@ -150,6 +151,13 @@ func (a *TranscribeAction) Execute(ctx context.Context, _ any) error {
 		}
 	}
 
+	// Flag the detection when its transcript matches a configured keyword. This
+	// runs after the transcript is persisted so the keyword columns are an
+	// additive update on the same row. Keyword flagging never fails the job: a
+	// persistence error here is logged but does not trigger a retry, since the
+	// transcript itself is already saved.
+	a.flagKeywords(ctx, result.Text, noteID)
+
 	if a.Settings.Debug {
 		GetLogger().Debug("Transcribed detection audio clip",
 			logger.String("component", "analysis.processor.actions"),
@@ -161,6 +169,57 @@ func (a *TranscribeAction) Execute(ctx context.Context, _ any) error {
 	}
 
 	return nil
+}
+
+// flagKeywords matches the transcript against the configured keyword list and,
+// on a hit, persists the flag + matched keywords onto the detection and emits a
+// keyword_flag alert event. It is a no-op when the keyword list is empty or no
+// keyword matches (the common case). Errors are logged but never returned so
+// keyword flagging cannot fail an otherwise-successful transcription job.
+func (a *TranscribeAction) flagKeywords(ctx context.Context, transcript string, noteID uint) {
+	cfg := a.Settings.Realtime.Transcription
+	hits := matchKeywords(transcript, cfg.Keywords, cfg.KeywordCaseSensitive)
+	if len(hits) == 0 {
+		return
+	}
+
+	keywordsHit := joinKeywords(hits)
+
+	// Persist the flag on the detection row (additive update).
+	if a.Repo != nil {
+		id := strconv.FormatUint(uint64(noteID), 10)
+		if err := a.Repo.UpdateKeywordFlag(ctx, id, true, keywordsHit); err != nil {
+			GetLogger().Error("Failed to persist keyword flag",
+				logger.String("component", "analysis.processor.actions"),
+				logger.String("detection_id", a.CorrelationID),
+				logger.Uint64("note_id", uint64(noteID)),
+				logger.Error(err),
+				logger.String("operation", "keyword_flag_persist"))
+		}
+	}
+
+	// Emit an alert so notification rules can fire on keyword matches.
+	species := a.Result.Species.CommonName
+	if species == "" {
+		species = a.Result.Species.ScientificName
+	}
+	alerting.TryPublish(&alerting.AlertEvent{
+		ObjectType: alerting.ObjectTypeKeywordFlag,
+		EventName:  alerting.EventKeywordMatched,
+		Properties: map[string]any{
+			alerting.PropertyKeywords:    keywordsHit,
+			alerting.PropertyTranscript:  transcript,
+			alerting.PropertyDetectionID: noteID,
+			alerting.PropertySpeciesName: species,
+		},
+	})
+
+	GetLogger().Info("Detection flagged by transcript keyword",
+		logger.String("component", "analysis.processor.actions"),
+		logger.String("detection_id", a.CorrelationID),
+		logger.Uint64("note_id", uint64(noteID)),
+		logger.String("keywords", keywordsHit),
+		logger.String("operation", "keyword_flag"))
 }
 
 // newTranscribeRetryConfig returns the retry configuration used while the

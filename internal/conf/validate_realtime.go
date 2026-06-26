@@ -120,6 +120,19 @@ func validateTranscriptionSettings(settings *TranscriptionSettings) error {
 			Build()
 	}
 
+	// Reject blank (whitespace-only) keyword entries so a misconfigured list
+	// surfaces at startup instead of silently never matching. An empty list is
+	// valid and simply disables keyword flagging.
+	for i, kw := range settings.Keywords {
+		if strings.TrimSpace(kw) == "" {
+			return errors.Newf("transcription keyword at index %d must not be blank", i).
+				Category(errors.CategoryValidation).
+				Context("validation_type", "transcription-keyword").
+				Context("keyword_index", i).
+				Build()
+		}
+	}
+
 	return nil
 }
 

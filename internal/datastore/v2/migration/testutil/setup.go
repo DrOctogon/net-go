@@ -598,6 +598,9 @@ func (r *testDetectionRepo) GetClipPath(_ context.Context, _ string) (string, er
 	return "", nil
 }
 func (r *testDetectionRepo) UpdateTranscript(_ context.Context, _, _, _ string) error { return nil }
+func (r *testDetectionRepo) UpdateKeywordFlag(_ context.Context, _ string, _ bool, _ string) error {
+	return nil
+}
 func (r *testDetectionRepo) GetAdditionalResults(_ context.Context, _ string) ([]detection.AdditionalResult, error) {
 	return nil, nil
 }

@@ -11,6 +11,7 @@ const (
 	ObjectTypeIntegration = "integration"
 	ObjectTypeDevice      = "device"
 	ObjectTypeSystem      = "system"
+	ObjectTypeKeywordFlag = "keyword_flag"
 )
 
 // Trigger types define how a rule is activated.
@@ -39,6 +40,8 @@ const (
 	EventDeviceStarted = "device.started"
 	EventDeviceStopped = "device.stopped"
 	EventDeviceError   = "device.error"
+
+	EventKeywordMatched = "keyword.matched"
 )
 
 // Metric names identify threshold-based metrics.
@@ -86,6 +89,11 @@ const (
 	PropertyNoveltyEpisodeDays  = events.DetectionMetadataNoveltyEpisodeDays
 	PropertyNoveltyEpisodeStart = events.DetectionMetadataNoveltyEpisodeStart
 	PropertyIsNewSpecies        = "is_new_species"
+
+	// Properties for keyword-flag events.
+	PropertyKeywords    = "keywords"
+	PropertyTranscript  = "transcript"
+	PropertyDetectionID = "detection_id"
 )
 
 // Action targets identify where notifications are sent.
@@ -118,6 +126,9 @@ const (
 	RuleKeyMQTTPublishDesc = "settings.alerts.builtInRules.mqttPublishFailed.description"
 	RuleKeyBirdWeatherName = "settings.alerts.builtInRules.birdWeatherFailed.name"
 	RuleKeyBirdWeatherDesc = "settings.alerts.builtInRules.birdWeatherFailed.description"
+
+	RuleKeyKeywordMatchedName = "settings.alerts.builtInRules.keywordMatched.name"
+	RuleKeyKeywordMatchedDesc = "settings.alerts.builtInRules.keywordMatched.description"
 )
 
 // Alert notification i18n key constants.

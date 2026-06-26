@@ -21,6 +21,7 @@ type AdvancedSearchFilters struct {
 	Species       []string
 	Location      []string // Maps to source_node column
 	Locked        *bool
+	Flagged       *bool // Filters on the notes.flagged column (keyword-flagged detections)
 	SortAscending bool
 	SortBy        string // "date_desc", "date_asc", "species_asc", "species_desc", "confidence_asc", "confidence_desc", "status"
 	Limit         int
@@ -104,6 +105,11 @@ func (ds *DataStore) SearchNotesAdvanced(filters *AdvancedSearchFilters) ([]Note
 
 	// Apply locked filter
 	query = applyLockedFilter(query, filters.Locked)
+
+	// Apply flagged filter (keyword-flagged detections)
+	if filters.Flagged != nil {
+		query = query.Where("flagged = ?", *filters.Flagged)
+	}
 
 	// Apply MinID filter for cursor-based pagination (used by migration worker)
 	if filters.MinID > 0 {
