@@ -31,6 +31,16 @@ Plan said "one rewrite unit" but that detonates the whole pipeline at once. **Pe
 - ~~`conf` dead `BirdweatherSettings` struct + `Realtime.Birdweather` field~~ — DONE (commit `20d07123`, 2026-06-26): removed struct, field, validators, `birdweatherIDPattern`, viper defaults, config.yaml blocks, dead notification message constants, logger default, and the api/v2 test refs. `RetrySettings` kept (MQTT consumer). Still-deferred bird conf (EBird/range/perch/bat/bsg structs) have live readers — separate pass.
 - Phase 1 `humanvoice.Predict` runs the GENERIC `inference.Classifier` — it does NOT yet implement Silero VAD's real stateful streaming I/O (state tensors + `sr` input + 512-sample frames). Real inference is unbuilt. See §3 / Phase 2c.
 
+## WAVE 1 BACKEND CLEANUP — DONE (2026-06-26)
+
+Orchestrated backend pivot cleanup, all build/test green (`-tags "notflite skipfrontend"`):
+- BirdWeather dead config removed (`20d07123`), eBird integration removed (`b1aae90a`).
+- Dog-bark + bat-ultrasonic filters removed (`6bd6917a`, −664 LOC): `dogbarkfilter.go`, `internal/audiocore/ultrasonic/`, `unlikely_comments.go`, `UltrasonicCV`/`DogBarkFilter` conf + api/v2 metrics. Kept `isHumanVocalization` (privacy filter), `SourceTypeUltrasonic` (hw routing), `Unlikely` DB column.
+- Hot-reload coverage declared for continuous-recording (`restart`) + transcription (`fresh`) settings (`717300bb`); full api/v2 suite green.
+- **Store-all-clips (Phase 3): SATISFIED** by the continuous full-audio recorder (`dfc92a80`) — records everything in rolling chunks; the per-detection force-save in the original plan is superseded.
+
+Remaining: Wave 2 frontend retarget (voice-event UI + settings, clear BirdWeather/eBird i18n orphans), Wave 3 rebrand (name decided: **VoiceWatch** — module path already `voicewatch`) + QA. Optional: privacy-gate-removal from save path (sensitive); restart-toast wiring for continuous-recording settings.
+
 ## REMAINING WORK (do mechanical parts on Sonnet, not Opus)
 
 - **2b** — delete `internal/imageprovider/` (~20 api/v2 files reference it: analytics, sse, settings, insights, media, app DTOs, processor actions, mqtt/dto, main.go). Bounded, mechanical.
