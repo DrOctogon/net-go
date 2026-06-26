@@ -39,7 +39,13 @@ Orchestrated backend pivot cleanup, all build/test green (`-tags "notflite skipf
 - Hot-reload coverage declared for continuous-recording (`restart`) + transcription (`fresh`) settings (`717300bb`); full api/v2 suite green.
 - **Store-all-clips (Phase 3): SATISFIED** by the continuous full-audio recorder (`dfc92a80`) — records everything in rolling chunks; the per-detection force-save in the original plan is superseded.
 
-Remaining: Wave 2 frontend retarget (voice-event UI + settings, clear BirdWeather/eBird i18n orphans), Wave 3 rebrand (name decided: **VoiceWatch** — module path already `voicewatch`) + QA. Optional: privacy-gate-removal from save path (sensitive); restart-toast wiring for continuous-recording settings.
+Wave 2 frontend retarget — DONE (2026-06-26): BirdWeather/eBird UI removed, keyword/transcript surfaced + detection list/detail/dashboard/daily-summary retargeted to voice (mic + transcript), new-species widget + species settings page/search/range removed, Transcription/Keyword settings UI built.
+
+Wave 3 rebrand — VoiceWatch product name already applied in UI/page-title/About; remaining = docs sweep + a redesigned logo asset (`BirdNET-Go-logo.webp`). Keep upstream BirdNET attribution.
+
+Privacy-gate (Phase 3) — **SUPERSEDED, no change**: the privacy filter is already opt-in, `enabled: false` by default → all voice clips stored by default; the toggle is the privacy opt-out. Removing it would be a privacy regression for a speech recorder. Keep as-is.
+
+Restart-toast for continuous-recording — DONE (`eed1d087`): real change-detection + RestartBanner reason wired; field moved restartExempt→restartCovered.
 
 ## REMAINING WORK (do mechanical parts on Sonnet, not Opus)
 
