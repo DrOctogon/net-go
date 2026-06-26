@@ -599,18 +599,6 @@
       "empty": "Všetko ticho — momentálne žiadne vtáky nezistené"
     },
     "rejected": "Zamietnuté",
-    "newSpeciesHighlights": {
-      "title": "Nové a vracajúce sa druhy",
-      "subtitle": "Prvé pozorovania a nedávne návraty",
-      "trackingDisabled": "Ak chcete túto funkciu používať, aktivujte „Povoliť sledovanie druhov“.",
-      "categoryLifetime": "Nový druh",
-      "categoryYear": "Nový tento rok",
-      "categorySeason": "Nový túto sezónu",
-      "categorySeasonNamed": "Nový túto {season}",
-      "maxConfidenceShort": "Max {confidence} %",
-      "detections": "{count, plural, one {# detekcia} few {# detekcie} other {# detekcií}}",
-      "lastSeen": "Naposledy: {days, plural, =0 {dnes} one {pred # dňom} few {pred # dňami} other {pred # dňami}}"
-    },
     "dailySummary": {
       "title": "Denná aktivita",
       "subtitle": "Detekcie druhov podľa hodín",
@@ -777,7 +765,6 @@
     "elements": {
       "banner": "Banner panela",
       "dailySummary": "Denný prehľad",
-      "newSpeciesHighlights": "Nové druhy – prehľad",
       "currentlyHearing": "Práve počuté",
       "detectionsGrid": "Nedávne detekcie",
       "liveSpectrogram": "Živý spektrogram",
@@ -4528,7 +4515,8 @@
       "generating": "Generuje sa...",
       "waiting": "Waiting...",
       "queuePosition": "Poradie: {position}",
-      "loadError": "Nepodarilo sa načítať zvuk"
+      "loadError": "Nepodarilo sa načítať zvuk",
+      "spectrogramForDetection": "Spectrogram for detection"
     },
     "forms": {
       "numberField": {

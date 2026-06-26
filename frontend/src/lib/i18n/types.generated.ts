@@ -489,16 +489,6 @@ export type TranslationKey =
   | 'dashboard.currentlyHearing.subtitle'
   | 'dashboard.currentlyHearing.empty'
   | 'dashboard.rejected'
-  | 'dashboard.newSpeciesHighlights.title'
-  | 'dashboard.newSpeciesHighlights.subtitle'
-  | 'dashboard.newSpeciesHighlights.trackingDisabled'
-  | 'dashboard.newSpeciesHighlights.categoryLifetime'
-  | 'dashboard.newSpeciesHighlights.categoryYear'
-  | 'dashboard.newSpeciesHighlights.categorySeason'
-  | 'dashboard.newSpeciesHighlights.categorySeasonNamed' // params: season
-  | 'dashboard.newSpeciesHighlights.maxConfidenceShort' // params: confidence
-  | 'dashboard.newSpeciesHighlights.detections' // params: count
-  | 'dashboard.newSpeciesHighlights.lastSeen' // params: days
   | 'dashboard.dailySummary.title'
   | 'dashboard.dailySummary.subtitle'
   | 'dashboard.dailySummary.columns.species'
@@ -626,7 +616,6 @@ export type TranslationKey =
   | 'dashboard.editMode.resetting'
   | 'dashboard.elements.banner'
   | 'dashboard.elements.dailySummary'
-  | 'dashboard.elements.newSpeciesHighlights'
   | 'dashboard.elements.currentlyHearing'
   | 'dashboard.elements.detectionsGrid'
   | 'dashboard.elements.liveSpectrogram'
@@ -3318,6 +3307,7 @@ export type TranslationKey =
   | 'components.audio.waiting'
   | 'components.audio.queuePosition' // params: position
   | 'components.audio.loadError'
+  | 'components.audio.spectrogramForDetection'
   | 'components.forms.numberField.adjustedToMinimum' // params: value
   | 'components.forms.numberField.adjustedToMaximum' // params: value
   | 'components.forms.rtsp.addNewStream'
@@ -3846,10 +3836,6 @@ export type TranslationParams = {
   'search.detailsPanel.viewDetails': { species: string | number };
   'search.errors.searchFailed': { error: string | number };
   'search.pagination.page': { current: string | number; total: string | number };
-  'dashboard.newSpeciesHighlights.categorySeasonNamed': { season: string | number };
-  'dashboard.newSpeciesHighlights.maxConfidenceShort': { confidence: string | number };
-  'dashboard.newSpeciesHighlights.detections': { count: string | number };
-  'dashboard.newSpeciesHighlights.lastSeen': { days: string | number };
   'dashboard.dailySummary.daylight.sunrise': { time: string | number };
   'dashboard.dailySummary.daylight.sunset': { time: string | number };
   'dashboard.dailySummary.tooltips.viewHourly': { hour: string | number };

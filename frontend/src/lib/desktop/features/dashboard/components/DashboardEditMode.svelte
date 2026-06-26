@@ -64,7 +64,6 @@
   const ALL_ELEMENT_TYPES: DashboardElementType[] = [
     'banner',
     'daily-summary',
-    'new-species-highlights',
     'currently-hearing',
     'live-spectrogram',
     'detections-grid',

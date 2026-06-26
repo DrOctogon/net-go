@@ -599,18 +599,6 @@
       "empty": "Alles rustig — momenteel geen vogels gedetecteerd"
     },
     "rejected": "Afgewezen",
-    "newSpeciesHighlights": {
-      "title": "Nieuwe & terugkerende soorten",
-      "subtitle": "Eerste waarnemingen en recente terugkeer",
-      "trackingDisabled": "Schakel \"Soorten volgen inschakelen\" in om deze functie te gebruiken.",
-      "categoryLifetime": "Nieuwe soort",
-      "categoryYear": "Nieuw dit jaar",
-      "categorySeason": "Nieuw dit seizoen",
-      "categorySeasonNamed": "Nieuw dit {season}",
-      "maxConfidenceShort": "Max {confidence}%",
-      "detections": "{count, plural, one {# detectie} other {# detecties}}",
-      "lastSeen": "Laatst: {days, plural, =0 {vandaag} one {# dag geleden} other {# dagen geleden}}"
-    },
     "dailySummary": {
       "title": "Dagactiviteit",
       "subtitle": "Detecties per uur",
@@ -777,7 +765,6 @@
     "elements": {
       "banner": "Dashboard-banner",
       "dailySummary": "Dagelijks overzicht",
-      "newSpeciesHighlights": "Nieuwe soorten in de kijker",
       "currentlyHearing": "Momenteel gehoord",
       "detectionsGrid": "Recente detecties",
       "liveSpectrogram": "Live spectrogram",
@@ -4528,7 +4515,8 @@
       "generating": "Genereren...",
       "waiting": "Waiting...",
       "queuePosition": "Wachtrij: {position}",
-      "loadError": "Kan audio niet laden"
+      "loadError": "Kan audio niet laden",
+      "spectrogramForDetection": "Spectrogram for detection"
     },
     "forms": {
       "numberField": {

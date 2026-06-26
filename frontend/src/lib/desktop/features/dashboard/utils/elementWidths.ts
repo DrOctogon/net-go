@@ -1,11 +1,7 @@
 import type { DashboardElement } from '$lib/stores/settings';
 
 /** Element types that always require full width (no half-width toggle). */
-export const FULL_WIDTH_ONLY: ReadonlySet<string> = new Set([
-  'daily-summary',
-  'new-species-highlights',
-  'live-spectrogram',
-]);
+export const FULL_WIDTH_ONLY: ReadonlySet<string> = new Set(['daily-summary', 'live-spectrogram']);
 
 /** Element types that support half width (show width toggle in edit mode). */
 export const SUPPORTS_HALF: ReadonlySet<string> = new Set([

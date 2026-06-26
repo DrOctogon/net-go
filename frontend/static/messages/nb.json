@@ -599,18 +599,6 @@
       "empty": "Stille — ingen fugler registrert akkurat nå"
     },
     "rejected": "Avvist",
-    "newSpeciesHighlights": {
-      "title": "Nye og tilbakevendende arter",
-      "subtitle": "Førstegangsdeteksjoner og nylig gjenfunne arter",
-      "trackingDisabled": "Aktiver \"Aktiver artssporing\" for å bruke denne funksjonen.",
-      "categoryLifetime": "Nye arter",
-      "categoryYear": "Nye i år",
-      "categorySeason": "Nye denne sesongen",
-      "categorySeasonNamed": "Nye i {season}",
-      "maxConfidenceShort": "Maks {confidence}%",
-      "detections": "{count, plural, one {# deteksjon} other {# deteksjoner}}",
-      "lastSeen": "Sist: {days, plural, =0 {i dag} one {# dag siden} other {# dager siden}}"
-    },
     "dailySummary": {
       "title": "Daglig aktivitet",
       "subtitle": "Artsregistreringer per time",
@@ -777,7 +765,6 @@
     "elements": {
       "banner": "Dashbordbanner",
       "dailySummary": "Daglig sammendrag",
-      "newSpeciesHighlights": "Høydepunkter for nye arter",
       "currentlyHearing": "Hører nå",
       "detectionsGrid": "Siste registreringer",
       "liveSpectrogram": "Direkte spektrogram",
@@ -4528,7 +4515,8 @@
       "generating": "Genererer...",
       "waiting": "Waiting...",
       "queuePosition": "Kø: {position}",
-      "loadError": "Innlasting av lyd mislyktes"
+      "loadError": "Innlasting av lyd mislyktes",
+      "spectrogramForDetection": "Spectrogram for detection"
     },
     "forms": {
       "numberField": {

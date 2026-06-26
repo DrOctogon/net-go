@@ -599,18 +599,6 @@
       "empty": "Tudo calmo — nenhuma ave detectada no momento"
     },
     "rejected": "Rejeitado",
-    "newSpeciesHighlights": {
-      "title": "Espécies novas e de regresso",
-      "subtitle": "Primeiras observações e regressos recentes",
-      "trackingDisabled": "Ative \"Ativar rastreamento de espécies\" para usar esta funcionalidade.",
-      "categoryLifetime": "Espécie nova",
-      "categoryYear": "Nova este ano",
-      "categorySeason": "Nova nesta temporada",
-      "categorySeasonNamed": "Nova nesta {season}",
-      "maxConfidenceShort": "Máx {confidence}%",
-      "detections": "{count, plural, one {# deteção} other {# deteções}}",
-      "lastSeen": "Último: {days, plural, =0 {hoje} one {há # dia} other {há # dias}}"
-    },
     "dailySummary": {
       "title": "Atividade Diária",
       "subtitle": "Detecções por hora",
@@ -777,7 +765,6 @@
     "elements": {
       "banner": "Banner do painel",
       "dailySummary": "Resumo diário",
-      "newSpeciesHighlights": "Novas espécies em destaque",
       "currentlyHearing": "Ouvindo atualmente",
       "detectionsGrid": "Detecções recentes",
       "liveSpectrogram": "Espectrograma ao vivo",
@@ -4528,7 +4515,8 @@
       "generating": "Gerando...",
       "waiting": "Waiting...",
       "queuePosition": "Fila: {position}",
-      "loadError": "Falha ao carregar áudio"
+      "loadError": "Falha ao carregar áudio",
+      "spectrogramForDetection": "Spectrogram for detection"
     },
     "forms": {
       "numberField": {

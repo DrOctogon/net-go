@@ -599,18 +599,6 @@
       "empty": "Viss kluss — pašlaik nav atklāts neviens putns"
     },
     "rejected": "Noraidīts",
-    "newSpeciesHighlights": {
-      "title": "Jaunās un atgriezušās sugas",
-      "subtitle": "Pirmie novērojumi un nesenās atgriešanās",
-      "trackingDisabled": "Lai izmantotu šo funkciju, aktivizējiet \"Iespējot sugu izsekošanu\".",
-      "categoryLifetime": "Jauna suga",
-      "categoryYear": "Jauna šogad",
-      "categorySeason": "Jauna šosezon",
-      "categorySeasonNamed": "Jauna šajā {season}",
-      "maxConfidenceShort": "Maks {confidence} %",
-      "detections": "{count, plural, zero {# noteikšanu} one {# noteikšana} other {# noteikšanas}}",
-      "lastSeen": "Pēdējoreiz: {days, plural, =0 {šodien} one {pirms # dienas} other {pirms # dienām}}"
-    },
     "dailySummary": {
       "title": "Dienas aktivitāte",
       "subtitle": "Sugu atklāšanas pa stundām",
@@ -777,7 +765,6 @@
     "elements": {
       "banner": "Informācijas paneļa baneris",
       "dailySummary": "Dienas kopsavilkums",
-      "newSpeciesHighlights": "Jaunu sugu apskats",
       "currentlyHearing": "Pašlaik dzirdams",
       "detectionsGrid": "Nesenās atklāšanas",
       "liveSpectrogram": "Tiešraides spektrogramma",
@@ -4528,7 +4515,8 @@
       "generating": "Ģenerē...",
       "waiting": "Waiting...",
       "queuePosition": "Rinda: {position}",
-      "loadError": "Neizdevās ielādēt audio"
+      "loadError": "Neizdevās ielādēt audio",
+      "spectrogramForDetection": "Spectrogram for detection"
     },
     "forms": {
       "numberField": {

@@ -599,18 +599,6 @@
       "empty": "Tutto tranquillo — nessun uccello rilevato al momento"
     },
     "rejected": "Rifiutato",
-    "newSpeciesHighlights": {
-      "title": "Specie nuove e di ritorno",
-      "subtitle": "Prime osservazioni e ritorni recenti",
-      "trackingDisabled": "Attiva \"Abilita tracciamento delle specie\" per usare questa funzione.",
-      "categoryLifetime": "Nuova specie",
-      "categoryYear": "Nuova quest'anno",
-      "categorySeason": "Nuova questa stagione",
-      "categorySeasonNamed": "Nuova questa {season}",
-      "maxConfidenceShort": "Max {confidence}%",
-      "detections": "{count, plural, one {# rilevamento} other {# rilevamenti}}",
-      "lastSeen": "Ultimo: {days, plural, =0 {oggi} one {# giorno fa} other {# giorni fa}}"
-    },
     "dailySummary": {
       "title": "Attività giornaliera",
       "subtitle": "Rilevamenti specie per ora",
@@ -777,7 +765,6 @@
     "elements": {
       "banner": "Banner della dashboard",
       "dailySummary": "Riepilogo giornaliero",
-      "newSpeciesHighlights": "Nuove specie in evidenza",
       "currentlyHearing": "In ascolto ora",
       "detectionsGrid": "Rilevamenti recenti",
       "liveSpectrogram": "Spettrogramma in tempo reale",
@@ -4528,7 +4515,8 @@
       "generating": "Generazione...",
       "waiting": "Waiting...",
       "queuePosition": "Coda: {position}",
-      "loadError": "Caricamento audio fallito"
+      "loadError": "Caricamento audio fallito",
+      "spectrogramForDetection": "Spectrogram for detection"
     },
     "forms": {
       "numberField": {
