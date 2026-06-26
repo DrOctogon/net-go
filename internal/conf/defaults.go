@@ -102,6 +102,16 @@ func setDefaultConfig() {
 	viper.SetDefault("realtime.audio.soundlevel.enabled", false)
 	viper.SetDefault("realtime.audio.soundlevel.interval", 10)
 
+	// Continuous full-audio recording configuration
+	// Records ALL audio from each enabled RTSP stream in rolling chunks for later
+	// voice-print / speaker-ID analysis, decoupled from the detection pipeline.
+	viper.SetDefault("realtime.audio.continuous.enabled", false)
+	viper.SetDefault("realtime.audio.continuous.path", "recordings/")
+	viper.SetDefault("realtime.audio.continuous.segmentseconds", 3600)
+	viper.SetDefault("realtime.audio.continuous.retentionhours", 24)
+	viper.SetDefault("realtime.audio.continuous.format", "flac")
+	viper.SetDefault("realtime.audio.continuous.samplerate", 0)
+
 	// Audio capture configuration
 	viper.SetDefault("realtime.audio.export.debug", false)
 	viper.SetDefault("realtime.audio.export.enabled", true)

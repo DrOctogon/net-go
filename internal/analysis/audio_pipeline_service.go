@@ -56,6 +56,7 @@ type AudioPipelineService struct {
 	bufferMgr           *BufferManager
 	ctrlMonitor         *ControlMonitor
 	quietHoursScheduler *schedule.QuietHoursScheduler
+	continuousRecorder  *ContinuousRecorder
 	soundLevelChan      chan soundlevel.SoundLevelData
 	restartChan         chan struct{}
 	done                chan struct{}
@@ -379,6 +380,15 @@ func (p *AudioPipelineService) Start(_ context.Context) error {
 		}
 	})
 
+	// Start continuous full-audio recorder for archival / voice-print analysis.
+	// Decoupled from the detection pipeline: one ffmpeg process per RTSP stream.
+	p.continuousRecorder = NewContinuousRecorder(settings)
+	if err := p.continuousRecorder.Start(context.Background()); err != nil {
+		log.Warn("continuous recorder failed to start",
+			logger.Error(err),
+			logger.String("operation", "start_continuous_recorder"))
+	}
+
 	startSucceeded = true
 	return nil
 }
@@ -435,6 +445,14 @@ func (p *AudioPipelineService) Stop(ctx context.Context) error {
 	// Stop audio level stats logger.
 	if p.audioLevelStats != nil {
 		p.audioLevelStats.Stop()
+	}
+
+	// Stop continuous recorder (cancels ffmpeg processes and retention goroutine).
+	if p.continuousRecorder != nil {
+		log.Info("stopping continuous recorder",
+			logger.String("operation", "shutdown_continuous_recorder"))
+		p.continuousRecorder.Stop()
+		p.continuousRecorder = nil
 	}
 
 	// Close done channel to signal restart loop and clip cleanup goroutines.

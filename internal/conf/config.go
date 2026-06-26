@@ -72,6 +72,19 @@ type RetentionSettings struct {
 	CheckInterval    int    `yaml:"checkinterval" json:"checkInterval"`       // cleanup check interval in minutes (default: 15)
 }
 
+// ContinuousRecordingSettings contains settings for continuous full-audio recording.
+// When enabled, one ffmpeg process per enabled RTSP stream records all audio into
+// time-segmented files for later voice-print / speaker-ID analysis, completely
+// decoupled from the detection pipeline.
+type ContinuousRecordingSettings struct {
+	Enabled        bool   `yaml:"enabled" json:"enabled" mapstructure:"enabled"`                     // true to enable continuous full-audio recording
+	Path           string `yaml:"path" json:"path" mapstructure:"path"`                              // directory for segment files
+	SegmentSeconds int    `yaml:"segmentseconds" json:"segmentSeconds" mapstructure:"segmentseconds"` // segment length in seconds
+	RetentionHours int    `yaml:"retentionhours" json:"retentionHours" mapstructure:"retentionhours"` // rolling retention window in hours (older files are deleted)
+	Format         string `yaml:"format" json:"format" mapstructure:"format"`                        // audio format: flac or wav
+	SampleRate     int    `yaml:"samplerate" json:"sampleRate" mapstructure:"samplerate"`            // output sample rate in Hz (0 = keep source rate)
+}
+
 // AudioSettings contains settings for audio processing and export.
 // SoundLevelSettings contains settings for sound level monitoring
 type SoundLevelSettings struct {
@@ -104,8 +117,9 @@ type AudioSettings struct {
 	SoxAudioTypes   []string            `yaml:"-" json:"-"`                                                     // supported audio types of sox, runtime value
 	FfprobePath     string              `yaml:"-" json:"-"`                                                     // path to ffprobe, derived from ffmpeg path at runtime
 	StreamTransport string              `yaml:"streamtransport" json:"streamTransport"`                         // preferred transport for audio streaming: "auto", "sse", or "ws"
-	Export          ExportSettings      `yaml:"export" json:"export"`                                           // export settings
-	SoundLevel      SoundLevelSettings  `yaml:"soundlevel" json:"soundLevel"`                                   // sound level monitoring settings
+	Export          ExportSettings             `yaml:"export" json:"export"`                                           // export settings
+	SoundLevel      SoundLevelSettings         `yaml:"soundlevel" json:"soundLevel"`                                   // sound level monitoring settings
+	Continuous      ContinuousRecordingSettings `yaml:"continuous" json:"continuous" mapstructure:"continuous"`         // continuous full-audio recording settings
 
 	Equalizer  EqualizerSettings `yaml:"equalizer" json:"equalizer"`                             // equalizer settings (global default)
 	QuietHours QuietHoursConfig  `yaml:"quietHours" json:"quietHours" mapstructure:"quietHours"` // quiet hours (global default, legacy)

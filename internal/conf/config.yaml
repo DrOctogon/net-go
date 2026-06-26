@@ -186,6 +186,15 @@ realtime:
     soundlevel:
       enabled: false      # true to enable sound level monitoring
       interval: 10        # measurement interval in seconds (min 5 recommended, lower values increase CPU load)
+    continuous:
+      # continuously record ALL audio in rolling chunks for later analysis
+      # (voice-print / speaker-ID) — decoupled from the detection pipeline
+      enabled: false          # true to enable continuous full-audio recording
+      path: recordings/       # directory for segment files
+      segmentseconds: 3600    # segment length in seconds (default: 1 hour)
+      retentionhours: 24      # rolling retention window in hours (older files are deleted)
+      format: flac            # audio format: flac or wav
+      samplerate: 0           # output sample rate in Hz (0 = keep source rate)
     equalizer:
       enabled: false
       filters:

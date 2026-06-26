@@ -56,6 +56,11 @@ func validateRealtimeSettings(settings *RealtimeSettings) error {
 		return err
 	}
 
+	// Validate continuous recording settings
+	if err := validateContinuousRecordingSettings(&settings.Audio.Continuous); err != nil {
+		return err
+	}
+
 	// Validate species settings
 	if err := validateSpeciesConfigSettings(&settings.Species); err != nil {
 		return err
@@ -536,5 +541,51 @@ func validateSpeciesConfigSettings(settings *SpeciesSettings) error {
 				Build()
 		}
 	}
+	return nil
+}
+
+// validContinuousRecordingFormats contains all supported audio formats for continuous recording.
+var validContinuousRecordingFormats = []string{"flac", "wav"}
+
+// validateContinuousRecordingSettings validates the continuous recording settings.
+// When enabled, segmentseconds and retentionhours must be positive, format must be
+// flac or wav, and samplerate must be non-negative.
+func validateContinuousRecordingSettings(settings *ContinuousRecordingSettings) error {
+	if !settings.Enabled {
+		return nil
+	}
+
+	if settings.SegmentSeconds <= 0 {
+		return errors.Newf("continuous recording segmentSeconds must be positive when enabled, got %d", settings.SegmentSeconds).
+			Category(errors.CategoryValidation).
+			Context("validation_type", "continuous-recording-segment-seconds").
+			Context("segment_seconds", settings.SegmentSeconds).
+			Build()
+	}
+
+	if settings.RetentionHours <= 0 {
+		return errors.Newf("continuous recording retentionHours must be positive when enabled, got %d", settings.RetentionHours).
+			Category(errors.CategoryValidation).
+			Context("validation_type", "continuous-recording-retention-hours").
+			Context("retention_hours", settings.RetentionHours).
+			Build()
+	}
+
+	if !slices.Contains(validContinuousRecordingFormats, settings.Format) {
+		return errors.Newf("continuous recording format must be one of %v, got %q", validContinuousRecordingFormats, settings.Format).
+			Category(errors.CategoryValidation).
+			Context("validation_type", "continuous-recording-format").
+			Context("format", settings.Format).
+			Build()
+	}
+
+	if settings.SampleRate < 0 {
+		return errors.Newf("continuous recording sampleRate must be non-negative, got %d", settings.SampleRate).
+			Category(errors.CategoryValidation).
+			Context("validation_type", "continuous-recording-sample-rate").
+			Context("sample_rate", settings.SampleRate).
+			Build()
+	}
+
 	return nil
 }
