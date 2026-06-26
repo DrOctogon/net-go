@@ -943,6 +943,7 @@
         "unknown": "Onbekend"
       }
     },
+    "noTranscript": "(no transcript)",
     "row": {
       "viewDetails": "Bekijk details voor {species}",
       "play": "Afspelen",

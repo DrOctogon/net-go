@@ -943,6 +943,7 @@
         "unknown": "Ismeretlen"
       }
     },
+    "noTranscript": "(no transcript)",
     "row": {
       "viewDetails": "{species} részleteinek megtekintése",
       "play": "Lejátszás",

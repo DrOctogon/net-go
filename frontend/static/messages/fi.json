@@ -943,6 +943,7 @@
         "unknown": "Tuntematon"
       }
     },
+    "noTranscript": "(no transcript)",
     "row": {
       "viewDetails": "Näytä {species} tiedot",
       "play": "Toista",

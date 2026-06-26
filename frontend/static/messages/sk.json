@@ -943,6 +943,7 @@
         "unknown": "Neznáme"
       }
     },
+    "noTranscript": "(no transcript)",
     "row": {
       "viewDetails": "Zobraziť podrobnosti pre {species}",
       "play": "Prehrať",

@@ -33,17 +33,11 @@
   import SourceBadge from '$lib/desktop/features/dashboard/components/SourceBadge.svelte';
   import SpectrogramPlayer from '$lib/desktop/components/media/SpectrogramPlayer.svelte';
   import ActionMenu from '$lib/desktop/components/ui/ActionMenu.svelte';
-  import { handleBirdImageError } from '$lib/desktop/components/ui/image-utils.js';
   import { t } from '$lib/i18n';
-  import { Flag } from '@lucide/svelte';
+  import { Flag, Mic } from '@lucide/svelte';
   import type { Detection } from '$lib/types/detection.types';
-  import { useImageDelayedLoading } from '$lib/utils/delayedLoading.svelte.js';
-  import { loggers } from '$lib/utils/logger';
   import { navigation } from '$lib/stores/navigation.svelte';
   import { buildAppUrl } from '$lib/utils/urlHelpers';
-  import { localizeSpeciesName } from '$lib/utils/speciesDisplay';
-
-  const logger = loggers.ui;
 
   // Presentational row: the parent (DetectionsList) owns the action handlers
   // and the ConfirmModal via the shared useDetectionActions composable, and
@@ -78,22 +72,6 @@
     onDelete,
   }: Props = $props();
 
-  // Localized common name for display in the visitor's UI locale. Falls back to
-  // the server-provided common name, then the scientific name.
-  const displayName = $derived(localizeSpeciesName(detection.scientificName, detection.commonName));
-
-  // Thumbnail loading with delayed spinner and URL failure tracking
-  const thumbnailLoader = useImageDelayedLoading({
-    delayMs: 150,
-    timeoutMs: 10000,
-    onTimeout: () => {
-      logger.warn('Thumbnail loading timeout', {
-        scientificName: detection.scientificName,
-        detectionId: detection.id,
-      });
-    },
-  });
-
   function handleDetailsClick(e: Event) {
     e.preventDefault();
     if (onDetailsClick) {
@@ -103,46 +81,6 @@
       navigation.navigate(`/ui/detections/${detection.id}`);
     }
   }
-
-  // Placeholder function for thumbnail URL. buildAppUrl prepends the
-  // configured base path so the image resolves through reverse proxies.
-  function getThumbnailUrl(scientificName: string): string {
-    // TODO: Replace with actual thumbnail API endpoint
-    return buildAppUrl(`/api/v2/media/species-image?name=${encodeURIComponent(scientificName)}`);
-  }
-
-  // Thumbnail loading handlers
-  function handleThumbnailLoad() {
-    thumbnailLoader.setLoading(false);
-  }
-
-  function handleThumbnailError() {
-    const currentUrl = getThumbnailUrl(detection.scientificName);
-    thumbnailLoader.markUrlFailed(currentUrl);
-  }
-
-  // Track previous URL to avoid unnecessary resets
-  let previousThumbnailUrl: string | null = null;
-
-  // Handle thumbnail loading state when detection changes
-  $effect(() => {
-    const currentUrl = getThumbnailUrl(detection.scientificName);
-    // Only reset loading state if URL actually changed
-    if (detection.scientificName && currentUrl !== previousThumbnailUrl) {
-      previousThumbnailUrl = currentUrl;
-
-      // Check if this URL has previously failed to prevent retry loops
-      if (thumbnailLoader.hasUrlFailed(currentUrl)) {
-        thumbnailLoader.setError();
-        return; // Don't try to load known failed URLs
-      }
-
-      // Start loading when URL changes
-      thumbnailLoader.setLoading(true);
-    }
-  });
-
-  // Cleanup is handled automatically by useImageDelayedLoading
 </script>
 
 <!-- DetectionRow now returns table cells for proper table structure -->
@@ -190,81 +128,25 @@
   <SourceBadge {detection} variant="inline" />
 </td>
 
-<!-- Bird species (with thumbnail) -->
+<!-- Detection (mic icon + transcript) -->
 <td class="text-sm">
-  <div class="sp-species-container sp-layout-detections">
-    <!-- Thumbnail -->
-    <div class="sp-thumbnail-wrapper">
-      <button class="sp-thumbnail-button" onclick={handleDetailsClick} tabindex="0">
-        <!-- Screen reader announcement for loading state -->
-        <span class="sr-only" role="status" aria-live="polite">
-          {thumbnailLoader.loading
-            ? t('detections.aria.thumbnailLoading', { species: displayName })
-            : t('detections.aria.thumbnailLoaded', { species: displayName })}
-        </span>
-
-        <!-- Loading spinner overlay -->
-        {#if thumbnailLoader.showSpinner}
-          <div
-            class="absolute inset-0 flex items-center justify-center bg-[var(--color-base-200)]/75 rounded-md"
-          >
-            <div class="loading loading-spinner loading-sm text-[var(--color-primary)]"></div>
-          </div>
-        {/if}
-
-        {#if thumbnailLoader.error}
-          <!-- Error placeholder -->
-          <div
-            class="absolute inset-0 flex items-center justify-center bg-[var(--color-base-200)] rounded-md"
-          >
-            <svg
-              class="w-8 h-8 text-[var(--color-base-content)] opacity-30"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-              />
-            </svg>
-            <span class="sr-only">{t('detections.row.imageFailedToLoad')}</span>
-          </div>
-        {:else if !thumbnailLoader.hasUrlFailed(getThumbnailUrl(detection.scientificName))}
-          <!-- Only render img element if URL hasn't failed before -->
-          <img
-            loading="lazy"
-            decoding="async"
-            fetchpriority="low"
-            src={getThumbnailUrl(detection.scientificName)}
-            alt={displayName}
-            class="sp-thumbnail-image"
-            class:opacity-0={thumbnailLoader.loading}
-            onload={handleThumbnailLoad}
-            onerror={e => {
-              handleThumbnailError();
-              handleBirdImageError(e);
-            }}
-          />
-        {/if}
-      </button>
+  <div class="sp-detection-container">
+    <!-- Static mic icon: replaces the bird thumbnail (decorative) -->
+    <div class="sp-mic-icon-wrapper" aria-hidden="true">
+      <Mic class="h-5 w-5" aria-hidden="true" />
     </div>
-
-    <!-- Species Names -->
-    <div class="sp-species-info-wrapper">
-      <div class="sp-species-names">
-        <button
-          onclick={handleDetailsClick}
-          class="sp-species-common-name hover:text-primary transition-colors cursor-pointer text-left"
-        >
-          {displayName}
-        </button>
-        <div class="sp-species-scientific-name">{detection.scientificName}</div>
-      </div>
-    </div>
+    <!-- Transcript text, single-line truncated; full text on hover -->
+    <button
+      onclick={handleDetailsClick}
+      class="sp-transcript-text hover:text-primary transition-colors"
+      title={detection.transcript}
+    >
+      {#if detection.transcript}
+        {detection.transcript}
+      {:else}
+        <span class="sp-no-transcript">{t('detections.noTranscript')}</span>
+      {/if}
+    </button>
   </div>
 </td>
 
@@ -317,31 +199,47 @@
 </td>
 
 <style>
-  /* Thumbnail wrapper - responsive width */
-  .sp-thumbnail-wrapper {
-    flex: 0 0 30%; /* Reduced to give more space to names */
-    min-width: 40px; /* Minimum size on very small screens */
-    max-width: 80px; /* Maximum size on large screens */
+  /* Row container: mic icon + transcript side by side */
+  .sp-detection-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
   }
 
-  /* Thumbnail button - maintains aspect ratio */
-  .sp-thumbnail-button {
-    display: block;
-    width: 100%;
-    aspect-ratio: 4/3; /* Consistent aspect ratio */
-    position: relative;
-    overflow: hidden;
+  /* Fixed-size mic icon box matching the old thumbnail footprint */
+  .sp-mic-icon-wrapper {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 30px;
     border-radius: 0.375rem;
     background-color: color-mix(in srgb, var(--color-base-200) 30%, transparent);
+    color: var(--color-base-content);
+    opacity: 0.45;
   }
 
-  /* Thumbnail image */
-  .sp-thumbnail-image {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+  /* Transcript button: single-line, ellipsis overflow */
+  .sp-transcript-text {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  /* Muted italic fallback when there is no transcript */
+  .sp-no-transcript {
+    opacity: 0.4;
+    font-style: italic;
+    font-size: 0.875em;
   }
 </style>

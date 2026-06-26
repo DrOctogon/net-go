@@ -757,6 +757,7 @@ export type TranslationKey =
   | 'detections.weather.conditions.snowshowersandthunder'
   | 'detections.weather.conditions.thunder'
   | 'detections.weather.conditions.unknown'
+  | 'detections.noTranscript'
   | 'detections.row.viewDetails' // params: species
   | 'detections.row.play'
   | 'detections.row.playAudio'

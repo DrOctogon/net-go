@@ -39,6 +39,33 @@ async function openMenuAndClick(itemName: RegExp) {
   await fireEvent.click(item);
 }
 
+describe('DetectionRow transcript presentation', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('renders the transcript text when detection.transcript is set', () => {
+    const detection = createMockDetection({ transcript: 'package at the door' });
+    render(DetectionRow, { props: { detection } });
+    expect(screen.getByText('package at the door')).toBeInTheDocument();
+  });
+
+  it('shows the noTranscript fallback when transcript is absent', () => {
+    const detection = createMockDetection({ transcript: undefined });
+    render(DetectionRow, { props: { detection } });
+    // t() is mocked to return its key
+    expect(screen.getByText('detections.noTranscript')).toBeInTheDocument();
+  });
+
+  it('does not render a species thumbnail image element', () => {
+    const detection = createMockDetection({ transcript: 'hello world' });
+    render(DetectionRow, { props: { detection } });
+    // The old thumbnail img had src containing the species-image API path.
+    // After the pivot only the spectrogram img remains; no species thumbnail.
+    expect(document.querySelector('img[src*="species-image"]')).toBeNull();
+  });
+});
+
 describe('DetectionRow action callbacks', () => {
   beforeEach(() => {
     vi.clearAllMocks();

@@ -943,6 +943,7 @@
         "unknown": "Nezināms"
       }
     },
+    "noTranscript": "(no transcript)",
     "row": {
       "viewDetails": "Skatīt informāciju par sugu {species}",
       "play": "Atskaņot",

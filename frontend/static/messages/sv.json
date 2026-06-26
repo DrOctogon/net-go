@@ -943,6 +943,7 @@
         "unknown": "Okänt"
       }
     },
+    "noTranscript": "(no transcript)",
     "row": {
       "viewDetails": "Visa detaljer för {species}",
       "play": "Spela upp",

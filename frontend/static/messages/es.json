@@ -943,6 +943,7 @@
         "unknown": "Desconocido"
       }
     },
+    "noTranscript": "(no transcript)",
     "row": {
       "viewDetails": "Ver detalles para {species}",
       "play": "Reproducir",
