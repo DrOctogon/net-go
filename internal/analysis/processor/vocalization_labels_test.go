@@ -258,49 +258,54 @@ func TestPerchHumanLabelsParityWithNonbird(t *testing.T) {
 	}
 }
 
-// TestShouldFilterDetection_DropsHumanLabels covers the third changed call site:
-// shouldFilterDetection must drop a human-labeled detection from being saved
-// (Perch v2 class and a localized BirdNET class), while letting a normal bird
-// through.
-func TestShouldFilterDetection_DropsHumanLabels(t *testing.T) {
+// TestShouldFilterDetection_HumanPrivacyGate verifies the opt-in human-voice
+// privacy gate. With the privacy filter OFF (the VoiceWatch default), human-voice
+// detections pass through so their clips are saved. With it ON, human-voice
+// detections are dropped. A non-human label is never dropped by this gate.
+func TestShouldFilterDetection_HumanPrivacyGate(t *testing.T) {
 	t.Parallel()
 
-	tests := []struct {
-		name       string
-		species    string
-		wantFilter bool
+	cases := []struct {
+		name    string
+		species string
+		isHuman bool
 	}{
-		{"Perch speech is dropped", "Speech", true},
-		{"localized speech model human is dropped", "Human vocal_Mensch Stimme", true},
-		{"normal bird is not dropped by the human filter", "Turdus merula", false},
+		{"speech label", "Speech", true},
+		{"localized human label", "Human vocal_Mensch Stimme", true},
+		{"non-human label", "Turdus merula", false},
 	}
 
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			t.Parallel()
-
-			p := &Processor{}
-			settings := &conf.Settings{}
-			result := datastore.Results{Species: tt.species, Confidence: 0.9}
-
-			shouldFilter, _ := p.shouldFilterDetection(
-				settings,
-				result,
-				tt.species, // commonName (unused by the human branch)
-				tt.species, // scientificName
-				tt.species, // speciesLowercase
-				0.7,        // baseThreshold (Confidence 0.9 > 0.7 triggers the human branch)
-				"Backyard",
-				"Perch_V2",
-			)
-
-			if tt.wantFilter {
-				assert.True(t, shouldFilter, "human-labeled detection must be filtered out")
+	for _, privacyOn := range []bool{false, true} {
+		for _, tc := range cases {
+			name := tc.name
+			if privacyOn {
+				name += "/privacy_on"
 			} else {
-				// A normal bird is not dropped by the human privacy branch. Other
-				// branches may still pass it through; the human check must not fire.
-				assert.False(t, shouldFilter, "non-human detection must not hit the human privacy filter")
+				name += "/privacy_off"
 			}
-		})
+			t.Run(name, func(t *testing.T) {
+				t.Parallel()
+
+				p := &Processor{}
+				settings := &conf.Settings{}
+				settings.Realtime.PrivacyFilter.Enabled = privacyOn
+				result := datastore.Results{Species: tc.species, Confidence: 0.9}
+
+				shouldFilter, _ := p.shouldFilterDetection(
+					settings,
+					result,
+					tc.species, // commonName
+					tc.species, // scientificName
+					tc.species, // speciesLowercase
+					0.7,        // baseThreshold (Confidence 0.9 > 0.7)
+					"src",
+					"voicewatch",
+				)
+
+				// Dropped only when the privacy filter is enabled AND the label is human.
+				assert.Equal(t, privacyOn && tc.isHuman, shouldFilter,
+					"human voice should be dropped only when the privacy filter is on")
+			})
+		}
 	}
 }

@@ -859,10 +859,12 @@ func (p *Processor) parseAndValidateSpecies(settings *conf.Settings, result data
 
 // shouldFilterDetection checks if a detection should be filtered out
 func (p *Processor) shouldFilterDetection(settings *conf.Settings, result datastore.Results, commonName, scientificName, speciesLowercase string, baseThreshold float32, source, modelID string) (shouldFilter bool, confidenceThreshold float32) {
-	// Check human detection privacy filter. Match the raw label so Perch v2's
-	// FSD50K human classes are caught too, not just VoiceWatch "Human *" classes.
-	if isHumanVocalization(result.Species) && result.Confidence > baseThreshold {
-		return true, 0 // Filter out human detections for privacy
+	// Privacy filter (opt-in, off by default): when enabled, discard human-voice
+	// detections so audio containing speech is not retained. VoiceWatch's purpose
+	// is to DETECT and store human voice, so detections pass through and are saved
+	// unless an operator explicitly turns the privacy filter on.
+	if settings.Realtime.PrivacyFilter.Enabled && isHumanVocalization(result.Species) && result.Confidence > baseThreshold {
+		return true, 0
 	}
 
 	// Check species exclusion filter (ignore list). This is the authoritative

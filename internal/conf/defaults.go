@@ -73,7 +73,7 @@ func setDefaultConfig() {
 	// VoiceWatch configuration
 	viper.SetDefault("voicewatch.debug", false)
 	viper.SetDefault("voicewatch.sensitivity", 1.0)
-	viper.SetDefault("voicewatch.threshold", 0.8)
+	viper.SetDefault("voicewatch.threshold", 0.5)
 	viper.SetDefault("voicewatch.overlap", 0.0)
 	viper.SetDefault("voicewatch.threads", 0)
 	viper.SetDefault("voicewatch.locale", DefaultFallbackLocale)
@@ -167,10 +167,10 @@ func setDefaultConfig() {
 	// Retention policy configuration
 	viper.SetDefault("realtime.audio.export.retention.enabled", true)
 	viper.SetDefault("realtime.audio.export.retention.debug", false)
-	viper.SetDefault("realtime.audio.export.retention.policy", "usage")
+	viper.SetDefault("realtime.audio.export.retention.policy", "age")
 	viper.SetDefault("realtime.audio.export.retention.maxusage", "80%")
-	viper.SetDefault("realtime.audio.export.retention.maxage", "30d")
-	viper.SetDefault("realtime.audio.export.retention.minclips", 10)
+	viper.SetDefault("realtime.audio.export.retention.maxage", "21d")
+	viper.SetDefault("realtime.audio.export.retention.minclips", 0)
 	viper.SetDefault("realtime.audio.export.retention.keepspectrograms", true)
 	viper.SetDefault("realtime.audio.export.retention.checkinterval", DefaultCleanupCheckInterval)
 
@@ -268,7 +268,7 @@ func setDefaultConfig() {
 	viper.SetDefault("realtime.mqtt.homeassistant.device_name", "VoiceWatch")
 
 	// Privacy filter configuration
-	viper.SetDefault("realtime.privacyfilter.enabled", true)
+	viper.SetDefault("realtime.privacyfilter.enabled", false)
 	viper.SetDefault("realtime.privacyfilter.debug", false)
 	viper.SetDefault("realtime.privacyfilter.confidence", 0.05)
 
