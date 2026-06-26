@@ -49,6 +49,28 @@ type DetectionContext struct {
 	// This flag is available for any late consumers that need to know whether the
 	// audio file exists on disk.
 	ClipSaved atomic.Bool
+
+	// transcript holds the speech-to-text transcript produced by TranscribeAction,
+	// shared with any late consumers. nil until transcription completes.
+	transcript atomic.Pointer[TranscriptResult]
+}
+
+// TranscriptResult is the transcript and its language stored in a DetectionContext
+// by TranscribeAction for downstream consumers.
+type TranscriptResult struct {
+	Text     string
+	Language string
+}
+
+// SetTranscript stores the transcript produced for this detection.
+func (c *DetectionContext) SetTranscript(text, language string) {
+	c.transcript.Store(&TranscriptResult{Text: text, Language: language})
+}
+
+// Transcript returns the transcript stored for this detection, or nil if
+// transcription has not completed (or is disabled).
+func (c *DetectionContext) Transcript() *TranscriptResult {
+	return c.transcript.Load()
 }
 
 // Action is the base interface for all actions that can be executed.

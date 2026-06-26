@@ -4,6 +4,7 @@ package conf
 
 import (
 	"math"
+	"os"
 	"slices"
 	"strings"
 
@@ -85,6 +86,38 @@ func validateRealtimeSettings(settings *RealtimeSettings) error {
 	// Validate dynamic threshold settings
 	if err := validateDynamicThresholdSettings(&settings.DynamicThreshold); err != nil {
 		return err
+	}
+
+	// Validate transcription settings
+	if err := validateTranscriptionSettings(&settings.Transcription); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// validateTranscriptionSettings validates the speech-to-text transcription
+// settings. Transcription is optional; validation only applies when enabled.
+// When enabled, the configured model file must exist on disk so the backend can
+// load it.
+func validateTranscriptionSettings(settings *TranscriptionSettings) error {
+	if !settings.Enabled {
+		return nil
+	}
+
+	if strings.TrimSpace(settings.Model) == "" {
+		return errors.Newf("transcription model path must be set when transcription is enabled").
+			Category(errors.CategoryValidation).
+			Context("validation_type", "transcription-model").
+			Build()
+	}
+
+	if _, err := os.Stat(settings.Model); err != nil {
+		return errors.Newf("transcription model path %q does not exist: %v", settings.Model, err).
+			Category(errors.CategoryValidation).
+			Context("validation_type", "transcription-model").
+			Context("model", settings.Model).
+			Build()
 	}
 
 	return nil

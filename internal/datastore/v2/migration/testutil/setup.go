@@ -597,6 +597,7 @@ func (r *testDetectionRepo) DeleteComment(_ context.Context, _ uint) error      
 func (r *testDetectionRepo) GetClipPath(_ context.Context, _ string) (string, error) {
 	return "", nil
 }
+func (r *testDetectionRepo) UpdateTranscript(_ context.Context, _, _, _ string) error { return nil }
 func (r *testDetectionRepo) GetAdditionalResults(_ context.Context, _ string) ([]detection.AdditionalResult, error) {
 	return nil, nil
 }

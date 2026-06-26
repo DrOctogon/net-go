@@ -223,6 +223,12 @@ func setDefaultConfig() {
 	viper.SetDefault("realtime.ebird.cachettl", 24) // 24 hours default
 	viper.SetDefault("realtime.ebird.locale", "en")
 
+	// Transcription configuration (speech-to-text of saved clips)
+	viper.SetDefault("realtime.transcription.enabled", false)
+	viper.SetDefault("realtime.transcription.model", "")
+	viper.SetDefault("realtime.transcription.binary", "whisper-cli")
+	viper.SetDefault("realtime.transcription.language", "en")
+
 	// OpenWeather configuration
 	/*
 		viper.SetDefault("realtime.OpenWeather.Enabled", false)

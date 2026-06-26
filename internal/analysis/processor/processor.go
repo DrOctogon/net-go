@@ -32,6 +32,7 @@ import (
 	"github.com/tphakala/voicewatch/internal/securefs"
 	"github.com/tphakala/voicewatch/internal/spectrogram"
 	"github.com/tphakala/voicewatch/internal/suncalc"
+	"github.com/tphakala/voicewatch/internal/transcription"
 )
 
 // Compile-time assertion to ensure *spectrogram.PreRenderer implements PreRendererSubmit
@@ -1919,6 +1920,31 @@ func (p *Processor) getDefaultActions(det *Detections) []Action {
 	// (Sentry BIRDNET-GO-WD), preventing SSE/MQTT from ever firing.
 	if settings.Realtime.Audio.Export.Enabled && databaseAction != nil {
 		actions = append(actions, p.buildSaveAudioAction(det, detectionCtx))
+	}
+
+	// Add TranscribeAction if transcription is enabled. It runs as an INDEPENDENT
+	// action (its own job) AFTER the DatabaseAction so it can read the
+	// database-assigned detection ID from the shared DetectionContext. Running it
+	// off the Database -> SSE -> MQTT composite ensures slow speech-to-text never
+	// blocks real-time broadcasts. The Transcriber is constructed from config; if
+	// the binary or model is missing it skips gracefully at Execute time.
+	if settings.Realtime.Transcription.Enabled && databaseAction != nil {
+		transcriber := transcription.NewWhisperCLI(transcription.Config{
+			Binary:   settings.Realtime.Transcription.Binary,
+			Model:    settings.Realtime.Transcription.Model,
+			Language: settings.Realtime.Transcription.Language,
+		})
+		actions = append(actions, &TranscribeAction{
+			Settings:      settings,
+			Result:        det.Result,
+			Transcriber:   transcriber,
+			Repo:          p.Repo,
+			EventTracker:  p.GetEventTracker(),
+			DetectionCtx:  detectionCtx, // Share context from DatabaseAction (provides detection ID)
+			RetryConfig:   newTranscribeRetryConfig(),
+			ClipName:      det.Result.ClipName,
+			CorrelationID: det.CorrelationID,
+		})
 	}
 
 	return actions

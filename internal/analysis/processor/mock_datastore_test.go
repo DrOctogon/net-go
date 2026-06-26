@@ -438,6 +438,13 @@ type MockDetectionRepository struct {
 	saveErr                error
 	savedResult            *detection.Result
 	savedAdditionalResults []detection.AdditionalResult // Captures additional results for verification
+
+	// Transcript capture for TranscribeAction verification.
+	transcriptCalls     int
+	transcriptID        string
+	transcriptText      string
+	transcriptLang      string
+	updateTranscriptErr error
 }
 
 // NewMockDetectionRepository creates a new mock repository starting with ID 1.
@@ -536,6 +543,35 @@ func (m *MockDetectionRepository) UpdateComment(_ context.Context, _ uint, _ str
 func (m *MockDetectionRepository) DeleteComment(_ context.Context, _ uint) error { return nil }
 func (m *MockDetectionRepository) GetClipPath(_ context.Context, _ string) (string, error) {
 	return "", nil
+}
+
+// UpdateTranscript captures the transcript persistence call for verification.
+func (m *MockDetectionRepository) UpdateTranscript(_ context.Context, id, transcript, language string) error {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	if m.updateTranscriptErr != nil {
+		return m.updateTranscriptErr
+	}
+	m.transcriptCalls++
+	m.transcriptID = id
+	m.transcriptText = transcript
+	m.transcriptLang = language
+	return nil
+}
+
+// GetTranscriptCalls returns how many times UpdateTranscript was invoked.
+func (m *MockDetectionRepository) GetTranscriptCalls() int {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	return m.transcriptCalls
+}
+
+// GetLastTranscript returns the id, text, and language from the last
+// UpdateTranscript call.
+func (m *MockDetectionRepository) GetLastTranscript() (id, text, language string) {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	return m.transcriptID, m.transcriptText, m.transcriptLang
 }
 func (m *MockDetectionRepository) GetAdditionalResults(_ context.Context, _ string) ([]detection.AdditionalResult, error) {
 	return nil, nil

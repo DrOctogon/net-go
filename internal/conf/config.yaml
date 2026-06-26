@@ -290,6 +290,12 @@ realtime:
     cachettl: 24          # cache time-to-live in hours (default: 24)
     locale: "en"          # locale for eBird data (e.g., "en", "es", "fr")
 
+  transcription:
+    enabled: false        # true to transcribe saved clips to text (speech-to-text)
+    model: ""             # path to the GGML model file (e.g. ggml-tiny.en.bin); required when enabled
+    binary: "whisper-cli" # whisper.cpp CLI executable (name on PATH or absolute path)
+    language: "en"        # spoken language hint passed to whisper (e.g. "en", "auto")
+
   weather:
     provider: yrno
     pollinterval: 60

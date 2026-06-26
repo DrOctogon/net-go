@@ -851,6 +851,17 @@ type RealtimeSettings struct {
 	Weather          WeatherSettings          `yaml:"weather" json:"weather"`                   // Weather provider related settings
 	SpeciesTracking  SpeciesTrackingSettings  `yaml:"speciestracking" json:"speciesTracking"`   // New species tracking settings
 	ExtendedCapture  ExtendedCaptureSettings  `yaml:"extendedcapture" json:"extendedCapture"`   // Extended capture for long calling species
+	Transcription    TranscriptionSettings    `yaml:"transcription" json:"transcription"`       // Speech-to-text transcription of saved clips
+}
+
+// TranscriptionSettings configures speech-to-text transcription of saved audio
+// clips. When enabled, the configured backend (whisper.cpp CLI) transcribes each
+// exported clip off the hot path and stores the transcript alongside the detection.
+type TranscriptionSettings struct {
+	Enabled  bool   `yaml:"enabled" json:"enabled"`   // true to enable transcription of saved clips
+	Model    string `yaml:"model" json:"model"`       // path to the GGML model file (e.g. ggml-tiny.en.bin); required when enabled
+	Binary   string `yaml:"binary" json:"binary"`     // whisper.cpp CLI executable (name on PATH or absolute path; default: whisper-cli)
+	Language string `yaml:"language" json:"language"` // spoken language hint passed to whisper (e.g. "en", "auto")
 }
 
 // SpeciesAction represents a single action configuration

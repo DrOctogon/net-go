@@ -7,6 +7,8 @@ import (
 	"strconv"
 	"time"
 
+	"gorm.io/gorm"
+
 	"github.com/tphakala/voicewatch/internal/datastore/mapper"
 	"github.com/tphakala/voicewatch/internal/detection"
 )
@@ -304,6 +306,29 @@ func (r *detectionRepository) GetClipPath(ctx context.Context, id string) (strin
 		return "", fmt.Errorf("failed to get clip path for detection %s: %w", id, err)
 	}
 	return path, nil
+}
+
+// UpdateTranscript stores the speech-to-text transcript and language for a
+// detection. It updates only the transcript columns, leaving all other fields
+// untouched. Following the v2 detection repository convention, the write is
+// performed as a targeted column update inside a transaction.
+func (r *detectionRepository) UpdateTranscript(ctx context.Context, id, transcript, language string) error {
+	noteID, err := r.parseID(id)
+	if err != nil {
+		return err
+	}
+	if err := r.store.Transaction(func(tx *gorm.DB) error {
+		return tx.WithContext(ctx).
+			Model(&Note{}).
+			Where("id = ?", noteID).
+			Updates(map[string]any{
+				"transcript":      transcript,
+				"transcript_lang": language,
+			}).Error
+	}); err != nil {
+		return fmt.Errorf("failed to update transcript for detection %s: %w", id, err)
+	}
+	return nil
 }
 
 // GetAdditionalResults returns the secondary predictions for a detection.

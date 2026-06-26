@@ -61,6 +61,11 @@ type DetectionRepository interface {
 	// GetClipPath returns the audio clip path for a detection.
 	GetClipPath(ctx context.Context, id string) (string, error)
 
+	// UpdateTranscript stores the speech-to-text transcript and its language for a
+	// detection. Both fields are additive and optional; an empty transcript clears
+	// any previously stored value.
+	UpdateTranscript(ctx context.Context, id, transcript, language string) error
+
 	// GetAdditionalResults returns the secondary predictions for a detection.
 	GetAdditionalResults(ctx context.Context, id string) ([]detection.AdditionalResult, error)
 

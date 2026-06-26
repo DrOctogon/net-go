@@ -42,6 +42,13 @@ type Note struct {
 	Threshold      float64
 	Sensitivity    float64
 	ClipName       string
+	// Transcript holds the speech-to-text transcription of the saved clip, when
+	// transcription is enabled. Additive nullable column; empty when transcription
+	// is disabled or the clip contained no recognizable speech.
+	Transcript string
+	// TranscriptLang is the language the transcript was produced in (e.g. "en").
+	// Additive nullable column; empty when no transcript was produced.
+	TranscriptLang string
 	ProcessingTime time.Duration
 	Unlikely       bool    `gorm:"default:false"`                 // Tagged by ultrasonic validation filter
 	Occurrence     float64 `gorm:"-" json:"occurrence,omitempty"` // Runtime only, occurrence probability (0-1) based on location/time

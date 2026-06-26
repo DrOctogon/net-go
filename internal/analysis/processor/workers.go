@@ -131,6 +131,8 @@ func getJobQueueRetryConfig(action Action) jobqueue.RetryConfig {
 	switch a := action.(type) {
 	case *MqttAction:
 		return a.RetryConfig // Now directly returns jobqueue.RetryConfig
+	case *TranscribeAction:
+		return a.RetryConfig // Retry until the detection ID and clip file are ready
 	case *SaveAudioAction:
 		// Only deferred SaveAudioActions (those waiting for an Extended
 		// Capture tail) need retry. Regular eager-read actions return
