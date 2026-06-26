@@ -6,9 +6,6 @@ vars:
   TFLITE_VERSION: v2.17.1
   ONNXRUNTIME_VERSION: '1.25.1'
   LABELS_DIR: internal/classifier/data/labels
-  AVICOMMONS_DATA_DIR: internal/imageprovider/data
-  AVICOMMONS_JSON_FILE: latest.json
-  AVICOMMONS_JSON_URL: https://avicommons.org/latest.json
   BUILD_DATE:
     sh: date -u +%Y-%m-%dT%H:%M:%SZ
   VERSION:
@@ -135,34 +132,6 @@ tasks:
     cmds:
       - task: lint
         vars: {CLI_ARGS: "--fix -v"}
-
-  download-avicommons-data:
-    desc: Download the Avicommons latest.json data file if it doesn't exist
-    dir: '{{.AVICOMMONS_DATA_DIR}}'
-    cmds:
-      - |
-        if [ ! -f "{{.AVICOMMONS_JSON_FILE}}" ]; then
-          echo "Downloading Avicommons data file ({{.AVICOMMONS_JSON_FILE}})..."
-          curl -fL -o "{{.AVICOMMONS_JSON_FILE}}" "{{.AVICOMMONS_JSON_URL}}"
-        else
-          echo "Avicommons data file ({{.AVICOMMONS_JSON_FILE}}) already exists."
-        fi
-    status:
-      - '[ -f "{{.AVICOMMONS_JSON_FILE}}" ]'
-
-  generate-species-dict:
-    desc: Regenerate per-locale species dictionaries from the OpenFauna dataset
-    cmds:
-      - go generate ./internal/speciesdict
-    sources:
-      - internal/openfauna/data/translations.csv.gz
-      - internal/openfauna/data/SOURCE.txt
-      - internal/openfauna/data/locales.txt
-      - internal/openfauna/dictionary.go
-      - internal/openfauna/resolver.go
-      - internal/speciesdict/gen/main.go
-    generates:
-      - internal/speciesdict/data/*.json.gz
 
   native-target:
     cmds:
@@ -1091,7 +1060,6 @@ tasks:
     cmds:
       - go clean
       - rm -rf {{.BINARY_DIR}}/* tflite_c *.tar.gz *.zip
-      - rm -f {{.AVICOMMONS_DATA_DIR}}/{{.AVICOMMONS_JSON_FILE}}
       - rm -rf frontend/dist frontend/node_modules
 
   # Database migration tools
@@ -1130,7 +1098,7 @@ tasks:
           esac
 
   linux_amd64:
-    deps: [check-tools, check-tensorflow, download-avicommons-data, frontend-build]
+    deps: [check-tools, check-tensorflow, frontend-build]
     vars:
       TFLITE_LIB_DIR: '{{.DOCKER_LIB_DIR | default .SYSTEM_LIB_DIR}}'
       TFLITE_LIB_ARCH: linux_amd64.tar.gz
@@ -1145,7 +1113,7 @@ tasks:
         go build -trimpath {{.BUILD_FLAGS}} -o {{.BINARY_DIR}}/{{.BINARY_NAME}}
 
   linux_arm64:
-    deps: [check-tools, check-tensorflow, download-avicommons-data, frontend-build]
+    deps: [check-tools, check-tensorflow, frontend-build]
     vars:
       TFLITE_LIB_DIR: '{{.DOCKER_LIB_DIR | default .CROSS_LIB_DIR_ARM64}}'
       TFLITE_LIB_ARCH: linux_arm64.tar.gz
@@ -1163,7 +1131,7 @@ tasks:
         go build -trimpath {{.BUILD_FLAGS}} -o {{.BINARY_DIR}}/{{.BINARY_NAME}}
 
   windows_amd64:
-    deps: [check-tools, check-tensorflow, download-avicommons-data, frontend-build]
+    deps: [check-tools, check-tensorflow, frontend-build]
     vars:
       TFLITE_LIB_DIR: /usr/x86_64-w64-mingw32/lib
       TFLITE_LIB_ARCH: windows_amd64.zip
@@ -1178,7 +1146,7 @@ tasks:
         go build -trimpath {{.BUILD_FLAGS}} -o {{.BINARY_DIR}}/{{.BINARY_NAME}}.exe
 
   darwin_amd64:
-    deps: [check-tools, check-tensorflow, download-avicommons-data, frontend-build]
+    deps: [check-tools, check-tensorflow, frontend-build]
     vars:
       TFLITE_LIB_DIR: /usr/local/lib
       TFLITE_LIB_ARCH: darwin_amd64.tar.gz
@@ -1192,7 +1160,7 @@ tasks:
         go build -trimpath {{.BUILD_FLAGS}} -o {{.BINARY_DIR}}/{{.BINARY_NAME}}
 
   darwin_arm64:
-    deps: [check-tools, check-tensorflow, download-avicommons-data, frontend-build]
+    deps: [check-tools, check-tensorflow, frontend-build]
     vars:
       TFLITE_LIB_DIR: /opt/homebrew/lib
       TFLITE_LIB_ARCH: darwin_arm64.tar.gz
@@ -1257,7 +1225,7 @@ tasks:
   # Internal task for building noembed binaries across platforms
   noembed_build:
     internal: true
-    deps: [check-tools, check-tensorflow, download-avicommons-data, frontend-build]
+    deps: [check-tools, check-tensorflow, frontend-build]
     cmds:
       - task: download-tflite
         vars:

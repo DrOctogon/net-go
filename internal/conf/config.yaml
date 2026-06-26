@@ -83,10 +83,6 @@ logging:
       enabled: false      # enable if using weather provider
       file_path: logs/weather.log
       level: info
-    ebird:
-      enabled: false      # enable if using eBird integration
-      file_path: logs/ebird.log
-      level: info
 
     # System and support modules
     backup:
@@ -104,10 +100,6 @@ logging:
     events:
       enabled: true
       file_path: logs/events.log
-      level: info
-    imageprovider:
-      enabled: true
-      file_path: logs/imageprovider.log
       level: info
     monitor:
       enabled: true
@@ -152,9 +144,6 @@ voicewatch:
   locale: en-us           # language to use for labels
   latitude: 00.000        # latitude of recording location for prediction filtering
   longitude: 00.000       # longitude of recording location for prediction filtering
-  rangefilter:
-      model: latest       # model to use for range filter: "latest" or "legacy" for previous model
-      threshold: 0.01     # rangefilter species occurrence threshold
   modelpath: ""           # path to external model file (empty for embedded)
   labelpath: ""           # path to external label file (empty for embedded)
   usexnnpack: true        # true to use XNNPACK delegate for inference acceleration
@@ -229,7 +218,6 @@ realtime:
       debug: false        # true to enable debug mode for image provider
       summary: false      # show thumbnails on summary table
       recent: true        # show thumbnails on recent table
-      imageprovider: avicommons # preferred image provider: avicommons, wikimedia, auto
       fallbackpolicy: none # fallback policy: none (no fallback), all (try all available providers)
  
   dynamicthreshold:
@@ -268,17 +256,13 @@ realtime:
     enabled: false        # true to enable OBS chat log
     path: voicewatch.txt     # path to OBS chat log
 
-  ebird:
-    enabled: false        # true to enable eBird API integration
-    apikey: ""            # eBird API key (get from https://ebird.org/api/keygen)
-    cachettl: 24          # cache time-to-live in hours (default: 24)
-    locale: "en"          # locale for eBird data (e.g., "en", "es", "fr")
-
   transcription:
     enabled: false        # true to transcribe saved clips to text (speech-to-text)
     model: ""             # path to the GGML model file (e.g. ggml-tiny.en.bin); required when enabled
     binary: "whisper-cli" # whisper.cpp CLI executable (name on PATH or absolute path)
     language: "en"        # spoken language hint passed to whisper (e.g. "en", "auto")
+    keywords: []          # words/phrases to flag in transcripts (comma list; empty disables keyword flagging)
+    keywordCaseSensitive: false  # true = case-sensitive keyword matching
 
   weather:
     provider: yrno
@@ -313,11 +297,6 @@ realtime:
   privacyfilter:          # Privacy filter: when enabled, DISCARDS human-voice detections
     enabled: false        # off by default — VoiceWatch saves all detected voice clips
     confidence: 0.05      # human-voice confidence above which clips are discarded
-
-  dogbarkfilter:
-    enabled: true
-    confidence: 0.1       # confidence threshold for dog bark detection
-    remember: 5           # number of minutes to remember dog barks
 
   daylightfilter:
     enabled: true
