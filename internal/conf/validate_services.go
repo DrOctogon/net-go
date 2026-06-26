@@ -68,43 +68,6 @@ func ValidateVoiceWatchSettings(cfg *VoiceWatchConfig) ValidationResult {
 	return result
 }
 
-// ValidateBirdweatherSettings performs Birdweather validation without side effects.
-// Returns validation result with normalized settings.
-func ValidateBirdweatherSettings(settings *BirdweatherSettings) ValidationResult {
-	if settings == nil {
-		return ValidationResult{Valid: false, Errors: []string{"Birdweather settings is nil"}}
-	}
-	result := ValidationResult{Valid: true, Warnings: []string{}}
-	normalized := *settings
-
-	if settings.Enabled {
-		// Check if ID is provided when enabled
-		if settings.ID == "" {
-			result.Valid = false
-			result.Errors = append(result.Errors, "Birdweather ID is required when enabled")
-			// Suggest disabling
-			normalized.Enabled = false
-			result.Warnings = append(result.Warnings, "Birdweather will be disabled due to missing ID")
-		} else if !birdweatherIDPattern.MatchString(settings.ID) {
-			// Validate Birdweather ID format using precompiled regex
-			result.Valid = false
-			result.Errors = append(result.Errors, "Invalid Birdweather ID format: must be 24 alphanumeric characters")
-			normalized.Enabled = false
-			result.Warnings = append(result.Warnings, "Birdweather will be disabled due to invalid ID format")
-		}
-
-		checkRange(&result, settings.Threshold, 0, 1, "birdweather threshold must be between 0 and 1")
-
-		if settings.LocationAccuracy < 0 {
-			result.Valid = false
-			result.Errors = append(result.Errors, "birdweather location accuracy must be non-negative")
-		}
-	}
-
-	result.Normalized = &normalized
-	return result
-}
-
 // ValidateWebhookProvider performs webhook provider validation without side effects.
 // Returns validation result with errors.
 func ValidateWebhookProvider(p *PushProviderConfig) ValidationResult {
@@ -440,35 +403,6 @@ func validateMQTTSettings(settings *MQTTSettings) error {
 // This function uses ValidateTelemetrySettings internally and handles error formatting.
 func validateTelemetrySettings(settings *TelemetrySettings) error {
 	return firstValidationError(ValidateTelemetrySettings(settings), "telemetry-listen-address")
-}
-
-// validateBirdweatherSettings validates the Birdweather-specific settings.
-// This function uses ValidateBirdweatherSettings internally and handles side effects
-// (logging, mutation) to maintain backward compatibility.
-func validateBirdweatherSettings(settings *BirdweatherSettings) error {
-	result := ValidateBirdweatherSettings(settings)
-
-	normalized, err := extractNormalized[BirdweatherSettings](result, "ValidateBirdweatherSettings")
-	if err != nil {
-		return err
-	}
-	*settings = *normalized
-
-	// Handle warnings (side effect: logging)
-	for _, warning := range result.Warnings {
-		GetLogger().Warn("Birdweather validation warning", logger.String("message", warning))
-	}
-
-	// Return errors if validation failed
-	if !result.Valid {
-		// Join errors for backward compatibility
-		return errors.Newf("%s", strings.Join(result.Errors, "; ")).
-			Category(errors.CategoryValidation).
-			Context("validation_type", "birdweather-settings").
-			Build()
-	}
-
-	return nil
 }
 
 // validateNotificationSettings validates notification push configuration

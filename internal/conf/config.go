@@ -345,16 +345,6 @@ type RetrySettings struct {
 	BackoffMultiplier float64 `yaml:"backoffmultiplier" json:"backoffMultiplier"` // multiplier for exponential backoff
 }
 
-// BirdweatherSettings contains settings for BirdWeather API integration.
-type BirdweatherSettings struct {
-	Enabled          bool          `yaml:"enabled" json:"enabled"`                   // true to enable birdweather uploads
-	Debug            bool          `yaml:"debug" json:"debug"`                       // true to enable debug mode
-	ID               string        `yaml:"id" json:"id"`                             // birdweather ID
-	Threshold        float64       `yaml:"threshold" json:"threshold"`               // threshold for prediction confidence for uploads
-	LocationAccuracy float64       `yaml:"locationaccuracy" json:"locationAccuracy"` // accuracy of location in meters
-	RetrySettings    RetrySettings `yaml:"retrysettings" json:"retrySettings"`       // settings for retry mechanism
-}
-
 // EBirdSettings contains settings for eBird API integration.
 type EBirdSettings struct {
 	Enabled  bool   `yaml:"enabled" json:"enabled"`   // true to enable eBird integration
@@ -837,7 +827,6 @@ type RealtimeSettings struct {
 		Path    string `yaml:"path" json:"path"`       // path to OBS chat log
 	} `yaml:"log" json:"log"`
 	LogDeduplication LogDeduplicationSettings `yaml:"logdeduplication" json:"logDeduplication"` // Log deduplication settings
-	Birdweather      BirdweatherSettings      `yaml:"birdweather" json:"birdweather"`           // Birdweather integration settings
 	EBird            EBirdSettings            `yaml:"ebird" json:"ebird"`                       // eBird integration settings
 	OpenWeather      OpenWeatherSettings      `yaml:"-" json:"-"`                               // OpenWeather integration settings
 	PrivacyFilter    PrivacyFilterSettings    `yaml:"privacyfilter" json:"privacyFilter"`       // Privacy filter settings

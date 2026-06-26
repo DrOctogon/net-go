@@ -5,7 +5,6 @@ package api
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -43,17 +42,7 @@ func runIntegrationConnectionHandlerTest(t *testing.T, handlerFunc func(*Control
 			tc.setupSettings(controller)
 
 			// Create request with appropriate body
-			var req *http.Request
-			if strings.Contains(endpoint, "birdweather") {
-				// BirdWeather endpoint expects JSON body matching the controller settings
-				bwSettings := controller.Settings.Load().Realtime.Birdweather
-				bodyJSON := fmt.Sprintf(`{"enabled":%t,"id":%q,"threshold":%f,"locationAccuracy":%f}`,
-					bwSettings.Enabled, bwSettings.ID, bwSettings.Threshold, bwSettings.LocationAccuracy)
-				req = httptest.NewRequest(http.MethodPost, endpoint, strings.NewReader(bodyJSON))
-				req.Header.Set("Content-Type", "application/json")
-			} else {
-				req = httptest.NewRequest(http.MethodPost, endpoint, http.NoBody)
-			}
+			req := httptest.NewRequest(http.MethodPost, endpoint, http.NoBody)
 			rec := httptest.NewRecorder()
 			c := e.NewContext(req, rec)
 
@@ -171,29 +160,6 @@ func (m *MockMQTTClient) TestConnection(ctx context.Context, resultChan chan<- m
 		return
 	}
 	m.Called(ctx, resultChan)
-}
-
-// MockBirdWeatherClient is a mock implementation for BirdWeather client testing
-type MockBirdWeatherClient struct {
-	mock.Mock
-	TestConnectFunc func(ctx context.Context, resultChan chan<- map[string]any)
-	CloseFunc       func()
-}
-
-func (m *MockBirdWeatherClient) TestConnection(ctx context.Context, resultChan chan<- map[string]any) {
-	if m.TestConnectFunc != nil {
-		m.TestConnectFunc(ctx, resultChan)
-		return
-	}
-	m.Called(ctx, resultChan)
-}
-
-func (m *MockBirdWeatherClient) Close() {
-	if m.CloseFunc != nil {
-		m.CloseFunc()
-		return
-	}
-	m.Called()
 }
 
 // TestGetMQTTStatus tests the GetMQTTStatus handler

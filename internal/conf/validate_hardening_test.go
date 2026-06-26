@@ -633,19 +633,6 @@ func TestValidateVoiceWatchSettings_NaNInfinityRejected(t *testing.T) {
 	}
 }
 
-func TestValidateBirdweatherSettings_NaNThresholdRejected(t *testing.T) {
-	t.Parallel()
-	settings := &BirdweatherSettings{
-		Enabled:   true,
-		ID:        "abcdef0123456789abcdef01",
-		Threshold: math.NaN(),
-	}
-
-	result := ValidateBirdweatherSettings(settings)
-	assert.False(t, result.Valid)
-	assert.NotEmpty(t, result.Errors)
-}
-
 func TestValidateAudioSourceConfig_NaNGainRejected(t *testing.T) {
 	t.Parallel()
 	src := AudioSourceConfig{

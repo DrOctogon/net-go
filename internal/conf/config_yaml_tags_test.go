@@ -119,9 +119,6 @@ func TestSettingsYAMLRoundTrip(t *testing.T) {
 	original.Realtime.Dashboard.TemperatureUnit = "fahrenheit"
 	// DynamicThreshold
 	original.Realtime.DynamicThreshold.ValidHours = 24
-	// RetrySettings (via Birdweather)
-	original.Realtime.Birdweather.RetrySettings.MaxRetries = 5
-	original.Realtime.Birdweather.RetrySettings.InitialDelay = 30
 	// BirdNET
 	original.VoiceWatch.Locale = "fi"
 	original.VoiceWatch.UseXNNPACK = true
@@ -148,8 +145,6 @@ func TestSettingsYAMLRoundTrip(t *testing.T) {
 	assert.Equal(t, 30, restored.Realtime.Dashboard.SummaryLimit)
 	assert.Equal(t, "fahrenheit", restored.Realtime.Dashboard.TemperatureUnit)
 	assert.Equal(t, 24, restored.Realtime.DynamicThreshold.ValidHours)
-	assert.Equal(t, 5, restored.Realtime.Birdweather.RetrySettings.MaxRetries)
-	assert.Equal(t, 30, restored.Realtime.Birdweather.RetrySettings.InitialDelay)
 	assert.Equal(t, "fi", restored.VoiceWatch.Locale)
 	assert.True(t, restored.VoiceWatch.UseXNNPACK)
 	assert.Equal(t, 168*time.Hour, restored.Security.SessionDuration)

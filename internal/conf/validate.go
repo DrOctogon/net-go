@@ -43,9 +43,6 @@ func sanitizeStringField(s string) string {
 
 // Precompiled regular expressions for validation
 var (
-	// birdweatherIDPattern validates Birdweather ID format (24 alphanumeric characters)
-	birdweatherIDPattern = regexp.MustCompile(`^[a-zA-Z0-9]{24}$`)
-
 	// gpsCoordPattern matches the GPS-coordinate-as-device-string
 	// misconfiguration seen in the wild. The leading colon is optional:
 	// the originally reported case was `:45.5,-120.5` (an ALSA-style
@@ -221,11 +218,6 @@ func ValidateSettings(settings *Settings) error {
 
 	// Validate Realtime settings
 	if err := validateRealtimeSettings(&settings.Realtime); err != nil {
-		ve.Errors = append(ve.Errors, err.Error())
-	}
-
-	// Validate Birdweather settings
-	if err := validateBirdweatherSettings(&settings.Realtime.Birdweather); err != nil {
 		ve.Errors = append(ve.Errors, err.Error())
 	}
 

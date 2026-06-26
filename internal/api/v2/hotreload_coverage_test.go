@@ -138,9 +138,6 @@ var hotReloadRegistry = map[string]hotReloadEntry{
 		action:     "reconfigure_log_deduplication",
 	},
 
-	// -- Birdweather (integration removed; config field retained, no reload action) --
-	"Realtime.Birdweather": {categories: []hotReloadCategory{hotReloadFresh}},
-
 	// -- eBird --
 	"Realtime.EBird": {categories: []hotReloadCategory{hotReloadFresh}},
 

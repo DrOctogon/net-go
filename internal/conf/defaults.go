@@ -47,7 +47,6 @@ func setDefaultConfig() {
 
 	// Integration modules
 	setModuleLogDefaults("mqtt", false)        // MQTT client (disabled by default)
-	setModuleLogDefaults("birdweather", false) // BirdWeather integration (disabled by default)
 	setModuleLogDefaults("weather", false)     // Weather providers (disabled by default)
 	setModuleLogDefaults("ebird", false)       // eBird integration (disabled by default)
 
@@ -204,18 +203,6 @@ func setDefaultConfig() {
 	// Log configuration
 	viper.SetDefault("realtime.log.enabled", false)
 	viper.SetDefault("realtime.log.path", "voicewatch.txt")
-
-	// BirdWeather configuration
-	viper.SetDefault("realtime.birdweather.enabled", false)
-	viper.SetDefault("realtime.birdweather.debug", false)
-	viper.SetDefault("realtime.birdweather.id", "")
-	viper.SetDefault("realtime.birdweather.threshold", 0.7)
-	viper.SetDefault("realtime.birdweather.locationaccuracy", 0)
-	viper.SetDefault("realtime.birdweather.retrysettings.enabled", true)
-	viper.SetDefault("realtime.birdweather.retrysettings.maxretries", 10)
-	viper.SetDefault("realtime.birdweather.retrysettings.initialdelay", 60)
-	viper.SetDefault("realtime.birdweather.retrysettings.maxdelay", 3600)
-	viper.SetDefault("realtime.birdweather.retrysettings.backoffmultiplier", 2.0)
 
 	// eBird configuration
 	viper.SetDefault("realtime.ebird.enabled", false)

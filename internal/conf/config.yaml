@@ -79,10 +79,6 @@ logging:
       enabled: false      # enable if using MQTT
       file_path: logs/mqtt.log
       level: info
-    birdweather:
-      enabled: false      # enable if using BirdWeather
-      file_path: logs/birdweather.log
-      level: info
     weather:
       enabled: false      # enable if using weather provider
       file_path: logs/weather.log
@@ -271,18 +267,6 @@ realtime:
   log:
     enabled: false        # true to enable OBS chat log
     path: voicewatch.txt     # path to OBS chat log
-
-  birdweather:
-    enabled: false        # true to enable birdweather uploads
-    locationaccuracy: 500 # accuracy of location in meters
-    debug: false          # true to enable birdweather api debug mode
-    id: ""                # birdweather ID
-    retrysettings:
-      enabled: true       # enable retry for failed submissions
-      maxretries: 3       # maximum number of retry attempts
-      initialdelay: 30    # initial delay before first retry in seconds
-      maxdelay: 600       # maximum delay between retries in seconds
-      backoffmultiplier: 2.0  # multiplier for exponential backoff
 
   ebird:
     enabled: false        # true to enable eBird API integration

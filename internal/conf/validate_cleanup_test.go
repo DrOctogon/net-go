@@ -40,7 +40,6 @@ func TestNilGuards(t *testing.T) {
 		validate func() ValidationResult
 	}{
 		{"ValidateVoiceWatchSettings", func() ValidationResult { return ValidateVoiceWatchSettings(nil) }},
-		{"ValidateBirdweatherSettings", func() ValidationResult { return ValidateBirdweatherSettings(nil) }},
 		{"ValidateMQTTSettings", func() ValidationResult { return ValidateMQTTSettings(nil) }},
 		{"ValidateWebServerSettings", func() ValidationResult { return ValidateWebServerSettings(nil) }},
 		{"ValidateTelemetrySettings", func() ValidationResult { return ValidateTelemetrySettings(nil) }},
