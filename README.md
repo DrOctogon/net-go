@@ -82,7 +82,7 @@ Docker images are published for `linux/amd64` and `linux/arm64`. Pre-built binar
 - **Silero VAD** speech detection (embedded, ONNX), analysing audio at the model's native 16 kHz
 - Single "Human Voice" class with a per-detection speech-confidence score
 - **Configurable false-positive filtering**: Deep Detection (repeat-confirmation within a 15-second window) and per-source confidence thresholds
-- Privacy and quiet-hours controls applied per audio source
+- Optional privacy filter (off by default) that discards human-voice clips when enabled, plus per-source quiet hours
 
 ### Audio inputs
 
@@ -115,7 +115,7 @@ Docker images are published for `linux/amd64` and `linux/arm64`. Pre-built binar
 
 - SQLite (default) or MySQL with retry-aware write paths for contention
 - Automatic backups with real-time status polling
-- Format-aware audio clip export (all detected voice clips are stored)
+- Format-aware audio clip export — every detected voice clip is stored, with a configurable rolling retention (age-based, **21-day default**); older clips are auto-pruned
 
 ### Operations
 
