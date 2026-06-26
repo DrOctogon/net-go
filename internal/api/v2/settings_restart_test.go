@@ -163,8 +163,9 @@ func TestHotReloadRestartFieldsCovered(t *testing.T) {
 		"Models":                  "model registry path; restart-vs-reload undecided",
 		"Perch":                   "perch model path; not wired",
 		"BSG":                     "BSG model path; not wired",
-		"Realtime.Audio.Watchdog": "no UI controls (project decision)",
-		"LowMemory":               "startup-only memory policy; not exposed via the live settings API",
+		"Realtime.Audio.Watchdog":   "no UI controls (project decision)",
+		"Realtime.Audio.Continuous": "continuous recorder is constructed once at pipeline start; restart-required detection not wired yet",
+		"LowMemory":                 "startup-only memory policy; not exposed via the live settings API",
 	}
 
 	for path, entry := range hotReloadRegistry {

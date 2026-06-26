@@ -112,6 +112,14 @@ var hotReloadRegistry = map[string]hotReloadEntry{
 	"Realtime.Audio.Equalizer":            {categories: []hotReloadCategory{hotReloadFresh}},
 	"Realtime.Audio.QuietHours":           {categories: []hotReloadCategory{hotReloadFresh}, action: "reconfigure_quiet_hours"},
 	"Realtime.Audio.Watchdog":             {categories: []hotReloadCategory{hotReloadRestart}},
+	// Continuous full-audio recorder is constructed once at pipeline start
+	// (audio_pipeline_service) with no live reconfigure path; changes apply on
+	// restart.
+	"Realtime.Audio.Continuous": {categories: []hotReloadCategory{hotReloadRestart}},
+
+	// -- Transcription (read per detection job from the live settings pointer;
+	// changes apply to subsequent detections without restart). --
+	"Realtime.Transcription": {categories: []hotReloadCategory{hotReloadFresh}},
 
 	// -- Dashboard (display only, read per-request by frontend) --
 	"Realtime.Dashboard": {categories: []hotReloadCategory{hotReloadDisplay}},
