@@ -476,9 +476,6 @@
     "noResultsFound": "Niets gevonden",
     "noResultsHint": "Probeer je zoek filters aan te passen",
     "fields": {
-      "species": "Soort",
-      "speciesPlaceholder": "Zoek op (deel van) soort naam ...",
-      "speciesHelp": "Voer (deel van) een soort naam in (niet hoofdletter gevoelig)",
       "dateRange": "Periode",
       "dateRangeHelp": "Filter herkeningen naar periode (laat blanko voor de maximale periode)",
       "from": "Vanaf",
@@ -683,8 +680,6 @@
         "markCorrect": "Juist",
         "markFalsePositive": "Onjuist",
         "review": "Herkenning beoordelen",
-        "showSpecies": "Soort tonen",
-        "ignoreSpecies": "Soort negeren",
         "lockDetection": "Herkenning vergrendelen",
         "unlockDetection": "Herkenning ontgrendelen",
         "deleteDetection": "Herkenning verwijderen"
@@ -2084,8 +2079,6 @@
           "warningOff": "Zonder filtering wordt elke detectie boven de betrouwbaarheidsdrempel onmiddellijk geaccepteerd. Dit levert doorgaans meerdere vals-positieven per dag op. Zelfs lage filtering verbetert de resultaatkwaliteit aanzienlijk."
         },
         "rangeFilter": {
-          "title": "Bereik Filter",
-          "description": "Beperk detectie tot soorten die waarschijnlijk voorkomen in uw geografische regio",
           "stationLocation": {
             "label": "Station Locatie",
             "helpText": "Station locatie, gebruikt voor weersgegevens en om vogelsoorten te beperken tot diegenen die waarschijnlijk voorkomen in de regio."
@@ -2097,33 +2090,6 @@
           "longitude": {
             "label": "Lengtegraad",
             "helpText": "Station lengtegraad, gebruikt voor weersgegevens en om vogelsoorten naar bereik te filteren."
-          },
-          "model": {
-            "label": "Bereik Filter Model",
-            "helpText": "VoiceWatch bereik filter model versie: latest of legacy."
-          },
-          "threshold": {
-            "label": "Drempelwaarde",
-            "helpText": "Bepaalt welke soorten worden opgenomen op basis van hun waarschijnlijkheid van voorkomen voor jouw locatie en tijd van het jaar. Standaard (0.01) wordt aanbevolen voor de meeste gebruikers. Hogere waarden (0.05-0.3) omvatten minder soorten met hogere waarschijnlijkheid van voorkomen. Zeer hoge waarden (0.5+) omvatten alleen de meest voorkomende soorten."
-          },
-          "speciesCount": {
-            "label": "Huidig Aantal Soorten",
-            "helpText": "Aantal soorten opgenomen in bereik filter. Wordt automatisch bijgewerkt wanneer drempelwaarde, breedtegraad of lengtegraad wijzigt.",
-            "loading": "Inlezen...",
-            "viewSpecies": "Bekijk Soorten"
-          },
-          "downloadTitle": "Download soorten lijst als CSV",
-          "csvDownloaded": "Soorten lijst succesvol gedownload",
-          "csvDownloadFailed": "Downloaden van soorten lijst mislukt. Probeer het opnieuw.",
-          "modal": {
-            "title": "Bereik Filter Soorten",
-            "speciesCount": "Aantal Soorten:",
-            "threshold": "Drempelwaarde:",
-            "latitude": "Breedtegraad:",
-            "longitude": "Lengtegraad:",
-            "loadingSpecies": "Soorten inlezen...",
-            "noSpeciesFound": "Geen soorten gevonden met huidige instellingen",
-            "close": "Sluiten"
           }
         },
         "database": {
@@ -2352,9 +2318,6 @@
       "errors": {
         "localesLoadFailed": "Kan taal opties niet laden. Gebruik standaardwaarden.",
         "providersLoadFailed": "Kan afbeeldings leveranciers niet laden. Gebruik standaardwaarden.",
-        "rangeFilterTestFailed": "Testen van bereik filter instellingen mislukt",
-        "rangeFilterLoadFailed": "Laden van soorten lijst mislukt",
-        "rangeFilterCountFailed": "Laden van soorten aantal mislukt",
         "mapLibraryLoadFailed": "Laden van kaartbibliotheek mislukt. Vernieuw de pagina.",
         "mapLoadFailed": "Laden van kaart mislukt. Probeer de pagina te vernieuwen.",
         "modalMapLoadFailed": "Laden van modale kaart mislukt. Sluit het venster en open het opnieuw.",
@@ -3709,342 +3672,6 @@
         "fileReadError": "Kan het geselecteerde bestand niet lezen"
       }
     },
-    "species": {
-      "pageLabel": "Soortinstellingen",
-      "saveError": "Opslaan van configuratie voor \"{species}\" mislukt. Probeer het opnieuw.",
-      "configUpdated": "Configuratie voor \"{species}\" bijgewerkt",
-      "configAdded": "Configuratie voor \"{species}\" toegevoegd",
-      "duplicateConfigError": "Soort \"{species}\" heeft al een configuratie. Kies een andere naam.",
-      "activeSpecies": {
-        "title": "Actieve Soorten",
-        "tabLabel": "Actief",
-        "description": "Soorten die worden gedetecteerd op basis van uw huidige locatie en filterinstellingen",
-        "stats": {
-          "species": "Soorten",
-          "location": "Locatie",
-          "threshold": "Drempelwaarde",
-          "updated": "Bijgewerkt",
-          "justNow": "Zojuist",
-          "minutesAgo": "{count}m geleden",
-          "hoursAgo": "{count}u geleden"
-        },
-        "search": {
-          "placeholder": "Zoek soorten..."
-        },
-        "badges": {
-          "included": "Opgenomen",
-          "configured": "Geconfigureerd"
-        },
-        "empty": {
-          "title": "Geen soorten gevonden",
-          "description": "Configureer uw locatie in Hoofdinstellingen om beschikbare soorten te zien"
-        },
-        "noResults": "Geen soorten komen overeen met uw zoekopdracht",
-        "infoNote": "Deze lijst is gebaseerd op uw locatie en de drempelwaarde van het bereikfilter. Handmatig toegevoegde soorten worden altijd opgenomen.",
-        "retry": "Opnieuw proberen",
-        "expand": "Lijst uitvouwen",
-        "collapse": "Lijst invouwen",
-        "downloadCsv": "CSV downloaden",
-        "errors": {
-          "loadFailed": "Kan de lijst met actieve soorten niet laden"
-        },
-        "locationNotConfigured": {
-          "title": "Locatie niet geconfigureerd",
-          "description": "Stel uw locatie in bij Hoofdinstellingen om soorten in uw omgeving te zien. Het bereikfilter gebruikt uw locatie om te bepalen welke soorten waarschijnlijk in de buurt voorkomen.",
-          "action": "Locatie configureren"
-        },
-        "rangeFilterHealth": {
-          "inactive": {
-            "title": "Bereikfilter inactief",
-            "description": "Detecties worden op dit moment niet gefilterd op basis van uw locatie, dus soorten van buiten uw omgeving kunnen worden gemeld. Controleer de configuratie van het bereikfiltermodel in Hoofdinstellingen."
-          },
-          "fellBack": {
-            "title": "Ingebouwd bereikfilter wordt gebruikt",
-            "description": "Het geconfigureerde geomodel-bereikfilter kon niet worden geladen, dus VoiceWatch is teruggevallen op het ingebouwde bereikfilter. Het filteren werkt nog steeds, maar controleer Hoofdinstellingen om het geomodel te herstellen."
-          },
-          "mappedZero": {
-            "title": "Bereikfilter kwam met geen enkele soort overeen",
-            "description": "Het geomodel-bereikfilter kwam met geen enkele soort van het actieve model overeen, dus elke detectie zou worden weggefilterd. Controleer of het labelbestand van het bereikfilter overeenkomt met het actieve model."
-          }
-        },
-        "columns": {
-          "commonName": "Naam",
-          "scientificName": "Wetenschappelijke naam",
-          "score": "Score",
-          "status": "Status"
-        }
-      },
-      "alwaysInclude": {
-        "title": "Altijd Opnemen Soorten",
-        "tabLabel": "Opnemen",
-        "description": "Soorten in deze lijst worden altijd opgenomen in het bereik van gedetecteerde soorten",
-        "noSpeciesMessage": "Geen soorten toegevoegd aan de opname lijst"
-      },
-      "alwaysExclude": {
-        "title": "Altijd Uitsluiten Soorten",
-        "tabLabel": "Uitsluiten",
-        "description": "Soorten in deze lijst worden altijd uitgesloten van detectie",
-        "noSpeciesMessage": "Geen soorten toegevoegd aan de uitsluit lijst"
-      },
-      "customConfiguration": {
-        "title": "Aangepaste Soorten Configuratie",
-        "tabLabel": "Aangepast",
-        "description": "Soorten specifieke drempelwaardes, detectie intervallen, en acties",
-        "helpText": {
-          "intro": "Configureer soorten-specifieke instellingen:",
-          "threshold": "Drempelwaarde: Minimum betrouwbaarheidsscore (0-1) vereist voor detectie",
-          "interval": "Interval: Minimum tijd in seconden tussen detecties van dezelfde soorten (0 = gebruik globale standaard)",
-          "actions": "Acties: Aangepaste commando's uit te voeren wanneer deze soorten worden gedetecteerd"
-        },
-        "columnHeaders": {
-          "species": "Soorten",
-          "settings": "Instellingen",
-          "actions": "Acties"
-        },
-        "badges": {
-          "threshold": "Drempelwaarde: {value}",
-          "interval": "Interval: {value}s",
-          "customAction": "Aangepaste Actie",
-          "executeDefaults": "+Standaarden"
-        },
-        "dropdown": {
-          "editConfig": "Wijzig Config",
-          "addAction": "Voeg Actie Toe",
-          "remove": "Verwijderen"
-        },
-        "labels": {
-          "threshold": "Drempelwaarde",
-          "interval": "Interval",
-          "intervalSeconds": "Interval (sec)",
-          "addButton": "Toevoegen"
-        },
-        "noConfigurationsMessage": "Geen aangepaste soorten configuraties toegevoegd",
-        "addForm": {
-          "speciesPlaceholder": "Soorten naam",
-          "thresholdPlaceholder": "0.5",
-          "intervalPlaceholder": "0"
-        },
-        "addConfiguration": "Configuratie Toevoegen",
-        "newConfiguration": "Nieuwe Configuratie",
-        "editing": "Bewerken: {species}",
-        "configuredCount": "{count} geconfigureerd",
-        "searchPlaceholder": "Typ om te zoeken...",
-        "saving": "Opslaan...",
-        "save": "Opslaan",
-        "cancel": "Annuleren",
-        "configureActions": "Acties Configureren",
-        "actionsConfigured": "Geconfigureerd",
-        "list": {
-          "editTitle": "Configuratie bewerken",
-          "removeTitle": "Configuratie verwijderen"
-        },
-        "emptyState": {
-          "title": "Nog geen configuraties.",
-          "description": "Klik op \"Configuratie Toevoegen\" om soorten detectie instellingen aan te passen."
-        },
-        "table": {
-          "columnScientificName": "Wetenschappelijke naam",
-          "intervalDefault": "Standaard",
-          "intervalDefaultTooltip": "0 = gebruik het globale standaardinterval",
-          "noActions": "Geen",
-          "searchPlaceholder": "Zoek soorten...",
-          "noResults": "Geen overeenkomende configuraties",
-          "editDisabledReason": "Sla de huidige editor op of sluit deze voordat u een andere soort bewerkt",
-          "actionsDisabledBusy": "Een moment geduld tot de huidige bewerking is voltooid"
-        }
-      },
-      "synonyms": {
-        "tabLabel": "Synoniemen",
-        "description": "Koppel wetenschappelijke VoiceWatch-namen aan hun bijgewerkte equivalenten in een nieuwere taxonomie. Wordt alleen als fallback gebruikt bij het ophalen van vogelfoto's van Wikipedia en AviCommons; hernoemt geen soorten in detecties of op het dashboard.",
-        "helpText": "Om te wijzigen hoe een soort in de interface wordt weergegeven, bewerk uw VoiceWatch-labelbestand (instelling \"Labelpad\" onder Hoofdinstellingen).",
-        "birdnetName": "VoiceWatch-naam",
-        "updatedName": "Bijgewerkte wetenschappelijke naam",
-        "addButton": "Synoniem toevoegen",
-        "emptyState": "Geen taxonomie-synoniemen geconfigureerd",
-        "errors": {
-          "unknownSpecies": "Soort niet gevonden in VoiceWatch-labels",
-          "duplicateKey": "Er bestaat al een synoniem voor deze soort",
-          "emptyUpdatedName": "De bijgewerkte naam is vereist"
-        }
-      },
-      "actionsModal": {
-        "title": "Acties voor {species}",
-        "actionType": {
-          "label": "Actie Type",
-          "executeCommand": "Voer Commando Uit",
-          "onlySupported": "Momenteel worden alleen Voer Commando Uit acties ondersteund"
-        },
-        "command": {
-          "label": "Commando",
-          "helpText": "Geef het volledige pad naar het commando of script dat u wilt uitvoeren"
-        },
-        "parameters": {
-          "label": "Parameters",
-          "helpText": "Deze waardes worden doorgegeven aan uw commando in de vermelde volgorde",
-          "placeholder": "Klik op de knoppen hieronder om parameters toe te voegen of typ handmatig",
-          "tooltip": "Gebruik de knoppen hieronder of typ direct (kommagescheiden)",
-          "availableTitle": "Beschikbare Parameters",
-          "buttons": {
-            "commonName": "CommonName",
-            "scientificName": "WetenschappelijkeNaam",
-            "confidence": "Betrouwbaarheid",
-            "time": "Tijd",
-            "source": "Bron",
-            "clearParameters": "Wis Parameters"
-          }
-        },
-        "executeDefaults": {
-          "label": "Voer ook standaard acties uit (database opslag, meldingen, etc.)",
-          "helpText": "Wanneer ingeschakeld, worden zowel uw aangepaste actie als de standaard acties van het systeem uitgevoerd. Wanneer uitgeschakeld, wordt alleen uw aangepaste actie uitgevoerd."
-        }
-      },
-      "add": "Toevoegen",
-      "remove": "Verwijderen",
-      "suggestions": "Soortsuggesties",
-      "addSpeciesToInclude": "Voeg soorten toe om op te nemen",
-      "addSpeciesToIncludeLabel": "Voeg Nieuwe Soorten toe om Op te Nemen",
-      "addSpeciesToExclude": "Voeg soorten toe om uit te sluiten",
-      "addSpeciesToExcludeLabel": "Voeg Nieuwe Soorten toe om Uit te Sluiten",
-      "commandPathPlaceholder": "/pad/naar/uw/commando",
-      "parametersPlaceholder": "Parameters verschijnen hier",
-      "errors": {
-        "speciesLoadFailed": "Laden van soorten lijst mislukt. Probeer opnieuw."
-      },
-      "tracking": {
-        "title": "Volgen",
-        "tabLabel": "Volgen",
-        "description": "Configureer het volgen van nieuwe soorten detecties op basis van tijdsperioden",
-        "enabled": {
-          "label": "Soortenvolging inschakelen",
-          "helpText": "Wanneer ingeschakeld, volgt het systeem nieuwe soorten detecties en kan meldingen verzenden"
-        },
-        "newSpeciesWindowDays": {
-          "label": "Nieuwe soort venster (dagen)",
-          "helpText": "Aantal dagen dat een soort als 'nieuw' wordt beschouwd na eerste detectie (1-365)"
-        },
-        "syncIntervalMinutes": {
-          "label": "Synchronisatie-interval (minuten)",
-          "helpText": "Hoe vaak volggegevens worden gesynchroniseerd met de database (1-1440)"
-        },
-        "notificationSuppressionHours": {
-          "label": "Meldingsonderdrukking (uren)",
-          "helpText": "Uren om dubbele meldingen voor dezelfde soort te onderdrukken (0-8760)"
-        },
-        "yearly": {
-          "title": "Jaarlijks volgen",
-          "description": "Volg de eerste aankomsten van soorten elk jaar",
-          "enabled": {
-            "label": "Jaarlijks volgen inschakelen",
-            "helpText": "Volg en meld wanneer een soort voor het eerst elk jaar wordt gedetecteerd"
-          },
-          "resetMonth": {
-            "label": "Reset maand",
-            "helpText": "Maand waarin jaarlijks volgen wordt gereset (1-12)"
-          },
-          "resetDay": {
-            "label": "Reset dag",
-            "helpText": "Dag van de maand waarop jaarlijks volgen wordt gereset"
-          },
-          "windowDays": {
-            "label": "Venster (dagen)",
-            "helpText": "Dagen om 'nieuw dit jaar' indicator te tonen (1-365)"
-          }
-        },
-        "seasonal": {
-          "title": "Seizoensvolging",
-          "description": "Volg de eerste aankomsten van soorten elk seizoen",
-          "enabled": {
-            "label": "Seizoensvolging inschakelen",
-            "helpText": "Volg en meld wanneer een soort voor het eerst elk seizoen wordt gedetecteerd"
-          },
-          "windowDays": {
-            "label": "Venster (dagen)",
-            "helpText": "Dagen om 'nieuw dit seizoen' indicator te tonen (1-365)"
-          },
-          "seasons": {
-            "title": "Seizoensdefinities",
-            "description": "Definieer wanneer elk seizoen begint. Seizoenen worden automatisch aangepast op basis van de breedtegraad van uw locatie.",
-            "spring": "Lente",
-            "summer": "Zomer",
-            "fall": "Herfst",
-            "winter": "Winter",
-            "wet1": "Natte seizoen 1",
-            "dry1": "Droge seizoen 1",
-            "wet2": "Natte seizoen 2",
-            "dry2": "Droge seizoen 2",
-            "startMonth": "Startmaand",
-            "startDay": "Startdag",
-            "hemisphereNote": "Seizoensdatums worden automatisch geconfigureerd op basis van uw breedtegraad. Het noordelijk halfrond gebruikt standaard seizoenen, het zuidelijk halfrond heeft verschoven datums, en equatoriale regio's gebruiken natte/droge seizoenen."
-          }
-        },
-        "months": {
-          "january": "Januari",
-          "february": "Februari",
-          "march": "Maart",
-          "april": "April",
-          "may": "Mei",
-          "june": "Juni",
-          "july": "Juli",
-          "august": "Augustus",
-          "september": "September",
-          "october": "Oktober",
-          "november": "November",
-          "december": "December"
-        },
-        "units": {
-          "days": "dagen",
-          "min": "min",
-          "hours": "uur"
-        }
-      },
-      "dynamicThreshold": {
-        "tabLabel": "Geleerd",
-        "title": "Geleerde drempels",
-        "description": "Deze pagina toont runtime data van dynamische drempels. Wanneer ingeschakeld in Hoofdinstellingen → Detectie, worden drempels automatisch aangepast door meerdere detecties met hoge betrouwbaarheid. Soorten die hier worden getoond, worden verondersteld op deze locatie te bestaan.",
-        "stats": {
-          "active": "Actief",
-          "atMinimum": "Op minimum",
-          "minThreshold": "Min. drempel",
-          "validityPeriod": "Geldigheidsperiode"
-        },
-        "header": {
-          "species": "Soort",
-          "threshold": "Drempel",
-          "expires": "Verloopt"
-        },
-        "searchPlaceholder": "Zoek soorten...",
-        "threshold": "Drempel",
-        "level": "Niveau",
-        "expires": "Verloopt",
-        "expired": "Verlopen",
-        "confidence": "Betrouwbaarheid",
-        "requiredConfidence": "Vereiste betrouwbaarheid",
-        "resetAll": "Alles resetten",
-        "resetSpecies": "Reset drempel voor deze soort",
-        "noEvents": "Geen drempelwijzigingsgeschiedenis",
-        "changeReason": {
-          "highConfidence": "Detectie met hoge betrouwbaarheid",
-          "expiry": "Drempel verlopen",
-          "manualReset": "Handmatige reset"
-        },
-        "note": "Detecties met hoge betrouwbaarheid bevestigen welke soorten op deze locatie bestaan. Na meerdere matches met hoge betrouwbaarheid wordt de detectiedrempel veilig verlaagd om meer geluiden te vangen zonder significant risico op fout-positieven. Drempels worden automatisch gereset na de geconfigureerde geldigheidsperiode.",
-        "empty": {
-          "title": "Geen geleerde drempels",
-          "description": "Detecties met hoge betrouwbaarheid creëren automatisch geleerde drempels voor soorten"
-        },
-        "resetAllConfirm": {
-          "title": "Alle drempels resetten",
-          "message": "Dit zal alle {count} geleerde drempels resetten. Soorten moeten opnieuw met hoge betrouwbaarheid worden gedetecteerd om hun drempels te verlagen."
-        },
-        "loadError": "Laden van dynamische drempels mislukt",
-        "resetSuccess": "Drempel gereset voor {species}",
-        "resetError": "Resetten van drempel mislukt",
-        "resetAllSuccess": "{count} drempels gereset",
-        "resetAllError": "Resetten van drempels mislukt",
-        "expand": "Gebeurtenisgeschiedenis tonen",
-        "collapse": "Gebeurtenisgeschiedenis verbergen"
-      }
-    },
     "database": {
       "sqlitePlaceholder": "Voer SQLite database pad in",
       "mysqlHostPlaceholder": "Voer MySQL host in",
@@ -4906,26 +4533,6 @@
       "locale": {
         "label": "Soortentaal",
         "helpText": "Taal voor de gangbare soortnamen in de interface."
-      }
-    },
-    "rangeFilter": {
-      "birdOnlyNote": "Bereikfilter geldt alleen voor vogelclassificatoren. Vleermuismodellen gebruiken hun eigen soortenlijsten.",
-      "status": {
-        "title": "Gebiedsfilter overzicht",
-        "geomodelInfo": "VoiceWatch Geomodel {version} - {species} bekende soorten",
-        "autoSelected": "Automatisch geselecteerd",
-        "manual": "Handmatig",
-        "classifier": "Classificator",
-        "totalSpecies": "Totaal aantal soorten",
-        "withRangeData": "Met gebiedsgegevens",
-        "withoutRangeData": "Zonder gebiedsgegevens",
-        "withRangeDataTooltip": "Soorten waarvoor het geomodel de geografische waarschijnlijkheid op uw locatie kan evalueren",
-        "withoutRangeDataTooltip": "Soorten zonder geografische gegevens in het geomodel, afgehandeld door de instelling voor niet-gekoppelde soorten hieronder",
-        "noFilter": "Geen gebiedsfilter actief",
-        "passUnmapped": {
-          "label": "Soorten zonder gebiedsgegevens toestaan",
-          "helpText": "Detecties toestaan van soorten waarvoor het geomodel geen geografische gegevens heeft. Wanneer uitgeschakeld, worden deze soorten altijd uitgefilterd."
-        }
       }
     },
     "advanced": {

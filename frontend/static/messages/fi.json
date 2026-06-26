@@ -476,9 +476,6 @@
     "noResultsFound": "Tuloksia ei löytynyt",
     "noResultsHint": "Kokeile säätää hakusuodattimia",
     "fields": {
-      "species": "Laji",
-      "speciesPlaceholder": "Syötä lajin nimi",
-      "speciesHelp": "Syötä lajin koko tai osittainen nimi (kirjainkoolla ei väliä)",
       "dateRange": "Päivämääräväli",
       "dateRangeHelp": "Suodata havaintoja päivämäärävälin mukaan (jätä tyhjäksi kaikille päiville)",
       "from": "Alkaen",
@@ -683,8 +680,6 @@
         "markCorrect": "Oikein",
         "markFalsePositive": "Virhe",
         "review": "Tarkista havainto",
-        "showSpecies": "Näytä laji",
-        "ignoreSpecies": "Ohita laji",
         "lockDetection": "Lukitse havainto",
         "unlockDetection": "Avaa lukitus",
         "deleteDetection": "Poista havainto"
@@ -2084,8 +2079,6 @@
           "warningOff": "Ilman suodatusta jokainen luottamuskynnyksen ylittävä havainto hyväksytään välittömästi. Tämä tuottaa tyypillisesti useita vääriä positiivisia päivässä. Jo matala suodatus parantaa tulosten laatua merkittävästi."
         },
         "rangeFilter": {
-          "title": "Aluesuodatin",
-          "description": "Rajoita tunnistus lajeihin, jotka ovat todennäköisiä maantieteellisellä alueellasi",
           "stationLocation": {
             "label": "Aseman sijainti",
             "helpText": "Aseman sijainti, jota käytetään säätietoihin ja lintulajien rajoittamiseen alueella todennäköisiin lajeihin."
@@ -2097,33 +2090,6 @@
           "longitude": {
             "label": "Pituusaste",
             "helpText": "Aseman sijainnin pituusaste, jota käytetään säätietoihin ja lintulajien aluesuodatukseen."
-          },
-          "model": {
-            "label": "Aluesuodatinmalli",
-            "helpText": "VoiceWatch-aluesuodatinmallin versio: latest tai legacy."
-          },
-          "threshold": {
-            "label": "Kynnysarvo",
-            "helpText": "Määrittää, mitkä lajit sisällytetään niiden esiintymistodennäköisyyden perusteella sijaintisi ja vuodenajan mukaan. Oletusarvo (0.01) on suositeltava useimmille käyttäjille. Korkeammat arvot (0.05-0.3) sisällyttävät vähemmän lajeja korkeammalla esiintymistodennäköisyydellä. Hyvin korkeat arvot (0.5+) sisällyttävät vain yleisimmät lajit."
-          },
-          "speciesCount": {
-            "label": "Nykyinen lajimäärä",
-            "helpText": "Aluesuodattimeen sisällytettyjen lajien määrä. Päivittyy automaattisesti, kun kynnysarvo, leveysaste tai pituusaste muuttuu.",
-            "loading": "Ladataan...",
-            "viewSpecies": "Näytä lajit"
-          },
-          "downloadTitle": "Lataa lajilista CSV-muodossa",
-          "csvDownloaded": "Lajilista ladattu onnistuneesti",
-          "csvDownloadFailed": "Lajilistan lataus epäonnistui. Yritä uudelleen.",
-          "modal": {
-            "title": "Aluesuodattimen lajit",
-            "speciesCount": "Lajimäärä:",
-            "threshold": "Kynnysarvo:",
-            "latitude": "Leveysaste:",
-            "longitude": "Pituusaste:",
-            "loadingSpecies": "Ladataan lajeja...",
-            "noSpeciesFound": "Lajeja ei löytynyt nykyisillä asetuksilla",
-            "close": "Sulje"
           }
         },
         "database": {
@@ -2352,9 +2318,6 @@
       "errors": {
         "localesLoadFailed": "Kielivaihtoehtoja ei voitu ladata. Käytetään oletusarvoja.",
         "providersLoadFailed": "Kuvatoimittajia ei voitu ladata. Käytetään oletusarvoja.",
-        "rangeFilterTestFailed": "Aluesuodatinasetusten testaus epäonnistui",
-        "rangeFilterLoadFailed": "Lajiluettelon lataus epäonnistui",
-        "rangeFilterCountFailed": "Lajimäärän lataus epäonnistui",
         "mapLibraryLoadFailed": "Karttakirjaston lataus epäonnistui. Päivitä sivu.",
         "mapLoadFailed": "Kartan lataus epäonnistui. Kokeile päivittää sivu.",
         "modalMapLoadFailed": "Ikkunan kartan lataus epäonnistui. Sulje ja avaa ikkuna uudelleen.",
@@ -3709,342 +3672,6 @@
         "fileReadError": "Valitun tiedoston lukeminen epäonnistui"
       }
     },
-    "species": {
-      "pageLabel": "Lajiasetukset",
-      "saveError": "Lajin \"{species}\" asetusten tallennus epäonnistui. Yritä uudelleen.",
-      "configUpdated": "Lajin \"{species}\" asetukset päivitetty",
-      "configAdded": "Lajin \"{species}\" asetukset lisätty",
-      "duplicateConfigError": "Lajilla \"{species}\" on jo asetukset. Valitse toinen nimi.",
-      "activeSpecies": {
-        "title": "Aktiiviset lajit",
-        "tabLabel": "Aktiivis.",
-        "description": "Lajit, jotka tunnistetaan nykyisen sijainnin ja suodatusasetusten perusteella",
-        "stats": {
-          "species": "Lajit",
-          "location": "Sijainti",
-          "threshold": "Kynnysarvo",
-          "updated": "Päivitetty",
-          "justNow": "Juuri nyt",
-          "minutesAgo": "{count}m sitten",
-          "hoursAgo": "{count}t sitten"
-        },
-        "search": {
-          "placeholder": "Etsi lajeja..."
-        },
-        "badges": {
-          "included": "Sisällytetty",
-          "configured": "Määritetty"
-        },
-        "empty": {
-          "title": "Lajeja ei löytynyt",
-          "description": "Määritä sijaintisi pääasetuksissa nähdäksesi saatavilla olevat lajit"
-        },
-        "noResults": "Mikään laji ei vastaa hakuasi",
-        "infoNote": "Tämä luettelo perustuu sijaintiisi ja aluesuodattimen kynnysarvoon. Manuaalisesti lisätyt lajit sisällytetään aina.",
-        "retry": "Yritä uudelleen",
-        "expand": "Laajenna luettelo",
-        "collapse": "Supista luettelo",
-        "downloadCsv": "Lataa CSV",
-        "errors": {
-          "loadFailed": "Aktiivisten lajien luettelon lataus epäonnistui"
-        },
-        "locationNotConfigured": {
-          "title": "Sijaintia ei ole määritetty",
-          "description": "Määritä sijaintisi pääasetuksissa nähdäksesi alueellasi esiintyvät lajit. Aluesuodatin käyttää sijaintiasi määrittääkseen, mitkä lajit todennäköisesti esiintyvät lähistölläsi.",
-          "action": "Määritä sijainti"
-        },
-        "rangeFilterHealth": {
-          "inactive": {
-            "title": "Aluesuodatin ei ole käytössä",
-            "description": "Havaintoja ei tällä hetkellä suodateta sijaintisi perusteella, joten myös alueesi ulkopuolisia lajeja voidaan raportoida. Tarkista aluesuodattimen mallin asetukset Asetukset-sivulta."
-          },
-          "fellBack": {
-            "title": "Käytössä sisäänrakennettu aluesuodatin",
-            "description": "Määritettyä geomallin aluesuodatinta ei voitu ladata, joten VoiceWatch siirtyi käyttämään sisäänrakennettua aluesuodatinta. Suodatus toimii edelleen, mutta tarkista Asetukset-sivulta, miten saat geomallin takaisin käyttöön."
-          },
-          "mappedZero": {
-            "title": "Aluesuodatin ei vastannut yhtäkään lajia",
-            "description": "Geomallin aluesuodatin ei vastannut yhtäkään aktiivisen mallin lajia, joten kaikki havainnot suodatettaisiin pois. Tarkista, että aluesuodattimen nimiötiedosto vastaa aktiivista mallia."
-          }
-        },
-        "columns": {
-          "commonName": "Nimi",
-          "scientificName": "Tieteellinen nimi",
-          "score": "Pisteet",
-          "status": "Tila"
-        }
-      },
-      "alwaysInclude": {
-        "title": "Sisällytä lajit aina",
-        "tabLabel": "Sisällytä",
-        "description": "Tämän listan lajit sisällytetään aina havaittujen lajien alueelle",
-        "noSpeciesMessage": "Sisällytyslistaan ei ole lisätty lajeja"
-      },
-      "alwaysExclude": {
-        "title": "Jätä lajit aina pois",
-        "tabLabel": "Jätä pois",
-        "description": "Tämän listan lajit jätetään aina pois tunnistuksesta",
-        "noSpeciesMessage": "Poissulkulistaan ei ole lisätty lajeja"
-      },
-      "customConfiguration": {
-        "title": "Mukautettu lajikokoonpano",
-        "tabLabel": "Mukautet.",
-        "description": "Lajikohtaiset kynnysarvot, havaintovälit ja toiminnot",
-        "helpText": {
-          "intro": "Määritä lajikohtaisia asetuksia:",
-          "threshold": "Kynnysarvo: Vähimmäisluottamuspistemäärä (0-1) joka vaaditaan havainnon tekemiseen",
-          "interval": "Väli: Vähimmäisaika sekunteina saman lajin havaintojen välillä (0 = käytä yleistä oletusarvoa)",
-          "actions": "Toiminnot: Mukautetut komennot, jotka suoritetaan kun tämä laji havaitaan"
-        },
-        "columnHeaders": {
-          "species": "Laji",
-          "settings": "Asetukset",
-          "actions": "Toiminnot"
-        },
-        "badges": {
-          "threshold": "Kynnys: {value}",
-          "interval": "Väli: {value}s",
-          "customAction": "Mukautettu toiminto",
-          "executeDefaults": "+Oletukset"
-        },
-        "dropdown": {
-          "editConfig": "Muokkaa asetuksia",
-          "addAction": "Lisää toiminto",
-          "remove": "Poista"
-        },
-        "labels": {
-          "threshold": "Kynnysarvo",
-          "interval": "Väli",
-          "intervalSeconds": "Väli (sek)",
-          "addButton": "Lisää"
-        },
-        "noConfigurationsMessage": "Mukautettuja lajikokoonpanoja ei ole lisätty",
-        "addForm": {
-          "speciesPlaceholder": "Lajin nimi",
-          "thresholdPlaceholder": "0.5",
-          "intervalPlaceholder": "0"
-        },
-        "addConfiguration": "Lisää määritys",
-        "newConfiguration": "Uusi määritys",
-        "editing": "Muokataan: {species}",
-        "configuredCount": "{count} määritetty",
-        "searchPlaceholder": "Kirjoita hakeaksesi...",
-        "saving": "Tallennetaan...",
-        "save": "Tallenna",
-        "cancel": "Peruuta",
-        "configureActions": "Määritä toiminnot",
-        "actionsConfigured": "Määritetty",
-        "list": {
-          "editTitle": "Muokkaa määritystä",
-          "removeTitle": "Poista määritys"
-        },
-        "emptyState": {
-          "title": "Määrityksiä ei vielä ole.",
-          "description": "Napsauta \"Lisää määritys\" mukauttaaksesi lajintunnistusasetuksia."
-        },
-        "table": {
-          "columnScientificName": "Tieteellinen nimi",
-          "intervalDefault": "Oletus",
-          "intervalDefaultTooltip": "0 = käytä globaalia oletusväliä",
-          "noActions": "Ei mitään",
-          "searchPlaceholder": "Etsi lajeja...",
-          "noResults": "Ei vastaavia asetuksia",
-          "editDisabledReason": "Tallenna tai sulje nykyinen muokkain ennen toisen lajin muokkaamista",
-          "actionsDisabledBusy": "Odota, että nykyinen toiminto on valmis"
-        }
-      },
-      "synonyms": {
-        "tabLabel": "Synonyymit",
-        "description": "Yhdistä VoiceWatchin tieteelliset lajinimet niiden päivitettyihin vastineisiin uudemmassa taksonomiassa. Käytetään vain varasijana haettaessa lintukuvia Wikipediasta ja AviCommonsista; ei nimeä lajeja uudelleen havainnoissa tai koontinäytöllä.",
-        "helpText": "Muuttaaksesi lajin käyttöliittymässä näkyvää nimeä, muokkaa VoiceWatchin tunnistetiedostoa (asetus \"Nimikkeiden polku\" pääasetuksissa).",
-        "birdnetName": "VoiceWatch-nimi",
-        "updatedName": "Päivitetty tieteellinen nimi",
-        "addButton": "Lisää synonyymi",
-        "emptyState": "Ei määritettyjä taksonomiasynonyymejä",
-        "errors": {
-          "unknownSpecies": "Lajia ei löydy VoiceWatch-tunnisteista",
-          "duplicateKey": "Tälle lajille on jo olemassa synonyymi",
-          "emptyUpdatedName": "Päivitetty nimi on pakollinen"
-        }
-      },
-      "actionsModal": {
-        "title": "Toiminnot lajille {species}",
-        "actionType": {
-          "label": "Toiminnon tyyppi",
-          "executeCommand": "Suorita komento",
-          "onlySupported": "Tällä hetkellä vain komennon suoritus -toiminnot ovat tuettuja"
-        },
-        "command": {
-          "label": "Komento",
-          "helpText": "Anna täydellinen polku komentoon tai skriptiin jonka haluat suorittaa"
-        },
-        "parameters": {
-          "label": "Parametrit",
-          "helpText": "Nämä arvot välitetään komennolle listatussa järjestyksessä",
-          "placeholder": "Napsauta alla olevia painikkeita lisätäksesi parametreja tai kirjoita manuaalisesti",
-          "tooltip": "Käytä alla olevia painikkeita tai kirjoita suoraan (pilkuilla eroteltuina)",
-          "availableTitle": "Käytettävissä olevat parametrit",
-          "buttons": {
-            "commonName": "YleinenNimi",
-            "scientificName": "TieteellinenNimi",
-            "confidence": "Luottamus",
-            "time": "Aika",
-            "source": "Lähde",
-            "clearParameters": "Tyhjennä parametrit"
-          }
-        },
-        "executeDefaults": {
-          "label": "Suorita myös oletustoiminnot (tietokantatallennus, ilmoitukset jne.)",
-          "helpText": "Kun käytössä, sekä mukautettu toimintosi että järjestelmän oletustoiminnot suoritetaan. Kun pois käytöstä, vain mukautettu toimintosi suoritetaan."
-        }
-      },
-      "add": "Lisää",
-      "remove": "Poista",
-      "suggestions": "Lajiehdotukset",
-      "addSpeciesToInclude": "Lisää sisällytettäviä lajeja",
-      "addSpeciesToIncludeLabel": "Lisää uusia sisällytettäviä lajeja",
-      "addSpeciesToExclude": "Lisää pois jätettäviä lajeja",
-      "addSpeciesToExcludeLabel": "Lisää uusia pois jätettäviä lajeja",
-      "commandPathPlaceholder": "/polku/komentoon",
-      "parametersPlaceholder": "Parametrit ilmestyvät tähän",
-      "errors": {
-        "speciesLoadFailed": "Lajiluettelon lataus epäonnistui. Yritä uudelleen."
-      },
-      "tracking": {
-        "title": "Seuranta",
-        "tabLabel": "Seuranta",
-        "description": "Määritä uusien lajihavaintojen seuranta aikajaksojen perusteella",
-        "enabled": {
-          "label": "Ota lajiseuranta käyttöön",
-          "helpText": "Kun käytössä, järjestelmä seuraa uusia lajihavaintoja ja voi lähettää ilmoituksia"
-        },
-        "newSpeciesWindowDays": {
-          "label": "Uuden lajin ikkuna (päivää)",
-          "helpText": "Kuinka monta päivää lajia pidetään 'uutena' ensimmäisen havainnon jälkeen (1-365)"
-        },
-        "syncIntervalMinutes": {
-          "label": "Synkronointiväli (minuuttia)",
-          "helpText": "Kuinka usein seurantatiedot synkronoidaan tietokannan kanssa (1-1440)"
-        },
-        "notificationSuppressionHours": {
-          "label": "Ilmoitusten esto (tuntia)",
-          "helpText": "Tuntia, joiden ajan estetään saman lajin toistuvat ilmoitukset (0-8760)"
-        },
-        "yearly": {
-          "title": "Vuosiseuranta",
-          "description": "Seuraa lajien ensimmäisiä saapumisia joka vuosi",
-          "enabled": {
-            "label": "Ota vuosiseuranta käyttöön",
-            "helpText": "Seuraa ja ilmoita, kun laji havaitaan ensimmäisen kerran vuodessa"
-          },
-          "resetMonth": {
-            "label": "Nollauskuukausi",
-            "helpText": "Kuukausi, jolloin vuosiseuranta nollataan (1-12)"
-          },
-          "resetDay": {
-            "label": "Nollauspäivä",
-            "helpText": "Kuukauden päivä, jolloin vuosiseuranta nollataan"
-          },
-          "windowDays": {
-            "label": "Ikkuna (päivää)",
-            "helpText": "Päivät 'uusi tänä vuonna' -ilmaisimen näyttämiseksi (1-365)"
-          }
-        },
-        "seasonal": {
-          "title": "Kausiseuranta",
-          "description": "Seuraa lajien ensimmäisiä saapumisia joka kausi",
-          "enabled": {
-            "label": "Ota kausiseuranta käyttöön",
-            "helpText": "Seuraa ja ilmoita, kun laji havaitaan ensimmäisen kerran kaudessa"
-          },
-          "windowDays": {
-            "label": "Ikkuna (päivää)",
-            "helpText": "Päivät 'uusi tällä kaudella' -ilmaisimen näyttämiseksi (1-365)"
-          },
-          "seasons": {
-            "title": "Kausimääritykset",
-            "description": "Määritä, milloin kukin kausi alkaa. Kaudet mukautuvat automaattisesti sijaintisi leveysasteen perusteella.",
-            "spring": "Kevät",
-            "summer": "Kesä",
-            "fall": "Syksy",
-            "winter": "Talvi",
-            "wet1": "Sadekausi 1",
-            "dry1": "Kuivakausi 1",
-            "wet2": "Sadekausi 2",
-            "dry2": "Kuivakausi 2",
-            "startMonth": "Alkukuukausi",
-            "startDay": "Alkupäivä",
-            "hemisphereNote": "Kausien päivämäärät määritetään automaattisesti leveysasteesi perusteella. Pohjoisella pallonpuoliskolla käytetään tavallisia vuodenaikoja, eteläisellä pallonpuoliskolla siirrettyjä päivämääriä ja päiväntasaajan alueilla sade-/kuivakausia."
-          }
-        },
-        "months": {
-          "january": "Tammikuu",
-          "february": "Helmikuu",
-          "march": "Maaliskuu",
-          "april": "Huhtikuu",
-          "may": "Toukokuu",
-          "june": "Kesäkuu",
-          "july": "Heinäkuu",
-          "august": "Elokuu",
-          "september": "Syyskuu",
-          "october": "Lokakuu",
-          "november": "Marraskuu",
-          "december": "Joulukuu"
-        },
-        "units": {
-          "days": "päivää",
-          "min": "min",
-          "hours": "t"
-        }
-      },
-      "dynamicThreshold": {
-        "tabLabel": "Opitut",
-        "title": "Opitut kynnysarvot",
-        "description": "Tämä sivu näyttää dynaamisten kynnysarvojen suoritusaikaiset tiedot. Kun käytössä kohdassa Pääasetukset → Tunnistus, kynnysarvoja säädetään automaattisesti useiden korkean luottamuksen havaintojen perusteella. Täällä näkyvien lajien oletetaan esiintyvän tässä sijainnissa.",
-        "stats": {
-          "active": "Aktiiviset",
-          "atMinimum": "Minimissä",
-          "minThreshold": "Min. kynnys",
-          "validityPeriod": "Voimassaoloaika"
-        },
-        "header": {
-          "species": "Laji",
-          "threshold": "Kynnysarvo",
-          "expires": "Vanhenee"
-        },
-        "searchPlaceholder": "Hae lajeja...",
-        "threshold": "Kynnysarvo",
-        "level": "Taso",
-        "expires": "Vanhenee",
-        "expired": "Vanhentunut",
-        "confidence": "Luottamus",
-        "requiredConfidence": "Vaadittu luottamus",
-        "resetAll": "Nollaa kaikki",
-        "resetSpecies": "Nollaa tämän lajin kynnysarvo",
-        "noEvents": "Ei kynnysarvon muutoshistoriaa",
-        "changeReason": {
-          "highConfidence": "Korkean luottamuksen havainto",
-          "expiry": "Kynnysarvo vanhentunut",
-          "manualReset": "Manuaalinen nollaus"
-        },
-        "note": "Korkean luottamuksen havainnot vahvistavat, mitkä lajit esiintyvät tässä sijainnissa. Useiden korkean luottamuksen osumien jälkeen tunnistuskynnystä alennetaan turvallisesti, jotta saadaan enemmän ääniä ilman merkittävää väärien positiivisten riskiä. Kynnysarvot nollautuvat automaattisesti asetetun voimassaoloajan jälkeen.",
-        "empty": {
-          "title": "Ei opittuja kynnysarvoja",
-          "description": "Korkean luottamuksen havainnot luovat automaattisesti opitut kynnysarvot lajeille"
-        },
-        "resetAllConfirm": {
-          "title": "Nollaa kaikki kynnysarvot",
-          "message": "Tämä nollaa kaikki {count} opittua kynnysarvoa. Lajit on havaittava uudelleen korkealla luottamuksella niiden kynnysarvojen alentamiseksi."
-        },
-        "loadError": "Dynaamisten kynnysarvojen lataus epäonnistui",
-        "resetSuccess": "Kynnysarvo nollattu lajille {species}",
-        "resetError": "Kynnysarvon nollaus epäonnistui",
-        "resetAllSuccess": "{count} kynnysarvoa nollattu",
-        "resetAllError": "Kynnysarvojen nollaus epäonnistui",
-        "expand": "Näytä tapahtumahistoria",
-        "collapse": "Piilota tapahtumahistoria"
-      }
-    },
     "database": {
       "sqlitePlaceholder": "Syötä SQLite-tietokannan polku",
       "mysqlHostPlaceholder": "Syötä MySQL-isäntä",
@@ -4906,26 +4533,6 @@
       "locale": {
         "label": "Lajien kieli",
         "helpText": "Kieli, jolla lajien yleisnimistö näytetään käyttöliittymässä."
-      }
-    },
-    "rangeFilter": {
-      "birdOnlyNote": "Aluesuodatin koskee vain lintuluokittimia. Lepakkomallit käyttävät omia lajilistojaan.",
-      "status": {
-        "title": "Aluesuodattimen yhteenveto",
-        "geomodelInfo": "VoiceWatch-geomalli {version} - {species} tunnettua lajia",
-        "autoSelected": "Automaattisesti valittu",
-        "manual": "Manuaalinen",
-        "classifier": "Luokittelija",
-        "totalSpecies": "Lajeja yhteensä",
-        "withRangeData": "Aluetiedoilla",
-        "withoutRangeData": "Ilman aluetietoja",
-        "withRangeDataTooltip": "Lajit, joiden maantieteellisen todennäköisyyden geomalli voi arvioida sijainnissasi",
-        "withoutRangeDataTooltip": "Lajit, joilla ei ole maantieteellisiä tietoja geomallissa, käsitellään alla olevalla kartoittamattomien lajien asetuksella",
-        "noFilter": "Ei aktiivista aluesuodatinta",
-        "passUnmapped": {
-          "label": "Salli lajit ilman aluetietoja",
-          "helpText": "Salli sellaisten lajien havainnot, joille geomallilla ei ole maantieteellisiä tietoja. Kun pois päältä, nämä lajit suodatetaan aina pois."
-        }
       }
     },
     "advanced": {

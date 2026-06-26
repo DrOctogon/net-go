@@ -10,7 +10,6 @@
   - onFreezeStart?: () => void - Callback when interaction starts
   - onFreezeEnd?: () => void - Callback when interaction ends
   - onReview?: () => void - Callback for review action
-  - onToggleSpecies?: () => void - Callback for toggle species action
   - onToggleLock?: () => void - Callback for toggle lock action
   - onDelete?: () => void - Callback for delete action
 -->
@@ -41,13 +40,11 @@
   interface Props {
     detection: Detection;
     isNew?: boolean;
-    isExcluded?: boolean;
     onFreezeStart?: () => void;
     onFreezeEnd?: () => void;
     onReview?: () => void;
     onMarkCorrect?: () => void;
     onMarkFalsePositive?: () => void;
-    onToggleSpecies?: () => void;
     onToggleLock?: () => void;
     onDelete?: () => void;
   }
@@ -55,13 +52,11 @@
   let {
     detection,
     isNew = false,
-    isExcluded = false,
     onFreezeStart,
     onFreezeEnd,
     onReview,
     onMarkCorrect,
     onMarkFalsePositive,
-    onToggleSpecies,
     onToggleLock,
     onDelete,
   }: Props = $props();
@@ -265,12 +260,10 @@
     />
     <ActionMenu
       {detection}
-      {isExcluded}
       variant="overlay"
       {onMarkCorrect}
       {onMarkFalsePositive}
       {onReview}
-      {onToggleSpecies}
       {onToggleLock}
       {onDelete}
       onDownload={() => downloadDetectionAudio(detection)}

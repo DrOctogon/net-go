@@ -271,11 +271,6 @@ vi.mock('$lib/utils/settingsApi.js', () => {
         enabled: true,
         path: '/tmp/test.db',
       },
-      rangeFilter: {
-        threshold: 0.01,
-        speciesCount: null,
-        species: [],
-      },
     },
     audio: {
       source: 'sysdefault',
@@ -403,9 +398,6 @@ vi.mock('$lib/utils/settingsApi.js', () => {
         mqtt: vi.fn().mockResolvedValue({ success: true, message: 'Test successful' }),
         database: vi.fn().mockResolvedValue({ success: true, message: 'Test successful' }),
         audio: vi.fn().mockResolvedValue({ success: true, message: 'Test successful' }),
-      },
-      rangeFilter: {
-        testSpecies: vi.fn().mockResolvedValue({ count: 0, species: [] }),
       },
       species: {
         search: vi.fn().mockResolvedValue([]),

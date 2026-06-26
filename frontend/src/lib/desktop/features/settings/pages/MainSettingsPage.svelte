@@ -97,9 +97,6 @@
       longitude: 0,
       modelPath: '',
       labelPath: '',
-      rangeFilter: {
-        threshold: 0.01,
-      },
     },
     output: $outputSettings || {
       sqlite: {

@@ -476,9 +476,6 @@
     "noResultsFound": "Nenhum resultado encontrado",
     "noResultsHint": "Tente ajustar seus filtros de pesquisa",
     "fields": {
-      "species": "Espécie",
-      "speciesPlaceholder": "Digite o nome da espécie",
-      "speciesHelp": "Digite o nome completo ou parcial da espécie (não diferencia maiúsculas/minúsculas)",
       "dateRange": "Intervalo de datas",
       "dateRangeHelp": "Filtrar detecções por intervalo de datas (deixe vazio para todas as datas)",
       "from": "De",
@@ -683,8 +680,6 @@
         "markCorrect": "Correto",
         "markFalsePositive": "Incorreto",
         "review": "Revisar detecção",
-        "showSpecies": "Mostrar espécie",
-        "ignoreSpecies": "Ignorar espécie",
         "lockDetection": "Bloquear detecção",
         "unlockDetection": "Desbloquear detecção",
         "deleteDetection": "Excluir detecção"
@@ -2084,8 +2079,6 @@
           "warningOff": "Sem filtragem, qualquer deteção acima do limiar de confiança é aceite imediatamente. Isto produz tipicamente vários falsos positivos por dia. Mesmo uma filtragem baixa melhora significativamente a qualidade dos resultados."
         },
         "rangeFilter": {
-          "title": "Filtro de alcance",
-          "description": "Limita a detecção a espécies prováveis em sua região geográfica",
           "stationLocation": {
             "label": "Localização da estação",
             "helpText": "Localização da estação, usada para dados meteorológicos e para limitar as espécies de pássaros àquelas prováveis na região."
@@ -2097,33 +2090,6 @@
           "longitude": {
             "label": "Longitude",
             "helpText": "Longitude da localização da estação, usada para dados meteorológicos e filtragem de alcance de espécies."
-          },
-          "model": {
-            "label": "Modelo de filtro de alcance",
-            "helpText": "Versão do modelo de filtro de alcance VoiceWatch: latest ou legacy."
-          },
-          "threshold": {
-            "label": "Limiar",
-            "helpText": "Controla quais espécies são incluídas com base em sua probabilidade de ocorrência para sua localização e época do ano. O padrão (0,01) é recomendado para a maioria dos usuários. Valores mais altos (0,05-0,3) incluem menos espécies com maior probabilidade de ocorrência. Valores muito altos (0,5+) incluem apenas as espécies mais comuns."
-          },
-          "speciesCount": {
-            "label": "Contagem atual de espécies",
-            "helpText": "Número de espécies incluídas no filtro de alcance. Atualiza automaticamente quando o limiar, latitude ou longitude muda.",
-            "loading": "Carregando...",
-            "viewSpecies": "Ver espécies"
-          },
-          "downloadTitle": "Baixar lista de espécies como CSV",
-          "csvDownloaded": "Lista de espécies baixada com sucesso",
-          "csvDownloadFailed": "Falha ao baixar a lista de espécies. Tente novamente.",
-          "modal": {
-            "title": "Espécies do filtro de alcance",
-            "speciesCount": "Contagem de espécies:",
-            "threshold": "Limiar:",
-            "latitude": "Latitude:",
-            "longitude": "Longitude:",
-            "loadingSpecies": "Carregando espécies...",
-            "noSpeciesFound": "Nenhuma espécie encontrada com as configurações atuais",
-            "close": "Fechar"
           }
         },
         "database": {
@@ -2352,9 +2318,6 @@
       "errors": {
         "localesLoadFailed": "Não foi possível carregar as opções de idioma. Usando padrões.",
         "providersLoadFailed": "Não foi possível carregar os provedores de imagem. Usando padrões.",
-        "rangeFilterTestFailed": "Falha ao testar configurações do filtro de alcance",
-        "rangeFilterLoadFailed": "Falha ao carregar lista de espécies",
-        "rangeFilterCountFailed": "Falha ao carregar contagem de espécies",
         "mapLibraryLoadFailed": "Falha ao carregar a biblioteca de mapas. Atualize a página.",
         "mapLoadFailed": "Falha ao carregar o mapa. Tente atualizar a página.",
         "modalMapLoadFailed": "Falha ao carregar o mapa modal. Feche e reabra a janela.",
@@ -3709,342 +3672,6 @@
         "fileReadError": "Falha ao ler o ficheiro selecionado"
       }
     },
-    "species": {
-      "pageLabel": "Configurações de espécies",
-      "saveError": "Falha ao guardar a configuração de \"{species}\". Tente novamente.",
-      "configUpdated": "Configuração de \"{species}\" atualizada",
-      "configAdded": "Configuração de \"{species}\" adicionada",
-      "duplicateConfigError": "A espécie \"{species}\" já tem uma configuração. Escolha outro nome.",
-      "activeSpecies": {
-        "title": "Espécies Ativas",
-        "tabLabel": "Ativas",
-        "description": "Espécies que serão detectadas com base na sua localização atual e configurações de filtro",
-        "stats": {
-          "species": "Espécies",
-          "location": "Localização",
-          "threshold": "Limiar",
-          "updated": "Atualizado",
-          "justNow": "Agora mesmo",
-          "minutesAgo": "há {count}m",
-          "hoursAgo": "há {count}h"
-        },
-        "search": {
-          "placeholder": "Pesquisar espécies..."
-        },
-        "badges": {
-          "included": "Incluída",
-          "configured": "Configurada"
-        },
-        "empty": {
-          "title": "Nenhuma espécie encontrada",
-          "description": "Configure sua localização nas Configurações Principais para ver as espécies disponíveis"
-        },
-        "noResults": "Nenhuma espécie corresponde à sua pesquisa",
-        "infoNote": "Esta lista é baseada na sua localização e no limiar do filtro de alcance. Espécies adicionadas manualmente são sempre incluídas.",
-        "retry": "Tentar novamente",
-        "expand": "Expandir lista",
-        "collapse": "Recolher lista",
-        "downloadCsv": "Baixar CSV",
-        "errors": {
-          "loadFailed": "Falha ao carregar a lista de espécies ativas"
-        },
-        "locationNotConfigured": {
-          "title": "Localização não configurada",
-          "description": "Defina sua localização nas Configurações Principais para ver as espécies disponíveis na sua área. O filtro de alcance usa sua localização para determinar quais espécies provavelmente serão encontradas nas proximidades.",
-          "action": "Configurar localização"
-        },
-        "rangeFilterHealth": {
-          "inactive": {
-            "title": "Filtro de alcance inativo",
-            "description": "As deteções não estão a ser filtradas pela sua localização neste momento, pelo que podem ser comunicadas espécies de fora da sua área. Verifique a configuração do modelo de filtro de alcance nas Configurações."
-          },
-          "fellBack": {
-            "title": "A usar o filtro de alcance integrado",
-            "description": "Não foi possível carregar o filtro de alcance do geomodelo configurado, pelo que o VoiceWatch recorreu ao filtro de alcance integrado. A filtragem continua a funcionar, mas verifique as Configurações para restaurar o geomodelo."
-          },
-          "mappedZero": {
-            "title": "O filtro de alcance não correspondeu a nenhuma espécie",
-            "description": "O filtro de alcance do geomodelo não correspondeu a nenhuma das espécies do modelo ativo, pelo que todas as deteções seriam filtradas. Verifique se o ficheiro de etiquetas do filtro de alcance corresponde ao modelo ativo."
-          }
-        },
-        "columns": {
-          "commonName": "Nome comum",
-          "scientificName": "Nome científico",
-          "score": "Pontuação",
-          "status": "Estado"
-        }
-      },
-      "alwaysInclude": {
-        "title": "Sempre incluir espécies",
-        "tabLabel": "Incluir",
-        "description": "Espécies nesta lista serão sempre incluídas no alcance de espécies detectadas",
-        "noSpeciesMessage": "Nenhuma espécie adicionada à lista de inclusão"
-      },
-      "alwaysExclude": {
-        "title": "Sempre excluir espécies",
-        "tabLabel": "Excluir",
-        "description": "Espécies nesta lista serão sempre excluídas da detecção",
-        "noSpeciesMessage": "Nenhuma espécie adicionada à lista de exclusão"
-      },
-      "customConfiguration": {
-        "title": "Configuração personalizada de espécies",
-        "tabLabel": "Personal.",
-        "description": "Valores de limiar específicos de espécies, intervalos de detecção e ações",
-        "helpText": {
-          "intro": "Configure configurações específicas da espécie:",
-          "threshold": "Limiar: Pontuação mínima de confiança (0-1) necessária para detecção",
-          "interval": "Intervalo: Tempo mínimo em segundos entre detecções da mesma espécie (0 = usar padrão global)",
-          "actions": "Ações: Comandos personalizados a executar quando esta espécie for detectada"
-        },
-        "columnHeaders": {
-          "species": "Espécie",
-          "settings": "Configurações",
-          "actions": "Ações"
-        },
-        "badges": {
-          "threshold": "Limiar: {value}",
-          "interval": "Intervalo: {value}s",
-          "customAction": "Ação personalizada",
-          "executeDefaults": "+Padrões"
-        },
-        "dropdown": {
-          "editConfig": "Editar configuração",
-          "addAction": "Adicionar ação",
-          "remove": "Remover"
-        },
-        "labels": {
-          "threshold": "Limiar",
-          "interval": "Intervalo",
-          "intervalSeconds": "Intervalo (seg)",
-          "addButton": "Adicionar"
-        },
-        "noConfigurationsMessage": "Nenhuma configuração personalizada de espécie adicionada",
-        "addForm": {
-          "speciesPlaceholder": "Nome da espécie",
-          "thresholdPlaceholder": "0,5",
-          "intervalPlaceholder": "0"
-        },
-        "addConfiguration": "Adicionar Configuração",
-        "newConfiguration": "Nova Configuração",
-        "editing": "Editando: {species}",
-        "configuredCount": "{count} configurado(s)",
-        "searchPlaceholder": "Digite para pesquisar...",
-        "saving": "Salvando...",
-        "save": "Salvar",
-        "cancel": "Cancelar",
-        "configureActions": "Configurar Ações",
-        "actionsConfigured": "Configurado",
-        "list": {
-          "editTitle": "Editar configuração",
-          "removeTitle": "Remover configuração"
-        },
-        "emptyState": {
-          "title": "Ainda não há configurações.",
-          "description": "Clique em \"Adicionar Configuração\" para personalizar as configurações de detecção de espécies."
-        },
-        "table": {
-          "columnScientificName": "Nome científico",
-          "intervalDefault": "Padrão",
-          "intervalDefaultTooltip": "0 = usar o intervalo padrão global",
-          "noActions": "Nenhum",
-          "searchPlaceholder": "Pesquisar espécies...",
-          "noResults": "Nenhuma configuração correspondente",
-          "editDisabledReason": "Salve ou feche o editor atual antes de editar outra espécie",
-          "actionsDisabledBusy": "Por favor, aguarde o término da operação atual"
-        }
-      },
-      "synonyms": {
-        "tabLabel": "Sinônimos",
-        "description": "Associe nomes científicos do VoiceWatch aos seus equivalentes atualizados em taxonomia mais recente. Usado apenas como alternativa ao buscar fotos de aves na Wikipedia e no AviCommons; não renomeia espécies nas detecções nem no painel.",
-        "helpText": "Para alterar como uma espécie aparece na interface, edite seu arquivo de rótulos do VoiceWatch (configuração \"Caminho dos rótulos\" nas configurações principais).",
-        "birdnetName": "Nome VoiceWatch",
-        "updatedName": "Nome científico atualizado",
-        "addButton": "Adicionar sinônimo",
-        "emptyState": "Nenhum sinônimo de taxonomia configurado",
-        "errors": {
-          "unknownSpecies": "Espécie não encontrada nos rótulos do VoiceWatch",
-          "duplicateKey": "Já existe um sinônimo para esta espécie",
-          "emptyUpdatedName": "O nome atualizado é obrigatório"
-        }
-      },
-      "actionsModal": {
-        "title": "Ações para {species}",
-        "actionType": {
-          "label": "Tipo de ação",
-          "executeCommand": "Executar comando",
-          "onlySupported": "Atualmente, apenas ações de Executar Comando são suportadas"
-        },
-        "command": {
-          "label": "Comando",
-          "helpText": "Forneça o caminho completo para o comando ou script que deseja executar"
-        },
-        "parameters": {
-          "label": "Parâmetros",
-          "helpText": "Esses valores serão passados para seu comando na ordem listada",
-          "placeholder": "Clique nos botões abaixo para adicionar parâmetros ou escreva manualmente",
-          "tooltip": "Use os botões abaixo ou escreva diretamente (separados por vírgula)",
-          "availableTitle": "Parâmetros disponíveis",
-          "buttons": {
-            "commonName": "NomeComum",
-            "scientificName": "NomeCientífico",
-            "confidence": "Confiança",
-            "time": "Hora",
-            "source": "Fonte",
-            "clearParameters": "Limpar parâmetros"
-          }
-        },
-        "executeDefaults": {
-          "label": "Também executar ações padrão (armazenamento em banco de dados, notificações, etc.)",
-          "helpText": "Quando ativado, tanto sua ação personalizada quanto as ações padrão do sistema serão executadas. Quando desativado, apenas sua ação personalizada será executada."
-        }
-      },
-      "add": "Adicionar",
-      "remove": "Remover",
-      "suggestions": "Sugestões de espécies",
-      "addSpeciesToInclude": "Adicionar espécies para incluir",
-      "addSpeciesToIncludeLabel": "Adicionar novas espécies para incluir",
-      "addSpeciesToExclude": "Adicionar espécies para excluir",
-      "addSpeciesToExcludeLabel": "Adicionar novas espécies para excluir",
-      "commandPathPlaceholder": "/caminho/para/seu/comando",
-      "parametersPlaceholder": "Os parâmetros aparecerão aqui",
-      "errors": {
-        "speciesLoadFailed": "Falha ao carregar lista de espécies. Por favor, tente novamente."
-      },
-      "tracking": {
-        "title": "Rastreamento",
-        "tabLabel": "Rastrear",
-        "description": "Configurar o rastreamento de novas detecções de espécies com base em períodos de tempo",
-        "enabled": {
-          "label": "Ativar rastreamento de espécies",
-          "helpText": "Quando ativado, o sistema rastreia novas detecções de espécies e pode enviar notificações"
-        },
-        "newSpeciesWindowDays": {
-          "label": "Janela de nova espécie (dias)",
-          "helpText": "Número de dias que uma espécie é considerada 'nova' após a primeira detecção (1-365)"
-        },
-        "syncIntervalMinutes": {
-          "label": "Intervalo de sincronização (minutos)",
-          "helpText": "Com que frequência sincronizar dados de rastreamento com o banco de dados (1-1440)"
-        },
-        "notificationSuppressionHours": {
-          "label": "Supressão de notificações (horas)",
-          "helpText": "Horas para suprimir notificações duplicadas para a mesma espécie (0-8760)"
-        },
-        "yearly": {
-          "title": "Rastreamento anual",
-          "description": "Rastrear as primeiras chegadas de espécies a cada ano",
-          "enabled": {
-            "label": "Ativar rastreamento anual",
-            "helpText": "Rastrear e notificar quando uma espécie é detectada pela primeira vez a cada ano"
-          },
-          "resetMonth": {
-            "label": "Mês de reinicialização",
-            "helpText": "Mês em que o rastreamento anual é reiniciado (1-12)"
-          },
-          "resetDay": {
-            "label": "Dia de reinicialização",
-            "helpText": "Dia do mês em que o rastreamento anual é reiniciado"
-          },
-          "windowDays": {
-            "label": "Janela (dias)",
-            "helpText": "Dias para mostrar o indicador 'novo este ano' (1-365)"
-          }
-        },
-        "seasonal": {
-          "title": "Rastreamento sazonal",
-          "description": "Rastrear as primeiras chegadas de espécies a cada estação",
-          "enabled": {
-            "label": "Ativar rastreamento sazonal",
-            "helpText": "Rastrear e notificar quando uma espécie é detectada pela primeira vez a cada estação"
-          },
-          "windowDays": {
-            "label": "Janela (dias)",
-            "helpText": "Dias para mostrar o indicador 'novo esta estação' (1-365)"
-          },
-          "seasons": {
-            "title": "Definições de estações",
-            "description": "Defina quando cada estação começa. As estações são ajustadas automaticamente com base na latitude da sua localização.",
-            "spring": "Primavera",
-            "summer": "Verão",
-            "fall": "Outono",
-            "winter": "Inverno",
-            "wet1": "Estação chuvosa 1",
-            "dry1": "Estação seca 1",
-            "wet2": "Estação chuvosa 2",
-            "dry2": "Estação seca 2",
-            "startMonth": "Mês de início",
-            "startDay": "Dia de início",
-            "hemisphereNote": "As datas das estações são configuradas automaticamente com base na sua latitude. O hemisfério norte usa estações padrão, o hemisfério sul tem datas deslocadas, e regiões equatoriais usam estações chuvosas/secas."
-          }
-        },
-        "months": {
-          "january": "Janeiro",
-          "february": "Fevereiro",
-          "march": "Março",
-          "april": "Abril",
-          "may": "Maio",
-          "june": "Junho",
-          "july": "Julho",
-          "august": "Agosto",
-          "september": "Setembro",
-          "october": "Outubro",
-          "november": "Novembro",
-          "december": "Dezembro"
-        },
-        "units": {
-          "days": "dias",
-          "min": "min",
-          "hours": "hrs"
-        }
-      },
-      "dynamicThreshold": {
-        "tabLabel": "Aprendido",
-        "title": "Limiares aprendidos",
-        "description": "Esta página mostra dados de execução dos limiares dinâmicos. Quando ativado em Configurações principais → Detecção, os limiares são ajustados automaticamente por múltiplas detecções de alta confiança. As espécies mostradas aqui são consideradas existentes nesta localização.",
-        "stats": {
-          "active": "Ativos",
-          "atMinimum": "No mínimo",
-          "minThreshold": "Limiar mín.",
-          "validityPeriod": "Período de validade"
-        },
-        "header": {
-          "species": "Espécie",
-          "threshold": "Limiar",
-          "expires": "Expira"
-        },
-        "searchPlaceholder": "Pesquisar espécies...",
-        "threshold": "Limiar",
-        "level": "Nível",
-        "expires": "Expira",
-        "expired": "Expirado",
-        "confidence": "Confiança",
-        "requiredConfidence": "Confiança necessária",
-        "resetAll": "Redefinir tudo",
-        "resetSpecies": "Redefinir limiar para esta espécie",
-        "noEvents": "Sem histórico de alterações de limiar",
-        "changeReason": {
-          "highConfidence": "Detecção de alta confiança",
-          "expiry": "Limiar expirado",
-          "manualReset": "Redefinição manual"
-        },
-        "note": "Detecções de alta confiança confirmam quais espécies existem nesta localização. Após múltiplas correspondências de alta confiança, o limiar de detecção é reduzido com segurança para capturar mais chamados sem risco significativo de falsos positivos. Os limiares são redefinidos automaticamente após o período de validade configurado.",
-        "empty": {
-          "title": "Sem limiares aprendidos",
-          "description": "Detecções de alta confiança criarão automaticamente limiares aprendidos para espécies"
-        },
-        "resetAllConfirm": {
-          "title": "Redefinir todos os limiares",
-          "message": "Isso redefinirá todos os {count} limiares aprendidos. As espécies precisarão ser detectadas com alta confiança novamente para reduzir seus limiares."
-        },
-        "loadError": "Falha ao carregar limiares dinâmicos",
-        "resetSuccess": "Limiar redefinido para {species}",
-        "resetError": "Falha ao redefinir limiar",
-        "resetAllSuccess": "{count} limiares redefinidos",
-        "resetAllError": "Falha ao redefinir limiares",
-        "expand": "Mostrar histórico de eventos",
-        "collapse": "Ocultar histórico de eventos"
-      }
-    },
     "database": {
       "sqlitePlaceholder": "Digite o caminho do banco de dados SQLite",
       "mysqlHostPlaceholder": "Digite o host MySQL",
@@ -4906,26 +4533,6 @@
       "locale": {
         "label": "Idioma das espécies",
         "helpText": "Idioma utilizado para os nomes comuns das espécies na interface."
-      }
-    },
-    "rangeFilter": {
-      "birdOnlyNote": "O filtro de alcance aplica-se apenas a classificadores de aves. Os modelos de morcegos usam as suas próprias listas de espécies.",
-      "status": {
-        "title": "Resumo do filtro de alcance",
-        "geomodelInfo": "VoiceWatch Geomodelo {version} - {species} espécies conhecidas",
-        "autoSelected": "Selecionado automaticamente",
-        "manual": "Manual",
-        "classifier": "Classificador",
-        "totalSpecies": "Total de espécies",
-        "withRangeData": "Com dados de alcance",
-        "withoutRangeData": "Sem dados de alcance",
-        "withRangeDataTooltip": "Espécies que o geomodelo pode avaliar por probabilidade geográfica na sua localização",
-        "withoutRangeDataTooltip": "Espécies sem dados geográficos no geomodelo, tratadas pela configuração de espécies não mapeadas abaixo",
-        "noFilter": "Nenhum filtro de alcance ativo",
-        "passUnmapped": {
-          "label": "Permitir espécies sem dados de alcance",
-          "helpText": "Permitir deteções de espécies para as quais o geomodelo não tem dados geográficos. Quando desativado, estas espécies são sempre filtradas."
-        }
       }
     },
     "advanced": {

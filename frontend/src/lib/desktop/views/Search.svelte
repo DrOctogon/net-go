@@ -31,11 +31,6 @@
   import { hasReviewPermission, isAuthenticated } from '$lib/utils/auth';
   import { loggers } from '$lib/utils/logger';
   import { buildAppUrl } from '$lib/utils/urlHelpers';
-  import {
-    loadDictionary,
-    searchScientificByCommon,
-    PER_VISITOR_SPECIES_LOCALE_ENABLED,
-  } from '$lib/stores/speciesDictionary.svelte';
   import { localizeSpeciesName } from '$lib/utils/speciesDisplay';
 
   // SPINNER CONTROL: Set to false to disable loading spinners (reduces flickering)
@@ -165,7 +160,6 @@
   }
 
   // Component state
-  let speciesSearchTerm = $state('');
   let dateRange = $state<DateRange>({ start: '', end: '' });
   let confidenceRange = $state<ConfidenceRange>({ min: 0, max: 100 });
   let verifiedStatus = $state<VerifiedStatus>('any');
@@ -268,34 +262,8 @@
     expandedItems.clear(); // Reset expanded state when loading new results
 
     try {
-      // Resolve the typed text to scientific names via the visitor's per-locale
-      // dictionary. Always send the raw term as the free-text species filter too:
-      // the backend OR-s the free-text species (scientific_name LIKE) with the
-      // resolved speciesScientific label IDs, so sending both makes the resolved
-      // path a strict superset and avoids dropping scientific-substring matches
-      // when the typed text is both a resolvable common name and a substring of a
-      // scientific name.
-      //
-      // Ensure the per-locale dictionary is loaded before resolving. The submit
-      // handler can fire immediately after first paint or a locale switch, before
-      // the dictionary fetch has completed; resolving against empty maps would
-      // silently fall back to the raw term (which the backend cannot resolve for a
-      // foreign-locale name). loadDictionary is cached, so awaiting it when already
-      // loaded is effectively instant.
-      //
-      // PARKED behind PER_VISITOR_SPECIES_LOCALE_ENABLED: while off, we skip the
-      // per-visitor dictionary entirely and send only the raw term, so search
-      // resolves in the server-side species language (settings.BirdNET.Locale).
-      let resolvedScientific: string[] = [];
-      if (PER_VISITOR_SPECIES_LOCALE_ENABLED) {
-        await loadDictionary();
-        resolvedScientific = searchScientificByCommon(speciesSearchTerm);
-      }
-
       // Build request body
       const requestBody = {
-        species: speciesSearchTerm,
-        speciesScientific: resolvedScientific,
         dateStart: dateRange.start,
         dateEnd: dateRange.end,
         confidenceMin: confidenceRange.min / 100,
@@ -333,7 +301,6 @@
 
   // Reset form
   function resetForm() {
-    speciesSearchTerm = '';
     dateRange.start = '';
     dateRange.end = '';
     confidenceRange.min = 0;
@@ -475,36 +442,6 @@
       >
         <!-- Basic Search Fields -->
         <div class="gap-4 search-form-grid">
-          <!-- Species -->
-          <div class="form-control">
-            <label class="label" for="species">
-              <span class="label-text">{t('search.fields.species')}</span>
-              <span
-                class="help-icon"
-                onmouseenter={() => (showTooltip = 'species')}
-                onmouseleave={() => (showTooltip = null)}
-                onfocus={() => (showTooltip = 'species')}
-                onblur={() => (showTooltip = null)}
-                role="button"
-                tabindex="0"
-                aria-label={t('search.fields.speciesHelp')}
-                aria-describedby="speciesTooltip">ⓘ</span
-              >
-            </label>
-            <input
-              type="text"
-              id="species"
-              bind:value={speciesSearchTerm}
-              placeholder={t('search.fields.speciesPlaceholder')}
-              class="input w-full"
-            />
-            {#if showTooltip === 'species'}
-              <div class="tooltip" id="speciesTooltip" role="tooltip">
-                {t('search.fields.speciesHelp')}
-              </div>
-            {/if}
-          </div>
-
           <!-- Date Range -->
           <div class="form-control">
             <label class="label" for="dateRangeStart">

@@ -476,9 +476,6 @@
     "noResultsFound": "No results found",
     "noResultsHint": "Try adjusting your search filters",
     "fields": {
-      "species": "Species",
-      "speciesPlaceholder": "Enter species name",
-      "speciesHelp": "Enter full or partial species name (not case sensitive)",
       "dateRange": "Date Range",
       "dateRangeHelp": "Filter detections by date range (leave empty for all dates)",
       "from": "From",
@@ -683,8 +680,6 @@
         "markCorrect": "Correct",
         "markFalsePositive": "Incorrect",
         "review": "Review detection",
-        "showSpecies": "Show species",
-        "ignoreSpecies": "Ignore species",
         "lockDetection": "Lock detection",
         "unlockDetection": "Unlock detection",
         "deleteDetection": "Delete detection"
@@ -2084,8 +2079,6 @@
           "warningOff": "With filtering disabled, any detection above the confidence threshold is accepted immediately. This typically produces several false positives per day. Even lenient filtering significantly improves result quality."
         },
         "rangeFilter": {
-          "title": "Range Filter",
-          "description": "Limit detection to species probable in your geographic region",
           "stationLocation": {
             "label": "Station Location",
             "helpText": "Station location, used for weather data and to limit bird species to those probable in the region."
@@ -2097,33 +2090,6 @@
           "longitude": {
             "label": "Longitude",
             "helpText": "Station longitude, used for weather data and species range filtering."
-          },
-          "model": {
-            "label": "Range Filter Model",
-            "helpText": "VoiceWatch range filter model version: latest or legacy."
-          },
-          "threshold": {
-            "label": "Threshold",
-            "helpText": "Controls which species are included based on their occurrence probability for your location and time of year. Default (0.01) is recommended for most users. Higher values (0.05-0.3) include fewer species with higher occurrence probability. Very high values (0.5+) include only the most common species."
-          },
-          "speciesCount": {
-            "label": "Current Species Count",
-            "helpText": "Number of species included in range filter. Updates automatically when threshold, latitude, or longitude changes.",
-            "loading": "Loading...",
-            "viewSpecies": "View Species"
-          },
-          "downloadTitle": "Download species list as CSV",
-          "csvDownloaded": "Species list downloaded successfully",
-          "csvDownloadFailed": "Failed to download species list. Please try again.",
-          "modal": {
-            "title": "Range Filter Species",
-            "speciesCount": "Species Count:",
-            "threshold": "Threshold:",
-            "latitude": "Latitude:",
-            "longitude": "Longitude:",
-            "loadingSpecies": "Loading species...",
-            "noSpeciesFound": "No species found with current settings",
-            "close": "Close"
           }
         },
         "database": {
@@ -2352,9 +2318,6 @@
       "errors": {
         "localesLoadFailed": "Unable to load language options. Using defaults.",
         "providersLoadFailed": "Unable to load image providers. Using defaults.",
-        "rangeFilterTestFailed": "Failed to test range filter settings",
-        "rangeFilterLoadFailed": "Failed to load species list",
-        "rangeFilterCountFailed": "Failed to load species count",
         "mapLibraryLoadFailed": "Failed to load map library. Please refresh the page.",
         "mapLoadFailed": "Failed to load map. Please try refreshing the page.",
         "modalMapLoadFailed": "Failed to load modal map. Please try closing and reopening the modal.",
@@ -3709,342 +3672,6 @@
         "fileReadError": "Failed to read the selected file"
       }
     },
-    "species": {
-      "pageLabel": "Species settings",
-      "saveError": "Failed to save configuration for \"{species}\". Please try again.",
-      "configUpdated": "Updated configuration for \"{species}\"",
-      "configAdded": "Added configuration for \"{species}\"",
-      "duplicateConfigError": "Species \"{species}\" already has a configuration. Please choose a different name.",
-      "activeSpecies": {
-        "title": "Active Species",
-        "tabLabel": "Active",
-        "description": "Species that will be detected based on your current location and filter settings",
-        "stats": {
-          "species": "Species",
-          "location": "Location",
-          "threshold": "Threshold",
-          "updated": "Updated",
-          "justNow": "Just now",
-          "minutesAgo": "{count}m ago",
-          "hoursAgo": "{count}h ago"
-        },
-        "search": {
-          "placeholder": "Search species..."
-        },
-        "badges": {
-          "included": "Included",
-          "configured": "Configured"
-        },
-        "empty": {
-          "title": "No species found",
-          "description": "Configure your location in Main Settings to see available species"
-        },
-        "noResults": "No species match your search",
-        "infoNote": "This list is based on your location and range filter threshold. Manually included species are always added.",
-        "retry": "Retry",
-        "expand": "Expand list",
-        "collapse": "Collapse list",
-        "downloadCsv": "Download CSV",
-        "errors": {
-          "loadFailed": "Failed to load active species list"
-        },
-        "locationNotConfigured": {
-          "title": "Location Not Configured",
-          "description": "Set your location in Main Settings to see species available in your area. The range filter uses your location to determine which species are likely to be found nearby.",
-          "action": "Configure Location"
-        },
-        "rangeFilterHealth": {
-          "inactive": {
-            "title": "Range filter inactive",
-            "description": "Detections are not being filtered by your location right now, so species from outside your area can be reported. Check the range filter model configuration in Settings."
-          },
-          "fellBack": {
-            "title": "Using the built-in range filter",
-            "description": "The configured geomodel range filter could not be loaded, so VoiceWatch fell back to the built-in range filter. Filtering still works, but check Settings to restore the geomodel."
-          },
-          "mappedZero": {
-            "title": "Range filter matched no species",
-            "description": "The geomodel range filter did not match any of the active model's species, so every detection would be filtered out. Check that the range filter labels file matches the active model."
-          }
-        },
-        "columns": {
-          "commonName": "Common Name",
-          "scientificName": "Scientific Name",
-          "score": "Score",
-          "status": "Status"
-        }
-      },
-      "alwaysInclude": {
-        "title": "Always Include Species",
-        "tabLabel": "Include",
-        "description": "Species in this list will always be included in range of detected species",
-        "noSpeciesMessage": "No species added to include list"
-      },
-      "alwaysExclude": {
-        "title": "Always Exclude Species",
-        "tabLabel": "Exclude",
-        "description": "Species in this list will always be excluded from detection",
-        "noSpeciesMessage": "No species added to exclude list"
-      },
-      "customConfiguration": {
-        "title": "Custom Species Configuration",
-        "tabLabel": "Custom",
-        "description": "Species specific threshold values, detection intervals, and actions",
-        "helpText": {
-          "intro": "Configure species-specific settings:",
-          "threshold": "Threshold: Minimum confidence score (0-1) required for detection",
-          "interval": "Interval: Minimum time in seconds between detections of the same species (0 = use global default)",
-          "actions": "Actions: Custom commands to execute when this species is detected"
-        },
-        "columnHeaders": {
-          "species": "Species",
-          "settings": "Settings",
-          "actions": "Actions"
-        },
-        "badges": {
-          "threshold": "Threshold: {value}",
-          "interval": "Interval: {value}s",
-          "customAction": "Custom Action",
-          "executeDefaults": "+Defaults"
-        },
-        "dropdown": {
-          "editConfig": "Edit Config",
-          "addAction": "Add Action",
-          "remove": "Remove"
-        },
-        "labels": {
-          "threshold": "Threshold",
-          "interval": "Interval",
-          "intervalSeconds": "Interval (s)",
-          "addButton": "Add"
-        },
-        "noConfigurationsMessage": "No custom species configurations added",
-        "addForm": {
-          "speciesPlaceholder": "Species name",
-          "thresholdPlaceholder": "0.5",
-          "intervalPlaceholder": "0"
-        },
-        "addConfiguration": "Add Configuration",
-        "newConfiguration": "New Configuration",
-        "editing": "Editing: {species}",
-        "configuredCount": "{count} configured",
-        "searchPlaceholder": "Type to search...",
-        "saving": "Saving...",
-        "save": "Save",
-        "cancel": "Cancel",
-        "configureActions": "Configure Actions",
-        "actionsConfigured": "Configured",
-        "list": {
-          "editTitle": "Edit configuration",
-          "removeTitle": "Remove configuration"
-        },
-        "emptyState": {
-          "title": "No configurations yet.",
-          "description": "Click \"Add Configuration\" to customize species detection settings."
-        },
-        "table": {
-          "columnScientificName": "Scientific Name",
-          "intervalDefault": "Default",
-          "intervalDefaultTooltip": "0 = use the global default interval",
-          "noActions": "None",
-          "searchPlaceholder": "Search species...",
-          "noResults": "No matching configurations",
-          "editDisabledReason": "Save or close the current editor before editing another species",
-          "actionsDisabledBusy": "Please wait for the current operation to finish"
-        }
-      },
-      "synonyms": {
-        "tabLabel": "Synonyms",
-        "description": "Map VoiceWatch scientific names to their updated equivalents in newer taxonomy. Used only as a fallback when looking up bird photos from Wikipedia and AviCommons; does not rename species in detections or on the dashboard.",
-        "helpText": "To change how a species is named in the UI, edit your VoiceWatch labels file (the \"Label Path\" setting under Main settings).",
-        "birdnetName": "VoiceWatch Name",
-        "updatedName": "Updated Scientific Name",
-        "addButton": "Add Synonym",
-        "emptyState": "No taxonomy synonyms configured",
-        "errors": {
-          "unknownSpecies": "Species not found in VoiceWatch labels",
-          "duplicateKey": "A synonym for this species already exists",
-          "emptyUpdatedName": "Updated name is required"
-        }
-      },
-      "actionsModal": {
-        "title": "Actions for {species}",
-        "actionType": {
-          "label": "Action Type",
-          "executeCommand": "Execute Command",
-          "onlySupported": "Currently, only Execute Command actions are supported"
-        },
-        "command": {
-          "label": "Command",
-          "helpText": "Provide the full path to the command or script you want to execute"
-        },
-        "parameters": {
-          "label": "Parameters",
-          "helpText": "These values will be passed to your command in the order listed",
-          "placeholder": "Click buttons below to add parameters or type manually",
-          "tooltip": "Use buttons below or type directly (comma-separated)",
-          "availableTitle": "Available Parameters",
-          "buttons": {
-            "commonName": "CommonName",
-            "scientificName": "ScientificName",
-            "confidence": "Confidence",
-            "time": "Time",
-            "source": "Source",
-            "clearParameters": "Clear Parameters"
-          }
-        },
-        "executeDefaults": {
-          "label": "Also run default actions (database storage, notifications, etc.)",
-          "helpText": "When enabled, both your custom action and the system's default actions will run. When disabled, only your custom action will execute."
-        }
-      },
-      "add": "Add",
-      "remove": "Remove",
-      "suggestions": "Species suggestions",
-      "addSpeciesToInclude": "Add species to include",
-      "addSpeciesToIncludeLabel": "Add New Species to Include",
-      "addSpeciesToExclude": "Add species to exclude",
-      "addSpeciesToExcludeLabel": "Add New Species to Exclude",
-      "commandPathPlaceholder": "/path/to/your/command",
-      "parametersPlaceholder": "Parameters will appear here",
-      "errors": {
-        "speciesLoadFailed": "Failed to load species list. Please try again."
-      },
-      "tracking": {
-        "title": "Species Tracking",
-        "tabLabel": "Tracking",
-        "description": "Configure tracking for new species detections based on time periods",
-        "enabled": {
-          "label": "Enable Species Tracking",
-          "helpText": "When enabled, the system tracks new species detections and can send notifications"
-        },
-        "newSpeciesWindowDays": {
-          "label": "New Species Window (days)",
-          "helpText": "Number of days a species is considered 'new' after first detection (1-365)"
-        },
-        "syncIntervalMinutes": {
-          "label": "Sync Interval (minutes)",
-          "helpText": "How often to synchronize tracking data with the database (1-1440)"
-        },
-        "notificationSuppressionHours": {
-          "label": "Notification Suppression (hours)",
-          "helpText": "Hours to suppress duplicate notifications for the same species (0-8760)"
-        },
-        "yearly": {
-          "title": "Yearly Tracking",
-          "description": "Track first arrivals of species each year",
-          "enabled": {
-            "label": "Enable Yearly Tracking",
-            "helpText": "Track and notify when a species is detected for the first time each year"
-          },
-          "resetMonth": {
-            "label": "Reset Month",
-            "helpText": "Month when yearly tracking resets (1-12)"
-          },
-          "resetDay": {
-            "label": "Reset Day",
-            "helpText": "Day of month when yearly tracking resets"
-          },
-          "windowDays": {
-            "label": "Window (days)",
-            "helpText": "Days to show 'new this year' indicator (1-365)"
-          }
-        },
-        "seasonal": {
-          "title": "Seasonal Tracking",
-          "description": "Track first arrivals of species each season",
-          "enabled": {
-            "label": "Enable Seasonal Tracking",
-            "helpText": "Track and notify when a species is detected for the first time each season"
-          },
-          "windowDays": {
-            "label": "Window (days)",
-            "helpText": "Days to show 'new this season' indicator (1-365)"
-          },
-          "seasons": {
-            "title": "Season Definitions",
-            "description": "Define when each season starts. Seasons are automatically adjusted based on your location's hemisphere.",
-            "spring": "Spring",
-            "summer": "Summer",
-            "fall": "Fall",
-            "winter": "Winter",
-            "wet1": "Wet Season 1",
-            "dry1": "Dry Season 1",
-            "wet2": "Wet Season 2",
-            "dry2": "Dry Season 2",
-            "startMonth": "Start Month",
-            "startDay": "Start Day",
-            "hemisphereNote": "Season dates are automatically configured based on your latitude. Northern hemisphere uses standard seasons, southern hemisphere has shifted dates, and equatorial regions use wet/dry seasons."
-          }
-        },
-        "months": {
-          "january": "January",
-          "february": "February",
-          "march": "March",
-          "april": "April",
-          "may": "May",
-          "june": "June",
-          "july": "July",
-          "august": "August",
-          "september": "September",
-          "october": "October",
-          "november": "November",
-          "december": "December"
-        },
-        "units": {
-          "days": "days",
-          "min": "min",
-          "hours": "hrs"
-        }
-      },
-      "dynamicThreshold": {
-        "tabLabel": "Learned",
-        "title": "Learned Thresholds",
-        "description": "This page shows Dynamic Threshold runtime data. When enabled in Main Settings → Detection, thresholds are automatically adjusted by multiple high-confidence detections. Species shown here are assumed to exist at this location.",
-        "stats": {
-          "active": "Active",
-          "atMinimum": "At Minimum",
-          "minThreshold": "Min Threshold",
-          "validityPeriod": "Validity Period"
-        },
-        "header": {
-          "species": "Species",
-          "threshold": "Threshold",
-          "expires": "Expires"
-        },
-        "searchPlaceholder": "Search species...",
-        "threshold": "Threshold",
-        "level": "Level",
-        "expires": "Expires",
-        "expired": "Expired",
-        "confidence": "Confidence",
-        "requiredConfidence": "Required confidence",
-        "resetAll": "Reset All",
-        "resetSpecies": "Reset threshold for this species",
-        "noEvents": "No threshold change history",
-        "changeReason": {
-          "highConfidence": "High confidence detection",
-          "expiry": "Threshold expired",
-          "manualReset": "Manual reset"
-        },
-        "note": "High-confidence detections confirm which species exist at this location. After multiple high confidence matches, the detection threshold is safely lowered to capture more calls without significant false positive risk. Thresholds automatically reset after the configured validity period.",
-        "empty": {
-          "title": "No learned thresholds",
-          "description": "High-confidence detections will automatically create learned thresholds for species"
-        },
-        "resetAllConfirm": {
-          "title": "Reset All Thresholds",
-          "message": "This will reset all {count} learned thresholds. Species will need to be detected with high confidence again to lower their thresholds."
-        },
-        "loadError": "Failed to load dynamic thresholds",
-        "resetSuccess": "Threshold reset for {species}",
-        "resetError": "Failed to reset threshold",
-        "resetAllSuccess": "Reset {count} thresholds",
-        "resetAllError": "Failed to reset thresholds",
-        "expand": "Show event history",
-        "collapse": "Hide event history"
-      }
-    },
     "database": {
       "sqlitePlaceholder": "Enter SQLite database path",
       "mysqlHostPlaceholder": "Enter MySQL host",
@@ -4906,26 +4533,6 @@
       "locale": {
         "label": "Species Language",
         "helpText": "Language used for species common names in the interface."
-      }
-    },
-    "rangeFilter": {
-      "birdOnlyNote": "Range filter applies to bird classifiers only. Bat models use their own species lists.",
-      "status": {
-        "title": "Range Filter Overview",
-        "geomodelInfo": "VoiceWatch Geomodel {version} - {species} known species",
-        "autoSelected": "Auto-selected",
-        "manual": "Manual",
-        "classifier": "Classifier",
-        "totalSpecies": "Total Species",
-        "withRangeData": "With Range Data",
-        "withoutRangeData": "Without Range Data",
-        "withRangeDataTooltip": "Species that the geomodel can evaluate for geographic probability at your location",
-        "withoutRangeDataTooltip": "Species without geographic data in the geomodel, handled by the unmapped species setting below",
-        "noFilter": "No range filter active",
-        "passUnmapped": {
-          "label": "Allow species without range data",
-          "helpText": "Allow detections of species the geomodel has no geographic data for. When disabled, these species are always filtered out."
-        }
       }
     },
     "advanced": {

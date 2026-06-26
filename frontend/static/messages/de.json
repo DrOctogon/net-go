@@ -476,9 +476,6 @@
     "noResultsFound": "Keine Ergebnisse gefunden",
     "noResultsHint": "Versuchen Sie, Ihre Suchfilter anzupassen",
     "fields": {
-      "species": "Art",
-      "speciesPlaceholder": "Artname eingeben",
-      "speciesHelp": "Vollständigen oder teilweisen Artnamen eingeben (Groß-/Kleinschreibung egal)",
       "dateRange": "Datumsbereich",
       "dateRangeHelp": "Erkennungen nach Datumsbereich filtern (leer lassen für alle Daten)",
       "from": "Von",
@@ -683,8 +680,6 @@
         "markCorrect": "Richtig",
         "markFalsePositive": "Falsch",
         "review": "Erkennung überprüfen",
-        "showSpecies": "Art anzeigen",
-        "ignoreSpecies": "Art ignorieren",
         "lockDetection": "Erkennung sperren",
         "unlockDetection": "Erkennung entsperren",
         "deleteDetection": "Erkennung löschen"
@@ -2084,8 +2079,6 @@
           "warningOff": "Ohne Filterung wird jede Erkennung über dem Konfidenzschwellenwert sofort akzeptiert. Dies erzeugt typischerweise mehrere Fehlerkennungen pro Tag. Selbst eine niedrige Filterung verbessert die Ergebnisqualität erheblich."
         },
         "rangeFilter": {
-          "title": "Reichweitenfilter",
-          "description": "Erkennungen auf wahrscheinliche Arten in Ihrer geografischen Region beschränken",
           "stationLocation": {
             "label": "Stationsstandort",
             "helpText": "Stationsstandort, wird zur Abrufung von Wetterdaten und zur Begrenzung von Vogelarten auf die in der Region wahrscheinlichen verwendet."
@@ -2097,33 +2090,6 @@
           "longitude": {
             "label": "Längengrad",
             "helpText": "Längengrad des Stationsstandorts, wird für Wetterdaten und zur Filterung von Vogelarten nach Verbreitungsgebiet verwendet."
-          },
-          "model": {
-            "label": "Reichweitenfilter-Modell",
-            "helpText": "VoiceWatch Reichweitenfilter-Modellversion: latest oder legacy."
-          },
-          "threshold": {
-            "label": "Schwellenwert",
-            "helpText": "Steuert, welche Arten basierend auf ihrer Auftrittswahrscheinlichkeit für Ihren Standort und Jahreszeit einbezogen werden. Standard (0,01) wird für die meisten Benutzer empfohlen. Höhere Werte (0,05-0,3) schließen weniger Arten mit höherer Auftrittswahrscheinlichkeit ein. Sehr hohe Werte (0,5+) schließen nur die häufigsten Arten ein."
-          },
-          "speciesCount": {
-            "label": "Aktuelle Artenanzahl",
-            "helpText": "Anzahl der im Reichweitenfilter enthaltenen Arten. Aktualisiert sich automatisch, wenn sich Schwellenwert, Breitengrad oder Längengrad ändern.",
-            "loading": "Wird geladen...",
-            "viewSpecies": "Arten anzeigen"
-          },
-          "downloadTitle": "Artenliste als CSV herunterladen",
-          "csvDownloaded": "Artenliste erfolgreich heruntergeladen",
-          "csvDownloadFailed": "Fehler beim Herunterladen der Artenliste. Bitte versuchen Sie es erneut.",
-          "modal": {
-            "title": "Reichweitenfilter-Arten",
-            "speciesCount": "Artenanzahl:",
-            "threshold": "Schwellenwert:",
-            "latitude": "Breitengrad:",
-            "longitude": "Längengrad:",
-            "loadingSpecies": "Arten werden geladen...",
-            "noSpeciesFound": "Keine Arten mit aktuellen Einstellungen gefunden",
-            "close": "Schließen"
           }
         },
         "database": {
@@ -2352,9 +2318,6 @@
       "errors": {
         "localesLoadFailed": "Sprachoptionen konnten nicht geladen werden. Verwende Standardwerte.",
         "providersLoadFailed": "Bildanbieter konnten nicht geladen werden. Verwende Standardwerte.",
-        "rangeFilterTestFailed": "Fehler beim Testen der Reichweitenfilter-Einstellungen",
-        "rangeFilterLoadFailed": "Fehler beim Laden der Artenliste",
-        "rangeFilterCountFailed": "Fehler beim Laden der Artenanzahl",
         "mapLibraryLoadFailed": "Kartenbibliothek konnte nicht geladen werden. Bitte aktualisieren Sie die Seite.",
         "mapLoadFailed": "Karte konnte nicht geladen werden. Bitte versuchen Sie, die Seite zu aktualisieren.",
         "modalMapLoadFailed": "Modalkarte konnte nicht geladen werden. Bitte schließen und öffnen Sie das Modal erneut.",
@@ -3709,342 +3672,6 @@
         "fileReadError": "Ausgewählte Datei konnte nicht gelesen werden"
       }
     },
-    "species": {
-      "pageLabel": "Arteneinstellungen",
-      "saveError": "Konfiguration für \"{species}\" konnte nicht gespeichert werden. Bitte versuchen Sie es erneut.",
-      "configUpdated": "Konfiguration für \"{species}\" aktualisiert",
-      "configAdded": "Konfiguration für \"{species}\" hinzugefügt",
-      "duplicateConfigError": "Art \"{species}\" hat bereits eine Konfiguration. Bitte wählen Sie einen anderen Namen.",
-      "activeSpecies": {
-        "title": "Aktive Arten",
-        "tabLabel": "Aktiv",
-        "description": "Arten, die basierend auf Ihrem aktuellen Standort und Filtereinstellungen erkannt werden",
-        "stats": {
-          "species": "Arten",
-          "location": "Standort",
-          "threshold": "Schwellenwert",
-          "updated": "Aktualisiert",
-          "justNow": "Gerade eben",
-          "minutesAgo": "vor {count}m",
-          "hoursAgo": "vor {count}h"
-        },
-        "search": {
-          "placeholder": "Arten suchen..."
-        },
-        "badges": {
-          "included": "Eingeschlossen",
-          "configured": "Konfiguriert"
-        },
-        "empty": {
-          "title": "Keine Arten gefunden",
-          "description": "Konfigurieren Sie Ihren Standort in den Haupteinstellungen, um verfügbare Arten zu sehen"
-        },
-        "noResults": "Keine Arten entsprechen Ihrer Suche",
-        "infoNote": "Diese Liste basiert auf Ihrem Standort und dem Bereichsfilter-Schwellenwert. Manuell hinzugefügte Arten werden immer eingeschlossen.",
-        "retry": "Erneut versuchen",
-        "expand": "Liste erweitern",
-        "collapse": "Liste reduzieren",
-        "downloadCsv": "CSV herunterladen",
-        "errors": {
-          "loadFailed": "Fehler beim Laden der aktiven Artenliste"
-        },
-        "locationNotConfigured": {
-          "title": "Standort nicht konfiguriert",
-          "description": "Legen Sie Ihren Standort in den Haupteinstellungen fest, um Arten in Ihrer Umgebung zu sehen. Der Bereichsfilter verwendet Ihren Standort, um zu bestimmen, welche Arten in der Nähe wahrscheinlich vorkommen.",
-          "action": "Standort konfigurieren"
-        },
-        "rangeFilterHealth": {
-          "inactive": {
-            "title": "Bereichsfilter inaktiv",
-            "description": "Erkennungen werden derzeit nicht nach Ihrem Standort gefiltert, daher können auch Arten von außerhalb Ihrer Umgebung gemeldet werden. Überprüfen Sie die Bereichsfilter-Modellkonfiguration in den Haupteinstellungen."
-          },
-          "fellBack": {
-            "title": "Eingebauter Bereichsfilter wird verwendet",
-            "description": "Der konfigurierte Geomodell-Bereichsfilter konnte nicht geladen werden, daher hat VoiceWatch auf den eingebauten Bereichsfilter zurückgegriffen. Die Filterung funktioniert weiterhin, aber überprüfen Sie die Haupteinstellungen, um das Geomodell wiederherzustellen."
-          },
-          "mappedZero": {
-            "title": "Bereichsfilter hat keine Arten gefunden",
-            "description": "Der Geomodell-Bereichsfilter stimmte mit keiner der Arten des aktiven Modells überein, daher würde jede Erkennung herausgefiltert. Stellen Sie sicher, dass die Bereichsfilter-Labeldatei zum aktiven Modell passt."
-          }
-        },
-        "columns": {
-          "commonName": "Name",
-          "scientificName": "Wissenschaftlicher Name",
-          "score": "Bewertung",
-          "status": "Status"
-        }
-      },
-      "alwaysInclude": {
-        "title": "Immer Arten einschließen",
-        "tabLabel": "Einschl.",
-        "description": "Arten in dieser Liste werden immer im Bereich der erkannten Arten enthalten sein",
-        "noSpeciesMessage": "Keine Arten zur Einschlussliste hinzugefügt"
-      },
-      "alwaysExclude": {
-        "title": "Immer Arten ausschließen",
-        "tabLabel": "Ausschl.",
-        "description": "Arten in dieser Liste werden immer von der Erkennung ausgeschlossen",
-        "noSpeciesMessage": "Keine Arten zur Ausschlussliste hinzugefügt"
-      },
-      "customConfiguration": {
-        "title": "Benutzerdefinierte Artenkonfiguration",
-        "tabLabel": "Benutzer.",
-        "description": "Artenspezifische Schwellenwerte, Erkennungsintervalle und Aktionen",
-        "helpText": {
-          "intro": "Konfigurieren Sie artenspezifische Einstellungen:",
-          "threshold": "Schwellenwert: Minimaler Konfidenzwert (0-1) für die Erkennung erforderlich",
-          "interval": "Intervall: Mindestzeit in Sekunden zwischen Erkennungen derselben Art (0 = globalen Standardwert verwenden)",
-          "actions": "Aktionen: Benutzerdefinierte Befehle, die ausgeführt werden, wenn diese Art erkannt wird"
-        },
-        "columnHeaders": {
-          "species": "Art",
-          "settings": "Einstellungen",
-          "actions": "Aktionen"
-        },
-        "badges": {
-          "threshold": "Schwellenwert: {value}",
-          "interval": "Intervall: {value}s",
-          "customAction": "Benutzerdefinierte Aktion",
-          "executeDefaults": "+Standards"
-        },
-        "dropdown": {
-          "editConfig": "Konfiguration bearbeiten",
-          "addAction": "Aktion hinzufügen",
-          "remove": "Entfernen"
-        },
-        "labels": {
-          "threshold": "Schwellenwert",
-          "interval": "Intervall",
-          "intervalSeconds": "Intervall (Sek.)",
-          "addButton": "Hinzufügen"
-        },
-        "noConfigurationsMessage": "Keine benutzerdefinierten Artenkonfigurationen hinzugefügt",
-        "addForm": {
-          "speciesPlaceholder": "Artname",
-          "thresholdPlaceholder": "0,5",
-          "intervalPlaceholder": "0"
-        },
-        "addConfiguration": "Konfiguration hinzufügen",
-        "newConfiguration": "Neue Konfiguration",
-        "editing": "Bearbeiten: {species}",
-        "configuredCount": "{count} konfiguriert",
-        "searchPlaceholder": "Zum Suchen eingeben...",
-        "saving": "Speichern...",
-        "save": "Speichern",
-        "cancel": "Abbrechen",
-        "configureActions": "Aktionen konfigurieren",
-        "actionsConfigured": "Konfiguriert",
-        "list": {
-          "editTitle": "Konfiguration bearbeiten",
-          "removeTitle": "Konfiguration entfernen"
-        },
-        "emptyState": {
-          "title": "Noch keine Konfigurationen.",
-          "description": "Klicken Sie auf \"Konfiguration hinzufügen\", um die Artenerkennungseinstellungen anzupassen."
-        },
-        "table": {
-          "columnScientificName": "Wissenschaftlicher Name",
-          "intervalDefault": "Standard",
-          "intervalDefaultTooltip": "0 = globales Standardintervall verwenden",
-          "noActions": "Keines",
-          "searchPlaceholder": "Arten suchen...",
-          "noResults": "Keine passenden Konfigurationen",
-          "editDisabledReason": "Speichern oder schließen Sie den aktuellen Editor, bevor Sie eine andere Art bearbeiten",
-          "actionsDisabledBusy": "Bitte warten Sie, bis der aktuelle Vorgang abgeschlossen ist"
-        }
-      },
-      "synonyms": {
-        "tabLabel": "Synonyme",
-        "description": "Ordnen Sie wissenschaftliche VoiceWatch-Namen ihren aktualisierten Entsprechungen in einer neueren Taxonomie zu. Wird nur als Fallback beim Abrufen von Vogelbildern von Wikipedia und AviCommons verwendet; benennt Arten weder in Erkennungen noch im Dashboard um.",
-        "helpText": "Um den in der Oberfläche angezeigten Namen einer Art zu ändern, bearbeiten Sie Ihre VoiceWatch-Labeldatei (Einstellung \"Label-Pfad\" unter Haupteinstellungen).",
-        "birdnetName": "VoiceWatch-Name",
-        "updatedName": "Aktualisierter wissenschaftlicher Name",
-        "addButton": "Synonym hinzufügen",
-        "emptyState": "Keine Taxonomie-Synonyme konfiguriert",
-        "errors": {
-          "unknownSpecies": "Art nicht in VoiceWatch-Labels gefunden",
-          "duplicateKey": "Für diese Art existiert bereits ein Synonym",
-          "emptyUpdatedName": "Der neue Name ist erforderlich"
-        }
-      },
-      "actionsModal": {
-        "title": "Aktionen für {species}",
-        "actionType": {
-          "label": "Aktionstyp",
-          "executeCommand": "Befehl ausführen",
-          "onlySupported": "Derzeit werden nur Befehl ausführen-Aktionen unterstützt"
-        },
-        "command": {
-          "label": "Befehl",
-          "helpText": "Geben Sie den vollständigen Pfad zum Befehl oder Skript an, das Sie ausführen möchten"
-        },
-        "parameters": {
-          "label": "Parameter",
-          "helpText": "Diese Werte werden in der aufgeführten Reihenfolge an Ihren Befehl übergeben",
-          "placeholder": "Klicken Sie auf die Schaltflächen unten, um Parameter hinzuzufügen, oder geben Sie sie manuell ein",
-          "tooltip": "Verwenden Sie die Schaltflächen unten oder geben Sie direkt ein (kommagetrennt)",
-          "availableTitle": "Verfügbare Parameter",
-          "buttons": {
-            "commonName": "DeutscherName",
-            "scientificName": "WissenschaftlicherName",
-            "confidence": "Konfidenz",
-            "time": "Zeit",
-            "source": "Quelle",
-            "clearParameters": "Parameter löschen"
-          }
-        },
-        "executeDefaults": {
-          "label": "Auch Standardaktionen ausführen (Datenbankspeicherung, Benachrichtigungen usw.)",
-          "helpText": "Wenn aktiviert, werden sowohl Ihre benutzerdefinierte Aktion als auch die Standardaktionen des Systems ausgeführt. Wenn deaktiviert, wird nur Ihre benutzerdefinierte Aktion ausgeführt."
-        }
-      },
-      "add": "Hinzufügen",
-      "remove": "Entfernen",
-      "suggestions": "Artvorschläge",
-      "addSpeciesToInclude": "Arten zum Einschließen hinzufügen",
-      "addSpeciesToIncludeLabel": "Neue Arten zum Einschließen hinzufügen",
-      "addSpeciesToExclude": "Arten zum Ausschließen hinzufügen",
-      "addSpeciesToExcludeLabel": "Neue Arten zum Ausschließen hinzufügen",
-      "commandPathPlaceholder": "/pfad/zu/ihrem/befehl",
-      "parametersPlaceholder": "Parameter werden hier angezeigt",
-      "errors": {
-        "speciesLoadFailed": "Fehler beim Laden der Artenliste. Bitte versuchen Sie es erneut."
-      },
-      "tracking": {
-        "title": "Verfolgung",
-        "tabLabel": "Verfolgung",
-        "description": "Konfigurieren Sie die Verfolgung neuer Artenerkennungen basierend auf Zeiträumen",
-        "enabled": {
-          "label": "Artenverfolgung aktivieren",
-          "helpText": "Bei Aktivierung verfolgt das System neue Artenerkennungen und kann Benachrichtigungen senden"
-        },
-        "newSpeciesWindowDays": {
-          "label": "Neue Art Fenster (Tage)",
-          "helpText": "Anzahl der Tage, die eine Art nach der Erstentdeckung als 'neu' gilt (1-365)"
-        },
-        "syncIntervalMinutes": {
-          "label": "Synchronisierungsintervall (Minuten)",
-          "helpText": "Wie oft Verfolgungsdaten mit der Datenbank synchronisiert werden (1-1440)"
-        },
-        "notificationSuppressionHours": {
-          "label": "Benachrichtigungsunterdrückung (Stunden)",
-          "helpText": "Stunden zur Unterdrückung doppelter Benachrichtigungen für dieselbe Art (0-8760)"
-        },
-        "yearly": {
-          "title": "Jährliche Verfolgung",
-          "description": "Verfolgen Sie die ersten Ankünfte von Arten jedes Jahr",
-          "enabled": {
-            "label": "Jährliche Verfolgung aktivieren",
-            "helpText": "Verfolgen und benachrichtigen Sie, wenn eine Art zum ersten Mal im Jahr erkannt wird"
-          },
-          "resetMonth": {
-            "label": "Rücksetzungsmonat",
-            "helpText": "Monat, in dem die jährliche Verfolgung zurückgesetzt wird (1-12)"
-          },
-          "resetDay": {
-            "label": "Rücksetzungstag",
-            "helpText": "Tag des Monats, an dem die jährliche Verfolgung zurückgesetzt wird"
-          },
-          "windowDays": {
-            "label": "Fenster (Tage)",
-            "helpText": "Tage zur Anzeige des 'Neu in diesem Jahr' Indikators (1-365)"
-          }
-        },
-        "seasonal": {
-          "title": "Saisonale Verfolgung",
-          "description": "Verfolgen Sie die ersten Ankünfte von Arten jede Saison",
-          "enabled": {
-            "label": "Saisonale Verfolgung aktivieren",
-            "helpText": "Verfolgen und benachrichtigen Sie, wenn eine Art zum ersten Mal in der Saison erkannt wird"
-          },
-          "windowDays": {
-            "label": "Fenster (Tage)",
-            "helpText": "Tage zur Anzeige des 'Neu in dieser Saison' Indikators (1-365)"
-          },
-          "seasons": {
-            "title": "Saisondefinitionen",
-            "description": "Definieren Sie, wann jede Saison beginnt. Die Saisons werden automatisch basierend auf dem Breitengrad Ihres Standorts angepasst.",
-            "spring": "Frühling",
-            "summer": "Sommer",
-            "fall": "Herbst",
-            "winter": "Winter",
-            "wet1": "Regenzeit 1",
-            "dry1": "Trockenzeit 1",
-            "wet2": "Regenzeit 2",
-            "dry2": "Trockenzeit 2",
-            "startMonth": "Startmonat",
-            "startDay": "Starttag",
-            "hemisphereNote": "Die Saisondaten werden automatisch basierend auf Ihrem Breitengrad konfiguriert. Die nördliche Hemisphäre verwendet Standardsaisons, die südliche Hemisphäre hat verschobene Daten und Äquatorialregionen verwenden Regen-/Trockenzeiten."
-          }
-        },
-        "months": {
-          "january": "Januar",
-          "february": "Februar",
-          "march": "März",
-          "april": "April",
-          "may": "Mai",
-          "june": "Juni",
-          "july": "Juli",
-          "august": "August",
-          "september": "September",
-          "october": "Oktober",
-          "november": "November",
-          "december": "Dezember"
-        },
-        "units": {
-          "days": "Tage",
-          "min": "Min",
-          "hours": "Std"
-        }
-      },
-      "dynamicThreshold": {
-        "tabLabel": "Gelernt",
-        "title": "Gelernte Schwellenwerte",
-        "description": "Diese Seite zeigt dynamische Schwellenwert-Laufzeitdaten. Wenn in Haupteinstellungen → Erkennung aktiviert, werden Schwellenwerte automatisch durch mehrere hochkonfidente Erkennungen angepasst. Hier gezeigte Arten werden an diesem Standort als vorhanden angenommen.",
-        "stats": {
-          "active": "Aktiv",
-          "atMinimum": "Am Minimum",
-          "minThreshold": "Min. Schwellenwert",
-          "validityPeriod": "Gültigkeitsdauer"
-        },
-        "header": {
-          "species": "Art",
-          "threshold": "Schwellenwert",
-          "expires": "Läuft ab"
-        },
-        "searchPlaceholder": "Arten suchen...",
-        "threshold": "Schwellenwert",
-        "level": "Stufe",
-        "expires": "Läuft ab",
-        "expired": "Abgelaufen",
-        "confidence": "Konfidenz",
-        "requiredConfidence": "Erforderliche Konfidenz",
-        "resetAll": "Alle zurücksetzen",
-        "resetSpecies": "Schwellenwert für diese Art zurücksetzen",
-        "noEvents": "Keine Schwellenwertänderungen",
-        "changeReason": {
-          "highConfidence": "Erkennung mit hoher Konfidenz",
-          "expiry": "Schwellenwert abgelaufen",
-          "manualReset": "Manueller Reset"
-        },
-        "note": "Hochkonfidente Erkennungen bestätigen, welche Arten an diesem Standort vorkommen. Nach mehreren hochkonfidenten Übereinstimmungen wird der Erkennungsschwellenwert sicher gesenkt, um mehr Rufe ohne signifikantes Falsch-Positiv-Risiko zu erfassen. Schwellenwerte werden nach der konfigurierten Gültigkeitsdauer automatisch zurückgesetzt.",
-        "empty": {
-          "title": "Keine gelernten Schwellenwerte",
-          "description": "Hochkonfidente Erkennungen erstellen automatisch gelernte Schwellenwerte für Arten"
-        },
-        "resetAllConfirm": {
-          "title": "Alle Schwellenwerte zurücksetzen",
-          "message": "Dies setzt alle {count} gelernten Schwellenwerte zurück. Arten müssen erneut mit hoher Konfidenz erkannt werden, um ihre Schwellenwerte zu senken."
-        },
-        "loadError": "Fehler beim Laden der dynamischen Schwellenwerte",
-        "resetSuccess": "Schwellenwert für {species} zurückgesetzt",
-        "resetError": "Fehler beim Zurücksetzen des Schwellenwerts",
-        "resetAllSuccess": "{count} Schwellenwerte zurückgesetzt",
-        "resetAllError": "Fehler beim Zurücksetzen der Schwellenwerte",
-        "expand": "Ereignisverlauf anzeigen",
-        "collapse": "Ereignisverlauf ausblenden"
-      }
-    },
     "database": {
       "sqlitePlaceholder": "SQLite-Datenbankpfad eingeben",
       "mysqlHostPlaceholder": "MySQL-Host eingeben",
@@ -4906,26 +4533,6 @@
       "locale": {
         "label": "Artensprache",
         "helpText": "Sprache für die gebräuchlichen Artnamen in der Benutzeroberfläche."
-      }
-    },
-    "rangeFilter": {
-      "birdOnlyNote": "Der Reichweitenfilter gilt nur für Vogelklassifikatoren. Fledermausmodelle verwenden eigene Artenlisten.",
-      "status": {
-        "title": "Gebietsfilter-Übersicht",
-        "geomodelInfo": "VoiceWatch-Geomodell {version} - {species} bekannte Arten",
-        "autoSelected": "Automatisch ausgewählt",
-        "manual": "Manuell",
-        "classifier": "Klassifikator",
-        "totalSpecies": "Arten insgesamt",
-        "withRangeData": "Mit Gebietsdaten",
-        "withoutRangeData": "Ohne Gebietsdaten",
-        "withRangeDataTooltip": "Arten, die das Geomodell anhand der geografischen Wahrscheinlichkeit an Ihrem Standort bewerten kann",
-        "withoutRangeDataTooltip": "Arten ohne geografische Daten im Geomodell, behandelt durch die Einstellung für nicht zugeordnete Arten unten",
-        "noFilter": "Kein Gebietsfilter aktiv",
-        "passUnmapped": {
-          "label": "Arten ohne Gebietsdaten zulassen",
-          "helpText": "Erkennungen von Arten zulassen, für die das Geomodell keine geografischen Daten hat. Wenn deaktiviert, werden diese Arten immer herausgefiltert."
-        }
       }
     },
     "advanced": {

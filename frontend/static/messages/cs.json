@@ -476,9 +476,6 @@
     "noResultsFound": "Nebyly nalezeny žádné výsledky",
     "noResultsHint": "Zkuste upravit filtry vyhledávání",
     "fields": {
-      "species": "Druh",
-      "speciesPlaceholder": "Zadejte název druhu",
-      "speciesHelp": "Zadejte celý nebo částečný název druhu (nerozlišují se malá a velká písmena)",
       "dateRange": "Rozsah dat",
       "dateRangeHelp": "Filtrovat detekce podle rozsahu dat (ponechte prázdné pro všechna data)",
       "from": "Od",
@@ -683,8 +680,6 @@
         "markCorrect": "Správně",
         "markFalsePositive": "Nesprávně",
         "review": "Zkontrolovat detekci",
-        "showSpecies": "Zobrazovat druh",
-        "ignoreSpecies": "Ignorovat druh",
         "lockDetection": "Uzamknout detekci",
         "unlockDetection": "Odemknout detekci",
         "deleteDetection": "Odstranit detekci"
@@ -2084,8 +2079,6 @@
           "warningOff": "Při vypnutém filtrování je každá detekce nad prahem spolehlivosti okamžitě přijata. To obvykle vede k několika falešným detekcím denně. I mírné filtrování výrazně zlepšuje kvalitu výsledků."
         },
         "rangeFilter": {
-          "title": "Filtr výskytu",
-          "description": "Omezit detekci na druhy pravděpodobné ve vašem geografickém regionu",
           "stationLocation": {
             "label": "Poloha stanice",
             "helpText": "Poloha stanice, používaná pro data o počasí a k omezení druhů ptáků na ty, které jsou v regionu pravděpodobné."
@@ -2097,33 +2090,6 @@
           "longitude": {
             "label": "Zeměpisná délka",
             "helpText": "Zeměpisná délka stanice, používaná pro data o počasí a filtrování výskytu druhů."
-          },
-          "model": {
-            "label": "Model filtru výskytu",
-            "helpText": "Verze modelu filtru výskytu VoiceWatch: nejnovější (latest) nebo původní (legacy)."
-          },
-          "threshold": {
-            "label": "Práh",
-            "helpText": "Řídí, které druhy jsou zahrnuty na základě pravděpodobnosti jejich výskytu pro vaši polohu a roční období. Pro většinu uživatelů se doporučuje výchozí hodnota (0.01). Vyšší hodnoty (0.05–0.3) zahrnují méně druhů s vyšší pravděpodobností výskytu. Velmi vysoké hodnoty (0.5+) zahrnují pouze nejběžnější druhy."
-          },
-          "speciesCount": {
-            "label": "Aktuální počet druhů",
-            "helpText": "Počet druhů zahrnutých ve filtru výskytu. Aktualizuje se automaticky při změně prahu, zeměpisné šířky nebo délky.",
-            "loading": "Načítání...",
-            "viewSpecies": "Zobrazit druhy"
-          },
-          "downloadTitle": "Stáhnout seznam druhů jako CSV",
-          "csvDownloaded": "Seznam druhů byl úspěšně stažen",
-          "csvDownloadFailed": "Nepodařilo se stáhnout seznam druhů. Zkuste to znovu.",
-          "modal": {
-            "title": "Druhy filtru výskytu",
-            "speciesCount": "Počet druhů:",
-            "threshold": "Práh:",
-            "latitude": "Zeměpisná šířka:",
-            "longitude": "Zeměpisná délka:",
-            "loadingSpecies": "Načítají se druhy...",
-            "noSpeciesFound": "S aktuálním nastavením nebyly nalezeny žádné druhy",
-            "close": "Zavřít"
           }
         },
         "database": {
@@ -2352,9 +2318,6 @@
       "errors": {
         "localesLoadFailed": "Nepodařilo se načíst možnosti jazyka. Používají se výchozí nastavení.",
         "providersLoadFailed": "Nepodařilo se načíst poskytovatele obrázků. Používají se výchozí nastavení.",
-        "rangeFilterTestFailed": "Nepodařilo se otestovat nastavení filtru výskytu",
-        "rangeFilterLoadFailed": "Nepodařilo se načíst seznam druhů",
-        "rangeFilterCountFailed": "Nepodařilo se načíst počet druhů",
         "mapLibraryLoadFailed": "Nepodařilo se načíst knihovnu map. Obnovte stránku.",
         "mapLoadFailed": "Nepodařilo se načíst mapu. Zkuste obnovit stránku.",
         "modalMapLoadFailed": "Nepodařilo se načíst modální mapu. Zkuste okno zavřít a znovu otevřít.",
@@ -3709,342 +3672,6 @@
         "fileReadError": "Nepodařilo se přečíst vybraný soubor"
       }
     },
-    "species": {
-      "pageLabel": "Nastavení druhů",
-      "saveError": "Uložení konfigurace pro \"{species}\" selhalo. Zkuste to prosím znovu.",
-      "configUpdated": "Konfigurace pro \"{species}\" byla aktualizována",
-      "configAdded": "Konfigurace pro \"{species}\" byla přidána",
-      "duplicateConfigError": "Druh \"{species}\" již má konfiguraci. Zvolte prosím jiný název.",
-      "activeSpecies": {
-        "title": "Aktivní druhy",
-        "tabLabel": "Aktivní",
-        "description": "Druhy, které budou detekovány na základě vaší aktuální polohy a nastavení filtru",
-        "stats": {
-          "species": "Druhy",
-          "location": "Poloha",
-          "threshold": "Práh",
-          "updated": "Aktualizováno",
-          "justNow": "Právě teď",
-          "minutesAgo": "před {count}m",
-          "hoursAgo": "před {count}h"
-        },
-        "search": {
-          "placeholder": "Hledat druhy..."
-        },
-        "badges": {
-          "included": "Zahrnuto",
-          "configured": "Nakonfigurováno"
-        },
-        "empty": {
-          "title": "Nebyly nalezeny žádné druhy",
-          "description": "Nakonfigurujte svou polohu v Hlavních nastaveních, abyste viděli dostupné druhy"
-        },
-        "noResults": "Žádné druhy neodpovídají vašemu vyhledávání",
-        "infoNote": "Tento seznam je založen na vaší poloze a prahu filtru rozsahu. Ručně zahrnuté druhy jsou vždy přidány.",
-        "retry": "Zkusit znovu",
-        "expand": "Rozbalit seznam",
-        "collapse": "Sbalit seznam",
-        "downloadCsv": "Stáhnout CSV",
-        "errors": {
-          "loadFailed": "Nepodařilo se načíst seznam aktivních druhů"
-        },
-        "locationNotConfigured": {
-          "title": "Poloha není nakonfigurována",
-          "description": "Nastavte svou polohu v Hlavních nastaveních, abyste viděli druhy dostupné ve vaší oblasti. Filtr rozsahu používá vaši polohu k určení, které druhy se pravděpodobně vyskytují v okolí.",
-          "action": "Nakonfigurovat polohu"
-        },
-        "rangeFilterHealth": {
-          "inactive": {
-            "title": "Filtr rozsahu je neaktivní",
-            "description": "Detekce nejsou momentálně filtrovány podle vaší polohy, takže mohou být hlášeny i druhy mimo vaši oblast. Zkontrolujte konfiguraci modelu filtru rozsahu v Nastavení."
-          },
-          "fellBack": {
-            "title": "Používá se vestavěný filtr rozsahu",
-            "description": "Nakonfigurovaný filtr rozsahu geomodelu se nepodařilo načíst, takže VoiceWatch přešel na vestavěný filtr rozsahu. Filtrování stále funguje, ale zkontrolujte Nastavení, abyste obnovili geomodel."
-          },
-          "mappedZero": {
-            "title": "Filtr rozsahu neodpovídá žádnému druhu",
-            "description": "Filtr rozsahu geomodelu neodpovídá žádnému z druhů aktivního modelu, takže by byla odfiltrována každá detekce. Zkontrolujte, zda soubor štítků filtru rozsahu odpovídá aktivnímu modelu."
-          }
-        },
-        "columns": {
-          "commonName": "Název",
-          "scientificName": "Vědecký název",
-          "score": "Skóre",
-          "status": "Stav"
-        }
-      },
-      "alwaysInclude": {
-        "title": "Vždy zahrnout druhy",
-        "tabLabel": "Zahrnout",
-        "description": "Druhy v tomto seznamu budou vždy zahrnuty v rozsahu detekovaných druhů",
-        "noSpeciesMessage": "Do seznamu zahrnutých druhů nebyly přidány žádné druhy"
-      },
-      "alwaysExclude": {
-        "title": "Vždy vyloučit druhy",
-        "tabLabel": "Vyloučit",
-        "description": "Druhy v tomto seznamu budou vždy vyloučeny z detekce",
-        "noSpeciesMessage": "Do seznamu vyloučených druhů nebyly přidány žádné druhy"
-      },
-      "customConfiguration": {
-        "title": "Vlastní konfigurace druhů",
-        "tabLabel": "Vlastní",
-        "description": "Hodnoty prahu specifické pro druhy, intervaly detekce a akce",
-        "helpText": {
-          "intro": "Nakonfigurujte nastavení specifická pro druhy:",
-          "threshold": "Práh: Minimální skóre spolehlivosti (0–1) vyžadované pro detekci",
-          "interval": "Interval: Minimální čas v sekundách mezi detekcemi stejného druhu (0 = použít globální výchozí hodnotu)",
-          "actions": "Akce: Vlastní příkazy, které se mají provést při detekci tohoto druhu"
-        },
-        "columnHeaders": {
-          "species": "Druh",
-          "settings": "Nastavení",
-          "actions": "Akce"
-        },
-        "badges": {
-          "threshold": "Práh: {value}",
-          "interval": "Interval: {value}s",
-          "customAction": "Vlastní akce",
-          "executeDefaults": "+Výchozí"
-        },
-        "dropdown": {
-          "editConfig": "Upravit konfiguraci",
-          "addAction": "Přidat akci",
-          "remove": "Odstranit"
-        },
-        "labels": {
-          "threshold": "Práh",
-          "interval": "Interval",
-          "intervalSeconds": "Interval (s)",
-          "addButton": "Přidat"
-        },
-        "noConfigurationsMessage": "Nebyly přidány žádné vlastní konfigurace druhů",
-        "addForm": {
-          "speciesPlaceholder": "Název druhu",
-          "thresholdPlaceholder": "0.5",
-          "intervalPlaceholder": "0"
-        },
-        "addConfiguration": "Přidat konfiguraci",
-        "newConfiguration": "Nová konfigurace",
-        "editing": "Upravuje se: {species}",
-        "configuredCount": "{count} nakonfigurováno",
-        "searchPlaceholder": "Pište pro vyhledávání...",
-        "saving": "Ukládá se...",
-        "save": "Uložit",
-        "cancel": "Zrušit",
-        "configureActions": "Nakonfigurovat akce",
-        "actionsConfigured": "Nakonfigurováno",
-        "list": {
-          "editTitle": "Upravit konfiguraci",
-          "removeTitle": "Odstranit konfiguraci"
-        },
-        "emptyState": {
-          "title": "Zatím žádné konfigurace.",
-          "description": "Klikněte na \"Přidat konfiguraci\" pro přizpůsobení nastavení detekce druhů."
-        },
-        "table": {
-          "columnScientificName": "Vědecký název",
-          "intervalDefault": "Výchozí",
-          "intervalDefaultTooltip": "0 = použít globální výchozí interval",
-          "noActions": "Žádný",
-          "searchPlaceholder": "Hledat druhy...",
-          "noResults": "Žádné odpovídající konfigurace",
-          "editDisabledReason": "Před úpravou jiného druhu uložte nebo zavřete aktuální editor",
-          "actionsDisabledBusy": "Počkejte prosím na dokončení aktuální operace"
-        }
-      },
-      "synonyms": {
-        "tabLabel": "Synonyma",
-        "description": "Přiřaďte vědecké názvy VoiceWatch k jejich aktualizovaným ekvivalentům v novější taxonomii. Používá se pouze jako záložní možnost při vyhledávání fotografií ptáků na Wikipedii a AviCommons; nepřejmenovává druhy v detekcích ani na nástěnce.",
-        "helpText": "Chcete-li změnit, pod jakým názvem se druh zobrazuje v rozhraní, upravte soubor štítků VoiceWatch (nastavení \"Cesta ke štítkům\" v Hlavních nastaveních).",
-        "birdnetName": "Název VoiceWatch",
-        "updatedName": "Aktualizovaný vědecký název",
-        "addButton": "Přidat synonymum",
-        "emptyState": "Žádná taxonomická synonyma nejsou nakonfigurována",
-        "errors": {
-          "unknownSpecies": "Druh nebyl nalezen ve štítcích VoiceWatch",
-          "duplicateKey": "Pro tento druh již synonymum existuje",
-          "emptyUpdatedName": "Aktualizovaný název je povinný"
-        }
-      },
-      "actionsModal": {
-        "title": "Akce pro {species}",
-        "actionType": {
-          "label": "Typ akce",
-          "executeCommand": "Provést příkaz",
-          "onlySupported": "V současnosti jsou podporovány pouze akce Provést příkaz"
-        },
-        "command": {
-          "label": "Příkaz",
-          "helpText": "Uveďte úplnou cestu k příkazu nebo skriptu, který chcete provést"
-        },
-        "parameters": {
-          "label": "Parametry",
-          "helpText": "Tyto hodnoty budou předány vašemu příkazu v uvedeném pořadí",
-          "placeholder": "Klikněte na tlačítka níže pro přidání parametrů nebo zadejte ručně",
-          "tooltip": "Použijte tlačítka níže nebo zadejte přímo (oddělené čárkou)",
-          "availableTitle": "Dostupné parametry",
-          "buttons": {
-            "commonName": "CommonName",
-            "scientificName": "ScientificName",
-            "confidence": "Confidence",
-            "time": "Time",
-            "source": "Source",
-            "clearParameters": "Vymazat parametry"
-          }
-        },
-        "executeDefaults": {
-          "label": "Spustit také výchozí akce (uložení do databáze, oznámení atd.)",
-          "helpText": "Pokud je povoleno, spustí se jak vaše vlastní akce, tak výchozí systémové akce. Pokud je zakázáno, provede se pouze vaše vlastní akce."
-        }
-      },
-      "add": "Přidat",
-      "remove": "Odstranit",
-      "suggestions": "Návrhy druhů",
-      "addSpeciesToInclude": "Přidat druh k zahrnutí",
-      "addSpeciesToIncludeLabel": "Přidat nový druh k zahrnutí",
-      "addSpeciesToExclude": "Přidat druh k vyloučení",
-      "addSpeciesToExcludeLabel": "Přidat nový druh k vyloučení",
-      "commandPathPlaceholder": "/cesta/k/vasemu/prikazu",
-      "parametersPlaceholder": "Parametry se zobrazí zde",
-      "errors": {
-        "speciesLoadFailed": "Nepodařilo se načíst seznam druhů. Zkuste to prosím znovu."
-      },
-      "tracking": {
-        "title": "Sledování druhů",
-        "tabLabel": "Sledování",
-        "description": "Konfigurace sledování nových detekcí druhů na základě časových období",
-        "enabled": {
-          "label": "Povolit sledování druhů",
-          "helpText": "Pokud je povoleno, systém sleduje nové detekce druhů a může posílat oznámení"
-        },
-        "newSpeciesWindowDays": {
-          "label": "Okno pro nové druhy (dny)",
-          "helpText": "Počet dní, po které je druh považován za „nový“ po první detekci (1–365)"
-        },
-        "syncIntervalMinutes": {
-          "label": "Interval synchronizace (minuty)",
-          "helpText": "Jak často synchronizovat data sledování s databází (1–1440)"
-        },
-        "notificationSuppressionHours": {
-          "label": "Potlačení oznámení (hodiny)",
-          "helpText": "Hodiny pro potlačení duplicitních oznámení pro tentýž druh (0–8760)"
-        },
-        "yearly": {
-          "title": "Roční sledování",
-          "description": "Sledovat první přílety druhů každý rok",
-          "enabled": {
-            "label": "Povolit roční sledování",
-            "helpText": "Sledovat a upozornit, když je druh detekován poprvé v daném roce"
-          },
-          "resetMonth": {
-            "label": "Měsíc resetu",
-            "helpText": "Měsíc, kdy se resetuje roční sledování (1–12)"
-          },
-          "resetDay": {
-            "label": "Den resetu",
-            "helpText": "Den v měsíci, kdy se resetuje roční sledování"
-          },
-          "windowDays": {
-            "label": "Okno (dny)",
-            "helpText": "Dny pro zobrazení indikátoru „nový tento rok“ (1–365)"
-          }
-        },
-        "seasonal": {
-          "title": "Sezónní sledování",
-          "description": "Sledovat první přílety druhů každou sezónu",
-          "enabled": {
-            "label": "Povolit sezónní sledování",
-            "helpText": "Sledovat a upozornit, když je druh detekován poprvé v dané sezóně"
-          },
-          "windowDays": {
-            "label": "Okno (dny)",
-            "helpText": "Dny pro zobrazení indikátoru „nový tuto sezónu“ (1–365)"
-          },
-          "seasons": {
-            "title": "Definice sezón",
-            "description": "Definujte, kdy začíná každá sezóna. Sezóny se automaticky přizpůsobují podle polokoule vaší polohy.",
-            "spring": "Jaro",
-            "summer": "Léto",
-            "fall": "Podzim",
-            "winter": "Zima",
-            "wet1": "Období dešťů 1",
-            "dry1": "Období sucha 1",
-            "wet2": "Období dešťů 2",
-            "dry2": "Období sucha 2",
-            "startMonth": "Měsíc začátku",
-            "startDay": "Den začátku",
-            "hemisphereNote": "Data sezón jsou automaticky konfigurována podle vaší zeměpisné šířky. Severní polokoule používá standardní sezóny, jižní polokoule má posunutá data a rovníkové oblasti používají období dešťů/sucha."
-          }
-        },
-        "months": {
-          "january": "Leden",
-          "february": "Únor",
-          "march": "Březen",
-          "april": "Duben",
-          "may": "Květen",
-          "june": "Červen",
-          "july": "Červenec",
-          "august": "Srpen",
-          "september": "Září",
-          "october": "Říjen",
-          "november": "Listopad",
-          "december": "Prosinec"
-        },
-        "units": {
-          "days": "dny",
-          "min": "min",
-          "hours": "hod"
-        }
-      },
-      "dynamicThreshold": {
-        "tabLabel": "Naučené",
-        "title": "Naučené prahy",
-        "description": "Tato stránka zobrazuje runtime data dynamického prahu. Pokud je povolen v Hlavních nastaveních → Detekce, prahy se automaticky upravují na základě více detekcí s vysokou spolehlivostí. Druhy zde zobrazené se považují za existující na tomto místě.",
-        "stats": {
-          "active": "Aktivní",
-          "atMinimum": "Na minimu",
-          "minThreshold": "Min. práh",
-          "validityPeriod": "Období platnosti"
-        },
-        "header": {
-          "species": "Druh",
-          "threshold": "Práh",
-          "expires": "Vyprší"
-        },
-        "searchPlaceholder": "Hledat druhy...",
-        "threshold": "Práh",
-        "level": "Úroveň",
-        "expires": "Vyprší",
-        "expired": "Vypršelo",
-        "confidence": "Spolehlivost",
-        "requiredConfidence": "Vyžadovaná spolehlivost",
-        "resetAll": "Resetovat vše",
-        "resetSpecies": "Resetovat práh pro tento druh",
-        "noEvents": "Žádná historie změn prahu",
-        "changeReason": {
-          "highConfidence": "Detekce s vysokou spolehlivostí",
-          "expiry": "Platnost prahu vypršela",
-          "manualReset": "Ruční reset"
-        },
-        "note": "Detekce s vysokou spolehlivostí potvrzují, které druhy na tomto místě existují. Po více shodách s vysokou spolehlivostí se práh detekce bezpečně sníží, aby se zachytilo více volání bez výrazného rizika falešně pozitivních výsledků. Prahy se automaticky resetují po uplynutí nakonfigurovaného období platnosti.",
-        "empty": {
-          "title": "Žádné naučené prahy",
-          "description": "Detekce s vysokou spolehlivostí automaticky vytvoří naučené prahy pro druhy"
-        },
-        "resetAllConfirm": {
-          "title": "Resetovat všechny prahy",
-          "message": "Tímto se resetuje všech {count} naučených prahů. Druhy budou muset být znovu detekovány s vysokou spolehlivostí, aby se jejich prahy snížily."
-        },
-        "loadError": "Nepodařilo se načíst dynamické prahy",
-        "resetSuccess": "Práh resetován pro druh {species}",
-        "resetError": "Nepodařilo se resetovat práh",
-        "resetAllSuccess": "Resetováno {count} prahů",
-        "resetAllError": "Nepodařilo se resetovat prahy",
-        "expand": "Zobrazit historii událostí",
-        "collapse": "Skrýt historii událostí"
-      }
-    },
     "database": {
       "sqlitePlaceholder": "Zadejte cestu k databázi SQLite",
       "mysqlHostPlaceholder": "Zadejte hostitele MySQL",
@@ -4906,26 +4533,6 @@
       "locale": {
         "label": "Jazyk druhů",
         "helpText": "Jazyk používaný pro běžné názvy druhů v rozhraní."
-      }
-    },
-    "rangeFilter": {
-      "birdOnlyNote": "Filtr rozsahu se vztahuje pouze na klasifikátory ptáků. Modely netopýrů používají vlastní seznamy druhů.",
-      "status": {
-        "title": "Přehled filtru rozsahu",
-        "geomodelInfo": "VoiceWatch Geomodel {version} – {species} známých druhů",
-        "autoSelected": "Automaticky vybráno",
-        "manual": "Ručně",
-        "classifier": "Klasifikátor",
-        "totalSpecies": "Celkem druhů",
-        "withRangeData": "S daty o rozsahu",
-        "withoutRangeData": "Bez dat o rozsahu",
-        "withRangeDataTooltip": "Druhy, u kterých geomodel dokáže vyhodnotit geografickou pravděpodobnost ve vaší poloze",
-        "withoutRangeDataTooltip": "Druhy bez geografických dat v geomodelu, řízené nastavením nemapovaných druhů níže",
-        "noFilter": "Žádný aktivní filtr rozsahu",
-        "passUnmapped": {
-          "label": "Povolit druhy bez dat o rozsahu",
-          "helpText": "Povolit detekce druhů, pro které geomodel nemá geografická data. Pokud je vypnuto, tyto druhy jsou vždy odfiltrovány."
-        }
       }
     },
     "advanced": {

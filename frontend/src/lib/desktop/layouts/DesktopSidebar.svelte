@@ -185,7 +185,6 @@ Performance Optimizations:
     settingsAnalysis: actualRoute === '/ui/settings/analysis',
     settingsMain: actualRoute === '/ui/settings/main',
     settingsAudio: actualRoute === '/ui/settings/audio',
-    settingsSpecies: actualRoute === '/ui/settings/species',
     settingsFilters: actualRoute.startsWith('/ui/settings/detectionfilters'),
     settingsNotifications: actualRoute === '/ui/settings/notifications',
     settingsIntegrations: actualRoute === '/ui/settings/integrations',
@@ -230,7 +229,6 @@ Performance Optimizations:
     settingsAnalysis: onNavigate ? '/settings/analysis' : '/ui/settings/analysis',
     settingsMain: onNavigate ? '/settings/main' : '/ui/settings/main',
     settingsAudio: onNavigate ? '/settings/audio' : '/ui/settings/audio',
-    settingsSpecies: onNavigate ? '/settings/species' : '/ui/settings/species',
     settingsFilters: onNavigate ? '/settings/detectionfilters' : '/ui/settings/detectionfilters',
     settingsNotifications: onNavigate ? '/settings/notifications' : '/ui/settings/notifications',
     settingsIntegrations: onNavigate ? '/settings/integrations' : '/ui/settings/integrations',
@@ -335,12 +333,6 @@ Performance Optimizations:
       label: t('settings.sections.analysis'),
       url: navigationUrls.settingsAnalysis,
       routeKey: 'settingsAnalysis',
-    },
-    {
-      icon: Bird,
-      label: t('settings.sections.species'),
-      url: navigationUrls.settingsSpecies,
-      routeKey: 'settingsSpecies',
     },
     {
       icon: Filter,

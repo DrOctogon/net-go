@@ -74,7 +74,6 @@ export interface VoiceWatchSettings {
   latitude: number;
   longitude: number;
   locationConfigured: boolean; // true when location has been explicitly configured
-  rangeFilter: RangeFilterSettings;
 }
 
 export interface DynamicThresholdSettings {
@@ -87,27 +86,6 @@ export interface DynamicThresholdSettings {
 
 export interface FalsePositiveFilterSettings {
   level: number; // 0=Off, 1=Lenient, 2=Moderate, 3=Balanced, 4=Strict, 5=Maximum
-}
-
-export interface RangeFilterSettings {
-  threshold: number;
-  passUnmappedSpecies: boolean;
-  speciesCount: number | null;
-  species: string[];
-}
-
-/** Species entry returned by the range filter test endpoint */
-export interface RangeFilterSpeciesEntry {
-  commonName?: string;
-  scientificName?: string;
-  label?: string;
-  score?: number;
-}
-
-/** Result from loadRangeFilterSpecies */
-export interface RangeFilterSpeciesResult {
-  count: number;
-  species: RangeFilterSpeciesEntry[];
 }
 
 export interface BatSettings {
@@ -852,12 +830,6 @@ function createEmptySettings(): SettingsFormData {
       latitude: 0,
       longitude: 0,
       locationConfigured: false,
-      rangeFilter: {
-        threshold: 0.03,
-        passUnmappedSpecies: false,
-        speciesCount: null,
-        species: [],
-      },
     },
     bat: {
       enabled: false,
@@ -1400,29 +1372,5 @@ export const settingsActions = {
       ...state,
       error: null,
     }));
-  },
-
-  /**
-   * Load range filter species using the test endpoint that respects the
-   * current threshold. Returns the filtered species list and count.
-   *
-   * This uses POST /api/v2/range/species/test (not GET /api/v2/range/species/list)
-   * because the list endpoint ignores query parameters and returns all species,
-   * which would reset the displayed count. See #2393.
-   */
-  async loadRangeFilterSpecies(): Promise<RangeFilterSpeciesResult> {
-    const state = get(settingsStore);
-    const birdnet = state.formData.voicewatch;
-
-    const data = await settingsAPI.rangeFilter.testSpecies(
-      birdnet.latitude,
-      birdnet.longitude,
-      birdnet.rangeFilter.threshold
-    );
-
-    return {
-      count: data.count,
-      species: data.species ?? [],
-    };
   },
 };

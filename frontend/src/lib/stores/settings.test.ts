@@ -28,7 +28,7 @@ vi.mock('$lib/i18n/index.js', () => ({
   t: vi.fn((key: string) => key),
 }));
 
-describe('Settings Store - Dynamic Threshold and Range Filter', () => {
+describe('Settings Store - Dynamic Threshold', () => {
   beforeEach(() => {
     // Reset store to initial state
     settingsStore.set({
@@ -45,12 +45,6 @@ describe('Settings Store - Dynamic Threshold and Range Filter', () => {
           latitude: 40.7128,
           longitude: -74.006,
           locationConfigured: true,
-          rangeFilter: {
-            threshold: 0.03,
-            passUnmappedSpecies: false,
-            speciesCount: null,
-            species: [],
-          },
         },
         realtime: {
           dynamicThreshold: {
@@ -71,82 +65,11 @@ describe('Settings Store - Dynamic Threshold and Range Filter', () => {
     });
   });
 
-  it('should preserve rangeFilter when updating coordinates', () => {
-    // Get initial state
-    const initialState = get(settingsStore);
-    expect(initialState.formData.voicewatch).toBeDefined();
-    const voicewatchSettings = initialState.formData.voicewatch as VoiceWatchSettings;
-
-    const initialRangeFilter = voicewatchSettings.rangeFilter;
-    expect(initialRangeFilter).toBeDefined();
-
-    // Verify initial range filter values
-    expect(initialRangeFilter.threshold).toBe(0.03);
-
-    // Update coordinates (simulating what happens when clicking on the map)
-    settingsActions.updateSection('voicewatch', {
-      latitude: 51.5074,
-      longitude: -0.1278,
-    });
-
-    // Get updated state
-    const updatedState = get(settingsStore);
-    const updatedBirdnet = updatedState.formData.voicewatch as VoiceWatchSettings;
-
-    // Verify coordinates were updated
-    expect(updatedBirdnet.latitude).toBe(51.5074);
-    expect(updatedBirdnet.longitude).toBe(-0.1278);
-
-    // Verify rangeFilter was preserved
-    expect(updatedBirdnet.rangeFilter.threshold).toBe(0.03);
-    expect(updatedBirdnet.rangeFilter).toEqual(initialRangeFilter);
-  });
-
-  it('should preserve coordinates when updating rangeFilter threshold', () => {
-    // Get initial coordinates
-    const initialState = get(settingsStore);
-    expect(initialState.formData.voicewatch).toBeDefined();
-    const voicewatchSettings = initialState.formData.voicewatch as VoiceWatchSettings;
-
-    const initialLat = voicewatchSettings.latitude;
-    const initialLng = voicewatchSettings.longitude;
-
-    // Update range filter threshold
-    settingsActions.updateSection('voicewatch', {
-      rangeFilter: {
-        threshold: 0.05,
-        passUnmappedSpecies: false,
-        speciesCount: null,
-        species: [],
-      },
-    });
-
-    // Get updated state
-    const updatedState = get(settingsStore);
-    const updatedBirdnet = updatedState.formData.voicewatch as VoiceWatchSettings;
-
-    // Verify range filter was updated
-    expect(updatedBirdnet.rangeFilter.threshold).toBe(0.05);
-
-    // Verify coordinates were preserved
-    expect(updatedBirdnet.latitude).toBe(initialLat);
-    expect(updatedBirdnet.longitude).toBe(initialLng);
-  });
-
   it('should handle nested updates correctly', () => {
     // Update multiple nested properties in sequence
     settingsActions.updateSection('voicewatch', {
       latitude: 48.8566,
       longitude: 2.3522,
-    });
-
-    settingsActions.updateSection('voicewatch', {
-      rangeFilter: {
-        threshold: 0.01,
-        passUnmappedSpecies: false,
-        speciesCount: null,
-        species: [],
-      },
     });
 
     settingsActions.updateSection('voicewatch', {
@@ -161,35 +84,8 @@ describe('Settings Store - Dynamic Threshold and Range Filter', () => {
     // Verify all updates were applied correctly
     expect(finalBirdnet.latitude).toBe(48.8566);
     expect(finalBirdnet.longitude).toBe(2.3522);
-    expect(finalBirdnet.rangeFilter.threshold).toBe(0.01);
     expect(finalBirdnet.sensitivity).toBe(1.2);
     expect(finalBirdnet.threshold).toBe(0.85);
-  });
-
-  it('should merge partial rangeFilter updates correctly', () => {
-    // Update only the range filter threshold (partial update)
-    const storeState = get(settingsStore);
-    expect(storeState.formData.voicewatch).toBeDefined();
-    const voicewatchSettings = storeState.formData.voicewatch as VoiceWatchSettings;
-
-    const currentRangeFilter = voicewatchSettings.rangeFilter;
-    expect(currentRangeFilter).toBeDefined();
-
-    settingsActions.updateSection('voicewatch', {
-      rangeFilter: {
-        ...currentRangeFilter,
-        threshold: 0.07,
-      },
-    });
-
-    // Get updated state
-    const updatedState = get(settingsStore);
-    const updatedBirdnet = updatedState.formData.voicewatch as VoiceWatchSettings;
-
-    // Verify only threshold was updated, other fields preserved
-    expect(updatedBirdnet.rangeFilter.threshold).toBe(0.07);
-    expect(updatedBirdnet.rangeFilter.speciesCount).toBe(null);
-    expect(updatedBirdnet.rangeFilter.species).toEqual([]);
   });
 
   it('should update dynamicThreshold settings in realtime section', () => {
@@ -255,12 +151,6 @@ describe('Settings Store - Model/Label Path Null Conversion', () => {
           latitude: 40.7128,
           longitude: -74.006,
           locationConfigured: true,
-          rangeFilter: {
-            threshold: 0.03,
-            passUnmappedSpecies: false,
-            speciesCount: null,
-            species: [],
-          },
         },
       },
       originalData: {
@@ -276,12 +166,6 @@ describe('Settings Store - Model/Label Path Null Conversion', () => {
           latitude: 40.7128,
           longitude: -74.006,
           locationConfigured: true,
-          rangeFilter: {
-            threshold: 0.03,
-            passUnmappedSpecies: false,
-            speciesCount: null,
-            species: [],
-          },
         },
       } as SettingsFormData,
       isLoading: false,
@@ -487,12 +371,6 @@ describe('Settings Store - UI Locale Preservation (#2756/#2760)', () => {
         latitude: 0,
         longitude: 0,
         locationConfigured: true,
-        rangeFilter: {
-          threshold: 0.03,
-          passUnmappedSpecies: false,
-          speciesCount: null,
-          species: [],
-        },
       },
       realtime: {
         dashboard: {

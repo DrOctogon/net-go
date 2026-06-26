@@ -100,17 +100,6 @@ describe('DetectionRow action callbacks', () => {
     expect(onToggleLock).toHaveBeenCalledTimes(1);
   });
 
-  it('invokes onToggleSpecies when the ignore-species menu item is clicked', async () => {
-    const onToggleSpecies = vi.fn();
-    render(DetectionRow, {
-      props: { detection: createMockDetection({ id: 300 }), onToggleSpecies },
-    });
-
-    await openMenuAndClick(/ignore species/i);
-
-    expect(onToggleSpecies).toHaveBeenCalledTimes(1);
-  });
-
   it('invokes onMarkCorrect when the mark-correct menu item is clicked', async () => {
     const onMarkCorrect = vi.fn();
     render(DetectionRow, {

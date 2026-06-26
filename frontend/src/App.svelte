@@ -174,7 +174,6 @@
     '/detectionfilters': 'settings.sections.filters',
     '/integrations': 'settings.sections.integration',
     '/security': 'settings.sections.security',
-    '/species': 'settings.sections.species',
     '/notifications': 'settings.sections.notifications',
     '/support': 'settings.sections.support',
   };

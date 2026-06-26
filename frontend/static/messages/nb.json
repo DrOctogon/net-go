@@ -476,9 +476,6 @@
     "noResultsFound": "Ingen resultater funnet",
     "noResultsHint": "Prøv å justere søkefiltrene",
     "fields": {
-      "species": "Art",
-      "speciesPlaceholder": "Skriv inn artsnavn",
-      "speciesHelp": "Skriv inn fullt eller delvis artsnavn (skiller ikke mellom store og små bokstaver)",
       "dateRange": "Datoperiode",
       "dateRangeHelp": "Filtrer registreringer etter datoperiode (la stå tomt for alle datoer)",
       "from": "Fra",
@@ -683,8 +680,6 @@
         "markCorrect": "Korrekt",
         "markFalsePositive": "Feil",
         "review": "Gjennomgå registrering",
-        "showSpecies": "Vis art",
-        "ignoreSpecies": "Ignorer art",
         "lockDetection": "Lås registrering",
         "unlockDetection": "Lås opp registrering",
         "deleteDetection": "Slett registrering"
@@ -2084,8 +2079,6 @@
           "warningOff": "Med filtrering deaktivert godtas enhver registrering over sikkerhetsterskel umiddelbart. Dette gir typisk flere falske positive per dag. Selv mild filtrering forbedrer resultatkvaliteten betydelig."
         },
         "rangeFilter": {
-          "title": "Utvalgsfilter",
-          "description": "Begrens deteksjon til arter som er sannsynlige i ditt geografiske område",
           "stationLocation": {
             "label": "Stasjonsposisjon",
             "helpText": "Stasjonsposisjon, brukes for værdata og for å begrense fuglearter til de som er sannsynlige i regionen."
@@ -2097,33 +2090,6 @@
           "longitude": {
             "label": "Lengdegrad",
             "helpText": "Stasjonens lengdegrad, brukes for værdata og artsutvalgsfiltrering."
-          },
-          "model": {
-            "label": "Utvalgsfiltermodell",
-            "helpText": "VoiceWatch-utvalgsfiltermodellversjon: nyeste eller eldre."
-          },
-          "threshold": {
-            "label": "Terskel",
-            "helpText": "Kontrollerer hvilke arter som inkluderes basert på forekomstsannsynlighet for din posisjon og årstid. Standard (0,01) anbefales for de fleste brukere. Høyere verdier (0,05–0,3) inkluderer færre arter med høyere forekomstsannsynlighet. Svært høye verdier (0,5+) inkluderer kun de vanligste artene."
-          },
-          "speciesCount": {
-            "label": "Gjeldende artsantall",
-            "helpText": "Antall arter inkludert i utvalgsfilteret. Oppdateres automatisk når terskel, breddegrad eller lengdegrad endres.",
-            "loading": "Laster...",
-            "viewSpecies": "Vis arter"
-          },
-          "downloadTitle": "Last ned artsliste som CSV",
-          "csvDownloaded": "Artsliste lastet ned",
-          "csvDownloadFailed": "Nedlasting av artsliste mislyktes. Prøv igjen.",
-          "modal": {
-            "title": "Utvalgsfilterarter",
-            "speciesCount": "Artsantall:",
-            "threshold": "Terskel:",
-            "latitude": "Breddegrad:",
-            "longitude": "Lengdegrad:",
-            "loadingSpecies": "Laster arter...",
-            "noSpeciesFound": "Ingen arter funnet med gjeldende innstillinger",
-            "close": "Lukk"
           }
         },
         "database": {
@@ -2352,9 +2318,6 @@
       "errors": {
         "localesLoadFailed": "Kan ikke laste språkalternativer. Bruker standardverdier.",
         "providersLoadFailed": "Kan ikke laste bildeleverandører. Bruker standardverdier.",
-        "rangeFilterTestFailed": "Testing av utvalgsfilterinnstillinger mislyktes",
-        "rangeFilterLoadFailed": "Innlasting av artsliste mislyktes",
-        "rangeFilterCountFailed": "Innlasting av artsantall mislyktes",
         "mapLibraryLoadFailed": "Innlasting av kartbibliotek mislyktes. Oppdater siden.",
         "mapLoadFailed": "Innlasting av kart mislyktes. Prøv å oppdatere siden.",
         "modalMapLoadFailed": "Innlasting av kartdialog mislyktes. Prøv å lukke og åpne dialogboksen på nytt.",
@@ -3709,342 +3672,6 @@
         "fileReadError": "Lesing av valgt fil mislyktes"
       }
     },
-    "species": {
-      "pageLabel": "Artsinnstillinger",
-      "saveError": "Lagring av konfigurasjon for «{species}» mislyktes. Prøv igjen.",
-      "configUpdated": "Konfigurasjon for «{species}» oppdatert",
-      "configAdded": "Konfigurasjon for «{species}» lagt til",
-      "duplicateConfigError": "Art «{species}» har allerede en konfigurasjon. Velg et annet navn.",
-      "activeSpecies": {
-        "title": "Aktive arter",
-        "tabLabel": "Aktiv",
-        "description": "Arter som vil registreres basert på gjeldende posisjon og filterinnstillinger",
-        "stats": {
-          "species": "Arter",
-          "location": "Posisjon",
-          "threshold": "Terskel",
-          "updated": "Oppdatert",
-          "justNow": "Akkurat nå",
-          "minutesAgo": "{count} min siden",
-          "hoursAgo": "{count} t siden"
-        },
-        "search": {
-          "placeholder": "Søk arter..."
-        },
-        "badges": {
-          "included": "Inkludert",
-          "configured": "Konfigurert"
-        },
-        "empty": {
-          "title": "Ingen arter funnet",
-          "description": "Konfigurer posisjonen din i Hovedinnstillinger for å se tilgjengelige arter"
-        },
-        "noResults": "Ingen arter samsvarer med søket ditt",
-        "infoNote": "Denne listen er basert på posisjon og utvalgsfilterterskel. Manuelt inkluderte arter legges alltid til.",
-        "retry": "Prøv igjen",
-        "expand": "Utvid listen",
-        "collapse": "Skjul listen",
-        "downloadCsv": "Last ned CSV",
-        "errors": {
-          "loadFailed": "Innlasting av aktiv artsliste mislyktes"
-        },
-        "locationNotConfigured": {
-          "title": "Posisjon ikke konfigurert",
-          "description": "Angi posisjonen din i Hovedinnstillinger for å se arter tilgjengelige i ditt område. Utvalgsfilteret bruker posisjonen til å bestemme hvilke arter som sannsynligvis finnes i nærheten.",
-          "action": "Konfigurer posisjon"
-        },
-        "rangeFilterHealth": {
-          "inactive": {
-            "title": "Utvalgsfilter inaktivt",
-            "description": "Registreringer filtreres ikke etter posisjon akkurat nå, så arter utenfor ditt område kan rapporteres. Sjekk utvalgsfiltermodellkonfigurasjonen i Innstillinger."
-          },
-          "fellBack": {
-            "title": "Bruker det innebygde utvalgsfilteret",
-            "description": "Det konfigurerte geomodell-utvalgsfilteret kunne ikke lastes, så VoiceWatch falt tilbake til det innebygde utvalgsfilteret. Filtrering fungerer fortsatt, men sjekk Innstillinger for å gjenopprette geomodellen."
-          },
-          "mappedZero": {
-            "title": "Utvalgsfilter matchet ingen arter",
-            "description": "Geomodell-utvalgsfilteret matchet ingen av den aktive modellens arter, så enhver registrering ville bli filtrert ut. Sjekk at utvalgsfilteretikettfilen matcher den aktive modellen."
-          }
-        },
-        "columns": {
-          "commonName": "Norsk navn",
-          "scientificName": "Vitenskapelig navn",
-          "score": "Score",
-          "status": "Status"
-        }
-      },
-      "alwaysInclude": {
-        "title": "Alltid inkluder arter",
-        "tabLabel": "Inkluder",
-        "description": "Arter i denne listen inkluderes alltid i utvalget av registrerte arter",
-        "noSpeciesMessage": "Ingen arter lagt til i inkluderingslisten"
-      },
-      "alwaysExclude": {
-        "title": "Alltid ekskluder arter",
-        "tabLabel": "Ekskluder",
-        "description": "Arter i denne listen ekskluderes alltid fra deteksjon",
-        "noSpeciesMessage": "Ingen arter lagt til i ekskluderingslisten"
-      },
-      "customConfiguration": {
-        "title": "Egendefinert artskonfigurasjon",
-        "tabLabel": "Egendefinert",
-        "description": "Artsspecifikke terskeltverdier, registreringsintervaller og handlinger",
-        "helpText": {
-          "intro": "Konfigurer artsspecifikke innstillinger:",
-          "threshold": "Terskel: Minimumssikkerhetsscore (0–1) kreves for registrering",
-          "interval": "Intervall: Minimum tid i sekunder mellom registreringer av samme art (0 = bruk global standard)",
-          "actions": "Handlinger: Egendefinerte kommandoer som kjøres når denne arten registreres"
-        },
-        "columnHeaders": {
-          "species": "Art",
-          "settings": "Innstillinger",
-          "actions": "Handlinger"
-        },
-        "badges": {
-          "threshold": "Terskel: {value}",
-          "interval": "Intervall: {value}s",
-          "customAction": "Egendefinert handling",
-          "executeDefaults": "+Standarder"
-        },
-        "dropdown": {
-          "editConfig": "Rediger konfigurasjon",
-          "addAction": "Legg til handling",
-          "remove": "Fjern"
-        },
-        "labels": {
-          "threshold": "Terskel",
-          "interval": "Intervall",
-          "intervalSeconds": "Intervall (s)",
-          "addButton": "Legg til"
-        },
-        "noConfigurationsMessage": "Ingen egendefinerte artskonfigurasjoner lagt til",
-        "addForm": {
-          "speciesPlaceholder": "Artsnavn",
-          "thresholdPlaceholder": "0,5",
-          "intervalPlaceholder": "0"
-        },
-        "addConfiguration": "Legg til konfigurasjon",
-        "newConfiguration": "Ny konfigurasjon",
-        "editing": "Redigerer: {species}",
-        "configuredCount": "{count} konfigurert",
-        "searchPlaceholder": "Skriv for å søke...",
-        "saving": "Lagrer...",
-        "save": "Lagre",
-        "cancel": "Avbryt",
-        "configureActions": "Konfigurer handlinger",
-        "actionsConfigured": "Konfigurert",
-        "list": {
-          "editTitle": "Rediger konfigurasjon",
-          "removeTitle": "Fjern konfigurasjon"
-        },
-        "emptyState": {
-          "title": "Ingen konfigurasjoner ennå.",
-          "description": "Klikk «Legg til konfigurasjon» for å tilpasse artsregistreringsinnstillinger."
-        },
-        "table": {
-          "columnScientificName": "Vitenskapelig navn",
-          "intervalDefault": "Standard",
-          "intervalDefaultTooltip": "0 = bruk det globale standardintervallet",
-          "noActions": "Ingen",
-          "searchPlaceholder": "Søk arter...",
-          "noResults": "Ingen matchende konfigurasjoner",
-          "editDisabledReason": "Lagre eller lukk gjeldende redigeringsprogram før du redigerer en annen art",
-          "actionsDisabledBusy": "Vennligst vent til den gjeldende operasjonen er ferdig"
-        }
-      },
-      "synonyms": {
-        "tabLabel": "Synonymer",
-        "description": "Kart VoiceWatch vitenskapelige navn til oppdaterte ekvivalenter i nyere taksonomi. Brukes kun som reserveløsning ved oppslag av fuglebilder fra Wikipedia og AviCommons.",
-        "helpText": "For å endre hvordan en art navngis i grensesnittet, rediger VoiceWatch-etikettfilen din (innstillingen «Etikettsti» under Hovedinnstillinger).",
-        "birdnetName": "VoiceWatch-navn",
-        "updatedName": "Oppdatert vitenskapelig navn",
-        "addButton": "Legg til synonym",
-        "emptyState": "Ingen taksonomiske synonymer konfigurert",
-        "errors": {
-          "unknownSpecies": "Art ikke funnet i VoiceWatch-etiketter",
-          "duplicateKey": "Et synonym for denne arten finnes allerede",
-          "emptyUpdatedName": "Oppdatert navn er obligatorisk"
-        }
-      },
-      "actionsModal": {
-        "title": "Handlinger for {species}",
-        "actionType": {
-          "label": "Handlingstype",
-          "executeCommand": "Kjør kommando",
-          "onlySupported": "For øyeblikket støttes kun «Kjør kommando»-handlinger"
-        },
-        "command": {
-          "label": "Kommando",
-          "helpText": "Oppgi full sti til kommandoen eller skriptet du vil kjøre"
-        },
-        "parameters": {
-          "label": "Parametere",
-          "helpText": "Disse verdiene sendes til kommandoen i den rekkefølgen de er opplistet",
-          "placeholder": "Klikk knapper nedenfor for å legge til parametere eller skriv manuelt",
-          "tooltip": "Bruk knapper nedenfor eller skriv direkte (kommaseparert)",
-          "availableTitle": "Tilgjengelige parametere",
-          "buttons": {
-            "commonName": "NorskNavn",
-            "scientificName": "VitenskapeligNavn",
-            "confidence": "Sikkerhet",
-            "time": "Tid",
-            "source": "Kilde",
-            "clearParameters": "Tøm parametere"
-          }
-        },
-        "executeDefaults": {
-          "label": "Kjør også standardhandlinger (databaselagring, varsler, osv.)",
-          "helpText": "Når aktivert, kjøres både den egendefinerte handlingen og systemets standardhandlinger. Når deaktivert, kjøres kun den egendefinerte handlingen."
-        }
-      },
-      "add": "Legg til",
-      "remove": "Fjern",
-      "suggestions": "Artsforslag",
-      "addSpeciesToInclude": "Legg til art for inkludering",
-      "addSpeciesToIncludeLabel": "Legg til ny art for inkludering",
-      "addSpeciesToExclude": "Legg til art for ekskludering",
-      "addSpeciesToExcludeLabel": "Legg til ny art for ekskludering",
-      "commandPathPlaceholder": "/sti/til/din/kommando",
-      "parametersPlaceholder": "Parametere vil vises her",
-      "errors": {
-        "speciesLoadFailed": "Innlasting av artsliste mislyktes. Prøv igjen."
-      },
-      "tracking": {
-        "title": "Artssporing",
-        "tabLabel": "Sporing",
-        "description": "Konfigurer sporing for nye artsregistreringer basert på tidsperioder",
-        "enabled": {
-          "label": "Aktiver artssporing",
-          "helpText": "Når aktivert, sporer systemet nye artsregistreringer og kan sende varsler"
-        },
-        "newSpeciesWindowDays": {
-          "label": "Ny art-vindu (dager)",
-          "helpText": "Antall dager en art anses som «ny» etter første registrering (1–365)"
-        },
-        "syncIntervalMinutes": {
-          "label": "Synkroniseringsintervall (minutter)",
-          "helpText": "Hvor ofte sporingsdataene synkroniseres med databasen (1–1440)"
-        },
-        "notificationSuppressionHours": {
-          "label": "Varselundertrykkelse (timer)",
-          "helpText": "Timer for å undertrykke dupliserte varsler for samme art (0–8760)"
-        },
-        "yearly": {
-          "title": "Årlig sporing",
-          "description": "Spor første ankomst av arter hvert år",
-          "enabled": {
-            "label": "Aktiver årlig sporing",
-            "helpText": "Spor og varsle når en art registreres for første gang hvert år"
-          },
-          "resetMonth": {
-            "label": "Tilbakestillingsmåned",
-            "helpText": "Måneden da årlig sporing tilbakestilles (1–12)"
-          },
-          "resetDay": {
-            "label": "Tilbakestillingsdag",
-            "helpText": "Dag i måneden da årlig sporing tilbakestilles"
-          },
-          "windowDays": {
-            "label": "Vindu (dager)",
-            "helpText": "Dager for å vise «ny i år»-indikator (1–365)"
-          }
-        },
-        "seasonal": {
-          "title": "Sesongsporing",
-          "description": "Spor første ankomst av arter hver sesong",
-          "enabled": {
-            "label": "Aktiver sesongsporing",
-            "helpText": "Spor og varsle når en art registreres for første gang hver sesong"
-          },
-          "windowDays": {
-            "label": "Vindu (dager)",
-            "helpText": "Dager for å vise «ny denne sesongen»-indikator (1–365)"
-          },
-          "seasons": {
-            "title": "Sesongsdefinisjoner",
-            "description": "Definer når hver sesong starter. Sesonger justeres automatisk basert på lokasjonens halvkule.",
-            "spring": "Vår",
-            "summer": "Sommer",
-            "fall": "Høst",
-            "winter": "Vinter",
-            "wet1": "Regntid 1",
-            "dry1": "Tørketid 1",
-            "wet2": "Regntid 2",
-            "dry2": "Tørketid 2",
-            "startMonth": "Startmåned",
-            "startDay": "Startdag",
-            "hemisphereNote": "Sesongdatoer konfigureres automatisk basert på breddegrad. Den nordlige halvkule bruker standardsesonger, den sørlige halvkule har forskjøvede datoer, og ekvatoriale regioner bruker regn-/tørketider."
-          }
-        },
-        "months": {
-          "january": "Januar",
-          "february": "Februar",
-          "march": "Mars",
-          "april": "April",
-          "may": "Mai",
-          "june": "Juni",
-          "july": "Juli",
-          "august": "August",
-          "september": "September",
-          "october": "Oktober",
-          "november": "November",
-          "december": "Desember"
-        },
-        "units": {
-          "days": "dager",
-          "min": "min",
-          "hours": "t"
-        }
-      },
-      "dynamicThreshold": {
-        "tabLabel": "Lært",
-        "title": "Lærte terskler",
-        "description": "Denne siden viser kjøretidsdata for dynamisk terskel. Når aktivert i Hovedinnstillinger → Deteksjon, justeres terskler automatisk av flere høysikkerhetsregistreringer. Arter som vises her antas å eksistere på dette stedet.",
-        "stats": {
-          "active": "Aktiv",
-          "atMinimum": "På minimum",
-          "minThreshold": "Min. terskel",
-          "validityPeriod": "Gyldighetsperiode"
-        },
-        "header": {
-          "species": "Art",
-          "threshold": "Terskel",
-          "expires": "Utløper"
-        },
-        "searchPlaceholder": "Søk arter...",
-        "threshold": "Terskel",
-        "level": "Nivå",
-        "expires": "Utløper",
-        "expired": "Utløpt",
-        "confidence": "Sikkerhet",
-        "requiredConfidence": "Påkrevd sikkerhet",
-        "resetAll": "Tilbakestill alle",
-        "resetSpecies": "Tilbakestill terskel for denne arten",
-        "noEvents": "Ingen terskelendringer i historikken",
-        "changeReason": {
-          "highConfidence": "Høysikkerhetsregistrering",
-          "expiry": "Terskel utløpt",
-          "manualReset": "Manuell tilbakestilling"
-        },
-        "note": "Høysikkerhetsregistreringer bekrefter hvilke arter som finnes på dette stedet. Etter flere høye sikkerhetstreff senkes registreringsterskelen forsiktig for å fange flere kall uten betydelig risiko for falske positive. Terskler tilbakestilles automatisk etter konfigurert gyldighetsperiode.",
-        "empty": {
-          "title": "Ingen lærte terskler",
-          "description": "Høysikkerhetsregistreringer vil automatisk opprette lærte terskler for arter"
-        },
-        "resetAllConfirm": {
-          "title": "Tilbakestille alle terskler",
-          "message": "Dette vil tilbakestille alle {count} lærte terskler. Arter må registreres med høy sikkerhet igjen for å senke tersklene."
-        },
-        "loadError": "Innlasting av dynamiske terskler mislyktes",
-        "resetSuccess": "Terskel tilbakestilt for {species}",
-        "resetError": "Tilbakestilling av terskel mislyktes",
-        "resetAllSuccess": "{count} terskler tilbakestilt",
-        "resetAllError": "Tilbakestilling av terskler mislyktes",
-        "expand": "Vis hendelseshistorikk",
-        "collapse": "Skjul hendelseshistorikk"
-      }
-    },
     "database": {
       "sqlitePlaceholder": "Skriv inn SQLite-databasesti",
       "mysqlHostPlaceholder": "Skriv inn MySQL-vert",
@@ -4906,26 +4533,6 @@
       "locale": {
         "label": "Artsspråk",
         "helpText": "Språk brukt for artsnavnene i grensesnittet."
-      }
-    },
-    "rangeFilter": {
-      "birdOnlyNote": "Utvalgsfilter gjelder kun for fugleklassifikatorer. Flaggermusmodeller bruker egne artslister.",
-      "status": {
-        "title": "Utvalgsfilter-oversikt",
-        "geomodelInfo": "VoiceWatch Geomodell {version} – {species} kjente arter",
-        "autoSelected": "Automatisk valgt",
-        "manual": "Manuell",
-        "classifier": "Klassifikator",
-        "totalSpecies": "Totalt arter",
-        "withRangeData": "Med utvalgsdata",
-        "withoutRangeData": "Uten utvalgsdata",
-        "withRangeDataTooltip": "Arter som geomodellen kan evaluere for geografisk sannsynlighet ved din posisjon",
-        "withoutRangeDataTooltip": "Arter uten geografiske data i geomodellen, håndtert av innstillingen for umappede arter nedenfor",
-        "noFilter": "Ingen aktivt utvalgsfilter",
-        "passUnmapped": {
-          "label": "Tillat arter uten utvalgsdata",
-          "helpText": "Tillat registreringer av arter geomodellen ikke har geografiske data for. Når deaktivert, filtreres disse artene alltid ut."
-        }
       }
     },
     "advanced": {

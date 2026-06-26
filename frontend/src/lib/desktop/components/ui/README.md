@@ -484,12 +484,10 @@ Context action menu rendered as a `MoreVertical` (⋮) trigger with a popover li
 ```ts
 interface Props {
   detection: Detection;
-  isExcluded?: boolean;
   variant?: 'default' | 'overlay';
   onMarkCorrect?: () => void;
   onMarkFalsePositive?: () => void;
   onReview?: () => void;
-  onToggleSpecies?: () => void;
   onToggleLock?: () => void;
   onDelete?: () => void;
   onDownload?: () => void;
@@ -502,7 +500,7 @@ interface Props {
 **Features:**
 
 - Quick-review shortcuts (Correct / Incorrect) at the top, hidden when the detection is locked
-- Review, Ignore/Show species, Lock/Unlock, Delete actions (existing)
+- Review, Lock/Unlock, Delete actions (existing)
 - Optional Download item when `onDownload` is provided
 - Viewport-aware positioning (flips above the trigger when there is not enough space below)
 - `variant="overlay"` swaps to a dark palette suitable for spectrogram overlays

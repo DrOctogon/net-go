@@ -20,9 +20,8 @@
 
   Props:
   - detection: Detection - The detection data object
-  - isExcluded?: boolean - Whether this detection's species is excluded
   - onDetailsClick?: (id: number) => void - Handler for detail view
-  - onReview / onMarkCorrect / onMarkFalsePositive / onToggleSpecies / onToggleLock / onDelete -
+  - onReview / onMarkCorrect / onMarkFalsePositive / onToggleLock / onDelete -
     action callbacks supplied by the parent (DetectionsList) via useDetectionActions
 -->
 <script lang="ts">
@@ -41,10 +40,9 @@
 
   // Presentational row: the parent (DetectionsList) owns the action handlers
   // and the ConfirmModal via the shared useDetectionActions composable, and
-  // passes them in as callbacks plus the server-hydrated isExcluded state.
+  // passes them in as callbacks.
   interface Props {
     detection: Detection;
-    isExcluded?: boolean;
     onDetailsClick?: (_id: number) => void;
     selectionActive?: boolean;
     selected?: boolean;
@@ -52,14 +50,12 @@
     onReview?: () => void;
     onMarkCorrect?: () => void;
     onMarkFalsePositive?: () => void;
-    onToggleSpecies?: () => void;
     onToggleLock?: () => void;
     onDelete?: () => void;
   }
 
   let {
     detection,
-    isExcluded = false,
     onDetailsClick,
     selectionActive = false,
     selected = false,
@@ -67,7 +63,6 @@
     onReview,
     onMarkCorrect,
     onMarkFalsePositive,
-    onToggleSpecies,
     onToggleLock,
     onDelete,
   }: Props = $props();
@@ -188,11 +183,9 @@
 <td onclick={e => e.stopPropagation()}>
   <ActionMenu
     {detection}
-    {isExcluded}
     {onMarkCorrect}
     {onMarkFalsePositive}
     {onReview}
-    {onToggleSpecies}
     {onToggleLock}
     {onDelete}
   />

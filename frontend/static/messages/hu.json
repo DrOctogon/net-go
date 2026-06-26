@@ -476,9 +476,6 @@
     "noResultsFound": "Nincs találat",
     "noResultsHint": "Próbálja módosítani a keresési szűrőket",
     "fields": {
-      "species": "Faj",
-      "speciesPlaceholder": "Adja meg a faj nevét",
-      "speciesHelp": "Adja meg a faj teljes vagy részleges nevét (nem érzékeny a nagybetűkre)",
       "dateRange": "Dátumtartomány",
       "dateRangeHelp": "Szűrés dátumtartomány szerint (üresen hagyva minden dátum)",
       "from": "Ettől",
@@ -683,8 +680,6 @@
         "markCorrect": "Megjelölés helyesként",
         "markFalsePositive": "Megjelölés téves pozitívként",
         "review": "Detektálás áttekintése",
-        "showSpecies": "Faj megjelenítése",
-        "ignoreSpecies": "Faj figyelmen kívül hagyása",
         "lockDetection": "Detektálás zárolása",
         "unlockDetection": "Detektálás zárolásának feloldása",
         "deleteDetection": "Detektálás törlése"
@@ -2084,8 +2079,6 @@
           "warningOff": "Szűrés nélkül a megbízhatósági küszöb feletti minden észlelés azonnal elfogadásra kerül. Ez általában naponta több hamis pozitívat eredményez. Már az enyhe szűrés is jelentősen javítja az eredmények minőségét."
         },
         "rangeFilter": {
-          "title": "Tartomány szűrő",
-          "description": "A detektálást a földrajzi régióban valószínű fajokra korlátozza",
           "stationLocation": {
             "label": "Állomás helyszín",
             "helpText": "Állomás helyszín, az időjárási adatokhoz és a madárfajoknak a régióban való valószínűségére való korlátozáshoz használva."
@@ -2097,33 +2090,6 @@
           "longitude": {
             "label": "Hosszúság",
             "helpText": "Állomás hosszúság, az időjárási adatokhoz és a faj tartomány szűréséhez használva."
-          },
-          "model": {
-            "label": "Tartomány szűrő modell",
-            "helpText": "VoiceWatch tartomány szűrő modell verzió: legújabb vagy örökölt."
-          },
-          "threshold": {
-            "label": "Küszöbérték",
-            "helpText": "Szabályozza, hogy mely fajok kerülnek be a helyszín és az évszak alapján. Az alapértelmezett (0.01) a legtöbb felhasználónak ajánlott. A magasabb értékek (0.05-0.3) kevesebb fajt tartalmaznak magasabb előfordulási valószínűséggel. A nagyon magas értékek (0.5+) csak a leggyakoribb fajokat tartalmazzák."
-          },
-          "speciesCount": {
-            "label": "Jelenlegi faj szám",
-            "helpText": "A tartomány szűrőbe bevont fajok száma. Automatikusan frissül, amikor a küszöbérték, szélesség vagy hosszúság megváltozik.",
-            "loading": "Betöltés...",
-            "viewSpecies": "Fajok megtekintése"
-          },
-          "downloadTitle": "Fajlista letöltése CSV-ként",
-          "csvDownloaded": "Fajlista sikeresen letöltve",
-          "csvDownloadFailed": "A fajlista letöltése sikertelen. Próbálja újra.",
-          "modal": {
-            "title": "Tartomány szűrő fajok",
-            "speciesCount": "Fajok száma:",
-            "threshold": "Küszöbérték:",
-            "latitude": "Szélesség:",
-            "longitude": "Hosszúság:",
-            "loadingSpecies": "Fajok betöltése...",
-            "noSpeciesFound": "A jelenlegi beállításokkal nem található faj",
-            "close": "Bezárás"
           }
         },
         "database": {
@@ -2352,9 +2318,6 @@
       "errors": {
         "localesLoadFailed": "A nyelvi opciók betöltése sikertelen. Alapértelmezettek használata.",
         "providersLoadFailed": "A képszolgáltatók betöltése sikertelen. Alapértelmezettek használata.",
-        "rangeFilterTestFailed": "A tartomány szűrő beállítások tesztelése sikertelen",
-        "rangeFilterLoadFailed": "A faj lista betöltése sikertelen",
-        "rangeFilterCountFailed": "A faj szám betöltése sikertelen",
         "mapLibraryLoadFailed": "A térkép könyvtár betöltése sikertelen. Kérjük, frissítse az oldalt.",
         "mapLoadFailed": "A térkép betöltése sikertelen. Kérjük, próbálja frissíteni az oldalt.",
         "modalMapLoadFailed": "A modal térkép betöltése sikertelen. Próbálja bezárni és újra megnyitni a modalt.",
@@ -3709,342 +3672,6 @@
         "fileReadError": "A kiválasztott fájl olvasása sikertelen"
       }
     },
-    "species": {
-      "pageLabel": "Faj beállítások",
-      "saveError": "A konfiguráció mentése sikertelen \"{species}\" számára. Kérjük, próbálja újra.",
-      "configUpdated": "Konfiguráció frissítve \"{species}\" számára",
-      "configAdded": "Konfiguráció hozzáadva \"{species}\" számára",
-      "duplicateConfigError": "A(z) \"{species}\" faj már rendelkezik konfigurációval. Kérjük, válasszon más nevet.",
-      "activeSpecies": {
-        "title": "Aktív fajok",
-        "tabLabel": "Aktív",
-        "description": "Azon fajok, amelyek az Ön jelenlegi helyszíne és szűrő beállításai alapján detektálásra kerülnek",
-        "stats": {
-          "species": "Faj",
-          "location": "Helyszín",
-          "threshold": "Küszöbérték",
-          "updated": "Frissítve",
-          "justNow": "Épp most",
-          "minutesAgo": "{count} perce",
-          "hoursAgo": "{count} órája"
-        },
-        "search": {
-          "placeholder": "Fajok keresése..."
-        },
-        "badges": {
-          "included": "Beleértve",
-          "configured": "Konfigurálva"
-        },
-        "empty": {
-          "title": "Nem található faj",
-          "description": "Konfigurálja a helyszínét a Fő beállításokban a rendelkezésre álló fajok megtekintéséhez"
-        },
-        "noResults": "Egyetlen faj sem felel meg a keresésnek",
-        "infoNote": "Ez a lista az Ön helyszíne és a tartomány szűrő küszöbértéke alapján készült. A manuálisan belefoglalt fajok mindig hozzáadásra kerülnek.",
-        "retry": "Újra",
-        "expand": "Lista kibontása",
-        "collapse": "Lista összecsukása",
-        "downloadCsv": "CSV letöltése",
-        "errors": {
-          "loadFailed": "Az aktív faj lista betöltése sikertelen"
-        },
-        "locationNotConfigured": {
-          "title": "Helyszín nincs konfigurálva",
-          "description": "Állítsa be a helyszínét a Fő beállításokban a környékén elérhető fajok megtekintéséhez. A tartomány szűrő az Ön helyszíne alapján határozza meg, mely fajok valószínűsíthetők a közelben.",
-          "action": "Helyszín konfigurálása"
-        },
-        "rangeFilterHealth": {
-          "inactive": {
-            "title": "A tartomány szűrő nem aktív",
-            "description": "A detektálásokat jelenleg nem szűri a helyszíned, így a területeden kívüli fajok is jelentésre kerülhetnek. Ellenőrizd a tartomány szűrő modell beállítását a Beállítások oldalon."
-          },
-          "fellBack": {
-            "title": "A beépített tartomány szűrő használata",
-            "description": "A beállított geomodell tartomány szűrőt nem sikerült betölteni, ezért a VoiceWatch a beépített tartomány szűrőre váltott. A szűrés továbbra is működik, de a geomodell visszaállításához ellenőrizd a Beállítások oldalt."
-          },
-          "mappedZero": {
-            "title": "A tartomány szűrő egyetlen fajra sem illeszkedett",
-            "description": "A geomodell tartomány szűrő az aktív modell egyetlen fajára sem illeszkedett, így minden detektálás kiszűrésre kerülne. Ellenőrizd, hogy a tartomány szűrő címkefájlja megegyezik-e az aktív modellel."
-          }
-        },
-        "columns": {
-          "commonName": "Közhasználatú név",
-          "scientificName": "Tudományos név",
-          "score": "Pontszám",
-          "status": "Állapot"
-        }
-      },
-      "alwaysInclude": {
-        "title": "Mindig belefoglalt fajok",
-        "tabLabel": "Beleértés",
-        "description": "Az ebben a listában szereplő fajok mindig belefoglaltak a detektált fajok közé",
-        "noSpeciesMessage": "Nincs faj hozzáadva a belefoglalt listához"
-      },
-      "alwaysExclude": {
-        "title": "Mindig kizárt fajok",
-        "tabLabel": "Kizárás",
-        "description": "Az ebben a listában szereplő fajok mindig ki vannak zárva a detektálásból",
-        "noSpeciesMessage": "Nincs faj hozzáadva a kizárt listához"
-      },
-      "customConfiguration": {
-        "title": "Egyedi faj konfiguráció",
-        "tabLabel": "Egyedi",
-        "description": "Fajspecifikus küszöbértékek, detektálási intervallumok és műveletek",
-        "helpText": {
-          "intro": "Fajspecifikus beállítások konfigurálása:",
-          "threshold": "Küszöbérték: Minimális megbízhatósági pontszám (0-1) a detektáláshoz",
-          "interval": "Intervallum: Minimális idő másodpercekben az azonos faj egymást követő detektálásai között (0 = globális alapértelmezett használata)",
-          "actions": "Műveletek: Egyedi parancsok végrehajtása, amikor ez a faj detektálásra kerül"
-        },
-        "columnHeaders": {
-          "species": "Faj",
-          "settings": "Beállítások",
-          "actions": "Műveletek"
-        },
-        "badges": {
-          "threshold": "Küszöbérték: {value}",
-          "interval": "Intervallum: {value}s",
-          "customAction": "Egyedi művelet",
-          "executeDefaults": "+Alapértelmezettek"
-        },
-        "dropdown": {
-          "editConfig": "Konfiguráció szerkesztése",
-          "addAction": "Művelet hozzáadása",
-          "remove": "Eltávolítás"
-        },
-        "labels": {
-          "threshold": "Küszöbérték",
-          "interval": "Intervallum",
-          "intervalSeconds": "Intervallum (mp)",
-          "addButton": "Hozzáadás"
-        },
-        "noConfigurationsMessage": "Nincs egyedi faj konfiguráció hozzáadva",
-        "addForm": {
-          "speciesPlaceholder": "Faj neve",
-          "thresholdPlaceholder": "0.5",
-          "intervalPlaceholder": "0"
-        },
-        "addConfiguration": "Konfiguráció hozzáadása",
-        "newConfiguration": "Új konfiguráció",
-        "editing": "Szerkesztés: {species}",
-        "configuredCount": "{count} konfigurálva",
-        "searchPlaceholder": "Gépeljen a kereséshez...",
-        "saving": "Mentés...",
-        "save": "Mentés",
-        "cancel": "Mégse",
-        "configureActions": "Műveletek konfigurálása",
-        "actionsConfigured": "Konfigurálva",
-        "list": {
-          "editTitle": "Konfiguráció szerkesztése",
-          "removeTitle": "Konfiguráció eltávolítása"
-        },
-        "emptyState": {
-          "title": "Még nincs konfiguráció.",
-          "description": "Kattintson a \"Konfiguráció hozzáadása\" gombra a faj detektálási beállítások testreszabásához."
-        },
-        "table": {
-          "columnScientificName": "Tudományos név",
-          "intervalDefault": "Alapértelmezett",
-          "intervalDefaultTooltip": "0 = globális alapértelmezett intervallum használata",
-          "noActions": "Nincs",
-          "searchPlaceholder": "Fajok keresése...",
-          "noResults": "Nincs megfelelő konfiguráció",
-          "editDisabledReason": "Mentse el vagy zárja be a jelenlegi szerkesztőt egy másik faj szerkesztése előtt",
-          "actionsDisabledBusy": "Kérjük, várja meg a jelenlegi művelet befejezését"
-        }
-      },
-      "synonyms": {
-        "tabLabel": "Szinonimák",
-        "description": "Rendelje hozzá a VoiceWatch tudományos fajneveit újabb taxonómia szerinti megfelelőikhez. Csak tartalékként használatos a madárképek Wikipédiáról és AviCommonsról való lekérésekor; nem nevezi át a fajokat a detektálásokban vagy az irányítópulton.",
-        "helpText": "Ha módosítani szeretné egy faj felületen megjelenő nevét, szerkessze a VoiceWatch címkefájlját (a „Címke útvonal” beállítás a fő beállítások között).",
-        "birdnetName": "VoiceWatch név",
-        "updatedName": "Frissített tudományos név",
-        "addButton": "Szinonima hozzáadása",
-        "emptyState": "Nincs taxonómia szinonima konfigurálva",
-        "errors": {
-          "unknownSpecies": "A faj nem található a VoiceWatch címkék között",
-          "duplicateKey": "Ehhez a fajhoz már létezik szinonima",
-          "emptyUpdatedName": "A frissített név kötelező"
-        }
-      },
-      "actionsModal": {
-        "title": "Műveletek ehhez: {species}",
-        "actionType": {
-          "label": "Művelet típusa",
-          "executeCommand": "Parancs végrehajtása",
-          "onlySupported": "Jelenleg csak a Parancs végrehajtása művelet támogatott"
-        },
-        "command": {
-          "label": "Parancs",
-          "helpText": "Adja meg a végrehajtani kívánt parancs vagy szkript teljes útvonalát"
-        },
-        "parameters": {
-          "label": "Paraméterek",
-          "helpText": "Ezek az értékek sorrendben kerülnek átadásra a parancsának",
-          "placeholder": "Kattintson a lent található gombokra a paraméterek hozzáadásához vagy gépeljen manuálisan",
-          "tooltip": "Használja a lent található gombokat vagy gépeljen közvetlenül (vesszővel elválasztva)",
-          "availableTitle": "Elérhető paraméterek",
-          "buttons": {
-            "commonName": "KözhasználatúNév",
-            "scientificName": "TudományosNév",
-            "confidence": "Megbízhatóság",
-            "time": "Idő",
-            "source": "Forrás",
-            "clearParameters": "Paraméterek törlése"
-          }
-        },
-        "executeDefaults": {
-          "label": "Alapértelmezett műveletek futtatása is (adatbázis tárolás, értesítések stb.)",
-          "helpText": "Engedélyezéskor az Ön egyedi művelete és a rendszer alapértelmezett műveletei is futni fognak. Tiltsa le, ha csak az Ön egyedi művelete fusson."
-        }
-      },
-      "add": "Hozzáadás",
-      "remove": "Eltávolítás",
-      "suggestions": "Faj javaslatok",
-      "addSpeciesToInclude": "Faj hozzáadása a belefoglaltak közé",
-      "addSpeciesToIncludeLabel": "Új faj hozzáadása a belefoglaltak közé",
-      "addSpeciesToExclude": "Faj hozzáadása a kizártak közé",
-      "addSpeciesToExcludeLabel": "Új faj hozzáadása a kizártak közé",
-      "commandPathPlaceholder": "/az/ön/parancs/útvonala",
-      "parametersPlaceholder": "A paraméterek itt jelennek meg",
-      "errors": {
-        "speciesLoadFailed": "A faj lista betöltése sikertelen. Kérjük, próbálja újra."
-      },
-      "tracking": {
-        "title": "Faj követés",
-        "tabLabel": "Követés",
-        "description": "Új faj detektálások követésének konfigurálása időszakok alapján",
-        "enabled": {
-          "label": "Faj követés engedélyezése",
-          "helpText": "Engedélyezéskor a rendszer követi az új faj detektálásokat és küldhet értesítéseket"
-        },
-        "newSpeciesWindowDays": {
-          "label": "Új faj ablak (nap)",
-          "helpText": "Napok száma, ameddig egy faj 'újnak' minősül az első detektálás után (1-365)"
-        },
-        "syncIntervalMinutes": {
-          "label": "Szinkronizálási intervallum (perc)",
-          "helpText": "Milyen gyakran szinkronizálja a követési adatokat az adatbázissal (1-1440)"
-        },
-        "notificationSuppressionHours": {
-          "label": "Értesítés elnyomás (óra)",
-          "helpText": "Órák az azonos faj ismételt értesítéseinek elnyomásához (0-8760)"
-        },
-        "yearly": {
-          "title": "Éves követés",
-          "description": "Minden évben az első érkezések követése",
-          "enabled": {
-            "label": "Éves követés engedélyezése",
-            "helpText": "Követés és értesítés, amikor egy faj először detektálásra kerül minden évben"
-          },
-          "resetMonth": {
-            "label": "Visszaállítási hónap",
-            "helpText": "Hónap, amikor az éves követés visszaáll (1-12)"
-          },
-          "resetDay": {
-            "label": "Visszaállítási nap",
-            "helpText": "A hónap napja, amikor az éves követés visszaáll"
-          },
-          "windowDays": {
-            "label": "Ablak (nap)",
-            "helpText": "Napok az 'ezévben új' jelző megjelenítéséhez (1-365)"
-          }
-        },
-        "seasonal": {
-          "title": "Évszakos követés",
-          "description": "Minden évszakban az első érkezések követése",
-          "enabled": {
-            "label": "Évszakos követés engedélyezése",
-            "helpText": "Követés és értesítés, amikor egy faj először detektálásra kerül minden évszakban"
-          },
-          "windowDays": {
-            "label": "Ablak (nap)",
-            "helpText": "Napok az 'ebben az évszakban új' jelző megjelenítéséhez (1-365)"
-          },
-          "seasons": {
-            "title": "Évszak definíciók",
-            "description": "Adja meg, mikor kezdődik minden évszak. Az évszakok automatikusan az Ön helyszínének félgömbje alapján kerülnek beállításra.",
-            "spring": "Tavasz",
-            "summer": "Nyár",
-            "fall": "Ősz",
-            "winter": "Tél",
-            "wet1": "Esős évszak 1",
-            "dry1": "Száraz évszak 1",
-            "wet2": "Esős évszak 2",
-            "dry2": "Száraz évszak 2",
-            "startMonth": "Kezdési hónap",
-            "startDay": "Kezdési nap",
-            "hemisphereNote": "Az évszak dátumok automatikusan az Ön szélessége alapján kerülnek konfigurálásra. Az északi félgömb a szabványos évszakokat, a déli félgömb eltolódott dátumokat, az egyenlítői régiók pedig esős/száraz évszakokat használnak."
-          }
-        },
-        "months": {
-          "january": "Január",
-          "february": "Február",
-          "march": "Március",
-          "april": "Április",
-          "may": "Május",
-          "june": "Június",
-          "july": "Július",
-          "august": "Augusztus",
-          "september": "Szeptember",
-          "october": "Október",
-          "november": "November",
-          "december": "December"
-        },
-        "units": {
-          "days": "nap",
-          "min": "perc",
-          "hours": "óra"
-        }
-      },
-      "dynamicThreshold": {
-        "tabLabel": "Tanult",
-        "title": "Tanult küszöbértékek",
-        "description": "Ez az oldal a Dinamikus küszöbérték futásidejű adatait mutatja. Ha engedélyezve van a Fő beállítások → Detektálás menüpontban, a küszöbértékek több magas megbízhatóságú detektálás alapján automatikusan kerülnek beállításra. Az itt látható fajok feltételezhetően léteznek ezen a helyszínen.",
-        "stats": {
-          "active": "Aktív",
-          "atMinimum": "Minimumon",
-          "minThreshold": "Min küszöbérték",
-          "validityPeriod": "Érvényességi időszak"
-        },
-        "header": {
-          "species": "Faj",
-          "threshold": "Küszöbérték",
-          "expires": "Lejárat"
-        },
-        "searchPlaceholder": "Faj keresése...",
-        "threshold": "Küszöbérték",
-        "level": "Szint",
-        "expires": "Lejárat",
-        "expired": "Lejárt",
-        "confidence": "Megbízhatóság",
-        "requiredConfidence": "Szükséges megbízhatóság",
-        "resetAll": "Összes visszaállítása",
-        "resetSpecies": "Küszöbérték visszaállítása ehhez a fajhoz",
-        "noEvents": "Nincs küszöbérték változási előzmény",
-        "changeReason": {
-          "highConfidence": "Magas megbízhatóságú detektálás",
-          "expiry": "Küszöbérték lejárt",
-          "manualReset": "Manuális visszaállítás"
-        },
-        "note": "A magas megbízhatóságú detektálások megerősítik, mely fajok léteznek ezen a helyszínen. Több magas megbízhatóságú egyezés után a detektálási küszöbérték biztonságosan csökkentésre kerül a több hívás rögzítéséhez jelentős hamis pozitív kockázat nélkül. A küszöbértékek automatikusan visszaállnak a konfigurált érvényességi időszak után.",
-        "empty": {
-          "title": "Nincs tanult küszöbérték",
-          "description": "A magas megbízhatóságú detektálások automatikusan létrehozzák a fajok tanult küszöbértékeit"
-        },
-        "resetAllConfirm": {
-          "title": "Összes küszöbérték visszaállítása",
-          "message": "Ez visszaállítja az összes {count} tanult küszöbértéket. A fajoknak ismét magas megbízhatósággal kell detektálásra kerülniük a küszöbértékeik csökkentéséhez."
-        },
-        "loadError": "A dinamikus küszöbértékek betöltése sikertelen",
-        "resetSuccess": "Küszöbérték visszaállítva ehhez: {species}",
-        "resetError": "A küszöbérték visszaállítása sikertelen",
-        "resetAllSuccess": "{count} küszöbérték visszaállítva",
-        "resetAllError": "A küszöbértékek visszaállítása sikertelen",
-        "expand": "Esemény előzmények megjelenítése",
-        "collapse": "Esemény előzmények elrejtése"
-      }
-    },
     "database": {
       "sqlitePlaceholder": "SQLite adatbázis útvonal megadása",
       "mysqlHostPlaceholder": "MySQL host megadása",
@@ -4906,26 +4533,6 @@
       "locale": {
         "label": "Fajok nyelve",
         "helpText": "A fajok köznapi neveihez használt nyelv a felületen."
-      }
-    },
-    "rangeFilter": {
-      "birdOnlyNote": "A területszűrő csak madár osztályozókra vonatkozik. A denevérmodellek saját fajlistákat használnak.",
-      "status": {
-        "title": "Területszűrő áttekintés",
-        "geomodelInfo": "VoiceWatch Geomodell {version} - {species} ismert faj",
-        "autoSelected": "Automatikusan kiválasztott",
-        "manual": "Kézi",
-        "classifier": "Osztályozó",
-        "totalSpecies": "Összes faj",
-        "withRangeData": "Területi adattal",
-        "withoutRangeData": "Területi adat nélkül",
-        "withRangeDataTooltip": "Fajok, amelyeket a geomodell ki tud értékelni földrajzi valószínűség szempontjából az Ön helyén",
-        "withoutRangeDataTooltip": "Fajok földrajzi adat nélkül a geomodellben, az alábbi nem térképezett fajok beállítás kezeli",
-        "noFilter": "Nincs aktív területszűrő",
-        "passUnmapped": {
-          "label": "Területi adat nélküli fajok engedélyezése",
-          "helpText": "Engedélyezze azon fajok detektálását, amelyekhez a geomodellnek nincs földrajzi adata. Kikapcsolva ezek a fajok mindig kiszűrésre kerülnek."
-        }
       }
     },
     "advanced": {

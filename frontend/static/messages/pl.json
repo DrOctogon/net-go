@@ -476,9 +476,6 @@
     "noResultsFound": "Nie znaleziono wyników",
     "noResultsHint": "Spróbuj dostosować filtry wyszukiwania",
     "fields": {
-      "species": "Gatunek",
-      "speciesPlaceholder": "Wprowadź nazwę gatunku",
-      "speciesHelp": "Wprowadź pełną lub częściową nazwę gatunku (bez rozróżniania wielkości liter)",
       "dateRange": "Zakres Dat",
       "dateRangeHelp": "Filtruj detekcje według zakresu dat (zostaw puste dla wszystkich dat)",
       "from": "Od",
@@ -683,8 +680,6 @@
         "markCorrect": "Poprawne",
         "markFalsePositive": "Błędne",
         "review": "Przegląd detekcji",
-        "showSpecies": "Pokaż gatunek",
-        "ignoreSpecies": "Ignoruj gatunek",
         "lockDetection": "Zablokuj detekcję",
         "unlockDetection": "Odblokuj detekcję",
         "deleteDetection": "Usuń detekcję"
@@ -2084,8 +2079,6 @@
           "warningOff": "Bez filtrowania każde wykrycie powyżej progu pewności jest natychmiast akceptowane. Zwykle powoduje to kilka fałszywych trafień dziennie. Nawet niskie filtrowanie znacznie poprawia jakość wyników."
         },
         "rangeFilter": {
-          "title": "Filtr Zasięgu",
-          "description": "Ogranicz detekcję do gatunków prawdopodobnych w Twoim regionie geograficznym",
           "stationLocation": {
             "label": "Lokalizacja Stacji",
             "helpText": "Lokalizacja stacji, używana do danych pogodowych i ograniczenia gatunków ptaków do tych prawdopodobnych w regionie."
@@ -2097,33 +2090,6 @@
           "longitude": {
             "label": "Długość Geograficzna",
             "helpText": "Długość geograficzna stacji, używana do danych pogodowych i filtrowania gatunków ptaków według zakresu geograficznego."
-          },
-          "model": {
-            "label": "Model Filtra Zasięgu",
-            "helpText": "Wersja modelu filtra zasięgu VoiceWatch: najnowsza lub starszy."
-          },
-          "threshold": {
-            "label": "Próg",
-            "helpText": "Kontroluje, które gatunki są uwzględniane na podstawie ich prawdopodobieństwa wystąpienia dla twojej lokalizacji i pory roku. Domyślna wartość (0.01) jest zalecana dla większości użytkowników. Wyższe wartości (0.05-0.3) uwzględniają mniej gatunków o wyższym prawdopodobieństwie wystąpienia. Bardzo wysokie wartości (0.5+) uwzględniają tylko najczęstsze gatunki."
-          },
-          "speciesCount": {
-            "label": "Bieżąca Liczba Gatunków",
-            "helpText": "Liczba gatunków uwzględnionych w filtrze zasięgu. Aktualizuje się automatycznie przy zmianie progu, szerokości lub długości geograficznej.",
-            "loading": "Ładowanie...",
-            "viewSpecies": "Wyświetl Gatunki"
-          },
-          "downloadTitle": "Pobierz listę gatunków jako CSV",
-          "csvDownloaded": "Lista gatunków pobrana pomyślnie",
-          "csvDownloadFailed": "Nie udało się pobrać listy gatunków. Spróbuj ponownie.",
-          "modal": {
-            "title": "Gatunki Filtra Zasięgu",
-            "speciesCount": "Liczba Gatunków:",
-            "threshold": "Próg:",
-            "latitude": "Szerokość Geograficzna:",
-            "longitude": "Długość Geograficzna:",
-            "loadingSpecies": "Ładowanie gatunków...",
-            "noSpeciesFound": "Nie znaleziono gatunków z bieżącymi ustawieniami",
-            "close": "Zamknij"
           }
         },
         "database": {
@@ -2352,9 +2318,6 @@
       "errors": {
         "localesLoadFailed": "Nie można załadować opcji językowych. Używanie domyślnych.",
         "providersLoadFailed": "Nie można załadować dostawców obrazów. Używanie domyślnych.",
-        "rangeFilterTestFailed": "Nie udało się przetestować ustawień filtra zasięgu",
-        "rangeFilterLoadFailed": "Nie udało się załadować listy gatunków",
-        "rangeFilterCountFailed": "Nie udało się załadować liczby gatunków",
         "mapLibraryLoadFailed": "Nie udało się załadować biblioteki map. Odśwież stronę.",
         "mapLoadFailed": "Nie udało się załadować mapy. Spróbuj odświeżyć stronę.",
         "modalMapLoadFailed": "Nie udało się załadować mapy w oknie modalnym. Zamknij i otwórz okno ponownie.",
@@ -3709,342 +3672,6 @@
         "fileReadError": "Nie udało się odczytać wybranego pliku"
       }
     },
-    "species": {
-      "pageLabel": "Ustawienia gatunków",
-      "saveError": "Nie udało się zapisać konfiguracji dla \"{species}\". Spróbuj ponownie.",
-      "configUpdated": "Zaktualizowano konfigurację dla \"{species}\"",
-      "configAdded": "Dodano konfigurację dla \"{species}\"",
-      "duplicateConfigError": "Gatunek \"{species}\" ma już konfigurację. Wybierz inną nazwę.",
-      "activeSpecies": {
-        "title": "Aktywne Gatunki",
-        "tabLabel": "Aktywne",
-        "description": "Gatunki, które będą wykrywane na podstawie Twojej aktualnej lokalizacji i ustawień filtrów",
-        "stats": {
-          "species": "Gatunki",
-          "location": "Lokalizacja",
-          "threshold": "Próg",
-          "updated": "Zaktualizowano",
-          "justNow": "Właśnie teraz",
-          "minutesAgo": "{count}m temu",
-          "hoursAgo": "{count}g temu"
-        },
-        "search": {
-          "placeholder": "Szukaj gatunków..."
-        },
-        "badges": {
-          "included": "Uwzględniony",
-          "configured": "Skonfigurowany"
-        },
-        "empty": {
-          "title": "Nie znaleziono gatunków",
-          "description": "Skonfiguruj swoją lokalizację w Ustawieniach Głównych, aby zobaczyć dostępne gatunki"
-        },
-        "noResults": "Żaden gatunek nie pasuje do Twojego wyszukiwania",
-        "infoNote": "Ta lista jest oparta na Twojej lokalizacji i progu filtra zasięgu. Ręcznie dodane gatunki są zawsze uwzględniane.",
-        "retry": "Spróbuj ponownie",
-        "expand": "Rozwiń listę",
-        "collapse": "Zwiń listę",
-        "downloadCsv": "Pobierz CSV",
-        "errors": {
-          "loadFailed": "Nie udało się załadować listy aktywnych gatunków"
-        },
-        "locationNotConfigured": {
-          "title": "Lokalizacja nie skonfigurowana",
-          "description": "Ustaw swoją lokalizację w Ustawieniach Głównych, aby zobaczyć gatunki dostępne w Twojej okolicy. Filtr zasięgu wykorzystuje Twoją lokalizację do określenia, które gatunki prawdopodobnie występują w pobliżu.",
-          "action": "Skonfiguruj lokalizację"
-        },
-        "rangeFilterHealth": {
-          "inactive": {
-            "title": "Filtr zasięgu jest nieaktywny",
-            "description": "Wykrycia nie są obecnie filtrowane według Twojej lokalizacji, więc mogą być zgłaszane gatunki spoza Twojej okolicy. Sprawdź konfigurację modelu filtra zasięgu w Ustawieniach."
-          },
-          "fellBack": {
-            "title": "Używany jest wbudowany filtr zasięgu",
-            "description": "Nie udało się załadować skonfigurowanego filtra zasięgu geomodelu, więc VoiceWatch przełączył się na wbudowany filtr zasięgu. Filtrowanie nadal działa, ale sprawdź Ustawienia, aby przywrócić geomodel."
-          },
-          "mappedZero": {
-            "title": "Filtr zasięgu nie dopasował żadnego gatunku",
-            "description": "Filtr zasięgu geomodelu nie dopasował żadnego z gatunków aktywnego modelu, więc każde wykrycie zostałoby odfiltrowane. Sprawdź, czy plik etykiet filtra zasięgu odpowiada aktywnemu modelowi."
-          }
-        },
-        "columns": {
-          "commonName": "Nazwa",
-          "scientificName": "Nazwa naukowa",
-          "score": "Wynik",
-          "status": "Status"
-        }
-      },
-      "alwaysInclude": {
-        "title": "Zawsze Uwzględniaj Gatunki",
-        "tabLabel": "Uwzględ.",
-        "description": "Gatunki z tej listy będą zawsze uwzględniane w zakresie wykrytych gatunków",
-        "noSpeciesMessage": "Nie dodano gatunków do listy uwzględnianych"
-      },
-      "alwaysExclude": {
-        "title": "Zawsze Wykluczaj Gatunki",
-        "tabLabel": "Wyklucz",
-        "description": "Gatunki z tej listy będą zawsze wykluczone z detekcji",
-        "noSpeciesMessage": "Nie dodano gatunków do listy wykluczanych"
-      },
-      "customConfiguration": {
-        "title": "Niestandardowa Konfiguracja Gatunków",
-        "tabLabel": "Niest.",
-        "description": "Wartości progowe specyficzne dla gatunków, interwały detekcji i akcje",
-        "helpText": {
-          "intro": "Konfiguruj ustawienia specyficzne dla gatunków:",
-          "threshold": "Próg: Minimalny wynik pewności (0-1) wymagany do detekcji",
-          "interval": "Interwał: Minimalny czas w sekundach między detekcjami tego samego gatunku (0 = użyj globalnego domyślnego)",
-          "actions": "Akcje: Niestandardowe polecenia do wykonania po wykryciu tego gatunku"
-        },
-        "columnHeaders": {
-          "species": "Gatunek",
-          "settings": "Ustawienia",
-          "actions": "Akcje"
-        },
-        "badges": {
-          "threshold": "Próg: {value}",
-          "interval": "Interwał: {value}s",
-          "customAction": "Akcja Niestandardowa",
-          "executeDefaults": "+Domyślne"
-        },
-        "dropdown": {
-          "editConfig": "Edytuj Konfigurację",
-          "addAction": "Dodaj Akcję",
-          "remove": "Usuń"
-        },
-        "labels": {
-          "threshold": "Próg",
-          "interval": "Interwał",
-          "intervalSeconds": "Interwał (sek)",
-          "addButton": "Dodaj"
-        },
-        "noConfigurationsMessage": "Nie dodano niestandardowych konfiguracji gatunków",
-        "addForm": {
-          "speciesPlaceholder": "Nazwa gatunku",
-          "thresholdPlaceholder": "0.5",
-          "intervalPlaceholder": "0"
-        },
-        "addConfiguration": "Dodaj Konfigurację",
-        "newConfiguration": "Nowa Konfiguracja",
-        "editing": "Edytowanie: {species}",
-        "configuredCount": "Skonfigurowano {count}",
-        "searchPlaceholder": "Wpisz aby szukać...",
-        "saving": "Zapisywanie...",
-        "save": "Zapisz",
-        "cancel": "Anuluj",
-        "configureActions": "Konfiguruj Akcje",
-        "actionsConfigured": "Skonfigurowane",
-        "list": {
-          "editTitle": "Edytuj konfigurację",
-          "removeTitle": "Usuń konfigurację"
-        },
-        "emptyState": {
-          "title": "Brak konfiguracji.",
-          "description": "Kliknij \"Dodaj Konfigurację\" aby dostosować ustawienia wykrywania gatunków."
-        },
-        "table": {
-          "columnScientificName": "Nazwa naukowa",
-          "intervalDefault": "Domyślne",
-          "intervalDefaultTooltip": "0 = użyj globalnego domyślnego interwału",
-          "noActions": "Brak",
-          "searchPlaceholder": "Szukaj gatunków...",
-          "noResults": "Brak pasujących konfiguracji",
-          "editDisabledReason": "Zapisz lub zamknij obecny edytor przed edycją innego gatunku",
-          "actionsDisabledBusy": "Proszę czekać na zakończenie obecnej operacji"
-        }
-      },
-      "synonyms": {
-        "tabLabel": "Synonimy",
-        "description": "Przypisz naukowe nazwy VoiceWatch do ich zaktualizowanych odpowiedników w nowszej taksonomii. Używane wyłącznie jako rozwiązanie awaryjne przy pobieraniu zdjęć ptaków z Wikipedii i AviCommons; nie zmienia nazw gatunków w wykryciach ani na panelu.",
-        "helpText": "Aby zmienić nazwę, pod którą gatunek pojawia się w interfejsie, edytuj swój plik etykiet VoiceWatch (ustawienie \"Ścieżka Etykiet\" w ustawieniach głównych).",
-        "birdnetName": "Nazwa VoiceWatch",
-        "updatedName": "Zaktualizowana nazwa naukowa",
-        "addButton": "Dodaj synonim",
-        "emptyState": "Nie skonfigurowano synonimów taksonomicznych",
-        "errors": {
-          "unknownSpecies": "Gatunek nie znaleziony w etykietach VoiceWatch",
-          "duplicateKey": "Synonim dla tego gatunku już istnieje",
-          "emptyUpdatedName": "Zaktualizowana nazwa jest wymagana"
-        }
-      },
-      "actionsModal": {
-        "title": "Akcje dla {species}",
-        "actionType": {
-          "label": "Typ Akcji",
-          "executeCommand": "Wykonaj Polecenie",
-          "onlySupported": "Obecnie obsługiwane są tylko akcje Wykonaj Polecenie"
-        },
-        "command": {
-          "label": "Polecenie",
-          "helpText": "Podaj pełną ścieżkę do polecenia lub skryptu, który chcesz wykonać"
-        },
-        "parameters": {
-          "label": "Parametry",
-          "helpText": "Te wartości zostaną przekazane do twojego polecenia w podanej kolejności",
-          "placeholder": "Kliknij przyciski poniżej, aby dodać parametry lub wpisz ręcznie",
-          "tooltip": "Użyj przycisków poniżej lub wpisz bezpośrednio (oddzielone przecinkami)",
-          "availableTitle": "Dostępne Parametry",
-          "buttons": {
-            "commonName": "NazwaPospolita",
-            "scientificName": "NazwaNaukowa",
-            "confidence": "Pewność",
-            "time": "Czas",
-            "source": "Źródło",
-            "clearParameters": "Wyczyść Parametry"
-          }
-        },
-        "executeDefaults": {
-          "label": "Uruchom również domyślne akcje (przechowywanie w bazie danych, powiadomienia itp.)",
-          "helpText": "Po włączeniu będą działać zarówno twoja niestandardowa akcja, jak i domyślne akcje systemu. Po wyłączeniu zostanie wykonana tylko twoja niestandardowa akcja."
-        }
-      },
-      "add": "Dodaj",
-      "remove": "Usuń",
-      "suggestions": "Sugestie gatunków",
-      "addSpeciesToInclude": "Dodaj gatunki do uwzględnienia",
-      "addSpeciesToIncludeLabel": "Dodaj Nowy Gatunek do Uwzględnienia",
-      "addSpeciesToExclude": "Dodaj gatunki do wykluczenia",
-      "addSpeciesToExcludeLabel": "Dodaj Nowy Gatunek do Wykluczenia",
-      "commandPathPlaceholder": "/ścieżka/do/twojego/polecenia",
-      "parametersPlaceholder": "Parametry pojawią się tutaj",
-      "errors": {
-        "speciesLoadFailed": "Nie udało się załadować listy gatunków. Spróbuj ponownie."
-      },
-      "tracking": {
-        "title": "Śledzenie",
-        "tabLabel": "Śledź",
-        "description": "Konfiguruj śledzenie nowych wykryć gatunków na podstawie okresów czasowych",
-        "enabled": {
-          "label": "Włącz śledzenie gatunków",
-          "helpText": "Po włączeniu system śledzi nowe wykrycia gatunków i może wysyłać powiadomienia"
-        },
-        "newSpeciesWindowDays": {
-          "label": "Okno nowego gatunku (dni)",
-          "helpText": "Liczba dni, przez które gatunek jest uważany za 'nowy' po pierwszym wykryciu (1-365)"
-        },
-        "syncIntervalMinutes": {
-          "label": "Interwał synchronizacji (minuty)",
-          "helpText": "Jak często synchronizować dane śledzenia z bazą danych (1-1440)"
-        },
-        "notificationSuppressionHours": {
-          "label": "Wstrzymanie powiadomień (godziny)",
-          "helpText": "Godziny na wstrzymanie zduplikowanych powiadomień dla tego samego gatunku (0-8760)"
-        },
-        "yearly": {
-          "title": "Śledzenie roczne",
-          "description": "Śledź pierwsze pojawienia gatunków każdego roku",
-          "enabled": {
-            "label": "Włącz śledzenie roczne",
-            "helpText": "Śledź i powiadamiaj, gdy gatunek zostanie wykryty po raz pierwszy w roku"
-          },
-          "resetMonth": {
-            "label": "Miesiąc resetu",
-            "helpText": "Miesiąc, w którym resetowane jest śledzenie roczne (1-12)"
-          },
-          "resetDay": {
-            "label": "Dzień resetu",
-            "helpText": "Dzień miesiąca, w którym resetowane jest śledzenie roczne"
-          },
-          "windowDays": {
-            "label": "Okno (dni)",
-            "helpText": "Dni do wyświetlania wskaźnika 'nowy w tym roku' (1-365)"
-          }
-        },
-        "seasonal": {
-          "title": "Śledzenie sezonowe",
-          "description": "Śledź pierwsze pojawienia gatunków każdego sezonu",
-          "enabled": {
-            "label": "Włącz śledzenie sezonowe",
-            "helpText": "Śledź i powiadamiaj, gdy gatunek zostanie wykryty po raz pierwszy w sezonie"
-          },
-          "windowDays": {
-            "label": "Okno (dni)",
-            "helpText": "Dni do wyświetlania wskaźnika 'nowy w tym sezonie' (1-365)"
-          },
-          "seasons": {
-            "title": "Definicje sezonów",
-            "description": "Określ, kiedy zaczyna się każdy sezon. Sezony są automatycznie dostosowywane na podstawie szerokości geograficznej Twojej lokalizacji.",
-            "spring": "Wiosna",
-            "summer": "Lato",
-            "fall": "Jesień",
-            "winter": "Zima",
-            "wet1": "Pora deszczowa 1",
-            "dry1": "Pora sucha 1",
-            "wet2": "Pora deszczowa 2",
-            "dry2": "Pora sucha 2",
-            "startMonth": "Miesiąc rozpoczęcia",
-            "startDay": "Dzień rozpoczęcia",
-            "hemisphereNote": "Daty sezonów są automatycznie konfigurowane na podstawie szerokości geograficznej. Półkula północna używa standardowych pór roku, półkula południowa ma przesunięte daty, a regiony równikowe używają pór deszczowych/suchych."
-          }
-        },
-        "months": {
-          "january": "Styczeń",
-          "february": "Luty",
-          "march": "Marzec",
-          "april": "Kwiecień",
-          "may": "Maj",
-          "june": "Czerwiec",
-          "july": "Lipiec",
-          "august": "Sierpień",
-          "september": "Wrzesień",
-          "october": "Październik",
-          "november": "Listopad",
-          "december": "Grudzień"
-        },
-        "units": {
-          "days": "dni",
-          "min": "min",
-          "hours": "godz"
-        }
-      },
-      "dynamicThreshold": {
-        "tabLabel": "Nauczone",
-        "title": "Nauczone progi",
-        "description": "Ta strona pokazuje dane runtime progów dynamicznych. Gdy włączone w Ustawienia główne → Wykrywanie, progi są automatycznie dostosowywane przez wielokrotne wykrycia o wysokiej pewności. Gatunki pokazane tutaj są uznawane za istniejące w tej lokalizacji.",
-        "stats": {
-          "active": "Aktywne",
-          "atMinimum": "Na minimum",
-          "minThreshold": "Min. próg",
-          "validityPeriod": "Okres ważności"
-        },
-        "header": {
-          "species": "Gatunek",
-          "threshold": "Próg",
-          "expires": "Wygasa"
-        },
-        "searchPlaceholder": "Szukaj gatunków...",
-        "threshold": "Próg",
-        "level": "Poziom",
-        "expires": "Wygasa",
-        "expired": "Wygasły",
-        "confidence": "Pewność",
-        "requiredConfidence": "Wymagana pewność",
-        "resetAll": "Resetuj wszystkie",
-        "resetSpecies": "Resetuj próg dla tego gatunku",
-        "noEvents": "Brak historii zmian progów",
-        "changeReason": {
-          "highConfidence": "Wykrycie o wysokiej pewności",
-          "expiry": "Próg wygasł",
-          "manualReset": "Ręczny reset"
-        },
-        "note": "Wykrycia o wysokiej pewności potwierdzają, które gatunki istnieją w tej lokalizacji. Po wielokrotnych dopasowaniach o wysokiej pewności próg wykrywania jest bezpiecznie obniżany, aby wychwycić więcej wołań bez znaczącego ryzyka fałszywych pozytywów. Progi resetują się automatycznie po skonfigurowanym okresie ważności.",
-        "empty": {
-          "title": "Brak nauczonych progów",
-          "description": "Wykrycia o wysokiej pewności automatycznie utworzą nauczone progi dla gatunków"
-        },
-        "resetAllConfirm": {
-          "title": "Resetuj wszystkie progi",
-          "message": "To zresetuje wszystkie {count} nauczonych progów. Gatunki będą musiały być ponownie wykryte z wysoką pewnością, aby obniżyć ich progi."
-        },
-        "loadError": "Nie udało się załadować dynamicznych progów",
-        "resetSuccess": "Próg zresetowany dla {species}",
-        "resetError": "Nie udało się zresetować progu",
-        "resetAllSuccess": "Zresetowano {count} progów",
-        "resetAllError": "Nie udało się zresetować progów",
-        "expand": "Pokaż historię zdarzeń",
-        "collapse": "Ukryj historię zdarzeń"
-      }
-    },
     "database": {
       "sqlitePlaceholder": "Wprowadź ścieżkę bazy danych SQLite",
       "mysqlHostPlaceholder": "Wprowadź host MySQL",
@@ -4906,26 +4533,6 @@
       "locale": {
         "label": "Język gatunków",
         "helpText": "Język używany do nazw zwyczajowych gatunków w interfejsie."
-      }
-    },
-    "rangeFilter": {
-      "birdOnlyNote": "Filtr zasięgu dotyczy tylko klasyfikatorów ptaków. Modele nietoperzy używają własnych list gatunków.",
-      "status": {
-        "title": "Przegląd filtra zasięgu",
-        "geomodelInfo": "VoiceWatch Geomodel {version} - {species} znanych gatunków",
-        "autoSelected": "Wybrano automatycznie",
-        "manual": "Ręczny",
-        "classifier": "Klasyfikator",
-        "totalSpecies": "Łącznie gatunków",
-        "withRangeData": "Z danymi zasięgu",
-        "withoutRangeData": "Bez danych zasięgu",
-        "withRangeDataTooltip": "Gatunki, które geomodel może ocenić pod kątem prawdopodobieństwa geograficznego w Twojej lokalizacji",
-        "withoutRangeDataTooltip": "Gatunki bez danych geograficznych w geomodelu, obsługiwane przez poniższe ustawienie niezmapowanych gatunków",
-        "noFilter": "Brak aktywnego filtra zasięgu",
-        "passUnmapped": {
-          "label": "Zezwalaj na gatunki bez danych zasięgu",
-          "helpText": "Zezwalaj na wykrywanie gatunków, dla których geomodel nie ma danych geograficznych. Po wyłączeniu te gatunki są zawsze odfiltrowywane."
-        }
       }
     },
     "advanced": {

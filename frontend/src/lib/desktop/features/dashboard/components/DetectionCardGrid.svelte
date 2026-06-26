@@ -272,13 +272,11 @@
             <DetectionCard
               {detection}
               isNew={newDetectionIds.has(detection.id)}
-              isExcluded={isSpeciesExcluded(detection.commonName)}
               {onFreezeStart}
               {onFreezeEnd}
               onMarkCorrect={() => actions.handleMarkCorrect(detection)}
               onMarkFalsePositive={() => actions.handleMarkFalsePositive(detection)}
               onReview={() => actions.handleReview(detection)}
-              onToggleSpecies={() => actions.handleToggleSpecies(detection)}
               onToggleLock={() => actions.handleToggleLock(detection)}
               onDelete={() => actions.handleDelete(detection)}
             />

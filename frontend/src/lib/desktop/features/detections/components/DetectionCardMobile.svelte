@@ -22,27 +22,23 @@
 
   // Presentational card: the parent (DetectionsList) owns the action handlers
   // and the ConfirmModal via the shared useDetectionActions composable, and
-  // passes them in as callbacks plus the server-hydrated isExcluded state.
+  // passes them in as callbacks.
   interface Props {
     detection: Detection;
-    isExcluded?: boolean;
     onDetailsClick?: (_id: number) => void;
     onReview?: () => void;
     onMarkCorrect?: () => void;
     onMarkFalsePositive?: () => void;
-    onToggleSpecies?: () => void;
     onToggleLock?: () => void;
     onDelete?: () => void;
   }
 
   let {
     detection,
-    isExcluded = false,
     onDetailsClick,
     onReview,
     onMarkCorrect,
     onMarkFalsePositive,
-    onToggleSpecies,
     onToggleLock,
     onDelete,
   }: Props = $props();
@@ -225,8 +221,6 @@
       {onMarkCorrect}
       {onMarkFalsePositive}
       {onReview}
-      {isExcluded}
-      {onToggleSpecies}
       {onToggleLock}
       {onDelete}
       onDownload={() => downloadDetectionAudio(detection)}

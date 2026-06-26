@@ -476,9 +476,6 @@
     "noResultsFound": "Nessun risultato trovato",
     "noResultsHint": "Prova a modificare i filtri di ricerca",
     "fields": {
-      "species": "Specie",
-      "speciesPlaceholder": "Inserisci nome specie",
-      "speciesHelp": "Inserisci il nome completo o parziale della specie (non sensibile alle maiuscole)",
       "dateRange": "Intervallo date",
       "dateRangeHelp": "Filtra rilevamenti per intervallo di date (lascia vuoto per tutte le date)",
       "from": "Da",
@@ -683,8 +680,6 @@
         "markCorrect": "Corretto",
         "markFalsePositive": "Non corretto",
         "review": "Revisiona rilevamento",
-        "showSpecies": "Mostra specie",
-        "ignoreSpecies": "Ignora specie",
         "lockDetection": "Blocca rilevamento",
         "unlockDetection": "Sblocca rilevamento",
         "deleteDetection": "Elimina rilevamento"
@@ -2084,8 +2079,6 @@
           "warningOff": "Senza filtraggio, qualsiasi rilevamento sopra la soglia di confidenza viene accettato immediatamente. Questo produce tipicamente diversi falsi positivi al giorno. Anche un filtraggio basso migliora significativamente la qualità dei risultati."
         },
         "rangeFilter": {
-          "title": "Filtro Intervallo",
-          "description": "Limita il rilevamento alle specie probabili nella tua regione geografica",
           "stationLocation": {
             "label": "Posizione Stazione",
             "helpText": "Posizione della stazione, usata per dati meteo e per limitare le specie di uccelli a quelle probabili nella regione."
@@ -2097,33 +2090,6 @@
           "longitude": {
             "label": "Longitudine",
             "helpText": "Longitudine della stazione, usata per dati meteo e filtro intervallo specie."
-          },
-          "model": {
-            "label": "Modello Filtro Intervallo",
-            "helpText": "Versione del modello filtro intervallo VoiceWatch: latest o legacy."
-          },
-          "threshold": {
-            "label": "Soglia",
-            "helpText": "Controlla quali specie sono incluse in base alla loro probabilità di occorrenza per la tua posizione e periodo dell'anno. Predefinito (0.01) è raccomandato per la maggior parte degli utenti. Valori più alti (0.05-0.3) includono meno specie con probabilità di occorrenza più alta. Valori molto alti (0.5+) includono solo le specie più comuni."
-          },
-          "speciesCount": {
-            "label": "Conteggio Specie Attuale",
-            "helpText": "Numero di specie incluse nel filtro intervallo. Si aggiorna automaticamente quando cambiano soglia, latitudine o longitudine.",
-            "loading": "Caricamento...",
-            "viewSpecies": "Vedi Specie"
-          },
-          "downloadTitle": "Scarica elenco specie come CSV",
-          "csvDownloaded": "Elenco specie scaricato con successo",
-          "csvDownloadFailed": "Impossibile scaricare elenco specie. Riprova.",
-          "modal": {
-            "title": "Specie Filtro Intervallo",
-            "speciesCount": "Conteggio Specie:",
-            "threshold": "Soglia:",
-            "latitude": "Latitudine:",
-            "longitude": "Longitudine:",
-            "loadingSpecies": "Caricamento specie...",
-            "noSpeciesFound": "Nessuna specie trovata con le impostazioni attuali",
-            "close": "Chiudi"
           }
         },
         "database": {
@@ -2352,9 +2318,6 @@
       "errors": {
         "localesLoadFailed": "Impossibile caricare opzioni lingua. Usando predefiniti.",
         "providersLoadFailed": "Impossibile caricare fornitori immagini. Usando predefiniti.",
-        "rangeFilterTestFailed": "Impossibile testare impostazioni filtro intervallo",
-        "rangeFilterLoadFailed": "Impossibile caricare lista specie",
-        "rangeFilterCountFailed": "Impossibile caricare conteggio specie",
         "mapLibraryLoadFailed": "Caricamento della libreria mappa non riuscito. Aggiorna la pagina.",
         "mapLoadFailed": "Caricamento della mappa non riuscito. Prova ad aggiornare la pagina.",
         "modalMapLoadFailed": "Caricamento della mappa modale non riuscito. Chiudi e riapri la finestra.",
@@ -3709,342 +3672,6 @@
         "fileReadError": "Impossibile leggere il file selezionato"
       }
     },
-    "species": {
-      "pageLabel": "Impostazioni specie",
-      "saveError": "Salvataggio della configurazione per \"{species}\" non riuscito. Riprova.",
-      "configUpdated": "Configurazione di \"{species}\" aggiornata",
-      "configAdded": "Configurazione di \"{species}\" aggiunta",
-      "duplicateConfigError": "La specie \"{species}\" ha già una configurazione. Scegli un altro nome.",
-      "activeSpecies": {
-        "title": "Specie Attive",
-        "tabLabel": "Attive",
-        "description": "Specie che saranno rilevate in base alla tua posizione attuale e impostazioni filtro",
-        "stats": {
-          "species": "Specie",
-          "location": "Posizione",
-          "threshold": "Soglia",
-          "updated": "Aggiornato",
-          "justNow": "Proprio ora",
-          "minutesAgo": "{count}m fa",
-          "hoursAgo": "{count}h fa"
-        },
-        "search": {
-          "placeholder": "Cerca specie..."
-        },
-        "badges": {
-          "included": "Incluso",
-          "configured": "Configurato"
-        },
-        "empty": {
-          "title": "Nessuna specie trovata",
-          "description": "Configura la tua posizione in Impostazioni Principali per vedere specie disponibili"
-        },
-        "noResults": "Nessuna specie corrisponde alla tua ricerca",
-        "infoNote": "Questa lista è basata sulla tua posizione e soglia filtro intervallo. Specie incluse manualmente sono sempre aggiunte.",
-        "retry": "Riprova",
-        "expand": "Espandi lista",
-        "collapse": "Comprimi lista",
-        "downloadCsv": "Scarica CSV",
-        "errors": {
-          "loadFailed": "Impossibile caricare lista specie attive"
-        },
-        "locationNotConfigured": {
-          "title": "Posizione Non Configurata",
-          "description": "Imposta la tua posizione in Impostazioni Principali per vedere specie disponibili nella tua area. Il filtro intervallo usa la tua posizione per determinare quali specie sono probabilmente presenti nelle vicinanze.",
-          "action": "Configura Posizione"
-        },
-        "rangeFilterHealth": {
-          "inactive": {
-            "title": "Filtro intervallo inattivo",
-            "description": "Al momento i rilevamenti non vengono filtrati in base alla tua posizione, quindi possono essere segnalate specie esterne alla tua zona. Controlla la configurazione del modello del filtro intervallo nelle Impostazioni."
-          },
-          "fellBack": {
-            "title": "Uso del filtro intervallo integrato",
-            "description": "Non è stato possibile caricare il filtro intervallo del geomodello configurato, quindi VoiceWatch è ricorso al filtro intervallo integrato. Il filtraggio funziona ancora, ma controlla le Impostazioni per ripristinare il geomodello."
-          },
-          "mappedZero": {
-            "title": "Il filtro intervallo non ha trovato corrispondenze con nessuna specie",
-            "description": "Il filtro intervallo del geomodello non corrisponde a nessuna delle specie del modello attivo, quindi ogni rilevamento verrebbe filtrato. Verifica che il file delle etichette del filtro intervallo corrisponda al modello attivo."
-          }
-        },
-        "columns": {
-          "commonName": "Nome comune",
-          "scientificName": "Nome scientifico",
-          "score": "Punteggio",
-          "status": "Stato"
-        }
-      },
-      "alwaysInclude": {
-        "title": "Includi Sempre Specie",
-        "tabLabel": "Includi",
-        "description": "Specie in questa lista saranno sempre incluse nell'intervallo di specie rilevate",
-        "noSpeciesMessage": "Nessuna specie aggiunta alla lista inclusione"
-      },
-      "alwaysExclude": {
-        "title": "Escludi Sempre Specie",
-        "tabLabel": "Escludi",
-        "description": "Specie in questa lista saranno sempre escluse dal rilevamento",
-        "noSpeciesMessage": "Nessuna specie aggiunta alla lista esclusione"
-      },
-      "customConfiguration": {
-        "title": "Configurazione Specie Personalizzata",
-        "tabLabel": "Personalizzato",
-        "description": "Valori soglia specifici per specie, intervalli rilevamento e azioni",
-        "helpText": {
-          "intro": "Configura impostazioni specifiche per specie:",
-          "threshold": "Soglia: Punteggio confidenza minimo (0-1) richiesto per rilevamento",
-          "interval": "Intervallo: Tempo minimo in secondi tra rilevamenti della stessa specie (0 = usa default globale)",
-          "actions": "Azioni: Comandi personalizzati da eseguire quando questa specie viene rilevata"
-        },
-        "columnHeaders": {
-          "species": "Specie",
-          "settings": "Impostazioni",
-          "actions": "Azioni"
-        },
-        "badges": {
-          "threshold": "Soglia: {value}",
-          "interval": "Intervallo: {value}s",
-          "customAction": "Azione Personalizzata",
-          "executeDefaults": "+Default"
-        },
-        "dropdown": {
-          "editConfig": "Modifica Config",
-          "addAction": "Aggiungi Azione",
-          "remove": "Rimuovi"
-        },
-        "labels": {
-          "threshold": "Soglia",
-          "interval": "Intervallo",
-          "intervalSeconds": "Intervallo (s)",
-          "addButton": "Aggiungi"
-        },
-        "noConfigurationsMessage": "Nessuna configurazione specie personalizzata aggiunta",
-        "addForm": {
-          "speciesPlaceholder": "Nome specie",
-          "thresholdPlaceholder": "0.5",
-          "intervalPlaceholder": "0"
-        },
-        "addConfiguration": "Aggiungi Configurazione",
-        "newConfiguration": "Nuova Configurazione",
-        "editing": "Modifica: {species}",
-        "configuredCount": "{count} configurato",
-        "searchPlaceholder": "Digita per cercare...",
-        "saving": "Salvataggio...",
-        "save": "Salva",
-        "cancel": "Annulla",
-        "configureActions": "Configura Azioni",
-        "actionsConfigured": "Configurato",
-        "list": {
-          "editTitle": "Modifica configurazione",
-          "removeTitle": "Rimuovi configurazione"
-        },
-        "emptyState": {
-          "title": "Ancora nessuna configurazione.",
-          "description": "Clicca \"Aggiungi Configurazione\" per personalizzare impostazioni rilevamento specie."
-        },
-        "table": {
-          "columnScientificName": "Nome scientifico",
-          "intervalDefault": "Predefinito",
-          "intervalDefaultTooltip": "0 = usa l'intervallo predefinito globale",
-          "noActions": "Nessuno",
-          "searchPlaceholder": "Cerca specie...",
-          "noResults": "Nessuna configurazione corrispondente",
-          "editDisabledReason": "Salva o chiudi l'editor corrente prima di modificare un'altra specie",
-          "actionsDisabledBusy": "Attendi il completamento dell'operazione in corso"
-        }
-      },
-      "synonyms": {
-        "tabLabel": "Sinonimi",
-        "description": "Associa i nomi scientifici VoiceWatch ai corrispettivi aggiornati in una tassonomia più recente. Utilizzato solo come alternativa nel recupero delle foto degli uccelli da Wikipedia e AviCommons; non rinomina le specie nei rilevamenti né nella dashboard.",
-        "helpText": "Per modificare il nome con cui una specie appare nell'interfaccia, modifica il tuo file di etichette VoiceWatch (impostazione \"Percorso Etichette\" nelle impostazioni principali).",
-        "birdnetName": "Nome VoiceWatch",
-        "updatedName": "Nome scientifico aggiornato",
-        "addButton": "Aggiungi sinonimo",
-        "emptyState": "Nessun sinonimo tassonomico configurato",
-        "errors": {
-          "unknownSpecies": "Specie non trovata nelle etichette VoiceWatch",
-          "duplicateKey": "Esiste già un sinonimo per questa specie",
-          "emptyUpdatedName": "Il nome aggiornato è obbligatorio"
-        }
-      },
-      "actionsModal": {
-        "title": "Azioni per {species}",
-        "actionType": {
-          "label": "Tipo Azione",
-          "executeCommand": "Esegui Comando",
-          "onlySupported": "Attualmente, solo azioni Esegui Comando sono supportate"
-        },
-        "command": {
-          "label": "Comando",
-          "helpText": "Fornisci il percorso completo al comando o script che vuoi eseguire"
-        },
-        "parameters": {
-          "label": "Parametri",
-          "helpText": "Questi valori saranno passati al tuo comando nell'ordine elencato",
-          "placeholder": "Clicca i pulsanti qui sotto per aggiungere parametri o digita manualmente",
-          "tooltip": "Usa i pulsanti qui sotto o digita direttamente (separati da virgola)",
-          "availableTitle": "Parametri Disponibili",
-          "buttons": {
-            "commonName": "NomeComune",
-            "scientificName": "NomeScientifico",
-            "confidence": "Confidenza",
-            "time": "Ora",
-            "source": "Sorgente",
-            "clearParameters": "Pulisci Parametri"
-          }
-        },
-        "executeDefaults": {
-          "label": "Esegui anche azioni predefinite (archiviazione database, notifiche, ecc.)",
-          "helpText": "Quando abilitato, sia la tua azione personalizzata che le azioni predefinite del sistema verranno eseguite. Quando disabilitato, solo la tua azione personalizzata verrà eseguita."
-        }
-      },
-      "add": "Aggiungi",
-      "remove": "Rimuovi",
-      "suggestions": "Suggerimenti specie",
-      "addSpeciesToInclude": "Aggiungi specie da includere",
-      "addSpeciesToIncludeLabel": "Aggiungi Nuova Specie da Includere",
-      "addSpeciesToExclude": "Aggiungi specie da escludere",
-      "addSpeciesToExcludeLabel": "Aggiungi Nuova Specie da Escludere",
-      "commandPathPlaceholder": "/percorso/al/tuo/comando",
-      "parametersPlaceholder": "I parametri appariranno qui",
-      "errors": {
-        "speciesLoadFailed": "Impossibile caricare lista specie. Riprova."
-      },
-      "tracking": {
-        "title": "Tracciamento Specie",
-        "tabLabel": "Tracciamento",
-        "description": "Configura tracciamento per nuovi rilevamenti specie basato su periodi tempo",
-        "enabled": {
-          "label": "Abilita Tracciamento Specie",
-          "helpText": "Quando abilitato, il sistema traccia nuovi rilevamenti specie e può inviare notifiche"
-        },
-        "newSpeciesWindowDays": {
-          "label": "Finestra Nuova Specie (giorni)",
-          "helpText": "Numero giorni una specie è considerata 'nuova' dopo primo rilevamento (1-365)"
-        },
-        "syncIntervalMinutes": {
-          "label": "Intervallo Sincronizzazione (minuti)",
-          "helpText": "Quanto spesso sincronizzare dati tracciamento con database (1-1440)"
-        },
-        "notificationSuppressionHours": {
-          "label": "Soppressione Notifiche (ore)",
-          "helpText": "Ore per sopprimere notifiche duplicate per la stessa specie (0-8760)"
-        },
-        "yearly": {
-          "title": "Tracciamento Annuale",
-          "description": "Traccia primi arrivi specie ogni anno",
-          "enabled": {
-            "label": "Abilita Tracciamento Annuale",
-            "helpText": "Traccia e notifica quando una specie viene rilevata per la prima volta ogni anno"
-          },
-          "resetMonth": {
-            "label": "Mese Reset",
-            "helpText": "Mese quando tracciamento annuale si resetta (1-12)"
-          },
-          "resetDay": {
-            "label": "Giorno Reset",
-            "helpText": "Giorno del mese quando tracciamento annuale si resetta"
-          },
-          "windowDays": {
-            "label": "Finestra (giorni)",
-            "helpText": "Giorni per mostrare indicatore 'nuovo quest'anno' (1-365)"
-          }
-        },
-        "seasonal": {
-          "title": "Tracciamento Stagionale",
-          "description": "Traccia primi arrivi specie ogni stagione",
-          "enabled": {
-            "label": "Abilita Tracciamento Stagionale",
-            "helpText": "Traccia e notifica quando una specie viene rilevata per la prima volta ogni stagione"
-          },
-          "windowDays": {
-            "label": "Finestra (giorni)",
-            "helpText": "Giorni per mostrare indicatore 'nuovo questa stagione' (1-365)"
-          },
-          "seasons": {
-            "title": "Definizioni Stagione",
-            "description": "Definisci quando inizia ogni stagione. Le stagioni sono regolate automaticamente in base all'emisfero della tua posizione.",
-            "spring": "Primavera",
-            "summer": "Estate",
-            "fall": "Autunno",
-            "winter": "Inverno",
-            "wet1": "Stagione Umida 1",
-            "dry1": "Stagione Secca 1",
-            "wet2": "Stagione Umida 2",
-            "dry2": "Stagione Secca 2",
-            "startMonth": "Mese Inizio",
-            "startDay": "Giorno Inizio",
-            "hemisphereNote": "Le date delle stagioni sono configurate automaticamente in base alla tua latitudine. Emisfero settentrionale usa stagioni standard, emisfero meridionale ha date spostate, e regioni equatoriali usano stagioni umida/secca."
-          }
-        },
-        "months": {
-          "january": "Gennaio",
-          "february": "Febbraio",
-          "march": "Marzo",
-          "april": "Aprile",
-          "may": "Maggio",
-          "june": "Giugno",
-          "july": "Luglio",
-          "august": "Agosto",
-          "september": "Settembre",
-          "october": "Ottobre",
-          "november": "Novembre",
-          "december": "Dicembre"
-        },
-        "units": {
-          "days": "giorni",
-          "min": "min",
-          "hours": "ore"
-        }
-      },
-      "dynamicThreshold": {
-        "tabLabel": "Appreso",
-        "title": "Soglie Apprese",
-        "description": "Questa pagina mostra dati runtime Soglia Dinamica. Quando abilitata in Impostazioni Principali → Rilevamento, soglie vengono regolate automaticamente da rilevamenti multipli alta confidenza. Specie mostrate qui si assume esistano in questa posizione.",
-        "stats": {
-          "active": "Attivo",
-          "atMinimum": "Al Minimo",
-          "minThreshold": "Soglia Min",
-          "validityPeriod": "Periodo Validità"
-        },
-        "header": {
-          "species": "Specie",
-          "threshold": "Soglia",
-          "expires": "Scade"
-        },
-        "searchPlaceholder": "Cerca specie...",
-        "threshold": "Soglia",
-        "level": "Livello",
-        "expires": "Scade",
-        "expired": "Scaduto",
-        "confidence": "Confidenza",
-        "requiredConfidence": "Confidenza richiesta",
-        "resetAll": "Reimposta Tutto",
-        "resetSpecies": "Reimposta soglia per questa specie",
-        "noEvents": "Nessuna cronologia cambi soglia",
-        "changeReason": {
-          "highConfidence": "Rilevamento alta confidenza",
-          "expiry": "Soglia scaduta",
-          "manualReset": "Reset manuale"
-        },
-        "note": "Rilevamenti alta confidenza confermano quali specie esistono in questa posizione. Dopo multiple corrispondenze alta confidenza, soglia rilevamento viene abbassata in sicurezza per catturare più richiami senza rischio significativo falsi positivi. Soglie si resettano automaticamente dopo periodo validità configurato.",
-        "empty": {
-          "title": "Nessuna soglia appresa",
-          "description": "Rilevamenti alta confidenza creeranno automaticamente soglie apprese per specie"
-        },
-        "resetAllConfirm": {
-          "title": "Reimposta Tutte Soglie",
-          "message": "Questo resetterà tutte le {count} soglie apprese. Specie dovranno essere rilevate con alta confidenza di nuovo per abbassare le loro soglie."
-        },
-        "loadError": "Impossibile caricare soglie dinamiche",
-        "resetSuccess": "Soglia resettata per {species}",
-        "resetError": "Impossibile resettare soglia",
-        "resetAllSuccess": "Resettate {count} soglie",
-        "resetAllError": "Impossibile resettare soglie",
-        "expand": "Mostra cronologia eventi",
-        "collapse": "Nascondi cronologia eventi"
-      }
-    },
     "database": {
       "sqlitePlaceholder": "Inserisci percorso database SQLite",
       "mysqlHostPlaceholder": "Inserisci host MySQL",
@@ -4906,26 +4533,6 @@
       "locale": {
         "label": "Lingua delle specie",
         "helpText": "Lingua utilizzata per i nomi comuni delle specie nell'interfaccia."
-      }
-    },
-    "rangeFilter": {
-      "birdOnlyNote": "Il filtro di zona si applica solo ai classificatori di uccelli. I modelli per pipistrelli usano le proprie liste di specie.",
-      "status": {
-        "title": "Panoramica filtro di zona",
-        "geomodelInfo": "VoiceWatch Geomodello {version} - {species} specie conosciute",
-        "autoSelected": "Selezionato automaticamente",
-        "manual": "Manuale",
-        "classifier": "Classificatore",
-        "totalSpecies": "Specie totali",
-        "withRangeData": "Con dati di distribuzione",
-        "withoutRangeData": "Senza dati di distribuzione",
-        "withRangeDataTooltip": "Specie che il geomodel può valutare per la probabilità geografica nella tua posizione",
-        "withoutRangeDataTooltip": "Specie senza dati geografici nel geomodel, gestite dall'impostazione delle specie non mappate qui sotto",
-        "noFilter": "Nessun filtro di zona attivo",
-        "passUnmapped": {
-          "label": "Consenti specie senza dati di distribuzione",
-          "helpText": "Consenti i rilevamenti di specie per le quali il geomodel non ha dati geografici. Se disabilitato, queste specie vengono sempre filtrate."
-        }
       }
     },
     "advanced": {

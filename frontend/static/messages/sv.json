@@ -476,9 +476,6 @@
     "noResultsFound": "Inga resultat hittades",
     "noResultsHint": "Prova att justera dina sökfilter",
     "fields": {
-      "species": "Art",
-      "speciesPlaceholder": "Ange artnamn",
-      "speciesHelp": "Ange helt eller delvis artnamn (ej skiftlägeskänsligt)",
       "dateRange": "Datumintervall",
       "dateRangeHelp": "Filtrera detektioner efter datumintervall (lämna tomt för alla datum)",
       "from": "Från",
@@ -683,8 +680,6 @@
         "markCorrect": "Korrekt",
         "markFalsePositive": "Felaktig",
         "review": "Granska detektering",
-        "showSpecies": "Visa art",
-        "ignoreSpecies": "Ignorera art",
         "lockDetection": "Lås detektering",
         "unlockDetection": "Lås upp detektering",
         "deleteDetection": "Ta bort detektering"
@@ -2084,8 +2079,6 @@
           "warningOff": "Utan filtrering accepteras varje detektering över konfidenströskeln omedelbart. Detta ger vanligtvis flera falska positiva per dag. Även låg filtrering förbättrar resultatkvaliteten avsevärt."
         },
         "rangeFilter": {
-          "title": "Områdesfilter",
-          "description": "Begränsa detektion till arter som är sannolika i ditt geografiska område",
           "stationLocation": {
             "label": "Stationsplats",
             "helpText": "Stationsplats, används för väderdata och för att begränsa fågelarter till de som är sannolika i regionen."
@@ -2097,33 +2090,6 @@
           "longitude": {
             "label": "Longitud",
             "helpText": "Stationens longitud, används för väderdata och artområdesfiltrering."
-          },
-          "model": {
-            "label": "Områdesfiltermodell",
-            "helpText": "VoiceWatch områdesfiltermodellversion: senaste eller äldre."
-          },
-          "threshold": {
-            "label": "Tröskelvärde",
-            "helpText": "Styr vilka arter som inkluderas baserat på deras förekomstsannolikhet för din plats och tid på året. Standardvärdet (0.01) rekommenderas för de flesta användare. Högre värden (0.05-0.3) inkluderar färre arter med högre förekomstsannolikhet. Mycket höga värden (0.5+) inkluderar bara de vanligaste arterna."
-          },
-          "speciesCount": {
-            "label": "Aktuellt artantal",
-            "helpText": "Antal arter som ingår i områdesfiltret. Uppdateras automatiskt när tröskelvärde, latitud eller longitud ändras.",
-            "loading": "Laddar...",
-            "viewSpecies": "Visa arter"
-          },
-          "downloadTitle": "Ladda ner artlista som CSV",
-          "csvDownloaded": "Artlista nedladdad",
-          "csvDownloadFailed": "Kunde inte ladda ner artlista. Försök igen.",
-          "modal": {
-            "title": "Arter i områdesfiltret",
-            "speciesCount": "Artantal:",
-            "threshold": "Tröskelvärde:",
-            "latitude": "Latitud:",
-            "longitude": "Longitud:",
-            "loadingSpecies": "Laddar arter...",
-            "noSpeciesFound": "Inga arter hittades med aktuella inställningar",
-            "close": "Stäng"
           }
         },
         "database": {
@@ -2352,9 +2318,6 @@
       "errors": {
         "localesLoadFailed": "Kunde inte ladda språkalternativ. Använder standardvärden.",
         "providersLoadFailed": "Kunde inte ladda bildleverantörer. Använder standardvärden.",
-        "rangeFilterTestFailed": "Kunde inte testa områdesfilterinställningar",
-        "rangeFilterLoadFailed": "Kunde inte ladda artlista",
-        "rangeFilterCountFailed": "Kunde inte ladda artantal",
         "mapLibraryLoadFailed": "Kunde inte ladda kartbibliotek. Vänligen uppdatera sidan.",
         "mapLoadFailed": "Kunde inte ladda kartan. Försök att uppdatera sidan.",
         "modalMapLoadFailed": "Kunde inte ladda modalkartan. Försök att stänga och öppna modalen igen.",
@@ -3709,342 +3672,6 @@
         "fileReadError": "Kunde inte läsa den valda filen"
       }
     },
-    "species": {
-      "pageLabel": "Artinställningar",
-      "saveError": "Kunde inte spara konfiguration för \"{species}\". Försök igen.",
-      "configUpdated": "Konfiguration uppdaterad för \"{species}\"",
-      "configAdded": "Konfiguration tillagd för \"{species}\"",
-      "duplicateConfigError": "Arten \"{species}\" har redan en konfiguration. Välj ett annat namn.",
-      "activeSpecies": {
-        "title": "Aktiva arter",
-        "tabLabel": "Aktiva",
-        "description": "Arter som kommer att detekteras baserat på din nuvarande plats och filterinställningar",
-        "stats": {
-          "species": "Arter",
-          "location": "Plats",
-          "threshold": "Tröskelvärde",
-          "updated": "Uppdaterad",
-          "justNow": "Just nu",
-          "minutesAgo": "{count}m sedan",
-          "hoursAgo": "{count}t sedan"
-        },
-        "search": {
-          "placeholder": "Sök arter..."
-        },
-        "badges": {
-          "included": "Inkluderad",
-          "configured": "Konfigurerad"
-        },
-        "empty": {
-          "title": "Inga arter hittades",
-          "description": "Konfigurera din plats i Huvudinställningar för att se tillgängliga arter"
-        },
-        "noResults": "Inga arter matchar din sökning",
-        "infoNote": "Denna lista baseras på din plats och tröskelvärdets intervallfilter. Manuellt inkluderade arter läggs alltid till.",
-        "retry": "Försök igen",
-        "expand": "Expandera lista",
-        "collapse": "Fäll ihop lista",
-        "downloadCsv": "Ladda ner CSV",
-        "errors": {
-          "loadFailed": "Kunde inte ladda listan med aktiva arter"
-        },
-        "locationNotConfigured": {
-          "title": "Plats ej konfigurerad",
-          "description": "Ange din plats i Huvudinställningar för att se arter tillgängliga i ditt område. Intervallfiltret använder din plats för att avgöra vilka arter som sannolikt finns i närheten.",
-          "action": "Konfigurera plats"
-        },
-        "rangeFilterHealth": {
-          "inactive": {
-            "title": "Områdesfiltret är inaktivt",
-            "description": "Detektioner filtreras just nu inte efter din plats, så arter från områden utanför ditt eget kan rapporteras. Kontrollera inställningarna för områdesfiltermodellen under Inställningar."
-          },
-          "fellBack": {
-            "title": "Använder det inbyggda områdesfiltret",
-            "description": "Det konfigurerade områdesfiltret med geomodell kunde inte laddas, så VoiceWatch gick tillbaka till det inbyggda områdesfiltret. Filtreringen fungerar fortfarande, men kontrollera Inställningar för att återställa geomodellen."
-          },
-          "mappedZero": {
-            "title": "Områdesfiltret matchade inga arter",
-            "description": "Områdesfiltret med geomodell matchade inga av den aktiva modellens arter, så alla detektioner skulle filtreras bort. Kontrollera att områdesfiltrets etikettfil stämmer överens med den aktiva modellen."
-          }
-        },
-        "columns": {
-          "commonName": "Vanligt namn",
-          "scientificName": "Vetenskapligt namn",
-          "score": "Poäng",
-          "status": "Status"
-        }
-      },
-      "alwaysInclude": {
-        "title": "Alltid inkludera arter",
-        "tabLabel": "Inkludera",
-        "description": "Arter i denna lista kommer alltid att inkluderas i intervallet av detekterade arter",
-        "noSpeciesMessage": "Inga arter tillagda i inkluderingslistan"
-      },
-      "alwaysExclude": {
-        "title": "Alltid exkludera arter",
-        "tabLabel": "Exkludera",
-        "description": "Arter i denna lista kommer alltid att exkluderas från detektering",
-        "noSpeciesMessage": "Inga arter tillagda i exkluderingslistan"
-      },
-      "customConfiguration": {
-        "title": "Anpassad artkonfiguration",
-        "tabLabel": "Anpassad",
-        "description": "Artspecifika tröskelvärden, detekteringsintervall och åtgärder",
-        "helpText": {
-          "intro": "Konfigurera artspecifika inställningar:",
-          "threshold": "Tröskelvärde: Minsta konfidenspoäng (0–1) som krävs för detektering",
-          "interval": "Intervall: Minsta tid i sekunder mellan detekteringar av samma art (0 = använd globalt standardvärde)",
-          "actions": "Åtgärder: Anpassade kommandon att köra när denna art detekteras"
-        },
-        "columnHeaders": {
-          "species": "Art",
-          "settings": "Inställningar",
-          "actions": "Åtgärder"
-        },
-        "badges": {
-          "threshold": "Tröskelvärde: {value}",
-          "interval": "Intervall: {value}s",
-          "customAction": "Anpassad åtgärd",
-          "executeDefaults": "+Standardvärden"
-        },
-        "dropdown": {
-          "editConfig": "Redigera konfiguration",
-          "addAction": "Lägg till åtgärd",
-          "remove": "Ta bort"
-        },
-        "labels": {
-          "threshold": "Tröskelvärde",
-          "interval": "Intervall",
-          "intervalSeconds": "Intervall (s)",
-          "addButton": "Lägg till"
-        },
-        "noConfigurationsMessage": "Inga anpassade artkonfigurationer tillagda",
-        "addForm": {
-          "speciesPlaceholder": "Artnamn",
-          "thresholdPlaceholder": "0.5",
-          "intervalPlaceholder": "0"
-        },
-        "addConfiguration": "Lägg till konfiguration",
-        "newConfiguration": "Ny konfiguration",
-        "editing": "Redigerar: {species}",
-        "configuredCount": "{count} konfigurerade",
-        "searchPlaceholder": "Skriv för att söka...",
-        "saving": "Sparar...",
-        "save": "Spara",
-        "cancel": "Avbryt",
-        "configureActions": "Konfigurera åtgärder",
-        "actionsConfigured": "Konfigurerade",
-        "list": {
-          "editTitle": "Redigera konfiguration",
-          "removeTitle": "Ta bort konfiguration"
-        },
-        "emptyState": {
-          "title": "Inga konfigurationer ännu.",
-          "description": "Klicka på \"Lägg till konfiguration\" för att anpassa artdetekteringsinställningar."
-        },
-        "table": {
-          "columnScientificName": "Vetenskapligt namn",
-          "intervalDefault": "Standard",
-          "intervalDefaultTooltip": "0 = använd det globala standardintervallet",
-          "noActions": "Inget",
-          "searchPlaceholder": "Sök arter...",
-          "noResults": "Inga matchande konfigurationer",
-          "editDisabledReason": "Spara eller stäng den aktuella redigeraren innan du redigerar en annan art",
-          "actionsDisabledBusy": "Vänligen vänta tills den aktuella åtgärden är slutförd"
-        }
-      },
-      "synonyms": {
-        "tabLabel": "Synonymer",
-        "description": "Koppla VoiceWatchs vetenskapliga artnamn till deras uppdaterade motsvarigheter i nyare taxonomi. Används endast som reserv vid hämtning av fågelbilder från Wikipedia och AviCommons; byter inte namn på arter i detektioner eller på instrumentpanelen.",
-        "helpText": "För att ändra hur en art visas i gränssnittet, redigera din VoiceWatch-etikettfil (inställningen \"Etikettsökväg\" under Huvudinställningar).",
-        "birdnetName": "VoiceWatch-namn",
-        "updatedName": "Uppdaterat vetenskapligt namn",
-        "addButton": "Lägg till synonym",
-        "emptyState": "Inga taxonomisynonymer konfigurerade",
-        "errors": {
-          "unknownSpecies": "Arten hittades inte i VoiceWatch-etiketter",
-          "duplicateKey": "En synonym för denna art finns redan",
-          "emptyUpdatedName": "Det uppdaterade namnet är obligatoriskt"
-        }
-      },
-      "actionsModal": {
-        "title": "Åtgärder för {species}",
-        "actionType": {
-          "label": "Åtgärdstyp",
-          "executeCommand": "Kör kommando",
-          "onlySupported": "För närvarande stöds bara Kör kommando-åtgärder"
-        },
-        "command": {
-          "label": "Kommando",
-          "helpText": "Ange den fullständiga sökvägen till kommandot eller skriptet du vill köra"
-        },
-        "parameters": {
-          "label": "Parametrar",
-          "helpText": "Dessa värden skickas till ditt kommando i den ordning de listas",
-          "placeholder": "Klicka på knapparna nedan för att lägga till parametrar eller skriv manuellt",
-          "tooltip": "Använd knapparna nedan eller skriv direkt (kommaseparerade)",
-          "availableTitle": "Tillgängliga parametrar",
-          "buttons": {
-            "commonName": "CommonName",
-            "scientificName": "ScientificName",
-            "confidence": "Confidence",
-            "time": "Time",
-            "source": "Source",
-            "clearParameters": "Rensa parametrar"
-          }
-        },
-        "executeDefaults": {
-          "label": "Kör även standardåtgärder (databaslagring, notifieringar, etc.)",
-          "helpText": "När aktiverad körs både din anpassade åtgärd och systemets standardåtgärder. När inaktiverad körs bara din anpassade åtgärd."
-        }
-      },
-      "add": "Lägg till",
-      "remove": "Ta bort",
-      "suggestions": "Artförslag",
-      "addSpeciesToInclude": "Lägg till art att inkludera",
-      "addSpeciesToIncludeLabel": "Lägg till ny art att inkludera",
-      "addSpeciesToExclude": "Lägg till art att exkludera",
-      "addSpeciesToExcludeLabel": "Lägg till ny art att exkludera",
-      "commandPathPlaceholder": "/sökväg/till/ditt/kommando",
-      "parametersPlaceholder": "Parametrar visas här",
-      "errors": {
-        "speciesLoadFailed": "Kunde inte ladda artlistan. Försök igen."
-      },
-      "tracking": {
-        "title": "Artspårning",
-        "tabLabel": "Spårning",
-        "description": "Konfigurera spårning av nya artdetekteringar baserat på tidsperioder",
-        "enabled": {
-          "label": "Aktivera artspårning",
-          "helpText": "När aktiverad spårar systemet nya artdetekteringar och kan skicka notifieringar"
-        },
-        "newSpeciesWindowDays": {
-          "label": "Fönster för nya arter (dagar)",
-          "helpText": "Antal dagar en art anses vara 'ny' efter första detektering (1–365)"
-        },
-        "syncIntervalMinutes": {
-          "label": "Synkroniseringsintervall (minuter)",
-          "helpText": "Hur ofta spårningsdata synkroniseras med databasen (1–1440)"
-        },
-        "notificationSuppressionHours": {
-          "label": "Undertryckning av notifieringar (timmar)",
-          "helpText": "Timmar att undertrycka duplicerade notifieringar för samma art (0–8760)"
-        },
-        "yearly": {
-          "title": "Årlig spårning",
-          "description": "Spåra första ankomsterna av arter varje år",
-          "enabled": {
-            "label": "Aktivera årlig spårning",
-            "helpText": "Spåra och meddela när en art detekteras för första gången varje år"
-          },
-          "resetMonth": {
-            "label": "Återställningsmånad",
-            "helpText": "Månad då årlig spårning återställs (1–12)"
-          },
-          "resetDay": {
-            "label": "Återställningsdag",
-            "helpText": "Dag i månaden då årlig spårning återställs"
-          },
-          "windowDays": {
-            "label": "Fönster (dagar)",
-            "helpText": "Dagar att visa 'ny i år'-indikator (1–365)"
-          }
-        },
-        "seasonal": {
-          "title": "Säsongsbetonad spårning",
-          "description": "Spåra första ankomsterna av arter varje säsong",
-          "enabled": {
-            "label": "Aktivera säsongsbetonad spårning",
-            "helpText": "Spåra och meddela när en art detekteras för första gången varje säsong"
-          },
-          "windowDays": {
-            "label": "Fönster (dagar)",
-            "helpText": "Dagar att visa 'ny denna säsong'-indikator (1–365)"
-          },
-          "seasons": {
-            "title": "Säsongsdefinitioner",
-            "description": "Definiera när varje säsong börjar. Säsonger justeras automatiskt baserat på din plats halvklot.",
-            "spring": "Vår",
-            "summer": "Sommar",
-            "fall": "Höst",
-            "winter": "Vinter",
-            "wet1": "Regnperiod 1",
-            "dry1": "Torrperiod 1",
-            "wet2": "Regnperiod 2",
-            "dry2": "Torrperiod 2",
-            "startMonth": "Startmånad",
-            "startDay": "Startdag",
-            "hemisphereNote": "Säsongsdatum konfigureras automatiskt baserat på din latitud. Norra halvklotet använder standardsäsonger, södra halvklotet har förskjutna datum och ekvatoriella regioner använder regn-/torrsäsonger."
-          }
-        },
-        "months": {
-          "january": "Januari",
-          "february": "Februari",
-          "march": "Mars",
-          "april": "April",
-          "may": "Maj",
-          "june": "Juni",
-          "july": "Juli",
-          "august": "Augusti",
-          "september": "September",
-          "october": "Oktober",
-          "november": "November",
-          "december": "December"
-        },
-        "units": {
-          "days": "dagar",
-          "min": "min",
-          "hours": "tim"
-        }
-      },
-      "dynamicThreshold": {
-        "tabLabel": "Inlärda",
-        "title": "Inlärda tröskelvärden",
-        "description": "Denna sida visar körtidsdata för dynamiska tröskelvärden. När aktiverad i Huvudinställningar -> Detektering justeras tröskelvärden automatiskt av flera högkonfidensdetekteringar. Arter som visas här antas finnas på denna plats.",
-        "stats": {
-          "active": "Aktiva",
-          "atMinimum": "Vid minimum",
-          "minThreshold": "Minsta tröskelvärde",
-          "validityPeriod": "Giltighetsperiod"
-        },
-        "header": {
-          "species": "Art",
-          "threshold": "Tröskelvärde",
-          "expires": "Upphör"
-        },
-        "searchPlaceholder": "Sök arter...",
-        "threshold": "Tröskelvärde",
-        "level": "Nivå",
-        "expires": "Upphör",
-        "expired": "Upphört",
-        "confidence": "Konfidens",
-        "requiredConfidence": "Erforderlig konfidens",
-        "resetAll": "Återställ alla",
-        "resetSpecies": "Återställ tröskelvärde för denna art",
-        "noEvents": "Ingen historik för tröskeländringar",
-        "changeReason": {
-          "highConfidence": "Högkonfidensdetektering",
-          "expiry": "Tröskelvärdet har upphört",
-          "manualReset": "Manuell återställning"
-        },
-        "note": "Högkonfidensdetekteringar bekräftar vilka arter som finns på denna plats. Efter flera högkonfidensmatchningar sänks detekteringströskelvärdet säkert för att fånga fler läten utan betydande risk för falsklarm. Tröskelvärden återställs automatiskt efter den konfigurerade giltighetsperioden.",
-        "empty": {
-          "title": "Inga inlärda tröskelvärden",
-          "description": "Högkonfidensdetekteringar skapar automatiskt inlärda tröskelvärden för arter"
-        },
-        "resetAllConfirm": {
-          "title": "Återställ alla tröskelvärden",
-          "message": "Detta återställer alla {count} inlärda tröskelvärden. Arter måste detekteras med hög konfidens igen för att sänka sina tröskelvärden."
-        },
-        "loadError": "Kunde inte ladda dynamiska tröskelvärden",
-        "resetSuccess": "Tröskelvärde återställt för {species}",
-        "resetError": "Kunde inte återställa tröskelvärdet",
-        "resetAllSuccess": "Återställde {count} tröskelvärden",
-        "resetAllError": "Kunde inte återställa tröskelvärdena",
-        "expand": "Visa händelsehistorik",
-        "collapse": "Dölj händelsehistorik"
-      }
-    },
     "database": {
       "sqlitePlaceholder": "Ange sökväg till SQLite-databas",
       "mysqlHostPlaceholder": "Ange MySQL-värd",
@@ -4906,26 +4533,6 @@
       "locale": {
         "label": "Artspråk",
         "helpText": "Språk som används för arternas vardagliga namn i gränssnittet."
-      }
-    },
-    "rangeFilter": {
-      "birdOnlyNote": "Områdesfilter gäller bara fågelklassificerare. Fladdermusmodeller använder egna artlistor.",
-      "status": {
-        "title": "Områdesfilter översikt",
-        "geomodelInfo": "VoiceWatch Geomodell {version} - {species} kända arter",
-        "autoSelected": "Automatiskt vald",
-        "manual": "Manuell",
-        "classifier": "Klassificerare",
-        "totalSpecies": "Totalt antal arter",
-        "withRangeData": "Med områdesdata",
-        "withoutRangeData": "Utan områdesdata",
-        "withRangeDataTooltip": "Arter som geomodellen kan utvärdera för geografisk sannolikhet vid din plats",
-        "withoutRangeDataTooltip": "Arter utan geografiska data i geomodellen, hanteras av inställningen för ej kartlagda arter nedan",
-        "noFilter": "Inget områdesfilter aktivt",
-        "passUnmapped": {
-          "label": "Tillåt arter utan områdesdata",
-          "helpText": "Tillåt detektioner av arter som geomodellen saknar geografiska data för. När inaktiverad filtreras dessa arter alltid bort."
-        }
       }
     },
     "advanced": {

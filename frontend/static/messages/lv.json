@@ -476,9 +476,6 @@
     "noResultsFound": "Rezultāti nav atrasti",
     "noResultsHint": "Mēģiniet pielāgot meklēšanas filtrus",
     "fields": {
-      "species": "Suga",
-      "speciesPlaceholder": "Ievadiet sugas nosaukumu",
-      "speciesHelp": "Ievadiet pilnu vai daļēju sugas nosaukumu (nav reģistrjutīgs)",
       "dateRange": "Datumu diapazons",
       "dateRangeHelp": "Filtrēt noteikšanas pēc datumu diapazona (atstājiet tukšu visiem datumiem)",
       "from": "No",
@@ -683,8 +680,6 @@
         "markCorrect": "Pareizs",
         "markFalsePositive": "Nepareizs",
         "review": "Pārskatīt atklāšanu",
-        "showSpecies": "Rādīt sugu",
-        "ignoreSpecies": "Ignorēt sugu",
         "lockDetection": "Bloķēt atklāšanu",
         "unlockDetection": "Atbloķēt atklāšanu",
         "deleteDetection": "Dzēst atklāšanu"
@@ -2084,8 +2079,6 @@
           "warningOff": "Bez filtrēšanas jebkura noteikšana virs ticamības sliekšņa tiek pieņemta nekavējoties. Tas parasti rada vairākus viltus pozitīvos dienā. Pat zema filtrēšana ievērojami uzlabo rezultātu kvalitāti."
         },
         "rangeFilter": {
-          "title": "Areāla filtrs",
-          "description": "Ierobežot noteikšanu līdz sugām, kas ir iespējamas jūsu ģeogrāfiskajā reģionā",
           "stationLocation": {
             "label": "Stacijas atrašanās vieta",
             "helpText": "Stacijas atrašanās vieta, ko izmanto laikapstākļu datiem un putnu sugu ierobežošanai līdz reģionā iespējamām."
@@ -2097,33 +2090,6 @@
           "longitude": {
             "label": "Garums",
             "helpText": "Stacijas garums, ko izmanto laikapstākļu datiem un sugu areāla filtrēšanai."
-          },
-          "model": {
-            "label": "Areāla filtra modelis",
-            "helpText": "VoiceWatch areāla filtra modeļa versija: jaunākā vai mantotā."
-          },
-          "threshold": {
-            "label": "Slieksnis",
-            "helpText": "Kontrolē, kuras sugas tiek iekļautas, pamatojoties uz to sastopamības varbūtību jūsu atrašanās vietai un gada laikam. Noklusējuma vērtība (0,01) ir ieteicama lielākajai daļai lietotāju. Augstākas vērtības (0,05–0,3) iekļauj mazāk sugu ar augstāku sastopamības varbūtību. Ļoti augstas vērtības (0,5+) iekļauj tikai visbiežāk sastopamās sugas."
-          },
-          "speciesCount": {
-            "label": "Pašreizējais sugu skaits",
-            "helpText": "Areāla filtrā iekļauto sugu skaits. Automātiski atjauninājas, kad mainās slieksnis, platums vai garums.",
-            "loading": "Ielādē...",
-            "viewSpecies": "Skatīt sugas"
-          },
-          "downloadTitle": "Lejupielādēt sugu sarakstu kā CSV",
-          "csvDownloaded": "Sugu saraksts veiksmīgi lejupielādēts",
-          "csvDownloadFailed": "Neizdevās lejupielādēt sugu sarakstu. Lūdzu, mēģiniet vēlreiz.",
-          "modal": {
-            "title": "Areāla filtra sugas",
-            "speciesCount": "Sugu skaits:",
-            "threshold": "Slieksnis:",
-            "latitude": "Platums:",
-            "longitude": "Garums:",
-            "loadingSpecies": "Ielādē sugas...",
-            "noSpeciesFound": "Ar pašreizējiem iestatījumiem sugas nav atrastas",
-            "close": "Aizvērt"
           }
         },
         "database": {
@@ -2352,9 +2318,6 @@
       "errors": {
         "localesLoadFailed": "Neizdevās ielādēt valodu opcijas. Izmanto noklusējuma vērtības.",
         "providersLoadFailed": "Neizdevās ielādēt attēlu nodrošinātājus. Izmanto noklusējuma vērtības.",
-        "rangeFilterTestFailed": "Neizdevās pārbaudīt areāla filtra iestatījumus",
-        "rangeFilterLoadFailed": "Neizdevās ielādēt sugu sarakstu",
-        "rangeFilterCountFailed": "Neizdevās ielādēt sugu skaitu",
         "mapLibraryLoadFailed": "Neizdevās ielādēt kartes bibliotēku. Lūdzu, atsvaidziniet lapu.",
         "mapLoadFailed": "Neizdevās ielādēt karti. Lūdzu, mēģiniet atsvaidzināt lapu.",
         "modalMapLoadFailed": "Neizdevās ielādēt modālā loga karti. Lūdzu, mēģiniet aizvērt un atkārtoti atvērt modālo logu.",
@@ -3709,342 +3672,6 @@
         "fileReadError": "Neizdevās nolasīt izvēlēto failu"
       }
     },
-    "species": {
-      "pageLabel": "Sugu iestatījumi",
-      "saveError": "Neizdevās saglabāt konfigurāciju sugai \"{species}\". Lūdzu, mēģiniet vēlreiz.",
-      "configUpdated": "Atjaunināta konfigurācija sugai \"{species}\"",
-      "configAdded": "Pievienota konfigurācija sugai \"{species}\"",
-      "duplicateConfigError": "Sugai \"{species}\" jau ir konfigurācija. Lūdzu, izvēlieties citu nosaukumu.",
-      "activeSpecies": {
-        "title": "Aktīvās sugas",
-        "tabLabel": "Aktīvās",
-        "description": "Sugas, kas tiks noteiktas, pamatojoties uz jūsu pašreizējo atrašanās vietu un filtru iestatījumiem",
-        "stats": {
-          "species": "Sugas",
-          "location": "Atrašanās vieta",
-          "threshold": "Slieksnis",
-          "updated": "Atjaunināts",
-          "justNow": "Tikko",
-          "minutesAgo": "pirms {count} min",
-          "hoursAgo": "pirms {count} st"
-        },
-        "search": {
-          "placeholder": "Meklēt sugas..."
-        },
-        "badges": {
-          "included": "Iekļauta",
-          "configured": "Konfigurēta"
-        },
-        "empty": {
-          "title": "Sugas nav atrastas",
-          "description": "Konfigurējiet savu atrašanās vietu galvenajos iestatījumos, lai redzētu pieejamās sugas"
-        },
-        "noResults": "Neviena suga neatbilst jūsu meklējumam",
-        "infoNote": "Šis saraksts ir balstīts uz jūsu atrašanās vietu un diapazona filtra slieksni. Manuāli iekļautās sugas vienmēr tiek pievienotas.",
-        "retry": "Mēģināt vēlreiz",
-        "expand": "Izvērst sarakstu",
-        "collapse": "Sakļaut sarakstu",
-        "downloadCsv": "Lejupielādēt CSV",
-        "errors": {
-          "loadFailed": "Neizdevās ielādēt aktīvo sugu sarakstu"
-        },
-        "locationNotConfigured": {
-          "title": "Atrašanās vieta nav konfigurēta",
-          "description": "Iestatiet savu atrašanās vietu galvenajos iestatījumos, lai redzētu jūsu apkārtnē pieejamās sugas. Diapazona filtrs izmanto jūsu atrašanās vietu, lai noteiktu, kuras sugas, visticamāk, atrodamas tuvumā.",
-          "action": "Konfigurēt atrašanās vietu"
-        },
-        "rangeFilterHealth": {
-          "inactive": {
-            "title": "Areāla filtrs nav aktīvs",
-            "description": "Noteikšanas pašlaik netiek filtrētas pēc jūsu atrašanās vietas, tāpēc var tikt ziņots arī par sugām, kas sastopamas ārpus jūsu apgabala. Pārbaudiet areāla filtra modeļa konfigurāciju Iestatījumu lapā."
-          },
-          "fellBack": {
-            "title": "Tiek izmantots iebūvētais areāla filtrs",
-            "description": "Konfigurēto ģeomodeļa areāla filtru neizdevās ielādēt, tāpēc VoiceWatch pārslēdzās uz iebūvēto areāla filtru. Filtrēšana joprojām darbojas, taču pārbaudiet Iestatījumu lapu, lai atjaunotu ģeomodeli."
-          },
-          "mappedZero": {
-            "title": "Areāla filtrs neatbilda nevienai sugai",
-            "description": "Ģeomodeļa areāla filtrs neatbilda nevienai aktīvā modeļa sugai, tāpēc tiktu izfiltrētas visas noteikšanas. Pārbaudiet, vai areāla filtra etiķešu fails atbilst aktīvajam modelim."
-          }
-        },
-        "columns": {
-          "commonName": "Parastais nosaukums",
-          "scientificName": "Zinātniskais nosaukums",
-          "score": "Vērtējums",
-          "status": "Statuss"
-        }
-      },
-      "alwaysInclude": {
-        "title": "Vienmēr iekļaut sugas",
-        "tabLabel": "Iekļaut",
-        "description": "Šajā sarakstā esošās sugas vienmēr tiks iekļautas noteikto sugu diapazonā",
-        "noSpeciesMessage": "Iekļaušanas sarakstā nav pievienota neviena suga"
-      },
-      "alwaysExclude": {
-        "title": "Vienmēr izslēgt sugas",
-        "tabLabel": "Izslēgt",
-        "description": "Šajā sarakstā esošās sugas vienmēr tiks izslēgtas no noteikšanas",
-        "noSpeciesMessage": "Izslēgšanas sarakstā nav pievienota neviena suga"
-      },
-      "customConfiguration": {
-        "title": "Pielāgota sugu konfigurācija",
-        "tabLabel": "Pielāgota",
-        "description": "Sugai specifiski sliekšņa vērtības, noteikšanas intervāli un darbības",
-        "helpText": {
-          "intro": "Konfigurēt sugai specifiskus iestatījumus:",
-          "threshold": "Slieksnis: minimālais ticamības vērtējums (0-1), kas nepieciešams noteikšanai",
-          "interval": "Intervāls: minimālais laiks sekundēs starp vienas sugas noteikšanām (0 = izmantot globālo noklusējumu)",
-          "actions": "Darbības: pielāgotas komandas, kas jāizpilda, kad šī suga tiek noteikta"
-        },
-        "columnHeaders": {
-          "species": "Suga",
-          "settings": "Iestatījumi",
-          "actions": "Darbības"
-        },
-        "badges": {
-          "threshold": "Slieksnis: {value}",
-          "interval": "Intervāls: {value}s",
-          "customAction": "Pielāgota darbība",
-          "executeDefaults": "+Noklusējumi"
-        },
-        "dropdown": {
-          "editConfig": "Rediģēt konfigurāciju",
-          "addAction": "Pievienot darbību",
-          "remove": "Noņemt"
-        },
-        "labels": {
-          "threshold": "Slieksnis",
-          "interval": "Intervāls",
-          "intervalSeconds": "Intervāls (s)",
-          "addButton": "Pievienot"
-        },
-        "noConfigurationsMessage": "Nav pievienotu pielāgotu sugu konfigurāciju",
-        "addForm": {
-          "speciesPlaceholder": "Sugas nosaukums",
-          "thresholdPlaceholder": "0.5",
-          "intervalPlaceholder": "0"
-        },
-        "addConfiguration": "Pievienot konfigurāciju",
-        "newConfiguration": "Jauna konfigurācija",
-        "editing": "Rediģē: {species}",
-        "configuredCount": "{count} konfigurētas",
-        "searchPlaceholder": "Rakstiet, lai meklētu...",
-        "saving": "Saglabā...",
-        "save": "Saglabāt",
-        "cancel": "Atcelt",
-        "configureActions": "Konfigurēt darbības",
-        "actionsConfigured": "Konfigurētas",
-        "list": {
-          "editTitle": "Rediģēt konfigurāciju",
-          "removeTitle": "Noņemt konfigurāciju"
-        },
-        "emptyState": {
-          "title": "Vēl nav konfigurāciju.",
-          "description": "Noklikšķiniet \"Pievienot konfigurāciju\", lai pielāgotu sugu noteikšanas iestatījumus."
-        },
-        "table": {
-          "columnScientificName": "Zinātniskais nosaukums",
-          "intervalDefault": "Noklusējuma",
-          "intervalDefaultTooltip": "0 = izmantot globālo noklusējuma intervālu",
-          "noActions": "Nav",
-          "searchPlaceholder": "Meklēt sugas...",
-          "noResults": "Nav atbilstošu konfigurāciju",
-          "editDisabledReason": "Pirms citas sugas rediģēšanas saglabājiet vai aizveriet pašreizējo redaktoru",
-          "actionsDisabledBusy": "Lūdzu, uzgaidiet, līdz beidzas pašreizējā darbība"
-        }
-      },
-      "synonyms": {
-        "tabLabel": "Sinonīmi",
-        "description": "Saistiet VoiceWatch zinātniskos sugu nosaukumus ar to atjauninātajiem ekvivalentiem jaunākajā taksonomijā. Tiek izmantots tikai kā rezerves variants, meklējot putnu fotoattēlus Wikipedia un AviCommons; nepārsauc sugas atklājumos vai informācijas panelī.",
-        "helpText": "Lai mainītu, kā suga tiek attēlota saskarnē, rediģējiet savu VoiceWatch etiķešu failu (iestatījums \"Etiķešu ceļš\" galvenajos iestatījumos).",
-        "birdnetName": "VoiceWatch nosaukums",
-        "updatedName": "Atjaunināts zinātniskais nosaukums",
-        "addButton": "Pievienot sinonīmu",
-        "emptyState": "Nav konfigurēti taksonomijas sinonīmi",
-        "errors": {
-          "unknownSpecies": "Suga nav atrasta VoiceWatch etiķetēs",
-          "duplicateKey": "Šai sugai jau pastāv sinonīms",
-          "emptyUpdatedName": "Atjauninātais nosaukums ir obligāts"
-        }
-      },
-      "actionsModal": {
-        "title": "Darbības sugai {species}",
-        "actionType": {
-          "label": "Darbības tips",
-          "executeCommand": "Izpildīt komandu",
-          "onlySupported": "Pašlaik tiek atbalstītas tikai komandu izpildes darbības"
-        },
-        "command": {
-          "label": "Komanda",
-          "helpText": "Norādiet pilnu ceļu uz komandu vai skriptu, kuru vēlaties izpildīt"
-        },
-        "parameters": {
-          "label": "Parametri",
-          "helpText": "Šīs vērtības tiks nodotas jūsu komandai norādītajā secībā",
-          "placeholder": "Noklikšķiniet uz pogām zemāk, lai pievienotu parametrus, vai ievadiet manuāli",
-          "tooltip": "Izmantojiet pogas zemāk vai ievadiet tieši (ar komatiem atdalīti)",
-          "availableTitle": "Pieejamie parametri",
-          "buttons": {
-            "commonName": "CommonName",
-            "scientificName": "ScientificName",
-            "confidence": "Confidence",
-            "time": "Time",
-            "source": "Source",
-            "clearParameters": "Notīrīt parametrus"
-          }
-        },
-        "executeDefaults": {
-          "label": "Arī izpildīt noklusējuma darbības (datu bāzes glabāšana, paziņojumi utt.)",
-          "helpText": "Kad iespējots, tiks izpildīta gan jūsu pielāgotā darbība, gan sistēmas noklusējuma darbības. Kad atspējots, tiks izpildīta tikai jūsu pielāgotā darbība."
-        }
-      },
-      "add": "Pievienot",
-      "remove": "Noņemt",
-      "suggestions": "Sugu ieteikumi",
-      "addSpeciesToInclude": "Pievienot sugu iekļaušanai",
-      "addSpeciesToIncludeLabel": "Pievienot jaunu sugu iekļaušanai",
-      "addSpeciesToExclude": "Pievienot sugu izslēgšanai",
-      "addSpeciesToExcludeLabel": "Pievienot jaunu sugu izslēgšanai",
-      "commandPathPlaceholder": "/ceļš/uz/jūsu/komandu",
-      "parametersPlaceholder": "Parametri parādīsies šeit",
-      "errors": {
-        "speciesLoadFailed": "Neizdevās ielādēt sugu sarakstu. Lūdzu, mēģiniet vēlreiz."
-      },
-      "tracking": {
-        "title": "Sugu izsekošana",
-        "tabLabel": "Izsekošana",
-        "description": "Konfigurēt jaunu sugu noteikšanas izsekošanu, pamatojoties uz laika periodiem",
-        "enabled": {
-          "label": "Iespējot sugu izsekošanu",
-          "helpText": "Kad iespējots, sistēma izseko jaunas sugu noteikšanas un var sūtīt paziņojumus"
-        },
-        "newSpeciesWindowDays": {
-          "label": "Jaunas sugas logs (dienas)",
-          "helpText": "Dienu skaits, cik ilgi suga tiek uzskatīta par 'jaunu' pēc pirmās noteikšanas (1-365)"
-        },
-        "syncIntervalMinutes": {
-          "label": "Sinhronizācijas intervāls (minūtes)",
-          "helpText": "Cik bieži sinhronizēt izsekošanas datus ar datu bāzi (1-1440)"
-        },
-        "notificationSuppressionHours": {
-          "label": "Paziņojumu apslāpēšana (stundas)",
-          "helpText": "Stundas, cik ilgi apslāpēt atkārtotus paziņojumus par vienu un to pašu sugu (0-8760)"
-        },
-        "yearly": {
-          "title": "Ikgadējā izsekošana",
-          "description": "Izsekot pirmo sugu ierašanos katru gadu",
-          "enabled": {
-            "label": "Iespējot ikgadējo izsekošanu",
-            "helpText": "Izsekot un paziņot, kad suga pirmo reizi gadā tiek noteikta"
-          },
-          "resetMonth": {
-            "label": "Atiestatīšanas mēnesis",
-            "helpText": "Mēnesis, kad ikgadējā izsekošana tiek atiestatīta (1-12)"
-          },
-          "resetDay": {
-            "label": "Atiestatīšanas diena",
-            "helpText": "Mēneša diena, kad ikgadējā izsekošana tiek atiestatīta"
-          },
-          "windowDays": {
-            "label": "Logs (dienas)",
-            "helpText": "Dienas, cik ilgi rādīt indikatoru 'jauna šogad' (1-365)"
-          }
-        },
-        "seasonal": {
-          "title": "Sezonālā izsekošana",
-          "description": "Izsekot pirmo sugu ierašanos katrā sezonā",
-          "enabled": {
-            "label": "Iespējot sezonālo izsekošanu",
-            "helpText": "Izsekot un paziņot, kad suga pirmo reizi sezonā tiek noteikta"
-          },
-          "windowDays": {
-            "label": "Logs (dienas)",
-            "helpText": "Dienas, cik ilgi rādīt indikatoru 'jauna šosezon' (1-365)"
-          },
-          "seasons": {
-            "title": "Sezonu definīcijas",
-            "description": "Definējiet, kad sākas katra sezona. Sezonas tiek automātiski pielāgotas, pamatojoties uz jūsu atrašanās vietas puslodi.",
-            "spring": "Pavasaris",
-            "summer": "Vasara",
-            "fall": "Rudens",
-            "winter": "Ziema",
-            "wet1": "1. lietainā sezona",
-            "dry1": "1. sausā sezona",
-            "wet2": "2. lietainā sezona",
-            "dry2": "2. sausā sezona",
-            "startMonth": "Sākuma mēnesis",
-            "startDay": "Sākuma diena",
-            "hemisphereNote": "Sezonu datumi tiek automātiski konfigurēti, pamatojoties uz jūsu ģeogrāfisko platumu. Ziemeļu puslode izmanto standarta sezonas, dienvidu puslodei ir nobīdīti datumi, un ekvatoriālajos reģionos tiek izmantotas lietainās/sausās sezonas."
-          }
-        },
-        "months": {
-          "january": "Janvāris",
-          "february": "Februāris",
-          "march": "Marts",
-          "april": "Aprīlis",
-          "may": "Maijs",
-          "june": "Jūnijs",
-          "july": "Jūlijs",
-          "august": "Augusts",
-          "september": "Septembris",
-          "october": "Oktobris",
-          "november": "Novembris",
-          "december": "Decembris"
-        },
-        "units": {
-          "days": "dienas",
-          "min": "min",
-          "hours": "st"
-        }
-      },
-      "dynamicThreshold": {
-        "tabLabel": "Apgūtie",
-        "title": "Apgūtie sliekšņi",
-        "description": "Šī lapa rāda dinamiskā sliekšņa izpildlaika datus. Kad iespējots galvenajos iestatījumos → Noteikšana, sliekšņi tiek automātiski pielāgoti, pamatojoties uz vairākām augstticamības noteikšanām. Šeit redzamās sugas tiek uzskatītas par esošām šajā atrašanās vietā.",
-        "stats": {
-          "active": "Aktīvs",
-          "atMinimum": "Pie minimuma",
-          "minThreshold": "Min slieksnis",
-          "validityPeriod": "Derīguma periods"
-        },
-        "header": {
-          "species": "Suga",
-          "threshold": "Slieksnis",
-          "expires": "Beidzas"
-        },
-        "searchPlaceholder": "Meklēt sugas...",
-        "threshold": "Slieksnis",
-        "level": "Līmenis",
-        "expires": "Beidzas",
-        "expired": "Beidzies",
-        "confidence": "Ticamība",
-        "requiredConfidence": "Nepieciešamā ticamība",
-        "resetAll": "Atiestatīt visus",
-        "resetSpecies": "Atiestatīt slieksni šai sugai",
-        "noEvents": "Nav sliekšņa izmaiņu vēstures",
-        "changeReason": {
-          "highConfidence": "Augstticamības noteikšana",
-          "expiry": "Slieksnis beidzies",
-          "manualReset": "Manuāla atiestatīšana"
-        },
-        "note": "Augstticamības noteikšanas apstiprina, kuras sugas atrodas šajā atrašanās vietā. Pēc vairākām augstticamības atbilstībām noteikšanas slieksnis tiek droši pazemināts, lai uztvētu vairāk dziesmu bez būtiska viltus pozitīvo rezultātu riska. Sliekšņi automātiski atiestatās pēc konfigurētā derīguma perioda.",
-        "empty": {
-          "title": "Nav apgūtu sliekšņu",
-          "description": "Augstticamības noteikšanas automātiski izveidos apgūtus sliekšņus sugām"
-        },
-        "resetAllConfirm": {
-          "title": "Atiestatīt visus sliekšņus",
-          "message": "Tas atiestatīs visus {count} apgūtos sliekšņus. Sugām būs jātiek noteiktām ar augstu ticamību vēlreiz, lai pazeminātu to sliekšņus."
-        },
-        "loadError": "Neizdevās ielādēt dinamiskos sliekšņus",
-        "resetSuccess": "Slieksnis atiestatīts sugai {species}",
-        "resetError": "Neizdevās atiestatīt slieksni",
-        "resetAllSuccess": "Atiestatīti {count} sliekšņi",
-        "resetAllError": "Neizdevās atiestatīt sliekšņus",
-        "expand": "Rādīt notikumu vēsturi",
-        "collapse": "Slēpt notikumu vēsturi"
-      }
-    },
     "database": {
       "sqlitePlaceholder": "Ievadiet SQLite datu bāzes ceļu",
       "mysqlHostPlaceholder": "Ievadiet MySQL resursdatoru",
@@ -4906,26 +4533,6 @@
       "locale": {
         "label": "Sugu valoda",
         "helpText": "Valoda, kas tiek izmantota sugu nosaukumiem interfeisā."
-      }
-    },
-    "rangeFilter": {
-      "birdOnlyNote": "Areāla filtrs attiecas tikai uz putnu klasifikatoriem. Sikspārņu modeļi izmanto savus sugu sarakstus.",
-      "status": {
-        "title": "Diapazona filtra pārskats",
-        "geomodelInfo": "VoiceWatch Geomodels {version} - {species} zināmas sugas",
-        "autoSelected": "Automātiski atlasīts",
-        "manual": "Manuāli",
-        "classifier": "Klasifikators",
-        "totalSpecies": "Kopējais sugu skaits",
-        "withRangeData": "Ar areāla datiem",
-        "withoutRangeData": "Bez areāla datiem",
-        "withRangeDataTooltip": "Sugas, kurām ģeomodelis var novērtēt ģeogrāfisko varbūtību jūsu atrašanās vietā",
-        "withoutRangeDataTooltip": "Sugas bez ģeogrāfiskajiem datiem ģeomodelī, kuras pārvalda nekartēto sugu iestatījums zemāk",
-        "noFilter": "Nav aktīva areāla filtra",
-        "passUnmapped": {
-          "label": "Atļaut sugas bez areāla datiem",
-          "helpText": "Atļaut sugu noteikšanu, kurām ģeomodelim nav ģeogrāfisko datu. Ja atspējots, šīs sugas vienmēr tiek izfiltrētas."
-        }
       }
     },
     "advanced": {

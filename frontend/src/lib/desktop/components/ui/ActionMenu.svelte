@@ -2,7 +2,7 @@
   ActionMenu Component
 
   A dropdown menu component that provides action buttons for detection items.
-  Displays common actions like review, toggle species visibility, lock/unlock, and delete.
+  Displays common actions like review, lock/unlock, and delete.
 
   Features:
   - Automatically positions menu to stay within viewport
@@ -21,8 +21,6 @@
   import {
     MoreVertical,
     SquarePen,
-    Eye,
-    EyeOff,
     Lock,
     LockOpen,
     Trash2,
@@ -43,16 +41,12 @@
   interface Props extends HTMLAttributes<HTMLDivElement> {
     /** The detection object containing data for this action menu */
     detection: Detection;
-    /** Whether the species is currently excluded from detection */
-    isExcluded?: boolean;
     /** Callback fired when user marks the detection as correct */
     onMarkCorrect?: () => void;
     /** Callback fired when user marks the detection as false positive */
     onMarkFalsePositive?: () => void;
     /** Callback fired when user clicks review action */
     onReview?: () => void;
-    /** Callback fired when user toggles species visibility */
-    onToggleSpecies?: () => void;
     /** Callback fired when user toggles detection lock status */
     onToggleLock?: () => void;
     /** Callback fired when user deletes the detection */
@@ -71,11 +65,9 @@
 
   let {
     detection,
-    isExcluded = false,
     onMarkCorrect,
     onMarkFalsePositive,
     onReview,
-    onToggleSpecies,
     onToggleLock,
     onDelete,
     onDownload,
@@ -308,32 +300,6 @@
                     class="ml-auto inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-[var(--color-error)]/15 text-[var(--color-error)]"
                     >✗</span
                   >
-                {/if}
-              </div>
-            </button>
-          </li>
-        {/if}
-
-        {#if canEdit && onToggleSpecies}
-          <li>
-            <button
-              onclick={() => handleAction(onToggleSpecies)}
-              class={cn(
-                'text-sm w-full text-left px-3 py-2 rounded-md transition-colors',
-                itemHoverClass
-              )}
-              role="menuitem"
-            >
-              <div class="flex items-center gap-2">
-                {#if isExcluded}
-                  <Eye class="size-4" />
-                {:else}
-                  <EyeOff class="size-4" />
-                {/if}
-                {#if isExcluded}
-                  <span>{t('dashboard.recentDetections.actions.showSpecies')}</span>
-                {:else}
-                  <span>{t('dashboard.recentDetections.actions.ignoreSpecies')}</span>
                 {/if}
               </div>
             </button>

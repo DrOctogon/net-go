@@ -32,12 +32,6 @@ export function createEmptySettings(): SettingsFormData {
       latitude: 0,
       longitude: 0,
       locationConfigured: false,
-      rangeFilter: {
-        threshold: 0.03,
-        passUnmappedSpecies: false,
-        speciesCount: null,
-        species: [],
-      },
     },
     realtime: {
       species: {
