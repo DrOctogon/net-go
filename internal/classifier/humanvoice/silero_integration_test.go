@@ -1,7 +1,6 @@
 package humanvoice_test
 
 import (
-	"context"
 	"math"
 	"testing"
 
@@ -39,7 +38,7 @@ func TestSilero_PredictSilence(t *testing.T) {
 	m := newTestModel(t)
 
 	silence := make([]float32, sampleCount) // all zeros
-	results, err := m.Predict(context.Background(), [][]float32{silence})
+	results, err := m.Predict(t.Context(), [][]float32{silence})
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 
@@ -61,7 +60,7 @@ func TestSilero_PredictTone(t *testing.T) {
 	for i := range tone {
 		tone[i] = 0.3 * float32(math.Sin(2*math.Pi*220*float64(i)/16000))
 	}
-	results, err := m.Predict(context.Background(), [][]float32{tone})
+	results, err := m.Predict(t.Context(), [][]float32{tone})
 	require.NoError(t, err)
 	require.Len(t, results, 1)
 	assert.GreaterOrEqual(t, results[0].Confidence, float32(0))
@@ -71,7 +70,7 @@ func TestSilero_PredictTone(t *testing.T) {
 // TestSilero_PredictEmpty returns no results for empty input.
 func TestSilero_PredictEmpty(t *testing.T) {
 	m := newTestModel(t)
-	results, err := m.Predict(context.Background(), nil)
+	results, err := m.Predict(t.Context(), nil)
 	require.NoError(t, err)
 	assert.Empty(t, results)
 }

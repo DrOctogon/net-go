@@ -1,7 +1,6 @@
 package humanvoice
 
 import (
-	"context"
 	"path/filepath"
 	"testing"
 
@@ -82,11 +81,11 @@ func TestPredict_EmptyInput(t *testing.T) {
 	t.Parallel()
 
 	m := &Model{}
-	results, err := m.Predict(context.Background(), nil)
+	results, err := m.Predict(t.Context(), nil)
 	require.NoError(t, err)
 	assert.Empty(t, results)
 
-	results, err = m.Predict(context.Background(), [][]float32{})
+	results, err = m.Predict(t.Context(), [][]float32{})
 	require.NoError(t, err)
 	assert.Empty(t, results)
 }
