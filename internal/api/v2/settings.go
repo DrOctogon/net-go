@@ -982,8 +982,6 @@ func getSettingsSectionValue(settings *conf.Settings, section string) (any, erro
 		return &settings.Realtime.RTSP, nil
 	case "privacyfilter":
 		return &settings.Realtime.PrivacyFilter, nil
-	case "dogbarkfilter":
-		return &settings.Realtime.DogBarkFilter, nil
 	case "telemetry":
 		return &settings.Realtime.Telemetry, nil
 	case "sentry":

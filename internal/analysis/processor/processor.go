@@ -65,7 +65,6 @@ type Processor struct {
 	lastSyncAttempt      time.Time               // Last time sync was attempted
 	syncMutex            sync.Mutex              // Mutex to protect sync operations
 	syncInProgress       atomic.Bool             // Flag to prevent overlapping syncs
-	LastDogDetection     map[string]time.Time    // keep track of dog barks per audio source
 	LastHumanDetection   map[string]time.Time    // keep track of human vocal per audio source
 	Metrics              *observability.Metrics
 	DynamicThresholds    map[string]*DynamicThreshold
@@ -74,8 +73,7 @@ type Processor struct {
 	pendingResetAll      bool                // True if a full reset is pending, protected by thresholdsMutex
 	pendingDetections    map[string]PendingDetection
 	pendingMutex         sync.RWMutex // RWMutex to protect access to pendingDetections (RLock for snapshots)
-	dogDetectionMutex    sync.Mutex
-	detectionMutex       sync.RWMutex // Mutex to protect LastDogDetection and LastHumanDetection maps
+	detectionMutex       sync.RWMutex // Mutex to protect LastHumanDetection map
 	controlChan          chan string
 	JobQueue             *jobqueue.JobQueue // Queue for managing job retries
 	workerCancel         context.CancelFunc // Function to cancel worker goroutines
@@ -441,7 +439,6 @@ func New(settings *conf.Settings, ds datastore.Interface, bn *classifier.Orchest
 			settings.Realtime.Species.Config,
 		),
 		Metrics:            metrics,
-		LastDogDetection:   make(map[string]time.Time),
 		LastHumanDetection: make(map[string]time.Time),
 		DynamicThresholds:  make(map[string]*DynamicThreshold),
 		pendingResets:      make(map[string]struct{}),
@@ -780,9 +777,8 @@ func (p *Processor) processResults(settings *conf.Settings, item classifier.Resu
 			continue // Skip invalid or partially parsed species
 		}
 
-		// Handle dog and human detection, this sets LastDogDetection and LastHumanDetection which is
-		// later used to discard detection if privacy filter or dog bark filters are enabled in settings.
-		p.handleDogDetection(settings, item, result)
+		// Handle human detection, this sets LastHumanDetection which is
+		// later used to discard detection if the privacy filter is enabled in settings.
 		p.handleHumanDetection(settings, item, result)
 
 		// Determine confidence threshold and check filters
@@ -1125,23 +1121,6 @@ func (p *Processor) syncSpeciesTrackerIfNeeded() {
 	}
 }
 
-// handleDogDetection handles the detection of dog barks and updates the last detection timestamp.
-//
-//nolint:gocritic // hugeParam: Pass by value is intentional - avoids pointer dereferencing in hot path
-func (p *Processor) handleDogDetection(settings *conf.Settings, item classifier.Results, result datastore.Results) {
-	if settings.Realtime.DogBarkFilter.Enabled && isDogDetection(result.Species) &&
-		result.Confidence > settings.Realtime.DogBarkFilter.Confidence {
-		GetLogger().Info("dog detection filtered",
-			logger.Float32("confidence", result.Confidence),
-			logger.Float32("threshold", float32(settings.Realtime.DogBarkFilter.Confidence)),
-			logger.String("source", p.getDisplayNameForSource(item.Source.ID)),
-			logger.String("operation", "dog_bark_filter"))
-		p.detectionMutex.Lock()
-		p.LastDogDetection[item.Source.ID] = item.StartTime
-		p.detectionMutex.Unlock()
-	}
-}
-
 // handleHumanDetection handles the detection of human vocalizations and updates the last detection timestamp.
 //
 //nolint:gocritic // hugeParam: Pass by value is intentional - avoids pointer dereferencing in hot path
@@ -1274,31 +1253,6 @@ func (p *Processor) shouldDiscardDetection(item *PendingDetection, settings *con
 				logger.String("source", p.getDisplayNameForSource(item.Source)),
 				logger.String("operation", "privacy_filter"))
 			return true, "privacy filter"
-		}
-	}
-
-	// Check dog bark filter
-	if settings.Realtime.DogBarkFilter.Enabled {
-		if settings.Realtime.DogBarkFilter.Debug {
-			p.detectionMutex.RLock()
-			GetLogger().Debug("last dog detection status",
-				logger.Any("last_detections", p.LastDogDetection),
-				logger.String("operation", "dog_detection_debug"))
-			p.detectionMutex.RUnlock()
-		}
-		p.detectionMutex.RLock()
-		lastDogDetection := p.LastDogDetection[item.Source]
-		p.detectionMutex.RUnlock()
-		if p.CheckDogBarkFilter(item.Detection.Result.Species.CommonName, lastDogDetection) ||
-			p.CheckDogBarkFilter(item.Detection.Result.Species.ScientificName, lastDogDetection) {
-			// Add structured logging for dog bark filter
-			GetLogger().Debug("Detection discarded by dog bark filter",
-				logger.String("species", item.Detection.Result.Species.CommonName),
-				logger.Time("detection_time", item.FirstDetected),
-				logger.Time("last_dog_detection", lastDogDetection),
-				logger.String("source", p.getDisplayNameForSource(item.Source)),
-				logger.String("operation", "dog_bark_filter"))
-			return true, "recent dog bark"
 		}
 	}
 

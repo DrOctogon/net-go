@@ -101,11 +101,6 @@ func (c *Controller) aggregateDetectionEvents(entries []reader.LogEntry, _ time.
 			summary := getOrCreateSummary(speciesMap, speciesName)
 			summary.Total++
 
-		case "dog_bark_filter":
-			bucketKey := toBucketKey(entry.Time)
-			bucket := getOrCreateBucket(bucketMap, speciesIdxMap, entry.Time, bucketKey)
-			bucket.PreFilters.DogBark++
-
 		case "privacy_filter":
 			bucketKey := toBucketKey(entry.Time)
 			bucket := getOrCreateBucket(bucketMap, speciesIdxMap, entry.Time, bucketKey)
@@ -254,7 +249,7 @@ func finalizeBucket(bucket *DetectionBucket) {
 // buildDetectionMetrics computes day-level aggregate metrics from finalized buckets.
 func buildDetectionMetrics(buckets []DetectionBucket, hourlyPending *[24]int, discardCounts map[string]int) DetectionMetrics {
 	var pendingTotal, approvedTotal, discardedTotal, flushedTotal int
-	var dogBarkTotal, privacyTotal int
+	var privacyTotal int
 	activeHours := 0
 
 	for i := range buckets {
@@ -263,7 +258,6 @@ func buildDetectionMetrics(buckets []DetectionBucket, hourlyPending *[24]int, di
 		approvedTotal += b.Totals.Approved
 		discardedTotal += b.Totals.Discarded
 		flushedTotal += b.Totals.Flushed
-		dogBarkTotal += b.PreFilters.DogBark
 		privacyTotal += b.PreFilters.Privacy
 		activeHours++
 	}
@@ -282,7 +276,6 @@ func buildDetectionMetrics(buckets []DetectionBucket, hourlyPending *[24]int, di
 		ApprovedTotal:   approvedTotal,
 		DiscardedTotal:  discardedTotal,
 		FlushedTotal:    flushedTotal,
-		DogBarkTotal:    dogBarkTotal,
 		PrivacyTotal:    privacyTotal,
 		TopDiscarded:    topDiscarded,
 		HourlyPending:   *hourlyPending,

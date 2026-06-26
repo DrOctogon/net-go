@@ -168,24 +168,21 @@ func TestAggregateDetectionEvents(t *testing.T) {
 		c.Settings.Store(newValidTestSettings())
 
 		entries := []reader.LogEntry{
-			makeEntry(baseTime, "dog_bark_filter", "", nil),
-			makeEntry(baseTime.Add(time.Minute), "dog_bark_filter", "", nil),
-			makeEntry(baseTime.Add(2*time.Minute), "privacy_filter", "", nil),
-			makeEntry(baseTime.Add(3*time.Minute), "approve_detection", "Robin", map[string]any{"confidence": 0.9, "match_count": float64(1)}),
+			makeEntry(baseTime, "privacy_filter", "", nil),
+			makeEntry(baseTime.Add(time.Minute), "privacy_filter", "", nil),
+			makeEntry(baseTime.Add(2*time.Minute), "approve_detection", "Robin", map[string]any{"confidence": 0.9, "match_count": float64(1)}),
 		}
 
 		result := c.aggregateDetectionEvents(entries, baseTime)
 
 		require.Len(t, result.Buckets, 1)
 		bucket := result.Buckets[0]
-		assert.Equal(t, 2, bucket.PreFilters.DogBark)
-		assert.Equal(t, 1, bucket.PreFilters.Privacy)
+		assert.Equal(t, 2, bucket.PreFilters.Privacy)
 		// Only the approve creates a species entry
 		require.Len(t, bucket.Species, 1)
 
 		// Metrics
-		assert.Equal(t, 2, result.Metrics.DogBarkTotal)
-		assert.Equal(t, 1, result.Metrics.PrivacyTotal)
+		assert.Equal(t, 2, result.Metrics.PrivacyTotal)
 	})
 
 	t.Run("pending count from create_pending_detection hourly array", func(t *testing.T) {

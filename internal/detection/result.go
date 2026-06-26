@@ -48,10 +48,8 @@ type Result struct {
 	Unlikely bool // Tagged by the ultrasonic validation filter when source audio lacks bat echolocation characteristics
 
 	// Runtime-only data (not persisted)
-	Occurrence            float64                       // Probability 0-1 based on location/time/season
-	ModelContributions    map[string]ResultModelContrib // Per-model detection data from cross-model consensus, keyed by model ID
-	UltrasonicCV          float64                       // US frame CV value from validation filter (for comment generation)
-	UltrasonicCVThreshold float64                       // CV threshold used by validation filter (for comment generation)
+	Occurrence         float64                       // Probability 0-1 based on location/time/season
+	ModelContributions map[string]ResultModelContrib // Per-model detection data from cross-model consensus, keyed by model ID
 	// RawLabel is the full un-truncated classifier label (e.g. "power_tool"); runtime-only,
 	// used by the datastore to classify non-bird sound classes correctly.
 	RawLabel string

@@ -66,9 +66,6 @@ func CloneSettings(src *Settings) *Settings {
 	}
 	dst.Realtime.Dashboard.Layout.Elements = cloneDashboardElements(src.Realtime.Dashboard.Layout.Elements)
 
-	// Realtime.DogBarkFilter.
-	dst.Realtime.DogBarkFilter.Species = slices.Clone(src.Realtime.DogBarkFilter.Species)
-
 	// Realtime.DaylightFilter.
 	dst.Realtime.DaylightFilter.Species = slices.Clone(src.Realtime.DaylightFilter.Species)
 

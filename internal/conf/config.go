@@ -496,15 +496,6 @@ type PrivacyFilterSettings struct {
 	Confidence float32 `yaml:"confidence" json:"confidence"` // confidence threshold for human detection
 }
 
-// DogBarkFilterSettings contains settings for the dog bark filter.
-type DogBarkFilterSettings struct {
-	Debug      bool     `yaml:"debug" json:"debug"`           // true to enable debug mode
-	Enabled    bool     `yaml:"enabled" json:"enabled"`       // true to enable dog bark filter
-	Confidence float32  `yaml:"confidence" json:"confidence"` // confidence threshold for dog bark detection
-	Remember   int      `yaml:"remember" json:"remember"`     // how long we should remember bark for filtering?
-	Species    []string `yaml:"species" json:"species"`       // species list for filtering
-}
-
 // DaylightFilterSettings contains settings for the daylight species filter.
 // It discards detections of configured species (default: nocturnal birds) during daylight hours.
 type DaylightFilterSettings struct {
@@ -821,7 +812,6 @@ type RealtimeSettings struct {
 	LogDeduplication LogDeduplicationSettings `yaml:"logdeduplication" json:"logDeduplication"` // Log deduplication settings
 	OpenWeather      OpenWeatherSettings      `yaml:"-" json:"-"`                               // OpenWeather integration settings
 	PrivacyFilter    PrivacyFilterSettings    `yaml:"privacyfilter" json:"privacyFilter"`       // Privacy filter settings
-	DogBarkFilter    DogBarkFilterSettings    `yaml:"dogbarkfilter" json:"dogBarkFilter"`       // Dog bark filter settings
 	DaylightFilter   DaylightFilterSettings   `yaml:"daylightfilter" json:"daylightFilter"`     // Daylight filter settings
 	RTSP             RTSPSettings             `yaml:"rtsp" json:"rtsp"`                         // RTSP settings
 	MQTT             MQTTSettings             `yaml:"mqtt" json:"mqtt"`                         // MQTT settings

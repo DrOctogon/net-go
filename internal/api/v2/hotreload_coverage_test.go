@@ -143,7 +143,6 @@ var hotReloadRegistry = map[string]hotReloadEntry{
 
 	// -- Filters --
 	"Realtime.PrivacyFilter":  {categories: []hotReloadCategory{hotReloadFresh}},
-	"Realtime.DogBarkFilter":  {categories: []hotReloadCategory{hotReloadFresh}},
 	"Realtime.DaylightFilter": {categories: []hotReloadCategory{hotReloadFresh}},
 
 	// -- RTSP --

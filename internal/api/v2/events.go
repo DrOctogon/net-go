@@ -22,7 +22,6 @@ var detectionOperations = []string{
 	"approve_detection",
 	"discard_detection",
 	"flush_detection",
-	"dog_bark_filter",
 	"privacy_filter",
 	"audio_export_success",
 }
@@ -33,7 +32,6 @@ var noiseOperations = []string{
 	"approve_detection",
 	"discard_detection",
 	"flush_detection",
-	"dog_bark_filter",
 	"privacy_filter",
 	"audio_export_success",
 	"process_detections_summary",
@@ -97,7 +95,6 @@ type BucketTotals struct {
 
 // PreFilterCounts tracks pre-analysis filter hits within a bucket.
 type PreFilterCounts struct {
-	DogBark int `json:"dog_bark"`
 	Privacy int `json:"privacy"`
 }
 
@@ -107,7 +104,6 @@ type DetectionMetrics struct {
 	ApprovedTotal   int            `json:"approved_total"`
 	DiscardedTotal  int            `json:"discarded_total"`
 	FlushedTotal    int            `json:"flushed_total"`
-	DogBarkTotal    int            `json:"dog_bark_total"`
 	PrivacyTotal    int            `json:"privacy_total"`
 	TopDiscarded    []SpeciesCount `json:"top_discarded"`
 	HourlyPending   [24]int        `json:"hourly_pending"`

@@ -1302,15 +1302,6 @@ func createComprehensiveMockConfig() map[string]any {
 				"confidence": 0.8,
 			},
 
-			// Dog Bark Filter
-			"dogBarkFilter": map[string]any{
-				"debug":      false,
-				"enabled":    true,
-				"confidence": 0.7,
-				"remember":   15,
-				"species":    []any{"Canis lupus familiaris"},
-			},
-
 			// MQTT (broker, username, password, TLS paths)
 			"mqtt": map[string]any{
 				"enabled":  true,
