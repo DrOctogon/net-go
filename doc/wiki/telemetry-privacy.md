@@ -65,7 +65,7 @@ The system meets privacy requirements for:
 ### Personal Data ❌ NEVER COLLECTED
 
 - **Audio recordings** or any sound files
-- **Bird detection results** or species information
+- **Voice detection results** or transcript content
 - **RTSP URLs, IP addresses, hostnames** (anonymized before transmission)
 - **Usernames, passwords** or authentication credentials
 - **File paths** or directory structures

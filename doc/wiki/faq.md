@@ -10,9 +10,7 @@ These come up again and again, so they are worth knowing before anything else:
 
 - **Run `install.sh` as your normal user, never with `sudo`.** Running the installer as root creates a second, separate instance under `/root/birdnet-go-app` while your real data stays under `~/birdnet-go-app`. This is the single most common cause of "an update deleted my settings/history". Nothing was deleted; you were just looking at a fresh root install. Re-run the installer as your normal user and your data is there.
 - **Use a single mono microphone (or a mono stream).** Stereo audio does not improve detection and can hurt it. A mono mic is recommended for both local capture and RTSP.
-- **Set your location (latitude/longitude).** The range filter needs coordinates. Without them, rarity is wrong (everything shows "very rare") and out-of-range species slip into your detections.
 - **Settings hot-reload.** Almost all settings now take effect immediately without a restart. If a setting change does not seem to apply, you are probably on an older build; update to the latest nightly.
-- **The "Active/Current Species" list is a prediction, not your detections.** The range-filter species list is a separate location prediction from the live detection pipeline. A strange or empty species count does **not** mean detection is broken; your detections can be flowing normally while the prediction list is just misconfigured.
 
 ## Installation and updates
 
@@ -64,11 +62,11 @@ Fill in the **Name** field for the source. Save stays disabled until the source 
 
 ### Which microphone should I use?
 
-See [Recommended Hardware](hardware.md). Popular community choices: a Clippy/Primo EM272 capsule on a cheap USB sound card for birds, and an AudioMoth (in USB-mic firmware) for bats and ultrasonic work. Keep the mic out of direct rain and protect it from insects; the AudioMoth case is splashproof, not waterproof.
+See [Recommended Hardware](hardware.md). Popular community choices include a lavalier mic (e.g. Boya USB BY-LM40) or a DIY capsule (PUI Audio AOM-5024L-HD-R) on a cheap USB sound card. Keep the mic out of direct rain.
 
 ### Can I save recordings to an external USB drive?
 
-Yes. Set an absolute path in **Settings > Audio > Export > Clips Folder** (e.g. `/mnt/usb/birds/`). Because install.sh runs VoiceWatch in a container, you must also mount the drive on the host and bind-mount it into the container's systemd service (`sudo systemctl edit birdnet-go.service --full`, add `-v /mnt/usb:/mnt/usb`), then make sure the mount is writable by UID 1000.
+Yes. Set an absolute path in **Settings > Audio > Export > Clips Folder** (e.g. `/mnt/usb/voicewatch/`). Because install.sh runs VoiceWatch in a container, you must also mount the drive on the host and bind-mount it into the container's systemd service (`sudo systemctl edit birdnet-go.service --full`, add `-v /mnt/usb:/mnt/usb`), then make sure the mount is writable by UID 1000.
 
 ## RTSP cameras and streams
 
@@ -109,46 +107,9 @@ paths:
 
 Point VoiceWatch at `rtsp://<pi-ip>:8554/stream`. Prefer PCM over MP3 for better analysis quality, and use `-i hw:1,0` (find devices with `arecord -l`) if `default` doesn't work. There are also community ESP32 RTSP-mic firmware projects listed in the README.
 
-## Models and detection (multi-model)
+## Models and detection
 
-See the [Detection Pipeline](detection-pipeline.md) for how audio flows through multiple models.
-
-### What models are available and how do I use more than one?
-
-VoiceWatch ships with **BirdNET v2.4** (the default, lightest model). From **Settings > Analysis > Models** you can also install **Google Perch v2** (a much larger multi-taxa model) and **BattyBirdNET** (regional bat classifiers). After installing a model, go to **Settings > Audio** and assign which models each source runs. One source can run several models, and detections of the same species from different models are merged, so cross-model agreement makes a detection more trustworthy.
-
-### Should I run Perch on its own?
-
-No. Run **BirdNET v2.4 and Perch together** on the same source. Perch produces lower confidence values, so running it alone gives far fewer detections unless you lower your confidence threshold (the UI suggests around `0.5` for Perch-only). Together, the two models complement each other and cross-model agreement reduces false positives.
-
-### I enabled Perch and now I get fewer detections, or rarity shows "very rare" for everything
-
-Two common causes:
-
-- You are likely running Perch with a threshold tuned for BirdNET (see above), run both models together.
-- Rarity and the range filter need your location set. If everything shows "very rare" on a recent nightly even with location set, update, there was also a range-filtering bug around this. Perch's range filtering needs the BirdNET Geomodel: if you installed Perch before that shipped, **reinstall the Perch model** from the gallery (to fetch the geomodel) and restart.
-
-### Perch or bat models won't load on a native (non-Docker) install
-
-These extra models run on the ONNX Runtime. The simplest and recommended path is the **Docker install** (`install.sh`), which bundles everything the ONNX models need, and the container images are moving to an ONNX-only runtime. If a model won't load, the startup logs show a model-loading warning, and the range filter silently falls back (species counts then look wrong). Switching to the Docker install is the cleanest fix.
-
-### My "Active Species" list is empty after switching models back to BirdNET 2.4
-
-If you installed Perch (or v3) and later reverted to BirdNET 2.4, the range-filter config can still point at a geomodel that 2.4 can't use, so the Active Species list comes up empty and filtering effectively stops. Clear the three range-filter values in `config.yaml` and restart:
-
-```yaml
-birdnet:
-  rangefilter:
-    model: ""
-    modelpath: ""
-    labelspath: ""
-```
-
-2.4 then falls back to its built-in range filter and the list repopulates within a day. Your stored detections are not affected.
-
-### How do I do bat detection?
-
-Bats need an **ultrasonic-capable mic** (e.g. an AudioMoth) capturing at **192 kHz or higher**, and it is **Linux only** (high-rate exclusive sound-card mode). Install a regional BattyBirdNET model and assign it to that source. Bats only run at night by default, and clips that lack ultrasonic energy are flagged **"Unlikely"**. VoiceWatch's spectrograms top out around 12 kHz, so to verify a bat call, download the clip and open it in a tool like Audacity (bat clips keep their full sample rate).
+See the [Detection Pipeline](detection-pipeline.md) for how audio flows through voice detection.
 
 ### Where did the Sensitivity and Overlap settings go?
 
@@ -164,18 +125,12 @@ You can install a model manually. The exact names matter: the folder must be `pe
 
 In rough order of impact:
 
-1. **Set your location** so the range filter restricts detections to locally plausible species.
-2. **Enable the false-positive filter** (the "balanced" level is a good default). It requires a species to be detected several times within a short window before it is confirmed.
-3. **Add persistent junk species to the exclude list** (Settings > BirdNET > Species). You can also bulk-delete existing junk detections from the Search page filtered by species.
-4. **Don't use aggressive EQ.** The models were trained on unfiltered audio, so high-pass and band-reject filters distort the spectral signature and usually do more harm than good. The only safe uses are a narrow 50/60 Hz mains-hum notch or a gentle high-pass below ~200 Hz.
+1. **Enable the false-positive filter** (the "balanced" level is a good default). It requires a voice event to be detected several times within a short window before it is confirmed.
+2. **Don't use aggressive EQ.** The VAD model was trained on unfiltered audio, so high-pass and band-reject filters distort the spectral signature and usually do more harm than good. The only safe uses are a narrow 50/60 Hz mains-hum notch or a gentle high-pass below ~200 Hz.
 
-### The privacy filter isn't catching human speech
+### Voice is not being detected even though someone is clearly speaking
 
-The privacy filter is limited by the model. The BirdNET model itself has poor human-speech recognition, so it can only do so much; this is a model limitation, not a VoiceWatch bug. (Perch has human-speech classes, but the privacy filter does not map to them yet.)
-
-### A bird I can clearly hear isn't being detected
-
-If it is a high-pitched bird (tits, robins, ~5-8 kHz) on a camera or low-bitrate stream, the audio codec may be cutting off the high frequencies. Watch the live spectrogram while the bird sings: if the top is blank, the stream isn't carrying those frequencies. For weak or near-zero detections on a local mic where confidence is uniformly low, the microphone or sound card is the most likely cause; check it before assuming a software problem.
+For weak or near-zero detections on a local mic where confidence is uniformly low, the microphone or sound card is the most likely cause — check the microphone placement and gain before assuming a software problem. On a camera or low-bitrate RTSP stream, the audio codec may be cutting off frequencies needed by the VAD. Watch the live spectrogram: if the speech range (roughly 80 Hz–8 kHz) is blank or very faint, the stream is not carrying those frequencies cleanly.
 
 ## Performance and hardware
 
@@ -186,16 +141,6 @@ A fix changed `birdnet.threads: 0` to mean "use all CPU cores" (it was previousl
 ### Is a Raspberry Pi Zero 2 W enough?
 
 It is marginal and RAM-limited; it cannot run the Perch or bat models, and is not recommended for new deployments. It works well as a dedicated RTSP mic feeding a Pi 4/5 that does the inference. If you do run it standalone, use Pi OS Lite, avoid RTSP/live streaming, and enable spectrogram pre-rendering. For sizing, run `birdnet-go benchmark` (rough BirdNET 2.4 throughput: Pi 4B ~6 inferences/s, Pi 5 ~11/s). See [Recommended Hardware](hardware.md).
-
-## Migrating from BirdNET-Pi
-
-### Can I import my BirdNET-Pi detection history?
-
-There is no official importer yet. The old `BirdNET-Pi2Go` tool is abandoned and does **not** work with the current database schema, so don't rely on it. A community member's Python merge script has been used to merge BirdNET-Pi data into a VoiceWatch database (see the migration discussions), but it is community-maintained and untested at scale. The simplest way to compare the two is to run both in parallel for a while, feeding them the same audio.
-
-### Tips for getting good accuracy after coming from BirdNET-Pi
-
-The maintainer's recommended starting point: enable the false-positive filter at the **"balanced"** level, run Google **Perch alongside BirdNET** on the same source, keep the **dynamic threshold** enabled (you can raise its minimum to about `0.3`), set your **location**, and **avoid audio EQ**.
 
 ## Database
 
@@ -244,13 +189,9 @@ Put a reverse proxy in front (it can serve on port 80/443 and proxy to 8080). in
 
 MQTT discovery messages are retained by the broker, so after updating you need to republish them: **Settings > Integrations > MQTT > Send Discovery** (or restart VoiceWatch) once your streams are registered. MQTT TLS certificates (CA/client cert/key) are uploaded through that same MQTT settings page.
 
-### BirdWeather test fails with "FFmpeg not available"
-
-BirdWeather uploads need FFmpeg. The official Docker image includes it, so this error means you are on a custom image or a native install without FFmpeg, install it, use the official image, or enable the native FLAC encoder.
-
 ### Push notifications never arrive even though the test works
 
-Update to the latest nightly (an old timeout bug made every push time out instantly). Also note VoiceWatch's two-layer model: the **provider** (URL/template) lives in config, and an **alert rule** decides when to send. Built-in rules only ring the in-app bell by default, so open the rule and add a **Push** action. Use the "Bird detected" event for every detection, or "New species detected" for first-time only. For Discord, send a proper JSON embed template, not plain text lines.
+Update to the latest nightly (an old timeout bug made every push time out instantly). Also note VoiceWatch's two-layer model: the **provider** (URL/template) lives in config, and an **alert rule** decides when to send. Built-in rules only ring the in-app bell by default, so open the rule and add a **Push** action. Use the "Voice detected" event for every detection. For Discord, send a proper JSON embed template, not plain text lines.
 
 ### Can I embed the VoiceWatch UI in a Home Assistant card?
 
@@ -266,7 +207,7 @@ This was a server compression bug, update to the latest nightly. It is not a Clo
 
 Update to the latest nightly (there were path-validation and Windows-specific spectrogram fixes). Make sure clip recording is enabled (**Settings > Audio > Recording**) and the format is WAV or FLAC. If old clips are 404ing, they may be in a `data/2026/` folder instead of `data/clips/2026/`, move them under `clips/`.
 
-### Dashboard search only finds scientific names
+### Dashboard search returns unexpected results
 
 Update to the latest nightly and make sure you've upgraded to the v2 database schema (**System > Database**, the upgrade option only shows if you're still on the legacy schema).
 
@@ -274,9 +215,9 @@ Update to the latest nightly and make sure you've upgraded to the v2 database sc
 
 Update to the latest nightly. If it still loops, your `config.yaml` is likely corrupted, the UI falls back to the wizard when it can't read settings. Delete the corrupted `config.yaml` and re-run setup.
 
-### A species disappeared from my dashboard
+### Detections disappeared from my dashboard
 
-The main dashboard shows a limited number of species (30 by default) and is filtered to the current day. Increase the limit in the dashboard settings, or look under **Analytics > Species** with the period set to "All".
+The main dashboard shows a limited number of recent detections and is filtered to the current day. Increase the limit in the dashboard settings, or use the Search page with the period set to "All".
 
 ## Diagnostics and getting help
 
@@ -286,7 +227,7 @@ Generate a support dump from **Settings > Support** (it bundles your config and 
 
 ### Can VoiceWatch batch-analyze my existing audio files?
 
-No, it is built for real-time stream and sound-card analysis. For offline file analysis use the companion tool **[birda](https://github.com/tphakala/birda)** (or **birda-gui**), which uses the same models.
+No, it is built for real-time stream and sound-card analysis. VoiceWatch processes audio in real time only; offline file analysis is not currently supported.
 
 ### How do I back up my data?
 

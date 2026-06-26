@@ -37,7 +37,7 @@ Telemetry in VoiceWatch refers to the automatic collection and transmission of t
 ### 🛡️ Data Protection
 
 - **No personal data** is collected or transmitted
-- **No audio recordings** or bird detection data is sent
+- **No audio recordings** or voice detection data is sent
 - **RTSP URLs are anonymized** to protect private network information
 - **Usernames and passwords** are completely removed from error reports
 - All data is **filtered before transmission** to ensure privacy
@@ -66,15 +66,15 @@ The system only collects essential technical information needed for debugging:
 
 ### What is NOT Collected ❌
 
-**Note**: The following applies specifically to telemetry. Other optional integrations (BirdWeather, MQTT, backups) may transmit different data when explicitly configured. See [Privacy Statement](../../PRIVACY.md) for complete details.
+**Note**: The following applies specifically to telemetry. Other optional integrations (MQTT, backups) may transmit different data when explicitly configured. See [Privacy Statement](../../PRIVACY.md) for complete details.
 
-- **Personal audio recordings** (except 3-second clips for BirdWeather when configured)
-- **Continuous bird detection results** (except when shared via configured integrations)
+- **Personal audio recordings** (except clips shared via configured integrations)
+- **Continuous voice detection results** (except when shared via configured integrations)
 - **Actual RTSP URLs, IP addresses, or hostnames** (anonymized in telemetry)
 - **Usernames, passwords, or authentication credentials**
 - **Personal information or user data**
 - **File paths or directory structures**
-- **Precise location data** (coordinates used only for weather/BirdWeather when configured)
+- **Precise location data** (coordinates used only for weather integration when configured)
 - **Any sensitive application data**
 
 ### System Identification 🔑
@@ -164,9 +164,8 @@ The same sensitive data always produces the same anonymized identifier, allowing
 - **[Privacy Statement](../../PRIVACY.md)** - **⭐ COMPREHENSIVE** privacy information covering all data collection and external integrations
 - **[Privacy & Data Collection](telemetry-privacy.md)** - Detailed privacy information and data handling (telemetry-specific)
 - **[Setup & Configuration](telemetry-setup.md)** - Step-by-step configuration guide
-- **[Troubleshooting](telemetry-troubleshooting.md)** - Common issues and solutions
 
-**Important**: The main [Privacy Statement](../../PRIVACY.md) contains complete information about all external services including BirdWeather, MQTT, backup services, weather APIs, and image services in addition to telemetry.
+**Important**: The main [Privacy Statement](../../PRIVACY.md) contains complete information about all external services including MQTT, backup services, and weather APIs in addition to telemetry.
 
 ## Frequently Asked Questions
 
@@ -188,7 +187,7 @@ The same sensitive data always produces the same anonymized identifier, allowing
 
 ### Q: What about other external services?
 
-**A:** VoiceWatch may connect to other external services when explicitly configured (BirdWeather, MQTT brokers, backup services, weather APIs). All require user configuration and are disabled by default. See [Privacy Statement](../../PRIVACY.md) for details.
+**A:** VoiceWatch may connect to other external services when explicitly configured (MQTT brokers, backup services, weather APIs). All require user configuration and are disabled by default. See [Privacy Statement](../../PRIVACY.md) for details.
 
 ### Q: Does this affect performance?
 
@@ -205,11 +204,9 @@ The same sensitive data always produces the same anonymized identifier, allowing
 ### Default External Connections (No Personal Data)
 
 - **Weather Services**: YR.no for weather data (read-only)
-- **Image Services**: Wikimedia Commons & AviCommons for bird photos (read-only)
 
 ### Optional External Integrations (Require User Configuration)
 
-- **BirdWeather**: Citizen science platform (audio clips, species data)
 - **MQTT Brokers**: Real-time detection publishing
 - **Backup Services**: External storage (FTP, SFTP, Google Drive, rsync)
 - **OpenWeather API**: Enhanced weather data (requires API key)

@@ -6,16 +6,16 @@ This document outlines the recommended hardware configurations for running Voice
 
 ### Recommended Systems
 
-- **Primary Recommendation:** Raspberry Pi 5 (2GB RAM model is sufficient, 4GB recommended for multi-model setups)
-  - **Rationale:** The Pi 5 is highly recommended for a snappy web interface and good inference performance, especially when running multiple models simultaneously (e.g., BirdNET v2.4, Google Perch v2, and BattyBirdNET classifiers at the same time).
-  - **Processing Speed:** The Pi 5 processes audio chunks significantly faster than the Pi 4, allowing for more reliable Deep Detection when using high overlap settings and smooth multi-model operation.
+- **Primary Recommendation:** Raspberry Pi 5 (2GB RAM model is sufficient, 4GB recommended)
+  - **Rationale:** The Pi 5 is highly recommended for a snappy web interface and good voice-detection inference performance.
+  - **Processing Speed:** The Pi 5 processes audio chunks significantly faster than the Pi 4, allowing for more reliable detection at high overlap settings.
 
 - **Alternative Systems:**
   - **Raspberry Pi 4B (4GB)** - Good performance, especially when overclocked to 1.8GHz
   - **Intel NUC** - Excellent performance, higher power consumption
 
 - **Minimum Viable System:** Raspberry Pi 4B (2GB) or equivalent 64-bit ARM/x86 board
-  - **Note:** While the Pi 4B can handle core BirdNET detection well, expect slower web interface responsiveness compared to the Pi 5, and possible performance issues with Deep Detection and multiple simultaneous RTSP streams.
+  - **Note:** While the Pi 4B can handle core voice detection well, expect slower web interface responsiveness compared to the Pi 5, and possible performance issues with Deep Detection and multiple simultaneous RTSP streams.
   - **Important:** Raspberry Pi 3 and Pi Zero are no longer supported. The codebase has outgrown these platforms.
 
 ### RAM Requirements
@@ -27,11 +27,8 @@ This document outlines the recommended hardware configurations for running Voice
 
 ### Model-Specific Hardware Requirements
 
-Different AI classifiers have different resource demands:
-
-- **BirdNET v2.4** (default): Runs well on Raspberry Pi 4B (2GB) and above. The lightest classifier option.
-- **Google Perch v2**: Requires at least a Raspberry Pi 4 class system with 2GB of RAM. The model is significantly larger than BirdNET v2.4 and needs more memory and CPU for inference.
-- **BattyBirdNET bat classifiers**: Require at least a Raspberry Pi 4 class system with 2GB of RAM. Additionally, bat detection has strict audio input requirements (see [Bat Detection Audio Requirements](#bat-detection-audio-requirements) below).
+- **Silero VAD** (voice activity detection, default): Runs well on Raspberry Pi 4B (2GB) and above. Lightweight inference.
+- **whisper.cpp transcription** (optional): Requires at least a Raspberry Pi 4 class system with 2GB of RAM. Larger models need more memory and CPU.
 
 ### CPU Considerations
 
@@ -59,7 +56,7 @@ Different AI classifiers have different resource demands:
 
 ### Sound Cards
 
-- **For bird detection:** USB audio interfaces with the following characteristics:
+- **For voice detection:** USB audio interfaces with the following characteristics:
   - 48kHz sample rate support
   - Low self-noise
   - Proper line/mic input with appropriate gain control
@@ -68,12 +65,9 @@ Different AI classifiers have different resource demands:
     - Creative Sound Blaster Play! 3
     - U-Green USB sound card (multiple models)
 
-- **For bat detection (or combined bird + bat):** A higher-end USB audio interface capable of high sample rates is required. See [Bat Detection Audio Requirements](#bat-detection-audio-requirements) below.
-  - **Recommended:** Focusrite Scarlett series (Solo, 2i2, etc.) - supports up to 192kHz sample rate, low noise, works well for both bird and bat detection when paired with an appropriate microphone
-
 ### Microphones
 
-**Important Note:** BirdNET AI processes all audio as mono only. Always use mono microphones for optimal performance. Stereo microphones can introduce phase errors which may reduce detection accuracy.
+**Important Note:** VoiceWatch processes all audio as mono. Always use mono microphones for optimal performance. Stereo microphones can introduce phase errors which may reduce detection accuracy.
 
 #### DIY Microphone (Best Performance)
 
@@ -96,30 +90,7 @@ Different AI classifiers have different resource demands:
 - **Lavalier (LAV) Microphones:**
   - Recommended models:
     - **Boya USB BY-LM40** (frequently recommended in the community), in reality not very sensitive meaning audio captured is quite low volume
-    - **Clippy Ultra XLR Microphone** - High performance audio and ultrasonic microphone with full ultrasonic response (20Hz - 110kHz), excellent sensitivity and low self-noise. Requires XLR interface with phantom power. [Available here](https://micbooster.com/product/clippy-ultra-xlr/?v=75778bf8fde7)
     - Other omnidirectional lavalier microphones
-
-### Bat Detection Audio Requirements
-
-Bat echolocation calls are ultrasonic, typically ranging from 20kHz to over 120kHz. Standard audio hardware designed for human hearing (capped at 48kHz sample rate) cannot capture these frequencies. To detect bats with BattyBirdNET classifiers, you need a high sample rate audio source:
-
-- **Minimum:** 96kHz sample rate - captures most common bat species but may miss the highest-frequency calls
-- **Good:** 192kHz sample rate - covers the vast majority of bat species and is the sweet spot for most setups
-- **Perfect:** 256kHz or higher sample rate - captures the full range of bat echolocation frequencies with room to spare
-
-#### Recommended Bat Detection Setups
-
-- **Best for bat-only detection:** AudioMoth USB Microphone
-  - Purpose-built for wildlife monitoring with an ultrasonic-capable microphone
-  - Supports up to 384kHz sample rate, capturing the entire bat echolocation spectrum
-  - Excellent sensitivity in the ultrasonic range
-  - Simply connects via USB as a standard audio device
-
-- **Best for combined bird and bat detection:** Focusrite Scarlett + Clippy Ultra XLR Microphone
-  - Focusrite Scarlett series audio interfaces provide clean, low-noise preamplification at up to 192kHz sample rate
-  - The Clippy Ultra XLR has full ultrasonic response (20Hz - 110kHz) with good sensitivity across both audible and ultrasonic frequencies
-  - This combination works well for both bird song detection (audible range) and bat echolocation (ultrasonic range) from a single audio source
-  - Allows running BirdNET and BattyBirdNET classifiers simultaneously on the same input
 
 ## Storage
 
@@ -161,7 +132,6 @@ Bat echolocation calls are ultrasonic, typically ranging from 20kHz to over 120k
   - Basic web interface usage: ~1Mbps
   - Live audio streaming via web interface: ~0.5Mbps per stream
   - RTSP ingestion: Dependent on stream quality (typically 0.5-4Mbps per stream)
-  - BirdWeather uploads: Minimal (~10KB per detection)
 
 ## Power Supply Considerations
 
@@ -217,14 +187,13 @@ Bat echolocation calls are ultrasonic, typically ranging from 20kHz to over 120k
 
 - **Community Recommendations:**
   - Join the [VoiceWatch GitHub Discussions](https://github.com/tphakala/voicewatch/discussions) for user experiences with different hardware setups
-  - The [BirdWeather Community](https://www.birdweather.com/) offers additional insights on microphone selection and placement
 
 - **Testing Your Setup:**
   - Use the built-in `benchmark` command to evaluate system performance:
     ```bash
     birdnet benchmark
     ```
-  - Test microphone sensitivity with known bird calls at measured distances
+  - Test microphone sensitivity with voice at measured distances
   - Compare detection rates across different hardware configurations
 
 ---

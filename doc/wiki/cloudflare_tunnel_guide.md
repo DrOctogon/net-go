@@ -163,7 +163,7 @@ Without authentication, your VoiceWatch instance is completely open to anyone wh
   - Changing configuration settings (audio sources, detection parameters, etc.)
   - Deleting detection records from the database
   - Viewing your configured location coordinates (privacy concern)
-  - Accessing all audio recordings of detected birds
+  - Accessing all audio recordings of detected voices
 - **Potential for Abuse**:
   - Malicious users could deliberately misconfigure your system
   - Someone could wipe your detection history and audio clips

@@ -3,7 +3,7 @@
 VoiceWatch can read from and write to removable or network-attached storage
 mounted on the host. The `/external` directory inside the container maps to
 `/mnt/birdnet-go/external` on the host. Planned uses include importing
-recordings from BirdNET-Pi and other bird detectors, and writing backups.
+audio recordings from external sources and writing backups.
 
 ## How it works
 
