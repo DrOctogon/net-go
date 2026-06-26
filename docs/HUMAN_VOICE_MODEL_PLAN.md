@@ -28,7 +28,7 @@ Plan said "one rewrite unit" but that detonates the whole pipeline at once. **Pe
 `go build -tags "notflite skipfrontend" ./...` → currently exit 0.
 
 **Known deferred debt:**
-- `conf` still has a dead `BirdweatherSettings` struct + `Realtime.Birdweather` field (retained to keep 2a bounded; the hot-reload coverage test maps it with no action). Remove in the config-cleanup pass.
+- ~~`conf` dead `BirdweatherSettings` struct + `Realtime.Birdweather` field~~ — DONE (commit `20d07123`, 2026-06-26): removed struct, field, validators, `birdweatherIDPattern`, viper defaults, config.yaml blocks, dead notification message constants, logger default, and the api/v2 test refs. `RetrySettings` kept (MQTT consumer). Still-deferred bird conf (EBird/range/perch/bat/bsg structs) have live readers — separate pass.
 - Phase 1 `humanvoice.Predict` runs the GENERIC `inference.Classifier` — it does NOT yet implement Silero VAD's real stateful streaming I/O (state tensors + `sr` input + 512-sample frames). Real inference is unbuilt. See §3 / Phase 2c.
 
 ## REMAINING WORK (do mechanical parts on Sonnet, not Opus)
