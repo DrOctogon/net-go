@@ -1,12 +1,12 @@
-# BirdNET-Go Podman Configuration Files
+# VoiceWatch Podman Configuration Files
 
-This directory contains Podman-specific configuration files for running BirdNET-Go with the Podman container runtime.
+This directory contains Podman-specific configuration files for running VoiceWatch with the Podman container runtime.
 
 ## Compose Files
 
 ### Production Files
 
-- **`podman-compose.yml`** - Standard configuration for running BirdNET-Go with Podman
+- **`podman-compose.yml`** - Standard configuration for running VoiceWatch with Podman
   - Includes audio device mounting for real-time bird detection
   - Uses standard HTTP on port 8080
   - Suitable for most home/local deployments
@@ -41,7 +41,7 @@ Copy the appropriate example file to `.env` and customize for your setup.
 
 ## Installation
 
-Use the `podman-install.sh` script in the repository root to install BirdNET-Go with Podman:
+Use the `podman-install.sh` script in the repository root to install VoiceWatch with Podman:
 
 ```bash
 bash podman-install.sh
@@ -53,14 +53,14 @@ The script will:
 2. Install Podman if not present
 3. Detect and handle any existing Docker installations
 4. Set up Quadlet systemd integration
-5. Configure and start BirdNET-Go
+5. Configure and start VoiceWatch
 
 ## Compatibility
 
-BirdNET-Go container images are built following the OCI (Open Container Initiative) standard, making them compatible with both Docker and Podman runtimes. The same image works with both tools - the `podman-*` prefixed tags are provided for easier discovery by Podman users.
+VoiceWatch container images are built following the OCI (Open Container Initiative) standard, making them compatible with both Docker and Podman runtimes. The same image works with both tools - the `podman-*` prefixed tags are provided for easier discovery by Podman users.
 
 ### System Requirements
 
 - **Podman 5.4+** for full feature support (including Quadlet)
 - **Debian 13+**, **Ubuntu 25.04+**, or compatible distributions
-- Audio device access for real-time bird detection (optional for file processing)
+- Audio device access for real-time voice detection (optional for file processing)

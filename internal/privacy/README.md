@@ -1,6 +1,6 @@
 # Privacy Package
 
-The `internal/privacy` package provides privacy-focused utility functions for handling sensitive data in BirdNET-Go. This package consolidates privacy and data scrubbing functions to ensure sensitive information like credentials, IP addresses, and personal data are properly anonymized before being transmitted in telemetry or logs.
+The `internal/privacy` package provides privacy-focused utility functions for handling sensitive data in VoiceWatch. This package consolidates privacy and data scrubbing functions to ensure sensitive information like credentials, IP addresses, and personal data are properly anonymized before being transmitted in telemetry or logs.
 
 ## Overview
 

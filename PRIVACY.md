@@ -2,20 +2,20 @@
 
 ## ⚠️ Important Notice: Volunteer-Maintained Project
 
-BirdNET-Go is a hobby project maintained by volunteers in their spare time. While we are committed to protecting your privacy and following best practices, our capacity to respond to requests and provide support is limited by volunteer availability. This privacy statement reflects our sincere efforts to be transparent about data practices, but please understand that responses may be delayed during busy periods or personal circumstances.
+VoiceWatch is a hobby project maintained by volunteers in their spare time. While we are committed to protecting your privacy and following best practices, our capacity to respond to requests and provide support is limited by volunteer availability. This privacy statement reflects our sincere efforts to be transparent about data practices, but please understand that responses may be delayed during busy periods or personal circumstances.
 
-BirdNET-Go is committed to protecting your privacy while providing reliable bird sound identification software. This privacy statement explains what data we collect, how we protect it, and your rights regarding data collection.
+VoiceWatch is committed to protecting your privacy while providing reliable human-voice detection software. This privacy statement explains what data we collect, how we protect it, and your rights regarding data collection.
 
 ## 🔒 Important: Completely Opt-In Data Collection
 
-**BirdNET-Go collects ZERO data by default.** All telemetry and support data collection is:
+**VoiceWatch collects ZERO data by default.** All telemetry and support data collection is:
 
 - ✅ **Completely Optional** - Never enabled without your explicit consent
 - ✅ **Opt-In Only** - You must actively choose to enable telemetry
 - ✅ **No Hidden Collection** - Nothing is transmitted without your knowledge
 - ✅ **User Controlled** - Enable or disable anytime with immediate effect
 
-**By default, BirdNET-Go operates locally with minimal external data transmission.** The only default external connections are:
+**By default, VoiceWatch operates locally with minimal external data transmission.** The only default external connections are:
 
 - **Weather data**: Read-only requests to YR.no (Norway's meteorological service) for weather information
 - **Bird images**: Read-only requests to Wikimedia Commons and AviCommons for bird photos
@@ -24,7 +24,7 @@ BirdNET-Go is committed to protecting your privacy while providing reliable bird
 
 ## Privacy Principles
 
-BirdNET-Go follows **Privacy by Design** principles:
+VoiceWatch follows **Privacy by Design** principles:
 
 - **Data Minimization**: Only essential technical data is collected for debugging
 - **Explicit Consent**: All telemetry requires explicit opt-in activation
@@ -144,7 +144,7 @@ BirdNET-Go follows **Privacy by Design** principles:
 
 ## System Identification
 
-BirdNET-Go uses a **unique System ID** for correlating error reports:
+VoiceWatch uses a **unique System ID** for correlating error reports:
 
 - **Format**: Random 12-character identifier (e.g., "A1B2-C3D4-E5F6")
 - **Generation**: Created locally using cryptographically secure random numbers
@@ -282,7 +282,7 @@ All telemetry passes through multiple privacy protection layers:
 
 ### Enable Telemetry
 
-1. Open BirdNET-Go web interface
+1. Open VoiceWatch web interface
 2. Go to Settings → Support
 3. Toggle "Enable Telemetry" to ON
 4. Your System ID will be displayed for reference
@@ -303,7 +303,7 @@ All telemetry passes through multiple privacy protection layers:
 
 ### Project Nature
 
-BirdNET-Go is provided as free, open-source software maintained by volunteers. While we implement strong privacy protections by design, users should understand:
+VoiceWatch is provided as free, open-source software maintained by volunteers. While we implement strong privacy protections by design, users should understand:
 
 - **Volunteer Capacity**: Support and response times depend on volunteer availability
 - **Best Effort Basis**: All privacy commitments are made on a best-effort basis within volunteer constraints
@@ -333,7 +333,7 @@ For other privacy questions, please report them through GitHub Issues:
 
 **📋 How to Report Privacy Issues:**
 
-1. **Go to**: [BirdNET-Go Issues](https://github.com/tphakala/voicewatch/issues)
+1. **Go to**: [VoiceWatch Issues](https://github.com/tphakala/voicewatch/issues)
 2. **Click**: "New Issue"
 3. **Title Format**: Use one of these prefixes:
    - `[PRIVACY]` - General privacy questions or concerns
@@ -370,7 +370,7 @@ For other privacy questions, please report them through GitHub Issues:
 For sensitive security or privacy issues that shouldn't be public, contact the project maintainers through GitHub Issues marked as confidential or use GitHub's private vulnerability reporting if available.
 
 **📝 Note for Users:**
-BirdNET-Go is a hobby project maintained by volunteers. We are genuinely committed to privacy protection, but our response capacity is limited by volunteer availability. Most privacy concerns can be immediately addressed by disabling telemetry in Settings → Support. For complex requests, please be patient as responses depend on volunteer schedules and may take longer than commercial services.
+VoiceWatch is a hobby project maintained by volunteers. We are genuinely committed to privacy protection, but our response capacity is limited by volunteer availability. Most privacy concerns can be immediately addressed by disabling telemetry in Settings → Support. For complex requests, please be patient as responses depend on volunteer schedules and may take longer than commercial services.
 
 ### Data Subject Rights (GDPR)
 
@@ -395,4 +395,4 @@ This privacy statement may be updated to reflect changes in our data practices o
 **Last Updated**: June 2025  
 **Effective Date**: June 2025
 
-_This privacy statement covers BirdNET-Go software as maintained by volunteers. For questions about the privacy practices of third-party services (Sentry, BirdWeather, etc.), please consult their respective privacy policies. BirdNET-Go is provided "AS IS" without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose and non-infringement. In no event shall the authors or copyright holders be liable for any claim, damages or other liability arising from the use of this software._
+_This privacy statement covers VoiceWatch software as maintained by volunteers. For questions about the privacy practices of third-party services (Sentry, BirdWeather, etc.), please consult their respective privacy policies. VoiceWatch is provided "AS IS" without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose and non-infringement. In no event shall the authors or copyright holders be liable for any claim, damages or other liability arising from the use of this software._

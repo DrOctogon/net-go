@@ -1,8 +1,8 @@
-# BirdNET-Go Development Guidelines
+# VoiceWatch Development Guidelines
 
 ## Project Overview
 
-BirdNET-Go: Go implementation of BirdNET for real-time bird sound identification aimed for non serious birders and home users. Open source project for fun.
+VoiceWatch: Go-based real-time human-voice detector for live audio. Self-hosted, privacy-first, runs on a Raspberry Pi. Open source project for fun. (Forked from BirdNET-Go; the audio pipeline and platform infrastructure are retained from that upstream project.)
 
 ## Quick Navigation
 
@@ -101,7 +101,7 @@ ast-grep --pattern "export let $PROP" --rewrite "let { $PROP } = \$props()" --la
 
 ## QA Testing Framework
 
-The BirdNET-Go QA system lives in `~/src/birdnet-go-qa/`. Always use it instead of ad-hoc test scripts.
+The VoiceWatch QA system lives in `~/src/birdnet-go-qa/`. Always use it instead of ad-hoc test scripts.
 
 ### Key Paths
 

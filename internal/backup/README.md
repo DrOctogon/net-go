@@ -4,7 +4,7 @@
 
 ## Overview
 
-The `internal/backup` package provides a comprehensive framework for managing backups within the BirdNET-Go application. It orchestrates the entire backup lifecycle, including:
+The `internal/backup` package provides a comprehensive framework for managing backups within the VoiceWatch application. It orchestrates the entire backup lifecycle, including:
 
 - **Source Management:** Defining and handling various data sources to be backed up (e.g., SQLite databases).
 - **Target Management:** Defining and interacting with various storage destinations for backups (e.g., local filesystem, S3).

@@ -1,23 +1,23 @@
 # Error Tracking & Telemetry
 
-BirdNET-Go includes an optional, privacy-first error tracking system designed to help developers identify and fix issues that affect system reliability and performance. This system is **completely opt-in** and follows privacy-by-design principles.
+VoiceWatch includes an optional, privacy-first error tracking system designed to help developers identify and fix issues that affect system reliability and performance. This system is **completely opt-in** and follows privacy-by-design principles.
 
 📋 **For comprehensive privacy information, please see our [Privacy Statement](../../PRIVACY.md)**
 
 ## Quick Start
 
-1. Navigate to **Settings → Support** in the BirdNET-Go web interface
+1. Navigate to **Settings → Support** in the VoiceWatch web interface
 2. Read the privacy notice and data collection information
-3. Check **"Enable Error Tracking (Opt-in)"** if you want to help improve BirdNET-Go
+3. Check **"Enable Error Tracking (Opt-in)"** if you want to help improve VoiceWatch
 4. Save your settings
 
-That's it! No additional configuration is required. Error reports will be automatically sent to the BirdNET-Go development team for analysis.
+That's it! No additional configuration is required. Error reports will be automatically sent to the VoiceWatch development team for analysis.
 
 ## What is Telemetry?
 
-**Note**: BirdNET-Go has multiple external integrations beyond telemetry. For complete information about all data collection and external services, see our [Privacy Statement](../../PRIVACY.md).
+**Note**: VoiceWatch has multiple external integrations beyond telemetry. For complete information about all data collection and external services, see our [Privacy Statement](../../PRIVACY.md).
 
-Telemetry in BirdNET-Go refers to the automatic collection and transmission of technical error information to help developers:
+Telemetry in VoiceWatch refers to the automatic collection and transmission of technical error information to help developers:
 
 - **Identify crashes and system errors** that affect application stability
 - **Debug issues** that occur across different configurations and environments
@@ -79,7 +79,7 @@ The system only collects essential technical information needed for debugging:
 
 ### System Identification 🔑
 
-BirdNET-Go uses a **unique system ID** for telemetry purposes:
+VoiceWatch uses a **unique system ID** for telemetry purposes:
 
 **What**: A randomly generated identifier (format: XXXX-XXXX-XXXX)
 **Why**: Allows tracking errors from the same system without revealing identity
@@ -118,7 +118,7 @@ The anonymized identifier:
 
 ### Enhanced Error System
 
-BirdNET-Go uses an advanced error handling system that automatically integrates with telemetry:
+VoiceWatch uses an advanced error handling system that automatically integrates with telemetry:
 
 1. **Component Detection**: Automatically identifies which part of the system generated the error
 2. **Error Categorization**: Classifies errors by type (network, validation, database, etc.) for better grouping
@@ -154,7 +154,7 @@ The same sensitive data always produces the same anonymized identifier, allowing
 
 ### For Developers
 
-- **Real-world insights**: Understanding of how BirdNET-Go performs in different environments
+- **Real-world insights**: Understanding of how VoiceWatch performs in different environments
 - **Prioritized development**: Focus on issues that affect the most users
 - **Faster debugging**: Anonymous error patterns help identify root causes
 - **Quality assurance**: Continuous monitoring of system reliability
@@ -188,7 +188,7 @@ The same sensitive data always produces the same anonymized identifier, allowing
 
 ### Q: What about other external services?
 
-**A:** BirdNET-Go may connect to other external services when explicitly configured (BirdWeather, MQTT brokers, backup services, weather APIs). All require user configuration and are disabled by default. See [Privacy Statement](../../PRIVACY.md) for details.
+**A:** VoiceWatch may connect to other external services when explicitly configured (BirdWeather, MQTT brokers, backup services, weather APIs). All require user configuration and are disabled by default. See [Privacy Statement](../../PRIVACY.md) for details.
 
 ### Q: Does this affect performance?
 
@@ -200,7 +200,7 @@ The same sensitive data always produces the same anonymized identifier, allowing
 
 ## External Integrations Beyond Telemetry
 
-**Important**: This document focuses on telemetry (error tracking). BirdNET-Go has several other external integrations that may transmit data:
+**Important**: This document focuses on telemetry (error tracking). VoiceWatch has several other external integrations that may transmit data:
 
 ### Default External Connections (No Personal Data)
 
@@ -218,7 +218,7 @@ The same sensitive data always produces the same anonymized identifier, allowing
 
 ## Volunteer Project Notice
 
-BirdNET-Go is provided as free, open-source software maintained by volunteers. While we implement strong privacy protections by design:
+VoiceWatch is provided as free, open-source software maintained by volunteers. While we implement strong privacy protections by design:
 
 - **Support capacity** depends on volunteer availability
 - **Privacy commitments** are made on a best-effort basis
@@ -231,4 +231,4 @@ For immediate privacy protection, simply disable telemetry in Settings → Suppo
 
 _Last updated: June 2025_
 
-_This document covers telemetry specifically. For comprehensive privacy information including all external integrations, see [Privacy Statement](../../PRIVACY.md). BirdNET-Go is provided "AS IS" without warranty of any kind._
+_This document covers telemetry specifically. For comprehensive privacy information including all external integrations, see [Privacy Statement](../../PRIVACY.md). VoiceWatch is provided "AS IS" without warranty of any kind._

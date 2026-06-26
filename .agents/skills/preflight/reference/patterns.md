@@ -1863,7 +1863,7 @@ wizard.steps.locationLanguage.geolocationFailed=Geolocation failed
 
 **Not exceptions (MUST flag):**
 - Multi-word English phrases, even if they contain a technical term (`Capture Length`, `Audio Settings`)
-- Brand names used as part of a sentence (`Powered by BirdNET-Go`)
+- Brand names used as part of a sentence (`Powered by VoiceWatch`)
 - Strings that happen to be short but are real English words (`Save`, `Delete`, `Loading...`, `Error`, `Retry`)
 - Mixed strings with placeholders (`{count} detections found`)
 
@@ -2394,7 +2394,7 @@ For each hunk in the diff, ask in order:
 
 ## Surface 1: Config & Settings Schema
 
-BirdNET-Go loads `config.yaml` into a settings struct. The struct tag is the wire contract with every existing config file on disk. Renaming or removing a tag orphans that user's value: it loads as the zero value or default, silently changing behavior.
+VoiceWatch loads `config.yaml` into a settings struct. The struct tag is the wire contract with every existing config file on disk. Renaming or removing a tag orphans that user's value: it loads as the zero value or default, silently changing behavior.
 
 ```go
 // BAD: renaming the yaml tag orphans every existing config.yaml that used "locale"
@@ -2561,7 +2561,7 @@ git diff > .preflight-regression-review.diff
 
 gemini -m gemini-3-pro-preview -p "REVIEW ONLY - Do NOT modify any files.
 
-Project: BirdNET-Go (Go backend + Svelte frontend). I am cross-validating a pre-push review focused ONLY on REGRESSIONS, BACKWARD-COMPATIBILITY breaks, and user-facing BEHAVIORAL changes that would hurt EXISTING users when they upgrade. Ignore generic code quality, style, and unrelated bugs; other reviewers cover those.
+Project: VoiceWatch (Go backend + Svelte frontend). I am cross-validating a pre-push review focused ONLY on REGRESSIONS, BACKWARD-COMPATIBILITY breaks, and user-facing BEHAVIORAL changes that would hurt EXISTING users when they upgrade. Ignore generic code quality, style, and unrelated bugs; other reviewers cover those.
 
 The change set is in .preflight-regression-review.diff (read it to see removed/old lines). Current file state is in these files:
 <absolute paths of changed files>

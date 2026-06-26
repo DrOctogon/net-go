@@ -1,4 +1,4 @@
-# BirdNET-Go Container Environment Variables
+# VoiceWatch Container Environment Variables
 
 This document describes environment variables that control container startup behavior and configuration.
 
@@ -143,7 +143,7 @@ environment:
 
 - Allows using custom or alternative BirdNET models
 - Path must be accessible inside the container
-- Model file must be compatible with BirdNET-Go
+- Model file must be compatible with VoiceWatch
 - Useful for testing new models or regional variants
 
 ---
@@ -196,7 +196,7 @@ Understanding the container startup sequence helps with troubleshooting:
    - Delays exit on failure (BIRDNET_STARTUP_FAIL_DELAY)
 
 3. **birdnet-go**
-   - The actual BirdNET-Go application
+   - The actual VoiceWatch application
    - Inherits environment from previous scripts
    - Configuration from `/config/config.yaml`
 

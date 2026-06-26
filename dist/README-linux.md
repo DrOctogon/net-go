@@ -1,4 +1,4 @@
-# BirdNET-Go - Linux Installation
+# VoiceWatch - Linux Installation
 
 ## Tarball Contents
 
@@ -22,7 +22,7 @@ sudo cp birdnet-go /usr/local/bin/
 # Verify the library is found
 ldconfig -p | grep onnxruntime
 
-# Run BirdNET-Go
+# Run VoiceWatch
 birdnet-go
 ```
 
@@ -67,7 +67,7 @@ Or run directly from the extracted directory:
 
 ### 3. First run
 
-BirdNET-Go creates its configuration and data directory in the current working
+VoiceWatch creates its configuration and data directory in the current working
 directory. On first launch it will:
 
 - Create a default `config.yaml`
@@ -96,7 +96,7 @@ sudo cp birdnet-go /usr/local/bin/
 
 sudo tee /etc/systemd/system/birdnet-go.service > /dev/null <<'EOF'
 [Unit]
-Description=BirdNET-Go
+Description=VoiceWatch
 After=network-online.target sound.target
 Wants=network-online.target
 

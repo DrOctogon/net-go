@@ -52,7 +52,7 @@ Thresholds are **not** configured here. Define alert rules in the alerting engin
 
 ### Automatic Path Detection
 
-When disk monitoring is enabled, the monitor auto-detects paths critical to BirdNET-Go:
+When disk monitoring is enabled, the monitor auto-detects paths critical to VoiceWatch:
 
 - **Database path** (if SQLite is enabled)
 - **Audio clips path** (if export is enabled)

@@ -1,6 +1,6 @@
 # i18n Implementation Guide
 
-> A comprehensive, performance-optimized internationalization system for BirdNET-Go frontend with
+> A comprehensive, performance-optimized internationalization system for VoiceWatch frontend with
 > zero external dependencies.
 
 This directory contains a custom-built i18n implementation designed for Svelte 5, featuring

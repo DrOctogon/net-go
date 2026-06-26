@@ -1,6 +1,6 @@
 # Metrics Package
 
-This package provides Prometheus metrics for the BirdNET-Go application, including a `Recorder` interface for improved testability.
+This package provides Prometheus metrics for the VoiceWatch application, including a `Recorder` interface for improved testability.
 
 ## Recorder Interface
 

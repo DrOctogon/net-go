@@ -1,10 +1,10 @@
-# BirdNET-Go Debug Data Collection Guide
+# VoiceWatch Debug Data Collection Guide
 
-This guide explains how to collect and analyze debug data from BirdNET-Go for performance troubleshooting.
+This guide explains how to collect and analyze debug data from VoiceWatch for performance troubleshooting.
 
 ## Prerequisites
 
-1. BirdNET-Go running with `debug: true` in config.yaml
+1. VoiceWatch running with `debug: true` in config.yaml
 2. `go` tool installed for profile analysis (optional - scripts will offer automatic installation)
 3. `curl` command available
 4. Python 3.x (for advanced analysis, optional)
@@ -143,7 +143,7 @@ PROFILE_DURATION=60 ./scripts/collect-debug-data.sh
 
 ### Real-time Monitoring
 
-While BirdNET-Go is running:
+While VoiceWatch is running:
 
 ```bash
 # Watch memory usage in real-time
@@ -302,5 +302,5 @@ For help interpreting results, please include:
 
 - The analysis report (analysis-report.md)
 - System specifications
-- BirdNET-Go configuration
+- VoiceWatch configuration
 - Description of the performance issue

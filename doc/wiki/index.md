@@ -1,6 +1,6 @@
-# BirdNET-Go Documentation
+# VoiceWatch Documentation
 
-Welcome to the BirdNET-Go documentation. This index will help you navigate through all available resources for installing, configuring, and using BirdNET-Go.
+Welcome to the VoiceWatch documentation. This index will help you navigate through all available resources for installing, configuring, and using VoiceWatch.
 
 ## Getting Started
 
@@ -12,7 +12,7 @@ Welcome to the BirdNET-Go documentation. This index will help you navigate throu
 ## Installation Methods
 
 - [Docker Installation (Linux)](installation.md#recommended-method-installsh-linux) - Using the automated `install.sh` script
-- [Docker Compose Installation](docker_compose_guide.md) - Setting up BirdNET-Go with Docker Compose
+- [Docker Compose Installation](docker_compose_guide.md) - Setting up VoiceWatch with Docker Compose
 - [Manual Docker Installation](installation.md#manual-docker-installation-advanced-linux-only) - Advanced Docker setup
 - [Manual Binary Installation](installation.md#manual-binary-installation-all-platforms) - Windows, macOS, and Linux binary installation
 
@@ -25,7 +25,7 @@ Welcome to the BirdNET-Go documentation. This index will help you navigate throu
 - [BirdNET Detection Pipeline](BirdNET‐Go-Guide#birdnet-detection-pipeline) - Understanding how settings affect detections
 - [BirdNET Range Filter](BirdNET‐Go-Guide#birdnet-range-filter) - Location and time-based species filtering
 - [Web Dashboard](BirdNET‐Go-Guide#web-dashboard) - Using the visualization dashboard
-- [Remote Internet Access](cloudflare_tunnel_guide.md) - Exposing BirdNET-Go to the internet securely
+- [Remote Internet Access](cloudflare_tunnel_guide.md) - Exposing VoiceWatch to the internet securely
 - [Weather Integration](BirdNET‐Go-Guide#weather-integration) - Connecting to weather data providers
 - [Audio Processing](BirdNET‐Go-Guide#audio-processing) - Advanced audio processing capabilities
 - [Deep Detection](BirdNET‐Go-Guide#deep-detection) - Improving detection reliability
@@ -38,7 +38,7 @@ Welcome to the BirdNET-Go documentation. This index will help you navigate throu
 - [Discord Setup Guide](guide.md#discord-setup-guide) - Step-by-step Discord webhook configuration with rich embeds
 - [MQTT Integration](BirdNET‐Go-Guide#integration-options) - Connecting to IoT systems
 - [BirdWeather API](BirdNET‐Go-Guide#integration-options) - Sharing data with BirdWeather.com
-- [Authentication](cloudflare_tunnel_guide.md#enabling-authentication) - Securing your BirdNET-Go instance
+- [Authentication](cloudflare_tunnel_guide.md#enabling-authentication) - Securing your VoiceWatch instance
 - [Cloudflare Tunnel Setup](cloudflare_tunnel_guide.md) - Detailed guide for secure internet access
 
 ## Privacy & Telemetry

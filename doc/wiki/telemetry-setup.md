@@ -1,12 +1,12 @@
 # Telemetry Setup & Configuration
 
-This guide walks you through enabling and configuring BirdNET-Go's optional error tracking system.
+This guide walks you through enabling and configuring VoiceWatch's optional error tracking system.
 
 ## Quick Setup (Recommended)
 
 ### Step 1: Access Settings
 
-1. Open your BirdNET-Go web interface
+1. Open your VoiceWatch web interface
 2. Navigate to **Settings** in the sidebar
 3. Click on **Support** in the settings menu
 
@@ -58,11 +58,11 @@ When enabled, you'll see:
 
 ```
 ✅ Error Tracking Enabled
-BirdNET-Go will now automatically report errors to help developers
-identify and fix issues with BirdNET-Go.
+VoiceWatch will now automatically report errors to help developers
+identify and fix issues with VoiceWatch.
 
 No additional configuration required. Error reports are automatically
-sent to the BirdNET-Go development team for analysis.
+sent to the VoiceWatch development team for analysis.
 ```
 
 #### Data Collection Information
@@ -74,7 +74,7 @@ sent to the BirdNET-Go development team for analysis.
 
 ### Simple Configuration (Current)
 
-BirdNET-Go uses a simplified configuration approach:
+VoiceWatch uses a simplified configuration approach:
 
 ```yaml
 # In config.yaml
@@ -117,7 +117,7 @@ sentry:
 
 ### Docker Compose
 
-If running BirdNET-Go in Docker, telemetry settings are managed the same way:
+If running VoiceWatch in Docker, telemetry settings are managed the same way:
 
 1. Access the web interface through your mapped port
 2. Navigate to Settings → Support
@@ -149,7 +149,7 @@ For telemetry to work, ensure your system can make outbound HTTPS connections:
 
 ### Proxy Support
 
-BirdNET-Go telemetry works with standard HTTP proxies:
+VoiceWatch telemetry works with standard HTTP proxies:
 
 - **HTTP_PROXY**: Automatically detected and used
 - **HTTPS_PROXY**: Used for telemetry transmission
@@ -157,7 +157,7 @@ BirdNET-Go telemetry works with standard HTTP proxies:
 
 ### Offline Operation
 
-If your BirdNET-Go installation cannot reach the internet:
+If your VoiceWatch installation cannot reach the internet:
 
 - **Telemetry fails silently**: No impact on normal operation
 - **Local logging continues**: System logs are unaffected
@@ -181,7 +181,7 @@ If your BirdNET-Go installation cannot reach the internet:
 
 - **Rate limiting**: Prevents excessive network usage
 - **Error batching**: Multiple errors may be sent together efficiently
-- **Graceful failure**: Network issues don't affect BirdNET-Go operation
+- **Graceful failure**: Network issues don't affect VoiceWatch operation
 
 ## Performance Impact
 
@@ -224,7 +224,7 @@ You can test the system by temporarily causing a harmless error:
 
 ## Frequently Asked Questions
 
-### Q: Do I need to restart BirdNET-Go after enabling telemetry?
+### Q: Do I need to restart VoiceWatch after enabling telemetry?
 
 **A:** No. Changes take effect immediately.
 
@@ -238,11 +238,11 @@ You can test the system by temporarily causing a harmless error:
 
 ### Q: What happens if my internet connection is down?
 
-**A:** Telemetry fails silently without affecting BirdNET-Go operation. Error tracking resumes when connectivity is restored.
+**A:** Telemetry fails silently without affecting VoiceWatch operation. Error tracking resumes when connectivity is restored.
 
 ### Q: Can I configure telemetry for my organization's internal error tracking?
 
-**A:** Currently, no. Telemetry is configured to send reports to the BirdNET-Go development team only. This ensures consistent debugging information and prevents configuration errors.
+**A:** Currently, no. Telemetry is configured to send reports to the VoiceWatch development team only. This ensures consistent debugging information and prevents configuration errors.
 
 ### Q: How do I disable telemetry temporarily?
 

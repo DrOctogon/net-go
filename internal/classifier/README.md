@@ -1,6 +1,6 @@
 # BirdNET Package
 
-The BirdNET package forms the core of the BirdNET-Go application, providing functionality for bird species identification using machine learning techniques. This package interfaces with TensorFlow Lite models to analyze audio data and identify bird species based on their sounds.
+The BirdNET package forms the core of the VoiceWatch application, providing functionality for bird species identification using machine learning techniques. This package interfaces with TensorFlow Lite models to analyze audio data and identify bird species based on their sounds.
 
 ## Package Overview
 

@@ -1,6 +1,6 @@
 # Release Manifest
 
-BirdNET-Go publishes a machine-readable manifest describing the latest release on
+VoiceWatch publishes a machine-readable manifest describing the latest release on
 each distribution channel. It is the data source for the in-app update checker
 and any external tooling that needs to know what the current builds are.
 

@@ -1,15 +1,15 @@
-# BirdNET-Go Profiling Guide
+# VoiceWatch Profiling Guide
 
-This guide explains how to use the built-in profiling capabilities in BirdNET-Go to diagnose performance issues and memory usage.
+This guide explains how to use the built-in profiling capabilities in VoiceWatch to diagnose performance issues and memory usage.
 
 ## Prerequisites
 
-- BirdNET-Go running with debug mode enabled
+- VoiceWatch running with debug mode enabled
 - `go` tool installed on your system (for analyzing profiles)
 
 ## Enabling Debug Mode
 
-To enable profiling endpoints, you need to run BirdNET-Go with debug mode enabled. Set `debug: true` in your config.yaml:
+To enable profiling endpoints, you need to run VoiceWatch with debug mode enabled. Set `debug: true` in your config.yaml:
 
 ```yaml
 debug: true

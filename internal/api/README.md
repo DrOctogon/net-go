@@ -1,6 +1,6 @@
-# BirdNet-Go API Package
+# VoiceWatch API Package
 
-This package implements the HTTP server and RESTful API for the BirdNET-Go application, providing endpoints for bird detection data management, analytics, system control, and more.
+This package implements the HTTP server and RESTful API for the VoiceWatch application, providing endpoints for bird detection data management, analytics, system control, and more.
 
 ## Package Structure
 

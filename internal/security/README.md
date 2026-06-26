@@ -1,6 +1,6 @@
 # Security Package
 
-The security package provides authentication and authorization mechanisms for the BirdNET-Go application, enabling secure access to protected resources through various authentication methods.
+The security package provides authentication and authorization mechanisms for the VoiceWatch application, enabling secure access to protected resources through various authentication methods.
 
 ## Overview
 

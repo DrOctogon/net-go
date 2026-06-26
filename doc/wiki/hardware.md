@@ -1,6 +1,6 @@
-# BirdNET-Go Hardware Recommendations
+# VoiceWatch Hardware Recommendations
 
-This document outlines the recommended hardware configurations for running BirdNET-Go effectively, ensuring optimal performance for both detection capabilities and user interface responsiveness.
+This document outlines the recommended hardware configurations for running VoiceWatch effectively, ensuring optimal performance for both detection capabilities and user interface responsiveness.
 
 ## Compute Hardware
 
@@ -20,7 +20,7 @@ This document outlines the recommended hardware configurations for running BirdN
 
 ### RAM Requirements
 
-- **Baseline Usage:** ~400MB for core BirdNET-Go processes
+- **Baseline Usage:** ~400MB for core VoiceWatch processes
 - **Recommended:**
   - 2GB RAM for standard installations (single audio source with BirdNET v2.4)
   - Each RTSP stream requires an additional FFmpeg process, which can consume substantial memory; if you have a high number of RTSP source streams consider a system with 4GB or more RAM
@@ -35,7 +35,7 @@ Different AI classifiers have different resource demands:
 
 ### CPU Considerations
 
-- **Threads:** BirdNET-Go can utilize multiple CPU cores. By default, it automatically optimizes for P-cores on hybrid architectures.
+- **Threads:** VoiceWatch can utilize multiple CPU cores. By default, it automatically optimizes for P-cores on hybrid architectures.
 - **Performance Impact:** CPU power directly affects:
   - Maximum achievable overlap values (Deep Detection capability)
   - Spectrogram rendering speed
@@ -216,7 +216,7 @@ Bat echolocation calls are ultrasonic, typically ranging from 20kHz to over 120k
 ## Additional Resources
 
 - **Community Recommendations:**
-  - Join the [BirdNET-Go GitHub Discussions](https://github.com/tphakala/voicewatch/discussions) for user experiences with different hardware setups
+  - Join the [VoiceWatch GitHub Discussions](https://github.com/tphakala/voicewatch/discussions) for user experiences with different hardware setups
   - The [BirdWeather Community](https://www.birdweather.com/) offers additional insights on microphone selection and placement
 
 - **Testing Your Setup:**

@@ -1,6 +1,6 @@
 # External Media (USB, SD Card, File Shares)
 
-BirdNET-Go can read from and write to removable or network-attached storage
+VoiceWatch can read from and write to removable or network-attached storage
 mounted on the host. The `/external` directory inside the container maps to
 `/mnt/birdnet-go/external` on the host. Planned uses include importing
 recordings from BirdNET-Pi and other bird detectors, and writing backups.
@@ -59,7 +59,7 @@ is guaranteed to complete before the container service starts:
 ```ini
 # /etc/systemd/system/birdnet-external-media.service
 [Unit]
-Description=Prepare BirdNET-Go external media mount point
+Description=Prepare VoiceWatch external media mount point
 DefaultDependencies=no
 After=local-fs.target
 Before=docker.service

@@ -2,7 +2,7 @@
 
 ## Overview
 
-This directory contains end-to-end (E2E) tests for BirdNET-Go using Playwright. These tests validate the complete user journey from frontend to backend, covering critical functionality, cross-browser compatibility, and real-world scenarios.
+This directory contains end-to-end (E2E) tests for VoiceWatch using Playwright. These tests validate the complete user journey from frontend to backend, covering critical functionality, cross-browser compatibility, and real-world scenarios.
 
 ## Directory Structure
 

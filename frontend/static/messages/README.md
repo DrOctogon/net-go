@@ -1,6 +1,6 @@
-# BirdNET-Go Frontend Internationalization (i18n)
+# VoiceWatch Frontend Internationalization (i18n)
 
-This directory contains translation files for the BirdNET-Go frontend application.
+This directory contains translation files for the VoiceWatch frontend application.
 
 ## Structure
 

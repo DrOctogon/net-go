@@ -1,12 +1,12 @@
-# BirdNET-Go Database Doctor - Specification
+# VoiceWatch Database Doctor - Specification
 
 ## Purpose
 
-A standalone Python diagnostic and repair tool for BirdNET-Go SQLite databases. Users run it
+A standalone Python diagnostic and repair tool for VoiceWatch SQLite databases. Users run it
 outside the application to diagnose and fix schema problems that prevent startup after
 upgrading between nightly builds.
 
-The script targets end users running BirdNET-Go on Raspberry Pi, NUC, or Docker. It must work
+The script targets end users running VoiceWatch on Raspberry Pi, NUC, or Docker. It must work
 with Python 3.9+ (Debian Bookworm ships 3.11) and have zero third-party dependencies.
 
 ## Problem Scope
@@ -118,7 +118,7 @@ python3 db-doctor.py /path/to/birdnet.db --json
 Human-readable by default. Each check prints a status line:
 
 ```text
-BirdNET-Go Database Doctor v1.0
+VoiceWatch Database Doctor v1.0
 
 Database: /home/birder/birdnet-go-app/data/birdnet.db
 Size: 105.2 MB
@@ -534,7 +534,7 @@ nightly-20260322 to newer builds.
 
 ## Distribution
 
-The script lives at `tools/db-doctor/db-doctor.py` in the BirdNET-Go repository.
+The script lives at `tools/db-doctor/db-doctor.py` in the VoiceWatch repository.
 Users can download it directly or copy it from their local clone. No installation
 step needed.
 

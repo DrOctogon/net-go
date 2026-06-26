@@ -1,6 +1,6 @@
 # Desktop UI Components Library
 
-A comprehensive collection of reusable Svelte 5 components for the BirdNET-Go desktop application.
+A comprehensive collection of reusable Svelte 5 components for the VoiceWatch desktop application.
 
 ## 🎯 Design Principles
 

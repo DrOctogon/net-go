@@ -1,6 +1,6 @@
 # JobQueue
 
-A specialized job queue implementation for BirdNET-Go that manages and processes bird species detection actions asynchronously. This module handles the execution of various post-detection tasks such as submitting findings to BirdWeather, sending MQTT notifications, writing to database, and other configurable actions triggered by bird species identifications.
+A specialized job queue implementation for VoiceWatch that manages and processes bird species detection actions asynchronously. This module handles the execution of various post-detection tasks such as submitting findings to BirdWeather, sending MQTT notifications, writing to database, and other configurable actions triggered by bird species identifications.
 
 ## Overview
 
@@ -344,4 +344,4 @@ When working with this codebase, keep in mind:
 
 ## License
 
-This package is part of the BirdNet-Go project and is subject to its licensing terms.
+This package is part of the VoiceWatch project and is subject to its licensing terms.

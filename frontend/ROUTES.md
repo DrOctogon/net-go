@@ -2,7 +2,7 @@
 
 ## Application Routes
 
-The BirdNET-Go frontend uses a Svelte 5 SPA (Single Page Application) with client-side routing served by the Go backend.
+The VoiceWatch frontend uses a Svelte 5 SPA (Single Page Application) with client-side routing served by the Go backend.
 
 ### UI Routes
 

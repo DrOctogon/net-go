@@ -158,9 +158,9 @@ Configure the following settings:
 - **Hidden units (2048)**: Determines the complexity of the neural network; higher values may capture more complex patterns but require more training data
 - **Model save - Append**: This critical setting means your training data will augment (be appended to) the default BirdNET classifier rather than replacing it. This creates new classes/labels in the model while preserving all existing bird species detection capabilities
 
-**Important Note about Append Mode**: When using append mode, your custom classes (like `Dog_Dog`) are added as new labels to the existing BirdNET model. If a label already exists in the base model, BirdNET-Go will intelligently handle matching labels as a single species, preventing duplicate detections.
+**Important Note about Append Mode**: When using append mode, your custom classes (like `Dog_Dog`) are added as new labels to the existing BirdNET model. If a label already exists in the base model, VoiceWatch will intelligently handle matching labels as a single species, preventing duplicate detections.
 
-_Note: These values were determined through trial and error and I have found that they work well for classifiers used with BirdNET-Go in non-scientific setting_
+_Note: These values were determined through trial and error and I have found that they work well for classifiers used with VoiceWatch in non-scientific setting_
 
 ## Step 3: Train the Classifier
 

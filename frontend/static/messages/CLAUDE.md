@@ -2,7 +2,7 @@
 
 ## Overview
 
-This directory contains the internationalization (i18n) message files for BirdNET-Go frontend. When working with translations, please read the comprehensive documentation in `README.md` first.
+This directory contains the internationalization (i18n) message files for VoiceWatch frontend. When working with translations, please read the comprehensive documentation in `README.md` first.
 
 ## Important Instructions
 
@@ -52,6 +52,6 @@ All translations must align with **software and application terminology**, not g
 | Terminal  | Command-line terminal                    | Airport terminal         |
 | Port      | Network port                             | Harbor port              |
 
-When translating, always consider the software context of BirdNET-Go as a bird sound identification application.
+When translating, always consider the software context of VoiceWatch as a real-time human-voice detection application.
 
 Please ensure you understand the translation structure before making modifications.

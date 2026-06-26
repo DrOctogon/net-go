@@ -1,6 +1,6 @@
 # Async Event System Architecture
 
-This document describes the complete async event system architecture implemented in BirdNET-Go, addressing all requirements from issue #833.
+This document describes the complete async event system architecture implemented in VoiceWatch, addressing all requirements from issue #833.
 
 ## System Overview
 
@@ -365,4 +365,4 @@ For systems upgrading to the async event system:
 
 ## Conclusion
 
-The async event system provides a robust, high-performance foundation for error handling, notifications, and telemetry in BirdNET-Go. With a 3,275x performance improvement and comprehensive feature set, it ensures the application can scale while maintaining observability and user experience.
+The async event system provides a robust, high-performance foundation for error handling, notifications, and telemetry in VoiceWatch. With a 3,275x performance improvement and comprehensive feature set, it ensures the application can scale while maintaining observability and user experience.

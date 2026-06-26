@@ -1,10 +1,10 @@
-# BirdNET-Go KVM/VM Images
+# VoiceWatch KVM/VM Images
 
-This directory contains automation for building pre-configured KVM virtual machine images with BirdNET-Go installed and ready to use.
+This directory contains automation for building pre-configured KVM virtual machine images with VoiceWatch installed and ready to use.
 
 ## Overview
 
-Pre-built VM images provide an alternative deployment method for users who prefer virtual machines over Docker containers. These images come with BirdNET-Go pre-installed, configured, and ready to run.
+Pre-built VM images provide an alternative deployment method for users who prefer virtual machines over Docker containers. These images come with VoiceWatch pre-installed, configured, and ready to run.
 
 ## Use Cases
 
@@ -49,14 +49,14 @@ Pre-built VM images provide an alternative deployment method for users who prefe
 
 - Ubuntu 22.04 LTS Server (latest updates)
 - Docker and Docker Compose
-- BirdNET-Go (latest nightly) via Docker
+- VoiceWatch (latest nightly) via Docker
 - Systemd service configuration
 - SSH server (key-based authentication)
 - Cloud-init for initial configuration
 - QEMU Guest Agent
 - Basic monitoring tools (htop, iotop, etc.)
 
-### **BirdNET-Go Configuration:**
+### **VoiceWatch Configuration:**
 
 - Web interface on port 8080
 - Audio device auto-detection
@@ -89,7 +89,7 @@ strategy:
 
 1. **Prepare Build Environment**: Install Packer, QEMU, dependencies
 2. **Download Base Image**: Ubuntu Server cloud image
-3. **Customize with Packer**: Install BirdNET-Go and dependencies
+3. **Customize with Packer**: Install VoiceWatch and dependencies
 4. **Optimize Image**: Remove unnecessary packages, clean caches
 5. **Compress Image**: zstd compression for distribution
 6. **Generate Checksums**: SHA256 checksums for verification
@@ -202,7 +202,7 @@ runcmd:
 - Network configuration
 - Timezone setting
 - Initial audio device configuration
-- BirdNET-Go settings
+- VoiceWatch settings
 
 ## Security Features
 
@@ -243,7 +243,7 @@ runcmd:
 ### **Automatic Updates:**
 
 - System packages: Enabled via unattended-upgrades
-- BirdNET-Go: Weekly check for new Docker images
+- VoiceWatch: Weekly check for new Docker images
 - Security updates: Applied automatically
 
 ### **Manual Updates:**
@@ -252,7 +252,7 @@ runcmd:
 # Update system packages
 sudo apt update && sudo apt upgrade -y
 
-# Update BirdNET-Go
+# Update VoiceWatch
 sudo systemctl stop birdnet-go
 sudo docker pull tphakala/birdnet-go:nightly
 sudo systemctl start birdnet-go
@@ -269,7 +269,7 @@ sudo systemctl start birdnet-go
 
 ### **Log Locations:**
 
-- BirdNET-Go logs: `/var/log/birdnet-go/`
+- VoiceWatch logs: `/var/log/birdnet-go/`
 - System logs: `/var/log/syslog`
 - Docker logs: `journalctl -u birdnet-go`
 
@@ -282,7 +282,7 @@ Most virtualization platforms support snapshots for easy backup/restore.
 ### **Data Backup:**
 
 ```bash
-# Backup BirdNET-Go data
+# Backup VoiceWatch data
 sudo tar -czf birdnet-go-backup-$(date +%Y%m%d).tar.gz \
   /opt/birdnet-go/data \
   /opt/birdnet-go/config
@@ -311,7 +311,7 @@ packer build -var 'version=custom' birdnet-go-vm.pkr.hcl
 
 - Different base OS (Debian, CentOS)
 - Additional software packages
-- Custom BirdNET-Go configuration
+- Custom VoiceWatch configuration
 - Enterprise authentication integration
 
 ## Troubleshooting
@@ -357,7 +357,7 @@ The VM uses a **two-disk architecture** for optimal data persistence and easy up
 ### Main OS Disk (8GB)
 
 - **Purpose**: Operating system, applications, and configuration
-- **Contents**: Ubuntu 24.10, Docker, BirdNET-Go configuration
+- **Contents**: Ubuntu 24.10, Docker, VoiceWatch configuration
 - **Replaceable**: Can be updated/replaced without data loss
 - **Mount**: Root filesystem (`/`)
 
@@ -446,11 +446,11 @@ sudo /usr/local/bin/init-data-disk /dev/vdb
 # Start the data mount service
 sudo systemctl start data.mount
 
-# Start BirdNET-Go
+# Start VoiceWatch
 sudo systemctl start birdnet-go
 ```
 
-### 6. Access BirdNET-Go
+### 6. Access VoiceWatch
 
 Open your browser and navigate to: `http://<vm-ip>:8080`
 
@@ -472,7 +472,7 @@ Open your browser and navigate to: `http://<vm-ip>:8080`
 
 ## 🔄 Updates & Maintenance
 
-### Updating BirdNET-Go
+### Updating VoiceWatch
 
 The two-disk architecture makes updates safe and easy:
 
@@ -617,7 +617,7 @@ Perfect for:
 
 - **Base OS**: Ubuntu 24.10 (Oracular Oriole)
 - **Docker**: Latest stable
-- **BirdNET-Go**: Latest nightly build
+- **VoiceWatch**: Latest nightly build
 - **Architecture**: AMD64 and ARM64 supported
 
 ## 🔐 Security & User Accounts
@@ -679,7 +679,7 @@ Perfect for:
 
 - Virtualization platform (Proxmox, libvirt, VMware, VirtualBox, etc.)
 - Minimum 4GB RAM, 8GB disk space for OS + separate data disk
-- Network connectivity for BirdNET-Go web interface
+- Network connectivity for VoiceWatch web interface
 
 ### Download and Setup
 
@@ -775,7 +775,7 @@ virt-install \
 ## 📦 What's Included
 
 - **Base OS**: Ubuntu 24.10 (Oracular Oriole) Server
-- **Docker**: Latest version with BirdNET-Go container ready
+- **Docker**: Latest version with VoiceWatch container ready
 - **System Tools**: htop, nano, vim, curl, wget, git
 - **Audio Support**: ALSA utilities for audio device access
 - **Network Tools**: avahi for mDNS, network diagnostics
@@ -788,7 +788,7 @@ virt-install \
 
 The VM uses a two-disk architecture:
 
-- **OS Disk** (8GB): Contains Ubuntu, Docker, and BirdNET-Go application
+- **OS Disk** (8GB): Contains Ubuntu, Docker, and VoiceWatch application
 - **Data Disk** (User-defined): Contains SQLite database, audio clips, logs, backups
 
 ### Key Directories
@@ -803,7 +803,7 @@ The VM uses a two-disk architecture:
 ### Service Management
 
 ```bash
-# Check BirdNET-Go status
+# Check VoiceWatch status
 sudo systemctl status birdnet-go
 
 # Start/stop/restart service
@@ -840,7 +840,7 @@ sudo systemctl start birdnet-go
 # Update Ubuntu packages
 sudo apt update && sudo apt upgrade
 
-# Update BirdNET-Go container
+# Update VoiceWatch container
 sudo docker pull ghcr.io/tphakala/birdnet-go:latest
 sudo systemctl restart birdnet-go
 ```
@@ -849,7 +849,7 @@ sudo systemctl restart birdnet-go
 
 For major updates, download new VM image and migrate data:
 
-1. Stop BirdNET-Go service on old VM
+1. Stop VoiceWatch service on old VM
 2. Backup data disk or copy `/data/birdnet-go/` contents
 3. Deploy new VM image
 4. Attach existing data disk or restore data
@@ -859,7 +859,7 @@ For major updates, download new VM image and migrate data:
 
 ### Port Usage
 
-- **8080**: BirdNET-Go web interface (HTTP)
+- **8080**: VoiceWatch web interface (HTTP)
 - **22**: SSH access
 - **5353**: mDNS (if using Avahi discovery)
 
@@ -872,7 +872,7 @@ sudo ufw enable
 # Allow SSH
 sudo ufw allow 22
 
-# Allow BirdNET-Go web interface
+# Allow VoiceWatch web interface
 sudo ufw allow 8080
 
 # Check status
@@ -889,7 +889,7 @@ sudo ufw status
 - Verify SSH service: `sudo systemctl status ssh`
 - Check firewall: `sudo ufw status`
 
-**BirdNET-Go not starting**:
+**VoiceWatch not starting**:
 
 - Check service status: `sudo systemctl status birdnet-go`
 - View logs: `sudo journalctl -u birdnet-go -f`
@@ -910,7 +910,7 @@ sudo ufw status
 ### Log Locations
 
 - **System logs**: `/var/log/syslog`
-- **BirdNET-Go service**: `sudo journalctl -u birdnet-go`
+- **VoiceWatch service**: `sudo journalctl -u birdnet-go`
 - **Docker logs**: `sudo docker logs birdnet-go`
 - **SSH logs**: `sudo journalctl -u ssh`
 
@@ -947,7 +947,7 @@ sudo ufw status
 This VM image contains:
 
 - Ubuntu 24.10: Licensed under various open source licenses
-- BirdNET-Go: Licensed under AGPL-3.0
+- VoiceWatch: Licensed under AGPL-3.0
 - Additional packages: Various open source licenses
 
 See individual component licenses for details.

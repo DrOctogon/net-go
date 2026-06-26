@@ -13,7 +13,7 @@
 - **NEVER use `any` type**
 - **NEVER create inline SVGs** - use `@lucide/svelte` icons
 - **NEVER use `toISOString()` for dates** - use `getLocalDateString()`
-- **NEVER use Secure Context APIs without fallback** - BirdNET-Go commonly runs on plain HTTP in home networks. `crypto.randomUUID()` and `navigator.clipboard` are undefined on non-HTTPS. Use `Math.random().toString(36).slice(2, 10)` for unique IDs. For clipboard, check `navigator.clipboard?.writeText` and fall back to textarea + `document.execCommand('copy')`
+- **NEVER use Secure Context APIs without fallback** - VoiceWatch commonly runs on plain HTTP in home networks. `crypto.randomUUID()` and `navigator.clipboard` are undefined on non-HTTPS. Use `Math.random().toString(36).slice(2, 10)` for unique IDs. For clipboard, check `navigator.clipboard?.writeText` and fall back to textarea + `document.execCommand('copy')`
 - **NEVER ship ambiguous UI states** - disabled controls, errors, and loading states must always explain _why_ to the user. A disabled Save button with no tooltip is a support ticket waiting to be filed. See [UX Design Principles](#ux-design-principles) below.
 - **Use D3.js for ALL charting/plotting** - unless specific requirement for custom approach
 - **Run `npm run check:all` before EVERY commit**
@@ -357,7 +357,7 @@ function getCsrfToken(): string | null {
 
 ## UX Design Principles
 
-Every interactive element needs a deliberate UX pass before it ships. Ambiguity is the most common source of avoidable support load: each confused user opens an issue, and each issue costs far more to triage than the design review would have. BirdNET-Go is a hobby project maintained by volunteers, so preventable rework comes directly out of feature work. Catch ambiguity at design time.
+Every interactive element needs a deliberate UX pass before it ships. Ambiguity is the most common source of avoidable support load: each confused user opens an issue, and each issue costs far more to triage than the design review would have. VoiceWatch is a hobby project maintained by volunteers, so preventable rework comes directly out of feature work. Catch ambiguity at design time.
 
 ### No Ambiguous Disabled States
 

@@ -1,8 +1,8 @@
-# BirdNET-Go
+# VoiceWatch
 
-BirdNET-Go is an application inspired by BirdNET-Pi and BirdNET Analyzer. It aims to be a high-performance and easy-to-deploy alternative to both of these.
+VoiceWatch is an application inspired by BirdNET-Pi and BirdNET Analyzer. It aims to be a high-performance and easy-to-deploy alternative to both of these.
 
-## BirdNET-Go Features
+## VoiceWatch Features
 
 - Audio analysis based on the BirdNET 2.4 tflite model
 - 24/7 real-time analysis of soundcard capture
@@ -24,7 +24,7 @@ BirdNET-Go is an application inspired by BirdNET-Pi and BirdNET Analyzer. It aim
 
 ## Supported Platforms
 
-BirdNET-Go has been successfully tested on:
+VoiceWatch has been successfully tested on:
 
 - Raspberry Pi 3B+ with 512MB RAM
 - Raspberry Pi 4B with 4GB RAM
@@ -43,7 +43,7 @@ Note: TPU accelerators such as Coral.AI are not supported due to incompatibility
 
 ### Docker Installation (Recommended for Linux)
 
-The easiest way to install BirdNET-Go on Debian, Ubuntu, or Raspberry Pi OS is using the provided installation script which sets up BirdNET-Go as a Docker container:
+The easiest way to install VoiceWatch on Debian, Ubuntu, or Raspberry Pi OS is using the provided installation script which sets up VoiceWatch as a Docker container:
 
 ```bash
 curl -fsSL https://github.com/tphakala/voicewatch/raw/main/install.sh -o install.sh
@@ -60,11 +60,11 @@ Both registries contain identical images. The installation script uses GitHub Co
 The script will:
 
 - Check system prerequisites and install required packages
-- Pull the latest BirdNET-Go Docker image from the primary registry
+- Pull the latest VoiceWatch Docker image from the primary registry
 - Guide you through configuration (audio input, location, language, etc.)
 - Create a systemd service for automatic start on boot
 - Set up directories for configuration and data persistence
-- Optionally configure privacy-first error tracking to help improve BirdNET-Go
+- Optionally configure privacy-first error tracking to help improve VoiceWatch
 
 The installation script includes several features:
 
@@ -76,26 +76,26 @@ The installation script includes several features:
 
 ### Docker Compose Installation
 
-For users who prefer Docker Compose for container management, BirdNET-Go can also be set up using this approach. Docker Compose offers more flexibility and makes it easier to manage container configurations.
+For users who prefer Docker Compose for container management, VoiceWatch can also be set up using this approach. Docker Compose offers more flexibility and makes it easier to manage container configurations.
 
 A [premade docker-compose.yml](https://github.com/tphakala/voicewatch/blob/main/Docker/docker-compose.yml) file is available in the repository. This file includes:
 
-- The BirdNET-Go container configuration with the latest nightly image
+- The VoiceWatch container configuration with the latest nightly image
 - Environment variables for customization (timezone, user permissions, etc.)
 - Volume mounts for persistent configuration and data storage
 - RAM disk (tmpfs) for HLS streaming segments to improve performance
 - Device mounts for sound card access
 - An optional Cloudflared service (commented out) for secure internet access
 
-See the [Docker Compose Guide](docker_compose_guide.md) for detailed instructions on setting up BirdNET-Go with Docker Compose, including internet access configuration using Cloudflare Tunnel and security options.
+See the [Docker Compose Guide](docker_compose_guide.md) for detailed instructions on setting up VoiceWatch with Docker Compose, including internet access configuration using Cloudflare Tunnel and security options.
 
 ### Manual Installation
 
-Pre-compiled BirdNET-Go executables are also available at https://github.com/tphakala/voicewatch/releases/. To install manually, download and unzip birdnet-go in any directory you wish to run it in, on Windows for example c:\users\username\birdnet-go.
+Pre-compiled VoiceWatch executables are also available at https://github.com/tphakala/voicewatch/releases/. To install manually, download and unzip birdnet-go in any directory you wish to run it in, on Windows for example c:\users\username\birdnet-go.
 
 #### External Dependencies
 
-BirdNET-Go has minimal external dependencies, but requires a few specific tools for certain features:
+VoiceWatch has minimal external dependencies, but requires a few specific tools for certain features:
 
 - **TensorFlow Lite C library**: Required for the core audio analysis functionality
 - **FFmpeg**: Required for RTSP stream capture, audio export to formats other than WAV (MP3, AAC, FLAC, Opus), and for the HLS live stream feature in the web interface
@@ -107,17 +107,17 @@ For manual installations, you'll need to install these dependencies separately o
 
 #### TensorFlow Lite C library
 
-In addition to BirdNET-Go executable you also need TensorFlow Lite C library which is available for download at https://github.com/tphakala/tflite_c/releases. Download library for your target platform and install it in proper library path for your system:
+In addition to VoiceWatch executable you also need TensorFlow Lite C library which is available for download at https://github.com/tphakala/tflite_c/releases. Download library for your target platform and install it in proper library path for your system:
 
 - On Linux copy **libtensorflowlite_c.so** to **/usr/local/lib** and run "**sudo ldconfig**"
 - On macOS **libtensorflowlite_c.dylib** to **/usr/local/lib**
-- On Windows copy **libtensorflowlite_c.so** to BirdNET-Go executable directory or any other directory in system PATH
+- On Windows copy **libtensorflowlite_c.so** to VoiceWatch executable directory or any other directory in system PATH
 
-> **Note**: For optimal performance using the XNNPACK delegate (enabled by default via `usexnnpack: true` in config), ensure you have downloaded version `v2.17.1` or newer of the TensorFlow Lite C library. If a compatible library is not found, BirdNET-Go will fall back to standard CPU processing.
+> **Note**: For optimal performance using the XNNPACK delegate (enabled by default via `usexnnpack: true` in config), ensure you have downloaded version `v2.17.1` or newer of the TensorFlow Lite C library. If a compatible library is not found, VoiceWatch will fall back to standard CPU processing.
 
 ## Configuration
 
-BirdNET-Go accepts several settings from command line but main configuration method is through configuration file which is created when birdnet-go is first run.
+VoiceWatch accepts several settings from command line but main configuration method is through configuration file which is created when birdnet-go is first run.
 
 ### Configuration File Locations
 
@@ -138,14 +138,14 @@ On Windows:
 The configuration file uses the YAML format, which does not recognize tabs as indentation. Below is a comprehensive breakdown of the available configuration options based on the code analysis:
 
 ```yaml
-# BirdNET-Go configuration
+# VoiceWatch configuration
 # Paths support environment variables such as $HOME and %appdata%
 
 debug: false # Enable debug messages for troubleshooting
 
 # Main application settings
 main:
-  name: BirdNET-Go # Name of this node, used to identify the source of notes
+  name: VoiceWatch # Name of this node, used to identify the source of notes
   timeas24h: true # true for 24-hour time format, false for 12-hour time format
   log:
     enabled: false # Enable main application logging
@@ -414,7 +414,7 @@ output:
 
 ### Command Line Interface
 
-While the primary configuration is done via `config.yaml`, BirdNET-Go also offers several command-line operations:
+While the primary configuration is done via `config.yaml`, VoiceWatch also offers several command-line operations:
 
 ```bash
 birdnet [command] [flags]
@@ -448,7 +448,7 @@ Many configuration options can be overridden via command-line flags (e.g., `--th
 
 #### Using a Custom Configuration File
 
-By default, BirdNET-Go looks for `config.yaml` in the [default configuration locations](#configuration-file-locations) for your operating system. You can override this with the `--config` or `-c` flag to use a configuration file at any path:
+By default, VoiceWatch looks for `config.yaml` in the [default configuration locations](#configuration-file-locations) for your operating system. You can override this with the `--config` or `-c` flag to use a configuration file at any path:
 
 ```bash
 # Use a specific config file
@@ -467,11 +467,11 @@ This is useful for:
 - **Container deployments** where the config file is mounted at a non-standard path.
 - **Testing** with scenario-specific configurations.
 
-> **Note:** If the specified config file does not exist, BirdNET-Go will exit with an error rather than creating a default configuration at that path.
+> **Note:** If the specified config file does not exist, VoiceWatch will exit with an error rather than creating a default configuration at that path.
 
 ### Supported Languages for Species Labels
 
-BirdNET-Go supports an extensive list of languages for species labels. This is significantly expanded from what was shown in the original wiki page:
+VoiceWatch supports an extensive list of languages for species labels. This is significantly expanded from what was shown in the original wiki page:
 
 - Afrikaans (af)
 - Arabic (ar)
@@ -519,7 +519,7 @@ BirdNET-Go supports an extensive list of languages for species labels. This is s
 
 ### Docker Installation Troubleshooting
 
-If you're having issues with your Docker-based BirdNET-Go installation, here are some common commands and solutions:
+If you're having issues with your Docker-based VoiceWatch installation, here are some common commands and solutions:
 
 #### Service Management
 
@@ -570,7 +570,7 @@ sudo journalctl -fu birdnet-go
 
 #### Updating a Docker Installation (`install.sh` method)
 
-If you installed BirdNET-Go using the recommended `install.sh` script, you can update to the latest version by simply re-running the script:
+If you installed VoiceWatch using the recommended `install.sh` script, you can update to the latest version by simply re-running the script:
 
 1.  It is **recommended to download a fresh copy** of the script each time, as it may contain improvements:
     ```bash
@@ -580,19 +580,19 @@ If you installed BirdNET-Go using the recommended `install.sh` script, you can u
     ```bash
     bash ./install.sh
     ```
-3.  The script will detect your installation and offer an "Update" option. Selecting it will stop the service, pull the newest `nightly` image, update the service configuration if needed, and restart BirdNET-Go. Your configuration and data will be preserved.
+3.  The script will detect your installation and offer an "Update" option. Selecting it will stop the service, pull the newest `nightly` image, update the service configuration if needed, and restart VoiceWatch. Your configuration and data will be preserved.
 
 ### Timezone Configuration
 
-BirdNET-Go uses timezone settings to ensure accurate timestamps for bird detections and proper scheduling of features. If you notice timestamp mismatches or scheduling issues, you may need to adjust the timezone configuration.
+VoiceWatch uses timezone settings to ensure accurate timestamps for bird detections and proper scheduling of features. If you notice timestamp mismatches or scheduling issues, you may need to adjust the timezone configuration.
 
 #### For install.sh Deployments
 
-If you installed BirdNET-Go using the recommended `install.sh` script, the timezone is configured during installation and stored in the systemd service file.
+If you installed VoiceWatch using the recommended `install.sh` script, the timezone is configured during installation and stored in the systemd service file.
 
 ##### Checking Current Timezone
 
-To see what timezone BirdNET-Go is currently using:
+To see what timezone VoiceWatch is currently using:
 
 ```bash
 # Check the timezone setting in the systemd service
@@ -674,7 +674,7 @@ docker-compose up -d
 
 #### For Binary Installations
 
-If you're running BirdNET-Go directly as a binary (not using Docker), it uses the system timezone by default. To override it:
+If you're running VoiceWatch directly as a binary (not using Docker), it uses the system timezone by default. To override it:
 
 ```bash
 # Set timezone environment variable before running
@@ -687,9 +687,9 @@ Or add it to your startup script or systemd service file if you've created one m
 
 > **⚠️ Custom Deployments:** The instructions above apply specifically to installations done via the official `install.sh` script. Custom Docker Compose setups or manual binary deployments may handle timezone configuration differently.
 
-> **💡 System vs Application Timezone:** BirdNET-Go can use a different timezone than your system. This is useful if you want your system in one timezone but want BirdNET-Go to record detections in another (e.g., UTC for standardized scientific data).
+> **💡 System vs Application Timezone:** VoiceWatch can use a different timezone than your system. This is useful if you want your system in one timezone but want VoiceWatch to record detections in another (e.g., UTC for standardized scientific data).
 
-> **🔄 After Updates:** When updating BirdNET-Go using the `install.sh` script, your timezone settings are preserved automatically as of recent versions.
+> **🔄 After Updates:** When updating VoiceWatch using the `install.sh` script, your timezone settings are preserved automatically as of recent versions.
 
 #### Troubleshooting Timezone Issues
 
@@ -707,7 +707,7 @@ Or add it to your startup script or systemd service file if you've created one m
 
 ### Support Script
 
-For more comprehensive troubleshooting, BirdNET-Go provides a support script that collects diagnostic information while protecting your privacy:
+For more comprehensive troubleshooting, VoiceWatch provides a support script that collects diagnostic information while protecting your privacy:
 
 ```bash
 curl -fsSL https://github.com/tphakala/voicewatch/raw/main/support.sh -o support.sh
@@ -718,7 +718,7 @@ The script will:
 
 - Collect system information (hardware, OS, etc.)
 - Gather Docker configuration and logs
-- Retrieve BirdNET-Go configuration (with sensitive data masked)
+- Retrieve VoiceWatch configuration (with sensitive data masked)
 - Capture systemd service information
 - Collect audio device information
 - Create a support bundle for sharing with developers
@@ -740,7 +740,7 @@ Providing detailed information in your issue report will help the developers und
 
 ## BirdNET Detection Pipeline
 
-Understanding how BirdNET-Go processes audio and applies various filters is crucial for optimizing your detection accuracy. The detection process follows a multi-stage pipeline where settings are applied in a specific order of precedence.
+Understanding how VoiceWatch processes audio and applies various filters is crucial for optimizing your detection accuracy. The detection process follows a multi-stage pipeline where settings are applied in a specific order of precedence.
 
 ### Detection Flow Overview
 
@@ -1266,7 +1266,7 @@ This displays all species that pass the threshold for your current location and 
 
 #### Range Filter Models
 
-BirdNET-Go supports two range filter model versions:
+VoiceWatch supports two range filter model versions:
 
 - **V2 (Default)**: Latest model with improved accuracy
 - **V1 (Legacy)**: Original model, use `model: "legacy"` if needed for compatibility
@@ -1301,7 +1301,7 @@ The V2 model generally provides better predictions and should be used unless you
 
 ### Web Dashboard
 
-BirdNET-Go includes a web dashboard that provides visualization and management capabilities. The dashboard features:
+VoiceWatch includes a web dashboard that provides visualization and management capabilities. The dashboard features:
 
 - Summary views of detected species
 - Recent detections display
@@ -1311,16 +1311,16 @@ BirdNET-Go includes a web dashboard that provides visualization and management c
 
 ### Remote Internet Access
 
-BirdNET-Go can be securely exposed to the internet, allowing you to monitor your birds from anywhere. The **recommended method** is using Cloudflare Tunnel (cloudflared), which provides:
+VoiceWatch can be securely exposed to the internet, allowing you to monitor your birds from anywhere. The **recommended method** is using Cloudflare Tunnel (cloudflared), which provides:
 
 - **Enhanced Security**: No need to open ports on your router/firewall
 - **End-to-End Encryption**: All traffic is securely encrypted
 - **Performance Benefits**: Static content like spectrograms and audio clips are cached on Cloudflare's global network
-- **Simple Setup**: Works with any BirdNET-Go installation method (Docker, Docker Compose, or binary)
+- **Simple Setup**: Works with any VoiceWatch installation method (Docker, Docker Compose, or binary)
 
 For detailed setup instructions and security best practices, see the dedicated [Cloudflare Tunnel Guide](cloudflare_tunnel_guide.md).
 
-> **IMPORTANT SECURITY WARNING**: When exposing BirdNET-Go to the internet, always enable authentication through one of the available methods (Basic Auth, Google OAuth, or GitHub OAuth). Without authentication, anyone with your URL can access your system, delete your data, change settings, and view your location. See the [Authentication section](cloudflare_tunnel_guide.md#enabling-authentication) of the guide for details.
+> **IMPORTANT SECURITY WARNING**: When exposing VoiceWatch to the internet, always enable authentication through one of the available methods (Basic Auth, Google OAuth, or GitHub OAuth). Without authentication, anyone with your URL can access your system, delete your data, change settings, and view your location. See the [Authentication section](cloudflare_tunnel_guide.md#enabling-authentication) of the guide for details.
 
 ### Weather Integration
 
@@ -1333,7 +1333,7 @@ Weather data can be used to correlate bird activity with environmental condition
 
 ### Audio Processing
 
-BirdNET-Go offers advanced audio processing capabilities:
+VoiceWatch offers advanced audio processing capabilities:
 
 - Support for various audio sources including direct soundcard capture and RTSP streams
 - Configurable equalizer with multiple filter types (LowPass, HighPass, BandPass, etc.)
@@ -1342,7 +1342,7 @@ BirdNET-Go offers advanced audio processing capabilities:
 
 ### Audio Clip Retention
 
-If you enable audio clip exporting (`realtime.audio.export.enabled: true`), BirdNET-Go can automatically manage disk space by deleting older recordings based on configured retention policies. This prevents your disk from filling up over time.
+If you enable audio clip exporting (`realtime.audio.export.enabled: true`), VoiceWatch can automatically manage disk space by deleting older recordings based on configured retention policies. This prevents your disk from filling up over time.
 
 The cleanup task runs periodically to check if clips need to be deleted based on the selected policy. The check interval is configurable to balance between timely cleanup and system resource usage.
 
@@ -1368,7 +1368,7 @@ The application includes several security options:
 
 #### Setting Up OAuth Authentication
 
-BirdNET-Go supports OAuth2 authentication with Google and GitHub for secure access to your web interface. This is the recommended authentication method when exposing your instance to the internet.
+VoiceWatch supports OAuth2 authentication with Google and GitHub for secure access to your web interface. This is the recommended authentication method when exposing your instance to the internet.
 
 ##### Google OAuth Setup
 
@@ -1381,7 +1381,7 @@ BirdNET-Go supports OAuth2 authentication with Google and GitHub for secure acce
    - Navigate to "APIs & Services" → "OAuth consent screen"
    - Choose "External" user type (unless you have a Google Workspace)
    - Fill in the required application information:
-     - Application name: `BirdNET-Go`
+     - Application name: `VoiceWatch`
      - User support email: Your email address
      - Developer contact information: Your email address
    - Add your domain to authorized domains if applicable
@@ -1391,15 +1391,15 @@ BirdNET-Go supports OAuth2 authentication with Google and GitHub for secure acce
    - Navigate to "APIs & Services" → "Credentials"
    - Click "Create Credentials" → "OAuth client ID"
    - Select "Web application" as the application type
-   - Set the name: `BirdNET-Go Web Client`
+   - Set the name: `VoiceWatch Web Client`
    - **Authorized redirect URIs**: Add your callback URL:
      - Format: `http://YOUR_HOST:PORT/auth/google/callback`
      - Example: `http://192.168.1.100:8080/auth/google/callback`
      - For internet access: `https://yourdomain.com/auth/google/callback`
 
-4. **Configure BirdNET-Go**:
+4. **Configure VoiceWatch**:
    - Copy the Client ID and Client Secret from Google
-   - In your BirdNET-Go web interface, go to Settings → Security
+   - In your VoiceWatch web interface, go to Settings → Security
    - Enable Google OAuth and enter:
      - **Client ID**: Your Google OAuth Client ID
      - **Client Secret**: Your Google OAuth Client Secret
@@ -1411,8 +1411,8 @@ BirdNET-Go supports OAuth2 authentication with Google and GitHub for secure acce
    - Go to GitHub Settings → Developer settings → OAuth Apps
    - Click "New OAuth App"
    - Fill in the application details:
-     - **Application name**: `BirdNET-Go`
-     - **Homepage URL**: `http://YOUR_HOST:PORT` (your BirdNET-Go URL)
+     - **Application name**: `VoiceWatch`
+     - **Homepage URL**: `http://YOUR_HOST:PORT` (your VoiceWatch URL)
      - **Authorization callback URL**: `http://YOUR_HOST:PORT/auth/github/callback`
        - Example: `http://192.168.1.100:8080/auth/github/callback`
        - For internet access: `https://yourdomain.com/auth/github/callback`
@@ -1422,8 +1422,8 @@ BirdNET-Go supports OAuth2 authentication with Google and GitHub for secure acce
    - After creating the app, click "Generate a new client secret"
    - Copy both the Client ID and Client Secret immediately
 
-3. **Configure BirdNET-Go**:
-   - In your BirdNET-Go web interface, go to Settings → Security
+3. **Configure VoiceWatch**:
+   - In your VoiceWatch web interface, go to Settings → Security
    - Enable GitHub OAuth and enter:
      - **Client ID**: Your GitHub OAuth Client ID
      - **Client Secret**: Your GitHub OAuth Client Secret
@@ -1467,7 +1467,7 @@ BIRDNET_SECURITY_GITHUBAUTH_USERID=yourusername
 
 ##### Important OAuth Notes
 
-- **Callback URLs**: Always use the format `/auth/provider/callback` (e.g., `/auth/google/callback`, `/auth/github/callback`) as shown in the BirdNET-Go settings page
+- **Callback URLs**: Always use the format `/auth/provider/callback` (e.g., `/auth/google/callback`, `/auth/github/callback`) as shown in the VoiceWatch settings page
 - **HTTPS Requirement**: OAuth providers typically require HTTPS for production use. Enable `autotls: true` or use a reverse proxy with SSL certificates
 - **User ID Restrictions**: The optional `userid` field allows you to restrict access to a specific account for enhanced security
 - **Local Network**: OAuth authentication works on local networks, but you can also enable subnet bypass for local access without OAuth
@@ -1477,7 +1477,7 @@ BIRDNET_SECURITY_GITHUBAUTH_USERID=yourusername
 
 **"Invalid redirect URI" errors**:
 
-- Ensure your callback URL in the OAuth app configuration exactly matches the format shown in BirdNET-Go settings
+- Ensure your callback URL in the OAuth app configuration exactly matches the format shown in VoiceWatch settings
 - Check that the protocol (http/https) and port number are correct
 - The callback URL should end with `/auth/google/callback` or `/auth/github/callback`
 
@@ -1488,13 +1488,13 @@ BIRDNET_SECURITY_GITHUBAUTH_USERID=yourusername
 
 **Login button not appearing**:
 
-- Check that OAuth is enabled in BirdNET-Go settings
+- Check that OAuth is enabled in VoiceWatch settings
 - Verify your client ID and client secret are correctly configured
 - Check the browser console for JavaScript errors
 
 ### Filtering Capabilities
 
-BirdNET-Go includes intelligent filtering mechanisms:
+VoiceWatch includes intelligent filtering mechanisms:
 
 - Privacy filter to ignore human voices
 - Dog bark filter to prevent misdetections when BirdNET confuses barking with owl/crow calls
@@ -1503,7 +1503,7 @@ BirdNET-Go includes intelligent filtering mechanisms:
 
 ### Deep Detection
 
-BirdNET-Go includes a "Deep Detection" feature designed to improve detection reliability and reduce false positives by requiring multiple detections of the same species within a time window.
+VoiceWatch includes a "Deep Detection" feature designed to improve detection reliability and reduce false positives by requiring multiple detections of the same species within a time window.
 
 #### Deep Detection Flow Chart
 
@@ -1588,7 +1588,7 @@ graph TD
 
 ### Live Audio Streaming
 
-BirdNET-Go allows you to listen to the live audio feed directly from the web interface. This is useful for monitoring the audio quality, checking microphone placement, or simply listening to the ambient sounds.
+VoiceWatch allows you to listen to the live audio feed directly from the web interface. This is useful for monitoring the audio quality, checking microphone placement, or simply listening to the ambient sounds.
 
 - **How to Use:**
   1.  Locate the microphone icon / audio level indicator in the web interface header.
@@ -1598,12 +1598,12 @@ BirdNET-Go allows you to listen to the live audio feed directly from the web int
   5.  Audio playback will begin using your browser's audio capabilities.
   6.  Click the stop icon (⏹️) to end the stream.
 - **Technology:** The live stream uses HLS (HTTP Live Streaming) for broad browser compatibility and efficient delivery.
-- **Dependency:** This feature requires **FFmpeg** to be installed and accessible by BirdNET-Go. If FFmpeg is not found, the play button may not appear or function.
+- **Dependency:** This feature requires **FFmpeg** to be installed and accessible by VoiceWatch. If FFmpeg is not found, the play button may not appear or function.
 - **Server Interaction:** Starting the live stream initiates audio encoding on the server. The stream uses a heartbeat mechanism to stay active while you are listening. Stopping the stream or closing the browser tab/window signals the server to stop the encoding process, conserving server resources.
 
 ### Sound Level Monitoring
 
-BirdNET-Go includes an advanced sound level monitoring feature that provides detailed acoustic measurements of your environment in 1/3rd octave bands. This feature is particularly useful for:
+VoiceWatch includes an advanced sound level monitoring feature that provides detailed acoustic measurements of your environment in 1/3rd octave bands. This feature is particularly useful for:
 
 - **Environmental noise monitoring**: Track ambient noise levels over time
 - **Acoustic habitat assessment**: Understand the soundscape characteristics of your monitoring location
@@ -2017,7 +2017,7 @@ The implementation provides a solid foundation for environmental sound monitorin
 
 ### Push Notifications
 
-BirdNET-Go includes a comprehensive push notification system that can send real-time alerts about bird detections, system errors, and important events to your preferred notification services. This feature enables you to stay informed about what's happening at your monitoring station even when you're away from the web interface.
+VoiceWatch includes a comprehensive push notification system that can send real-time alerts about bird detections, system errors, and important events to your preferred notification services. This feature enables you to stay informed about what's happening at your monitoring station even when you're away from the web interface.
 
 #### Overview
 
@@ -2025,7 +2025,7 @@ The push notification system supports multiple delivery methods (providers) and 
 
 #### Configuring Notification URLs
 
-Push notifications for new bird detections include clickable links to view the detection details in the web interface. To ensure these URLs work correctly when accessing BirdNET-Go through a reverse proxy or from remote locations, you need to configure the hostname:
+Push notifications for new bird detections include clickable links to view the detection details in the web interface. To ensure these URLs work correctly when accessing VoiceWatch through a reverse proxy or from remote locations, you need to configure the hostname:
 
 **Configuration Methods (in priority order):**
 
@@ -2062,11 +2062,11 @@ services:
 
 Without proper hostname configuration, notification URLs will show as `http://localhost:8080/ui/detections/12345`, which won't work when clicked from a phone or remote device. With the hostname configured, URLs will correctly show as `http://birdnet.home.arpa/ui/detections/12345`.
 
-> **Note**: A warning will be logged if BirdNET-Go falls back to using localhost for notification URLs. Configure the hostname using either method above to resolve this warning.
+> **Note**: A warning will be logged if VoiceWatch falls back to using localhost for notification URLs. Configure the hostname using either method above to resolve this warning.
 
 #### Supported Providers
 
-BirdNET-Go supports three types of push notification providers:
+VoiceWatch supports three types of push notification providers:
 
 ##### 1. Shoutrrr (Multi-Service)
 
@@ -2140,7 +2140,7 @@ https://discord.com/api/webhooks/1234567890/abcDEFghiJKLmnoPQRstu
 → discord://abcDEFghiJKLmnoPQRstu@1234567890
 ```
 
-**Step 3: Configure in BirdNET-Go**
+**Step 3: Configure in VoiceWatch**
 
 Via the web UI:
 1. Go to **Settings** → **Notifications** → **Channels**
@@ -2195,7 +2195,7 @@ notification:
           {"name":"Species","value":"{{index .Metadata `species`}}","inline":true},
           {"name":"Confidence","value":"{{index .Metadata `bg_confidence_percent`}}%","inline":true},
           {"name":"Location","value":"{{index .Metadata `bg_location`}}","inline":true}],
-          "footer":{"text":"BirdNET-Go"}}]}
+          "footer":{"text":"VoiceWatch"}}]}
 ```
 
 This produces Discord messages with:
@@ -2619,7 +2619,7 @@ token_file: "/run/secrets/telegram_token"
 
 **2. Environment Variables**
 
-Set environment variables when running BirdNET-Go:
+Set environment variables when running VoiceWatch:
 
 ```bash
 # Docker
@@ -2794,11 +2794,11 @@ Trigger custom actions via script (turn on lights, play sounds, etc.):
 
 ### Species Tracking System
 
-BirdNET-Go includes an intelligent species tracking system that helps you discover and monitor bird activity patterns at your location. This feature automatically tracks when new bird species appear and highlights them with special badges to make discoveries easy to spot.
+VoiceWatch includes an intelligent species tracking system that helps you discover and monitor bird activity patterns at your location. This feature automatically tracks when new bird species appear and highlights them with special badges to make discoveries easy to spot.
 
 #### How Species Tracking Works
 
-The species tracking system runs automatically in the background, analyzing each bird detection and comparing it against your historical data. When BirdNET-Go detects a bird species that hasn't been seen recently (or ever), it adds special badges to help you notice these exciting discoveries.
+The species tracking system runs automatically in the background, analyzing each bird detection and comparing it against your historical data. When VoiceWatch detects a bird species that hasn't been seen recently (or ever), it adds special badges to help you notice these exciting discoveries.
 
 #### Types of Species Tracking
 
@@ -2975,7 +2975,7 @@ speciesTracking:
 3. **Check Regularly**: Visit your dashboard daily during migration seasons to catch the most exciting discoveries
 4. **Seasonal Awareness**: Pay extra attention during spring and fall migrations when new species are most likely to appear
 
-The species tracking system transforms your BirdNET-Go installation from a simple detector into an intelligent monitoring system that helps you understand the changing patterns of bird life at your location throughout the year.
+The species tracking system transforms your VoiceWatch installation from a simple detector into an intelligent monitoring system that helps you understand the changing patterns of bird life at your location throughout the year.
 
 ### Integration Options
 
@@ -2996,8 +2996,8 @@ The application offers several integration points:
   - **Getting a BirdWeather ID/Token:** To upload data, you need an ID (also referred to as a Token). This process is now automated:
     1. Create an account at [app.birdweather.com/login](https://app.birdweather.com/login).
     2. Go to your account's station page: [app.birdweather.com/account/stations](https://app.birdweather.com/account/stations).
-    3. Create a new station, ensuring the Latitude and Longitude match your BirdNET-Go configuration (`birdnet.latitude` and `birdnet.longitude`).
-    4. Copy the generated station ID/Token into the `realtime.birdweather.id` field in your BirdNET-Go configuration.
+    3. Create a new station, ensuring the Latitude and Longitude match your VoiceWatch configuration (`birdnet.latitude` and `birdnet.longitude`).
+    4. Copy the generated station ID/Token into the `realtime.birdweather.id` field in your VoiceWatch configuration.
   - **Data Sharing Consent:** By configuring and enabling BirdWeather uploads with your ID/Token, you consent to sharing your soundscape snippets and detection data with BirdWeather.
 * Custom actions that can be triggered on species detection.
 * Built-in connection testers (via Web UI) for BirdWeather and MQTT to verify configuration.
@@ -3005,7 +3005,7 @@ The application offers several integration points:
 
 ## Real-time Detection API (Server-Sent Events)
 
-BirdNET-Go provides a Server-Sent Events (SSE) API that streams bird detections in real-time as they happen. This allows you to build custom applications, dashboards, or integrations that react immediately to new bird detections.
+VoiceWatch provides a Server-Sent Events (SSE) API that streams bird detections in real-time as they happen. This allows you to build custom applications, dashboards, or integrations that react immediately to new bird detections.
 
 ### Authentication Policy
 
@@ -3109,7 +3109,7 @@ Perfect for web dashboards or browser-based applications:
 <!DOCTYPE html>
 <html>
   <head>
-    <title>BirdNET-Go Live Detections</title>
+    <title>VoiceWatch Live Detections</title>
   </head>
   <body>
     <div id="detections"></div>
@@ -3174,7 +3174,7 @@ import requests
 
 def listen_to_detections(base_url="http://localhost:8080"):
     """
-    Listen to BirdNET-Go detection stream and process detections.
+    Listen to VoiceWatch detection stream and process detections.
 
     Requires: pip install sseclient-py requests
     """
@@ -3184,7 +3184,7 @@ def listen_to_detections(base_url="http://localhost:8080"):
         response = requests.get(url, stream=True, headers={'Accept': 'text/event-stream'})
         client = sseclient.SSEClient(response)
 
-        print("Connected to BirdNET-Go detection stream...")
+        print("Connected to VoiceWatch detection stream...")
 
         for event in client.events():
             if event.event == 'connected':
@@ -3239,7 +3239,7 @@ if __name__ == "__main__":
 
 #### Node.js
 
-Ideal for server-side applications or building APIs on top of BirdNET-Go:
+Ideal for server-side applications or building APIs on top of VoiceWatch:
 
 ```javascript
 const EventSource = require("eventsource");
@@ -3273,7 +3273,7 @@ class BirdNetGoClient {
       console.error("❌ SSE Error:", error);
     };
 
-    console.log("🔗 Connecting to BirdNET-Go detection stream...");
+    console.log("🔗 Connecting to VoiceWatch detection stream...");
   }
 
   onDetection(detection) {
@@ -3428,7 +3428,7 @@ Send notifications via email, SMS, push notifications, or other channels when ra
 
 ## Species-Specific Settings
 
-BirdNET-Go allows for fine-grained control over how individual species are handled through the `realtime.species` configuration section:
+VoiceWatch allows for fine-grained control over how individual species are handled through the `realtime.species` configuration section:
 
 - **Include List (`include`):** A list of species names (matching the labels used by your BirdNET model/locale) that should _always_ be processed and trigger actions if their confidence meets the required threshold. These species bypass any location-based range filtering.
 - **Exclude List (`exclude`):** A list of species names that should _always_ be ignored, regardless of their detection confidence. This is useful for filtering out consistently problematic species or non-bird sounds that might be misidentified.
@@ -3445,8 +3445,8 @@ BirdNET-Go allows for fine-grained control over how individual species are handl
       - `Time`: The time of the detection (format: HH:MM:SS).
       - `Source`: The audio source identifier (e.g., sound card name or RTSP stream URL).
     - **ExecuteDefaults:** A boolean value (`true` or `false`).
-      - If `true` (default), BirdNET-Go will execute **both** your custom command **and** all other configured default actions (like saving to the database, uploading to BirdWeather, sending MQTT messages, etc.).
-      - If `false`, BirdNET-Go will **only** execute your custom command for this specific species detection and will _skip_ all default actions.
+      - If `true` (default), VoiceWatch will execute **both** your custom command **and** all other configured default actions (like saving to the database, uploading to BirdWeather, sending MQTT messages, etc.).
+      - If `false`, VoiceWatch will **only** execute your custom command for this specific species detection and will _skip_ all default actions.
 
 Example `config` entry:
 

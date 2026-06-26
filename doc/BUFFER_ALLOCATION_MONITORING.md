@@ -2,7 +2,7 @@
 
 ## Overview
 
-BirdNET-Go uses metrics to track buffer allocations and detect potential repeated allocation issues. This replaces the previous allocation tracking system with lightweight Prometheus metrics.
+VoiceWatch uses metrics to track buffer allocations and detect potential repeated allocation issues. This replaces the previous allocation tracking system with lightweight Prometheus metrics.
 
 ## Key Metrics
 

@@ -1,8 +1,8 @@
-# BirdNET-Go API v2 Documentation
+# VoiceWatch API v2 Documentation
 
 ## Overview
 
-The API v2 provides comprehensive access to BirdNET-Go's bird detection and monitoring capabilities through REST endpoints and real-time streams. All endpoints are prefixed with `/api/v2`.
+The API v2 provides comprehensive access to VoiceWatch's human-voice detection and monitoring capabilities through REST endpoints and real-time streams. All endpoints are prefixed with `/api/v2`.
 
 ## Endpoint Registration Pattern
 
@@ -1002,7 +1002,7 @@ export function startStreamMonitoring() {
 ### Troubleshooting Common Issues
 
 **Q: Stream shows `circuit_open` state and won't reconnect**
-A: Check `last_error_context` for the permanent failure reason. Fix the underlying issue (e.g., correct URL, fix authentication) and either restart BirdNET-Go or wait for the circuit breaker cooldown period (30 seconds).
+A: Check `last_error_context` for the permanent failure reason. Fix the underlying issue (e.g., correct URL, fix authentication) and either restart VoiceWatch or wait for the circuit breaker cooldown period (30 seconds).
 
 **Q: `time_since_data_seconds` is increasing but stream shows healthy**
 A: This indicates the stream may be stalled. The health check will automatically trigger a restart when it exceeds the configured threshold (default: 60 seconds).

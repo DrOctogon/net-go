@@ -2,11 +2,11 @@
 
 ## Overview
 
-The `mqtt` package provides a robust MQTT client implementation for BirdNET-Go, enabling real-time streaming of bird detection data to MQTT brokers. This package is designed with reliability, observability, and proper error handling as core principles.
+The `mqtt` package provides a robust MQTT client implementation for VoiceWatch, enabling real-time streaming of bird detection data to MQTT brokers. This package is designed with reliability, observability, and proper error handling as core principles.
 
 ## Package Purpose
 
-This package serves as the MQTT integration layer for BirdNET-Go, allowing:
+This package serves as the MQTT integration layer for VoiceWatch, allowing:
 
 - Real-time publishing of bird detection events
 - Integration with home automation systems (Home Assistant, Node-RED, etc.)
@@ -288,7 +288,7 @@ Tests use the following broker sources:
 
 ### TLS Certificate Management
 
-BirdNET-Go provides a secure certificate management system:
+VoiceWatch provides a secure certificate management system:
 
 - **UI Certificate Entry**: Paste PEM-encoded certificates directly in the web interface
 - **Secure Storage**: Certificates are saved to `config/tls/mqtt/` with proper permissions

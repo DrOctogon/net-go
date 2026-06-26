@@ -1,6 +1,6 @@
-# Contributing to BirdNET-Go
+# Contributing to VoiceWatch
 
-Thank you for your interest in contributing to BirdNET-Go!
+Thank you for your interest in contributing to VoiceWatch!
 
 ## TL;DR - Quick Start
 
@@ -58,7 +58,7 @@ air realtime
 
 ### Project License
 
-By contributing to BirdNET-Go, you agree that your contributions will be licensed under **[CC BY-NC-SA 4.0](LICENSE)**:
+By contributing to VoiceWatch, you agree that your contributions will be licensed under **[CC BY-NC-SA 4.0](LICENSE)**:
 
 - ✅ **Attribution** - Give appropriate credit
 - ✅ **ShareAlike** - Same license for derivatives
@@ -69,7 +69,7 @@ See [LICENSE](LICENSE) for full terms.
 
 ### Privacy Policy
 
-BirdNET-Go is **privacy-first** with zero data collection by default. Contributors must:
+VoiceWatch is **privacy-first** with zero data collection by default. Contributors must:
 
 - Follow privacy-by-design principles
 - Never add telemetry without explicit user opt-in
@@ -363,7 +363,7 @@ task e2e-report                 # View report
 
 ## AI-Assisted Development
 
-BirdNET-Go **welcomes AI-assisted coding tools**. The main developer uses [Claude Code](https://claude.ai/claude-code), and all PRs receive [CodeRabbit AI](https://coderabbit.ai/) reviews.
+VoiceWatch **welcomes AI-assisted coding tools**. The main developer uses [Claude Code](https://claude.ai/claude-code), and all PRs receive [CodeRabbit AI](https://coderabbit.ai/) reviews.
 
 ### CLAUDE.md Guidelines
 
@@ -398,7 +398,7 @@ Project guidelines are in CLAUDE.md files (see [Getting Started](#getting-starte
 ### Getting Started with Claude Code
 
 1. Install: [Claude Code guide](https://docs.claude.com/en/docs/claude-code)
-2. Open BirdNET-Go repository
+2. Open VoiceWatch repository
 3. CLAUDE.md files provide automatic context
 4. Ask Claude for help with specific tasks
 
@@ -555,6 +555,6 @@ task clean              # Clean artifacts
 
 ---
 
-**Thank you for contributing to BirdNET-Go!** 🎉
+**Thank you for contributing to VoiceWatch!** 🎉
 
 **Questions?** [Discord](https://discord.gg/gcSCFGUtsd) | [Discussions](https://github.com/tphakala/voicewatch/discussions) | [Issues](https://github.com/tphakala/voicewatch/issues)

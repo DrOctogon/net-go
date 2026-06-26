@@ -1,6 +1,6 @@
 # i18n Translation Validation Tools
 
-Automated validation tools for BirdNET-Go's i18n translation files.
+Automated validation tools for VoiceWatch's i18n translation files.
 
 ## Overview
 
@@ -472,4 +472,4 @@ When adding new validation rules:
 
 ## License
 
-Same as BirdNET-Go project license.
+Same as VoiceWatch project license.

@@ -1,6 +1,6 @@
-# BirdNET-Go Logging Standards
+# VoiceWatch Logging Standards
 
-This document defines the logging standards, field naming conventions, and message formats used throughout the BirdNET-Go codebase.
+This document defines the logging standards, field naming conventions, and message formats used throughout the VoiceWatch codebase.
 
 ## Table of Contents
 

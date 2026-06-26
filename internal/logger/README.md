@@ -1,6 +1,6 @@
 # Logger Package
 
-Centralized, module-aware logging system for BirdNET-Go built on Go's standard `log/slog`.
+Centralized, module-aware logging system for VoiceWatch built on Go's standard `log/slog`.
 
 ## Features
 

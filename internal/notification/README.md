@@ -43,7 +43,7 @@ Use the helper functions for common scenarios:
 notification.NotifyError(err)
 
 // System alert (e.g., startup/shutdown events)
-notification.NotifySystemAlert(notification.PriorityMedium, "System Starting", "BirdNET-Go is initializing")
+notification.NotifySystemAlert(notification.PriorityMedium, "System Starting", "VoiceWatch is initializing")
 
 // Bird detection
 notification.NotifyDetection("Northern Cardinal", 0.95, map[string]interface{}{
@@ -55,7 +55,7 @@ notification.NotifyDetection("Northern Cardinal", 0.95, map[string]interface{}{
 notification.NotifyIntegrationFailure("BirdWeather", err)
 
 // Info message
-notification.NotifyInfo("Update Available", "A new version of BirdNET-Go is available")
+notification.NotifyInfo("Update Available", "A new version of VoiceWatch is available")
 
 // Warning
 notification.NotifyWarning("audio", "Audio Device Changed", "Audio input device has been switched")

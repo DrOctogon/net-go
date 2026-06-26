@@ -1,10 +1,10 @@
-# BirdNET-Go Architecture
+# VoiceWatch Architecture
 
-This document provides a comprehensive overview of BirdNET-Go's architecture, tech stack, and design decisions.
+This document provides a comprehensive overview of VoiceWatch's architecture, tech stack, and design decisions.
 
 ## Table of Contents
 
-- [BirdNET-Go Architecture](#birdnet-go-architecture)
+- [VoiceWatch Architecture](#voicewatch-architecture)
   - [Table of Contents](#table-of-contents)
   - [System Overview](#system-overview)
     - [High-Level Architecture](#high-level-architecture)
@@ -60,7 +60,7 @@ This document provides a comprehensive overview of BirdNET-Go's architecture, te
 
 ## System Overview
 
-BirdNET-Go is a self-contained application for real-time bird sound identification using the BirdNET AI model. The architecture follows these key principles:
+VoiceWatch is a self-contained application for real-time human-voice detection. The architecture follows these key principles:
 
 - **Single Binary Deployment**: Frontend assets are embedded into the Go binary
 - **Privacy-First**: No data collection without explicit user opt-in
@@ -155,7 +155,7 @@ github.com/stretchr/testify
 
 **Dual TensorFlow Lite Model Architecture**
 
-BirdNET-Go uses **TWO** TensorFlow Lite models from the BirdNET Analyzer project:
+VoiceWatch (pre-pivot) used **TWO** TensorFlow Lite models from the BirdNET Analyzer project:
 
 1. **Analysis Model** - Species identification from audio
 2. **Range Filter Model** - Geographic/regional filtering of species
@@ -196,7 +196,7 @@ internal/inference/
 
 **TensorFlow Lite Integration via go-tflite:**
 
-BirdNET-Go uses the `github.com/tphakala/go-tflite` library for TensorFlow Lite integration:
+VoiceWatch (pre-pivot) used the `github.com/tphakala/go-tflite` library for TensorFlow Lite integration:
 
 ```go
 // internal/inference/tflite/classifier.go
@@ -324,7 +324,7 @@ cmd/
 ```yaml
 # config.yaml
 main:
-  name: BirdNET-Go
+  name: VoiceWatch
   timeAs24h: true
   log:
     level: info
@@ -509,7 +509,7 @@ stats, err := db.GetTopBirdsDetected(limit)
 
 **Multi-Source Audio Capture**
 
-BirdNET-Go supports various audio input sources:
+VoiceWatch supports various audio input sources:
 
 1. **Local Audio Devices** (ALSA, CoreAudio, WASAPI)
 2. **RTSP Streams** (IP cameras, network audio sources)
@@ -561,7 +561,7 @@ internal/myaudio/
 
 **Audio Device Interface (malgo/miniaudio):**
 
-BirdNET-Go uses **malgo** (Go wrapper for miniaudio.h) for cross-platform audio device access:
+VoiceWatch uses **malgo** (Go wrapper for miniaudio.h) for cross-platform audio device access:
 
 - **Linux**: ALSA backend
 - **macOS**: CoreAudio backend
@@ -570,7 +570,7 @@ BirdNET-Go uses **malgo** (Go wrapper for miniaudio.h) for cross-platform audio 
 **Audio Format Requirements:**
 
 - **Realtime Mode**: Expects 48kHz, 16-bit mono PCM from audio source
-  - No explicit resampling in BirdNET-Go code
+  - No explicit resampling in VoiceWatch code
   - malgo/miniaudio may handle format conversion internally
 - **File Analysis Mode**: Uses `resample.go` for format conversion to 48kHz mono
 
@@ -614,7 +614,7 @@ Spectrograms are generated on-demand or pre-rendered for dashboard display using
 
 **Async Task Processing System:**
 
-BirdNET-Go uses an asynchronous job queue system for handling detection actions (database saves, MQTT publishes, BirdWeather uploads, etc.):
+VoiceWatch uses an asynchronous job queue system for handling detection actions (database saves, MQTT publishes, BirdWeather uploads, etc.):
 
 ```
 internal/analysis/jobqueue/
@@ -791,7 +791,7 @@ internal/analysis/jobqueue/
 
 **Concurrency Model:**
 
-BirdNET-Go uses a job queue system for concurrent action processing:
+VoiceWatch uses a job queue system for concurrent action processing:
 
 ```go
 // Initialize job queue with capacity and options
@@ -937,7 +937,7 @@ internal/package/
 
 **Automated Mock Generation with Mockery v2**
 
-BirdNET-Go uses [Mockery v2](https://vektra.github.io/mockery/) for automated mock generation, eliminating manual mock maintenance:
+VoiceWatch uses [Mockery v2](https://vektra.github.io/mockery/) for automated mock generation, eliminating manual mock maintenance:
 
 ```
 internal/datastore/mocks/
@@ -1077,7 +1077,7 @@ go test -race ./...
 
 ### UI Technology Stack
 
-BirdNET-Go uses a modern Svelte 5 frontend:
+VoiceWatch uses a modern Svelte 5 frontend:
 
 | Feature              | Technology            |
 | -------------------- | --------------------- |
@@ -1932,7 +1932,7 @@ const (
 
 **Binary Authentication Model:**
 
-BirdNET-Go uses a **binary authentication model** (authenticated or not) rather than role-based access control. There are no user roles or permission levels.
+VoiceWatch uses a **binary authentication model** (authenticated or not) rather than role-based access control. There are no user roles or permission levels.
 
 **Protected Routes:**
 

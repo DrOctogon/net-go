@@ -2,7 +2,7 @@
 
 ## Overview
 
-The TLS Certificate Manager provides a secure, centralized system for managing TLS certificates and private keys across different services in BirdNET-Go. It handles certificate validation, secure storage, and file path management, making it easy to add TLS support to any service.
+The TLS Certificate Manager provides a secure, centralized system for managing TLS certificates and private keys across different services in VoiceWatch. It handles certificate validation, secure storage, and file path management, making it easy to add TLS support to any service.
 
 ## Purpose
 

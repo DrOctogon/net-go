@@ -1,6 +1,6 @@
-# BirdNET-Go Detection Pipeline
+# VoiceWatch Detection Pipeline
 
-This document explains how audio flows through BirdNET-Go's multi-model detection pipeline, from hardware capture to stored detections and notifications.
+This document explains how audio flows through VoiceWatch's multi-model detection pipeline, from hardware capture to stored detections and notifications.
 
 ## Pipeline Overview
 

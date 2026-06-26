@@ -1,7 +1,8 @@
-# BirdNET-Go
+# VoiceWatch
 
 <p align="center">
   <img src="doc/BirdNET-Go-logo.webp" />
+  <!-- VoiceWatch logo redesign pending; current asset is the upstream BirdNET-Go logo -->
 </p>
 <p align="center">
   <!-- Project Status -->
@@ -46,9 +47,9 @@
 
 **Realtime human-voice detector for live audio.**
 
-Self-hosted, 24/7, local AI inference. BirdNET-Go ingests soundcard input or network audio streams, runs on-device voice-activity detection, and presents detections in a fast web UI. Runs on a Raspberry Pi. No audio leaves the machine.
+Self-hosted, 24/7, local AI inference. VoiceWatch ingests soundcard input or network audio streams, runs on-device voice-activity detection, and presents detections in a fast web UI. Runs on a Raspberry Pi. No audio leaves the machine.
 
-> **Project status:** BirdNET-Go has pivoted from multi-species bird identification to a single-purpose **human-voice (speech) detector**. The bird/wildlife classifiers, model gallery, range filter, and taxonomy have been removed; detection now uses an embedded [Silero VAD](https://github.com/snakers4/silero-vad) model. The repository name and platform heritage are retained.
+> **Project status:** VoiceWatch has pivoted from multi-species bird identification to a single-purpose **human-voice (speech) detector**. The bird/wildlife classifiers, model gallery, range filter, and taxonomy have been removed; detection now uses an embedded [Silero VAD](https://github.com/snakers4/silero-vad) model. The repository name and platform heritage are retained.
 
 ## Highlights
 
