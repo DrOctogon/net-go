@@ -786,6 +786,7 @@
   },
   "detections": {
     "title": "Registreringer",
+    "flaggedByKeywords": "Flagged by keywords: {keywords}",
     "titles": {
       "hourly": "Timeresultater for {hour}:00 den {date}",
       "hourlyRange": "Timeresultater fra {startHour}:00 til {endHour}:00 den {date}",

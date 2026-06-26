@@ -786,6 +786,7 @@
   },
   "detections": {
     "title": "Detekteringar",
+    "flaggedByKeywords": "Flagged by keywords: {keywords}",
     "titles": {
       "hourly": "Timresultat för {hour}:00 den {date}",
       "hourlyRange": "Timresultat från {startHour}:00 till {endHour}:00 den {date}",

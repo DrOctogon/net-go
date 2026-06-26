@@ -786,6 +786,7 @@
   },
   "detections": {
     "title": "Atklāšanas",
+    "flaggedByKeywords": "Flagged by keywords: {keywords}",
     "titles": {
       "hourly": "Stundu rezultāti plkst. {hour}:00, {date}",
       "hourlyRange": "Stundu rezultāti no {startHour}:00 līdz {endHour}:00, {date}",

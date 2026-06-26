@@ -632,6 +632,7 @@ export type TranslationKey =
   | 'dashboard.elements.liveSpectrogram'
   | 'dashboard.elements.videoEmbed'
   | 'detections.title'
+  | 'detections.flaggedByKeywords' // params: keywords
   | 'detections.titles.hourly' // params: hour, date
   | 'detections.titles.hourlyRange' // params: startHour, endHour, date
   | 'detections.titles.species' // params: species, date
@@ -3907,6 +3908,7 @@ export type TranslationParams = {
   'dashboard.errors.recentDetectionsFetch': { status: string | number };
   'dashboard.errors.configFetch': { status: string | number };
   'dashboard.editMode.configureTitle': { element: string | number };
+  'detections.flaggedByKeywords': { keywords: string | number };
   'detections.titles.hourly': { hour: string | number; date: string | number };
   'detections.titles.hourlyRange': {
     startHour: string | number;

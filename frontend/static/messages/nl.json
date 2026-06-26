@@ -786,6 +786,7 @@
   },
   "detections": {
     "title": "Herkend",
+    "flaggedByKeywords": "Flagged by keywords: {keywords}",
     "titles": {
       "hourly": "Herkend om {hour}:00 uur op {date}",
       "hourlyRange": "Herkend tussen {startHour}:00 en {endHour}:00 uur op {date}",

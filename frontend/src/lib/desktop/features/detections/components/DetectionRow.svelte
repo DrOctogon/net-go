@@ -35,6 +35,7 @@
   import ActionMenu from '$lib/desktop/components/ui/ActionMenu.svelte';
   import { handleBirdImageError } from '$lib/desktop/components/ui/image-utils.js';
   import { t } from '$lib/i18n';
+  import { Flag } from '@lucide/svelte';
   import type { Detection } from '$lib/types/detection.types';
   import { useImageDelayedLoading } from '$lib/utils/delayedLoading.svelte.js';
   import { loggers } from '$lib/utils/logger';
@@ -274,7 +275,22 @@
 
 <!-- Status -->
 <td>
-  <VerificationBadges {detection} />
+  <div class="flex items-start gap-1.5 flex-wrap">
+    {#if detection.flagged}
+      {@const flagLabel = detection.keywordsHit?.length
+        ? t('detections.flaggedByKeywords', { keywords: detection.keywordsHit.join(', ') })
+        : t('detections.detail.transcript.flaggedNotice')}
+      <span
+        role="img"
+        aria-label={flagLabel}
+        title={flagLabel}
+        class="inline-flex items-center text-[var(--color-warning)] shrink-0"
+      >
+        <Flag class="w-3.5 h-3.5" aria-hidden="true" />
+      </span>
+    {/if}
+    <VerificationBadges {detection} />
+  </div>
 </td>
 
 <!-- Recording/Spectrogram -->

@@ -786,6 +786,7 @@
   },
   "detections": {
     "title": "Detekcie",
+    "flaggedByKeywords": "Flagged by keywords: {keywords}",
     "titles": {
       "hourly": "Hodinové výsledky pre {hour}:00 dňa {date}",
       "hourlyRange": "Hodinové výsledky od {startHour}:00 do {endHour}:00 dňa {date}",

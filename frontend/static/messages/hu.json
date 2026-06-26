@@ -786,6 +786,7 @@
   },
   "detections": {
     "title": "Detektálások",
+    "flaggedByKeywords": "Flagged by keywords: {keywords}",
     "titles": {
       "hourly": "Órási eredmények {date}-án {hour}:00-kor",
       "hourlyRange": "Órási eredmények {date}-án {startHour}:00 - {endHour}:00 között",

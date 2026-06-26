@@ -786,6 +786,7 @@
   },
   "detections": {
     "title": "Rilevamenti",
+    "flaggedByKeywords": "Flagged by keywords: {keywords}",
     "titles": {
       "hourly": "Risultati orari per le {hour}:00 del {date}",
       "hourlyRange": "Risultati orari dalle {startHour}:00 alle {endHour}:00 del {date}",

@@ -33,6 +33,7 @@
     Download,
     Camera,
     Clock,
+    Flag,
     History,
     StickyNote,
     Sun,
@@ -665,6 +666,52 @@
 {/snippet}
 
 {#snippet overviewTab(det: Detection)}
+  <!-- Transcript Section: only rendered when the backend returns transcript text -->
+  {#if det.transcript}
+    <section aria-labelledby="transcript-heading" class="mb-8">
+      <h3 id="transcript-heading" class="section-heading">
+        {t('detections.detail.transcript.title')}
+      </h3>
+      <div class="content-panel">
+        {#if det.flagged}
+          <div
+            class="flex items-center gap-2 mb-3 pb-3 border-b border-[var(--border-100)]"
+            role="status"
+          >
+            <Flag class="w-4 h-4 text-[var(--color-warning)] shrink-0" aria-hidden="true" />
+            <span class="text-sm font-medium text-[var(--color-base-content)]/70">
+              {t('detections.detail.transcript.flaggedNotice')}
+            </span>
+          </div>
+        {/if}
+
+        <p class="text-sm leading-relaxed whitespace-pre-wrap">{det.transcript}</p>
+
+        {#if det.keywordsHit && det.keywordsHit.length > 0}
+          <div class="mt-3 pt-3 border-t border-[var(--border-100)]">
+            <p
+              class="text-xs font-semibold uppercase tracking-wider text-[var(--color-base-content)]/50 mb-2"
+            >
+              {t('detections.detail.transcript.matchedKeywords')}
+            </p>
+            <ul
+              class="flex flex-wrap gap-1.5 list-none p-0 m-0"
+              aria-label={t('detections.detail.transcript.matchedKeywords')}
+            >
+              {#each det.keywordsHit as keyword (keyword)}
+                <li
+                  class="px-2 py-0.5 rounded text-xs font-medium border border-[var(--color-warning)]/40 bg-[var(--color-warning)]/10 text-[var(--color-base-content)]/80"
+                >
+                  {keyword}
+                </li>
+              {/each}
+            </ul>
+          </div>
+        {/if}
+      </div>
+    </section>
+  {/if}
+
   <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
     <!-- Species Rarity -->
     {#if speciesInfo?.rarity}

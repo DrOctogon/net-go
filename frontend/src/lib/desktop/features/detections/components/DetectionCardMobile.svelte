@@ -16,6 +16,7 @@
   import { dashboardSettings } from '$lib/stores/settings';
   import { navigation } from '$lib/stores/navigation.svelte';
   import { t } from '$lib/i18n';
+  import { Flag } from '@lucide/svelte';
 
   const getDefaultAudioGain = () => get(dashboardSettings)?.defaultAudioGain ?? 0;
   const DEFAULT_AUDIO_FILTER_FREQ = 20;
@@ -164,6 +165,19 @@
         <MoonBadge moonPhaseName={detection.weather.moonPhaseName} />
       {/if}
       <SourceBadge {detection} variant="overlay" />
+      {#if detection.flagged}
+        {@const flagLabel = detection.keywordsHit?.length
+          ? t('detections.flaggedByKeywords', { keywords: detection.keywordsHit.join(', ') })
+          : t('detections.detail.transcript.flaggedNotice')}
+        <span
+          role="img"
+          aria-label={flagLabel}
+          title={flagLabel}
+          class="inline-flex items-center justify-center w-6 h-6 rounded bg-black/50 text-[var(--color-warning)]"
+        >
+          <Flag class="w-3.5 h-3.5" aria-hidden="true" />
+        </span>
+      {/if}
     </div>
 
     <!-- Center Play Button -->

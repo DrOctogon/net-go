@@ -786,6 +786,7 @@
   },
   "detections": {
     "title": "Detections",
+    "flaggedByKeywords": "Flagged by keywords: {keywords}",
     "titles": {
       "hourly": "Hourly Results for {hour}:00 on {date}",
       "hourlyRange": "Hourly Results from {startHour}:00 to {endHour}:00 on {date}",
