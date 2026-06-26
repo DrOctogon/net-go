@@ -46,9 +46,8 @@ func setDefaultConfig() {
 	setModuleLogDefaults("security", true) // Security operations
 
 	// Integration modules
-	setModuleLogDefaults("mqtt", false)        // MQTT client (disabled by default)
-	setModuleLogDefaults("weather", false)     // Weather providers (disabled by default)
-	setModuleLogDefaults("ebird", false)       // eBird integration (disabled by default)
+	setModuleLogDefaults("mqtt", false)    // MQTT client (disabled by default)
+	setModuleLogDefaults("weather", false) // Weather providers (disabled by default)
 
 	// System and support modules
 	setModuleLogDefaults("backup", true)                          // Backup operations
@@ -203,12 +202,6 @@ func setDefaultConfig() {
 	// Log configuration
 	viper.SetDefault("realtime.log.enabled", false)
 	viper.SetDefault("realtime.log.path", "voicewatch.txt")
-
-	// eBird configuration
-	viper.SetDefault("realtime.ebird.enabled", false)
-	viper.SetDefault("realtime.ebird.apikey", "")
-	viper.SetDefault("realtime.ebird.cachettl", 24) // 24 hours default
-	viper.SetDefault("realtime.ebird.locale", "en")
 
 	// Transcription configuration (speech-to-text of saved clips)
 	viper.SetDefault("realtime.transcription.enabled", false)

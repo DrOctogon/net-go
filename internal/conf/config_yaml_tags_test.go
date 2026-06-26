@@ -105,10 +105,6 @@ func TestSettingsYAMLRoundTrip(t *testing.T) {
 	t.Parallel()
 
 	original := Settings{}
-	// EBird (the corrupted struct from #2429)
-	original.Realtime.EBird.Locale = "en-uk"
-	original.Realtime.EBird.CacheTTL = 48
-	original.Realtime.EBird.APIKey = "test-key"
 	// Retention (5 previously-mismatched fields)
 	original.Realtime.Audio.Export.Retention.MaxAge = "30d"
 	original.Realtime.Audio.Export.Retention.MaxUsage = "80%"
@@ -135,9 +131,6 @@ func TestSettingsYAMLRoundTrip(t *testing.T) {
 	require.NoError(t, err)
 
 	// Verify fields from each major subsystem survived
-	assert.Equal(t, "en-uk", restored.Realtime.EBird.Locale)
-	assert.Equal(t, 48, restored.Realtime.EBird.CacheTTL)
-	assert.Equal(t, "test-key", restored.Realtime.EBird.APIKey)
 	assert.Equal(t, "30d", restored.Realtime.Audio.Export.Retention.MaxAge)
 	assert.Equal(t, "80%", restored.Realtime.Audio.Export.Retention.MaxUsage)
 	assert.Equal(t, 10, restored.Realtime.Audio.Export.Retention.MinClips)

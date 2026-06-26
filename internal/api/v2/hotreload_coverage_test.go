@@ -138,9 +138,6 @@ var hotReloadRegistry = map[string]hotReloadEntry{
 		action:     "reconfigure_log_deduplication",
 	},
 
-	// -- eBird --
-	"Realtime.EBird": {categories: []hotReloadCategory{hotReloadFresh}},
-
 	// -- OpenWeather (runtime, yaml:"-") --
 	"Realtime.OpenWeather": {categories: []hotReloadCategory{hotReloadRuntime}},
 

@@ -50,9 +50,6 @@ func settingsWithSecrets(t *testing.T) *conf.Settings {
 	s.Realtime.Weather.OpenWeather.APIKey = "ow-api-key-123"
 	s.Realtime.Weather.Wunderground.APIKey = "wu-api-key-456"
 
-	// eBird
-	s.Realtime.EBird.APIKey = "ebird-api-key-789"
-
 	// Backup encryption
 	s.Backup.EncryptionKey = "base64-encryption-key"
 	s.Backup.Targets = []conf.BackupTarget{
@@ -142,9 +139,6 @@ func TestSanitizeSettingsForAPI_RedactsAllSecrets(t *testing.T) {
 	assert.Equal(t, redactedValue, sanitized.Realtime.Weather.OpenWeather.APIKey, "openWeather.apiKey must be redacted")
 	assert.Equal(t, redactedValue, sanitized.Realtime.Weather.Wunderground.APIKey, "wunderground.apiKey must be redacted")
 
-	// --- eBird ---
-	assert.Equal(t, redactedValue, sanitized.Realtime.EBird.APIKey, "ebird.apiKey must be redacted")
-
 	// --- Backup ---
 	assert.Equal(t, redactedValue, sanitized.Backup.EncryptionKey, "backup.encryptionKey must be redacted")
 	require.Len(t, sanitized.Backup.Targets, 2)
@@ -205,7 +199,6 @@ func TestSanitizeSettingsForAPI_EmptySecretsStayEmpty(t *testing.T) {
 	assert.Empty(t, sanitized.Realtime.MQTT.Password, "empty mqtt password should stay empty")
 	assert.Empty(t, sanitized.Output.MySQL.Password, "empty mysql password should stay empty")
 	assert.Empty(t, sanitized.Realtime.Weather.OpenWeather.APIKey, "empty openweather key should stay empty")
-	assert.Empty(t, sanitized.Realtime.EBird.APIKey, "empty ebird key should stay empty")
 	assert.Empty(t, sanitized.Backup.EncryptionKey, "empty encryption key should stay empty")
 }
 
@@ -236,7 +229,6 @@ func TestSanitizeSettingsForAPI_JSONOutputHasNoSecrets(t *testing.T) {
 		"db-password",
 		"ow-api-key-123",
 		"wu-api-key-456",
-		"ebird-api-key-789",
 		"base64-encryption-key",
 		"ftp-password",
 		"s3-secret-key",
@@ -273,7 +265,6 @@ func TestRestoreRedactedSecrets_PreservesRealValues(t *testing.T) {
 	incoming.Realtime.MQTT.Password = redactedValue
 	incoming.Output.MySQL.Password = redactedValue
 	incoming.Realtime.Weather.OpenWeather.APIKey = redactedValue
-	incoming.Realtime.EBird.APIKey = redactedValue
 	incoming.Backup.EncryptionKey = redactedValue
 	incoming.Security.OAuthProviders[0].ClientSecret = redactedValue
 	incoming.Notification.Push.Providers[0].Endpoints[0].Auth.Token = redactedValue
@@ -288,7 +279,6 @@ func TestRestoreRedactedSecrets_PreservesRealValues(t *testing.T) {
 	assert.Equal(t, "mqtt-password", incoming.Realtime.MQTT.Password)
 	assert.Equal(t, "db-password", incoming.Output.MySQL.Password)
 	assert.Equal(t, "ow-api-key-123", incoming.Realtime.Weather.OpenWeather.APIKey)
-	assert.Equal(t, "ebird-api-key-789", incoming.Realtime.EBird.APIKey)
 	assert.Equal(t, "base64-encryption-key", incoming.Backup.EncryptionKey)
 	assert.Equal(t, "goog-secret", incoming.Security.OAuthProviders[0].ClientSecret)
 	assert.Equal(t, "bearer-token-secret", incoming.Notification.Push.Providers[0].Endpoints[0].Auth.Token)

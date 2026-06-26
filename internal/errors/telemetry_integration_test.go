@@ -106,16 +106,6 @@ func TestShouldReportToSentry_FiltersNoteNotFound(t *testing.T) {
 	assert.False(t, shouldReportToSentry(ee))
 }
 
-func TestShouldReportToSentry_FiltersEBirdTaxonomyNotFound(t *testing.T) {
-	t.Parallel()
-	// Non-bird species (e.g., Canis latrans) are expected to be absent from eBird
-	ee := New(fmt.Errorf("species not found in eBird taxonomy: Canis latrans")).
-		Component("ebird").
-		Category(CategoryNotFound).
-		Build()
-	assert.False(t, shouldReportToSentry(ee))
-}
-
 func TestShouldReportToSentry_FiltersDynamicThresholdNotFound(t *testing.T) {
 	t.Parallel()
 	// A user querying the dynamic threshold for a species that has none is a
@@ -144,9 +134,9 @@ func TestShouldReportToSentry_AllowsNetworkCategoryCodeBugs(t *testing.T) {
 // component="notification", and that single sentinel is what every caller
 // (notification push providers AND birdweather uploads, which reuse the
 // same breaker) receives, so the notification-only filter suppresses both
-// in practice. Other CategoryLimit producers (eBird API quota, analysis job
-// queue full, spectrogram pre-render memory limits) are legitimate
-// operational signals that ops needs to see and must still reach Sentry.
+// in practice. Other CategoryLimit producers (analysis job queue full,
+// spectrogram pre-render memory limits) are legitimate operational signals
+// that ops needs to see and must still reach Sentry.
 func TestShouldReportToSentry_CategoryLimitNotificationOnly(t *testing.T) {
 	t.Parallel()
 
@@ -167,12 +157,6 @@ func TestShouldReportToSentry_CategoryLimitNotificationOnly(t *testing.T) {
 			component:  "notification",
 			err:        fmt.Errorf("circuit breaker is half-open, too many requests"),
 			wantReport: false,
-		},
-		{
-			name:       "ebird API quota exhaustion is reported",
-			component:  "ebird",
-			err:        fmt.Errorf("ebird API quota exceeded"),
-			wantReport: true,
 		},
 		{
 			name:       "analysis job queue full is reported",

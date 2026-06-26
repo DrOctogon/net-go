@@ -1737,9 +1737,6 @@ func sanitizeSettingsForAPI(s *conf.Settings) *conf.Settings {
 	sanitized.Realtime.Weather.OpenWeather.APIKey = redact(s.Realtime.Weather.OpenWeather.APIKey)
 	sanitized.Realtime.Weather.Wunderground.APIKey = redact(s.Realtime.Weather.Wunderground.APIKey)
 
-	// --- eBird API key ---
-	sanitized.Realtime.EBird.APIKey = redact(s.Realtime.EBird.APIKey)
-
 	// --- Backup secrets ---
 	sanitized.Backup.EncryptionKey = redact(s.Backup.EncryptionKey)
 
@@ -1850,9 +1847,6 @@ func restoreRedactedSecrets(current, incoming *conf.Settings) error {
 	restore(&current.Realtime.Weather.OpenWeather.APIKey, &incoming.Realtime.Weather.OpenWeather.APIKey)
 	restore(&current.Realtime.Weather.Wunderground.APIKey, &incoming.Realtime.Weather.Wunderground.APIKey)
 
-	// eBird
-	restore(&current.Realtime.EBird.APIKey, &incoming.Realtime.EBird.APIKey)
-
 	// Backup
 	restore(&current.Backup.EncryptionKey, &incoming.Backup.EncryptionKey)
 
@@ -1942,7 +1936,6 @@ func validateNoRedactedSentinels(s *conf.Settings) error {
 	check(s.Output.MySQL.Password, "output.mysql.password")
 	check(s.Realtime.Weather.OpenWeather.APIKey, "realtime.weather.openWeather.apiKey")
 	check(s.Realtime.Weather.Wunderground.APIKey, "realtime.weather.wunderground.apiKey")
-	check(s.Realtime.EBird.APIKey, "realtime.ebird.apiKey")
 	check(s.Backup.EncryptionKey, "backup.encryptionKey")
 
 	// Array-based OAuth providers
@@ -2009,7 +2002,6 @@ func clearRedactedSentinels(s *conf.Settings) {
 	clearField(&s.Output.MySQL.Password)
 	clearField(&s.Realtime.Weather.OpenWeather.APIKey)
 	clearField(&s.Realtime.Weather.Wunderground.APIKey)
-	clearField(&s.Realtime.EBird.APIKey)
 	clearField(&s.Backup.EncryptionKey)
 
 	for i := range s.Security.OAuthProviders {
