@@ -26,6 +26,7 @@
   import { formatLocalDateTime } from '$lib/utils/date';
   import { buildAppUrl, getCurrentPathWithQuery } from '$lib/utils/urlHelpers';
   import { loggers } from '$lib/utils/logger';
+  import { highlightKeywords } from '$lib/utils/highlightKeywords';
   import SourceBadge from '$lib/desktop/features/dashboard/components/SourceBadge.svelte';
   import {
     Download,
@@ -70,6 +71,13 @@
   let canReview = $derived($hasReviewPermission);
   let clipExtractionEnabled = $derived($isAuthenticated);
   let detection = $state<Detection | null>(null);
+  // Pre-compute highlighted segments so the template stays declarative.
+  // Reactively recomputed whenever `detection` changes.
+  let transcriptSegments = $derived(
+    detection !== null && (detection.transcript ?? '') !== ''
+      ? highlightKeywords(detection.transcript ?? '', detection.keywordsHit)
+      : []
+  );
   let isLoadingDetection = $state(true);
   let detectionError = $state<string | null>(null);
 
@@ -426,7 +434,12 @@
           </div>
         {/if}
 
-        <p class="text-sm leading-relaxed whitespace-pre-wrap">{det.transcript}</p>
+        <p class="text-sm leading-relaxed whitespace-pre-wrap">
+          {#each transcriptSegments as seg, i (i)}{#if seg.match}<mark
+                class="rounded-sm bg-[var(--color-warning)]/20 text-[var(--color-base-content)] border-b border-[var(--color-warning)]/60 font-medium"
+                >{seg.text}</mark
+              >{:else}{seg.text}{/if}{/each}
+        </p>
 
         {#if det.keywordsHit && det.keywordsHit.length > 0}
           <div class="mt-3 pt-3 border-t border-[var(--border-100)]">
