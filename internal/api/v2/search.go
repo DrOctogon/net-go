@@ -56,8 +56,12 @@ type SearchRequest struct {
 	// matched a configured keyword (notes.flagged = true). The frontend sends
 	// { flagged: true } — absent or false means no flag filter.
 	FlaggedOnly bool   `json:"flagged"`
-	Page        int    `json:"page"`
-	SortBy      string `json:"sortBy"`
+	// Gender / AgeBand restrict results to detections with the given estimated
+	// speaker attribute. Unrecognized values are ignored (treated as no filter).
+	Gender  string `json:"gender"`
+	AgeBand string `json:"ageBand"`
+	Page    int    `json:"page"`
+	SortBy  string `json:"sortBy"`
 }
 
 // SearchResponse defines the structure of the search API response
@@ -198,6 +202,8 @@ func (c *Controller) buildSearchFilters(req *SearchRequest, ctxTimeout context.C
 		TimeOfDay:         req.TimeOfDay,
 		Transcript:        req.Transcript,
 		Flagged:           flagged,
+		Gender:            validSpeakerGenderFilter(req.Gender),
+		AgeBand:           validSpeakerAgeBandFilter(req.AgeBand),
 		Page:              req.Page,
 		PerPage:           defaultPerPage,
 		SortBy:            req.SortBy,

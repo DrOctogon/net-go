@@ -3869,6 +3869,10 @@
           "name": "Keyword flagged",
           "description": "Notifies when a detection transcript matches a configured keyword"
         },
+        "speakerAttribute": {
+          "name": "Speaker attribute matched",
+          "description": "Notifies when a detection's estimated speaker attributes (gender, age band) match a rule"
+        },
         "streamDisconnected": {
           "name": "Audio straume atvienota",
           "description": "Paziņo, kad RTSP vai audio straume zaudē savienojumu"
@@ -4692,7 +4696,8 @@
       "database": "Database settings",
       "logging": "Logging settings",
       "tlsCertificate": "TLS certificate",
-      "continuousRecording": "Continuous recording settings"
+      "continuousRecording": "Continuous recording settings",
+      "speakerAttributes": "Speaker attribute settings"
     }
   },
   "help": {

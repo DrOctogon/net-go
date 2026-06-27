@@ -58,7 +58,11 @@ Four user-facing voice features + follow-ups, each gated (go build + datastore/a
 
 Orphan i18n `settings.alerts.builtInRules.newSpecies` removed (en.json + types.generated.ts). Build-time `EventDetectionNewSpecies` const + `detection_bridge.go` path remain (dead-but-harmless for single-class voice; never fires) — optional future removal.
 
-## WAVE 5 — SPEAKER ATTRIBUTES: GENDER + AGE (planned)
+## WAVE 5 — SPEAKER ATTRIBUTES: GENDER + AGE (backend scaffold DONE; model + frontend pending)
+
+**Scaffold landed (2026-06-27, build+vet+tests green):** new `internal/speaker/` pkg (`Analyzer` iface + `NoopAnalyzer` + `New` factory + `Cosine` + `PCMS16LEToFloat32` + gender/age consts/validators, unit-tested); additive nullable `Note` columns (`gender`, `gender_confidence`, `age_band`, `age_confidence`, `speaker_id`, `voice_print_embedding` JSON) + `detection.Result` fields + `NoteFromResult` mapping; `conf.SpeakerAttributesSettings` (default off) + config.yaml + restart wiring (detector + settingsChangeChecks + restartRequiringChecks + hot-reload registry + coverage tests); processor seam `analyzeSpeakerAttributes` (gated, s16le→f32, attach, alert); `gender`/`ageBand` search filters on BOTH surfaces (result+count, allowlist-validated, parameterized); `GET /api/v2/detections/:id/similar` (auth-gated cosine, top-10, min-score floor); alerting `EventSpeakerAttributeMatched`/`ObjectTypeSpeakerAttr` rule+schema; i18n keys (all 15 locales + generated types). Reviewed (go-reviewer): auth-gated the similar endpoint, 64-bit ID parse, qualified SQL columns, dropped clip-name leak.
+
+**Still pending:** real ONNX gender/age/voice-print model (Noop → estimates always empty, similarity empty); frontend (chips/selectors/settings UI); speaker clustering to populate `speaker_id`; move alert emission post-save for a valid detection_id; thread lifecycle ctx into the seam. `golangci-lint` not yet run (binary absent locally).
 
 Goal: enrich each human-voice detection with **estimated speaker gender** and **estimated age band**, surfaced in the UI and searchable/alertable. Additive on top of the existing VAD pipeline — VAD gates *whether* a clip has speech; these models classify *who* is speaking. Privacy-sensitive: estimates are demographic inferences, gate behind an opt-in setting and document the accuracy/bias caveats before any release.
 

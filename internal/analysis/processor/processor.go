@@ -30,6 +30,7 @@ import (
 	"github.com/tphakala/voicewatch/internal/observability"
 	"github.com/tphakala/voicewatch/internal/privacy"
 	"github.com/tphakala/voicewatch/internal/securefs"
+	"github.com/tphakala/voicewatch/internal/speaker"
 	"github.com/tphakala/voicewatch/internal/spectrogram"
 	"github.com/tphakala/voicewatch/internal/suncalc"
 	"github.com/tphakala/voicewatch/internal/transcription"
@@ -54,7 +55,8 @@ type Processor struct {
 	Ds                   datastore.Interface           // Legacy - to be removed after migration
 	Repo                 datastore.DetectionRepository // New - preferred for detection operations
 	Bn                   *classifier.Orchestrator
-	log                  logger.Logger // Logger inherited from analysis package with "processor" child module
+	speakerAnalyzer      speaker.Analyzer // Opt-in speaker-attribute analyzer (gender/age/voice-print); NoopAnalyzer when disabled
+	log                  logger.Logger    // Logger inherited from analysis package with "processor" child module
 	MqttClient           mqtt.Client
 	mqttMutex            sync.RWMutex // Mutex to protect MQTT client access
 	mqttNotReadyWarnOnce sync.Once    // Ensures the "client not ready" warning logs at most once per process to avoid flood
@@ -552,6 +554,21 @@ func New(settings *conf.Settings, ds datastore.Interface, bn *classifier.Orchest
 	if settings.Realtime.Dashboard.Spectrogram.IsPreRenderEnabled() {
 		p.initPreRenderer()
 	}
+
+	// Initialize the speaker-attribute analyzer (gender/age/voice-print). It is
+	// constructed once here from the current settings; changing the settings
+	// requires a restart (see speakerAttributesSettingsChanged in api/v2). When
+	// disabled or no model is available, New returns a NoopAnalyzer.
+	sa := settings.Realtime.Audio.SpeakerAttributes
+	p.speakerAnalyzer = speaker.New(speaker.Config{
+		Enabled:             sa.Enabled,
+		GenderEnabled:       sa.Gender.Enabled,
+		AgeEnabled:          sa.Age.Enabled,
+		VoicePrintEnabled:   sa.VoicePrint.Enabled,
+		GenderModelPath:     sa.Gender.ModelPath,
+		AgeModelPath:        sa.Age.ModelPath,
+		VoicePrintModelPath: sa.VoicePrint.ModelPath,
+	})
 
 	return p
 }
@@ -1319,6 +1336,11 @@ func (p *Processor) processApprovedDetection(item *PendingDetection, speciesName
 			}
 		}
 	}
+
+	// Estimate speaker attributes (gender/age/voice-print) on the detection's
+	// audio before actions are built, so they ride into the database save via
+	// NoteFromResult. No-op (and instant) unless the opt-in analyzer is enabled.
+	p.analyzeSpeakerAttributes(item)
 
 	actionList := p.getActionsForItem(&item.Detection)
 	for _, action := range actionList {

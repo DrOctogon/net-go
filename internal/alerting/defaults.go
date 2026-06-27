@@ -153,5 +153,24 @@ func DefaultRules() []entities.AlertRule {
 				{Target: TargetBell, SortOrder: 0},
 			},
 		},
+		{
+			// Enabled like the other built-ins, but it only fires when the opt-in
+			// speaker-attribute analysis is enabled and producing estimates (the
+			// feature is off by default, and no model is bundled yet). Users add
+			// conditions (e.g. gender=female AND age_band=child).
+			Name:           "Speaker attribute matched",
+			Description:    "Notifies when a detection's estimated speaker attributes match a rule",
+			NameKey:        RuleKeySpeakerAttrName,
+			DescriptionKey: RuleKeySpeakerAttrDesc,
+			Enabled:        true,
+			BuiltIn:        true,
+			ObjectType:     ObjectTypeSpeakerAttr,
+			TriggerType:    TriggerTypeEvent,
+			EventName:      EventSpeakerAttributeMatched,
+			CooldownSec:    60,
+			Actions: []entities.AlertAction{
+				{Target: TargetBell, SortOrder: 0},
+			},
+		},
 	}
 }

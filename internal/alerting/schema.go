@@ -118,6 +118,18 @@ func GetSchema() Schema {
 					},
 				},
 			},
+			{
+				Name:  ObjectTypeSpeakerAttr,
+				Label: "Speaker Attribute",
+				Events: []EventSchema{
+					{
+						Name:        EventSpeakerAttributeMatched,
+						Label:       "Speaker Attribute Matched",
+						Description: "Fires when a detection's estimated speaker attributes (gender, age band) match the rule conditions",
+						Properties:  speakerAttrProperties(),
+					},
+				},
+			},
 		},
 		Operators: []OperatorSchema{
 			{Name: OperatorIs, Label: "is", Type: "string"},
@@ -194,6 +206,15 @@ func keywordFlagProperties() []PropertySchema {
 		{Name: PropertyKeywords, Label: "Keywords", Type: "string", Operators: stringOperators},
 		{Name: PropertyTranscript, Label: "Transcript", Type: "string", Operators: stringOperators},
 		{Name: PropertySpeciesName, Label: "Species Name", Type: "string", Operators: stringOperators},
+		{Name: PropertyDetectionID, Label: "Detection ID", Type: "string", Operators: stringOperators},
+	}
+}
+
+func speakerAttrProperties() []PropertySchema {
+	return []PropertySchema{
+		{Name: PropertySpeakerGender, Label: "Gender", Type: "string", Operators: stringOperators},
+		{Name: PropertySpeakerAgeBand, Label: "Age Band", Type: "string", Operators: stringOperators},
+		{Name: PropertyConfidence, Label: "Confidence", Type: "number", Operators: numericOperators},
 		{Name: PropertyDetectionID, Label: "Detection ID", Type: "string", Operators: stringOperators},
 	}
 }

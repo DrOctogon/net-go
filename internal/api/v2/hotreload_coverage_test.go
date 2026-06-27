@@ -116,6 +116,9 @@ var hotReloadRegistry = map[string]hotReloadEntry{
 	// (audio_pipeline_service) with no live reconfigure path; changes apply on
 	// restart.
 	"Realtime.Audio.Continuous": {categories: []hotReloadCategory{hotReloadRestart}},
+	// Speaker-attribute analyzer (gender/age/voice-print) is constructed once at
+	// pipeline start with no live reconfigure path; changes apply on restart.
+	"Realtime.Audio.SpeakerAttributes": {categories: []hotReloadCategory{hotReloadRestart}},
 
 	// -- Transcription (read per detection job from the live settings pointer;
 	// changes apply to subsequent detections without restart). --

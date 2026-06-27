@@ -54,8 +54,20 @@ type Note struct {
 	Flagged bool `gorm:"default:false"`
 	// KeywordsHit is the comma-joined list of keywords matched in the transcript.
 	// Additive nullable column; empty when no keyword matched.
-	KeywordsHit    string
-	ProcessingTime time.Duration
+	KeywordsHit string
+	// Speaker attributes (Wave 5). Additive nullable columns populated only when
+	// the opt-in speaker-attributes analysis is enabled and a model is available.
+	// These are demographic *estimates*, not biometric identity. Empty/zero when
+	// the feature is disabled (the default).
+	Gender           string  // estimated gender: "male"/"female"/"unknown"/""
+	GenderConfidence float64 `gorm:"default:0"` // 0..1 confidence for Gender
+	AgeBand          string  // estimated relative age band: child/teen/adult/senior/""
+	AgeConfidence    float64 `gorm:"default:0"` // 0..1 confidence for AgeBand
+	SpeakerID        string  // voice-print cluster/speaker id; empty until assigned
+	// VoicePrintEmbedding is the serialized speaker-embedding vector used for
+	// "similar voices" lookups. JSON-serialized; null when no embedding computed.
+	VoicePrintEmbedding []float32 `gorm:"serializer:json"`
+	ProcessingTime      time.Duration
 	Unlikely       bool    `gorm:"default:false"`                 // Tagged by ultrasonic validation filter
 	Occurrence     float64 `gorm:"-" json:"occurrence,omitempty"` // Runtime only, occurrence probability (0-1) based on location/time
 	// RawLabel is the full un-truncated classifier label (e.g. "power_tool"); runtime-only,

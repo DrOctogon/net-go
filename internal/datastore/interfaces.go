@@ -2100,6 +2100,10 @@ type SearchFilters struct {
 	// Flagged, when non-nil, restricts results to notes where flagged = *Flagged.
 	// nil means no filter (both flagged and unflagged are returned).
 	Flagged *bool
+	// Gender / AgeBand are exact-match speaker-attribute filters on the
+	// notes.gender / notes.age_band columns. Empty means no filter.
+	Gender  string
+	AgeBand string
 	Page    int
 	PerPage int
 	SortBy  string
@@ -2269,6 +2273,12 @@ func applyCommonFilters(query *gorm.DB, filters *SearchFilters, ds *DataStore) *
 	}
 	if filters.Flagged != nil {
 		query = query.Where("notes.flagged = ?", *filters.Flagged)
+	}
+	if filters.Gender != "" {
+		query = query.Where("notes.gender = ?", filters.Gender)
+	}
+	if filters.AgeBand != "" {
+		query = query.Where("notes.age_band = ?", filters.AgeBand)
 	}
 
 	return query

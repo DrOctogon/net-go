@@ -180,6 +180,24 @@ realtime:
       retentionhours: 24      # rolling retention window in hours (older files are deleted)
       format: flac            # audio format: flac or wav
       samplerate: 0           # output sample rate in Hz (0 = keep source rate)
+    speakerattributes:
+      # opt-in speaker-attribute estimation (gender, relative age band) and
+      # voice-print embeddings for "similar voices". These are demographic
+      # ESTIMATES, not biometric identity recognition; accuracy varies by
+      # accent/language/recording quality. Disabled by default; enabling
+      # requires a restart. No model is bundled yet (scaffold only).
+      enabled: false          # master switch for all speaker-attribute analysis
+      gender:
+        enabled: false        # estimate speaker gender
+        modelpath: ""         # ONNX model path ("" = bundled/default once available)
+        threshold: 0.5        # minimum confidence to keep an estimate (0..1)
+      age:
+        enabled: false        # estimate relative age band (child/teen/adult/senior)
+        modelpath: ""
+        threshold: 0.5
+      voiceprint:
+        enabled: false        # compute + store voice-print embeddings for similarity
+        modelpath: ""
     equalizer:
       enabled: false
       filters:

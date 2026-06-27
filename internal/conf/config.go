@@ -77,12 +77,41 @@ type RetentionSettings struct {
 // time-segmented files for later voice-print / speaker-ID analysis, completely
 // decoupled from the detection pipeline.
 type ContinuousRecordingSettings struct {
-	Enabled        bool   `yaml:"enabled" json:"enabled" mapstructure:"enabled"`                     // true to enable continuous full-audio recording
-	Path           string `yaml:"path" json:"path" mapstructure:"path"`                              // directory for segment files
+	Enabled        bool   `yaml:"enabled" json:"enabled" mapstructure:"enabled"`                      // true to enable continuous full-audio recording
+	Path           string `yaml:"path" json:"path" mapstructure:"path"`                               // directory for segment files
 	SegmentSeconds int    `yaml:"segmentseconds" json:"segmentSeconds" mapstructure:"segmentseconds"` // segment length in seconds
 	RetentionHours int    `yaml:"retentionhours" json:"retentionHours" mapstructure:"retentionhours"` // rolling retention window in hours (older files are deleted)
-	Format         string `yaml:"format" json:"format" mapstructure:"format"`                        // audio format: flac or wav
-	SampleRate     int    `yaml:"samplerate" json:"sampleRate" mapstructure:"samplerate"`            // output sample rate in Hz (0 = keep source rate)
+	Format         string `yaml:"format" json:"format" mapstructure:"format"`                         // audio format: flac or wav
+	SampleRate     int    `yaml:"samplerate" json:"sampleRate" mapstructure:"samplerate"`             // output sample rate in Hz (0 = keep source rate)
+}
+
+// SpeakerAttributesSettings configures opt-in speaker-attribute estimation
+// (gender, relative age band) and voice-print embeddings for human-voice
+// detections. These are demographic *estimates*, not biometric identity
+// recognition. Disabled by default for privacy; enabling requires a restart
+// because the analyzer is constructed once at pipeline startup. All fields are
+// scalars (the nested structs contain only scalars) so the settings are
+// comparable, which the restart-change detector relies on.
+type SpeakerAttributesSettings struct {
+	Enabled    bool                  `yaml:"enabled" json:"enabled" mapstructure:"enabled"`          // master switch for all speaker-attribute analysis
+	Gender     SpeakerAttributeModel `yaml:"gender" json:"gender" mapstructure:"gender"`             // gender estimation
+	Age        SpeakerAttributeModel `yaml:"age" json:"age" mapstructure:"age"`                      // relative age-band estimation
+	VoicePrint VoicePrintSettings    `yaml:"voiceprint" json:"voicePrint" mapstructure:"voiceprint"` // speaker-embedding extraction for "similar voices"
+}
+
+// SpeakerAttributeModel holds per-attribute enablement, the ONNX model path, and
+// the minimum confidence below which an estimate is discarded.
+type SpeakerAttributeModel struct {
+	Enabled   bool    `yaml:"enabled" json:"enabled" mapstructure:"enabled"`       // true to run this attribute's model
+	ModelPath string  `yaml:"modelpath" json:"modelPath" mapstructure:"modelpath"` // path to the ONNX model ("" = use bundled/default once available)
+	Threshold float64 `yaml:"threshold" json:"threshold" mapstructure:"threshold"` // minimum confidence to keep an estimate (0..1)
+}
+
+// VoicePrintSettings configures speaker-embedding extraction used for the
+// "similar voices" lookup.
+type VoicePrintSettings struct {
+	Enabled   bool   `yaml:"enabled" json:"enabled" mapstructure:"enabled"`       // true to compute and store voice-print embeddings
+	ModelPath string `yaml:"modelpath" json:"modelPath" mapstructure:"modelpath"` // path to the embedding model
 }
 
 // AudioSettings contains settings for audio processing and export.
@@ -107,19 +136,20 @@ type AudioSourceConfig struct {
 }
 
 type AudioSettings struct {
-	Sources         []AudioSourceConfig `yaml:"sources" json:"sources" mapstructure:"sources"`                  // Audio capture devices
-	Source          string              `yaml:"source,omitempty" json:"source,omitempty" mapstructure:"source"` // Legacy: migrated to Sources on load
-	FfmpegPath      string              `yaml:"ffmpegpath" mapstructure:"ffmpegpath" json:"ffmpegPath"`         // path to ffmpeg, runtime value
-	FfmpegVersion   string              `yaml:"-" json:"ffmpegVersion,omitempty"`                               // ffmpeg version string, runtime value
-	FfmpegMajor     int                 `yaml:"-" json:"ffmpegMajor,omitempty"`                                 // ffmpeg major version number, runtime value
-	FfmpegMinor     int                 `yaml:"-" json:"ffmpegMinor,omitempty"`                                 // ffmpeg minor version number, runtime value
-	SoxPath         string              `yaml:"soxpath" mapstructure:"soxpath" json:"soxPath"`                  // path to sox, runtime value
-	SoxAudioTypes   []string            `yaml:"-" json:"-"`                                                     // supported audio types of sox, runtime value
-	FfprobePath     string              `yaml:"-" json:"-"`                                                     // path to ffprobe, derived from ffmpeg path at runtime
-	StreamTransport string              `yaml:"streamtransport" json:"streamTransport"`                         // preferred transport for audio streaming: "auto", "sse", or "ws"
-	Export          ExportSettings             `yaml:"export" json:"export"`                                           // export settings
-	SoundLevel      SoundLevelSettings         `yaml:"soundlevel" json:"soundLevel"`                                   // sound level monitoring settings
-	Continuous      ContinuousRecordingSettings `yaml:"continuous" json:"continuous" mapstructure:"continuous"`         // continuous full-audio recording settings
+	Sources           []AudioSourceConfig         `yaml:"sources" json:"sources" mapstructure:"sources"`                               // Audio capture devices
+	Source            string                      `yaml:"source,omitempty" json:"source,omitempty" mapstructure:"source"`              // Legacy: migrated to Sources on load
+	FfmpegPath        string                      `yaml:"ffmpegpath" mapstructure:"ffmpegpath" json:"ffmpegPath"`                      // path to ffmpeg, runtime value
+	FfmpegVersion     string                      `yaml:"-" json:"ffmpegVersion,omitempty"`                                            // ffmpeg version string, runtime value
+	FfmpegMajor       int                         `yaml:"-" json:"ffmpegMajor,omitempty"`                                              // ffmpeg major version number, runtime value
+	FfmpegMinor       int                         `yaml:"-" json:"ffmpegMinor,omitempty"`                                              // ffmpeg minor version number, runtime value
+	SoxPath           string                      `yaml:"soxpath" mapstructure:"soxpath" json:"soxPath"`                               // path to sox, runtime value
+	SoxAudioTypes     []string                    `yaml:"-" json:"-"`                                                                  // supported audio types of sox, runtime value
+	FfprobePath       string                      `yaml:"-" json:"-"`                                                                  // path to ffprobe, derived from ffmpeg path at runtime
+	StreamTransport   string                      `yaml:"streamtransport" json:"streamTransport"`                                      // preferred transport for audio streaming: "auto", "sse", or "ws"
+	Export            ExportSettings              `yaml:"export" json:"export"`                                                        // export settings
+	SoundLevel        SoundLevelSettings          `yaml:"soundlevel" json:"soundLevel"`                                                // sound level monitoring settings
+	Continuous        ContinuousRecordingSettings `yaml:"continuous" json:"continuous" mapstructure:"continuous"`                      // continuous full-audio recording settings
+	SpeakerAttributes SpeakerAttributesSettings   `yaml:"speakerattributes" json:"speakerAttributes" mapstructure:"speakerattributes"` // opt-in speaker attribute estimation + voice print
 
 	Equalizer  EqualizerSettings `yaml:"equalizer" json:"equalizer"`                             // equalizer settings (global default)
 	QuietHours QuietHoursConfig  `yaml:"quietHours" json:"quietHours" mapstructure:"quietHours"` // quiet hours (global default, legacy)
@@ -1201,24 +1231,24 @@ type InputConfig struct {
 }
 
 type VoiceWatchConfig struct {
-	Version            string              `yaml:"version,omitempty" json:"version,omitempty"`                 // model version: "2.4", "3.0"
-	Debug              bool                `yaml:"debug" json:"debug"`                                         // true to enable debug mode
-	Sensitivity        float64             `yaml:"sensitivity" json:"sensitivity"`                             // birdnet analysis sigmoid sensitivity
-	Threshold          float64             `yaml:"threshold" json:"threshold"`                                 // threshold for prediction confidence to report
-	Overlap            float64             `yaml:"overlap" json:"overlap"`                                     // birdnet analysis overlap between chunks
-	Longitude          float64             `yaml:"longitude" json:"longitude"`                                 // longitude of recording location for prediction filtering
-	Latitude           float64             `yaml:"latitude" json:"latitude"`                                   // latitude of recording location for prediction filtering
-	LocationConfigured bool                `yaml:"locationconfigured" json:"locationConfigured"`               // true when location has been explicitly configured by the user
-	Threads            int                 `yaml:"threads" json:"threads"`                                     // number of CPU threads to use for analysis
-	Locale             string              `yaml:"locale" json:"locale"`                                       // language to use for labels
-	ModelPath          string              `yaml:"modelpath,omitempty" json:"modelPath,omitempty"`             // path to external model file (empty for embedded)
-	LabelPath          string              `yaml:"labelpath,omitempty" json:"labelPath,omitempty"`             // path to external label file (empty for embedded)
-	Labels             []string            `yaml:"-" json:"-"`                                                 // list of available species labels, runtime value
-	UseXNNPACK         bool                `yaml:"usexnnpack" json:"useXnnpack"`                               // true to use XNNPACK delegate for inference acceleration
-	ONNXRuntimePath    string              `yaml:"onnxruntimepath,omitempty" json:"onnxRuntimePath,omitempty"` // path to ONNX Runtime shared library (required for ONNX models)
-	OpenVINOPath       string              `yaml:"openvinopath,omitempty" json:"openVinoPath,omitempty"`       // path to libopenvino_c shared library (OpenVINO image variants only)
-	Backend            string              `yaml:"backend,omitempty" json:"backend,omitempty"`                 // inference backend preference: "auto" (default), "onnx", or "openvino"
-	OpenVINODevice     string              `yaml:"openvinodevice,omitempty" json:"openVinoDevice,omitempty"`   // OpenVINO device preference: "auto" (default), "cpu", or "gpu"
+	Version            string   `yaml:"version,omitempty" json:"version,omitempty"`                 // model version: "2.4", "3.0"
+	Debug              bool     `yaml:"debug" json:"debug"`                                         // true to enable debug mode
+	Sensitivity        float64  `yaml:"sensitivity" json:"sensitivity"`                             // birdnet analysis sigmoid sensitivity
+	Threshold          float64  `yaml:"threshold" json:"threshold"`                                 // threshold for prediction confidence to report
+	Overlap            float64  `yaml:"overlap" json:"overlap"`                                     // birdnet analysis overlap between chunks
+	Longitude          float64  `yaml:"longitude" json:"longitude"`                                 // longitude of recording location for prediction filtering
+	Latitude           float64  `yaml:"latitude" json:"latitude"`                                   // latitude of recording location for prediction filtering
+	LocationConfigured bool     `yaml:"locationconfigured" json:"locationConfigured"`               // true when location has been explicitly configured by the user
+	Threads            int      `yaml:"threads" json:"threads"`                                     // number of CPU threads to use for analysis
+	Locale             string   `yaml:"locale" json:"locale"`                                       // language to use for labels
+	ModelPath          string   `yaml:"modelpath,omitempty" json:"modelPath,omitempty"`             // path to external model file (empty for embedded)
+	LabelPath          string   `yaml:"labelpath,omitempty" json:"labelPath,omitempty"`             // path to external label file (empty for embedded)
+	Labels             []string `yaml:"-" json:"-"`                                                 // list of available species labels, runtime value
+	UseXNNPACK         bool     `yaml:"usexnnpack" json:"useXnnpack"`                               // true to use XNNPACK delegate for inference acceleration
+	ONNXRuntimePath    string   `yaml:"onnxruntimepath,omitempty" json:"onnxRuntimePath,omitempty"` // path to ONNX Runtime shared library (required for ONNX models)
+	OpenVINOPath       string   `yaml:"openvinopath,omitempty" json:"openVinoPath,omitempty"`       // path to libopenvino_c shared library (OpenVINO image variants only)
+	Backend            string   `yaml:"backend,omitempty" json:"backend,omitempty"`                 // inference backend preference: "auto" (default), "onnx", or "openvino"
+	OpenVINODevice     string   `yaml:"openvinodevice,omitempty" json:"openVinoDevice,omitempty"`   // OpenVINO device preference: "auto" (default), "cpu", or "gpu"
 }
 
 // Inference backend preferences for BirdNET.Backend.

@@ -23,6 +23,8 @@ type AdvancedSearchFilters struct {
 	Locked        *bool
 	Flagged       *bool  // Filters on the notes.flagged column (keyword-flagged detections)
 	Transcript    string // Free-text LIKE filter on notes.transcript (keyword/phrase search)
+	Gender        string // Exact match on notes.gender (speaker-attribute filter); "" = no filter
+	AgeBand       string // Exact match on notes.age_band (speaker-attribute filter); "" = no filter
 	SortAscending bool
 	SortBy        string // "date_desc", "date_asc", "species_asc", "species_desc", "confidence_asc", "confidence_desc", "status"
 	Limit         int
@@ -117,6 +119,15 @@ func (ds *DataStore) SearchNotesAdvanced(filters *AdvancedSearchFilters) ([]Note
 	if filters.Transcript != "" {
 		escaped := escapeLikePattern(filters.Transcript)
 		query = query.Where("LOWER(transcript) LIKE LOWER(?) ESCAPE '\\'", "%"+escaped+"%")
+	}
+
+	// Apply speaker-attribute filters (exact match, parameterized). Applied
+	// before the count query is derived (below) so both result and count agree.
+	if filters.Gender != "" {
+		query = query.Where("notes.gender = ?", filters.Gender)
+	}
+	if filters.AgeBand != "" {
+		query = query.Where("notes.age_band = ?", filters.AgeBand)
 	}
 
 	// Apply MinID filter for cursor-based pagination (used by migration worker)

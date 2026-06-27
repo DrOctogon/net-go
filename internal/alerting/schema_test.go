@@ -16,7 +16,7 @@ func TestGetSchema_AllObjectTypesPresent(t *testing.T) {
 	assert.ElementsMatch(t, []string{
 		ObjectTypeStream, ObjectTypeDetection, ObjectTypeApplication,
 		ObjectTypeIntegration, ObjectTypeDevice, ObjectTypeSystem,
-		ObjectTypeKeywordFlag,
+		ObjectTypeKeywordFlag, ObjectTypeSpeakerAttr,
 	}, names)
 }
 
@@ -35,6 +35,7 @@ func TestGetSchema_AllEventsPresent(t *testing.T) {
 		EventMQTTConnected, EventMQTTDisconnected, EventMQTTPublishFailed,
 		EventDeviceStarted, EventDeviceStopped, EventDeviceError,
 		EventKeywordMatched,
+		EventSpeakerAttributeMatched,
 	}
 	assert.ElementsMatch(t, expectedEvents, allEvents)
 }

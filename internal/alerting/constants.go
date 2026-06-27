@@ -12,6 +12,7 @@ const (
 	ObjectTypeDevice      = "device"
 	ObjectTypeSystem      = "system"
 	ObjectTypeKeywordFlag = "keyword_flag"
+	ObjectTypeSpeakerAttr = "speaker_attr"
 )
 
 // Trigger types define how a rule is activated.
@@ -41,6 +42,8 @@ const (
 	EventDeviceError   = "device.error"
 
 	EventKeywordMatched = "keyword.matched"
+
+	EventSpeakerAttributeMatched = "speaker.attribute_matched"
 )
 
 // Metric names identify threshold-based metrics.
@@ -93,6 +96,10 @@ const (
 	PropertyKeywords    = "keywords"
 	PropertyTranscript  = "transcript"
 	PropertyDetectionID = "detection_id"
+
+	// Properties for speaker-attribute events.
+	PropertySpeakerGender  = "gender"
+	PropertySpeakerAgeBand = "age_band"
 )
 
 // Action targets identify where notifications are sent.
@@ -124,6 +131,9 @@ const (
 
 	RuleKeyKeywordFlagName = "settings.alerts.builtInRules.keywordFlag.name"
 	RuleKeyKeywordFlagDesc = "settings.alerts.builtInRules.keywordFlag.description"
+
+	RuleKeySpeakerAttrName = "settings.alerts.builtInRules.speakerAttribute.name"
+	RuleKeySpeakerAttrDesc = "settings.alerts.builtInRules.speakerAttribute.description"
 )
 
 // Alert notification i18n key constants.

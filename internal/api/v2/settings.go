@@ -2101,7 +2101,8 @@ const (
 	reasonDatabaseRestart  = "restart.reasons.database"
 	reasonLoggingRestart    = "restart.reasons.logging"
 	reasonTLSCertRestart    = "restart.reasons.tlsCertificate"
-	reasonContinuousRestart = "restart.reasons.continuousRecording"
+	reasonContinuousRestart        = "restart.reasons.continuousRecording"
+	reasonSpeakerAttributesRestart = "restart.reasons.speakerAttributes"
 )
 
 // settingsChangeChecks defines all settings change detectors in order of execution.
@@ -2121,6 +2122,7 @@ var settingsChangeChecks = []settingsChangeCheck{
 	{"Database", "", outputSettingsChanged, "Database settings changed. Restart required to apply.", notification.MsgSettingsDatabaseRestart, "warning", toastDurationExtended},
 	{"Logging", "", loggingSettingsChanged, "Logging settings changed. Restart required to apply.", notification.MsgSettingsLoggingRestart, "warning", toastDurationExtended},
 	{"Continuous recording", "", continuousRecordingSettingsChanged, "Continuous recording settings changed. Restart required to apply.", "", "warning", toastDurationExtended},
+	{"Speaker attributes", "", speakerAttributesSettingsChanged, "Speaker attribute settings changed. Restart required to apply.", "", "warning", toastDurationExtended},
 	{"Log deduplication", "reconfigure_log_deduplication", logDeduplicationSettingsChanged, "Reconfiguring log deduplication...", "", "info", toastDurationShort},
 	{"RTSP health", "reconfigure_rtsp_health", rtspHealthSettingsChanged, "Reconfiguring RTSP health monitoring...", "", "info", toastDurationShort},
 	{"Monitoring", "reconfigure_monitoring", monitoringSettingsChanged, "Reconfiguring system monitoring...", "", "info", toastDurationShort},
@@ -2138,6 +2140,7 @@ var restartRequiringChecks = map[string]string{
 	"Database":             reasonDatabaseRestart,
 	"Logging":              reasonLoggingRestart,
 	"Continuous recording": reasonContinuousRestart,
+	"Speaker attributes":   reasonSpeakerAttributesRestart,
 }
 
 // handleSettingsChanges checks if important settings have changed and triggers appropriate actions
@@ -2233,6 +2236,15 @@ func (c *Controller) sendReconfigActions(actions []string, debugEnabled bool) {
 // struct comparison is sufficient.
 func continuousRecordingSettingsChanged(old, current *conf.Settings) bool {
 	return old.Realtime.Audio.Continuous != current.Realtime.Audio.Continuous
+}
+
+// speakerAttributesSettingsChanged reports whether the opt-in speaker-attribute
+// analysis configuration changed. The analyzer (gender/age/voice-print models)
+// is constructed once at pipeline start with no live reconfigure path, so any
+// change requires a restart. SpeakerAttributesSettings and its nested structs
+// are all scalars, so a struct comparison is sufficient.
+func speakerAttributesSettingsChanged(old, current *conf.Settings) bool {
+	return old.Realtime.Audio.SpeakerAttributes != current.Realtime.Audio.SpeakerAttributes
 }
 
 // intervalSettingsChanged checks if species interval or global interval settings have changed.

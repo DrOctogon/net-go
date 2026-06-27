@@ -54,6 +54,17 @@ type Result struct {
 	// used by the datastore to classify non-bird sound classes correctly.
 	RawLabel string
 
+	// Speaker attributes (Wave 5). Estimated demographic attributes and a
+	// voice-print embedding attached after detection when the opt-in
+	// speaker-attributes analysis is enabled. Zero-valued otherwise. These are
+	// estimates, not biometric identity recognition.
+	Gender              string
+	GenderConfidence    float64
+	AgeBand             string
+	AgeConfidence       float64
+	SpeakerID           string
+	VoicePrintEmbedding []float32
+
 	// Review status (populated from DB relations when loaded)
 	Verified string
 	Locked   bool
