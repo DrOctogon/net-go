@@ -58,6 +58,44 @@ Four user-facing voice features + follow-ups, each gated (go build + datastore/a
 
 Orphan i18n `settings.alerts.builtInRules.newSpecies` removed (en.json + types.generated.ts). Build-time `EventDetectionNewSpecies` const + `detection_bridge.go` path remain (dead-but-harmless for single-class voice; never fires) — optional future removal.
 
+## WAVE 5 — SPEAKER ATTRIBUTES: GENDER + AGE (planned)
+
+Goal: enrich each human-voice detection with **estimated speaker gender** and **estimated age band**, surfaced in the UI and searchable/alertable. Additive on top of the existing VAD pipeline — VAD gates *whether* a clip has speech; these models classify *who* is speaking. Privacy-sensitive: estimates are demographic inferences, gate behind an opt-in setting and document the accuracy/bias caveats before any release.
+
+### Model approach
+- **Reuse the ONNX backend** (`internal/inference/onnx`) — same pattern as Silero VAD. No new runtime.
+- Candidate models (small, ONNX-exportable, 16 kHz mono — matches VAD output):
+  - **Gender**: binary/probabilistic classifier (e.g. wav2vec2 / ECAPA-TDNN gender head, or a lightweight CNN on log-mel). Output: `{male, female, unknown}` + confidence.
+  - **Age**: regression → age (years) bucketed into bands, OR direct multi-class band classifier. Bands (proposed, named constants — no magic strings): `child` / `teen` / `adult` / `senior`. Output: band + confidence.
+  - Prefer a **single multi-task model** (shared encoder, two heads) if one exists — one inference pass, lower CPU on the Pi. Otherwise two small sequential models.
+- Only run attribute inference **when VAD fires** (speech present) — never on silence/noise. Reuse the already-resampled 16 kHz frames; don't re-decode.
+- Gate behind `Realtime.Audio.SpeakerAttributes.Enabled` (hot-reloadable, default `false`). Separate sub-toggles `Gender.Enabled` / `Age.Enabled` so each can run independently.
+
+### Backend
+- New pkg `internal/classifier/speakerattr/` (parallel to `humanvoice/`): `ModelInstance`-style wrappers; `go:embed` the model(s) + `WriteEmbeddedModel` extract-on-first-run, same as VAD.
+- `conf/config.go`: add `SpeakerAttributesConfig` (`Enabled`, `Gender{Enabled,Threshold,ModelPath}`, `Age{Enabled,Threshold,ModelPath}`). Hot-reload via per-request checks; add to `settingsChangeChecks` (model construction at pipeline startup → likely **restart-required**, mirror continuous-recording wiring + `restartCovered` test entry).
+- Detection schema: add nullable `gender`, `gender_confidence`, `age_band`, `age_confidence` columns to the v2only datastore (migration; nullable so existing rows + VAD-only mode are valid). Wire through `analysis/processor` save path after the VAD result, before save.
+- API v2 (NEVER v1): extend detection DTO with the attribute fields; add filters to BOTH search surfaces (GET `/api/v2/detections` `AdvancedSearchFilters`, POST `/api/v2/search` `SearchFilters`) — `gender:`, `age_band:`. Apply to result AND count queries (same dual-builder gotcha as transcript search).
+
+### Alerting
+- New built-in rule scaffolding mirroring keyword-flag: `EventSpeakerAttributeMatched` + `ObjectTypeSpeakerAttr` + rule keys, so users can alert on e.g. `gender=female AND age_band=child`. Constants/defaults/schema/dispatcher.
+
+### Frontend
+- Detection list/detail/card: show gender + age-band chips with confidence (reuse the keyword-chip pattern). Hide chips when attributes disabled or null.
+- Search.svelte: gender + age-band filter selectors (only send when set).
+- Settings: SpeakerAttributes section under audio — master enable + per-attribute toggles + thresholds + model-status info. i18n keys for all labels.
+- `npm run check:all` 0 errors; util/component tests for chip render + null-safety.
+
+### Privacy + compliance (must address before release)
+- Demographic inference on recorded speech is **higher-risk than VAD presence**. Default OFF; README + UI must state these are *estimates*, document known bias (accuracy varies by accent/language/recording quality), and clarify no identity/biometric ID is performed (this is attribute estimation, not speaker recognition).
+- Estimates stored alongside clips inherit the existing store-all-clips retention; note in privacy docs.
+
+### Open questions
+1. Single multi-task model vs. two models? (CPU budget on Pi decides.)
+2. Age as regression+bucketing or direct band classifier? Band boundaries?
+3. Report per-clip single estimate, or per-VAD-segment when multiple speakers? (v1: per-clip single, like current detection granularity.)
+4. Confidence-threshold default + whether to store low-confidence estimates as `unknown` vs. drop.
+
 ## REMAINING WORK (do mechanical parts on Sonnet, not Opus)
 
 - **2b** — delete `internal/imageprovider/` (~20 api/v2 files reference it: analytics, sse, settings, insights, media, app DTOs, processor actions, mqtt/dto, main.go). Bounded, mechanical.
