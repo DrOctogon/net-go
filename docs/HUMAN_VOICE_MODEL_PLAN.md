@@ -66,7 +66,9 @@ Orphan i18n `settings.alerts.builtInRules.newSpecies` removed (en.json + types.g
 
 **Frontend DONE (commit `a651f55d`, 2026-06-27, `npm run check:all` clean):** Detection TS type +`gender/genderConfidence/ageBand/ageConfidence`; shared `SpeakerAttributeChips.svelte` (default+overlay, hidden when empty, XSS-safe) + pure `utils/speakerAttributes.ts`; chips on DetectionRow, DetectionCardMobile, dashboard DetectionCard, DetectionDetail; Search.svelte gender+ageBand selectors (sent only when set); AudioSettingsPage "Speaker Attributes" section (master+per-attr toggles+thresholds+privacy caveat, hot-reload via updateSection) + `stores/settings.ts` shape; i18n across all 16 locales + regenerated types; chip/util tests.
 
-**Still pending:** real ONNX gender/age/voice-print model (Noop → estimates always empty, similarity empty); speaker clustering to populate `speaker_id`. Both need external model assets / embeddings — not buildable in-repo. `golangci-lint` not yet run (binary absent locally).
+**Clustering primitive DONE (commit `051a989c`, 2026-06-27):** `speaker.Clusterer` (NewClusterer/Assign/NumClusters) — online greedy cosine clustering with running-mean centroids, concurrency-safe, race-tested. Lands ahead of the model (like `Cosine`); NOT yet wired into the seam (Noop emits no embeddings) and has no cross-restart persistence/eviction.
+
+**Still pending:** real ONNX gender/age/voice-print model (Noop → estimates/embeddings always empty) — needs external model assets, not buildable in-repo; wire `Clusterer` into the seam + persist clusters once embeddings flow. `golangci-lint` not yet run (binary absent locally).
 
 Goal: enrich each human-voice detection with **estimated speaker gender** and **estimated age band**, surfaced in the UI and searchable/alertable. Additive on top of the existing VAD pipeline — VAD gates *whether* a clip has speech; these models classify *who* is speaking. Privacy-sensitive: estimates are demographic inferences, gate behind an opt-in setting and document the accuracy/bias caveats before any release.
 
