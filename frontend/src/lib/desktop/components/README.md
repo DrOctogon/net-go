@@ -25,6 +25,7 @@ This folder contains **shared components** used across the application. Feature-
 - `ConfidenceCircle.svelte` - Circular confidence indicator with progress ring
 - `DataTable.svelte` - Generic data table with controlled (parent-driven) sorting
 - `SortableDataTable.svelte` - Card-wrapped table with built-in client-side sorting and search, header bar (icon/title/count/search/actions), and loading/empty/no-results states; composes SortableHeader, ResizableContainer, and EmptyState
+- `SpeakerAttributeChips.svelte` - Estimated speaker gender + age-band chips with confidence (e.g. "Female · 87%"); `default`/`overlay` variants; renders nothing when the detection has no estimates
 - `StatsCard.svelte` - Statistical information card
 - `StatusBadges.svelte` - Status indicators (verified, locked, etc.)
 - `WeatherDetails.svelte` - Detailed weather display for modals (vertical layout, icons always visible)
