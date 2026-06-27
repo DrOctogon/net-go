@@ -1,7 +1,7 @@
 # Pivot Plan: BirdNET-Go → Human Voice Detector
 
-Status: IN PROGRESS — Phases 1 + 2a committed, green.
-Date: 2026-06-23 (updated 2026-06-24)
+Status: IN PROGRESS — backend pivot (Waves 1–3) + frontend voice features done, branch `human-voice-pivot` 56 commits ahead of `main`, all green. Remaining: VAD accuracy verify (needs ORT env), VoiceWatch logo asset, optional deep dead-code (`EventDetectionNewSpecies` path). See WAVE 4 below.
+Date: 2026-06-23 (updated 2026-06-26)
 Branch: `human-voice-pivot`
 Strategy: **Neutralize + repurpose** — strip bird/animal brain, keep reusable
 acoustic pipeline, retarget to human-voice-only detection.
@@ -46,6 +46,17 @@ Wave 3 rebrand — VoiceWatch product name already applied in UI/page-title/Abou
 Privacy-gate (Phase 3) — **SUPERSEDED, no change**: the privacy filter is already opt-in, `enabled: false` by default → all voice clips stored by default; the toggle is the privacy opt-out. Removing it would be a privacy regression for a speech recorder. Keep as-is.
 
 Restart-toast for continuous-recording — DONE (`eed1d087`): real change-detection + RestartBanner reason wired; field moved restartExempt→restartCovered.
+
+## WAVE 4 — VOICE FEATURES (feature-dev) — DONE (2026-06-26)
+
+Four user-facing voice features + follow-ups, each gated (go build + datastore/alerting tests + `npm run check:all` 0 errors, ast:security clean + `npm test` ~2432 green) and pushed:
+- **Transcript search** — wired into BOTH search surfaces (GET `/api/v2/detections` → `AdvancedSearchFilters.Transcript`, AND POST `/api/v2/search` → `SearchFilters.Transcript`; the two use SEPARATE query builders — both required). Parameterized LIKE with `escapeLikePattern` (escapes `\ % _`), `ESCAPE '\\'`. No SQL injection.
+- **Flagged-only filter** — `SearchFilters.Flagged *bool` + `SearchRequest.FlaggedOnly`, applied to result AND count queries; Search.svelte "Flagged only" toggle (sends `flagged:true` only when on).
+- **Voice-activity dashboard widget** — `VoiceActivityCard.svelte` (D3 24h bar chart from `GET /api/v2/analytics/time/distribution/hourly`, no species param).
+- **Keyword-flag built-in alert rule** — `RuleKeyKeywordFlag*`/`ObjectTypeKeywordFlag`/`EventKeywordMatched` (60s cooldown, bell action) in defaults/constants/schema/dispatcher; removed dead new-species + BirdWeather rules (`9ba3ff3f`).
+- **Keyword highlighting** — `highlightKeywords.ts` util (word-boundary `\b`, case-insensitive, `escapeRegExp`, dedup, cap 100, round-trip-safe, never throws); XSS-safe segment `{#each}` + `<mark>` render (NO `{@html}`) in DetectionDetail + DetectionRow + DetectionCardMobile + dashboard DetectionCard. 31 util tests.
+
+Orphan i18n `settings.alerts.builtInRules.newSpecies` removed (en.json + types.generated.ts). Build-time `EventDetectionNewSpecies` const + `detection_bridge.go` path remain (dead-but-harmless for single-class voice; never fires) — optional future removal.
 
 ## REMAINING WORK (do mechanical parts on Sonnet, not Opus)
 
