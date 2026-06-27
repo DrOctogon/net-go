@@ -486,7 +486,12 @@
       "verifiedStatus": "Todennettu tila",
       "lockedStatus": "Lukittu tila",
       "timeOfDay": "Vuorokaudenaika",
-      "source": "Äänilähde"
+      "source": "Äänilähde",
+      "transcript": "Transcript",
+      "transcriptHelp": "Search for spoken words in the voice clip transcript (case-insensitive substring match)",
+      "transcriptPlaceholder": "Search transcript...",
+      "flaggedOnly": "Flagged only",
+      "flaggedOnlyHelp": "Limit results to detections whose transcript matched a configured keyword"
     },
     "advancedFilters": "Lisäsuodattimet",
     "showAdvancedFilters": "Näytä lisäsuodattimet",

@@ -486,7 +486,12 @@
       "verifiedStatus": "Stav ověření",
       "lockedStatus": "Stav uzamčení",
       "timeOfDay": "Denní doba",
-      "source": "Zdroj zvuku"
+      "source": "Zdroj zvuku",
+      "transcript": "Transcript",
+      "transcriptHelp": "Search for spoken words in the voice clip transcript (case-insensitive substring match)",
+      "transcriptPlaceholder": "Search transcript...",
+      "flaggedOnly": "Flagged only",
+      "flaggedOnlyHelp": "Limit results to detections whose transcript matched a configured keyword"
     },
     "advancedFilters": "Pokročilé filtry",
     "showAdvancedFilters": "Zobrazit pokročilé filtry",

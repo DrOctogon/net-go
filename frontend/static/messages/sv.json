@@ -486,7 +486,12 @@
       "verifiedStatus": "Verifieringsstatus",
       "lockedStatus": "Låsstatus",
       "timeOfDay": "Tid på dygnet",
-      "source": "Ljudkälla"
+      "source": "Ljudkälla",
+      "transcript": "Transcript",
+      "transcriptHelp": "Search for spoken words in the voice clip transcript (case-insensitive substring match)",
+      "transcriptPlaceholder": "Search transcript...",
+      "flaggedOnly": "Flagged only",
+      "flaggedOnlyHelp": "Limit results to detections whose transcript matched a configured keyword"
     },
     "advancedFilters": "Avancerade filter",
     "showAdvancedFilters": "Visa avancerade filter",

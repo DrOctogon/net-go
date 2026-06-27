@@ -486,7 +486,12 @@
       "verifiedStatus": "Verifikācijas statuss",
       "lockedStatus": "Bloķēšanas statuss",
       "timeOfDay": "Diennakts laiks",
-      "source": "Audio avots"
+      "source": "Audio avots",
+      "transcript": "Transcript",
+      "transcriptHelp": "Search for spoken words in the voice clip transcript (case-insensitive substring match)",
+      "transcriptPlaceholder": "Search transcript...",
+      "flaggedOnly": "Flagged only",
+      "flaggedOnlyHelp": "Limit results to detections whose transcript matched a configured keyword"
     },
     "advancedFilters": "Papildu filtri",
     "showAdvancedFilters": "Rādīt papildu filtrus",

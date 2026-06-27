@@ -134,6 +134,12 @@ func calculateFilterComplexity(filters *SearchFilters) float64 {
 	if filters.TimeOfDay != "" && filters.TimeOfDay != "any" {
 		complexity += 2 // Time-based filters are more complex
 	}
+	if filters.Transcript != "" {
+		complexity += 1
+	}
+	if filters.Flagged != nil {
+		complexity += 1
+	}
 
 	return complexity
 }
@@ -241,6 +247,12 @@ func getAppliedFilters(filters *SearchFilters) map[string]any {
 	}
 	if filters.TimeOfDay != "" && filters.TimeOfDay != "any" {
 		applied["time_of_day"] = filters.TimeOfDay
+	}
+	if filters.Transcript != "" {
+		applied["transcript"] = filters.Transcript
+	}
+	if filters.Flagged != nil {
+		applied["flagged"] = *filters.Flagged
 	}
 
 	return applied

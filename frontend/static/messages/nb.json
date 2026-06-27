@@ -486,7 +486,12 @@
       "verifiedStatus": "Verifiseringsstatus",
       "lockedStatus": "Låsestatus",
       "timeOfDay": "Tidspunkt på døgnet",
-      "source": "Audio Source"
+      "source": "Audio Source",
+      "transcript": "Transcript",
+      "transcriptHelp": "Search for spoken words in the voice clip transcript (case-insensitive substring match)",
+      "transcriptPlaceholder": "Search transcript...",
+      "flaggedOnly": "Flagged only",
+      "flaggedOnlyHelp": "Limit results to detections whose transcript matched a configured keyword"
     },
     "advancedFilters": "Avanserte filtre",
     "showAdvancedFilters": "Vis avanserte filtre",

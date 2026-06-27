@@ -3,6 +3,7 @@
   import SourceBadge from '$lib/desktop/features/dashboard/components/SourceBadge.svelte';
   import AudioPlayer from '$lib/desktop/components/media/AudioPlayer.svelte';
   import MobileAudioPlayer from '$lib/desktop/components/media/MobileAudioPlayer.svelte';
+  import Checkbox from '$lib/desktop/components/forms/Checkbox.svelte';
   import DatePicker from '$lib/desktop/components/ui/DatePicker.svelte';
   import { handleBirdImageError } from '$lib/desktop/components/ui/image-utils';
   import TimeOfDayIcon from '$lib/desktop/components/ui/TimeOfDayIcon.svelte';
@@ -165,6 +166,8 @@
   let verifiedStatus = $state<VerifiedStatus>('any');
   let lockedStatus = $state<LockedStatus>('any');
   let timeOfDayFilter = $state<TimeOfDayFilter>('any');
+  let transcriptTerm = $state('');
+  let flaggedOnly = $state(false);
   let formSubmitted = $state(false);
   let advancedFilters = $state(false);
   let isLoading = $state(false);
@@ -263,6 +266,7 @@
 
     try {
       // Build request body
+      const trimmedTranscript = transcriptTerm.trim();
       const requestBody = {
         dateStart: dateRange.start,
         dateEnd: dateRange.end,
@@ -274,6 +278,8 @@
         timeOfDay: timeOfDayFilter,
         page: currentPage,
         sortBy: sortBy,
+        ...(trimmedTranscript !== '' ? { transcript: trimmedTranscript } : {}),
+        ...(flaggedOnly ? { flagged: true } : {}),
       };
 
       interface SearchResponse {
@@ -309,6 +315,8 @@
     lockedStatus = 'any';
     sourceFilter = '';
     timeOfDayFilter = 'any';
+    transcriptTerm = '';
+    flaggedOnly = false;
     formSubmitted = false;
     results = [];
     errorMessage = '';
@@ -484,6 +492,37 @@
               </div>
             {/if}
           </div>
+
+          <!-- Transcript Search -->
+          <div class="form-control">
+            <label class="label" for="transcriptSearch">
+              <span class="label-text">{t('search.fields.transcript')}</span>
+              <span
+                class="help-icon"
+                onmouseenter={() => (showTooltip = 'transcript')}
+                onmouseleave={() => (showTooltip = null)}
+                onfocus={() => (showTooltip = 'transcript')}
+                onblur={() => (showTooltip = null)}
+                role="button"
+                tabindex="0"
+                aria-label={t('search.fields.transcriptHelp')}
+                aria-describedby="transcriptTooltip">ⓘ</span
+              >
+            </label>
+            <input
+              type="text"
+              id="transcriptSearch"
+              class="input w-full"
+              bind:value={transcriptTerm}
+              placeholder={t('search.fields.transcriptPlaceholder')}
+              aria-describedby="transcriptTooltip"
+            />
+            {#if showTooltip === 'transcript'}
+              <div class="tooltip" id="transcriptTooltip" role="tooltip">
+                {t('search.fields.transcriptHelp')}
+              </div>
+            {/if}
+          </div>
         </div>
 
         <!-- Advanced Filters Toggle -->
@@ -568,6 +607,15 @@
                   {t('search.errors.minMaxConfidence')}
                 </div>
               {/if}
+            </div>
+
+            <!-- Flagged Only Toggle -->
+            <div class="form-control">
+              <Checkbox
+                bind:checked={flaggedOnly}
+                label={t('search.fields.flaggedOnly')}
+                helpText={t('search.fields.flaggedOnlyHelp')}
+              />
             </div>
 
             <!-- Status & Time of Day Filters -->

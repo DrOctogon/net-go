@@ -486,7 +486,12 @@
       "verifiedStatus": "Ellenőrzött állapot",
       "lockedStatus": "Zárolt állapot",
       "timeOfDay": "Napszak",
-      "source": "Hangforrás"
+      "source": "Hangforrás",
+      "transcript": "Transcript",
+      "transcriptHelp": "Search for spoken words in the voice clip transcript (case-insensitive substring match)",
+      "transcriptPlaceholder": "Search transcript...",
+      "flaggedOnly": "Flagged only",
+      "flaggedOnlyHelp": "Limit results to detections whose transcript matched a configured keyword"
     },
     "advancedFilters": "Speciális szűrők",
     "showAdvancedFilters": "Speciális szűrők megjelenítése",

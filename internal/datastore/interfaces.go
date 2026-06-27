@@ -2094,10 +2094,16 @@ type SearchFilters struct {
 	UnlockedOnly      bool
 	Device            string
 	TimeOfDay         string // "any", "day", "night", "sunrise", "sunset"
-	Page              int
-	PerPage           int
-	SortBy            string
-	Ctx               context.Context // Add context for cancellation/timeout
+	// Transcript is a free-text LIKE filter on the notes.transcript column.
+	// Empty means no filter. The match is case-insensitive substring.
+	Transcript string
+	// Flagged, when non-nil, restricts results to notes where flagged = *Flagged.
+	// nil means no filter (both flagged and unflagged are returned).
+	Flagged *bool
+	Page    int
+	PerPage int
+	SortBy  string
+	Ctx     context.Context // Add context for cancellation/timeout
 }
 
 // sanitise validates and normalises the search filters, returning an error for invalid combinations.
@@ -2255,6 +2261,14 @@ func applyCommonFilters(query *gorm.DB, filters *SearchFilters, ds *DataStore) *
 
 	if filters.Device != "" {
 		query = query.Where("notes.source_node LIKE ?", "%"+filters.Device+"%")
+	}
+
+	if filters.Transcript != "" {
+		escaped := escapeLikePattern(filters.Transcript)
+		query = query.Where("LOWER(notes.transcript) LIKE LOWER(?) ESCAPE '\\'", "%"+escaped+"%")
+	}
+	if filters.Flagged != nil {
+		query = query.Where("notes.flagged = ?", *filters.Flagged)
 	}
 
 	return query

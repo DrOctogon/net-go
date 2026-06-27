@@ -486,7 +486,12 @@
       "verifiedStatus": "Statut vérifié",
       "lockedStatus": "Statut verrouillé",
       "timeOfDay": "Moment de la journée",
-      "source": "Source audio"
+      "source": "Source audio",
+      "transcript": "Transcript",
+      "transcriptHelp": "Search for spoken words in the voice clip transcript (case-insensitive substring match)",
+      "transcriptPlaceholder": "Search transcript...",
+      "flaggedOnly": "Flagged only",
+      "flaggedOnlyHelp": "Limit results to detections whose transcript matched a configured keyword"
     },
     "advancedFilters": "Filtres avancés",
     "showAdvancedFilters": "Afficher les filtres avancés",
