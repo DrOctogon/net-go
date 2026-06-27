@@ -3851,6 +3851,10 @@
       "v2Required": "Reguły alertów wymagają zaktualizowanego schematu bazy danych. Możesz zaktualizować bazę danych na",
       "v2RequiredLink": "stronie Bazy danych w sekcji System.",
       "builtInRules": {
+        "keywordFlag": {
+          "name": "Keyword flagged",
+          "description": "Notifies when a detection transcript matches a configured keyword"
+        },
         "newSpecies": {
           "name": "Wykryto nowy gatunek",
           "description": "Powiadamia, gdy gatunek zostanie wykryty po raz pierwszy"

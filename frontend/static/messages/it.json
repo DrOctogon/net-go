@@ -3851,6 +3851,10 @@
       "v2Required": "Le regole di allerta richiedono uno schema del database aggiornato. Puoi aggiornare il database dalla",
       "v2RequiredLink": "pagina Database del Sistema.",
       "builtInRules": {
+        "keywordFlag": {
+          "name": "Keyword flagged",
+          "description": "Notifies when a detection transcript matches a configured keyword"
+        },
         "newSpecies": {
           "name": "Nuova specie rilevata",
           "description": "Notifica quando una specie viene rilevata per la prima volta"

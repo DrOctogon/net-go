@@ -3851,6 +3851,10 @@
       "v2Required": "Alarmregler kræver et opdateret databaseskema. Du kan opdatere din database fra",
       "v2RequiredLink": "Systemets databaseside.",
       "builtInRules": {
+        "keywordFlag": {
+          "name": "Keyword flagged",
+          "description": "Notifies when a detection transcript matches a configured keyword"
+        },
         "newSpecies": {
           "name": "Ny art registreret",
           "description": "Notificerer, når en art registreres for første gang"

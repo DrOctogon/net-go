@@ -3851,6 +3851,10 @@
       "v2Required": "Waarschuwingsregels vereisen een bijgewerkt databaseschema. U kunt uw database bijwerken via de",
       "v2RequiredLink": "Systeem-databasepagina.",
       "builtInRules": {
+        "keywordFlag": {
+          "name": "Keyword flagged",
+          "description": "Notifies when a detection transcript matches a configured keyword"
+        },
         "newSpecies": {
           "name": "Nieuwe soort gedetecteerd",
           "description": "Meldt wanneer een soort voor het eerst wordt gedetecteerd"

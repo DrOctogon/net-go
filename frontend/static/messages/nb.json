@@ -3851,6 +3851,10 @@
       "v2Required": "Varselregler krever et oppdatert databaseskjema. Du kan oppdatere databasen fra",
       "v2RequiredLink": "System databaseside.",
       "builtInRules": {
+        "keywordFlag": {
+          "name": "Keyword flagged",
+          "description": "Notifies when a detection transcript matches a configured keyword"
+        },
         "newSpecies": {
           "name": "Ny art registrert",
           "description": "Varsler når en art registreres for første gang"

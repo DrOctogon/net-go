@@ -3851,6 +3851,10 @@
       "v2Required": "Alert rules require an updated database schema. You can update your database from the",
       "v2RequiredLink": "System Database page.",
       "builtInRules": {
+        "keywordFlag": {
+          "name": "Keyword flagged",
+          "description": "Notifies when a detection transcript matches a configured keyword"
+        },
         "newSpecies": {
           "name": "New species detected",
           "description": "Notifies when a species is detected for the first time"

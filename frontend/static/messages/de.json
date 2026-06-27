@@ -3851,6 +3851,10 @@
       "v2Required": "Alarmregeln erfordern ein aktualisiertes Datenbankschema. Sie können Ihre Datenbank aktualisieren über die",
       "v2RequiredLink": "System-Datenbankseite.",
       "builtInRules": {
+        "keywordFlag": {
+          "name": "Keyword flagged",
+          "description": "Notifies when a detection transcript matches a configured keyword"
+        },
         "newSpecies": {
           "name": "Neue Art erkannt",
           "description": "Benachrichtigt, wenn eine Art zum ersten Mal erkannt wird"

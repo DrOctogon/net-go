@@ -3851,6 +3851,10 @@
       "v2Required": "Pravidla upozornění vyžadují aktualizované schéma databáze. Databázi můžete aktualizovat na",
       "v2RequiredLink": "stránce Databáze v sekci Systém.",
       "builtInRules": {
+        "keywordFlag": {
+          "name": "Keyword flagged",
+          "description": "Notifies when a detection transcript matches a configured keyword"
+        },
         "newSpecies": {
           "name": "Detekován nový druh",
           "description": "Upozorní, když je druh detekován poprvé"

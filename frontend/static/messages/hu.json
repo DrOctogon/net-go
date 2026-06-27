@@ -3851,6 +3851,10 @@
       "v2Required": "A riasztási szabályokhoz frissített adatbázis-séma szükséges. Az adatbázist frissítheti a",
       "v2RequiredLink": "Rendszer Adatbázis oldalán.",
       "builtInRules": {
+        "keywordFlag": {
+          "name": "Keyword flagged",
+          "description": "Notifies when a detection transcript matches a configured keyword"
+        },
         "newSpecies": {
           "name": "Új faj detektálva",
           "description": "Értesít, amikor egy faj először kerül detektálásra"

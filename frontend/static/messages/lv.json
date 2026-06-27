@@ -3851,6 +3851,10 @@
       "v2Required": "Brīdinājumu noteikumiem nepieciešama atjaunināta datu bāzes shēma. Varat atjaunināt savu datu bāzi no",
       "v2RequiredLink": "Sistēmas datu bāzes lapas.",
       "builtInRules": {
+        "keywordFlag": {
+          "name": "Keyword flagged",
+          "description": "Notifies when a detection transcript matches a configured keyword"
+        },
         "newSpecies": {
           "name": "Jauna suga noteikta",
           "description": "Paziņo, kad suga tiek noteikta pirmo reizi"

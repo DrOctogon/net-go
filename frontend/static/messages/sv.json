@@ -3851,6 +3851,10 @@
       "v2Required": "Larmregler kräver ett uppdaterat databasschema. Du kan uppdatera din databas från",
       "v2RequiredLink": "Systemets databassida.",
       "builtInRules": {
+        "keywordFlag": {
+          "name": "Keyword flagged",
+          "description": "Notifies when a detection transcript matches a configured keyword"
+        },
         "newSpecies": {
           "name": "Ny art detekterad",
           "description": "Meddelar när en art detekteras för första gången"

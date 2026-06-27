@@ -3851,6 +3851,10 @@
       "v2Required": "Hälytyssäännöt vaativat päivitetyn tietokantaskeeman. Voit päivittää tietokantasi",
       "v2RequiredLink": "Järjestelmän tietokantasivulta.",
       "builtInRules": {
+        "keywordFlag": {
+          "name": "Keyword flagged",
+          "description": "Notifies when a detection transcript matches a configured keyword"
+        },
         "newSpecies": {
           "name": "Uusi laji havaittu",
           "description": "Ilmoittaa kun laji havaitaan ensimmäistä kertaa"

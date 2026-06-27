@@ -2847,6 +2847,8 @@ export type TranslationKey =
   | 'settings.alerts.schema.operators.less_or_equal'
   | 'settings.alerts.v2Required'
   | 'settings.alerts.v2RequiredLink'
+  | 'settings.alerts.builtInRules.keywordFlag.name'
+  | 'settings.alerts.builtInRules.keywordFlag.description'
   | 'settings.alerts.builtInRules.newSpecies.name'
   | 'settings.alerts.builtInRules.newSpecies.description'
   | 'settings.alerts.builtInRules.streamDisconnected.name'

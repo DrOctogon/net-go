@@ -3851,6 +3851,10 @@
       "v2Required": "Las reglas de alerta requieren un esquema de base de datos actualizado. Puede actualizar su base de datos desde la",
       "v2RequiredLink": "página de Base de datos del Sistema.",
       "builtInRules": {
+        "keywordFlag": {
+          "name": "Keyword flagged",
+          "description": "Notifies when a detection transcript matches a configured keyword"
+        },
         "newSpecies": {
           "name": "Nueva especie detectada",
           "description": "Notifica cuando se detecta una especie por primera vez"
