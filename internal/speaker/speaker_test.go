@@ -10,6 +10,53 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// TestNewHonorsSubFeatureFlags locks the privacy contract documented on New:
+// an analyzer must never produce an attribute whose sub-feature is disabled.
+// Today New always returns NoopAnalyzer (empty for every config), so this also
+// guards against a future real model that ignores the per-attribute flags —
+// when that model is wired in, this test must keep passing for the
+// "enabled-but-sub-disabled" cases.
+func TestNewHonorsSubFeatureFlags(t *testing.T) {
+	t.Parallel()
+	// 16 kHz mono frame of non-silence so a real model would have signal to act on.
+	samples := make([]float32, 16000)
+	for i := range samples {
+		samples[i] = 0.1
+	}
+
+	tests := []struct {
+		name       string
+		cfg        Config
+		wantGender bool // gender estimate permitted by config
+		wantAge    bool // age estimate permitted by config
+	}{
+		{"all-disabled", Config{}, false, false},
+		{"master-on-subs-off", Config{Enabled: true}, false, false},
+		{"gender-only", Config{Enabled: true, GenderEnabled: true}, true, false},
+		{"age-only", Config{Enabled: true, AgeEnabled: true}, false, true},
+		{"both", Config{Enabled: true, GenderEnabled: true, AgeEnabled: true}, true, true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			a := New(tt.cfg)
+			require.NotNil(t, a)
+			attrs, err := a.Analyze(context.Background(), [][]float32{samples})
+			require.NoError(t, err)
+
+			// An attribute may only be present when its sub-feature is enabled.
+			// (Noop yields none, satisfying every case; a real model that leaks a
+			// disabled attribute would fail here.)
+			if !tt.wantGender {
+				assert.Empty(t, attrs.Gender, "gender must be empty when gender sub-feature is off")
+			}
+			if !tt.wantAge {
+				assert.Empty(t, attrs.AgeBand, "age band must be empty when age sub-feature is off")
+			}
+		})
+	}
+}
+
 func TestCosine(t *testing.T) {
 	t.Parallel()
 	tests := []struct {

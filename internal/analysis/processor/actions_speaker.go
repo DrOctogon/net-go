@@ -90,8 +90,10 @@ func emitSpeakerAttributeAlert(settings *conf.Settings, r *detection.Result) {
 		return
 	}
 
-	// confidence is the max of the two independent model confidences — a
-	// conservative upper bound for rule thresholds, NOT a joint posterior.
+	// confidence is the maximum of the two independent model confidences.
+	// Using the max means a single high-confidence estimate is enough to satisfy
+	// a rule threshold — intentional, NOT a joint posterior or conservative
+	// combination (min would be the conservative choice).
 	confidence := r.GenderConfidence
 	if r.AgeConfidence > confidence {
 		confidence = r.AgeConfidence

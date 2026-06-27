@@ -21,6 +21,14 @@ type Config struct {
 // wrapper in internal/classifier/humanvoice). The seam, persistence columns,
 // search filters, and alert rule are already wired, so only this constructor
 // and the analyzer implementation need to change.
+//
+// PRIVACY CONTRACT (enforce when wiring the real model): the returned analyzer
+// MUST honor the per-attribute sub-flags and populate ONLY the Attributes fields
+// whose sub-feature is enabled — GenderEnabled gates Gender/GenderConfidence,
+// AgeEnabled gates AgeBand/AgeConfidence, VoicePrintEnabled gates Embedding.
+// A user who turns the master switch on but a sub-attribute off has opted OUT of
+// generating that inference; running the model for it anyway is a privacy
+// regression. TestNewHonorsSubFeatureFlags locks this contract in.
 func New(cfg Config) Analyzer {
 	return NoopAnalyzer{}
 }

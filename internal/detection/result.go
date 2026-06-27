@@ -71,9 +71,14 @@ type Result struct {
 	Comments []Comment
 }
 
-// HasSpeakerAttributes reports whether any estimated speaker attribute (gender
-// or age band) is present on the result. Mirrors speaker.Attributes.HasAttributes
-// so callers in other packages can gate behavior without importing speaker.
+// HasSpeakerAttributes reports whether any estimated demographic speaker
+// attribute (gender or age band) is present on the result. Mirrors
+// speaker.Attributes.HasAttributes so callers in other packages can gate
+// behavior without importing speaker.
+//
+// SpeakerID and VoicePrintEmbedding are intentionally excluded: this gate drives
+// the demographic-attribute alert, which carries gender/age. A voice-print-only
+// detection (clustering/identity) is not a "speaker attribute matched" event.
 func (r *Result) HasSpeakerAttributes() bool {
 	return r.Gender != "" || r.AgeBand != ""
 }
