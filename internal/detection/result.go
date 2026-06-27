@@ -71,6 +71,13 @@ type Result struct {
 	Comments []Comment
 }
 
+// HasSpeakerAttributes reports whether any estimated speaker attribute (gender
+// or age band) is present on the result. Mirrors speaker.Attributes.HasAttributes
+// so callers in other packages can gate behavior without importing speaker.
+func (r *Result) HasSpeakerAttributes() bool {
+	return r.Gender != "" || r.AgeBand != ""
+}
+
 // ResultModelContrib records a single AI model's contribution to a detection.
 type ResultModelContrib struct {
 	Model         ModelInfo

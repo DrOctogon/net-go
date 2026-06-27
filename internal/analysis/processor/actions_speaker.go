@@ -11,6 +11,8 @@ import (
 	"context"
 
 	"github.com/tphakala/voicewatch/internal/alerting"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/detection"
 	"github.com/tphakala/voicewatch/internal/logger"
 	"github.com/tphakala/voicewatch/internal/speaker"
 )
@@ -21,11 +23,14 @@ import (
 // audio is available. Errors never abort the detection — they are logged and
 // the detection saves without attributes.
 //
-// NOTE: with the bundled NoopAnalyzer this never produces attributes, so the
-// alert below never fires today. When a real model is added, emission should
-// move to a post-save step (mirroring keyword flagging in TranscribeAction) so
-// the alert carries a persisted detection ID; here the ID is not yet assigned.
-func (p *Processor) analyzeSpeakerAttributes(item *PendingDetection) {
+// The ctx is the processor's flusher lifecycle context, so a real (blocking)
+// ONNX model honors shutdown cancellation. The bundled NoopAnalyzer ignores it.
+//
+// Estimation happens here (pre-save) so the attributes ride into the database
+// via NoteFromResult. The matching alert is emitted post-save by
+// emitSpeakerAttributeAlert (from DatabaseAction) so it carries a persisted
+// detection ID — at this seam the ID is not yet assigned.
+func (p *Processor) analyzeSpeakerAttributes(ctx context.Context, item *PendingDetection) {
 	settings := p.currentSettings()
 	if settings == nil || !settings.Realtime.Audio.SpeakerAttributes.Enabled {
 		return
@@ -47,11 +52,12 @@ func (p *Processor) analyzeSpeakerAttributes(item *PendingDetection) {
 		return
 	}
 
-	// TODO(speaker): thread the processor lifecycle context through the flush ->
-	// processApprovedDetection path so a real (blocking) ONNX model honors
-	// shutdown cancellation. The bundled NoopAnalyzer ignores ctx, so
-	// context.Background() is safe for the scaffold.
-	attrs, err := analyzer.Analyze(context.Background(), [][]float32{samples})
+	// flusherCtx may be unset on code paths that bypass processor start (e.g.
+	// direct unit tests); fall back to a non-nil context for the model call.
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	attrs, err := analyzer.Analyze(ctx, [][]float32{samples})
 	if err != nil {
 		GetLogger().Warn("Speaker-attribute analysis failed",
 			logger.String("component", "analysis.processor.actions"),
@@ -69,24 +75,33 @@ func (p *Processor) analyzeSpeakerAttributes(item *PendingDetection) {
 	r.AgeConfidence = attrs.AgeConfidence
 	r.SpeakerID = attrs.SpeakerID
 	r.VoicePrintEmbedding = attrs.Embedding
+}
 
-	if !attrs.HasAttributes() {
+// emitSpeakerAttributeAlert publishes a speaker.attribute_matched alert for a
+// detection that has been persisted, so notification rules can fire on estimated
+// attributes with a valid detection ID. It is called post-save from
+// DatabaseAction. No-op when the feature is disabled or the detection carries no
+// estimated attributes (the common case, including the bundled NoopAnalyzer).
+func emitSpeakerAttributeAlert(settings *conf.Settings, r *detection.Result) {
+	if settings == nil || !settings.Realtime.Audio.SpeakerAttributes.Enabled {
+		return
+	}
+	if r == nil || !r.HasSpeakerAttributes() {
 		return
 	}
 
-	// Emit an alert so notification rules can fire on estimated attributes.
 	// confidence is the max of the two independent model confidences — a
 	// conservative upper bound for rule thresholds, NOT a joint posterior.
-	confidence := attrs.GenderConfidence
-	if attrs.AgeConfidence > confidence {
-		confidence = attrs.AgeConfidence
+	confidence := r.GenderConfidence
+	if r.AgeConfidence > confidence {
+		confidence = r.AgeConfidence
 	}
 	alerting.TryPublish(&alerting.AlertEvent{
 		ObjectType: alerting.ObjectTypeSpeakerAttr,
 		EventName:  alerting.EventSpeakerAttributeMatched,
 		Properties: map[string]any{
-			alerting.PropertySpeakerGender:  attrs.Gender,
-			alerting.PropertySpeakerAgeBand: attrs.AgeBand,
+			alerting.PropertySpeakerGender:  r.Gender,
+			alerting.PropertySpeakerAgeBand: r.AgeBand,
 			alerting.PropertyConfidence:     confidence,
 			alerting.PropertyDetectionID:    r.ID,
 		},

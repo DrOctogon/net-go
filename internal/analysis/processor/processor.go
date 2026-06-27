@@ -1299,8 +1299,10 @@ func (p *Processor) shouldDiscardDetection(item *PendingDetection, settings *con
 	return false, ""
 }
 
-// processApprovedDetection handles an approved detection by sending it to the worker queue
-func (p *Processor) processApprovedDetection(item *PendingDetection, speciesName string) {
+// processApprovedDetection handles an approved detection by sending it to the worker queue.
+// ctx is the flusher lifecycle context, threaded to the speaker-attribute seam so a
+// blocking model honors shutdown cancellation.
+func (p *Processor) processApprovedDetection(ctx context.Context, item *PendingDetection, speciesName string) {
 	settings := p.currentSettings()
 
 	GetLogger().Info("approving detection",
@@ -1340,7 +1342,7 @@ func (p *Processor) processApprovedDetection(item *PendingDetection, speciesName
 	// Estimate speaker attributes (gender/age/voice-print) on the detection's
 	// audio before actions are built, so they ride into the database save via
 	// NoteFromResult. No-op (and instant) unless the opt-in analyzer is enabled.
-	p.analyzeSpeakerAttributes(item)
+	p.analyzeSpeakerAttributes(ctx, item)
 
 	actionList := p.getActionsForItem(&item.Detection)
 	for _, action := range actionList {
@@ -1525,7 +1527,7 @@ func (p *Processor) flushPendingDetections() (pendingCount, flushedCount int) {
 			logger.Int("required", itemMinDetections),
 			logger.String("operation", "flush_detection"))
 
-		p.processApprovedDetection(&item, speciesName)
+		p.processApprovedDetection(p.flusherCtx, &item, speciesName)
 		delete(p.pendingDetections, mapKey)
 		flushedCount++
 
