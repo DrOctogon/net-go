@@ -23,6 +23,7 @@
   import PlayOverlay from './PlayOverlay.svelte';
   import ActionMenu from '$lib/desktop/components/ui/ActionMenu.svelte';
   import { Mic } from '@lucide/svelte';
+  import { highlightKeywords } from '$lib/utils/highlightKeywords';
   import AudioSettingsButton from './AudioSettingsButton.svelte';
   import { cn } from '$lib/utils/cn';
   import { downloadDetectionAudio } from '$lib/utils/audioDownload';
@@ -230,9 +231,12 @@
       <!-- Transcript (single-line, ellipsis) with full text on hover -->
       <div class="voice-transcript-area">
         {#if detection.transcript}
-          <span class="voice-transcript-text" title={detection.transcript}>
-            {detection.transcript}
-          </span>
+          <span class="voice-transcript-text" title={detection.transcript}
+            >{#each highlightKeywords(detection.transcript, detection.keywordsHit) as seg, i (i)}{#if seg.match}<mark
+                  class="rounded-sm bg-[var(--color-warning)]/20 text-[var(--color-base-content)] border-b border-[var(--color-warning)]/60 font-medium"
+                  >{seg.text}</mark
+                >{:else}{seg.text}{/if}{/each}</span
+          >
         {:else}
           <span class="voice-no-transcript">{t('detections.noTranscript')}</span>
         {/if}

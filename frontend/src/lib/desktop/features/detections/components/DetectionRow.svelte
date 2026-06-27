@@ -34,6 +34,7 @@
   import ActionMenu from '$lib/desktop/components/ui/ActionMenu.svelte';
   import { t } from '$lib/i18n';
   import { Flag, Mic } from '@lucide/svelte';
+  import { highlightKeywords } from '$lib/utils/highlightKeywords';
   import type { Detection } from '$lib/types/detection.types';
   import { navigation } from '$lib/stores/navigation.svelte';
   import { buildAppUrl } from '$lib/utils/urlHelpers';
@@ -137,7 +138,10 @@
       title={detection.transcript}
     >
       {#if detection.transcript}
-        {detection.transcript}
+        {#each highlightKeywords(detection.transcript, detection.keywordsHit) as seg, i (i)}{#if seg.match}<mark
+              class="rounded-sm bg-[var(--color-warning)]/20 text-[var(--color-base-content)] border-b border-[var(--color-warning)]/60 font-medium"
+              >{seg.text}</mark
+            >{:else}{seg.text}{/if}{/each}
       {:else}
         <span class="sp-no-transcript">{t('detections.noTranscript')}</span>
       {/if}
