@@ -80,6 +80,7 @@ Performance Optimizations:
   import BannerCard from '$lib/desktop/features/dashboard/components/BannerCard.svelte';
   import VideoEmbedCard from '$lib/desktop/features/dashboard/components/VideoEmbedCard.svelte';
   import MiniSpectrogram from '$lib/desktop/features/dashboard/components/MiniSpectrogram.svelte';
+  import VoiceActivityCard from '$lib/desktop/features/dashboard/components/VoiceActivityCard.svelte';
   import DashboardEditMode from '$lib/desktop/features/dashboard/components/DashboardEditMode.svelte';
   import DailySummaryConfigForm from '$lib/desktop/features/dashboard/components/DailySummaryConfigForm.svelte';
   import {
@@ -1593,6 +1594,8 @@ Performance Optimizations:
           editMode={inEditMode}
           onUpdate={config => onElementUpdate({ ...element, video: config })}
         />
+      {:else if element.type === 'voice-activity'}
+        <VoiceActivityCard />
       {/if}
     {/snippet}
   </DashboardEditMode>

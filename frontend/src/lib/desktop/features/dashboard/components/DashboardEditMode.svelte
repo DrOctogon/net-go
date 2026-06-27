@@ -68,6 +68,7 @@
     'live-spectrogram',
     'detections-grid',
     'video-embed',
+    'voice-activity',
   ];
 
   // Maximum number of instances allowed per element type

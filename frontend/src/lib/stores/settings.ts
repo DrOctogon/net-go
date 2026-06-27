@@ -561,7 +561,8 @@ export type DashboardElementType =
   | 'currently-hearing'
   | 'detections-grid'
   | 'live-spectrogram'
-  | 'video-embed';
+  | 'video-embed'
+  | 'voice-activity';
 
 // A single configurable element on the dashboard
 export interface DashboardElement {

@@ -768,7 +768,21 @@
       "currentlyHearing": "Currently Hearing",
       "detectionsGrid": "Recent Detections",
       "liveSpectrogram": "Live Spectrogram",
-      "videoEmbed": "Video Embed"
+      "videoEmbed": "Video Embed",
+      "voiceActivity": "Voice Activity"
+    },
+    "voiceActivity": {
+      "title": "Voice Activity",
+      "subtitle": "Detections by hour — today",
+      "chartAriaLabel": "Bar chart of voice detections per hour for today",
+      "loading": "Loading voice activity...",
+      "empty": "No voice detections today",
+      "errors": {
+        "load": "Failed to load voice activity data"
+      },
+      "bar": {
+        "tooltip": "{count} detection(s) at {hour}:00"
+      }
     }
   },
   "detections": {
