@@ -35,7 +35,9 @@ type Attributes struct {
 }
 
 // HasAttributes reports whether any gender or age estimate is populated.
-func (a Attributes) HasAttributes() bool {
+// Pointer receiver: Attributes is wide (embedding slice header + fields), so a
+// value receiver would copy it on every call.
+func (a *Attributes) HasAttributes() bool {
 	return a.Gender != "" || a.AgeBand != ""
 }
 

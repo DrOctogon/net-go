@@ -15,7 +15,7 @@ func PCMS16LEToFloat32(pcm []byte) []float32 {
 		return nil
 	}
 	out := make([]float32, n)
-	for i := 0; i < n; i++ {
+	for i := range n {
 		s := int16(binary.LittleEndian.Uint16(pcm[i*2:]))
 		out[i] = float32(s) / sampleScaleS16
 	}

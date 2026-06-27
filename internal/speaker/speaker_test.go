@@ -1,7 +1,6 @@
 package speaker
 
 import (
-	"context"
 	"encoding/binary"
 	"math"
 	"testing"
@@ -41,7 +40,7 @@ func TestNewHonorsSubFeatureFlags(t *testing.T) {
 			t.Parallel()
 			a := New(tt.cfg)
 			require.NotNil(t, a)
-			attrs, err := a.Analyze(context.Background(), [][]float32{samples})
+			attrs, err := a.Analyze(t.Context(), [][]float32{samples})
 			require.NoError(t, err)
 
 			// An attribute may only be present when its sub-feature is enabled.
@@ -105,7 +104,7 @@ func TestPCMS16LEToFloat32(t *testing.T) {
 
 func TestNoopAnalyzer(t *testing.T) {
 	t.Parallel()
-	attrs, err := NoopAnalyzer{}.Analyze(context.Background(), [][]float32{{0.1, 0.2}})
+	attrs, err := NoopAnalyzer{}.Analyze(t.Context(), [][]float32{{0.1, 0.2}})
 	require.NoError(t, err)
 	assert.False(t, attrs.HasAttributes())
 	assert.Empty(t, attrs.Gender)
@@ -135,8 +134,13 @@ func TestValidators(t *testing.T) {
 
 func TestHasAttributes(t *testing.T) {
 	t.Parallel()
-	assert.True(t, Attributes{Gender: GenderMale}.HasAttributes())
-	assert.True(t, Attributes{AgeBand: AgeBandAdult}.HasAttributes())
-	assert.False(t, Attributes{}.HasAttributes())
-	assert.False(t, Attributes{GenderConfidence: 0.9}.HasAttributes(), "confidence without label is not an estimate")
+	// HasAttributes has a pointer receiver, so call on addressable values.
+	gender := Attributes{Gender: GenderMale}
+	age := Attributes{AgeBand: AgeBandAdult}
+	empty := Attributes{}
+	confOnly := Attributes{GenderConfidence: 0.9}
+	assert.True(t, gender.HasAttributes())
+	assert.True(t, age.HasAttributes())
+	assert.False(t, empty.HasAttributes())
+	assert.False(t, confOnly.HasAttributes(), "confidence without label is not an estimate")
 }
