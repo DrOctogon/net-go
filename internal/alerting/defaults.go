@@ -168,5 +168,20 @@ func DefaultRules() []entities.AlertRule {
 				{Target: TargetBell, SortOrder: 0},
 			},
 		},
+		{
+			Name:           "Keyword flagged",
+			Description:    "Notifies when a detection transcript matches a configured keyword",
+			NameKey:        RuleKeyKeywordFlagName,
+			DescriptionKey: RuleKeyKeywordFlagDesc,
+			Enabled:        true,
+			BuiltIn:        true,
+			ObjectType:     ObjectTypeKeywordFlag,
+			TriggerType:    TriggerTypeEvent,
+			EventName:      EventKeywordMatched,
+			CooldownSec:    60,
+			Actions: []entities.AlertAction{
+				{Target: TargetBell, SortOrder: 0},
+			},
+		},
 	}
 }

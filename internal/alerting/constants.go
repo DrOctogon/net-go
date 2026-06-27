@@ -127,8 +127,8 @@ const (
 	RuleKeyBirdWeatherName = "settings.alerts.builtInRules.birdWeatherFailed.name"
 	RuleKeyBirdWeatherDesc = "settings.alerts.builtInRules.birdWeatherFailed.description"
 
-	RuleKeyKeywordMatchedName = "settings.alerts.builtInRules.keywordMatched.name"
-	RuleKeyKeywordMatchedDesc = "settings.alerts.builtInRules.keywordMatched.description"
+	RuleKeyKeywordFlagName = "settings.alerts.builtInRules.keywordFlag.name"
+	RuleKeyKeywordFlagDesc = "settings.alerts.builtInRules.keywordFlag.description"
 )
 
 // Alert notification i18n key constants.

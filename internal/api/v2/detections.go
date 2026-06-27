@@ -275,6 +275,7 @@ type detectionQueryParams struct {
 	Location   string
 	Locked     string
 	Flagged    string
+	Transcript string
 	// Sorting
 	SortBy string
 	// Include additional data
@@ -284,10 +285,10 @@ type detectionQueryParams struct {
 // advancedSearchCacheKey generates a deterministic cache key for advanced search queries.
 // Includes all filter parameters to avoid cache collisions.
 func (p *detectionQueryParams) advancedSearchCacheKey() string {
-	return fmt.Sprintf("adv_search:%s:%d:%d:%s:%s:%s:%s:%s:%s:%s:%s:%s:%s:%s:%s:%s:%d",
+	return fmt.Sprintf("adv_search:%s:%d:%d:%s:%s:%s:%s:%s:%s:%s:%s:%s:%s:%s:%s:%s:%s:%d",
 		p.Search, p.NumResults, p.Offset,
 		p.Confidence, p.TimeOfDay, p.HourRange,
-		p.Verified, p.Location, p.Locked, p.Flagged,
+		p.Verified, p.Location, p.Locked, p.Flagged, p.Transcript,
 		p.Species, p.Date, p.StartDate+":"+p.EndDate,
 		p.SortBy, p.QueryType, p.Hour, p.Duration)
 }
@@ -310,6 +311,7 @@ func (c *Controller) parseDetectionQueryParams(ctx echo.Context) (*detectionQuer
 		Location:   ctx.QueryParam("location"),
 		Locked:     ctx.QueryParam("locked"),
 		Flagged:    ctx.QueryParam("flagged"),
+		Transcript: ctx.QueryParam("transcript"),
 		// Sorting
 		SortBy: ctx.QueryParam("sortBy"),
 		// Include weather data
@@ -625,6 +627,7 @@ func (p *detectionQueryParams) needsAdvancedRouting() bool {
 	if p.Confidence != "" || p.TimeOfDay != "" ||
 		p.HourRange != "" || p.Verified != "" ||
 		p.Location != "" || p.Locked != "" || p.Flagged != "" ||
+		p.Transcript != "" ||
 		p.StartDate != "" || p.EndDate != "" {
 		return true
 	}
@@ -1159,6 +1162,9 @@ func (c *Controller) buildAdvancedSearchFilters(params *detectionQueryParams) da
 	if params.Flagged != "" {
 		flagged := params.Flagged == QueryValueTrue
 		filters.Flagged = &flagged
+	}
+	if params.Transcript != "" {
+		filters.Transcript = params.Transcript
 	}
 
 	// Apply sorting

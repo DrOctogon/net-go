@@ -108,6 +108,18 @@ func GetSchema() Schema {
 					{Name: MetricDiskUsage, Label: "Disk Usage", Unit: "%", Properties: numericValueProperties()},
 				},
 			},
+			{
+				Name:  ObjectTypeKeywordFlag,
+				Label: "Keyword Flag",
+				Events: []EventSchema{
+					{
+						Name:        EventKeywordMatched,
+						Label:       "Keyword Matched",
+						Description: "Fires when a detection transcript contains a configured keyword",
+						Properties:  keywordFlagProperties(),
+					},
+				},
+			},
 		},
 		Operators: []OperatorSchema{
 			{Name: OperatorIs, Label: "is", Type: "string"},
@@ -182,5 +194,14 @@ func deviceErrorProperties() []PropertySchema {
 func numericValueProperties() []PropertySchema {
 	return []PropertySchema{
 		{Name: PropertyValue, Label: "Value", Type: "number", Operators: numericOperators},
+	}
+}
+
+func keywordFlagProperties() []PropertySchema {
+	return []PropertySchema{
+		{Name: PropertyKeywords, Label: "Keywords", Type: "string", Operators: stringOperators},
+		{Name: PropertyTranscript, Label: "Transcript", Type: "string", Operators: stringOperators},
+		{Name: PropertySpeciesName, Label: "Species Name", Type: "string", Operators: stringOperators},
+		{Name: PropertyDetectionID, Label: "Detection ID", Type: "string", Operators: stringOperators},
 	}
 }

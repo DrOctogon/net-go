@@ -21,7 +21,8 @@ type AdvancedSearchFilters struct {
 	Species       []string
 	Location      []string // Maps to source_node column
 	Locked        *bool
-	Flagged       *bool // Filters on the notes.flagged column (keyword-flagged detections)
+	Flagged       *bool  // Filters on the notes.flagged column (keyword-flagged detections)
+	Transcript    string // Free-text LIKE filter on notes.transcript (keyword/phrase search)
 	SortAscending bool
 	SortBy        string // "date_desc", "date_asc", "species_asc", "species_desc", "confidence_asc", "confidence_desc", "status"
 	Limit         int
@@ -109,6 +110,13 @@ func (ds *DataStore) SearchNotesAdvanced(filters *AdvancedSearchFilters) ([]Note
 	// Apply flagged filter (keyword-flagged detections)
 	if filters.Flagged != nil {
 		query = query.Where("flagged = ?", *filters.Flagged)
+	}
+
+	// Apply transcript filter (free-text substring search on speech-to-text transcript).
+	// LIKE wildcards in the user term are escaped so they are treated as literals.
+	if filters.Transcript != "" {
+		escaped := escapeLikePattern(filters.Transcript)
+		query = query.Where("LOWER(transcript) LIKE LOWER(?) ESCAPE '\\'", "%"+escaped+"%")
 	}
 
 	// Apply MinID filter for cursor-based pagination (used by migration worker)
@@ -336,4 +344,14 @@ func applyLockedFilter(query *gorm.DB, locked *bool) *gorm.DB {
 
 	return query.Joins("LEFT JOIN note_locks ON note_locks.note_id = notes.id").
 		Where("note_locks.id IS NULL")
+}
+
+// escapeLikePattern escapes backslash, percent, and underscore in s so that
+// the resulting string can be embedded in a LIKE pattern with ESCAPE '\'
+// and all characters in s are treated as literals (no wildcards).
+func escapeLikePattern(s string) string {
+	s = strings.ReplaceAll(s, `\`, `\\`)
+	s = strings.ReplaceAll(s, `%`, `\%`)
+	s = strings.ReplaceAll(s, `_`, `\_`)
+	return s
 }
