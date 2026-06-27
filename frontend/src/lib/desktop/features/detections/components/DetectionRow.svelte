@@ -32,6 +32,7 @@
   import SourceBadge from '$lib/desktop/features/dashboard/components/SourceBadge.svelte';
   import SpectrogramPlayer from '$lib/desktop/components/media/SpectrogramPlayer.svelte';
   import ActionMenu from '$lib/desktop/components/ui/ActionMenu.svelte';
+  import SpeakerAttributeChips from '$lib/desktop/components/data/SpeakerAttributeChips.svelte';
   import { t } from '$lib/i18n';
   import { Flag, Mic } from '@lucide/svelte';
   import { highlightKeywords } from '$lib/utils/highlightKeywords';
@@ -171,6 +172,7 @@
       </span>
     {/if}
     <VerificationBadges {detection} />
+    <SpeakerAttributeChips {detection} variant="default" />
   </div>
 </td>
 

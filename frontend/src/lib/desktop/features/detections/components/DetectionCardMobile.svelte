@@ -7,6 +7,7 @@
   import SourceBadge from '$lib/desktop/features/dashboard/components/SourceBadge.svelte';
   import PlayOverlay from '$lib/desktop/features/dashboard/components/PlayOverlay.svelte';
   import ActionMenu from '$lib/desktop/components/ui/ActionMenu.svelte';
+  import SpeakerAttributeChips from '$lib/desktop/components/data/SpeakerAttributeChips.svelte';
   import { cn } from '$lib/utils/cn';
   import { downloadDetectionAudio } from '$lib/utils/audioDownload';
   import { createSpectrogramLoader } from '$lib/utils/spectrogramLoader.svelte';
@@ -174,6 +175,7 @@
           <Flag class="w-3.5 h-3.5" aria-hidden="true" />
         </span>
       {/if}
+      <SpeakerAttributeChips {detection} variant="overlay" />
     </div>
 
     <!-- Center Play Button -->

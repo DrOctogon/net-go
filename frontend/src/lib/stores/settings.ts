@@ -143,11 +143,37 @@ export interface AudioSettings {
   useAudioCore?: boolean;
   equalizer: EqualizerSettings;
   quietHours?: QuietHoursConfig;
+  speakerAttributes?: SpeakerAttributesSettings; // opt-in speaker attribute estimation
 }
 
 export interface SoundLevelSettings {
   enabled: boolean;
   interval: number;
+}
+
+// SpeakerAttributeModel holds per-attribute enablement and minimum confidence.
+// `modelPath` mirrors the backend field so a round-trip save does not drop it.
+export interface SpeakerAttributeModel {
+  enabled: boolean;
+  modelPath?: string;
+  threshold: number; // minimum confidence to keep an estimate (0..1)
+}
+
+// VoicePrintSettings mirrors the backend voice-print embedding config so saving
+// speaker-attribute settings does not strip it. Not edited by the Audio page.
+export interface VoicePrintSettings {
+  enabled: boolean;
+  modelPath?: string;
+}
+
+// SpeakerAttributesSettings configures opt-in speaker-attribute estimation
+// (estimated gender + relative age band). Disabled by default for privacy;
+// these are demographic estimates, not identity recognition.
+export interface SpeakerAttributesSettings {
+  enabled: boolean; // master switch for all speaker-attribute analysis
+  gender: SpeakerAttributeModel;
+  age: SpeakerAttributeModel;
+  voicePrint?: VoicePrintSettings;
 }
 
 // Stream type constants
@@ -891,6 +917,12 @@ function createEmptySettings(): SettingsFormData {
           enabled: false,
           filters: [],
         },
+        speakerAttributes: {
+          enabled: false,
+          gender: { enabled: false, modelPath: '', threshold: 0.5 },
+          age: { enabled: false, modelPath: '', threshold: 0.5 },
+          voicePrint: { enabled: false, modelPath: '' },
+        },
       },
       privacyFilter: {
         enabled: false,
@@ -1069,6 +1101,11 @@ export const batSettings = derived(settingsStore, $store => $store.formData.bat)
 export const realtimeSettings = derived(settingsStore, $store => $store.formData.realtime);
 
 export const audioSettings = derived(settingsStore, $store => $store.formData.realtime?.audio);
+
+export const speakerAttributesSettings = derived(
+  settingsStore,
+  $store => $store.formData.realtime?.audio?.speakerAttributes
+);
 
 export const privacyFilterSettings = derived(
   settingsStore,

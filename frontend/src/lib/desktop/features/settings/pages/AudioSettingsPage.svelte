@@ -40,9 +40,11 @@
     rtspSettings,
     realtimeSettings,
     extendedCaptureSettings,
+    speakerAttributesSettings,
     type AudioSourceConfig,
     type EqualizerFilterType,
     type StreamConfig,
+    type SpeakerAttributesSettings,
   } from '$lib/stores/settings';
   import { hasSettingsChanged } from '$lib/utils/settingsChanges';
   import SettingsTabs, {
@@ -205,7 +207,15 @@
     )
   );
 
-  // Processing tab changes (equalizer + sound level + normalization)
+  // Speaker Attributes section changes
+  let speakerAttributesHasChanges = $derived(
+    hasSettingsChanged(
+      store.originalData.realtime?.audio?.speakerAttributes,
+      store.formData.realtime?.audio?.speakerAttributes
+    )
+  );
+
+  // Processing tab changes (equalizer + sound level + normalization + speaker attributes)
   let processingTabHasChanges = $derived(
     hasSettingsChanged(
       {
@@ -216,7 +226,9 @@
         equalizer: store.formData.realtime?.audio?.equalizer,
         soundLevel: store.formData.realtime?.audio?.soundLevel,
       }
-    ) || normalizationHasChanges
+    ) ||
+      normalizationHasChanges ||
+      speakerAttributesHasChanges
   );
 
   // Clip Recording section changes (enable, capture settings)
@@ -588,6 +600,62 @@
         species: cleaned,
       },
     });
+  }
+
+  // Speaker attributes (opt-in estimated gender + age band). Merge stored values
+  // over defaults so partial/absent config still yields a complete object to bind.
+  let speakerAttributes = $derived<SpeakerAttributesSettings>(
+    (() => {
+      const sa = $speakerAttributesSettings;
+      return {
+        enabled: sa?.enabled ?? false,
+        gender: {
+          enabled: sa?.gender?.enabled ?? false,
+          modelPath: sa?.gender?.modelPath ?? '',
+          threshold: sa?.gender?.threshold ?? 0.5,
+        },
+        age: {
+          enabled: sa?.age?.enabled ?? false,
+          modelPath: sa?.age?.modelPath ?? '',
+          threshold: sa?.age?.threshold ?? 0.5,
+        },
+        voicePrint: {
+          enabled: sa?.voicePrint?.enabled ?? false,
+          modelPath: sa?.voicePrint?.modelPath ?? '',
+        },
+      };
+    })()
+  );
+
+  // Persist a partial speaker-attribute update. Writes through updateSection so
+  // the change is hot-reload safe (no startup-time branching in the UI).
+  function updateSpeakerAttributes(next: Partial<SpeakerAttributesSettings>) {
+    settingsActions.updateSection('realtime', {
+      audio: {
+        ...$audioSettings!,
+        speakerAttributes: { ...speakerAttributes, ...next },
+      },
+    });
+  }
+
+  function updateSpeakerMasterEnabled(enabled: boolean) {
+    updateSpeakerAttributes({ enabled });
+  }
+
+  function updateSpeakerGenderEnabled(enabled: boolean) {
+    updateSpeakerAttributes({ gender: { ...speakerAttributes.gender, enabled } });
+  }
+
+  function updateSpeakerGenderThreshold(threshold: number) {
+    updateSpeakerAttributes({ gender: { ...speakerAttributes.gender, threshold } });
+  }
+
+  function updateSpeakerAgeEnabled(enabled: boolean) {
+    updateSpeakerAttributes({ age: { ...speakerAttributes.age, enabled } });
+  }
+
+  function updateSpeakerAgeThreshold(threshold: number) {
+    updateSpeakerAttributes({ age: { ...speakerAttributes.age, threshold } });
   }
 
   // Handle equalizer updates from the AudioEqualizerSettings component
@@ -1012,6 +1080,106 @@
                 </li>
               </ul>
             </SettingsNote>
+          </div>
+        </fieldset>
+      </div>
+    </SettingsSection>
+
+    <!-- Speaker Attributes (opt-in estimated gender + age band) -->
+    <SettingsSection
+      title={t('settings.audio.speakerAttributes.title')}
+      description={t('settings.audio.speakerAttributes.description')}
+      originalData={store.originalData.realtime?.audio?.speakerAttributes}
+      currentData={store.formData.realtime?.audio?.speakerAttributes}
+    >
+      <div class="space-y-4">
+        <!-- Privacy / accuracy caveat -->
+        <div
+          class="flex items-start gap-3 p-4 rounded-lg bg-[color-mix(in_srgb,var(--color-info)_15%,transparent)] text-[var(--color-info)]"
+        >
+          <Info class="size-6 shrink-0" />
+          <span>{t('settings.audio.speakerAttributes.caveat')}</span>
+        </div>
+
+        <!-- Master enable -->
+        <Checkbox
+          checked={speakerAttributes.enabled}
+          label={t('settings.audio.speakerAttributes.enable')}
+          helpText={t('settings.audio.speakerAttributes.enableHelp')}
+          disabled={store.isLoading || store.isSaving}
+          onchange={updateSpeakerMasterEnabled}
+        />
+
+        <!-- Per-attribute models, gated on the master switch -->
+        <fieldset
+          disabled={!speakerAttributes.enabled || store.isLoading || store.isSaving}
+          class="contents"
+          aria-describedby="speaker-attributes-status"
+        >
+          <span id="speaker-attributes-status" class="sr-only">
+            {speakerAttributes.enabled
+              ? t('settings.audio.speakerAttributes.enable')
+              : t('settings.audio.speakerAttributes.disabled')}
+          </span>
+          <div
+            class="space-y-6 transition-opacity duration-200"
+            class:opacity-50={!speakerAttributes.enabled}
+          >
+            <!-- Gender estimation -->
+            <div class="space-y-3">
+              <Checkbox
+                checked={speakerAttributes.gender.enabled}
+                label={t('settings.audio.speakerAttributes.gender.enable')}
+                helpText={t('settings.audio.speakerAttributes.gender.enableHelp')}
+                disabled={!speakerAttributes.enabled || store.isLoading || store.isSaving}
+                onchange={updateSpeakerGenderEnabled}
+              />
+              <div class="settings-form-grid">
+                <InlineSlider
+                  label={t('settings.audio.speakerAttributes.gender.thresholdLabel')}
+                  value={speakerAttributes.gender.threshold}
+                  onUpdate={updateSpeakerGenderThreshold}
+                  min={0}
+                  max={1}
+                  step={0.05}
+                  size="sm"
+                  disabled={!speakerAttributes.enabled ||
+                    !speakerAttributes.gender.enabled ||
+                    store.isLoading ||
+                    store.isSaving}
+                  formatValue={(v: number) => `${Math.round(v * 100)}%`}
+                  helpText={t('settings.audio.speakerAttributes.gender.thresholdHelp')}
+                />
+              </div>
+            </div>
+
+            <!-- Age-band estimation -->
+            <div class="space-y-3">
+              <Checkbox
+                checked={speakerAttributes.age.enabled}
+                label={t('settings.audio.speakerAttributes.age.enable')}
+                helpText={t('settings.audio.speakerAttributes.age.enableHelp')}
+                disabled={!speakerAttributes.enabled || store.isLoading || store.isSaving}
+                onchange={updateSpeakerAgeEnabled}
+              />
+              <div class="settings-form-grid">
+                <InlineSlider
+                  label={t('settings.audio.speakerAttributes.age.thresholdLabel')}
+                  value={speakerAttributes.age.threshold}
+                  onUpdate={updateSpeakerAgeThreshold}
+                  min={0}
+                  max={1}
+                  step={0.05}
+                  size="sm"
+                  disabled={!speakerAttributes.enabled ||
+                    !speakerAttributes.age.enabled ||
+                    store.isLoading ||
+                    store.isSaving}
+                  formatValue={(v: number) => `${Math.round(v * 100)}%`}
+                  helpText={t('settings.audio.speakerAttributes.age.thresholdHelp')}
+                />
+              </div>
+            </div>
           </div>
         </fieldset>
       </div>

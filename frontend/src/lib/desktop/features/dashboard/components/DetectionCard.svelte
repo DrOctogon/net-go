@@ -22,6 +22,7 @@
   import SourceBadge from './SourceBadge.svelte';
   import PlayOverlay from './PlayOverlay.svelte';
   import ActionMenu from '$lib/desktop/components/ui/ActionMenu.svelte';
+  import SpeakerAttributeChips from '$lib/desktop/components/data/SpeakerAttributeChips.svelte';
   import { Mic } from '@lucide/svelte';
   import { highlightKeywords } from '$lib/utils/highlightKeywords';
   import AudioSettingsButton from './AudioSettingsButton.svelte';
@@ -209,6 +210,7 @@
         <MoonBadge moonPhaseName={detection.weather.moonPhaseName} />
       {/if}
       <SourceBadge {detection} variant="overlay" />
+      <SpeakerAttributeChips {detection} variant="overlay" />
     </div>
 
     <!-- Center Play Button -->

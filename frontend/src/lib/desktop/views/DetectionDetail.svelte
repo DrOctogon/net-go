@@ -28,6 +28,8 @@
   import { loggers } from '$lib/utils/logger';
   import { highlightKeywords } from '$lib/utils/highlightKeywords';
   import SourceBadge from '$lib/desktop/features/dashboard/components/SourceBadge.svelte';
+  import SpeakerAttributeChips from '$lib/desktop/components/data/SpeakerAttributeChips.svelte';
+  import { getSpeakerChips } from '$lib/utils/speakerAttributes';
   import {
     Download,
     Mic,
@@ -391,6 +393,14 @@
             units={det.weather.units}
             size="md"
           />
+        </div>
+      {/if}
+
+      <!-- Speaker Attributes (estimated gender + age band; opt-in) -->
+      {#if getSpeakerChips(det).length > 0}
+        <div class="meta-section" aria-label={t('detections.speaker.sectionLabel')}>
+          <div class="speaker-attr-label">{t('detections.speaker.sectionLabel')}</div>
+          <SpeakerAttributeChips detection={det} variant="default" />
         </div>
       {/if}
 
@@ -875,6 +885,17 @@
   .meta-time-row .time-of-day-badge {
     margin-top: 0;
     margin-left: 0.125rem;
+  }
+
+  /* Label above the speaker-attribute chips in the metadata card */
+  .speaker-attr-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-base-content);
+    opacity: 0.5;
+    margin-bottom: 0.375rem;
   }
 
   .meta-download {

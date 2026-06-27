@@ -491,7 +491,9 @@
       "transcriptHelp": "Search for spoken words in the voice clip transcript (case-insensitive substring match)",
       "transcriptPlaceholder": "Search transcript...",
       "flaggedOnly": "Flagged only",
-      "flaggedOnlyHelp": "Limit results to detections whose transcript matched a configured keyword"
+      "flaggedOnlyHelp": "Limit results to detections whose transcript matched a configured keyword",
+      "gender": "Speaker gender",
+      "ageBand": "Speaker age"
     },
     "advancedFilters": "Zaawansowane Filtry",
     "showAdvancedFilters": "Pokaż Zaawansowane Filtry",
@@ -565,6 +567,9 @@
       "page": "Strona {current} z {total}",
       "goToPrevious": "Przejdź do poprzedniej strony",
       "goToNext": "Przejdź do następnej strony"
+    },
+    "speakerOptions": {
+      "any": "Any"
     }
   },
   "error": {
@@ -993,6 +998,22 @@
       "loadFailed": "Nie udało się załadować detekcji (Błąd {status}). Odśwież stronę.",
       "noIdProvided": "Nie podano identyfikatora detekcji.",
       "fetchFailed": "Nie udało się pobrać detekcji"
+    },
+    "speaker": {
+      "sectionLabel": "Estimated speaker",
+      "genderAria": "Estimated speaker gender",
+      "ageAria": "Estimated speaker age",
+      "gender": {
+        "male": "Male",
+        "female": "Female",
+        "unknown": "Unknown"
+      },
+      "age": {
+        "child": "Child",
+        "teen": "Teen",
+        "adult": "Adult",
+        "senior": "Senior"
+      }
     }
   },
   "species": {
@@ -3449,6 +3470,26 @@
       "models": {
         "recommendBoth": "Dla najlepszego pokrycia wykrywania gatunków zaleca się uruchamianie zarówno modelu VoiceWatch, jak i Perch jednocześnie.",
         "perchOnlyWarning": "Sam Perch produkuje mniej wykryć. Obniż próg pewności do 0.50, aby uzyskać znaczące wyniki, lub włącz VoiceWatch obok Perch dla lepszego pokrycia."
+      },
+      "speakerAttributes": {
+        "title": "Speaker Attributes",
+        "description": "Estimate the speaker's gender and relative age band for human-voice detections. Opt-in and off by default.",
+        "caveat": "These are demographic estimates, not identity recognition. Accuracy varies by accent and recording quality.",
+        "enable": "Enable speaker attributes",
+        "enableHelp": "Master switch for all speaker-attribute estimation.",
+        "disabled": "Speaker attributes are disabled",
+        "gender": {
+          "enable": "Estimate speaker gender",
+          "enableHelp": "Estimate whether the speaker sounds male, female, or unknown.",
+          "thresholdLabel": "Gender confidence threshold",
+          "thresholdHelp": "Discard gender estimates below this confidence."
+        },
+        "age": {
+          "enable": "Estimate speaker age band",
+          "enableHelp": "Estimate a relative age band (child, teen, adult, senior).",
+          "thresholdLabel": "Age confidence threshold",
+          "thresholdHelp": "Discard age estimates below this confidence."
+        }
       }
     },
     "security": {

@@ -33,6 +33,12 @@
   import { loggers } from '$lib/utils/logger';
   import { buildAppUrl } from '$lib/utils/urlHelpers';
   import { localizeSpeciesName } from '$lib/utils/speciesDisplay';
+  import {
+    SPEAKER_GENDERS,
+    SPEAKER_AGE_BANDS,
+    type SpeakerGender,
+    type SpeakerAgeBand,
+  } from '$lib/utils/speakerAttributes';
 
   // SPINNER CONTROL: Set to false to disable loading spinners (reduces flickering)
   // Change back to true to re-enable spinners for testing
@@ -168,6 +174,9 @@
   let timeOfDayFilter = $state<TimeOfDayFilter>('any');
   let transcriptTerm = $state('');
   let flaggedOnly = $state(false);
+  // Speaker-attribute filters: 'any' means "do not filter" and is not sent.
+  let genderFilter = $state<'any' | SpeakerGender>('any');
+  let ageBandFilter = $state<'any' | SpeakerAgeBand>('any');
   let formSubmitted = $state(false);
   let advancedFilters = $state(false);
   let isLoading = $state(false);
@@ -280,6 +289,8 @@
         sortBy: sortBy,
         ...(trimmedTranscript !== '' ? { transcript: trimmedTranscript } : {}),
         ...(flaggedOnly ? { flagged: true } : {}),
+        ...(genderFilter !== 'any' ? { gender: genderFilter } : {}),
+        ...(ageBandFilter !== 'any' ? { ageBand: ageBandFilter } : {}),
       };
 
       interface SearchResponse {
@@ -317,6 +328,8 @@
     timeOfDayFilter = 'any';
     transcriptTerm = '';
     flaggedOnly = false;
+    genderFilter = 'any';
+    ageBandFilter = 'any';
     formSubmitted = false;
     results = [];
     errorMessage = '';
@@ -656,6 +669,32 @@
                   <option value="night">{t('search.timeOfDayOptions.night')}</option>
                   <option value="sunrise">{t('search.timeOfDayOptions.sunrise')}</option>
                   <option value="sunset">{t('search.timeOfDayOptions.sunset')}</option>
+                </select>
+              </div>
+
+              <!-- Speaker Gender -->
+              <div class="form-control">
+                <label class="label" for="genderFilter">
+                  <span class="label-text">{t('search.fields.gender')}</span>
+                </label>
+                <select id="genderFilter" bind:value={genderFilter} class="select w-full">
+                  <option value="any">{t('search.speakerOptions.any')}</option>
+                  {#each SPEAKER_GENDERS as gender (gender)}
+                    <option value={gender}>{t(`detections.speaker.gender.${gender}`)}</option>
+                  {/each}
+                </select>
+              </div>
+
+              <!-- Speaker Age Band -->
+              <div class="form-control">
+                <label class="label" for="ageBandFilter">
+                  <span class="label-text">{t('search.fields.ageBand')}</span>
+                </label>
+                <select id="ageBandFilter" bind:value={ageBandFilter} class="select w-full">
+                  <option value="any">{t('search.speakerOptions.any')}</option>
+                  {#each SPEAKER_AGE_BANDS as ageBand (ageBand)}
+                    <option value={ageBand}>{t(`detections.speaker.age.${ageBand}`)}</option>
+                  {/each}
                 </select>
               </div>
 

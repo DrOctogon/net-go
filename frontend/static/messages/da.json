@@ -491,7 +491,9 @@
       "transcriptHelp": "Search for spoken words in the voice clip transcript (case-insensitive substring match)",
       "transcriptPlaceholder": "Search transcript...",
       "flaggedOnly": "Flagged only",
-      "flaggedOnlyHelp": "Limit results to detections whose transcript matched a configured keyword"
+      "flaggedOnlyHelp": "Limit results to detections whose transcript matched a configured keyword",
+      "gender": "Speaker gender",
+      "ageBand": "Speaker age"
     },
     "advancedFilters": "Avancerede filtre",
     "showAdvancedFilters": "Vis avancerede filtre",
@@ -565,6 +567,9 @@
       "page": "Side {current} af {total}",
       "goToPrevious": "Gå til forrige side",
       "goToNext": "Gå til næste side"
+    },
+    "speakerOptions": {
+      "any": "Any"
     }
   },
   "error": {
@@ -993,6 +998,22 @@
       "loadFailed": "Kunne ikke indlæse registrering (fejl {status}). Prøv at genindlæse siden.",
       "noIdProvided": "Intet registrerings-ID angivet.",
       "fetchFailed": "Kunne ikke hente registreringer"
+    },
+    "speaker": {
+      "sectionLabel": "Estimated speaker",
+      "genderAria": "Estimated speaker gender",
+      "ageAria": "Estimated speaker age",
+      "gender": {
+        "male": "Male",
+        "female": "Female",
+        "unknown": "Unknown"
+      },
+      "age": {
+        "child": "Child",
+        "teen": "Teen",
+        "adult": "Adult",
+        "senior": "Senior"
+      }
     }
   },
   "species": {
@@ -3449,6 +3470,26 @@
       "models": {
         "recommendBoth": "For bedste artsdækning anbefales det at køre både VoiceWatch og Perch sammen.",
         "perchOnlyWarning": "Perch alene producerer færre detektioner. Sænk konfidenstærsklen til 0.50 for meningsfulde resultater, eller aktiver VoiceWatch ved siden af for bedste dækning."
+      },
+      "speakerAttributes": {
+        "title": "Speaker Attributes",
+        "description": "Estimate the speaker's gender and relative age band for human-voice detections. Opt-in and off by default.",
+        "caveat": "These are demographic estimates, not identity recognition. Accuracy varies by accent and recording quality.",
+        "enable": "Enable speaker attributes",
+        "enableHelp": "Master switch for all speaker-attribute estimation.",
+        "disabled": "Speaker attributes are disabled",
+        "gender": {
+          "enable": "Estimate speaker gender",
+          "enableHelp": "Estimate whether the speaker sounds male, female, or unknown.",
+          "thresholdLabel": "Gender confidence threshold",
+          "thresholdHelp": "Discard gender estimates below this confidence."
+        },
+        "age": {
+          "enable": "Estimate speaker age band",
+          "enableHelp": "Estimate a relative age band (child, teen, adult, senior).",
+          "thresholdLabel": "Age confidence threshold",
+          "thresholdHelp": "Discard age estimates below this confidence."
+        }
       }
     },
     "security": {

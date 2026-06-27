@@ -30,6 +30,10 @@ export interface Detection {
   transcriptLang?: string; // Language of the transcript (e.g. "en")
   flagged?: boolean; // True when the transcript matched a configured keyword
   keywordsHit?: string[]; // Keywords that matched the transcript
+  gender?: string; // Estimated speaker gender ("male" | "female" | "unknown"; empty = no estimate)
+  genderConfidence?: number; // Confidence of the gender estimate (0..1)
+  ageBand?: string; // Estimated relative age band ("child" | "teen" | "adult" | "senior"; empty = no estimate)
+  ageConfidence?: number; // Confidence of the age-band estimate (0..1)
   comments?: Comment[];
   clipName?: string;
   weather?: Weather;
