@@ -30,9 +30,9 @@ func TestGetSchema_AllEventsPresent(t *testing.T) {
 	}
 	expectedEvents := []string{
 		EventStreamConnected, EventStreamDisconnected, EventStreamError,
-		EventDetectionNewSpecies, EventDetectionOccurred,
+		EventDetectionOccurred,
 		EventApplicationStarted, EventApplicationStopped,
-		EventBirdWeatherFailed, EventMQTTConnected, EventMQTTDisconnected, EventMQTTPublishFailed,
+		EventMQTTConnected, EventMQTTDisconnected, EventMQTTPublishFailed,
 		EventDeviceStarted, EventDeviceStopped, EventDeviceError,
 		EventKeywordMatched,
 	}

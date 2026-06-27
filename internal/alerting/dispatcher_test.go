@@ -164,8 +164,8 @@ func TestDispatcher_DefaultTemplate_EventKey(t *testing.T) {
 
 	rule := &entities.AlertRule{
 		ID:      1,
-		Name:    "Species Alert",
-		NameKey: RuleKeyNewSpeciesName,
+		Name:    "Detection Alert",
+		NameKey: RuleKeyKeywordFlagName,
 		Actions: []entities.AlertAction{
 			{Target: TargetBell},
 		},
@@ -181,9 +181,9 @@ func TestDispatcher_DefaultTemplate_EventKey(t *testing.T) {
 	require.Len(t, mock.keyCalls, 1)
 	assert.Equal(t, notification.TypeDetection, mock.keyCalls[0].notifType, "detection event should use TypeDetection")
 	assert.Equal(t, MsgAlertFiredTitle, mock.keyCalls[0].titleKey)
-	assert.Equal(t, "Species Alert", mock.keyCalls[0].titleParams["rule_name"])
-	assert.Equal(t, RuleKeyNewSpeciesName, mock.keyCalls[0].titleParams["rule_name_key"])
-	assert.Equal(t, "Species Alert", mock.keyCalls[0].title)
+	assert.Equal(t, "Detection Alert", mock.keyCalls[0].titleParams["rule_name"])
+	assert.Equal(t, RuleKeyKeywordFlagName, mock.keyCalls[0].titleParams["rule_name_key"])
+	assert.Equal(t, "Detection Alert", mock.keyCalls[0].title)
 	assert.Empty(t, mock.keyCalls[0].message, "default message should be empty, not duplicate the title")
 }
 
@@ -523,8 +523,8 @@ func TestDispatcher_DefaultTemplate_DetectionMessage(t *testing.T) {
 
 	rule := &entities.AlertRule{
 		ID:      1,
-		Name:    "New species detected",
-		NameKey: RuleKeyNewSpeciesName,
+		Name:    "Detection alert",
+		NameKey: RuleKeyKeywordFlagName,
 		Actions: []entities.AlertAction{
 			{Target: TargetBell},
 		},
@@ -593,15 +593,15 @@ func TestDispatcher_DefaultTemplate_ErrorMessage_Unclassified(t *testing.T) {
 
 	rule := &entities.AlertRule{
 		ID:      1,
-		Name:    "BirdWeather upload failed",
-		NameKey: RuleKeyBirdWeatherName,
+		Name:    "MQTT publish failed",
+		NameKey: RuleKeyMQTTPublishName,
 		Actions: []entities.AlertAction{
 			{Target: TargetBell},
 		},
 	}
 	event := &AlertEvent{
 		ObjectType: ObjectTypeIntegration,
-		EventName:  EventBirdWeatherFailed,
+		EventName:  EventMQTTPublishFailed,
 		Properties: map[string]any{
 			PropertyError: "species not in taxonomy",
 		},
@@ -802,8 +802,8 @@ func TestDispatcher_DefaultTemplate_PassesEventProps(t *testing.T) {
 
 	rule := &entities.AlertRule{
 		ID:      1,
-		Name:    "Species Alert",
-		NameKey: RuleKeyNewSpeciesName,
+		Name:    "Detection Alert",
+		NameKey: RuleKeyKeywordFlagName,
 		Actions: []entities.AlertAction{
 			{Target: TargetBell}, // no custom template
 		},
@@ -834,8 +834,8 @@ func TestDispatchTest_DefaultTemplate_UsesTestKeysMethod(t *testing.T) {
 
 	rule := &entities.AlertRule{
 		ID:      1,
-		Name:    "New species detected",
-		NameKey: RuleKeyNewSpeciesName,
+		Name:    "Detection alert",
+		NameKey: RuleKeyKeywordFlagName,
 		Actions: []entities.AlertAction{
 			{Target: TargetBell}, // empty templates → defaults with keys
 		},
@@ -860,6 +860,6 @@ func TestDispatchTest_DefaultTemplate_UsesTestKeysMethod(t *testing.T) {
 	assert.Equal(t, TargetBell, call.target)
 	assert.Equal(t, notification.TypeDetection, call.notifType, "detection test event should use TypeDetection")
 	assert.Equal(t, MsgAlertFiredTitle, call.titleKey)
-	assert.Equal(t, "New species detected", call.titleParams["rule_name"])
+	assert.Equal(t, "Detection alert", call.titleParams["rule_name"])
 	assert.Equal(t, MsgAlertDetectionOccurred, call.messageKey)
 }

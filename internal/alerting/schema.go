@@ -68,8 +68,7 @@ func GetSchema() Schema {
 				Name:  ObjectTypeDetection,
 				Label: "Detection",
 				Events: []EventSchema{
-					{Name: EventDetectionNewSpecies, Label: "New Species Detected", Description: "Fires when a species is seen for the first time within the tracking window", Properties: detectionProperties()},
-					{Name: EventDetectionOccurred, Label: "Detection Occurred", Description: "Fires for every detection, including new species", Properties: detectionProperties()},
+					{Name: EventDetectionOccurred, Label: "Detection Occurred", Description: "Fires for every detection", Properties: detectionProperties()},
 				},
 			},
 			{
@@ -84,7 +83,6 @@ func GetSchema() Schema {
 				Name:  ObjectTypeIntegration,
 				Label: "Integration",
 				Events: []EventSchema{
-					{Name: EventBirdWeatherFailed, Label: "BirdWeather Upload Failed", Properties: errorProperties()},
 					{Name: EventMQTTConnected, Label: "MQTT Connected", Properties: mqttProperties()},
 					{Name: EventMQTTDisconnected, Label: "MQTT Disconnected", Properties: mqttProperties()},
 					{Name: EventMQTTPublishFailed, Label: "MQTT Publish Failed", Properties: mqttPublishProperties()},
@@ -157,12 +155,6 @@ func detectionProperties() []PropertySchema {
 		{Name: PropertyDaysSinceLastSeen, Label: "Days Since Last Seen", Type: "number", Operators: numericOperators},
 		{Name: PropertyNoveltyEpisodeDays, Label: "Novelty Episode Days", Type: "number", Operators: numericOperators},
 		{Name: PropertyLocation, Label: "Location", Type: "string", Operators: stringOperators},
-	}
-}
-
-func errorProperties() []PropertySchema {
-	return []PropertySchema{
-		{Name: PropertyError, Label: "Error Message", Type: "string", Operators: stringOperators},
 	}
 }
 

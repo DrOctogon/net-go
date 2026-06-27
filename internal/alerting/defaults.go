@@ -9,21 +9,6 @@ import (
 func DefaultRules() []entities.AlertRule {
 	return []entities.AlertRule{
 		{
-			Name:           "New species detected",
-			Description:    "Notifies when a species is detected for the first time",
-			NameKey:        RuleKeyNewSpeciesName,
-			DescriptionKey: RuleKeyNewSpeciesDesc,
-			Enabled:        true,
-			BuiltIn:        true,
-			ObjectType:     ObjectTypeDetection,
-			TriggerType:    TriggerTypeEvent,
-			EventName:      EventDetectionNewSpecies,
-			CooldownSec:    60,
-			Actions: []entities.AlertAction{
-				{Target: TargetBell, SortOrder: 0},
-			},
-		},
-		{
 			Name:           "Audio stream disconnected",
 			Description:    "Notifies when an RTSP or audio stream loses connection",
 			NameKey:        RuleKeyStreamDiscName,
@@ -148,21 +133,6 @@ func DefaultRules() []entities.AlertRule {
 			ObjectType:     ObjectTypeIntegration,
 			TriggerType:    TriggerTypeEvent,
 			EventName:      EventMQTTDisconnected,
-			CooldownSec:    600,
-			Actions: []entities.AlertAction{
-				{Target: TargetBell, SortOrder: 0},
-			},
-		},
-		{
-			Name:           "BirdWeather upload failed",
-			Description:    "Notifies when a BirdWeather upload fails",
-			NameKey:        RuleKeyBirdWeatherName,
-			DescriptionKey: RuleKeyBirdWeatherDesc,
-			Enabled:        true,
-			BuiltIn:        true,
-			ObjectType:     ObjectTypeIntegration,
-			TriggerType:    TriggerTypeEvent,
-			EventName:      EventBirdWeatherFailed,
 			CooldownSec:    600,
 			Actions: []entities.AlertAction{
 				{Target: TargetBell, SortOrder: 0},

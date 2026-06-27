@@ -3869,10 +3869,6 @@
           "name": "Keyword flagged",
           "description": "Notifies when a detection transcript matches a configured keyword"
         },
-        "newSpecies": {
-          "name": "Új faj detektálva",
-          "description": "Értesít, amikor egy faj először kerül detektálásra"
-        },
         "streamDisconnected": {
           "name": "Hang stream leválasztva",
           "description": "Értesít, amikor egy RTSP vagy hang stream elveszíti a kapcsolatot"

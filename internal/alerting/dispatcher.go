@@ -346,7 +346,7 @@ func isDetectionEvent(eventName string) bool {
 }
 
 func isErrorEvent(eventName string) bool {
-	return eventName == EventStreamError || eventName == EventDeviceError || eventName == EventBirdWeatherFailed || eventName == EventMQTTPublishFailed
+	return eventName == EventStreamError || eventName == EventDeviceError || eventName == EventMQTTPublishFailed
 }
 
 func isDisconnectEvent(eventName string) bool {

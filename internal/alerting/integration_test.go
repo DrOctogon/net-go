@@ -142,42 +142,6 @@ func integrationLogger() logger.Logger {
 	return logger.NewSlogLogger(io.Discard, logger.LogLevelError, nil)
 }
 
-func TestIntegration_DetectionNewSpeciesRuleFires(t *testing.T) {
-	repo := newIntegrationRepo()
-	recorder := &actionRecorder{}
-	log := integrationLogger()
-
-	// Seed default rules
-	err := seedDefaultRules(t.Context(), repo, log)
-	require.NoError(t, err)
-
-	// Create engine
-	engine := NewEngine(repo, recorder.dispatch, log, nil)
-	err = engine.RefreshRules(t.Context())
-	require.NoError(t, err)
-
-	// Publish detection.new_species event
-	event := &AlertEvent{
-		ObjectType: ObjectTypeDetection,
-		EventName:  EventDetectionNewSpecies,
-		Properties: map[string]any{
-			"species_name":    "Eurasian Blue Tit",
-			"scientific_name": "Cyanistes caeruleus",
-			"confidence":      0.92,
-		},
-		Timestamp: time.Now(),
-	}
-	engine.HandleEvent(event)
-
-	// Verify the rule fired
-	assert.Equal(t, 1, recorder.count(), "expected exactly one rule to fire")
-	assert.Equal(t, "New species detected", recorder.lastCall().ruleName)
-	assert.Contains(t, recorder.lastCall().targets, TargetBell)
-
-	// Verify history entry created
-	assert.Equal(t, 1, repo.historyCount(), "expected one history entry")
-}
-
 func TestIntegration_CooldownPreventsDuplicateFiring(t *testing.T) {
 	repo := newIntegrationRepo()
 	recorder := &actionRecorder{}
@@ -191,9 +155,9 @@ func TestIntegration_CooldownPreventsDuplicateFiring(t *testing.T) {
 	require.NoError(t, err)
 
 	event := &AlertEvent{
-		ObjectType: ObjectTypeDetection,
-		EventName:  EventDetectionNewSpecies,
-		Properties: map[string]any{"species_name": "Eurasian Blue Tit"},
+		ObjectType: ObjectTypeStream,
+		EventName:  EventStreamDisconnected,
+		Properties: map[string]any{PropertyStreamName: "test-stream"},
 		Timestamp:  time.Now(),
 	}
 

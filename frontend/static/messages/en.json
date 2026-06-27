@@ -3869,10 +3869,6 @@
           "name": "Keyword flagged",
           "description": "Notifies when a detection transcript matches a configured keyword"
         },
-        "newSpecies": {
-          "name": "New species detected",
-          "description": "Notifies when a species is detected for the first time"
-        },
         "streamDisconnected": {
           "name": "Audio stream disconnected",
           "description": "Notifies when an RTSP or audio stream loses connection"
