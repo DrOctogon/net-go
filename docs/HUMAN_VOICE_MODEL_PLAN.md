@@ -68,7 +68,9 @@ Orphan i18n `settings.alerts.builtInRules.newSpecies` removed (en.json + types.g
 
 **Clustering primitive DONE (commit `051a989c`, 2026-06-27):** `speaker.Clusterer` (NewClusterer/Assign/NumClusters) — online greedy cosine clustering with running-mean centroids, concurrency-safe, race-tested. Lands ahead of the model (like `Cosine`); NOT yet wired into the seam (Noop emits no embeddings) and has no cross-restart persistence/eviction.
 
-**Still pending:** real ONNX gender/age/voice-print model (Noop → estimates/embeddings always empty) — needs external model assets, not buildable in-repo; wire `Clusterer` into the seam + persist clusters once embeddings flow. `golangci-lint` not yet run (binary absent locally).
+**Real ONNX analyzer + clustering wiring DONE (commits `0bf5449f`, `74d5e2b4`, 2026-06-27):** `onnx.AgeGenderModel` (load-from-path ORT wrapper, dimension-based output routing, Wav2Vec2 normalization) + `speaker.ONNXAnalyzer` (output→Attributes mapping, per-attr privacy gating) + pure tested `speaker/mapping.go`; `speaker.New` → `(Analyzer, error)` builds ONNXAnalyzer when enabled+path set, processor falls back to Noop on error. `Clusterer` now wired into the seam (`p.speakerClusterer.Assign` populates `Result.SpeakerID`). Target model = audEERING wav2vec2-large-robust-24-ft-age-gender (CC BY-NC-SA → user-supplied path, never vendored). `golangci-lint` v2.12.2 run: speaker + onnx packages 0 issues.
+
+**Still pending (env-gated, not buildable in-repo):** runtime-verify inference with the real `.onnx` + ORT shared lib in a QA container; cross-restart cluster persistence/eviction. Pre-existing `goconst` lint on bird-name test data is upstream/out-of-scope.
 
 Goal: enrich each human-voice detection with **estimated speaker gender** and **estimated age band**, surfaced in the UI and searchable/alertable. Additive on top of the existing VAD pipeline — VAD gates *whether* a clip has speech; these models classify *who* is speaking. Privacy-sensitive: estimates are demographic inferences, gate behind an opt-in setting and document the accuracy/bias caveats before any release.
 
