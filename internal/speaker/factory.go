@@ -74,7 +74,12 @@ func (b *modelBuilder) build(enabled bool, path string) *onnx.SingleOutputAudioM
 	if b.err != nil || !enabled || path == "" {
 		return nil
 	}
-	m, err := onnx.NewSingleOutputAudioModel(path, b.threads)
+	// normalize=false: pass the raw waveform through. Matches models with an
+	// in-graph front end (e.g. the ECAPA gender model, which does its own
+	// preemphasis + mel + mean-norm). A Wav2Vec2-style model that needs external
+	// waveform normalization would require a per-attribute normalize config flag
+	// (not yet plumbed through conf.SpeakerAttributesSettings).
+	m, err := onnx.NewSingleOutputAudioModel(path, b.threads, false)
 	if err != nil {
 		b.err = err
 		return nil

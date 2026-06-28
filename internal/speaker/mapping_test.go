@@ -90,10 +90,10 @@ func TestMapGender2Class(t *testing.T) {
 		wantLabel  string
 		wantConfHi bool // confidence should be the dominant softmax prob (> 0.5)
 	}{
-		// logits ordered [female, male] (see gender2ClassFemaleIdx assumption).
-		{"female-wins", []float32{5, 0}, GenderFemale, true},
-		{"male-wins", []float32{0, 5}, GenderMale, true},
-		{"tie-low-conf", []float32{1, 1}, GenderFemale, false}, // argmax -> first (female)
+		// logits ordered [male, female] (verified JaesungHuh pred2gender).
+		{"male-wins", []float32{5, 0}, GenderMale, true},
+		{"female-wins", []float32{0, 5}, GenderFemale, true},
+		{"tie-low-conf", []float32{1, 1}, GenderMale, false}, // argmax -> first (male)
 		{"single-element", []float32{1}, "", false},
 		{"nil-logits", nil, "", false},
 	}
@@ -123,9 +123,9 @@ func TestMapGender2ClassConfidenceMatchesSoftmax(t *testing.T) {
 	logits := []float32{2.0, 1.0}
 	probs := softmax(logits)
 	label, conf := mapGender(logits)
-	// Female (index 0) is the argmax; confidence must equal its softmax prob.
-	assert.Equal(t, GenderFemale, label)
-	assert.InDelta(t, probs[gender2ClassFemaleIdx], conf, 1e-9)
+	// Male (index 0) is the argmax; confidence must equal its softmax prob.
+	assert.Equal(t, GenderMale, label)
+	assert.InDelta(t, probs[gender2ClassMaleIdx], conf, 1e-9)
 }
 
 func TestMapGenderConfidenceMatchesSoftmax(t *testing.T) {

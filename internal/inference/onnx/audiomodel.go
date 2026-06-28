@@ -17,17 +17,19 @@ import (
 // does this at startup; see runtime.go).
 //
 // INPUT: a single float32 audio tensor of shape (1, N) holding a 16 kHz mono raw
-// waveform. Per-clip zero-mean / unit-variance normalization is applied before
-// inference (see normalizeWaveform).
+// waveform.
 //
-// PREPROCESSING RISK (unverifiable in this sandbox): this normalization matches
-// the Wav2Vec2 feature extractor (audEERING), but it is NOT an identity — it
-// changes the signal. A model with a different expected front end (e.g. an
-// ECAPA-TDNN gender model that computes its own mel-filterbank from raw or
-// differently-scaled audio, like JaesungHuh/voice-gender-classifier) may expect
-// un-normalized input, in which case this degrades accuracy. If accuracy is poor
-// with such a model, make normalization per-model configurable (a TODO until a
-// real model can be benchmarked against its reference pipeline).
+// PREPROCESSING: input normalization is OPT-IN per model (the `normalize` arg).
+//   - normalize=false (default): the raw waveform is passed through unchanged.
+//     Correct for models that do their own front end inside the ONNX graph — e.g.
+//     JaesungHuh/voice-gender-classifier (ECAPA-TDNN), whose source applies
+//     preemphasis + mel-filterbank + mean normalization internally and expects a
+//     raw waveform in.
+//   - normalize=true: per-clip zero-mean / unit-variance normalization is applied
+//     (see normalizeWaveform). Correct for a Wav2Vec2-style front end (audEERING)
+//     that expects an externally normalized waveform.
+// Applying the wrong choice degrades accuracy, so the caller must match it to the
+// model's reference pipeline.
 //
 // OUTPUT: a single float32 vector. Its length is interpreted by the caller:
 //   - gender model:      class logits/probabilities (2 or 3 classes)
@@ -57,14 +59,18 @@ type SingleOutputAudioModel struct {
 	session    *ort.DynamicAdvancedSession
 	inputName  string // the single float32 audio input
 	outputName string // the single float32 output
+	normalize  bool   // apply waveform zero-mean/unit-variance before inference
 }
 
 // NewSingleOutputAudioModel loads a single-input/single-output audio model from
 // modelPath. It reads the model metadata, requires exactly one float32 input and
 // exactly one float32 output, and creates the inference session. threads <= 0
-// uses the createSession default. The ONNX Runtime must be initialized before
-// calling.
-func NewSingleOutputAudioModel(modelPath string, threads int) (*SingleOutputAudioModel, error) {
+// uses the createSession default. normalize selects waveform preprocessing (see
+// the PREPROCESSING note above): false passes the raw waveform through (for
+// models with an in-graph front end such as ECAPA), true applies Wav2Vec2-style
+// zero-mean/unit-variance normalization. The ONNX Runtime must be initialized
+// before calling.
+func NewSingleOutputAudioModel(modelPath string, threads int, normalize bool) (*SingleOutputAudioModel, error) {
 	if modelPath == "" {
 		return nil, ErrModelPathRequired
 	}
@@ -101,6 +107,7 @@ func NewSingleOutputAudioModel(modelPath string, threads int) (*SingleOutputAudi
 		session:    session,
 		inputName:  inputName,
 		outputName: outputName,
+		normalize:  normalize,
 	}, nil
 }
 
@@ -162,9 +169,12 @@ func (m *SingleOutputAudioModel) Infer(samples []float32) ([]float32, error) {
 		return nil, fmt.Errorf("voicewatch: speaker inference requires non-empty samples")
 	}
 
-	normalized := normalizeWaveform(samples)
+	input := samples
+	if m.normalize {
+		input = normalizeWaveform(samples)
+	}
 
-	inputTensor, err := ort.NewTensor(ort.NewShape(singleOutputBatch, int64(len(normalized))), normalized)
+	inputTensor, err := ort.NewTensor(ort.NewShape(singleOutputBatch, int64(len(input))), input)
 	if err != nil {
 		return nil, fmt.Errorf("voicewatch: speaker input tensor: %w", err)
 	}

@@ -24,14 +24,12 @@ const (
 	genderClassMale   = 2
 	genderClassCount  = 3
 
-	// 2-class gender model indices. ASSUMPTION (DOCUMENTED, UNVERIFIABLE HERE):
-	// the export's id2label order is [female, male]. The JaesungHuh
-	// voice-gender-classifier id2label order cannot be confirmed in this sandbox;
-	// if a model actually uses [male, female], swap these two constants (and only
-	// these) to correct it. Verify against the model's id2label before trusting
-	// 2-class output in production.
-	gender2ClassFemaleIdx = 0
-	gender2ClassMaleIdx   = 1
+	// 2-class gender model indices, order [male, female]. VERIFIED against the
+	// JaesungHuh/voice-gender-classifier source: `self.pred2gender = {0:'male',
+	// 1:'female'}`. A different 2-class export could use [female, male] — if so,
+	// swap these two constants (and only these).
+	gender2ClassMaleIdx   = 0
+	gender2ClassFemaleIdx = 1
 	gender2ClassCount     = 2
 )
 
@@ -87,8 +85,8 @@ func softmax(logits []float32) []float64 {
 //   - 3-class [child, female, male] (audEERING order): female -> GenderFemale,
 //     male -> GenderMale, child -> GenderUnknown (child is an age class, not a
 //     gender). Used when len(logits) >= genderClassCount.
-//   - 2-class [female, male] (see gender2ClassFemaleIdx/gender2ClassMaleIdx for
-//     the documented order assumption): argmax -> female/male. Used when
+//   - 2-class [male, female] (verified JaesungHuh order; see
+//     gender2ClassMaleIdx/gender2ClassFemaleIdx): argmax -> male/female. Used when
 //     len(logits) == gender2ClassCount.
 //
 // Confidence is the winning class's softmax probability. Logits shorter than
@@ -121,8 +119,8 @@ func mapGender3Class(logits []float32) (label string, confidence float64) {
 	}
 }
 
-// mapGender2Class maps 2-class [female, male] logits (see the order assumption
-// on gender2ClassFemaleIdx).
+// mapGender2Class maps 2-class [male, female] logits (verified order; see
+// gender2ClassMaleIdx/gender2ClassFemaleIdx).
 func mapGender2Class(logits []float32) (label string, confidence float64) {
 	probs := softmax(logits[:gender2ClassCount])
 	argmax := argmaxFloat64(probs)
