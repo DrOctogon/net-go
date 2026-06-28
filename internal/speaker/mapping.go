@@ -17,11 +17,22 @@ const (
 	ageAdultMaxYears  = 60.0
 	ageSeniorMaxYears = 100.0
 
-	// Gender class indices within the model's [child, female, male] logits.
+	// Gender class indices within the audEERING 3-class [child, female, male]
+	// logits. "child" is an age class, not a gender, so it maps to GenderUnknown.
 	genderClassChild  = 0
 	genderClassFemale = 1
 	genderClassMale   = 2
 	genderClassCount  = 3
+
+	// 2-class gender model indices. ASSUMPTION (DOCUMENTED, UNVERIFIABLE HERE):
+	// the export's id2label order is [female, male]. The JaesungHuh
+	// voice-gender-classifier id2label order cannot be confirmed in this sandbox;
+	// if a model actually uses [male, female], swap these two constants (and only
+	// these) to correct it. Verify against the model's id2label before trusting
+	// 2-class output in production.
+	gender2ClassFemaleIdx = 0
+	gender2ClassMaleIdx   = 1
+	gender2ClassCount     = 2
 )
 
 // ageBandRange describes one age band and its [lo, hi) years interval. The
@@ -70,25 +81,34 @@ func softmax(logits []float32) []float64 {
 	return out
 }
 
-// mapGender maps the model's [child, female, male] gender logits to a speaker
-// gender label and a confidence in [0,1]. The label is the softmax argmax:
-// female -> GenderFemale, male -> GenderMale, child -> GenderUnknown (child is
-// an age class, not a gender). Confidence is the winning class's softmax
-// probability. Logits shorter than genderClassCount yield ("", 0).
+// mapGender maps a gender model's output logits to a speaker gender label and a
+// confidence in [0,1]. It supports both export shapes:
+//
+//   - 3-class [child, female, male] (audEERING order): female -> GenderFemale,
+//     male -> GenderMale, child -> GenderUnknown (child is an age class, not a
+//     gender). Used when len(logits) >= genderClassCount.
+//   - 2-class [female, male] (see gender2ClassFemaleIdx/gender2ClassMaleIdx for
+//     the documented order assumption): argmax -> female/male. Used when
+//     len(logits) == gender2ClassCount.
+//
+// Confidence is the winning class's softmax probability. Logits shorter than
+// gender2ClassCount yield ("", 0).
 func mapGender(logits []float32) (label string, confidence float64) {
-	if len(logits) < genderClassCount {
+	switch {
+	case len(logits) >= genderClassCount:
+		return mapGender3Class(logits)
+	case len(logits) >= gender2ClassCount:
+		return mapGender2Class(logits)
+	default:
 		return "", 0
 	}
+}
 
+// mapGender3Class maps audEERING [child, female, male] logits.
+func mapGender3Class(logits []float32) (label string, confidence float64) {
 	probs := softmax(logits[:genderClassCount])
-	argmax := 0
-	for i := 1; i < genderClassCount; i++ {
-		if probs[i] > probs[argmax] {
-			argmax = i
-		}
-	}
+	argmax := argmaxFloat64(probs)
 	confidence = probs[argmax]
-
 	switch argmax {
 	case genderClassFemale:
 		return GenderFemale, confidence
@@ -99,6 +119,34 @@ func mapGender(logits []float32) (label string, confidence float64) {
 	default:
 		return GenderUnknown, confidence
 	}
+}
+
+// mapGender2Class maps 2-class [female, male] logits (see the order assumption
+// on gender2ClassFemaleIdx).
+func mapGender2Class(logits []float32) (label string, confidence float64) {
+	probs := softmax(logits[:gender2ClassCount])
+	argmax := argmaxFloat64(probs)
+	confidence = probs[argmax]
+	switch argmax {
+	case gender2ClassFemaleIdx:
+		return GenderFemale, confidence
+	case gender2ClassMaleIdx:
+		return GenderMale, confidence
+	default:
+		return GenderUnknown, confidence
+	}
+}
+
+// argmaxFloat64 returns the index of the largest element. The input is assumed
+// non-empty (callers pass a softmax result sized to the class count).
+func argmaxFloat64(values []float64) int {
+	argmax := 0
+	for i := 1; i < len(values); i++ {
+		if values[i] > values[argmax] {
+			argmax = i
+		}
+	}
+	return argmax
 }
 
 // mapAge maps the model's age score (0..1, where score*100 ≈ years) to an age

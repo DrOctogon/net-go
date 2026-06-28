@@ -47,15 +47,16 @@ func (e *LabelLoadError) Error() string {
 	return fmt.Sprintf("voicewatch: failed to load labels from %s: %s", e.Path, e.Reason)
 }
 
-// AgeGenderIOError indicates the age/gender model's inputs or outputs could not
-// be unambiguously routed by tensor dimension. The audEERING export uses
-// uncertain tensor names, so I/O is matched by shape; this error is returned
-// when that matching is ambiguous (see agegender.go).
-type AgeGenderIOError struct {
+// SpeakerModelIOError indicates a per-attribute speaker model's inputs or
+// outputs could not be matched to the expected single-float-input/
+// single-float-output contract. Tensor names vary across exports, so I/O is
+// matched by element type rather than by name; this error is returned when the
+// model does not have exactly one float32 input and one float32 output (see
+// audiomodel.go).
+type SpeakerModelIOError struct {
 	Reason string
 }
 
-func (e *AgeGenderIOError) Error() string {
-	return fmt.Sprintf("voicewatch: age/gender model I/O routing failed: %s", e.Reason)
+func (e *SpeakerModelIOError) Error() string {
+	return fmt.Sprintf("voicewatch: speaker model I/O routing failed: %s", e.Reason)
 }
-

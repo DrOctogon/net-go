@@ -59,7 +59,9 @@ func TestMapGender(t *testing.T) {
 		{"female-wins", []float32{0, 5, 0}, GenderFemale, true},
 		{"male-wins", []float32{0, 0, 5}, GenderMale, true},
 		{"child-wins-is-unknown", []float32{5, 0, 0}, GenderUnknown, true},
-		{"too-short", []float32{1, 2}, "", false},
+		// A 2-element input is handled by the 2-class path, so "too short" here
+		// means fewer than 2 elements (see TestMapGender2Class for 2-class cases).
+		{"too-short", []float32{1}, "", false},
 		{"empty", nil, "", false},
 	}
 	for _, tt := range tests {
@@ -78,6 +80,52 @@ func TestMapGender(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestMapGender2Class(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		name       string
+		logits     []float32
+		wantLabel  string
+		wantConfHi bool // confidence should be the dominant softmax prob (> 0.5)
+	}{
+		// logits ordered [female, male] (see gender2ClassFemaleIdx assumption).
+		{"female-wins", []float32{5, 0}, GenderFemale, true},
+		{"male-wins", []float32{0, 5}, GenderMale, true},
+		{"tie-low-conf", []float32{1, 1}, GenderFemale, false}, // argmax -> first (female)
+		{"single-element", []float32{1}, "", false},
+		{"nil-logits", nil, "", false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			label, conf := mapGender(tt.logits)
+			assert.Equal(t, tt.wantLabel, label)
+			if tt.wantLabel == "" {
+				assert.Zero(t, conf)
+				return
+			}
+			assert.GreaterOrEqual(t, conf, 0.0)
+			assert.LessOrEqual(t, conf, 1.0)
+			if tt.wantConfHi {
+				assert.Greater(t, conf, 0.5, "winning class confidence should dominate")
+			} else {
+				// A tie yields exactly the uniform probability (0.5 for 2 classes).
+				assert.InDelta(t, 0.5, conf, 1e-9, "tie -> uniform confidence")
+			}
+		})
+	}
+}
+
+func TestMapGender2ClassConfidenceMatchesSoftmax(t *testing.T) {
+	t.Parallel()
+	logits := []float32{2.0, 1.0}
+	probs := softmax(logits)
+	label, conf := mapGender(logits)
+	// Female (index 0) is the argmax; confidence must equal its softmax prob.
+	assert.Equal(t, GenderFemale, label)
+	assert.InDelta(t, probs[gender2ClassFemaleIdx], conf, 1e-9)
 }
 
 func TestMapGenderConfidenceMatchesSoftmax(t *testing.T) {
@@ -154,12 +202,4 @@ func TestBandFor(t *testing.T) {
 			assert.Equal(t, tt.want, bandFor(tt.years).band)
 		})
 	}
-}
-
-func TestFirstNonEmpty(t *testing.T) {
-	t.Parallel()
-	assert.Equal(t, "x", firstNonEmpty("", "", "x"))
-	assert.Equal(t, "a", firstNonEmpty("a", "b"))
-	assert.Empty(t, firstNonEmpty("", ""))
-	assert.Empty(t, firstNonEmpty())
 }
