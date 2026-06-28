@@ -38,7 +38,8 @@ func TestNewHonorsSubFeatureFlags(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			a := New(tt.cfg)
+			a, err := New(tt.cfg)
+			require.NoError(t, err)
 			require.NotNil(t, a)
 			attrs, err := a.Analyze(t.Context(), [][]float32{samples})
 			require.NoError(t, err)
@@ -112,11 +113,22 @@ func TestNoopAnalyzer(t *testing.T) {
 	assert.Nil(t, attrs.Embedding)
 }
 
-func TestNewReturnsNoopUntilModelExists(t *testing.T) {
+func TestNewReturnsNoopWithoutModelPath(t *testing.T) {
 	t.Parallel()
-	a := New(Config{Enabled: true, GenderEnabled: true})
+	// Enabled but no model path configured -> Noop (no model to load).
+	a, err := New(Config{Enabled: true, GenderEnabled: true})
+	require.NoError(t, err)
 	_, ok := a.(NoopAnalyzer)
-	assert.True(t, ok, "no real model vendored yet -> noop")
+	assert.True(t, ok, "no model path -> noop")
+}
+
+func TestNewDisabledReturnsNoop(t *testing.T) {
+	t.Parallel()
+	// Disabled master switch -> Noop even when a path is set.
+	a, err := New(Config{GenderModelPath: "/does/not/matter.onnx"})
+	require.NoError(t, err)
+	_, ok := a.(NoopAnalyzer)
+	assert.True(t, ok, "disabled -> noop")
 }
 
 func TestValidators(t *testing.T) {

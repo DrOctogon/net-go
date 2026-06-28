@@ -560,7 +560,7 @@ func New(settings *conf.Settings, ds datastore.Interface, bn *classifier.Orchest
 	// requires a restart (see speakerAttributesSettingsChanged in api/v2). When
 	// disabled or no model is available, New returns a NoopAnalyzer.
 	sa := settings.Realtime.Audio.SpeakerAttributes
-	p.speakerAnalyzer = speaker.New(speaker.Config{
+	speakerAnalyzer, err := speaker.New(speaker.Config{
 		Enabled:             sa.Enabled,
 		GenderEnabled:       sa.Gender.Enabled,
 		AgeEnabled:          sa.Age.Enabled,
@@ -569,6 +569,16 @@ func New(settings *conf.Settings, ds datastore.Interface, bn *classifier.Orchest
 		AgeModelPath:        sa.Age.ModelPath,
 		VoicePrintModelPath: sa.VoicePrint.ModelPath,
 	})
+	if err != nil {
+		// Do not fail processor startup on a model-load error; fall back to the
+		// no-op analyzer so detections keep flowing. The failure is logged (not
+		// silent) so the user can see attributes are disabled.
+		GetLogger().Error("Failed to construct speaker-attribute analyzer; falling back to no-op (speaker attributes disabled)",
+			logger.String("error", err.Error()),
+			logger.String("operation", "speaker_analyzer_init"))
+		speakerAnalyzer = speaker.NoopAnalyzer{}
+	}
+	p.speakerAnalyzer = speakerAnalyzer
 
 	return p
 }
