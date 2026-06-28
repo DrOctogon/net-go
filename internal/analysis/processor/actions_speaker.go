@@ -73,8 +73,15 @@ func (p *Processor) analyzeSpeakerAttributes(ctx context.Context, item *PendingD
 	r.GenderConfidence = attrs.GenderConfidence
 	r.AgeBand = attrs.AgeBand
 	r.AgeConfidence = attrs.AgeConfidence
-	r.SpeakerID = attrs.SpeakerID
 	r.VoicePrintEmbedding = attrs.Embedding
+
+	// Assign a stable speaker cluster ID from the voice-print embedding. The
+	// clusterer is nil unless voice-print analysis is enabled, and the embedding
+	// is empty unless a real model produced one, so this is a no-op in the
+	// scaffold/Noop path. Clustering is independent of the gender/age estimates.
+	if p.speakerClusterer != nil && len(attrs.Embedding) > 0 {
+		r.SpeakerID = p.speakerClusterer.Assign(attrs.Embedding)
+	}
 }
 
 // emitSpeakerAttributeAlert publishes a speaker.attribute_matched alert for a

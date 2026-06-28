@@ -55,8 +55,9 @@ type Processor struct {
 	Ds                   datastore.Interface           // Legacy - to be removed after migration
 	Repo                 datastore.DetectionRepository // New - preferred for detection operations
 	Bn                   *classifier.Orchestrator
-	speakerAnalyzer      speaker.Analyzer // Opt-in speaker-attribute analyzer (gender/age/voice-print); NoopAnalyzer when disabled
-	log                  logger.Logger    // Logger inherited from analysis package with "processor" child module
+	speakerAnalyzer      speaker.Analyzer   // Opt-in speaker-attribute analyzer (gender/age/voice-print); NoopAnalyzer when disabled
+	speakerClusterer     *speaker.Clusterer // Online voice-print clustering to assign SpeakerID; nil when speaker attributes disabled
+	log                  logger.Logger      // Logger inherited from analysis package with "processor" child module
 	MqttClient           mqtt.Client
 	mqttMutex            sync.RWMutex // Mutex to protect MQTT client access
 	mqttNotReadyWarnOnce sync.Once    // Ensures the "client not ready" warning logs at most once per process to avoid flood
@@ -579,6 +580,14 @@ func New(settings *conf.Settings, ds datastore.Interface, bn *classifier.Orchest
 		speakerAnalyzer = speaker.NoopAnalyzer{}
 	}
 	p.speakerAnalyzer = speakerAnalyzer
+
+	// Voice-print clusterer assigns a stable SpeakerID from embeddings produced
+	// by the analyzer. Created only when voice-print analysis is enabled; it is
+	// inert (never called) otherwise since no embeddings are produced. Clusters
+	// live for the process lifetime (no cross-restart persistence yet).
+	if sa.Enabled && sa.VoicePrint.Enabled {
+		p.speakerClusterer = speaker.NewClusterer(0) // 0 => DefaultClusterThreshold
+	}
 
 	return p
 }
