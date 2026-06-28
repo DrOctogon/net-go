@@ -18,7 +18,6 @@ VoiceWatch is committed to protecting your privacy while providing reliable huma
 **By default, VoiceWatch operates locally with minimal external data transmission.** The only default external connections are:
 
 - **Weather data**: Read-only requests to YR.no (Norway's meteorological service) for weather information
-- **Bird images**: Read-only requests to Wikimedia Commons and AviCommons for bird photos
 
 **All other external integrations require explicit user configuration and are disabled by default.**
 
@@ -40,29 +39,15 @@ VoiceWatch follows **Privacy by Design** principles:
 
 - **YR.no API**: Read-only requests for weather data using your configured coordinates
 - **Data sent**: Only HTTP requests with latitude/longitude parameters
-- **Purpose**: Correlate weather patterns with bird detection for better insights
+- **Purpose**: Correlate weather patterns with voice detection for better insights
 - **Privacy**: No registration required, no personal data, no tracking
-
-**Image Services** (enabled by default):
-
-- **Wikimedia Commons & AviCommons**: Download bird photos for web interface
-- **Data sent**: Only HTTP GET requests for public images
-- **Purpose**: Display bird photos in the web dashboard
-- **Privacy**: Read-only requests, no personal data transmitted
 
 ### Optional External Integrations (Require User Configuration)
 
-**BirdWeather Integration** (disabled by default):
-
-- **Purpose**: Share bird detections with the citizen science platform
-- **Data sent**: 3-second audio clips, species data, randomized location coordinates
-- **Requires**: User account registration and station ID configuration
-- **Privacy protection**: Location randomized within user-defined accuracy radius
-
 **MQTT Broker Integration** (disabled by default):
 
-- **Purpose**: Publish bird detection events to external MQTT brokers
-- **Data sent**: Bird detection information (species, confidence, timestamp, optional audio)
+- **Purpose**: Publish voice detection events to external MQTT brokers
+- **Data sent**: Voice detection information (confidence, timestamp, optional audio)
 - **Requires**: User-configured broker URL, credentials, and topics
 
 **Backup Services** (disabled by default):
@@ -123,23 +108,23 @@ VoiceWatch follows **Privacy by Design** principles:
 
 ### ❌ Data We NEVER Collect (Telemetry)
 
-**Note**: The following applies to telemetry data collection. Optional integrations like BirdWeather may transmit some of this data when explicitly configured by users.
+**Note**: The following applies to telemetry data collection. Optional integrations (e.g. MQTT) may transmit some of this data when explicitly configured by users.
 
-- **Personal audio recordings** (except 3-second clips for BirdWeather when configured)
-- **Continuous bird detection results** (except when shared via configured integrations)
+- **Personal audio recordings** (except optional clips sent via a user-configured integration)
+- **Continuous voice detection results** (except when shared via configured integrations)
 - **Actual RTSP URLs, IP addresses, or hostnames** (anonymized in telemetry)
 - **Usernames, passwords, or authentication credentials**
 - **File paths** or directory structures
 - **Personal configuration settings** (except when included in support packages)
-- **Precise location data** (coordinates used only for weather/BirdWeather when configured)
+- **Precise location data** (coordinates used only for weather when configured)
 - **Device identifiers** or hardware serial numbers
 - **Network topology** or internal IP addresses
 
 ### ❌ Data Never Transmitted by Default
 
-- **No bird detection data** shared without explicit integration setup
-- **No audio recordings** transmitted without BirdWeather configuration
-- **No location information** sent without weather service or BirdWeather setup
+- **No voice detection data** shared without explicit integration setup
+- **No audio recordings** transmitted without a user-configured integration (e.g. MQTT)
+- **No location information** sent without weather service setup
 - **No personal information** of any kind
 
 ## System Identification
@@ -184,27 +169,13 @@ VoiceWatch uses a **unique System ID** for correlating error reports:
 - **Data flow**: Inbound only (weather information)
 - **Encryption**: HTTPS
 
-**Image Services**:
-
-- **Wikimedia Commons**: Wikimedia Foundation servers
-- **AviCommons**: University of Arizona servers
-- **Data flow**: Inbound only (bird photos)
-- **Encryption**: HTTPS
-
 ### User-Configured Integrations
-
-**BirdWeather** (when enabled):
-
-- **Service**: BirdWeather citizen science platform
-- **Purpose**: Community bird detection sharing
-- **Data**: 3-second audio clips, species data, randomized coordinates
-- **User control**: Requires explicit registration and configuration
 
 **MQTT Brokers** (when configured):
 
 - **Service**: User-specified MQTT brokers
-- **Purpose**: Real-time bird detection publishing
-- **Data**: Bird detection events, optional audio clips
+- **Purpose**: Real-time voice detection publishing
+- **Data**: Voice detection events, optional audio clips
 - **User control**: Complete control over broker and data format
 
 **Backup Services** (when configured):
@@ -417,4 +388,4 @@ This privacy statement may be updated to reflect changes in our data practices o
 **Last Updated**: June 2025  
 **Effective Date**: June 2025
 
-_This privacy statement covers VoiceWatch software as maintained by volunteers. For questions about the privacy practices of third-party services (Sentry, BirdWeather, etc.), please consult their respective privacy policies. VoiceWatch is provided "AS IS" without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose and non-infringement. In no event shall the authors or copyright holders be liable for any claim, damages or other liability arising from the use of this software._
+_This privacy statement covers VoiceWatch software as maintained by volunteers. For questions about the privacy practices of third-party services (Sentry, your configured MQTT broker, etc.), please consult their respective privacy policies. VoiceWatch is provided "AS IS" without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose and non-infringement. In no event shall the authors or copyright holders be liable for any claim, damages or other liability arising from the use of this software._
