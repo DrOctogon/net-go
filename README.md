@@ -85,6 +85,13 @@ Docker images are published for `linux/amd64` and `linux/arm64`. Pre-built binar
 - **Configurable false-positive filtering**: Deep Detection (repeat-confirmation within a 15-second window) and per-source confidence thresholds
 - Optional privacy filter (off by default) that discards human-voice clips when enabled, plus per-source quiet hours
 
+### Speaker attributes (opt-in, default off)
+
+- Optional **estimated speaker gender and relative age band** per detection, plus a voice-print embedding used to group likely-same-speaker clips
+- Surfaced as confidence-tagged chips in the detection list/detail and as `gender` / `age_band` search filters and alert conditions
+- **Estimates, not identity recognition** — demographic inferences whose accuracy varies by accent, language, and recording quality. Disabled by default; each attribute (gender / age / voice-print) is individually toggled
+- **No model ships with VoiceWatch** — you supply an ONNX model file per attribute (see the privacy statement and `docs/HUMAN_VOICE_MODEL_PLAN.md`)
+
 ### Audio inputs
 
 - Soundcard capture and RTSP / RTSPS streams, including multiple sources in parallel

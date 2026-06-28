@@ -271,6 +271,28 @@ All telemetry passes through multiple privacy protection layers:
 - Configuration data scrubbing for support packages
 - Memory safety to prevent credential exposure
 
+### Speaker Attribute Estimation (Opt-In, Default Off)
+
+VoiceWatch can optionally estimate **speaker gender**, a **relative age band**, and
+a **voice-print embedding** for each human-voice detection. This is privacy-sensitive
+and is **disabled by default**; it must be explicitly enabled, and each attribute
+(gender / age / voice-print) is toggled independently.
+
+- **Estimates, not identity recognition.** These are demographic _inferences_ from
+  acoustic features — not biometric identification of a specific person. Accuracy
+  varies with accent, language, age, and recording quality, and the models carry
+  known demographic bias. Treat the labels as approximate.
+- **Runs locally; nothing leaves the device.** Estimation is on-device inference;
+  no audio or attribute is transmitted to any external service by this feature.
+- **No model is bundled.** VoiceWatch ships with no gender/age/voice-print model.
+  The operator supplies an ONNX model file per attribute; if none is configured the
+  feature produces nothing.
+- **Stored alongside clips.** When enabled, estimates and the voice-print embedding
+  are saved with the detection and inherit the same store-all-clips retention and
+  the privacy-filter / quiet-hours controls described above.
+- **Opt-out remains the default.** Leaving the feature off (the default) means no
+  demographic inference is performed or stored.
+
 ### Security Measures
 
 - **Encryption**: TLS 1.3 for data transmission
