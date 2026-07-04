@@ -247,41 +247,6 @@ describe('Duplicate Keys: Audio Devices', () => {
 });
 
 // ============================================================================
-// All Species Labels: used by the species autocomplete pickers
-// ============================================================================
-
-describe('Duplicate Keys: All Species Labels', () => {
-  it('species label list has no duplicates', async () => {
-    // Species picker predictions come from species/all. If the label list itself
-    // has duplicates, the predictions dropdown could return duplicate values.
-    const response = await apiCall('/species/all');
-
-    if (!response.ok) {
-      console.log(`Species/all not available (status ${response.status}), skipping`);
-      return;
-    }
-
-    const data = await response.json();
-    const labels: string[] = Array.isArray(data)
-      ? data
-      : (data.labels ?? data.species ?? data.data ?? []);
-
-    if (labels.length === 0) {
-      console.log('No species labels, skipping');
-      return;
-    }
-
-    const labelSet = new Set(labels);
-    const duplicateCount = labels.length - labelSet.size;
-
-    expect(
-      duplicateCount,
-      `Found ${duplicateCount} duplicate labels in species/all (total: ${labels.length})`
-    ).toBe(0);
-  });
-});
-
-// ============================================================================
 // Hourly Distribution — used by Analytics time charts
 // ============================================================================
 

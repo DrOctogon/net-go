@@ -5,7 +5,6 @@
   import MobileAudioPlayer from '$lib/desktop/components/media/MobileAudioPlayer.svelte';
   import Checkbox from '$lib/desktop/components/forms/Checkbox.svelte';
   import DatePicker from '$lib/desktop/components/ui/DatePicker.svelte';
-  import { handleBirdImageError } from '$lib/desktop/components/ui/image-utils';
   import TimeOfDayIcon from '$lib/desktop/components/ui/TimeOfDayIcon.svelte';
   import { getLocale, t } from '$lib/i18n';
   import { dashboardSettings } from '$lib/stores/settings';
@@ -897,47 +896,6 @@
                   </td>
                   <td>
                     <div class="flex items-center gap-2">
-                      <!-- Add bird image thumbnail -->
-                      <div
-                        class="w-12 h-9 rounded-md overflow-hidden bg-gray-100 shrink-0 cursor-pointer hover:ring-2 hover:ring-primary transition-all focus:outline-hidden focus:ring-2 focus:ring-[var(--color-primary)]"
-                        onclick={() => toggleExpand(result.id)}
-                        onkeydown={e => {
-                          if (e.key === 'Enter' || e.key === ' ') {
-                            e.preventDefault();
-                            toggleExpand(result.id);
-                          }
-                        }}
-                        aria-label={isExpanded(result.id)
-                          ? t('search.detailsPanel.collapseDetails', {
-                              species: displayName || t('search.detailsPanel.unknownSpecies'),
-                            })
-                          : t('search.detailsPanel.expandDetails', {
-                              species: displayName || t('search.detailsPanel.unknownSpecies'),
-                            })}
-                        aria-expanded={isExpanded(result.id)}
-                        role="button"
-                        tabindex="0"
-                      >
-                        <!-- PERFORMANCE OPTIMIZATION: Enhanced image loading attributes -->
-                        <!-- loading="lazy": Defer loading until image enters viewport -->
-                        <!-- decoding="async": Decode image off-main-thread to prevent UI blocking -->
-                        <!-- fetchpriority="low": Lower network priority for species thumbnails -->
-                        <img
-                          src={buildAppUrl(
-                            `/api/v2/media/species-image?name=${encodeURIComponent(result.scientificName)}`
-                          )}
-                          alt={displayName || t('search.detailsPanel.unknownSpecies')}
-                          class="w-full h-full object-cover"
-                          onerror={e => {
-                            const target = e.currentTarget as HTMLImageElement;
-                            target.src = buildAppUrl('/ui/assets/bird-placeholder.svg');
-                            target.classList.add('p-2');
-                          }}
-                          loading="lazy"
-                          decoding="async"
-                          fetchpriority="low"
-                        />
-                      </div>
                       <div>
                         <div class="font-bold">
                           {displayName || t('search.detailsPanel.unknownSpecies')}
@@ -1115,50 +1073,10 @@
                           : 'bg-[var(--color-base-200)]'}"
                       >
                         <!-- Expanded content -->
-                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                           <!-- Weather Information Container -->
                           <div class="bg-[var(--color-base-200)] rounded-box p-4">
                             <WeatherInfo detectionId={result.id} units={temperatureUnits} />
-                          </div>
-
-                          <!-- Bird Image Container (Middle Column) -->
-                          <div
-                            class="bg-[var(--color-base-200)] rounded-box p-4 flex flex-col justify-center items-center"
-                          >
-                            <div
-                              class="w-full aspect-[4/3] rounded-md overflow-hidden bg-gray-100 cursor-pointer hover:brightness-90 transition-all focus:outline-hidden focus:ring-2 focus:ring-[var(--color-primary)]"
-                              onclick={() => toggleExpand(result.id)}
-                              onkeydown={e => {
-                                if (e.key === 'Enter' || e.key === ' ') {
-                                  e.preventDefault();
-                                  toggleExpand(result.id);
-                                }
-                              }}
-                              role="button"
-                              tabindex="0"
-                              aria-label={t('search.detailsPanel.collapseDetails', {
-                                species: displayName || t('search.detailsPanel.unknownSpecies'),
-                              })}
-                              aria-expanded={isExpanded(result.id)}
-                              aria-controls="expanded-row-{result.id}"
-                              title={t('search.detailsPanel.clickToCollapse')}
-                            >
-                              <img
-                                src={buildAppUrl(
-                                  `/api/v2/media/species-image?name=${encodeURIComponent(result.scientificName)}`
-                                )}
-                                alt={displayName || t('search.detailsPanel.unknownSpecies')}
-                                class="w-full h-full object-cover"
-                                onerror={e => {
-                                  const target = e.currentTarget as HTMLImageElement;
-                                  target.src = buildAppUrl('/ui/assets/bird-placeholder.svg');
-                                  target.classList.add('p-2');
-                                }}
-                                loading="lazy"
-                                decoding="async"
-                                fetchpriority="low"
-                              />
-                            </div>
                           </div>
 
                           <!-- Audio Player -->
@@ -1207,21 +1125,6 @@
                 <!-- Thumbnail and names -->
                 <div class="flex-1 min-w-0">
                   <div class="flex items-center gap-2">
-                    <div
-                      class="w-12 h-9 rounded-md overflow-hidden bg-[var(--color-base-200)] shrink-0"
-                    >
-                      <img
-                        src={buildAppUrl(
-                          `/api/v2/media/species-image?name=${encodeURIComponent(result.scientificName)}`
-                        )}
-                        alt={displayName || t('search.detailsPanel.unknownSpecies')}
-                        class="w-full h-full object-cover"
-                        onerror={handleBirdImageError}
-                        loading="lazy"
-                        decoding="async"
-                        fetchpriority="low"
-                      />
-                    </div>
                     <div class="min-w-0">
                       <div class="font-semibold leading-tight truncate">
                         {displayName || t('search.detailsPanel.unknownSpecies')}

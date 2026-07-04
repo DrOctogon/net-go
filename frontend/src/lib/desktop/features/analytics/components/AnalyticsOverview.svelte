@@ -17,9 +17,7 @@
   import { api } from '$lib/utils/api';
   import { formatNumber, formatDateTime } from '$lib/utils/formatters';
   import { getLogger } from '$lib/utils/logger';
-  import { buildAppUrl } from '$lib/utils/urlHelpers';
   import { localizeSpeciesName } from '$lib/utils/speciesDisplay';
-  import { handleBirdImageError } from '$lib/desktop/components/ui/image-utils';
   import LoadingSpinner from '$lib/desktop/components/ui/LoadingSpinner.svelte';
   import SourceBadge from '$lib/desktop/features/dashboard/components/SourceBadge.svelte';
   import type { SourceInfo } from '$lib/types/detection.types';
@@ -649,21 +647,6 @@
                   <td>{detection.timestamp ? formatDateTime(detection.timestamp) : '-'}</td>
                   <td>
                     <div class="flex items-center gap-2">
-                      <div class="w-8 h-8 rounded-full bg-[var(--color-base-200)] overflow-hidden">
-                        <!-- PERFORMANCE OPTIMIZATION: Enhanced image loading for species thumbnails -->
-                        <img
-                          src={buildAppUrl(
-                            `/api/v2/media/species-image?name=${encodeURIComponent(detection.scientificName ?? '')}`
-                          )}
-                          alt={detection.commonName ||
-                            t('analytics.recentDetections.unknownSpecies')}
-                          class="w-full h-full object-cover"
-                          onerror={handleBirdImageError}
-                          loading="lazy"
-                          decoding="async"
-                          fetchpriority="low"
-                        />
-                      </div>
                       <div>
                         <div class="font-medium">
                           {localizeSpeciesName(detection.scientificName, detection.commonName) ||
@@ -714,22 +697,6 @@
           {#each recentDetections as detection, index (detection.id ?? index)}
             <div class="bg-[var(--color-base-100)] rounded-lg p-3">
               <div class="flex items-start gap-3">
-                <!-- Thumbnail -->
-                <div
-                  class="w-10 h-10 rounded-full bg-[var(--color-base-200)] overflow-hidden shrink-0"
-                >
-                  <img
-                    src={buildAppUrl(
-                      `/api/v2/media/species-image?name=${encodeURIComponent(detection.scientificName ?? '')}`
-                    )}
-                    alt={detection.commonName || t('analytics.recentDetections.unknownSpecies')}
-                    class="w-full h-full object-cover"
-                    onerror={handleBirdImageError}
-                    loading="lazy"
-                    decoding="async"
-                    fetchpriority="low"
-                  />
-                </div>
                 <!-- Content -->
                 <div class="flex-1 min-w-0">
                   <div class="text-sm text-[var(--color-base-content)]/70">

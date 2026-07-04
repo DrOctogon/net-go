@@ -1835,19 +1835,6 @@
           "axisDate": "Date",
           "axisUniqueSpecies": "Espèces uniques"
         },
-        "accumulation": {
-          "title": "Species Accumulation Curve",
-          "description": "Cumulative number of distinct species detected within the selected period. The curve climbs as new species appear and flattens toward an asymptote once the common ones have been recorded; a still-rising tail means more species are likely waiting to be found.",
-          "noData": "No species accumulation data available",
-          "noDataHint": "Select a wider date range to watch the species list build up over time",
-          "ariaLabel": "Species accumulation curve: cumulative distinct species detected over the period",
-          "axisDate": "Date",
-          "axisSpecies": "Cumulative species",
-          "totalSpecies": "{species} species",
-          "tooltipCumulative": "Cumulative species",
-          "tooltipNew": "New in period",
-          "summary": "Cumulative species accumulation across {days} days, reaching {species} distinct species by the end of the period."
-        },
         "yearOverYear": {
           "title": "Year-over-Year Tracker",
           "description": "Cumulative detections so far this year versus the same calendar dates last year. The shaded band is the running gap between the two; this year's line sitting above last year's means you are ahead of last year's pace.",
@@ -1860,20 +1847,6 @@
           "legendLast": "{year} (last year)",
           "tooltipDelta": "Difference",
           "summary": "Year over year: by {monthDay}, {currentYear} has {thisYear} cumulative detections versus {lastYear} for {previousYear} (a difference of {delta})."
-        },
-        "phenology": {
-          "title": "Arrival & Departure Phenology",
-          "description": "First and last detection of each species within the selected period, drawn as residency bars for the most-detected species. Read it top to bottom in arrival order to see who shows up first and who lingers latest across the season.",
-          "noData": "No phenology data available",
-          "noDataHint": "Select a wider date range to see when species arrive and depart",
-          "ariaLabel": "Arrival and departure phenology: residency bars showing each species' first-to-last detection span",
-          "axisDate": "Date",
-          "summary": "Arrival and departure residency spans for {species} species across the selected period.",
-          "tooltipFirst": "First detected",
-          "tooltipLast": "Last detected",
-          "tooltipResidency": "Residency",
-          "tooltipCount": "Detections",
-          "residencyDays": "{days} days"
         },
         "heatmap": {
           "title": "Seasonal Activity Heatmap",
@@ -1890,13 +1863,8 @@
           "summary": "{total} detections across {days} days. Busiest around {time} on {date}."
         },
         "ridgeline": {
-          "title": "Who Sings When",
-          "description": "Hour-of-day activity for the most-detected species, sorting dawn singers from all-day and nocturnal birds",
-          "noData": "No species activity data available",
-          "noDataHint": "Select a wider date range to compare species activity patterns",
           "ariaLabel": "Who-sings-when ridgeline: hour-of-day activity distribution per species",
           "axisTime": "Time of Day",
-          "note": "Showing the top {count} species by detection volume",
           "tooltipDetections": "Detections",
           "tooltipPeak": "Peak",
           "summary": "Hour-of-day activity for {count} species. Most active: {species} around {time}."
@@ -4290,11 +4258,6 @@
       "removeCertificate": "Supprimer le certificat",
       "fileReadError": "Échec de la lecture du fichier",
       "loading": "Chargement des informations du certificat..."
-    },
-    "birdThumbnail": {
-      "viewDetections": "View {name} detections",
-      "largeView": "Large view of {name}",
-      "clickToView": "Click to view detections"
     }
   },
   "connectivity": {

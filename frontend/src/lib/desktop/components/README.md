@@ -91,7 +91,6 @@ This folder contains **shared components** used across the application. Feature-
 - `LoginModal.svelte` - User login modal
 - `ReviewModal.svelte` - Detection review modal
 - `SpeciesBadges.svelte` - Reusable species status and lock badges for modals
-- `SpeciesThumbnail.svelte` - Reusable species thumbnail image component
 
 ## Review
 
@@ -159,7 +158,6 @@ The following components are located in their feature directories:
 - `ConfidenceBadge.svelte` - Confidence level badge display
 - `WeatherBadge.svelte` - Weather condition badge display
 - `SpeciesInfoBar.svelte` - Species information bar with thumbnail
-- `BirdThumbnailPopup.svelte` - Hover popup showing larger bird image
 
 ### Detections (`features/detections/components/`)
 

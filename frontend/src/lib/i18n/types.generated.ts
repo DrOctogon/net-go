@@ -1419,17 +1419,6 @@ export type TranslationKey =
   | 'analytics.advanced.charts.diversity.noDataHint'
   | 'analytics.advanced.charts.diversity.axisDate'
   | 'analytics.advanced.charts.diversity.axisUniqueSpecies'
-  | 'analytics.advanced.charts.accumulation.title'
-  | 'analytics.advanced.charts.accumulation.description'
-  | 'analytics.advanced.charts.accumulation.noData'
-  | 'analytics.advanced.charts.accumulation.noDataHint'
-  | 'analytics.advanced.charts.accumulation.ariaLabel'
-  | 'analytics.advanced.charts.accumulation.axisDate'
-  | 'analytics.advanced.charts.accumulation.axisSpecies'
-  | 'analytics.advanced.charts.accumulation.totalSpecies' // params: species
-  | 'analytics.advanced.charts.accumulation.tooltipCumulative'
-  | 'analytics.advanced.charts.accumulation.tooltipNew'
-  | 'analytics.advanced.charts.accumulation.summary' // params: days, species
   | 'analytics.advanced.charts.yearOverYear.title'
   | 'analytics.advanced.charts.yearOverYear.description'
   | 'analytics.advanced.charts.yearOverYear.noData'
@@ -1441,18 +1430,6 @@ export type TranslationKey =
   | 'analytics.advanced.charts.yearOverYear.legendLast' // params: year
   | 'analytics.advanced.charts.yearOverYear.tooltipDelta'
   | 'analytics.advanced.charts.yearOverYear.summary' // params: monthDay, currentYear, thisYear, lastYear, previousYear, delta
-  | 'analytics.advanced.charts.phenology.title'
-  | 'analytics.advanced.charts.phenology.description'
-  | 'analytics.advanced.charts.phenology.noData'
-  | 'analytics.advanced.charts.phenology.noDataHint'
-  | 'analytics.advanced.charts.phenology.ariaLabel'
-  | 'analytics.advanced.charts.phenology.axisDate'
-  | 'analytics.advanced.charts.phenology.summary' // params: species
-  | 'analytics.advanced.charts.phenology.tooltipFirst'
-  | 'analytics.advanced.charts.phenology.tooltipLast'
-  | 'analytics.advanced.charts.phenology.tooltipResidency'
-  | 'analytics.advanced.charts.phenology.tooltipCount'
-  | 'analytics.advanced.charts.phenology.residencyDays' // params: days
   | 'analytics.advanced.charts.heatmap.title'
   | 'analytics.advanced.charts.heatmap.description'
   | 'analytics.advanced.charts.heatmap.noData'
@@ -1465,13 +1442,8 @@ export type TranslationKey =
   | 'analytics.advanced.charts.heatmap.legendMore' // params: max
   | 'analytics.advanced.charts.heatmap.ariaLabel'
   | 'analytics.advanced.charts.heatmap.summary' // params: total, days, time, date
-  | 'analytics.advanced.charts.ridgeline.title'
-  | 'analytics.advanced.charts.ridgeline.description'
-  | 'analytics.advanced.charts.ridgeline.noData'
-  | 'analytics.advanced.charts.ridgeline.noDataHint'
   | 'analytics.advanced.charts.ridgeline.ariaLabel'
   | 'analytics.advanced.charts.ridgeline.axisTime'
-  | 'analytics.advanced.charts.ridgeline.note' // params: count
   | 'analytics.advanced.charts.ridgeline.tooltipDetections'
   | 'analytics.advanced.charts.ridgeline.tooltipPeak'
   | 'analytics.advanced.charts.ridgeline.summary' // params: count, species, time
@@ -3149,9 +3121,6 @@ export type TranslationKey =
   | 'components.tls.removeCertificate'
   | 'components.tls.fileReadError'
   | 'components.tls.loading'
-  | 'components.birdThumbnail.viewDetections' // params: name
-  | 'components.birdThumbnail.largeView' // params: name
-  | 'components.birdThumbnail.clickToView'
   | 'connectivity.offline'
   | 'detection.actions.back'
   | 'detection.actions.review'
@@ -3740,11 +3709,6 @@ export type TranslationParams = {
   'analytics.hub.card.notEnoughDataHint': { min: string | number };
   'analytics.advanced.speciesSelection': { count: string | number; max: string | number };
   'analytics.advanced.detections': { count: string | number };
-  'analytics.advanced.charts.accumulation.totalSpecies': { species: string | number };
-  'analytics.advanced.charts.accumulation.summary': {
-    days: string | number;
-    species: string | number;
-  };
   'analytics.advanced.charts.yearOverYear.legendThis': { year: string | number };
   'analytics.advanced.charts.yearOverYear.legendLast': { year: string | number };
   'analytics.advanced.charts.yearOverYear.summary': {
@@ -3755,8 +3719,6 @@ export type TranslationParams = {
     previousYear: string | number;
     delta: string | number;
   };
-  'analytics.advanced.charts.phenology.summary': { species: string | number };
-  'analytics.advanced.charts.phenology.residencyDays': { days: string | number };
   'analytics.advanced.charts.heatmap.legendMore': { max: string | number };
   'analytics.advanced.charts.heatmap.summary': {
     total: string | number;
@@ -3764,7 +3726,6 @@ export type TranslationParams = {
     time: string | number;
     date: string | number;
   };
-  'analytics.advanced.charts.ridgeline.note': { count: string | number };
   'analytics.advanced.charts.ridgeline.summary': {
     count: string | number;
     species: string | number;
@@ -3885,8 +3846,6 @@ export type TranslationParams = {
     start: string | number;
     end: string | number;
   };
-  'components.birdThumbnail.viewDetections': { name: string | number };
-  'components.birdThumbnail.largeView': { name: string | number };
   'quietHours.indicator.tooltip': { count: string | number };
   'errors.detection.invalidDate': { paramName: string | number };
   'errors.backup.insufficientSpace': { needed: string | number; available: string | number };
