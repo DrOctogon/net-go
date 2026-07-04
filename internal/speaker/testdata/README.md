@@ -1,19 +1,23 @@
 # Speaker test fixtures
 
-## `pipeline_probe_2class.onnx`
+`pipeline_probe_*.onnx` are **synthetic** ONNX models used only to exercise the
+speaker attribute inference pipelines (`internal/inference/onnx.SingleOutputAudioModel`
++ the `mapGender`/`mapAge` mappings and the voice-print `Cosine`) end to end
+against real ONNX Runtime. **They are not real classifiers/extractors** and have
+no accuracy — do not ship them or treat their output as meaningful.
 
-A **synthetic** ONNX model used only to exercise the speaker gender inference
-pipeline (`internal/inference/onnx.SingleOutputAudioModel` + `mapGender2Class`)
-end to end against real ONNX Runtime. **It is not a gender classifier** and has
-no accuracy — do not ship it or treat its output as meaningful.
+Each probe reduces a clip to its mean amplitude and projects that mean to the
+output shape the mapping expects, so results are deterministic functions of the
+input mean:
 
-Graph: `waveform[batch, samples] --ReduceMean(axis=1)--> [batch, 1] --MatMul([[1, -1]])--> logits[batch, 2]`.
-This projects a clip's mean amplitude to two class logits `[mean, -mean]`, which
-makes the `[male, female]` mapping order and the softmax confidence bound
-deterministic: a positive-mean waveform maps to `male`, a negative-mean waveform
-to `female`.
+| File | Output | Mapping behaviour |
+| --- | --- | --- |
+| `pipeline_probe_2class.onnx` | `logits[batch, 2]` = `[mean, -mean]` | `mapGender2Class`: +mean → male, −mean → female |
+| `pipeline_probe_age.onnx` | `score[batch, 1]` = `mean` | `mapAge`: years = score·100; 0.05 → child, 0.35 → adult |
+| `pipeline_probe_embedding.onnx` | `embedding[batch, 8]` = `mean·[1..8]` | surfaced as `Attributes.Embedding`; `Cosine(e,e)` = 1 |
 
-Consumed by `TestGenderPipeline_SyntheticProbe` (skips when the ONNX Runtime
+Consumed by `TestGenderPipeline_SyntheticProbe`, `TestAgePipeline_SyntheticProbe`,
+and `TestVoicePrintPipeline_SyntheticProbe` (each skips when the ONNX Runtime
 shared library is absent). For a REAL gender model + accuracy check, use
 `TestONNXGenderModelSmoke` with `VW_ORT_LIB` + `VW_SPEAKER_GENDER_MODEL`.
 
