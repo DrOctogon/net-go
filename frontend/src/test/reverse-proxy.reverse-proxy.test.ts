@@ -119,8 +119,6 @@ const API_ROUTES = [
   '/api/v2/notifications/unread/count',
   '/api/v2/dynamic-thresholds',
   '/api/v2/dynamic-thresholds/stats',
-  '/api/v2/range/species/count',
-  '/api/v2/range/species/list',
   '/api/v2/integrations/mqtt/status',
   '/api/v2/streams/status',
   '/api/v2/streams/health',

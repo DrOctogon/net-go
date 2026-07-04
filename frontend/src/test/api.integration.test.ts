@@ -331,30 +331,6 @@ describe('Dynamic Thresholds API', () => {
 });
 
 // ============================================================================
-// Range Filter
-// ============================================================================
-
-describe('Range Filter API', () => {
-  it('can fetch species count in range', async () => {
-    const response = await apiCall('/range/species/count');
-
-    expect(response.ok).toBe(true);
-
-    const result = await response.json();
-    expect(result).toBeDefined();
-  });
-
-  it('can fetch species list in range', async () => {
-    const response = await apiCall('/range/species/list');
-
-    expect(response.ok).toBe(true);
-
-    const result = await response.json();
-    expect(result).toBeDefined();
-  });
-});
-
-// ============================================================================
 // Integrations
 // ============================================================================
 
