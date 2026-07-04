@@ -1163,7 +1163,7 @@ func (p *Processor) handleHumanDetection(settings *conf.Settings, item classifie
 			logger.String("source", p.getDisplayNameForSource(item.Source.ID)),
 			logger.String("operation", "privacy_filter"))
 		// put human detection timestamp into LastHumanDetection map. This is used to discard
-		// bird detections if a human vocalization is detected after the first detection
+		// any detection that coincides with (or follows) detected human speech
 		p.detectionMutex.Lock()
 		p.LastHumanDetection[item.Source.ID] = item.StartTime
 		p.detectionMutex.Unlock()
@@ -1269,8 +1269,8 @@ func (p *Processor) shouldDiscardDetection(item *PendingDetection, settings *con
 		p.detectionMutex.RLock()
 		lastHumanDetection, exists := p.LastHumanDetection[item.Source]
 		p.detectionMutex.RUnlock()
-		// Discard when a human voice was detected at or after the bird detection
-		// started. Using !Before (>=) rather than After (>) so a human and a bird
+		// Discard when human voice was detected at or after this detection
+		// started. Using !Before (>=) rather than After (>) so a detection
 		// sharing the exact same audio chunk (equal timestamps) still trips the
 		// privacy filter instead of leaking the detection.
 		if exists && !lastHumanDetection.Before(item.FirstDetected) {
