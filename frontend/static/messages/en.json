@@ -2853,10 +2853,7 @@
         "enable": "Enable Daylight Filter",
         "disabled": "Daylight filter is disabled",
         "offsetLabel": "Daylight Window Offset (Hours)",
-        "offsetHelp": "Adjust the daylight window. Positive values shrink it (more lenient, e.g. +1 = starts 1h after dawn). Negative values expand it (stricter, e.g. -1 = starts 1h before dawn).",
-        "speciesListLabel": "Nocturnal Species List",
-        "addSpeciesLabel": "Add Nocturnal Species",
-        "addSpeciesHelp": "Search and add species, genera, families, or orders to filter during daylight. Default: Strigiformes (all owls). Note: an empty list disables daylight species filtering."
+        "offsetHelp": "Adjust the daylight window. Positive values shrink it (more lenient, e.g. +1 = starts 1h after dawn). Negative values expand it (stricter, e.g. -1 = starts 1h before dawn)."
       },
       "errors": {
         "speciesLoadFailed": "Failed to load species list. Please try again."
@@ -3387,10 +3384,6 @@
         "enableHelp": "When enabled, repeated detections of configured species are merged into a single longer recording.",
         "maxDurationLabel": "Max Duration",
         "maxDurationHelp": "Maximum length of an extended capture clip. The recording grows as detections continue, up to this limit.",
-        "speciesListLabel": "Extended Capture Species",
-        "addSpeciesLabel": "Add Species",
-        "addSpeciesHelp": "Species that trigger extended capture. Supports common names, scientific names, and genus-level matching (e.g. \"Strix\" matches all Strix owls).",
-        "addSpeciesButton": "Add",
         "disabled": "Extended capture is disabled"
       },
       "fileSettings": {

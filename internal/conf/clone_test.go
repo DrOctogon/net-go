@@ -96,8 +96,6 @@ func newPopulatedSettings() *Settings {
 		},
 	}
 
-	s.Realtime.DaylightFilter.Species = []string{"Strix aluco"}
-
 	s.Realtime.RTSP.Streams = []StreamConfig{
 		{
 			Name: "front", URL: "rtsp://x", Enabled: true, Models: []string{"birdnet"},
@@ -111,8 +109,6 @@ func newPopulatedSettings() *Settings {
 	s.Realtime.RTSP.FFmpegParameters = []string{"-rtsp_transport", "tcp"}
 
 	s.Realtime.Monitoring.Disk.Paths = []string{"/", "/data"}
-
-	s.Realtime.ExtendedCapture.Species = []string{"Tyto alba"}
 
 	s.Realtime.Species.Include = []string{"Corvus corax"}
 	s.Realtime.Species.Exclude = []string{"Passer domesticus"}
@@ -222,8 +218,6 @@ func mutateCloneEverywhere(dst *Settings) {
 	dst.Realtime.Dashboard.Layout.Elements = append(dst.Realtime.Dashboard.Layout.Elements,
 		DashboardElement{ID: "added"})
 
-	dst.Realtime.DaylightFilter.Species[0] = mutated
-
 	dst.Realtime.RTSP.Streams[0].Models[0] = mutated
 	dst.Realtime.RTSP.Streams[0].Enabled = false
 	dst.Realtime.RTSP.Streams[0].Equalizer.Enabled = false
@@ -232,8 +226,6 @@ func mutateCloneEverywhere(dst *Settings) {
 	dst.Realtime.RTSP.FFmpegParameters[0] = mutated
 
 	dst.Realtime.Monitoring.Disk.Paths[0] = mutated
-
-	dst.Realtime.ExtendedCapture.Species[0] = mutated
 
 	dst.Realtime.Species.Include[0] = mutated
 	dst.Realtime.Species.Exclude[0] = mutated
@@ -329,8 +321,6 @@ func assertSourceUnchanged(t *testing.T, src *Settings) {
 	require.NotNil(t, elem.Summary)
 	assert.Equal(t, 30, elem.Summary.SummaryLimit)
 
-	assert.Equal(t, []string{"Strix aluco"}, src.Realtime.DaylightFilter.Species)
-
 	require.Len(t, src.Realtime.RTSP.Streams, 1)
 	assert.True(t, src.Realtime.RTSP.Streams[0].Enabled)
 	assert.Equal(t, []string{"birdnet"}, src.Realtime.RTSP.Streams[0].Models)
@@ -342,8 +332,6 @@ func assertSourceUnchanged(t *testing.T, src *Settings) {
 	assert.Equal(t, []string{"-rtsp_transport", "tcp"}, src.Realtime.RTSP.FFmpegParameters)
 
 	assert.Equal(t, []string{"/", "/data"}, src.Realtime.Monitoring.Disk.Paths)
-
-	assert.Equal(t, []string{"Tyto alba"}, src.Realtime.ExtendedCapture.Species)
 
 	assert.Equal(t, []string{"Corvus corax"}, src.Realtime.Species.Include)
 	assert.Equal(t, []string{"Passer domesticus"}, src.Realtime.Species.Exclude)

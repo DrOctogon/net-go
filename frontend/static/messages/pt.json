@@ -2853,10 +2853,7 @@
         "enable": "Ativar filtro de luz do dia",
         "disabled": "O filtro de luz do dia está desativado",
         "offsetLabel": "Deslocamento da janela de luz do dia (Horas)",
-        "offsetHelp": "Ajustar a janela de luz do dia. Valores positivos reduzem-na (mais permissivo, ex. +1 = começa 1h após o amanhecer). Valores negativos expandem-na (mais rigoroso, ex. -1 = começa 1h antes do amanhecer).",
-        "speciesListLabel": "Lista de espécies noturnas",
-        "addSpeciesLabel": "Adicionar espécie noturna",
-        "addSpeciesHelp": "Pesquisar e adicionar espécies, géneros, famílias ou ordens para filtrar durante o dia. Predefinição: Strigiformes (todas as corujas). Nota: uma lista vazia não filtra nenhuma espécie durante o dia."
+        "offsetHelp": "Ajustar a janela de luz do dia. Valores positivos reduzem-na (mais permissivo, ex. +1 = começa 1h após o amanhecer). Valores negativos expandem-na (mais rigoroso, ex. -1 = começa 1h antes do amanhecer)."
       },
       "errors": {
         "speciesLoadFailed": "Falha ao carregar lista de espécies. Por favor, tente novamente."
@@ -3387,10 +3384,6 @@
         "enableHelp": "Quando ativada, as deteções repetidas das espécies configuradas são combinadas numa única gravação mais longa.",
         "maxDurationLabel": "Duração máxima",
         "maxDurationHelp": "Comprimento máximo de um clipe de captura estendida. A gravação cresce à medida que as deteções continuam, até este limite.",
-        "speciesListLabel": "Espécies de captura estendida",
-        "addSpeciesLabel": "Adicionar espécie",
-        "addSpeciesHelp": "Espécies que acionam a captura estendida. Suporta nomes comuns, nomes científicos e correspondência ao nível do género (ex.: \"Strix\" inclui todas as corujas Strix).",
-        "addSpeciesButton": "Adicionar",
         "disabled": "A captura estendida está desativada"
       },
       "fileSettings": {

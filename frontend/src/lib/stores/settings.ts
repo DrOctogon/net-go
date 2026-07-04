@@ -339,7 +339,6 @@ export interface DaylightFilterSettings {
   enabled: boolean;
   debug: boolean;
   offset: number;
-  species: string[];
 }
 
 export interface IntegrationSettings {
@@ -505,7 +504,6 @@ export interface ExtendedCaptureSettings {
   enabled: boolean;
   maxDuration: number;
   captureBufferSeconds: number;
-  species: string[];
 }
 
 export interface SupportSettings {
@@ -940,13 +938,11 @@ function createEmptySettings(): SettingsFormData {
         enabled: false,
         debug: false,
         offset: 0,
-        species: [],
       },
       extendedCapture: {
         enabled: false,
         maxDuration: 120,
         captureBufferSeconds: 0,
-        species: [],
       },
       mqtt: {
         enabled: false,

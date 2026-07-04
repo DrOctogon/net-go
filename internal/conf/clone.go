@@ -66,9 +66,6 @@ func CloneSettings(src *Settings) *Settings {
 	}
 	dst.Realtime.Dashboard.Layout.Elements = cloneDashboardElements(src.Realtime.Dashboard.Layout.Elements)
 
-	// Realtime.DaylightFilter.
-	dst.Realtime.DaylightFilter.Species = slices.Clone(src.Realtime.DaylightFilter.Species)
-
 	// Realtime.RTSP.
 	dst.Realtime.RTSP.Streams = cloneStreamConfigs(src.Realtime.RTSP.Streams)
 	dst.Realtime.RTSP.URLs = slices.Clone(src.Realtime.RTSP.URLs)
@@ -76,9 +73,6 @@ func CloneSettings(src *Settings) *Settings {
 
 	// Realtime.Monitoring.Disk.
 	dst.Realtime.Monitoring.Disk.Paths = slices.Clone(src.Realtime.Monitoring.Disk.Paths)
-
-	// Realtime.ExtendedCapture.
-	dst.Realtime.ExtendedCapture.Species = slices.Clone(src.Realtime.ExtendedCapture.Species)
 
 	// Realtime.Species.
 	dst.Realtime.Species.Include = slices.Clone(src.Realtime.Species.Include)

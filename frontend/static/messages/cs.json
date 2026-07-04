@@ -2853,10 +2853,7 @@
         "enable": "Povolit filtr denního světla",
         "disabled": "Filtr denního světla je vypnutý",
         "offsetLabel": "Posun okna denního světla (hodiny)",
-        "offsetHelp": "Upraví okno denního světla. Kladné hodnoty jej zmenšují (tolerantnější, např. +1 = začíná 1 h po úsvitu). Záporné hodnoty jej rozšiřují (přísnější, např. -1 = začíná 1 h před úsvitem).",
-        "speciesListLabel": "Seznam nočních druhů",
-        "addSpeciesLabel": "Přidat noční druh",
-        "addSpeciesHelp": "Vyhledejte a přidejte druhy, rody, čeledi nebo řády k filtrování během dne. Výchozí: Strigiformes (všechny sovy). Poznámka: prázdný seznam vypne filtrování nočních druhů během dne."
+        "offsetHelp": "Upraví okno denního světla. Kladné hodnoty jej zmenšují (tolerantnější, např. +1 = začíná 1 h po úsvitu). Záporné hodnoty jej rozšiřují (přísnější, např. -1 = začíná 1 h před úsvitem)."
       },
       "errors": {
         "speciesLoadFailed": "Nepodařilo se načíst seznam druhů. Zkuste to znovu."
@@ -3387,10 +3384,6 @@
         "enableHelp": "Pokud je povoleno, opakované detekce nakonfigurovaných druhů jsou sloučeny do jediné delší nahrávky.",
         "maxDurationLabel": "Maximální délka",
         "maxDurationHelp": "Maximální délka klipu rozšířeného záznamu. Nahrávka roste s pokračujícími detekcemi až do tohoto limitu.",
-        "speciesListLabel": "Druhy pro rozšířený záznam",
-        "addSpeciesLabel": "Přidat druh",
-        "addSpeciesHelp": "Druhy, které spouštějí rozšířený záznam. Podporuje běžné názvy, vědecké názvy a shodu na úrovni rodu (např. „Strix“ zahrnuje všechny sovy rodu Strix).",
-        "addSpeciesButton": "Přidat",
         "disabled": "Rozšířený záznam je vypnut"
       },
       "fileSettings": {

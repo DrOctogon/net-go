@@ -77,7 +77,6 @@
         enabled: false,
         debug: false,
         offset: 0,
-        species: [],
       };
 
       // Ensure species is always an array even if dogBarkFilterSettings exists but has undefined/null species
@@ -87,10 +86,7 @@
           ...dogBarkBase,
           species: dogBarkBase.species ?? [], // Always ensures species is an array
         },
-        daylight: {
-          ...daylightBase,
-          species: daylightBase.species ?? [],
-        },
+        daylight: daylightBase,
       };
     })()
   );
@@ -257,13 +253,6 @@
     settingsActions.updateSection('realtime', {
       ...$realtimeSettings,
       daylightFilter: { ...settings.daylight, offset },
-    });
-  }
-
-  function handleDaylightSpeciesChange(updatedSpecies: string[]) {
-    settingsActions.updateSection('realtime', {
-      ...$realtimeSettings,
-      daylightFilter: { ...settings.daylight, species: updatedSpecies },
     });
   }
 </script>
@@ -437,22 +426,6 @@
                 helpText={t('settings.filters.daylightFilter.offsetHelp')}
               />
             </div>
-
-            <!-- Nocturnal Species List -->
-            <SpeciesListEditor
-              species={settings.daylight.species}
-              disabled={!settings.daylight.enabled || store.isLoading || store.isSaving}
-              predictions={speciesListState.data}
-              predictionsLoading={speciesListState.loading}
-              localizeLabel={localizeSpeciesLabel}
-              listLabel={t('settings.filters.daylightFilter.speciesListLabel')}
-              addLabel={t('settings.filters.daylightFilter.addSpeciesLabel')}
-              addPlaceholder={t('settings.filters.typeSpeciesName')}
-              addHelpText={t('settings.filters.daylightFilter.addSpeciesHelp')}
-              addButtonText={t('settings.filters.falsePositivePrevention.addSpeciesButton')}
-              hasChanges={daylightFilterHasChanges}
-              onSpeciesChange={handleDaylightSpeciesChange}
-            />
           </div>
         </fieldset>
       </div>

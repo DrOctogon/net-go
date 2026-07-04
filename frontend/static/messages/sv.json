@@ -2853,10 +2853,7 @@
         "enable": "Aktivera dagsljusfilter",
         "disabled": "Dagsljusfiltret är inaktiverat",
         "offsetLabel": "Dagsljusfönsterförskjutning (timmar)",
-        "offsetHelp": "Justera dagsljusfönstret. Positiva värden krymper det (mer överseende, t.ex. +1 = börjar 1 timme efter gryning). Negativa värden utökar det (striktare, t.ex. -1 = börjar 1 timme före gryning).",
-        "speciesListLabel": "Lista över nattaktiva arter",
-        "addSpeciesLabel": "Lägg till nattaktiv art",
-        "addSpeciesHelp": "Sök och lägg till arter, släkten, familjer eller ordningar att filtrera under dagsljus. Standard: Strigiformes (alla ugglor). Obs: en tom lista inaktiverar dagsljusartfiltreringen."
+        "offsetHelp": "Justera dagsljusfönstret. Positiva värden krymper det (mer överseende, t.ex. +1 = börjar 1 timme efter gryning). Negativa värden utökar det (striktare, t.ex. -1 = börjar 1 timme före gryning)."
       },
       "errors": {
         "speciesLoadFailed": "Kunde inte ladda artlista. Försök igen."
@@ -3387,10 +3384,6 @@
         "enableHelp": "När aktiverad slås upprepade detekteringar av konfigurerade arter samman till en enda längre inspelning.",
         "maxDurationLabel": "Max längd",
         "maxDurationHelp": "Maximal längd på ett utökat inspelningsklipp. Inspelningen växer allt eftersom detekteringar fortsätter, upp till denna gräns.",
-        "speciesListLabel": "Arter för utökad inspelning",
-        "addSpeciesLabel": "Lägg till art",
-        "addSpeciesHelp": "Arter som utlöser utökad inspelning. Stöder vanliga namn, vetenskapliga namn och släktmatchning (t.ex. \"Strix\" matchar alla Strix-ugglor).",
-        "addSpeciesButton": "Lägg till",
         "disabled": "Utökad inspelning är inaktiverad"
       },
       "fileSettings": {

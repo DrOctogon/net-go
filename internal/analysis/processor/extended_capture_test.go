@@ -10,45 +10,25 @@ import (
 	"github.com/tphakala/voicewatch/internal/detection"
 )
 
-func TestIsExtendedCaptureSpecies(t *testing.T) {
+func TestIsExtendedCaptureEnabled(t *testing.T) {
 	t.Parallel()
 
+	// Extended capture is global: every detection qualifies when the feature is
+	// enabled, and none qualify when it is disabled.
 	tests := []struct {
-		name           string
-		enabled        bool
-		allSpecies     bool
-		speciesMap     map[string]bool
-		scientificName string
-		expected       bool
+		name     string
+		enabled  bool
+		expected bool
 	}{
 		{
-			name:           "disabled returns false",
-			enabled:        false,
-			scientificName: "Strix aluco",
-			expected:       false,
+			name:     "disabled returns false",
+			enabled:  false,
+			expected: false,
 		},
 		{
-			name:           "all species mode returns true",
-			enabled:        true,
-			allSpecies:     true,
-			scientificName: "Strix aluco",
-			expected:       true,
-		},
-		{
-			name:           "matching species returns true",
-			enabled:        true,
-			allSpecies:     false,
-			speciesMap:     map[string]bool{"strix aluco": true},
-			scientificName: "Strix aluco",
-			expected:       true,
-		},
-		{
-			name:           "non-matching species returns false",
-			enabled:        true,
-			allSpecies:     false,
-			speciesMap:     map[string]bool{"strix aluco": true},
-			scientificName: "Parus major",
-			expected:       false,
+			name:     "enabled returns true",
+			enabled:  true,
+			expected: true,
 		},
 	}
 
@@ -61,10 +41,8 @@ func TestIsExtendedCaptureSpecies(t *testing.T) {
 						ExtendedCapture: conf.ExtendedCaptureSettings{Enabled: tt.enabled},
 					},
 				},
-				extendedCaptureAll:     tt.allSpecies,
-				extendedCaptureSpecies: tt.speciesMap,
 			}
-			assert.Equal(t, tt.expected, p.isExtendedCaptureSpecies(tt.scientificName))
+			assert.Equal(t, tt.expected, p.isExtendedCaptureEnabled())
 		})
 	}
 }
@@ -122,7 +100,6 @@ func TestResolveExtendedCaptureFilter(t *testing.T) {
 	}
 }
 
-
 func TestExtendedCapture_FlushDeadlineExtension(t *testing.T) {
 	t.Parallel()
 
@@ -138,8 +115,7 @@ func TestExtendedCapture_FlushDeadlineExtension(t *testing.T) {
 				},
 			},
 		},
-		pendingDetections:  make(map[string]PendingDetection),
-		extendedCaptureAll: true,
+		pendingDetections: make(map[string]PendingDetection),
 	}
 
 	species := "tawny owl"
@@ -184,16 +160,16 @@ func TestProcessorInitExtendedCapture(t *testing.T) {
 			Realtime: conf.RealtimeSettings{
 				ExtendedCapture: conf.ExtendedCaptureSettings{
 					Enabled: true,
-					Species: []string{},
 				},
 			},
 		},
 	}
 
+	// initExtendedCapture is safe to call and must not panic. When enabled,
+	// extended capture applies globally to every detection.
 	p.initExtendedCapture()
 
-	assert.True(t, p.extendedCaptureAll)
-	assert.Nil(t, p.extendedCaptureSpecies)
+	assert.True(t, p.isExtendedCaptureEnabled())
 }
 
 func TestProcessorInitExtendedCapture_Disabled(t *testing.T) {
@@ -207,8 +183,7 @@ func TestProcessorInitExtendedCapture_Disabled(t *testing.T) {
 
 	p.initExtendedCapture()
 
-	assert.False(t, p.extendedCaptureAll)
-	assert.Nil(t, p.extendedCaptureSpecies)
+	assert.False(t, p.isExtendedCaptureEnabled())
 }
 
 func TestExtendedCapture_EndToEnd_ContinuousSession(t *testing.T) {
@@ -224,8 +199,7 @@ func TestExtendedCapture_EndToEnd_ContinuousSession(t *testing.T) {
 				},
 			},
 		},
-		pendingDetections:  make(map[string]PendingDetection),
-		extendedCaptureAll: true,
+		pendingDetections: make(map[string]PendingDetection),
 	}
 
 	species := "strix uralensis"
@@ -288,8 +262,7 @@ func TestExtendedCapture_MultiSource_Independence(t *testing.T) {
 				},
 			},
 		},
-		pendingDetections:  make(map[string]PendingDetection),
-		extendedCaptureAll: true,
+		pendingDetections: make(map[string]PendingDetection),
 	}
 
 	species := "strix aluco"

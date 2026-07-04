@@ -2853,10 +2853,7 @@
         "enable": "Aktiver dagslysfilter",
         "disabled": "Dagslysfilter er deaktivert",
         "offsetLabel": "Dagslysvindu-forskyvning (timer)",
-        "offsetHelp": "Juster dagslysvinduet. Positive verdier innsnevrer det (mer mild, f.eks. +1 = starter 1t etter grytid). Negative verdier utvider det (strengere, f.eks. -1 = starter 1t før grytid).",
-        "speciesListLabel": "Liste over nattaktive arter",
-        "addSpeciesLabel": "Legg til nattaktiv art",
-        "addSpeciesHelp": "Søk og legg til arter, slekter, familier eller ordener som skal filtreres i dagslys. Standard: Strigiformes (alle ugler). Merk: en tom liste deaktiverer dagslydsartsfiltrering."
+        "offsetHelp": "Juster dagslysvinduet. Positive verdier innsnevrer det (mer mild, f.eks. +1 = starter 1t etter grytid). Negative verdier utvider det (strengere, f.eks. -1 = starter 1t før grytid)."
       },
       "errors": {
         "speciesLoadFailed": "Innlasting av artsliste mislyktes. Prøv igjen."
@@ -3387,10 +3384,6 @@
         "enableHelp": "Når aktivert, slås gjentatte registreringer av konfigurerte arter sammen til ett enkelt lengre opptak.",
         "maxDurationLabel": "Maks. varighet",
         "maxDurationHelp": "Maksimal lengde på et utvidet opptaksklipp. Opptaket vokser ettersom registreringer fortsetter, opp til denne grensen.",
-        "speciesListLabel": "Utvidet opptaksarter",
-        "addSpeciesLabel": "Legg til art",
-        "addSpeciesHelp": "Arter som utløser utvidet opptak. Støtter norske navn, vitenskapelige navn og slektsnivåsamsvar (f.eks. «Strix» matcher alle Strix-ugler).",
-        "addSpeciesButton": "Legg til",
         "disabled": "Utvidet opptak er deaktivert"
       },
       "fileSettings": {

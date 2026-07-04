@@ -2853,10 +2853,7 @@
         "enable": "Activer le filtre de lumière du jour",
         "disabled": "Le filtre de lumière du jour est désactivé",
         "offsetLabel": "Décalage de la fenêtre de lumière du jour (Heures)",
-        "offsetHelp": "Ajuster la fenêtre de lumière du jour. Les valeurs positives la réduisent (plus permissif, ex. +1 = commence 1h après l'aube). Les valeurs négatives l'élargissent (plus strict, ex. -1 = commence 1h avant l'aube).",
-        "speciesListLabel": "Liste des espèces nocturnes",
-        "addSpeciesLabel": "Ajouter une espèce nocturne",
-        "addSpeciesHelp": "Rechercher et ajouter des espèces, genres, familles ou ordres à filtrer pendant la journée. Par défaut : Strigiformes (tous les hiboux). Remarque : une liste vide ne filtre aucune espèce pendant la journée."
+        "offsetHelp": "Ajuster la fenêtre de lumière du jour. Les valeurs positives la réduisent (plus permissif, ex. +1 = commence 1h après l'aube). Les valeurs négatives l'élargissent (plus strict, ex. -1 = commence 1h avant l'aube)."
       },
       "errors": {
         "speciesLoadFailed": "Échec du chargement de la liste des espèces. Veuillez réessayer."
@@ -3387,10 +3384,6 @@
         "enableHelp": "Lorsqu'elle est activée, les détections répétées des espèces configurées sont fusionnées en un seul enregistrement plus long.",
         "maxDurationLabel": "Durée maximale",
         "maxDurationHelp": "Longueur maximale d'un clip de capture étendue. L'enregistrement s'allonge au fil des détections, jusqu'à cette limite.",
-        "speciesListLabel": "Espèces en capture étendue",
-        "addSpeciesLabel": "Ajouter une espèce",
-        "addSpeciesHelp": "Espèces déclenchant la capture étendue. Prend en charge les noms communs, les noms scientifiques et la correspondance au niveau du genre (par ex. « Strix » inclut toutes les chouettes Strix).",
-        "addSpeciesButton": "Ajouter",
         "disabled": "La capture étendue est désactivée"
       },
       "fileSettings": {

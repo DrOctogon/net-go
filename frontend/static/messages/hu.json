@@ -2853,10 +2853,7 @@
         "enable": "Nappali szűrő engedélyezése",
         "disabled": "A nappali szűrő le van tiltva",
         "offsetLabel": "Nappali ablak eltolás (óra)",
-        "offsetHelp": "Állítsa be a nappali ablakot. A pozitív értékek csökkentik (engedékenyebb, pl. +1 = 1 órával napkelte után kezdődik). A negatív értékek bővítik (szigorúbb, pl. -1 = 1 órával napkelte előtt kezdődik).",
-        "speciesListLabel": "Éjszakai faj lista",
-        "addSpeciesLabel": "Éjszakai faj hozzáadása",
-        "addSpeciesHelp": "Keresés és hozzáadás olyan fajokhoz, nemzetségekhez, családokhoz vagy rendekhez, amelyeket nappal szűrni kell. Alapértelmezett: Strigiformes (minden bagoly). Megjegyzés: az üres lista letiltja a nappali faj szűrést."
+        "offsetHelp": "Állítsa be a nappali ablakot. A pozitív értékek csökkentik (engedékenyebb, pl. +1 = 1 órával napkelte után kezdődik). A negatív értékek bővítik (szigorúbb, pl. -1 = 1 órával napkelte előtt kezdődik)."
       },
       "errors": {
         "speciesLoadFailed": "A faj lista betöltése sikertelen. Próbálja újra."
@@ -3387,10 +3384,6 @@
         "enableHelp": "Ha engedélyezve van, a konfigurált fajok ismételt detektálásai egyetlen hosszabb felvételben egyesülnek.",
         "maxDurationLabel": "Max időtartam",
         "maxDurationHelp": "A kiterjesztett rögzítés maximális hossza. A felvétel növekszik, ahogy az észlelések folytatódnak eddig a határig.",
-        "speciesListLabel": "Kiterjesztetten rögzítendő fajok",
-        "addSpeciesLabel": "Faj hozzáadása",
-        "addSpeciesHelp": "Fajok, amelyek kiterjesztett rögzítést váltanak ki. Támogatja a közhasználatú neveket, tudományos neveket és nemzetség szintű egyeztetést (pl. \"Strix\" egyeztet minden Strix bagollyal).",
-        "addSpeciesButton": "Hozzáadás",
         "disabled": "A kiterjesztett rögzítés le van tiltva"
       },
       "fileSettings": {

@@ -526,13 +526,12 @@ type PrivacyFilterSettings struct {
 	Confidence float32 `yaml:"confidence" json:"confidence"` // confidence threshold for human detection
 }
 
-// DaylightFilterSettings contains settings for the daylight species filter.
-// It discards detections of configured species (default: nocturnal birds) during daylight hours.
+// DaylightFilterSettings contains settings for the daylight filter.
+// When enabled it discards all detections that occur during daylight hours.
 type DaylightFilterSettings struct {
-	Debug   bool     `yaml:"debug" json:"debug"`     // true to enable debug logging
-	Enabled bool     `yaml:"enabled" json:"enabled"` // true to enable daylight filter
-	Offset  int      `yaml:"offset" json:"offset"`   // hours to adjust daylight window; positive = shrink (lenient), negative = expand (strict)
-	Species []string `yaml:"species" json:"species"` // species, families, orders, or genera to filter during daylight
+	Debug   bool `yaml:"debug" json:"debug"`     // true to enable debug logging
+	Enabled bool `yaml:"enabled" json:"enabled"` // true to enable daylight filter
+	Offset  int  `yaml:"offset" json:"offset"`   // hours to adjust daylight window; positive = shrink (lenient), negative = expand (strict)
 }
 
 // RTSPHealthSettings contains settings for RTSP stream health monitoring.
@@ -755,10 +754,9 @@ func (f *FalsePositiveFilterSettings) Validate() error {
 // ExtendedCaptureSettings contains settings for extended capture mode.
 // Extended capture produces a single audio clip for long continuous calling sessions.
 type ExtendedCaptureSettings struct {
-	Enabled              bool     `yaml:"enabled" json:"enabled" mapstructure:"enabled"`
-	MaxDuration          int      `yaml:"maxduration" json:"maxDuration" mapstructure:"maxDuration"`
-	CaptureBufferSeconds int      `yaml:"capturebufferseconds" json:"captureBufferSeconds" mapstructure:"captureBufferSeconds"`
-	Species              []string `yaml:"species" json:"species" mapstructure:"species"`
+	Enabled              bool `yaml:"enabled" json:"enabled" mapstructure:"enabled"`
+	MaxDuration          int  `yaml:"maxduration" json:"maxDuration" mapstructure:"maxDuration"`
+	CaptureBufferSeconds int  `yaml:"capturebufferseconds" json:"captureBufferSeconds" mapstructure:"captureBufferSeconds"`
 }
 
 // EffectiveCaptureBufferSeconds returns the capture buffer duration to use for

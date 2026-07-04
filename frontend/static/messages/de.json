@@ -2853,10 +2853,7 @@
         "enable": "Tageslichtfilter aktivieren",
         "disabled": "Tageslichtfilter ist deaktiviert",
         "offsetLabel": "Tageslichtfenster-Versatz (Stunden)",
-        "offsetHelp": "Tageslichtfenster anpassen. Positive Werte verkleinern es (toleranter, z.B. +1 = beginnt 1h nach Morgendämmerung). Negative Werte erweitern es (strenger, z.B. -1 = beginnt 1h vor Morgendämmerung).",
-        "speciesListLabel": "Liste nachtaktiver Arten",
-        "addSpeciesLabel": "Nachtaktive Art hinzufügen",
-        "addSpeciesHelp": "Suchen und Hinzufügen von Arten, Gattungen, Familien oder Ordnungen zum Filtern bei Tageslicht. Standard: Strigiformes (alle Eulen). Hinweis: Eine leere Liste filtert KEINE Arten bei Tageslicht."
+        "offsetHelp": "Tageslichtfenster anpassen. Positive Werte verkleinern es (toleranter, z.B. +1 = beginnt 1h nach Morgendämmerung). Negative Werte erweitern es (strenger, z.B. -1 = beginnt 1h vor Morgendämmerung)."
       },
       "errors": {
         "speciesLoadFailed": "Fehler beim Laden der Artenliste. Bitte versuchen Sie es erneut."
@@ -3387,10 +3384,6 @@
         "enableHelp": "Wenn aktiviert, werden wiederholte Erkennungen konfigurierter Arten zu einer einzigen längeren Aufnahme zusammengeführt.",
         "maxDurationLabel": "Maximale Dauer",
         "maxDurationHelp": "Maximale Länge eines erweiterten Aufnahmeclips. Die Aufnahme wächst mit fortlaufenden Erkennungen bis zu diesem Limit.",
-        "speciesListLabel": "Arten für erweiterte Aufnahme",
-        "addSpeciesLabel": "Art hinzufügen",
-        "addSpeciesHelp": "Arten, die die erweiterte Aufnahme auslösen. Unterstützt gebräuchliche Namen, wissenschaftliche Namen und Gattungsabgleich (z.B. \"Strix\" erfasst alle Strix-Eulen).",
-        "addSpeciesButton": "Hinzufügen",
         "disabled": "Erweiterte Aufnahme ist deaktiviert"
       },
       "fileSettings": {

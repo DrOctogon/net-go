@@ -26,73 +26,6 @@ func newTestSunCalc() *suncalc.SunCalc {
 	return suncalc.NewSunCalc(helsinkiLatitude, helsinkiLongitude)
 }
 
-func TestIsDaylightFilterSpecies(t *testing.T) {
-	t.Parallel()
-
-	tests := []struct {
-		name           string
-		enabled        bool
-		allSpecies     bool
-		speciesMap     map[string]bool
-		scientificName string
-		expected       bool
-	}{
-		{
-			name:           "disabled returns false",
-			enabled:        false,
-			scientificName: "Strix aluco",
-			expected:       false,
-		},
-		{
-			name:           "all species mode returns true",
-			enabled:        true,
-			allSpecies:     true,
-			scientificName: "Strix aluco",
-			expected:       true,
-		},
-		{
-			name:           "matching species returns true",
-			enabled:        true,
-			allSpecies:     false,
-			speciesMap:     map[string]bool{"strix aluco": true},
-			scientificName: "Strix aluco",
-			expected:       true,
-		},
-		{
-			name:           "non-matching species returns false",
-			enabled:        true,
-			allSpecies:     false,
-			speciesMap:     map[string]bool{"strix aluco": true},
-			scientificName: "Parus major",
-			expected:       false,
-		},
-		{
-			name:           "case-insensitive matching",
-			enabled:        true,
-			allSpecies:     false,
-			speciesMap:     map[string]bool{"bubo bubo": true},
-			scientificName: "BUBO BUBO",
-			expected:       true,
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			t.Parallel()
-			p := &Processor{
-				Settings: &conf.Settings{
-					Realtime: conf.RealtimeSettings{
-						DaylightFilter: conf.DaylightFilterSettings{Enabled: tt.enabled},
-					},
-				},
-				daylightFilterAll:     tt.allSpecies,
-				daylightFilterSpecies: tt.speciesMap,
-			}
-			assert.Equal(t, tt.expected, p.isDaylightFilterSpecies(tt.scientificName))
-		})
-	}
-}
-
 func TestIsDaylight(t *testing.T) {
 	t.Parallel()
 
@@ -294,6 +227,7 @@ func TestCheckDaylightFilter(t *testing.T) {
 
 	p := &Processor{
 		Settings: &conf.Settings{
+			VoiceWatch: conf.VoiceWatchConfig{LocationConfigured: true},
 			Realtime: conf.RealtimeSettings{
 				DaylightFilter: conf.DaylightFilterSettings{
 					Enabled: true,
@@ -301,11 +235,11 @@ func TestCheckDaylightFilter(t *testing.T) {
 				},
 			},
 		},
-		sunCalc:               sc,
-		daylightFilterAll:     false,
-		daylightFilterSpecies: map[string]bool{"strix aluco": true},
+		sunCalc: sc,
 	}
 
+	// The daylight filter is global: any detection during daylight is discarded,
+	// regardless of species.
 	tests := []struct {
 		name           string
 		scientificName string
@@ -313,22 +247,22 @@ func TestCheckDaylightFilter(t *testing.T) {
 		wantDiscard    bool
 	}{
 		{
-			name:           "owl during day is discarded",
+			name:           "detection during day is discarded",
 			scientificName: "Strix aluco",
 			detectionTime:  sunTimes.CivilDawn.Add(3 * time.Hour),
 			wantDiscard:    true,
 		},
 		{
-			name:           "owl at night is kept",
+			name:           "detection at night is kept",
 			scientificName: "Strix aluco",
 			detectionTime:  sunTimes.CivilDawn.Add(-2 * time.Hour),
 			wantDiscard:    false,
 		},
 		{
-			name:           "non-owl during day is kept",
+			name:           "any other detection during day is also discarded",
 			scientificName: "Parus major",
 			detectionTime:  sunTimes.CivilDawn.Add(3 * time.Hour),
-			wantDiscard:    false,
+			wantDiscard:    true,
 		},
 	}
 
@@ -352,111 +286,43 @@ func TestCheckDaylightFilterDisabled(t *testing.T) {
 
 	p := &Processor{
 		Settings: &conf.Settings{
+			VoiceWatch: conf.VoiceWatchConfig{LocationConfigured: true},
 			Realtime: conf.RealtimeSettings{
 				DaylightFilter: conf.DaylightFilterSettings{
 					Enabled: false,
 				},
 			},
 		},
-		sunCalc:               sc,
-		daylightFilterAll:     false,
-		daylightFilterSpecies: map[string]bool{"strix aluco": true},
+		sunCalc: sc,
 	}
 
-	// Even a matching species during daylight should not be discarded when disabled.
+	// A detection during daylight should not be discarded when the filter is disabled.
 	result := p.checkDaylightFilter("Strix aluco", sunTimes.CivilDawn.Add(3*time.Hour))
 	assert.False(t, result, "disabled filter should never discard")
 }
 
-
-func TestInitDaylightFilterUnconfiguredLocation(t *testing.T) {
+func TestCheckDaylightFilterUnconfiguredLocation(t *testing.T) {
 	t.Parallel()
 
+	sc := newTestSunCalc()
+	sunTimes, err := sc.GetSunEventTimes(referenceDate())
+	require.NoError(t, err)
+
+	// Filter enabled but location not configured: the daylight window cannot be
+	// computed, so the global filter stays inactive and discards nothing.
 	p := &Processor{
 		Settings: &conf.Settings{
-			VoiceWatch: conf.VoiceWatchConfig{
-				Latitude:  0,
-				Longitude: 0,
-			},
+			VoiceWatch: conf.VoiceWatchConfig{LocationConfigured: false},
 			Realtime: conf.RealtimeSettings{
-				DaylightFilter: conf.DaylightFilterSettings{
-					Enabled: true,
-					Species: []string{"Strix aluco"},
-				},
+				DaylightFilter: conf.DaylightFilterSettings{Enabled: true},
 			},
 		},
-		sunCalc: newTestSunCalc(),
-		// Pre-populate to verify they get cleared
-		daylightFilterAll:     true,
-		daylightFilterSpecies: map[string]bool{"strix aluco": true},
+		sunCalc: sc,
 	}
 
+	// initDaylightFilter is safe to call and must not panic.
 	p.initDaylightFilter()
 
-	p.daylightFilterMu.RLock()
-	defer p.daylightFilterMu.RUnlock()
-	assert.Nil(t, p.daylightFilterSpecies,
-		"species should be cleared with unconfigured location")
-	assert.False(t, p.daylightFilterAll,
-		"all-species flag should be false with unconfigured location")
+	result := p.checkDaylightFilter("Strix aluco", sunTimes.CivilDawn.Add(3*time.Hour))
+	assert.False(t, result, "filter should stay inactive with unconfigured location")
 }
-
-func TestInitDaylightFilterEmptySpeciesList(t *testing.T) {
-	t.Parallel()
-
-	p := &Processor{
-		Settings: &conf.Settings{
-			VoiceWatch: conf.VoiceWatchConfig{
-				Latitude:           60.1699,
-				Longitude:          24.9384,
-				LocationConfigured: true,
-			},
-			Realtime: conf.RealtimeSettings{
-				DaylightFilter: conf.DaylightFilterSettings{
-					Enabled: true,
-					Species: []string{}, // empty list
-				},
-			},
-		},
-		sunCalc: newTestSunCalc(),
-		// Pre-populate to verify they get cleared
-		daylightFilterAll:     true,
-		daylightFilterSpecies: map[string]bool{"strix aluco": true},
-	}
-
-	p.initDaylightFilter()
-
-	p.daylightFilterMu.RLock()
-	defer p.daylightFilterMu.RUnlock()
-	assert.False(t, p.daylightFilterAll,
-		"empty species list should NOT enable filter-all for an exclusionary filter")
-	assert.Nil(t, p.daylightFilterSpecies,
-		"species should be nil with empty species list")
-}
-
-func TestInitDaylightFilterDisabled(t *testing.T) {
-	t.Parallel()
-
-	p := &Processor{
-		Settings: &conf.Settings{
-			Realtime: conf.RealtimeSettings{
-				DaylightFilter: conf.DaylightFilterSettings{
-					Enabled: false,
-				},
-			},
-		},
-		// Pre-populate to verify they get cleared.
-		daylightFilterSpecies: map[string]bool{"strix aluco": true},
-		daylightFilterAll:     true,
-	}
-
-	p.initDaylightFilter()
-
-	p.daylightFilterMu.RLock()
-	defer p.daylightFilterMu.RUnlock()
-	assert.Nil(t, p.daylightFilterSpecies,
-		"species should be cleared when filter is disabled")
-	assert.False(t, p.daylightFilterAll,
-		"all-species flag should be cleared when filter is disabled")
-}
-

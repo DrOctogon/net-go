@@ -2853,10 +2853,7 @@
         "enable": "Aktivér dagslysfilter",
         "disabled": "Dagslysfilteret er deaktiveret",
         "offsetLabel": "Dagslysvindue-forskydning (timer)",
-        "offsetHelp": "Justér dagslysvinduet. Positive værdier indsnævrer det (mere lempeligt, f.eks. +1 = starter 1 time efter daggry). Negative værdier udvider det (strengere, f.eks. -1 = starter 1 time før daggry).",
-        "speciesListLabel": "Liste over nataktive arter",
-        "addSpeciesLabel": "Tilføj nataktiv art",
-        "addSpeciesHelp": "Søg og tilføj arter, slægter, familier eller ordener der filtreres i dagslys. Standard: Strigiformes (alle ugler). Bemærk: en tom liste deaktiverer dagslysartsfiltrering."
+        "offsetHelp": "Justér dagslysvinduet. Positive værdier indsnævrer det (mere lempeligt, f.eks. +1 = starter 1 time efter daggry). Negative værdier udvider det (strengere, f.eks. -1 = starter 1 time før daggry)."
       },
       "errors": {
         "speciesLoadFailed": "Kunne ikke indlæse artsliste. Prøv venligst igen."
@@ -3387,10 +3384,6 @@
         "enableHelp": "Når aktiveret, sammenflettes gentagne registreringer af konfigurerede arter til en enkelt længere optagelse.",
         "maxDurationLabel": "Maksimal varighed",
         "maxDurationHelp": "Maksimal længde af et udvidet optagelsesklip. Optagelsen vokser efterhånden som registreringer fortsætter, op til denne grænse.",
-        "speciesListLabel": "Arter til udvidet optagelse",
-        "addSpeciesLabel": "Tilføj art",
-        "addSpeciesHelp": "Arter, der udløser udvidet optagelse. Understøtter almindelige navne, videnskabelige navne og slægtsmatching (f.eks. \"Strix\" matcher alle Strix-ugler).",
-        "addSpeciesButton": "Tilføj",
         "disabled": "Udvidet optagelse er deaktiveret"
       },
       "fileSettings": {

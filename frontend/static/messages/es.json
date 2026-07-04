@@ -2853,10 +2853,7 @@
         "enable": "Activar filtro de luz diurna",
         "disabled": "El filtro de luz diurna está desactivado",
         "offsetLabel": "Desplazamiento de ventana de luz diurna (Horas)",
-        "offsetHelp": "Ajustar la ventana de luz diurna. Los valores positivos la reducen (más permisivo, ej. +1 = comienza 1h después del amanecer). Los valores negativos la amplían (más estricto, ej. -1 = comienza 1h antes del amanecer).",
-        "speciesListLabel": "Lista de especies nocturnas",
-        "addSpeciesLabel": "Agregar especie nocturna",
-        "addSpeciesHelp": "Buscar y agregar especies, géneros, familias u órdenes para filtrar durante el día. Predeterminado: Strigiformes (todos los búhos). Nota: una lista vacía no filtra ninguna especie durante el día."
+        "offsetHelp": "Ajustar la ventana de luz diurna. Los valores positivos la reducen (más permisivo, ej. +1 = comienza 1h después del amanecer). Los valores negativos la amplían (más estricto, ej. -1 = comienza 1h antes del amanecer)."
       },
       "errors": {
         "speciesLoadFailed": "Error al cargar la lista de especies. Por favor, inténtalo de nuevo."
@@ -3387,10 +3384,6 @@
         "enableHelp": "Cuando está activada, las detecciones repetidas de las especies configuradas se fusionan en una única grabación más larga.",
         "maxDurationLabel": "Duración máxima",
         "maxDurationHelp": "Longitud máxima de un clip de captura extendida. La grabación crece a medida que continúan las detecciones, hasta este límite.",
-        "speciesListLabel": "Especies de captura extendida",
-        "addSpeciesLabel": "Añadir especie",
-        "addSpeciesHelp": "Especies que activan la captura extendida. Admite nombres comunes, nombres científicos y coincidencia a nivel de género (p. ej., \"Strix\" incluye todos los búhos Strix).",
-        "addSpeciesButton": "Añadir",
         "disabled": "La captura extendida está desactivada"
       },
       "fileSettings": {

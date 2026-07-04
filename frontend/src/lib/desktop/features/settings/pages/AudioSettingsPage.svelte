@@ -55,7 +55,6 @@
   import SettingsNote from '$lib/desktop/features/settings/components/SettingsNote.svelte';
   import EmptyState from '$lib/desktop/features/settings/components/EmptyState.svelte';
   import AudioEqualizerSettings from '$lib/desktop/features/settings/components/AudioEqualizerSettings.svelte';
-  import SpeciesListEditor from '$lib/desktop/components/forms/SpeciesListEditor.svelte';
   import { t } from '$lib/i18n';
   import { getLocale } from '$lib/i18n';
   import { loggers } from '$lib/utils/logger';
@@ -71,8 +70,6 @@
     Info,
   } from '@lucide/svelte';
   import { api } from '$lib/utils/api';
-  import { normalizeForLookup } from '$lib/utils/speciesNames';
-  import { localizeSpeciesName } from '$lib/utils/speciesDisplay';
 
   const logger = loggers.audio;
 
@@ -332,102 +329,12 @@
   const EXTENDED_CAPTURE_MAX_DURATION = 1200;
   const EXTENDED_CAPTURE_DURATION_STEP = 30;
 
-  // Species list API state for extended capture (reuses ApiState<T>)
-  interface SpeciesListResponse {
-    species?: Array<{ label: string; scientificName?: string; commonName?: string }>;
-    genera?: string[];
-    families?: Array<{ name: string; commonName: string }>;
-    orders?: string[];
-  }
-
-  // Suffix appended to genus entries in the predictions list for display
-  const GENUS_SUFFIX = ' (Genus)';
-  const FAMILY_SUFFIX = ' (Family)';
-  const ORDER_SUFFIX = ' (Order)';
-
-  let speciesListState = $state<ApiState<string[]>>({
-    loading: true,
-    error: null,
-    data: [],
+  let extendedCaptureSettingsLocal = $derived({
+    enabled: false,
+    maxDuration: 120,
+    captureBufferSeconds: 0,
+    ...($extendedCaptureSettings ?? {}),
   });
-
-  // Normalized species value -> scientific name (species entries only; taxonomy
-  // group rows have no scientific name and display verbatim).
-  let speciesScientificMap = $state(new Map<string, string>());
-
-  // Resolve a stored extended-capture value to its visitor-locale label. Taxonomy
-  // group rows (genus/family/order) fall through to their verbatim value.
-  function localizeSpeciesLabel(value: string): string {
-    return localizeSpeciesName(speciesScientificMap.get(normalizeForLookup(value)), value);
-  }
-
-  $effect(() => {
-    loadSpeciesList();
-  });
-
-  async function loadSpeciesList() {
-    speciesListState.loading = true;
-    speciesListState.error = null;
-
-    try {
-      const data = await api.get<SpeciesListResponse>('/api/v2/range/species/list');
-      if (data?.species && Array.isArray(data.species)) {
-        // Species common names, building a value -> scientific name map for display.
-        const sciMap = new Map<string, string>();
-        const speciesNames = data.species.map(sp => {
-          const value = sp.commonName ?? sp.label.replace('_', ' - ');
-          if (sp.scientificName) {
-            sciMap.set(normalizeForLookup(value), sp.scientificName);
-          }
-          return value;
-        });
-        speciesScientificMap = sciMap;
-
-        // Taxonomy group entries from server (with display suffixes)
-        const generaEntries = (data.genera ?? []).map(g => `${g}${GENUS_SUFFIX}`);
-        const familyEntries = (data.families ?? []).map(f =>
-          f.commonName ? `${f.name} — ${f.commonName}${FAMILY_SUFFIX}` : `${f.name}${FAMILY_SUFFIX}`
-        );
-        const orderEntries = (data.orders ?? []).map(o => `${o}${ORDER_SUFFIX}`);
-
-        speciesListState.data = [
-          ...orderEntries,
-          ...familyEntries,
-          ...generaEntries,
-          ...speciesNames,
-        ];
-      } else {
-        speciesListState.data = [];
-        speciesScientificMap = new Map();
-      }
-    } catch (error) {
-      logger.warn('Failed to load species list for extended capture', error, {
-        component: 'AudioSettingsPage',
-        action: 'loadSpeciesList',
-      });
-      speciesListState.error = t('settings.filters.errors.speciesLoadFailed');
-      speciesListState.data = [];
-      speciesScientificMap = new Map();
-    } finally {
-      speciesListState.loading = false;
-    }
-  }
-
-  let extendedCaptureSettingsLocal = $derived(
-    (() => {
-      const defaults = {
-        enabled: false,
-        maxDuration: 120,
-        captureBufferSeconds: 0,
-        species: [] as string[],
-      };
-      const merged = { ...defaults, ...($extendedCaptureSettings ?? {}) };
-      return {
-        ...merged,
-        species: Array.isArray(merged.species) ? merged.species : [],
-      };
-    })()
-  );
 
   // Check if ffmpeg is available
   let ffmpegAvailable = $state(true); // Assume true for now
@@ -576,29 +483,6 @@
     settingsActions.updateSection('realtime', {
       ...$realtimeSettings,
       extendedCapture: { ...extendedCaptureSettingsLocal, captureBufferSeconds: 0, maxDuration },
-    });
-  }
-
-  function handleExtendedCaptureSpeciesChange(updatedSpecies: string[]) {
-    // Strip taxonomy suffixes and extract scientific names before storing
-    const cleaned = updatedSpecies.map(s => {
-      if (s.endsWith(GENUS_SUFFIX)) return s.slice(0, -GENUS_SUFFIX.length);
-      if (s.endsWith(FAMILY_SUFFIX)) {
-        // Extract scientific name from "Strigidae — Owls (Family)" or "Strigidae (Family)"
-        const withoutSuffix = s.slice(0, -FAMILY_SUFFIX.length);
-        const dashIdx = withoutSuffix.indexOf(' — ');
-        return dashIdx >= 0 ? withoutSuffix.slice(0, dashIdx) : withoutSuffix;
-      }
-      if (s.endsWith(ORDER_SUFFIX)) return s.slice(0, -ORDER_SUFFIX.length);
-      return s;
-    });
-    settingsActions.updateSection('realtime', {
-      ...$realtimeSettings,
-      extendedCapture: {
-        ...extendedCaptureSettingsLocal,
-        captureBufferSeconds: 0,
-        species: cleaned,
-      },
     });
   }
 
@@ -1381,22 +1265,6 @@
                 helpText={t('settings.audio.extendedCapture.maxDurationHelp')}
               />
             </div>
-
-            <!-- Species List -->
-            <SpeciesListEditor
-              species={extendedCaptureSettingsLocal.species}
-              disabled={!extendedCaptureSettingsLocal.enabled || store.isLoading || store.isSaving}
-              predictions={speciesListState.data}
-              localizeLabel={localizeSpeciesLabel}
-              predictionsLoading={speciesListState.loading}
-              listLabel={t('settings.audio.extendedCapture.speciesListLabel')}
-              addLabel={t('settings.audio.extendedCapture.addSpeciesLabel')}
-              addPlaceholder={t('settings.filters.typeSpeciesName')}
-              addHelpText={t('settings.audio.extendedCapture.addSpeciesHelp')}
-              addButtonText={t('settings.audio.extendedCapture.addSpeciesButton')}
-              hasChanges={false}
-              onSpeciesChange={handleExtendedCaptureSpeciesChange}
-            />
           </div>
         </fieldset>
       </div>

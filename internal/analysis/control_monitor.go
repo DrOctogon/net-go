@@ -838,14 +838,14 @@ func (cm *ControlMonitor) handleReconfigurePushNotifications() {
 	emitHotReload("push_notifications")
 }
 
-// handleRebuildExtendedCapture rebuilds the extended capture species filter
-// when ExtendedCapture settings (Enabled, Species, MaxDuration) change at runtime.
+// handleRebuildExtendedCapture re-applies the extended capture state
+// when ExtendedCapture settings (Enabled, MaxDuration) change at runtime.
 func (cm *ControlMonitor) handleRebuildExtendedCapture() {
-	GetLogger().Info("Rebuilding extended capture species filter")
+	GetLogger().Info("Rebuilding extended capture state")
 
 	if cm.proc == nil {
 		GetLogger().Error("Processor not available for extended capture rebuild")
-		cm.notifyError("Failed to rebuild extended capture filter", errors.Newf("processor not available").
+		cm.notifyError("Failed to rebuild extended capture", errors.Newf("processor not available").
 			Component("analysis").
 			Category(errors.CategoryConfiguration).
 			Context("operation", "rebuild_extended_capture").
@@ -855,8 +855,8 @@ func (cm *ControlMonitor) handleRebuildExtendedCapture() {
 
 	cm.proc.RebuildExtendedCaptureFilter()
 
-	GetLogger().Info("Extended capture species filter rebuilt successfully")
-	cm.notifySuccess("Extended capture species filter rebuilt successfully")
+	GetLogger().Info("Extended capture state rebuilt successfully")
+	cm.notifySuccess("Extended capture rebuilt successfully")
 	emitHotReload("extended_capture")
 }
 

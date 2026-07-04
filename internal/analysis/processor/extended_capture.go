@@ -17,75 +17,33 @@ const (
 	extendedCaptureLongWait        = 60 * time.Second
 )
 
-// RebuildExtendedCaptureFilter re-resolves the extended capture species filter
-// from the current settings. This is called by the control monitor when
-// ExtendedCapture settings (Enabled, Species, MaxDuration) change at runtime.
+// RebuildExtendedCaptureFilter re-applies the extended capture state from the
+// current settings. This is called by the control monitor when ExtendedCapture
+// settings (Enabled, MaxDuration) change at runtime.
 func (p *Processor) RebuildExtendedCaptureFilter() {
 	p.initExtendedCapture()
 }
 
-// initExtendedCapture resolves the extended capture species filter at startup.
-// Called from Processor.New(). Safe to re-call on settings refresh.
+// initExtendedCapture logs the extended capture state at startup. Extended
+// capture is global: when enabled it applies to every detection, so there is
+// no species list to resolve. Called from Processor.New(). Safe to re-call on
+// settings refresh.
 func (p *Processor) initExtendedCapture() {
 	settings := p.currentSettings()
 
 	if !settings.Realtime.ExtendedCapture.Enabled {
-		p.extendedCaptureMu.Lock()
-		p.extendedCaptureAll = false
-		p.extendedCaptureSpecies = nil
-		p.extendedCaptureMu.Unlock()
 		return
 	}
 
-	// Resolve config entries against the full multi-model label union (primary plus
-	// secondary models such as bats/Perch) so secondary-model species match. Fall
-	// back to the primary labels if the orchestrator is unavailable.
-	var labels []string
-	if p.Bn != nil {
-		labels = p.Bn.AllLabels()
-	}
-	if len(labels) == 0 {
-		labels = settings.VoiceWatch.Labels
-	}
-	locale := settings.VoiceWatch.Locale
-
-	isAll, resolved := resolveSpeciesFilter(
-		settings.Realtime.ExtendedCapture.Species, labels, locale, "extended_capture",
-	)
-
-	p.extendedCaptureMu.Lock()
-	p.extendedCaptureAll = isAll
-	p.extendedCaptureSpecies = resolved
-	p.extendedCaptureMu.Unlock()
-
-	if isAll {
-		GetLogger().Info("Extended capture enabled for all species",
-			logger.Int("max_duration_seconds", settings.Realtime.ExtendedCapture.MaxDuration),
-			logger.String("operation", "extended_capture_init"))
-	} else {
-		GetLogger().Info("Extended capture enabled for filtered species",
-			logger.Int("species_count", len(resolved)),
-			logger.Int("max_duration_seconds", settings.Realtime.ExtendedCapture.MaxDuration),
-			logger.String("operation", "extended_capture_init"))
-	}
+	GetLogger().Info("Extended capture enabled for all detections",
+		logger.Int("max_duration_seconds", settings.Realtime.ExtendedCapture.MaxDuration),
+		logger.String("operation", "extended_capture_init"))
 }
 
-// isExtendedCaptureSpecies checks if a species qualifies for extended capture.
-func (p *Processor) isExtendedCaptureSpecies(scientificName string) bool {
-	settings := p.currentSettings()
-
-	if !settings.Realtime.ExtendedCapture.Enabled {
-		return false
-	}
-
-	p.extendedCaptureMu.RLock()
-	defer p.extendedCaptureMu.RUnlock()
-
-	if p.extendedCaptureAll {
-		return true
-	}
-
-	return p.extendedCaptureSpecies[strings.ToLower(scientificName)]
+// isExtendedCaptureEnabled reports whether extended capture applies. Extended
+// capture is global: every detection qualifies when the feature is enabled.
+func (p *Processor) isExtendedCaptureEnabled() bool {
+	return p.currentSettings().Realtime.ExtendedCapture.Enabled
 }
 
 // resolveSpeciesFilter resolves the config species list into a set of scientific names.

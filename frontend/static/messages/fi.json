@@ -2853,10 +2853,7 @@
         "enable": "Ota päivänvalosuodatin käyttöön",
         "disabled": "Päivänvalosuodatin on pois käytöstä",
         "offsetLabel": "Päivänvaloikkunan siirtymä (Tunnit)",
-        "offsetHelp": "Säädä päivänvaloikkunaa. Positiiviset arvot pienentävät sitä (sallivampi, esim. +1 = alkaa 1h aamunkoiton jälkeen). Negatiiviset arvot laajentavat sitä (tiukempi, esim. -1 = alkaa 1h ennen aamunkoittoa).",
-        "speciesListLabel": "Yöaktiivisten lajien luettelo",
-        "addSpeciesLabel": "Lisää yöaktiivinen laji",
-        "addSpeciesHelp": "Hae ja lisää lajeja, sukuja, heimoja tai lahkoja suodatettavaksi päivänvalossa. Oletus: Strigiformes (kaikki pöllöt). Huom: tyhjä lista ei suodata mitään lajeja päivänvalossa."
+        "offsetHelp": "Säädä päivänvaloikkunaa. Positiiviset arvot pienentävät sitä (sallivampi, esim. +1 = alkaa 1h aamunkoiton jälkeen). Negatiiviset arvot laajentavat sitä (tiukempi, esim. -1 = alkaa 1h ennen aamunkoittoa)."
       },
       "errors": {
         "speciesLoadFailed": "Lajiluettelon lataus epäonnistui. Yritä uudelleen."
@@ -3387,10 +3384,6 @@
         "enableHelp": "Kun käytössä, määritettyjen lajien toistuvat havainnot yhdistetään yhdeksi pidemmäksi tallennukseksi.",
         "maxDurationLabel": "Enimmäiskesto",
         "maxDurationHelp": "Laajennetun tallennuksen leikkeen enimmäispituus. Tallennus kasvaa havaintojen jatkuessa tähän rajaan asti.",
-        "speciesListLabel": "Laajennetun tallennuksen lajit",
-        "addSpeciesLabel": "Lisää laji",
-        "addSpeciesHelp": "Lajit, jotka käynnistävät laajennetun tallennuksen. Tukee yleisnimiä, tieteellisiä nimiä ja sukutason vastaavuutta (esim. \"Strix\" kattaa kaikki Strix-pöllöt).",
-        "addSpeciesButton": "Lisää",
         "disabled": "Laajennettu tallennus on pois käytöstä"
       },
       "fileSettings": {

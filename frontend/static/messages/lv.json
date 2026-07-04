@@ -2853,10 +2853,7 @@
         "enable": "Iespējot dienasgaismas filtru",
         "disabled": "Dienasgaismas filtrs ir atspējots",
         "offsetLabel": "Dienasgaismas loga nobīde (stundas)",
-        "offsetHelp": "Pielāgot dienasgaismas logu. Pozitīvas vērtības to sašaurina (pielaidīgāk, piem., +1 = sākas 1 st. pēc rītausmas). Negatīvas vērtības to paplašina (stingrāk, piem., -1 = sākas 1 st. pirms rītausmas).",
-        "speciesListLabel": "Nakts sugu saraksts",
-        "addSpeciesLabel": "Pievienot nakts sugas",
-        "addSpeciesHelp": "Meklēt un pievienot sugas, ģintis, dzimtas vai kārtas filtrēšanai dienasgaismā. Noklusējums: Strigiformes (visas pūces). Piezīme: tukšs saraksts atspējo dienasgaismas sugu filtrēšanu."
+        "offsetHelp": "Pielāgot dienasgaismas logu. Pozitīvas vērtības to sašaurina (pielaidīgāk, piem., +1 = sākas 1 st. pēc rītausmas). Negatīvas vērtības to paplašina (stingrāk, piem., -1 = sākas 1 st. pirms rītausmas)."
       },
       "errors": {
         "speciesLoadFailed": "Neizdevās ielādēt sugu sarakstu. Lūdzu, mēģiniet vēlreiz."
@@ -3387,10 +3384,6 @@
         "enableHelp": "Kad iespējots, atkārtotas konfigurēto sugu noteikšanas tiek apvienotas vienā garākā ierakstā.",
         "maxDurationLabel": "Maksimālais ilgums",
         "maxDurationHelp": "Maksimālais paplašinātās uztveršanas klipa garums. Ieraksts pieaug, turpinoties noteikšanām, līdz šim limitam.",
-        "speciesListLabel": "Paplašinātās uztveršanas sugas",
-        "addSpeciesLabel": "Pievienot sugu",
-        "addSpeciesHelp": "Sugas, kas aktivizē paplašināto uztveršanu. Atbalsta parastus nosaukumus, zinātniskos nosaukumus un ģints līmeņa atbilstību (piem., \"Strix\" atbilst visām Strix pūcēm).",
-        "addSpeciesButton": "Pievienot",
         "disabled": "Paplašinātā uztveršana ir atspējota"
       },
       "fileSettings": {

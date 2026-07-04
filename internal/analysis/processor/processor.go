@@ -89,7 +89,7 @@ type Processor struct {
 	startOnce            sync.Once          // Ensures Start() is called only once
 	// SSE related fields
 	SSEBroadcaster      func(note *datastore.Note) error // Function to broadcast detection via SSE
-	sseBroadcasterMutex sync.RWMutex                    // Mutex to protect SSE broadcaster access
+	sseBroadcasterMutex sync.RWMutex                     // Mutex to protect SSE broadcaster access
 
 	// Pending detection broadcast fields
 	PendingBroadcaster      func(snapshot []SSEPendingDetection) // Function to broadcast pending detections via SSE
@@ -135,16 +135,10 @@ type Processor struct {
 	lastDetectionCache map[string]*recentDetectionList
 	lastDetectionMu    sync.RWMutex
 
-	// Extended capture fields
-	extendedCaptureSpecies map[string]bool // Resolved set of scientific names eligible for extended capture
-	extendedCaptureAll     bool            // True when all species qualify (empty species list)
-	extendedCaptureMu      sync.RWMutex    // Protects extendedCaptureSpecies and extendedCaptureAll
-
-	// Daylight filter fields
-	daylightFilterSpecies map[string]bool  // Resolved set of scientific names to filter during daylight
-	daylightFilterAll     bool             // Currently unused; empty species list resolves to filter-nothing
-	daylightFilterMu      sync.RWMutex     // Protects daylightFilterSpecies and daylightFilterAll
-	sunCalc               *suncalc.SunCalc // Injected sun calculator for daylight determination
+	// Daylight filter fields. The daylight filter and extended capture are both
+	// global features (they apply to every detection when enabled), so no
+	// per-species resolution state is kept here.
+	sunCalc *suncalc.SunCalc // Injected sun calculator for daylight determination
 
 	// invalidCommandPaths records ExecuteCommand action command paths that
 	// have recently failed validation (missing, unreadable, non-executable,
@@ -432,11 +426,11 @@ func New(settings *conf.Settings, ds datastore.Interface, bn *classifier.Orchest
 	}
 
 	p := &Processor{
-		Settings:       settings,
-		Ds:             ds,
-		Repo:           datastore.NewDetectionRepository(ds, nil), // Bridge to new domain model
-		Bn:           bn,
-		log:          procLog,
+		Settings: settings,
+		Ds:       ds,
+		Repo:     datastore.NewDetectionRepository(ds, nil), // Bridge to new domain model
+		Bn:       bn,
+		log:      procLog,
 		EventTracker: NewEventTrackerWithConfig(
 			time.Duration(settings.Realtime.Interval)*time.Second,
 			settings.Realtime.Species.Config,
@@ -511,7 +505,6 @@ func New(settings *conf.Settings, ds datastore.Interface, bn *classifier.Orchest
 	// NOTE: Background goroutines (detection processor, worker pool, flusher)
 	// are NOT started here. Call Start() after wiring BufferMgr and Registry
 	// to avoid a race where detections arrive before the buffer manager is set.
-
 
 	// Initialize MQTT client if enabled in settings
 	p.initializeMQTT(settings)
@@ -753,8 +746,8 @@ func (p *Processor) processDetections(item classifier.Results) {
 			}
 		}
 
-		// Apply extended capture if species qualifies
-		if p.isExtendedCaptureSpecies(det.Result.Species.ScientificName) {
+		// Apply extended capture to every detection when the feature is enabled
+		if p.isExtendedCaptureEnabled() {
 			p.applyExtendedCapture(mapKey, now, detectionWindow)
 		}
 
@@ -1851,13 +1844,13 @@ func (p *Processor) getDefaultActions(det *Detections) []Action {
 			mqttRetryConfig := retryConfigFromSettings(settings.Realtime.MQTT.RetrySettings)
 
 			mqttAction = &MqttAction{
-				Settings:       settings,
-				MqttClient:     mqttClient,
-				EventTracker:   p.GetEventTracker(),
-				DetectionCtx:   detectionCtx, // Share context from DatabaseAction
-				Result:      det.Result, // Domain model (single source of truth)
-				RetryConfig: mqttRetryConfig,
-				CorrelationID:  det.CorrelationID,
+				Settings:      settings,
+				MqttClient:    mqttClient,
+				EventTracker:  p.GetEventTracker(),
+				DetectionCtx:  detectionCtx, // Share context from DatabaseAction
+				Result:        det.Result,   // Domain model (single source of truth)
+				RetryConfig:   mqttRetryConfig,
+				CorrelationID: det.CorrelationID,
 			}
 		}
 	}
@@ -2075,7 +2068,6 @@ func (p *Processor) readCaptureSegment(sourceID string, startTime time.Time, dur
 	endTime := startTime.Add(time.Duration(duration) * time.Second)
 	return cb.ReadSegment(startTime, endTime)
 }
-
 
 // SetEventTracker safely replaces the current EventTracker
 func (p *Processor) SetEventTracker(tracker *EventTracker) {

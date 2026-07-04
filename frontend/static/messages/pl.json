@@ -2853,10 +2853,7 @@
         "enable": "Włącz filtr światła dziennego",
         "disabled": "Filtr światła dziennego jest wyłączony",
         "offsetLabel": "Przesunięcie okna światła dziennego (Godziny)",
-        "offsetHelp": "Dostosuj okno światła dziennego. Wartości dodatnie zmniejszają je (bardziej liberalne, np. +1 = zaczyna się 1h po świcie). Wartości ujemne rozszerzają je (bardziej rygorystyczne, np. -1 = zaczyna się 1h przed świtem).",
-        "speciesListLabel": "Lista gatunków nocnych",
-        "addSpeciesLabel": "Dodaj gatunek nocny",
-        "addSpeciesHelp": "Wyszukaj i dodaj gatunki, rodzaje, rodziny lub rzędy do filtrowania w ciągu dnia. Domyślnie: Strigiformes (wszystkie sowy). Uwaga: pusta lista nie filtruje żadnych gatunków w ciągu dnia."
+        "offsetHelp": "Dostosuj okno światła dziennego. Wartości dodatnie zmniejszają je (bardziej liberalne, np. +1 = zaczyna się 1h po świcie). Wartości ujemne rozszerzają je (bardziej rygorystyczne, np. -1 = zaczyna się 1h przed świtem)."
       },
       "errors": {
         "speciesLoadFailed": "Nie udało się załadować listy gatunków. Spróbuj ponownie."
@@ -3387,10 +3384,6 @@
         "enableHelp": "Po włączeniu powtarzające się wykrycia skonfigurowanych gatunków są łączone w jedno dłuższe nagranie.",
         "maxDurationLabel": "Maksymalny czas trwania",
         "maxDurationHelp": "Maksymalna długość klipu rozszerzonego nagrywania. Nagranie rośnie wraz z kolejnymi wykryciami, aż do tego limitu.",
-        "speciesListLabel": "Gatunki rozszerzonego nagrywania",
-        "addSpeciesLabel": "Dodaj gatunek",
-        "addSpeciesHelp": "Gatunki wyzwalające rozszerzone nagrywanie. Obsługuje nazwy pospolite, nazwy naukowe i dopasowanie na poziomie rodzaju (np. „Strix” obejmuje wszystkie sowy Strix).",
-        "addSpeciesButton": "Dodaj",
         "disabled": "Rozszerzone nagrywanie jest wyłączone"
       },
       "fileSettings": {

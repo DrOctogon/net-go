@@ -211,7 +211,6 @@ var hotReloadRegistry = map[string]hotReloadEntry{
 	"Realtime.ExtendedCapture.Enabled":              {categories: []hotReloadCategory{hotReloadFresh}, action: "rebuild_extended_capture"},
 	"Realtime.ExtendedCapture.MaxDuration":          {categories: []hotReloadCategory{hotReloadFresh}, action: "rebuild_extended_capture"},
 	"Realtime.ExtendedCapture.CaptureBufferSeconds": {categories: []hotReloadCategory{hotReloadNotify}},
-	"Realtime.ExtendedCapture.Species":              {categories: []hotReloadCategory{hotReloadFresh}, action: "rebuild_extended_capture"},
 
 	// --- WebServer ---
 	"WebServer.Debug":          {categories: []hotReloadCategory{hotReloadFresh}},
