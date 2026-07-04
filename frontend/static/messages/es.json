@@ -661,7 +661,6 @@
         "species": "Especie",
         "weather": "Clima",
         "confidence": "Confianza",
-        "thumbnail": "Miniatura",
         "status": "Estado",
         "recording": "Grabación",
         "actions": "Acciones"
@@ -830,7 +829,6 @@
       "source": "Fuente",
       "species": "Especie",
       "confidence": "Confianza",
-      "thumbnail": "Miniatura",
       "status": "Estado",
       "recording": "Grabación",
       "actions": "Acciones"
@@ -986,9 +984,7 @@
       "loading": "Cargando detalles de detección...",
       "loaded": "Detalles de detección cargados para {species}",
       "error": "Error al cargar la detección: {error}",
-      "loadingResults": "Cargando {count} resultados...",
-      "thumbnailLoading": "Cargando miniatura de {species}...",
-      "thumbnailLoaded": "Miniatura de {species} cargada"
+      "loadingResults": "Cargando {count} resultados..."
     },
     "errors": {
       "notFound": "Detección no encontrada. Es posible que haya sido eliminada o el ID es incorrecto.",

@@ -661,7 +661,6 @@
         "species": "Soort",
         "weather": "Weer",
         "confidence": "Betrouwbaarheid",
-        "thumbnail": "Afbeelding",
         "status": "Status",
         "recording": "Geluid opname",
         "actions": "Akties"
@@ -830,7 +829,6 @@
       "source": "Bron",
       "species": "Soort",
       "confidence": "Betrouwbaarheid",
-      "thumbnail": "afbeelding",
       "status": "Status",
       "recording": "Geluid opname",
       "actions": "Akties"
@@ -986,9 +984,7 @@
       "loading": "Herkenningsdetails laden...",
       "loaded": "Herkenningsdetails geladen voor {species}",
       "error": "Fout bij het laden van herkenning: {error}",
-      "loadingResults": "{count} resultaten laden...",
-      "thumbnailLoading": "{species} miniatuur laden...",
-      "thumbnailLoaded": "Miniatuur van {species} geladen"
+      "loadingResults": "{count} resultaten laden..."
     },
     "errors": {
       "notFound": "Detectie niet gevonden. Deze is mogelijk verwijderd of de ID is onjuist.",

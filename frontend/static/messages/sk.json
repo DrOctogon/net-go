@@ -661,7 +661,6 @@
         "species": "Druh",
         "weather": "Počasie",
         "confidence": "Istota",
-        "thumbnail": "Náhľad",
         "status": "Stav",
         "recording": "Nahrávka",
         "actions": "Akcie"
@@ -830,7 +829,6 @@
       "source": "Zdroj",
       "species": "Druh",
       "confidence": "Istota",
-      "thumbnail": "Náhľad",
       "status": "Stav",
       "recording": "Nahrávka",
       "actions": "Akcie"
@@ -986,9 +984,7 @@
       "loading": "Načítavajú sa podrobnosti detekcie...",
       "loaded": "Podrobnosti detekcie načítané pre {species}",
       "error": "Chyba pri načítaní detekcie: {error}",
-      "loadingResults": "Načítava sa {count} výsledkov...",
-      "thumbnailLoading": "Načítava sa náhľad {species}...",
-      "thumbnailLoaded": "Náhľad {species} načítaný"
+      "loadingResults": "Načítava sa {count} výsledkov..."
     },
     "errors": {
       "notFound": "Detekcia sa nenašla. Možno bola odstránená alebo je ID nesprávne.",

@@ -46,7 +46,6 @@ type ExpectedSpeciesItem struct {
 	CommonName     string `json:"common_name"`
 	YearsSeen      int    `json:"years_seen"`
 	LastSeenDate   string `json:"last_seen_date"`
-	ThumbnailURL   string `json:"thumbnail_url"`
 }
 
 // ExpectedTodayRegionalResponse is the response for GET /api/v2/insights/expected-today/regional.
@@ -78,7 +77,6 @@ type PhantomSpeciesItem struct {
 	DetectionCount int64   `json:"detection_count"`
 	AvgConfidence  float64 `json:"avg_confidence"`
 	MaxConfidence  float64 `json:"max_confidence"`
-	ThumbnailURL   string  `json:"thumbnail_url"`
 }
 
 // DawnChorusResponse is the response for GET /api/v2/insights/dawn-chorus.
@@ -96,7 +94,6 @@ type DawnChorusItem struct {
 	AvgFirstDetection string `json:"avg_first_detection"` // HH:MM
 	EarliestDetection string `json:"earliest_detection"`  // HH:MM
 	DaysObserved      int    `json:"days_observed"`
-	ThumbnailURL      string `json:"thumbnail_url"`
 }
 
 // MigrationResponse is the response for GET /api/v2/insights/migration.
@@ -113,7 +110,6 @@ type NewArrivalItem struct {
 	CommonName     string `json:"common_name"`
 	FirstDetected  string `json:"first_detected"` // YYYY-MM-DD
 	DetectionCount int64  `json:"detection_count"`
-	ThumbnailURL   string `json:"thumbnail_url"`
 }
 
 // GoneQuietItem is one species in the gone quiet list.
@@ -123,7 +119,6 @@ type GoneQuietItem struct {
 	LastDetected    string `json:"last_detected"` // YYYY-MM-DD
 	DaysSince       int    `json:"days_since"`
 	TotalDetections int64  `json:"total_detections"`
-	ThumbnailURL    string `json:"thumbnail_url"`
 }
 
 // DashboardKPIsResponse is the response for GET /api/v2/dashboard/kpis.
@@ -264,12 +259,6 @@ func resolveCommonName(nameMap map[string]string, scientificName string) string 
 		return cn
 	}
 	return scientificName
-}
-
-// buildThumbnailURL returns an empty string.
-// Image providers have been removed as part of the human-voice pivot.
-func buildThumbnailURL(_ string) string {
-	return ""
 }
 
 // analyticsTZOffset returns the server local timezone's UTC offset (seconds) in effect at ref.
@@ -454,7 +443,6 @@ func (c *Controller) getExpectedTodayImpl(ctx echo.Context) error {
 			CommonName:     resolveCommonName(nameMap, r.ScientificName),
 			YearsSeen:      r.YearsSeen,
 			LastSeenDate:   r.LastSeenDate,
-			ThumbnailURL:   buildThumbnailURL(r.ScientificName),
 		})
 	}
 
@@ -512,7 +500,6 @@ func (c *Controller) getPhantomSpeciesImpl(ctx echo.Context) error {
 			DetectionCount: r.DetectionCount,
 			AvgConfidence:  r.AvgConfidence,
 			MaxConfidence:  r.MaxConfidence,
-			ThumbnailURL:   buildThumbnailURL(r.ScientificName),
 		})
 	}
 
@@ -587,7 +574,6 @@ func (c *Controller) getDawnChorusImpl(ctx echo.Context) error {
 			AvgFirstDetection: secondsToTimeString(avgSeconds),
 			EarliestDetection: secondsToTimeString(sd.earliestSeconds),
 			DaysObserved:      sd.daysObserved,
-			ThumbnailURL:      buildThumbnailURL(sd.scientificName),
 		})
 	}
 
@@ -637,7 +623,6 @@ func (c *Controller) getMigrationImpl(ctx echo.Context) error {
 			CommonName:     resolveCommonName(nameMap, a.ScientificName),
 			FirstDetected:  time.Unix(a.FirstDetected, 0).In(now.Location()).Format(time.DateOnly),
 			DetectionCount: a.DetectionCount,
-			ThumbnailURL:   buildThumbnailURL(a.ScientificName),
 		})
 	}
 
@@ -653,7 +638,6 @@ func (c *Controller) getMigrationImpl(ctx echo.Context) error {
 			LastDetected:    lastDetectedLocal.Format(time.DateOnly),
 			DaysSince:       daysSince,
 			TotalDetections: q.TotalDetections,
-			ThumbnailURL:    buildThumbnailURL(q.ScientificName),
 		})
 	}
 

@@ -661,7 +661,6 @@
         "species": "Art",
         "weather": "Vejr",
         "confidence": "Sikkerhed",
-        "thumbnail": "Miniaturebillede",
         "status": "Status",
         "recording": "Optagelse",
         "actions": "Handlinger"
@@ -830,7 +829,6 @@
       "source": "Kilde",
       "species": "Art",
       "confidence": "Sikkerhed",
-      "thumbnail": "Miniaturebillede",
       "status": "Status",
       "recording": "Optagelse",
       "actions": "Handlinger"
@@ -986,9 +984,7 @@
       "loading": "Indlæser registreringsdetaljer...",
       "loaded": "Registreringsdetaljer indlæst for {species}",
       "error": "Fejl ved indlæsning af registrering: {error}",
-      "loadingResults": "Indlæser {count} resultater...",
-      "thumbnailLoading": "Indlæser {species} miniaturebillede...",
-      "thumbnailLoaded": "Miniaturebillede af {species} indlæst"
+      "loadingResults": "Indlæser {count} resultater..."
     },
     "errors": {
       "notFound": "Registrering ikke fundet. Den kan være blevet slettet, eller ID'et er forkert.",

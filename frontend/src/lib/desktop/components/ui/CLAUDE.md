@@ -22,8 +22,7 @@ The README.md file contains comprehensive documentation of all available UI comp
 ### 2. Import Paths
 
 ```svelte
-// UI components import ComponentName from '$lib/desktop/components/ui/ComponentName.svelte'; //
-Utilities import {handleBirdImageError} from '$lib/desktop/components/ui/image-utils.js';
+// UI components import ComponentName from '$lib/desktop/components/ui/ComponentName.svelte';
 ```
 
 ### 3. Common Component Categories Available

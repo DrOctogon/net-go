@@ -661,7 +661,6 @@
         "species": "Laji",
         "weather": "Sää",
         "confidence": "Luottamus",
-        "thumbnail": "Pienoiskuva",
         "status": "Tila",
         "recording": "Tallenne",
         "actions": "Toiminnot"
@@ -830,7 +829,6 @@
       "source": "Lähde",
       "species": "Laji",
       "confidence": "Luottamus",
-      "thumbnail": "Pienoiskuva",
       "status": "Tila",
       "recording": "Tallenne",
       "actions": "Toiminnot"
@@ -986,9 +984,7 @@
       "loading": "Ladataan havainnon tietoja...",
       "loaded": "Havainnon tiedot ladattu: {species}",
       "error": "Virhe havainnon latauksessa: {error}",
-      "loadingResults": "Ladataan {count} tulosta...",
-      "thumbnailLoading": "Ladataan {species} pikkukuvaa...",
-      "thumbnailLoaded": "Pikkukuva {species} ladattu"
+      "loadingResults": "Ladataan {count} tulosta..."
     },
     "errors": {
       "notFound": "Havaintoa ei löytynyt. Se on ehkä poistettu tai tunniste on virheellinen.",

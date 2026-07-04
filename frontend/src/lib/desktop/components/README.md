@@ -139,7 +139,6 @@ This folder contains **shared components** used across the application. Feature-
 ## Utility Files
 
 - `hls-config.ts` - HLS video streaming configuration
-- `image-utils.ts` - Image utility functions
 
 ## Test Files
 
@@ -157,7 +156,6 @@ The following components are located in their feature directories:
 - `PlayOverlay.svelte` - Audio play button overlay for detection cards
 - `ConfidenceBadge.svelte` - Confidence level badge display
 - `WeatherBadge.svelte` - Weather condition badge display
-- `SpeciesInfoBar.svelte` - Species information bar with thumbnail
 
 ### Detections (`features/detections/components/`)
 

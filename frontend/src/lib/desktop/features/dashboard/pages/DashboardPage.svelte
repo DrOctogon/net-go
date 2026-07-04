@@ -1106,7 +1106,6 @@ Performance Optimizations:
         high_confidence: detection.confidence >= 0.8,
         first_heard: detection.time,
         latest_heard: detection.time,
-        thumbnail_url: '', // Empty string; DailySummaryCard handles fallback image display
         isNew: true,
       };
       // Set the hourly count for the specific hour safely using splice

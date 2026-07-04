@@ -661,7 +661,6 @@
         "species": "Art",
         "weather": "Wetter",
         "confidence": "Konfidenz",
-        "thumbnail": "Vorschau",
         "status": "Status",
         "recording": "Aufnahme",
         "actions": "Aktionen"
@@ -830,7 +829,6 @@
       "source": "Quelle",
       "species": "Art",
       "confidence": "Konfidenz",
-      "thumbnail": "Vorschau",
       "status": "Status",
       "recording": "Aufnahme",
       "actions": "Aktionen"
@@ -986,9 +984,7 @@
       "loading": "Erkennungsdetails werden geladen...",
       "loaded": "Erkennungsdetails für {species} geladen",
       "error": "Fehler beim Laden der Erkennung: {error}",
-      "loadingResults": "Lade {count} Ergebnisse...",
-      "thumbnailLoading": "Lade Vorschaubild von {species}...",
-      "thumbnailLoaded": "Vorschaubild von {species} geladen"
+      "loadingResults": "Lade {count} Ergebnisse..."
     },
     "errors": {
       "notFound": "Erkennung nicht gefunden. Sie wurde möglicherweise gelöscht oder die ID ist falsch.",

@@ -13,7 +13,6 @@
     max_confidence: number;
     first_heard: string;
     last_heard: string;
-    thumbnail_url?: string;
   }
 
   interface Props {
@@ -86,16 +85,6 @@
 
   {#snippet children()}
     {#if displaySpecies}
-      {#if displaySpecies.thumbnail_url}
-        <div class="w-full aspect-[4/3] rounded-xl overflow-hidden bg-[var(--color-base-300)]">
-          <img
-            src={displaySpecies.thumbnail_url}
-            alt={displayName}
-            class="w-full h-full object-cover"
-          />
-        </div>
-      {/if}
-
       <div class="grid grid-cols-2 gap-3 text-sm mt-3">
         <div class="flex justify-between bg-[var(--color-base-200)] rounded px-3 py-2">
           <span class="opacity-70">{t('analytics.species.card.detections')}</span>

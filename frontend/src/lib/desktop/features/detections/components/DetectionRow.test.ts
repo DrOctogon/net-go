@@ -60,9 +60,12 @@ describe('DetectionRow transcript presentation', () => {
   it('does not render a species thumbnail image element', () => {
     const detection = createMockDetection({ transcript: 'hello world' });
     render(DetectionRow, { props: { detection } });
-    // The old thumbnail img had src containing the species-image API path.
-    // After the pivot only the spectrogram img remains; no species thumbnail.
-    expect(document.querySelector('img[src*="species-image"]')).toBeNull();
+    // After the human-voice pivot, species have no avatar/thumbnail image.
+    // The species name renders as text; no <img> is labeled with the species name.
+    const speciesAvatar = Array.from(document.querySelectorAll('img')).find(
+      img => img.getAttribute('alt') === detection.commonName
+    );
+    expect(speciesAvatar).toBeUndefined();
   });
 });
 

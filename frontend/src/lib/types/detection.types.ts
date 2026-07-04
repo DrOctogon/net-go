@@ -187,7 +187,6 @@ export interface DailySpeciesSummary {
   max_confidence?: number; // Highest detection confidence for the day (fraction 0..1)
   first_heard: string;
   latest_heard: string;
-  thumbnail_url: string;
   // Species tracking metadata
   is_new_species?: boolean; // True if first seen within tracking window (persistent from API)
   days_since_first_seen?: number; // Days since species was first detected

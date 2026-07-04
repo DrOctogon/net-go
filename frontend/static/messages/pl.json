@@ -661,7 +661,6 @@
         "species": "Gatunek",
         "weather": "Pogoda",
         "confidence": "Pewność",
-        "thumbnail": "Miniatura",
         "status": "Status",
         "recording": "Nagranie",
         "actions": "Akcje"
@@ -830,7 +829,6 @@
       "source": "Źródło",
       "species": "Gatunek",
       "confidence": "Pewność",
-      "thumbnail": "Miniatura",
       "status": "Status",
       "recording": "Nagranie",
       "actions": "Akcje"
@@ -986,9 +984,7 @@
       "loading": "Ładowanie szczegółów detekcji...",
       "loaded": "Szczegóły detekcji załadowane dla {species}",
       "error": "Błąd ładowania detekcji: {error}",
-      "loadingResults": "Ładowanie {count} wyników...",
-      "thumbnailLoading": "Ładowanie miniatury {species}...",
-      "thumbnailLoaded": "Miniatura {species} załadowana"
+      "loadingResults": "Ładowanie {count} wyników..."
     },
     "errors": {
       "notFound": "Nie znaleziono detekcji. Mogła zostać usunięta lub identyfikator jest nieprawidłowy.",

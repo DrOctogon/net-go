@@ -60,10 +60,6 @@ A comprehensive collection of reusable Svelte 5 components for the VoiceWatch de
 - [NotificationBell](#notificationbell) - Notification indicator
 - [SearchBox](#searchbox) - Search input with functionality
 
-### Utilities
-
-- [image-utils.ts](#image-utils) - Image handling utilities
-
 ---
 
 ## 📖 Component Documentation
@@ -523,33 +519,6 @@ interface Props {
 
 ---
 
-### Image Utils
-
-**File**: `image-utils.ts`
-
-Utility functions for image handling.
-
-```typescript
-export function handleBirdImageError(e: Event): void;
-```
-
-**Usage:**
-
-```svelte
-<script>
-  import { handleBirdImageError } from '$lib/desktop/components/ui/image-utils.js';
-</script>
-
-<img src="/api/species-image/{species}" alt="Bird" onerror={handleBirdImageError} />
-```
-
-**Features:**
-
-- Bird-specific error handling
-- Automatic placeholder fallback
-
----
-
 ## 🔧 Development Guidelines
 
 ### Creating New Components
@@ -611,8 +580,7 @@ export function handleBirdImageError(e: Event): void;
 ### Import Patterns
 
 ```svelte
-// Correct import path import Badge from '$lib/desktop/components/ui/Badge.svelte'; import {handleBirdImageError}
-from '$lib/desktop/components/ui/image-utils.js';
+// Correct import path import Badge from '$lib/desktop/components/ui/Badge.svelte';
 ```
 
 ### Snippet Usage

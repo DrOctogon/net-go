@@ -661,7 +661,6 @@
         "species": "Species",
         "weather": "Weather",
         "confidence": "Confidence",
-        "thumbnail": "Thumbnail",
         "status": "Status",
         "recording": "Recording",
         "actions": "Actions"
@@ -830,7 +829,6 @@
       "source": "Source",
       "species": "Species",
       "confidence": "Confidence",
-      "thumbnail": "Thumbnail",
       "status": "Status",
       "recording": "Recording",
       "actions": "Actions"
@@ -986,9 +984,7 @@
       "loading": "Loading detection details...",
       "loaded": "Detection details loaded for {species}",
       "error": "Error loading detection: {error}",
-      "loadingResults": "Loading {count} results...",
-      "thumbnailLoading": "Loading {species} thumbnail...",
-      "thumbnailLoaded": "{species} thumbnail loaded"
+      "loadingResults": "Loading {count} results..."
     },
     "errors": {
       "notFound": "Detection not found. It may have been deleted or the ID is incorrect.",

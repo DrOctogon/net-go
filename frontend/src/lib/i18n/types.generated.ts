@@ -529,7 +529,6 @@ export type TranslationKey =
   | 'dashboard.recentDetections.headers.species'
   | 'dashboard.recentDetections.headers.weather'
   | 'dashboard.recentDetections.headers.confidence'
-  | 'dashboard.recentDetections.headers.thumbnail'
   | 'dashboard.recentDetections.headers.status'
   | 'dashboard.recentDetections.headers.recording'
   | 'dashboard.recentDetections.headers.actions'
@@ -661,7 +660,6 @@ export type TranslationKey =
   | 'detections.headers.source'
   | 'detections.headers.species'
   | 'detections.headers.confidence'
-  | 'detections.headers.thumbnail'
   | 'detections.headers.status'
   | 'detections.headers.recording'
   | 'detections.headers.actions'
@@ -780,8 +778,6 @@ export type TranslationKey =
   | 'detections.aria.loaded' // params: species
   | 'detections.aria.error' // params: error
   | 'detections.aria.loadingResults' // params: count
-  | 'detections.aria.thumbnailLoading' // params: species
-  | 'detections.aria.thumbnailLoaded' // params: species
   | 'detections.errors.notFound'
   | 'detections.errors.noPermission'
   | 'detections.errors.loginRequired'
@@ -3656,8 +3652,6 @@ export type TranslationParams = {
   'detections.aria.loaded': { species: string | number };
   'detections.aria.error': { error: string | number };
   'detections.aria.loadingResults': { count: string | number };
-  'detections.aria.thumbnailLoading': { species: string | number };
-  'detections.aria.thumbnailLoaded': { species: string | number };
   'detections.errors.loadFailed': { status: string | number };
   'spectrogram.gain.level': { value: string | number };
   'system.systemInfo.temperatureValue': { temp: string | number };
