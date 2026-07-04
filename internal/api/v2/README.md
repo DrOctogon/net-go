@@ -147,10 +147,7 @@ Lightweight connectivity check. Returns a minimal response with no database quer
 | GET    | `/integrations/mqtt/tls/certificate`         | `GetMQTTTLSCertificate`         | ✅   | Get MQTT TLS certificate status                |
 | POST   | `/integrations/mqtt/tls/certificate`         | `UploadMQTTTLSCertificate`      | ✅   | Upload MQTT TLS certificates                   |
 | DELETE | `/integrations/mqtt/tls/certificate`         | `DeleteMQTTTLSCertificate`      | ✅   | Remove MQTT TLS certificates                   |
-| GET    | `/integrations/birdweather/status`           | `GetBirdWeatherStatus`          | ✅   | BirdWeather integration status                 |
-| POST   | `/integrations/birdweather/test`             | `TestBirdWeatherConnection`     | ✅   | Test BirdWeather connection                    |
 | POST   | `/integrations/weather/test`                 | `TestWeatherConnection`         | ✅   | Test weather provider connection               |
-| POST   | `/integrations/ebird/test`                   | `TestEBirdConnection`           | ✅   | Test eBird API connectivity and authentication |
 
 ### Media (`media.go`)
 
@@ -461,7 +458,7 @@ Requires enhanced (v2) database. Returns 409 Conflict if not available.
 | Method | Route                               | Handler                    | Auth | Description                              |
 | ------ | ----------------------------------- | -------------------------- | ---- | ---------------------------------------- |
 | GET    | `/insights/expected-today`          | `getExpectedToday`         | ❌   | Species expected today based on history  |
-| GET    | `/insights/expected-today/regional` | `getExpectedTodayRegional` | ❌   | Regional eBird observations near station |
+| GET    | `/insights/expected-today/regional` | `getExpectedTodayRegional` | ❌   | Retained stub (eBird integration removed): always reports unavailable |
 | GET    | `/insights/phantom-species`         | `getPhantomSpecies`        | ❌   | Frequent but low-confidence detections   |
 | GET    | `/insights/dawn-chorus`             | `getDawnChorus`            | ❌   | Dawn chorus timing analysis              |
 | GET    | `/insights/migration`               | `getMigration`             | ❌   | New arrivals and gone-quiet species      |
