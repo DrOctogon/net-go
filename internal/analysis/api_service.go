@@ -35,9 +35,9 @@ type APIServerService struct {
 	metrics    *observability.Metrics
 	engine     *engine.AudioEngine
 
-	server        *api.Server
-	proc          *processor.Processor
-	sunCalc       *suncalc.SunCalc
+	server         *api.Server
+	proc           *processor.Processor
+	sunCalc        *suncalc.SunCalc
 	oauth2Server   *security.OAuth2Server
 	systemMonitor  *monitor.SystemMonitor
 	controlChan    chan string
