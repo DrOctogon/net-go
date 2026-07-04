@@ -173,6 +173,7 @@ Lightweight connectivity check. Returns a minimal response with no database quer
 | PUT    | `/notifications/:id/read`          | `MarkNotificationRead`             | ✅   | Mark notification as read                                                                                           |
 | PUT    | `/notifications/:id/acknowledge`   | `MarkNotificationAcknowledged`     | ✅   | Acknowledge notification                                                                                            |
 | DELETE | `/notifications/:id`               | `DeleteNotification`               | ✅   | Delete notification                                                                                                 |
+| POST   | `/notifications/test`              | `CreateTestDetectionNotification`  | ✅   | Create a sample human-voice detection notification (test/QA seed). Returns the created notification.                |
 | GET    | `/notifications/unread/count`      | `GetUnreadCount`                   | ❌   | Count unread notifications (public read-only). Used by dashboard NotificationBell.                                  |
 | GET    | `/notifications/check-ntfy-server` | `CheckNtfyServer`                  | ✅   | Probe NTFY host for HTTPS/HTTP connectivity (authenticated to prevent SSRF relay). Query: `host=<hostname[:port]>`. |
 

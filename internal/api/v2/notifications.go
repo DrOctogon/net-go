@@ -205,6 +205,7 @@ func (c *Controller) SetupNotificationRoutes() {
 	notifServiceGroup.PUT("/:id/read", c.MarkNotificationRead)
 	notifServiceGroup.PUT("/:id/acknowledge", c.MarkNotificationAcknowledged)
 	notifServiceGroup.DELETE("/:id", c.DeleteNotification)
+	notifServiceGroup.POST("/test", c.CreateTestDetectionNotification)
 
 	notificationsGroup.GET("/check-ntfy-server", c.CheckNtfyServer)
 }
@@ -905,3 +906,55 @@ func (c *Controller) GetUnreadCount(ctx echo.Context) error {
 	})
 }
 
+// Test detection notification constants.
+const (
+	testNotificationConfidence = 0.99 // Sample confidence for the test detection notification
+	testNotificationExpiryHrs  = 24   // Hours until the test notification expires
+)
+
+// CreateTestDetectionNotification creates a test human-voice detection
+// notification. It exists so the notification pipeline (persistence, unread
+// count, SSE broadcast, and CRUD) can be exercised end-to-end from the UI and
+// integration tests without waiting for a live voice detection. The emitted
+// notification mirrors a real detection: type=detection, priority=high,
+// status=unread.
+func (c *Controller) CreateTestDetectionNotification(ctx echo.Context) error {
+	settings := c.currentSettings()
+	if settings == nil {
+		return c.HandleError(ctx, nil, "Settings not initialized", http.StatusServiceUnavailable)
+	}
+
+	service := c.getNotificationService()
+
+	// Format detection time according to the user's time format preference.
+	now := time.Now()
+	detectionTime := now.Format("3:04:05 PM")
+	if settings.Main.TimeAs24h {
+		detectionTime = now.Format(time.TimeOnly)
+	}
+
+	title := "Human voice detected"
+	message := "Test human-voice detection at " + detectionTime + " (sample data)"
+
+	testNotification := notification.NewNotification(notification.TypeDetection, notification.PriorityHigh, title, message).
+		WithComponent("detection").
+		WithMetadata("confidence", testNotificationConfidence).
+		WithMetadata("detection_time", detectionTime).
+		WithMetadata("is_test", true).
+		WithMetadata("note_id", 1).
+		WithExpiry(testNotificationExpiryHrs * time.Hour)
+
+	// Use CreateWithMetadata to persist and broadcast.
+	if err := service.CreateWithMetadata(testNotification); err != nil {
+		c.logErrorIfEnabled("failed to create test notification", logger.Error(err))
+		return c.HandleError(ctx, err, "Failed to create test notification", http.StatusInternalServerError)
+	}
+
+	if settings.WebServer.Debug {
+		c.logDebugIfEnabled("test detection notification created",
+			logger.String("notification_id", testNotification.ID),
+			logger.String("rendered_title", title))
+	}
+
+	return ctx.JSON(http.StatusOK, testNotification)
+}

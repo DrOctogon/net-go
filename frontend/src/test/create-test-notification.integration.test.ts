@@ -6,7 +6,7 @@ import { apiCall } from './integration-setup';
 
 describe('Test Helpers', () => {
   it('create notification for manual testing', async () => {
-    const response = await apiCall('/notifications/test/new-species', {
+    const response = await apiCall('/notifications/test', {
       method: 'POST',
     });
     expect(response.ok).toBe(true);
