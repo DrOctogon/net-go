@@ -2831,22 +2831,6 @@
         "confidenceLabel": "Luottamuskynnys ihmisen tunnistukseen",
         "confidenceHelp": "Aseta luottamustaso ihmisäänen tunnistukseen, matalampi arvo tekee suodattimesta herkemmän"
       },
-      "falsePositivePrevention": {
-        "title": "Väärien positiivisten ehkäisy",
-        "description": "Määritä virhetunnistussuodattimet",
-        "enableDogBark": "Ota koiran haukunnan suodatin käyttöön",
-        "disabled": "Koiran haukuntasuodatin on poistettu käytöstä",
-        "confidenceLabel": "Luottamuskynnys",
-        "confidenceHelp": "Aseta luottamustaso koiran haukunnan tunnistukseen, matalampi arvo tekee suodattimesta herkemmän",
-        "expireTimeLabel": "Koiran haukunnan vanhenemisaika (minuuttia)",
-        "expireTimeHelp": "Aseta kuinka kauan havaittu koiran haukunta muistetaan",
-        "addDogBarkSpeciesLabel": "Lisää koiran haukunnan lajeja",
-        "addDogBarkSpeciesHelp": "Etsi ja lisää lajeja, jotka voidaan sekoittaa koiran haukuntaan",
-        "addSpeciesButton": "Lisää"
-      },
-      "speciesNamePlaceholder": "Lajin nimi",
-      "typeSpeciesName": "Kirjoita lajin nimi...",
-      "dogBarkSpeciesList": "Koiran haukunnan lajiluettelo",
       "daylightFilter": {
         "title": "Päivänvalosuodatin",
         "description": "Suodata yöaktiivisten lajien havainnot päivänvalossa. Käyttää siviiliaamunkoiton/-hämärän rajoja määritetyn sijainnin perusteella.",
@@ -2854,9 +2838,6 @@
         "disabled": "Päivänvalosuodatin on pois käytöstä",
         "offsetLabel": "Päivänvaloikkunan siirtymä (Tunnit)",
         "offsetHelp": "Säädä päivänvaloikkunaa. Positiiviset arvot pienentävät sitä (sallivampi, esim. +1 = alkaa 1h aamunkoiton jälkeen). Negatiiviset arvot laajentavat sitä (tiukempi, esim. -1 = alkaa 1h ennen aamunkoittoa)."
-      },
-      "errors": {
-        "speciesLoadFailed": "Lajiluettelon lataus epäonnistui. Yritä uudelleen."
       }
     },
     "integration": {

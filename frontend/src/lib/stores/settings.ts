@@ -309,7 +309,6 @@ export interface RetentionSettings {
 
 export interface FilterSettings {
   privacy: PrivacyFilterSettings;
-  dogBark: DogBarkFilterSettings;
 }
 
 export interface PrivacyFilterSettings {
@@ -325,14 +324,6 @@ export interface PrivacyFilter {
   enabled: boolean;
   threshold: number;
   conditions: Record<string, unknown>;
-}
-
-export interface DogBarkFilterSettings {
-  enabled: boolean;
-  confidence: number;
-  remember: number;
-  debug: boolean;
-  species: string[];
 }
 
 export interface DaylightFilterSettings {
@@ -538,7 +529,6 @@ export interface RealtimeSettings {
     path: string;
   };
   privacyFilter?: PrivacyFilterSettings;
-  dogBarkFilter?: DogBarkFilterSettings;
   daylightFilter?: DaylightFilterSettings;
   rtsp?: RTSPSettings;
   mqtt?: MQTTSettings;
@@ -927,13 +917,6 @@ function createEmptySettings(): SettingsFormData {
         confidence: 0.5,
         debug: false,
       },
-      dogBarkFilter: {
-        enabled: false,
-        confidence: 0.5,
-        remember: 30,
-        debug: false,
-        species: [],
-      },
       daylightFilter: {
         enabled: false,
         debug: false,
@@ -1106,11 +1089,6 @@ export const speakerAttributesSettings = derived(
 export const privacyFilterSettings = derived(
   settingsStore,
   $store => $store.formData.realtime?.privacyFilter
-);
-
-export const dogBarkFilterSettings = derived(
-  settingsStore,
-  $store => $store.formData.realtime?.dogBarkFilter
 );
 
 export const daylightFilterSettings = derived(

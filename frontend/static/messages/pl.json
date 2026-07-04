@@ -2831,22 +2831,6 @@
         "confidenceLabel": "Próg Pewności dla Detekcji Człowieka",
         "confidenceHelp": "Ustaw poziom pewności dla detekcji głosu ludzkiego, niższa wartość sprawia, że filtr jest bardziej czuły"
       },
-      "falsePositivePrevention": {
-        "title": "Zapobieganie Fałszywym Pozytywnościom",
-        "description": "Konfiguruj filtry fałszywych detekcji",
-        "enableDogBark": "Włącz Filtr Szczekania Psa",
-        "disabled": "Filtr szczekania psa jest wyłączony",
-        "confidenceLabel": "Próg Pewności",
-        "confidenceHelp": "Ustaw poziom pewności dla detekcji szczekania psa, niższa wartość sprawia, że filtr jest bardziej czuły",
-        "expireTimeLabel": "Czas Wygaśnięcia Szczekania Psa (Minuty)",
-        "expireTimeHelp": "Ustaw, jak długo pamiętać wykryte szczekanie psa",
-        "addDogBarkSpeciesLabel": "Dodaj Gatunki Szczekania Psa",
-        "addDogBarkSpeciesHelp": "Szukaj i dodaj gatunki, które mogą być mylone ze szczekaniem psa",
-        "addSpeciesButton": "Dodaj"
-      },
-      "speciesNamePlaceholder": "Nazwa gatunku",
-      "typeSpeciesName": "Wpisz nazwę gatunku...",
-      "dogBarkSpeciesList": "Lista Gatunków Szczekania Psa",
       "daylightFilter": {
         "title": "Filtr światła dziennego",
         "description": "Odfiltruj wykrycia gatunków nocnych w godzinach dziennych. Używa granic świtu/zmierzchu cywilnego z skonfigurowanej lokalizacji.",
@@ -2854,9 +2838,6 @@
         "disabled": "Filtr światła dziennego jest wyłączony",
         "offsetLabel": "Przesunięcie okna światła dziennego (Godziny)",
         "offsetHelp": "Dostosuj okno światła dziennego. Wartości dodatnie zmniejszają je (bardziej liberalne, np. +1 = zaczyna się 1h po świcie). Wartości ujemne rozszerzają je (bardziej rygorystyczne, np. -1 = zaczyna się 1h przed świtem)."
-      },
-      "errors": {
-        "speciesLoadFailed": "Nie udało się załadować listy gatunków. Spróbuj ponownie."
       }
     },
     "integration": {

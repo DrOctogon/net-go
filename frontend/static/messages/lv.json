@@ -2831,22 +2831,6 @@
         "confidenceLabel": "Ticamības slieksnis cilvēku noteikšanai",
         "confidenceHelp": "Iestatiet ticamības līmeni cilvēku balss noteikšanai, zemāka vērtība padara filtru jutīgāku"
       },
-      "falsePositivePrevention": {
-        "title": "Viltus pozitīvo novēršana",
-        "description": "Konfigurēt viltus noteikšanas filtrus",
-        "enableDogBark": "Iespējot suņa rejas filtru",
-        "disabled": "Suņa rejas filtrs ir atspējots",
-        "confidenceLabel": "Ticamības slieksnis",
-        "confidenceHelp": "Iestatiet ticamības līmeni suņa rejas noteikšanai, zemāka vērtība padara filtru jutīgāku",
-        "expireTimeLabel": "Suņa rejas derīguma laiks (minūtes)",
-        "expireTimeHelp": "Iestatiet, cik ilgi atcerēties noteiktu suņa reju",
-        "addDogBarkSpeciesLabel": "Pievienot suņa rejas sugas",
-        "addDogBarkSpeciesHelp": "Meklēt un pievienot sugas, kuras var sajaukt ar suņa rejām",
-        "addSpeciesButton": "Pievienot"
-      },
-      "speciesNamePlaceholder": "Sugas nosaukums",
-      "typeSpeciesName": "Ievadiet sugas nosaukumu...",
-      "dogBarkSpeciesList": "Suņa rejas sugu saraksts",
       "daylightFilter": {
         "title": "Dienasgaismas filtrs",
         "description": "Filtrēt nakts sugu noteikšanas dienasgaismas stundās. Izmanto pilsoniskā rītausmas/krēslas robežas no jūsu konfigurētās atrašanās vietas.",
@@ -2854,9 +2838,6 @@
         "disabled": "Dienasgaismas filtrs ir atspējots",
         "offsetLabel": "Dienasgaismas loga nobīde (stundas)",
         "offsetHelp": "Pielāgot dienasgaismas logu. Pozitīvas vērtības to sašaurina (pielaidīgāk, piem., +1 = sākas 1 st. pēc rītausmas). Negatīvas vērtības to paplašina (stingrāk, piem., -1 = sākas 1 st. pirms rītausmas)."
-      },
-      "errors": {
-        "speciesLoadFailed": "Neizdevās ielādēt sugu sarakstu. Lūdzu, mēģiniet vēlreiz."
       }
     },
     "integration": {

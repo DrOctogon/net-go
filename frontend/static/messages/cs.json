@@ -2831,22 +2831,6 @@
         "confidenceLabel": "Práh spolehlivosti pro detekci lidí",
         "confidenceHelp": "Nastavte úroveň spolehlivosti pro detekci lidského hlasu, nižší hodnota dělá filtr citlivějším"
       },
-      "falsePositivePrevention": {
-        "title": "Prevence falešně pozitivních detekcí",
-        "description": "Konfigurace filtrů falešných detekcí",
-        "enableDogBark": "Povolit filtr psího štěkání",
-        "disabled": "Filtr psího štěkání je vypnutý",
-        "confidenceLabel": "Práh spolehlivosti",
-        "confidenceHelp": "Nastavte úroveň spolehlivosti pro detekci psího štěkání, nižší hodnota dělá filtr citlivějším",
-        "expireTimeLabel": "Doba platnosti psího štěkání (minuty)",
-        "expireTimeHelp": "Nastavte, jak dlouho si má systém pamatovat detekované psí štěkání",
-        "addDogBarkSpeciesLabel": "Přidat druhy zaměnitelné se štěkáním",
-        "addDogBarkSpeciesHelp": "Vyhledejte a přidejte druhy, které by mohly být zaměněny s psím štěkáním",
-        "addSpeciesButton": "Přidat"
-      },
-      "speciesNamePlaceholder": "Název druhu",
-      "typeSpeciesName": "Zadejte název druhu...",
-      "dogBarkSpeciesList": "Seznam druhů zaměnitelných se štěkáním",
       "daylightFilter": {
         "title": "Filtr denního světla",
         "description": "Odfiltrovat detekce nočních druhů během denního světla. Používá hranice občanského úsvitu/soumraku z vaší nakonfigurované polohy.",
@@ -2854,9 +2838,6 @@
         "disabled": "Filtr denního světla je vypnutý",
         "offsetLabel": "Posun okna denního světla (hodiny)",
         "offsetHelp": "Upraví okno denního světla. Kladné hodnoty jej zmenšují (tolerantnější, např. +1 = začíná 1 h po úsvitu). Záporné hodnoty jej rozšiřují (přísnější, např. -1 = začíná 1 h před úsvitem)."
-      },
-      "errors": {
-        "speciesLoadFailed": "Nepodařilo se načíst seznam druhů. Zkuste to znovu."
       }
     },
     "integration": {

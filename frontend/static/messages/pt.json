@@ -2831,22 +2831,6 @@
         "confidenceLabel": "Limiar de confiança para detecção humana",
         "confidenceHelp": "Defina o nível de confiança para detecção de voz humana, valores mais baixos tornam o filtro mais sensível"
       },
-      "falsePositivePrevention": {
-        "title": "Prevenção de falsos positivos",
-        "description": "Configurar filtros de detecção falsa",
-        "enableDogBark": "Ativar filtro de latido de cachorro",
-        "disabled": "Filtro de latido de cachorro está desativado",
-        "confidenceLabel": "Limiar de confiança",
-        "confidenceHelp": "Defina o nível de confiança para detecção de latido de cachorro, valores mais baixos tornam o filtro mais sensível",
-        "expireTimeLabel": "Tempo de expiração de latido de cachorro (minutos)",
-        "expireTimeHelp": "Defina por quanto tempo lembrar um latido de cachorro detectado",
-        "addDogBarkSpeciesLabel": "Adicionar espécies de latido de cachorro",
-        "addDogBarkSpeciesHelp": "Pesquise e adicione espécies que podem ser confundidas com latidos de cachorro",
-        "addSpeciesButton": "Adicionar"
-      },
-      "speciesNamePlaceholder": "Nome da espécie",
-      "typeSpeciesName": "Digite o nome da espécie...",
-      "dogBarkSpeciesList": "Lista de espécies de latido de cão",
       "daylightFilter": {
         "title": "Filtro de luz do dia",
         "description": "Filtrar deteções de espécies noturnas durante as horas de luz do dia. Utiliza os limites do amanhecer/anoitecer civil da sua localização configurada.",
@@ -2854,9 +2838,6 @@
         "disabled": "O filtro de luz do dia está desativado",
         "offsetLabel": "Deslocamento da janela de luz do dia (Horas)",
         "offsetHelp": "Ajustar a janela de luz do dia. Valores positivos reduzem-na (mais permissivo, ex. +1 = começa 1h após o amanhecer). Valores negativos expandem-na (mais rigoroso, ex. -1 = começa 1h antes do amanhecer)."
-      },
-      "errors": {
-        "speciesLoadFailed": "Falha ao carregar lista de espécies. Por favor, tente novamente."
       }
     },
     "integration": {

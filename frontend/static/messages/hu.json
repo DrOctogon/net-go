@@ -2831,22 +2831,6 @@
         "confidenceLabel": "Megbízhatósági küszöbérték az emberi detektáláshoz",
         "confidenceHelp": "Állítsa be az emberi hang detektálás megbízhatósági szintjét, az alacsonyabb érték érzékenyebbé teszi a szűrőt"
       },
-      "falsePositivePrevention": {
-        "title": "Hamis pozitív megelőzés",
-        "description": "Hamis detektálási szűrők konfigurálása",
-        "enableDogBark": "Kutyaugatás szűrő engedélyezése",
-        "disabled": "A kutyaugatás szűrő le van tiltva",
-        "confidenceLabel": "Megbízhatósági küszöbérték",
-        "confidenceHelp": "Állítsa be a kutyaugatás detektálás megbízhatósági szintjét, az alacsonyabb érték érzékenyebbé teszi a szűrőt",
-        "expireTimeLabel": "Kutyaugatás lejárati idő (perc)",
-        "expireTimeHelp": "Állítsa be, mennyi ideig jegyezze meg az észlelt kutyaugatást",
-        "addDogBarkSpeciesLabel": "Kutyaugatás fajok hozzáadása",
-        "addDogBarkSpeciesHelp": "Keresés és hozzáadás olyan fajokhoz, amelyek összetéveszthetők a kutyák ugatásával",
-        "addSpeciesButton": "Hozzáadás"
-      },
-      "speciesNamePlaceholder": "Faj neve",
-      "typeSpeciesName": "Adja meg a faj nevét...",
-      "dogBarkSpeciesList": "Kutyaugatás faj lista",
       "daylightFilter": {
         "title": "Nappali szűrő",
         "description": "Szűrje ki az éjszakai fajok detektálásait a nappali órákban. A konfigurált helyszín civil hajnal/alkonyat határait használja.",
@@ -2854,9 +2838,6 @@
         "disabled": "A nappali szűrő le van tiltva",
         "offsetLabel": "Nappali ablak eltolás (óra)",
         "offsetHelp": "Állítsa be a nappali ablakot. A pozitív értékek csökkentik (engedékenyebb, pl. +1 = 1 órával napkelte után kezdődik). A negatív értékek bővítik (szigorúbb, pl. -1 = 1 órával napkelte előtt kezdődik)."
-      },
-      "errors": {
-        "speciesLoadFailed": "A faj lista betöltése sikertelen. Próbálja újra."
       }
     },
     "integration": {

@@ -2831,22 +2831,6 @@
         "confidenceLabel": "Soglia Confidenza per Rilevamento Umano",
         "confidenceHelp": "Imposta livello confidenza per rilevamento voce umana, valore più basso rende filtro più sensibile"
       },
-      "falsePositivePrevention": {
-        "title": "Prevenzione Falsi Positivi",
-        "description": "Configura filtri falsi rilevamenti",
-        "enableDogBark": "Abilita Filtro Abbaio Cane",
-        "disabled": "Filtro abbaio cane disabilitato",
-        "confidenceLabel": "Soglia Confidenza",
-        "confidenceHelp": "Imposta livello confidenza per rilevamento abbaio cane, valore più basso rende filtro più sensibile",
-        "expireTimeLabel": "Tempo Scadenza Abbaio Cane (Minuti)",
-        "expireTimeHelp": "Imposta per quanto tempo ricordare un abbaio cane rilevato",
-        "addDogBarkSpeciesLabel": "Aggiungi Specie Abbaio Cane",
-        "addDogBarkSpeciesHelp": "Cerca e aggiungi specie che potrebbero essere confuse con abbai di cani",
-        "addSpeciesButton": "Aggiungi"
-      },
-      "speciesNamePlaceholder": "Nome specie",
-      "typeSpeciesName": "Digita nome specie...",
-      "dogBarkSpeciesList": "Lista Specie Abbaio Cane",
       "daylightFilter": {
         "title": "Filtro luce diurna",
         "description": "Filtra i rilevamenti di specie notturne durante le ore diurne. Utilizza i confini dell'alba/tramonto civile dalla posizione configurata.",
@@ -2854,9 +2838,6 @@
         "disabled": "Il filtro luce diurna è disabilitato",
         "offsetLabel": "Offset finestra di luce diurna (Ore)",
         "offsetHelp": "Regola la finestra di luce diurna. Valori positivi la riducono (più permissivo, es. +1 = inizia 1h dopo l'alba). Valori negativi la ampliano (più rigoroso, es. -1 = inizia 1h prima dell'alba)."
-      },
-      "errors": {
-        "speciesLoadFailed": "Impossibile caricare lista specie. Riprova."
       }
     },
     "integration": {

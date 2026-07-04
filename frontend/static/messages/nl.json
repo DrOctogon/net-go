@@ -2831,22 +2831,6 @@
         "confidenceLabel": "Betrouwbaarheids Drempelwaarde voor Menselijke Detectie",
         "confidenceHelp": "Stel het betrouwbaarheidsniveau in voor menselijke stem detectie, lagere waarde maakt filter gevoeliger"
       },
-      "falsePositivePrevention": {
-        "title": "Vals Positief Preventie",
-        "description": "Configureer valse detectie filters",
-        "enableDogBark": "Schakel Hondengeblaf Filter in",
-        "disabled": "Hondengeblaf filter is uitgeschakeld",
-        "confidenceLabel": "Betrouwbaarheids Drempelwaarde",
-        "confidenceHelp": "Stel het betrouwbaarheidsniveau in voor hondengeblaf detectie, lagere waarde maakt filter gevoeliger",
-        "expireTimeLabel": "Hondengeblaf Verlooptijd (Minuten)",
-        "expireTimeHelp": "Stel in hoe lang een gedetecteerd hondengeblaf wordt onthouden",
-        "addDogBarkSpeciesLabel": "Voeg Hondengeblaf Soorten toe",
-        "addDogBarkSpeciesHelp": "Zoek en voeg soorten toe die verward kunnen worden met hondengeblaf",
-        "addSpeciesButton": "Toevoegen"
-      },
-      "speciesNamePlaceholder": "Soorten naam",
-      "typeSpeciesName": "Typ soorten naam...",
-      "dogBarkSpeciesList": "Hondengeblaf Soorten Lijst",
       "daylightFilter": {
         "title": "Daglichtfilter",
         "description": "Filter detecties van nachtelijke soorten tijdens daglichturen. Gebruikt de burgerlijke schemering/dageraad grenzen van uw geconfigureerde locatie.",
@@ -2854,9 +2838,6 @@
         "disabled": "Daglichtfilter is uitgeschakeld",
         "offsetLabel": "Daglichtvenster Offset (Uren)",
         "offsetHelp": "Pas het daglichtvenster aan. Positieve waarden verkleinen het (soepeler, bijv. +1 = begint 1u na dageraad). Negatieve waarden vergroten het (strenger, bijv. -1 = begint 1u voor dageraad)."
-      },
-      "errors": {
-        "speciesLoadFailed": "Laden van soorten lijst mislukt. Probeer het opnieuw."
       }
     },
     "integration": {

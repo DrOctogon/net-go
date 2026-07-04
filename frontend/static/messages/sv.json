@@ -2831,22 +2831,6 @@
         "confidenceLabel": "Konfidenströskelvärde för mänsklig detektering",
         "confidenceHelp": "Ange konfidensnivå för detektering av mänsklig röst, lägre värde gör filtret känsligare"
       },
-      "falsePositivePrevention": {
-        "title": "Förebyggande av falska positiva",
-        "description": "Konfigurera filter för felaktiga detektioner",
-        "enableDogBark": "Aktivera hundskallsfilter",
-        "disabled": "Hundskallsfiltret är inaktiverat",
-        "confidenceLabel": "Konfidenströskelvärde",
-        "confidenceHelp": "Ange konfidensnivå för detektering av hundskall, lägre värde gör filtret känsligare",
-        "expireTimeLabel": "Förfallotid för hundskall (minuter)",
-        "expireTimeHelp": "Ange hur länge ett detekterat hundskall ska sparas i minnet",
-        "addDogBarkSpeciesLabel": "Lägg till hundskallsart",
-        "addDogBarkSpeciesHelp": "Sök och lägg till arter som kan förväxlas med hundskall",
-        "addSpeciesButton": "Lägg till"
-      },
-      "speciesNamePlaceholder": "Artnamn",
-      "typeSpeciesName": "Skriv artnamn...",
-      "dogBarkSpeciesList": "Lista över hundskallsarter",
       "daylightFilter": {
         "title": "Dagsljusfilter",
         "description": "Filtrera bort detektioner av nattaktiva arter under dygnets ljusa timmar. Använder civil gryning/skymning från din konfigurerade plats.",
@@ -2854,9 +2838,6 @@
         "disabled": "Dagsljusfiltret är inaktiverat",
         "offsetLabel": "Dagsljusfönsterförskjutning (timmar)",
         "offsetHelp": "Justera dagsljusfönstret. Positiva värden krymper det (mer överseende, t.ex. +1 = börjar 1 timme efter gryning). Negativa värden utökar det (striktare, t.ex. -1 = börjar 1 timme före gryning)."
-      },
-      "errors": {
-        "speciesLoadFailed": "Kunde inte ladda artlista. Försök igen."
       }
     },
     "integration": {

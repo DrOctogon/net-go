@@ -311,13 +311,6 @@ vi.mock('$lib/utils/settingsApi.js', () => {
         confidence: 0.9,
         debug: false,
       },
-      dogBark: {
-        enabled: false,
-        confidence: 0.7,
-        remember: 300,
-        debug: false,
-        species: [],
-      },
     },
     integration: {
       mqtt: {

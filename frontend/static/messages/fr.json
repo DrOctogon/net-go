@@ -2831,22 +2831,6 @@
         "confidenceLabel": "Seuil de confiance pour la détection humaine",
         "confidenceHelp": "Définir le niveau de confiance pour la détection de voix humaine, une valeur plus faible rend le filtre plus sensible"
       },
-      "falsePositivePrevention": {
-        "title": "Prévention des faux positifs",
-        "description": "Configurer les filtres de détection erronée",
-        "enableDogBark": "Activer le filtre d'aboiement de chien",
-        "disabled": "Le filtre d'aboiement de chien est désactivé",
-        "confidenceLabel": "Seuil de confiance",
-        "confidenceHelp": "Définir le niveau de confiance pour la détection d'aboiement de chien, une valeur plus faible rend le filtre plus sensible",
-        "expireTimeLabel": "Temps d'expiration des aboiements de chien (minutes)",
-        "expireTimeHelp": "Définissez pendant combien de temps garder en mémoire la détection d'aboiement de chien",
-        "addDogBarkSpeciesLabel": "Ajouter une espèce similaire à un aboiement de chien",
-        "addDogBarkSpeciesHelp": "Rechercher et ajouter des espèces qui pourraient être confondues avec des aboiements de chien",
-        "addSpeciesButton": "Ajouter"
-      },
-      "speciesNamePlaceholder": "Nom de l'espèce",
-      "typeSpeciesName": "Tapez le nom de l'espèce...",
-      "dogBarkSpeciesList": "Liste des espèces d'aboiement de chien",
       "daylightFilter": {
         "title": "Filtre de lumière du jour",
         "description": "Filtrer les détections d'espèces nocturnes pendant les heures de jour. Utilise les limites de l'aube/crépuscule civil de votre emplacement configuré.",
@@ -2854,9 +2838,6 @@
         "disabled": "Le filtre de lumière du jour est désactivé",
         "offsetLabel": "Décalage de la fenêtre de lumière du jour (Heures)",
         "offsetHelp": "Ajuster la fenêtre de lumière du jour. Les valeurs positives la réduisent (plus permissif, ex. +1 = commence 1h après l'aube). Les valeurs négatives l'élargissent (plus strict, ex. -1 = commence 1h avant l'aube)."
-      },
-      "errors": {
-        "speciesLoadFailed": "Échec du chargement de la liste des espèces. Veuillez réessayer."
       }
     },
     "integration": {

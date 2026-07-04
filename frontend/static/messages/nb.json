@@ -2831,22 +2831,6 @@
         "confidenceLabel": "Sikkerhetsterskel for menneskelig stemmedeteksjon",
         "confidenceHelp": "Angi sikkerhetsnivå for menneskelig stemmedeteksjon. Lavere verdi gjør filteret mer følsomt"
       },
-      "falsePositivePrevention": {
-        "title": "Forebygging av falske positive",
-        "description": "Konfigurer filtre for falsk deteksjon",
-        "enableDogBark": "Aktiver hundebjellefilter",
-        "disabled": "Hundebjellefilter er deaktivert",
-        "confidenceLabel": "Sikkerhetsterskel",
-        "confidenceHelp": "Angi sikkerhetsnivå for hundebjelledeteksjon. Lavere verdi gjør filteret mer følsomt",
-        "expireTimeLabel": "Utløpstid for hundebjell (minutter)",
-        "expireTimeHelp": "Angi hvor lenge et oppdaget hundebjell skal huskes",
-        "addDogBarkSpeciesLabel": "Legg til hundebjell-art",
-        "addDogBarkSpeciesHelp": "Søk og legg til arter som kan forveksles med hundebjell",
-        "addSpeciesButton": "Legg til"
-      },
-      "speciesNamePlaceholder": "Artsnavn",
-      "typeSpeciesName": "Skriv artsnavn...",
-      "dogBarkSpeciesList": "Liste over hundebjell-arter",
       "daylightFilter": {
         "title": "Dagslysfilter",
         "description": "Filtrer ut registreringer av nattaktive arter i dagslystimer. Bruker sivil grytid/skumring fra konfigurert posisjon.",
@@ -2854,9 +2838,6 @@
         "disabled": "Dagslysfilter er deaktivert",
         "offsetLabel": "Dagslysvindu-forskyvning (timer)",
         "offsetHelp": "Juster dagslysvinduet. Positive verdier innsnevrer det (mer mild, f.eks. +1 = starter 1t etter grytid). Negative verdier utvider det (strengere, f.eks. -1 = starter 1t før grytid)."
-      },
-      "errors": {
-        "speciesLoadFailed": "Innlasting av artsliste mislyktes. Prøv igjen."
       }
     },
     "integration": {

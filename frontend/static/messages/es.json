@@ -2831,22 +2831,6 @@
         "confidenceLabel": "Umbral de confianza para detección humana",
         "confidenceHelp": "Establece el nivel de confianza para la detección de voz humana, un valor más bajo hace que el filtro sea más sensible"
       },
-      "falsePositivePrevention": {
-        "title": "Prevención de falsos positivos",
-        "description": "Configurar filtros de detección falsa",
-        "enableDogBark": "Habilitar filtro de ladridos de perro",
-        "disabled": "El filtro de ladrido de perro está deshabilitado",
-        "confidenceLabel": "Umbral de confianza",
-        "confidenceHelp": "Establece el nivel de confianza para la detección de ladridos de perro, un valor más bajo hace que el filtro sea más sensible",
-        "expireTimeLabel": "Tiempo de expiración de ladridos de perro (minutos)",
-        "expireTimeHelp": "Establece cuánto tiempo recordar un ladrido de perro detectado",
-        "addDogBarkSpeciesLabel": "Añadir especies de ladrido de perro",
-        "addDogBarkSpeciesHelp": "Buscar y añadir especies que podrían confundirse con ladridos de perro",
-        "addSpeciesButton": "Añadir"
-      },
-      "speciesNamePlaceholder": "Nombre de la especie",
-      "typeSpeciesName": "Escribe el nombre de la especie...",
-      "dogBarkSpeciesList": "Lista de especies de ladrido de perro",
       "daylightFilter": {
         "title": "Filtro de luz diurna",
         "description": "Filtrar detecciones de especies nocturnas durante las horas de luz. Utiliza los límites del amanecer/atardecer civil de su ubicación configurada.",
@@ -2854,9 +2838,6 @@
         "disabled": "El filtro de luz diurna está desactivado",
         "offsetLabel": "Desplazamiento de ventana de luz diurna (Horas)",
         "offsetHelp": "Ajustar la ventana de luz diurna. Los valores positivos la reducen (más permisivo, ej. +1 = comienza 1h después del amanecer). Los valores negativos la amplían (más estricto, ej. -1 = comienza 1h antes del amanecer)."
-      },
-      "errors": {
-        "speciesLoadFailed": "Error al cargar la lista de especies. Por favor, inténtalo de nuevo."
       }
     },
     "integration": {

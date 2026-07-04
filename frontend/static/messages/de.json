@@ -2831,22 +2831,6 @@
         "confidenceLabel": "Konfidenzschwelle für Menschenerkennung",
         "confidenceHelp": "Legen Sie das Konfidenzniveau für die Erkennung menschlicher Stimmen fest, niedrigere Werte machen den Filter empfindlicher"
       },
-      "falsePositivePrevention": {
-        "title": "Falsch-Positiv-Prävention",
-        "description": "Falscherkennungsfilter konfigurieren",
-        "enableDogBark": "Hundebellenfilter aktivieren",
-        "disabled": "Hundebellenfilter ist deaktiviert",
-        "confidenceLabel": "Konfidenzschwelle",
-        "confidenceHelp": "Legen Sie das Konfidenzniveau für die Erkennung von Hundebellen fest, niedrigere Werte machen den Filter empfindlicher",
-        "expireTimeLabel": "Ablaufzeit für Hundebellen (Minuten)",
-        "expireTimeHelp": "Legen Sie fest, wie lange ein erkanntes Hundebellen gespeichert wird",
-        "addDogBarkSpeciesLabel": "Hundebellen-Arten hinzufügen",
-        "addDogBarkSpeciesHelp": "Suchen und fügen Sie Arten hinzu, die mit Hundebellen verwechselt werden könnten",
-        "addSpeciesButton": "Hinzufügen"
-      },
-      "speciesNamePlaceholder": "Artname",
-      "typeSpeciesName": "Artname eingeben...",
-      "dogBarkSpeciesList": "Hundebell-Artenliste",
       "daylightFilter": {
         "title": "Tageslichtfilter",
         "description": "Erkennungen nachtaktiver Arten während der Tageslichtstunden herausfiltern. Verwendet die bürgerlichen Dämmerungsgrenzen Ihres konfigurierten Standorts.",
@@ -2854,9 +2838,6 @@
         "disabled": "Tageslichtfilter ist deaktiviert",
         "offsetLabel": "Tageslichtfenster-Versatz (Stunden)",
         "offsetHelp": "Tageslichtfenster anpassen. Positive Werte verkleinern es (toleranter, z.B. +1 = beginnt 1h nach Morgendämmerung). Negative Werte erweitern es (strenger, z.B. -1 = beginnt 1h vor Morgendämmerung)."
-      },
-      "errors": {
-        "speciesLoadFailed": "Fehler beim Laden der Artenliste. Bitte versuchen Sie es erneut."
       }
     },
     "integration": {

@@ -2831,22 +2831,6 @@
         "confidenceLabel": "Konfidenstærskel for menneskelig detektion",
         "confidenceHelp": "Indstil konfidensniveauet for detektering af menneskelige stemmer. Lavere værdier gør filteret mere følsomt"
       },
-      "falsePositivePrevention": {
-        "title": "Forebyggelse af falske positiver",
-        "description": "Konfigurer filtre for falske detektioner",
-        "enableDogBark": "Aktivér hundegøfilter",
-        "disabled": "Hundegøfilteret er deaktiveret",
-        "confidenceLabel": "Konfidenstærskel",
-        "confidenceHelp": "Indstil konfidensniveauet for detektering af hundegø. Lavere værdier gør filteret mere følsomt",
-        "expireTimeLabel": "Udløbstid for hundegø (minutter)",
-        "expireTimeHelp": "Indstil hvor længe en detekteret hundegø huskes",
-        "addDogBarkSpeciesLabel": "Tilføj hundegøart",
-        "addDogBarkSpeciesHelp": "Søg og tilføj arter, der kan forveksles med hundegø",
-        "addSpeciesButton": "Tilføj"
-      },
-      "speciesNamePlaceholder": "Artsnavn",
-      "typeSpeciesName": "Skriv artsnavn...",
-      "dogBarkSpeciesList": "Liste over hundegøarter",
       "daylightFilter": {
         "title": "Dagslysfilter",
         "description": "Filtrér detektioner af nataktive arter i dagslystimerne. Bruger civil daggry/skumring fra din konfigurerede placering.",
@@ -2854,9 +2838,6 @@
         "disabled": "Dagslysfilteret er deaktiveret",
         "offsetLabel": "Dagslysvindue-forskydning (timer)",
         "offsetHelp": "Justér dagslysvinduet. Positive værdier indsnævrer det (mere lempeligt, f.eks. +1 = starter 1 time efter daggry). Negative værdier udvider det (strengere, f.eks. -1 = starter 1 time før daggry)."
-      },
-      "errors": {
-        "speciesLoadFailed": "Kunne ikke indlæse artsliste. Prøv venligst igen."
       }
     },
     "integration": {
