@@ -155,28 +155,4 @@ export const settingsAPI = {
     deleteCertificates: (): Promise<unknown> =>
       api.delete('/api/v2/integrations/mqtt/tls/certificate'),
   },
-
-  /**
-   * Configuration validation
-   */
-  validate: {
-    /**
-     * Validate entire settings configuration
-     */
-    all: (
-      data: SettingsFormData
-    ): Promise<{ valid: boolean; errors?: Record<string, string[]> }> => {
-      return api.post('/api/v2/settings/validate', data);
-    },
-
-    /**
-     * Validate specific section
-     */
-    section: (
-      section: string,
-      data: Record<string, unknown>
-    ): Promise<{ valid: boolean; errors?: Record<string, string[]> }> => {
-      return api.post(`/api/v2/settings/validate/${section}`, data);
-    },
-  },
 };
