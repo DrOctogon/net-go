@@ -642,18 +642,11 @@
     );
 
     try {
-      interface TestNotificationResponse {
-        title?: string;
-      }
-      const data = await api.post<TestNotificationResponse>(
-        '/api/v2/notifications/test/new-species'
-      );
+      await api.post('/api/v2/notifications/test');
       generating = false;
 
       updateChannelStatus(
-        t('settings.notifications.testNotification.statusMessages.success', {
-          species: data.title || 'Northern Cardinal',
-        }),
+        t('settings.notifications.testNotification.statusMessages.success'),
         'success'
       );
 
@@ -987,7 +980,7 @@
     testingProvider = true;
 
     try {
-      await api.post('/api/v2/notifications/test/new-species');
+      await api.post('/api/v2/notifications/test');
 
       pushStatusMessage = t('settings.notifications.push.test.success');
       pushStatusType = 'success';
