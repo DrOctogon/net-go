@@ -22,7 +22,6 @@ func TestValidateContinuousRecordingSettings_DisabledIsAlwaysValid(t *testing.T)
 		{Enabled: false, SegmentSeconds: -99, RetentionHours: -99, Format: "invalid", SampleRate: -99},
 	}
 	for i, cfg := range cases {
-		cfg := cfg
 		t.Run("case", func(t *testing.T) {
 			t.Parallel()
 			assert.NoError(t, validateContinuousRecordingSettings(&cfg), "case %d should pass when disabled", i)
@@ -62,7 +61,6 @@ func TestValidateContinuousRecordingSettings_ValidEnabled(t *testing.T) {
 		},
 	}
 	for _, tc := range cases {
-		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 			assert.NoError(t, validateContinuousRecordingSettings(&tc.cfg))
@@ -124,7 +122,6 @@ func TestValidateContinuousRecordingSettings_InvalidFormatFails(t *testing.T) {
 	t.Parallel()
 	invalidFormats := []string{"mp3", "opus", "aac", "ogg", "", "WAV", "FLAC"}
 	for _, fmt := range invalidFormats {
-		fmt := fmt
 		t.Run("format_"+fmt, func(t *testing.T) {
 			t.Parallel()
 			cfg := ContinuousRecordingSettings{
@@ -140,7 +137,6 @@ func TestValidateContinuousRecordingSettings_InvalidFormatFails(t *testing.T) {
 func TestValidateContinuousRecordingSettings_ValidFormats(t *testing.T) {
 	t.Parallel()
 	for _, fmt := range []string{"flac", "wav"} {
-		fmt := fmt
 		t.Run("format_"+fmt, func(t *testing.T) {
 			t.Parallel()
 			cfg := ContinuousRecordingSettings{

@@ -95,7 +95,7 @@ func sanitizeSourceName(name string) string {
 // isExpired reports whether a file's modification time is older than retentionHours
 // relative to now. It is a pure, side-effect-free function that serves as the single
 // testable decision point for the retention cleanup goroutine.
-func isExpired(modTime time.Time, now time.Time, retentionHours int) bool {
+func isExpired(modTime, now time.Time, retentionHours int) bool {
 	return now.Sub(modTime) > time.Duration(retentionHours)*time.Hour
 }
 
@@ -367,14 +367,14 @@ func runContinuousRetentionCleanup(cfg conf.ContinuousRecordingSettings) {
 	if walkErr := filepath.WalkDir(cfg.Path, func(path string, d os.DirEntry, err error) error {
 		if err != nil {
 			// Skip unreadable entries rather than aborting the entire walk.
-			return nil
+			return nil //nolint:nilerr // intentional: skip the unreadable entry and continue the walk
 		}
 		if d.IsDir() {
 			return nil
 		}
 		info, infoErr := d.Info()
 		if infoErr != nil {
-			return nil
+			return nil //nolint:nilerr // intentional: skip entries whose info is unavailable, continue the walk
 		}
 		if isExpired(info.ModTime(), now, cfg.RetentionHours) {
 			if removeErr := os.Remove(path); removeErr != nil {

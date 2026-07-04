@@ -122,7 +122,7 @@ func (b *SettingsBuilder) WithRTSPHealthThreshold(seconds int) *SettingsBuilder 
 }
 
 // WithImageProvider configures thumbnail fallback policy.
-func (b *SettingsBuilder) WithImageProvider(_ string, fallbackPolicy string) *SettingsBuilder {
+func (b *SettingsBuilder) WithImageProvider(_, fallbackPolicy string) *SettingsBuilder {
 	b.settings.Realtime.Dashboard.Thumbnails.FallbackPolicy = fallbackPolicy
 	return b
 }

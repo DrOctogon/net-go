@@ -228,8 +228,7 @@ func TestGetJobQueueRetryConfig(t *testing.T) {
 			assert.Equal(t, tt.wantMaxRetries, config.MaxRetries, "getJobQueueRetryConfig() MaxRetries")
 
 			// For actions with retry configuration, check if the full configuration is preserved
-			switch tt.action.(type) {
-			case *MqttAction:
+			if _, ok := tt.action.(*MqttAction); ok {
 				assert.Equal(t, mqttRetryConfig.InitialDelay, config.InitialDelay, "getJobQueueRetryConfig() InitialDelay")
 				assert.Equal(t, mqttRetryConfig.MaxDelay, config.MaxDelay, "getJobQueueRetryConfig() MaxDelay")
 				assert.InDelta(t, mqttRetryConfig.Multiplier, config.Multiplier, 0, "getJobQueueRetryConfig() Multiplier")

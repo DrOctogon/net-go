@@ -1,7 +1,6 @@
 package analysis
 
 import (
-	"context"
 	"testing"
 	"time"
 
@@ -142,7 +141,7 @@ func TestContinuousRecorder_DisabledIsNoOp(t *testing.T) {
 	t.Parallel()
 	r := NewContinuousRecorder(disabledRecorderSettings())
 
-	err := r.Start(context.Background())
+	err := r.Start(t.Context())
 	require.NoError(t, err, "Start should not error when disabled")
 
 	// Stop must not block or panic.
@@ -182,7 +181,7 @@ func TestContinuousRecorder_MultipleStopSafe(t *testing.T) {
 	t.Parallel()
 	r := NewContinuousRecorder(disabledRecorderSettings())
 
-	require.NoError(t, r.Start(context.Background()))
+	require.NoError(t, r.Start(t.Context()))
 	r.Stop()
 	r.Stop() // second call must not panic or block
 }
@@ -193,7 +192,7 @@ func TestContinuousRecorder_StartIdempotent(t *testing.T) {
 	t.Parallel()
 	r := NewContinuousRecorder(disabledRecorderSettings())
 
-	require.NoError(t, r.Start(context.Background()))
-	require.NoError(t, r.Start(context.Background()), "second Start call should be a no-op")
+	require.NoError(t, r.Start(t.Context()))
+	require.NoError(t, r.Start(t.Context()), "second Start call should be a no-op")
 	r.Stop()
 }
