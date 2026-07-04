@@ -26,8 +26,8 @@ import (
 const apiServerServiceName = "api-server"
 
 // APIServerService manages the HTTP API server, processor, and related subsystems
-// as an app.Service. It owns the lifecycle of the API server, processor, bird image
-// cache, SunCalc, OAuth2 server, system monitor, and the control/audio-level channels.
+// as an app.Service. It owns the lifecycle of the API server, processor,
+// SunCalc, OAuth2 server, system monitor, and the control/audio-level channels.
 type APIServerService struct {
 	settings   *conf.Settings
 	bnAnalyzer *VoiceWatchAnalyzer

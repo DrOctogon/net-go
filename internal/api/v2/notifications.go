@@ -86,7 +86,7 @@ type NotificationClient struct {
 	SubscriberCh <-chan *notification.Notification
 	Context      context.Context
 	// Guest is true when the SSE connection was opened by an unauthenticated
-	// request. Guests receive only bird-detection events; operational/admin
+	// request. Guests receive only detection events; operational/admin
 	// notifications are filtered out before being sent to the wire.
 	Guest bool
 }
