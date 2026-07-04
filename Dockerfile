@@ -104,21 +104,9 @@ RUN --mount=type=cache,target=/go/pkg/mod,uid=10001,gid=10001 \
 # Create final image using a multi-platform base image
 FROM --platform=$TARGETPLATFORM debian:trixie-slim
 
-# Copy model files to /models. arm64 ships ONNX-only (issue #1103); other arches
-# ship the TFLite models. Stage all candidates in one cacheable layer, then keep
-# only the set for the target architecture.
-RUN mkdir -p /models /tmp/allmodels
-COPY --from=build /home/dev-user/src/BirdNET-Go/internal/classifier/data/*.tflite /tmp/allmodels/
-COPY --from=build /home/dev-user/src/BirdNET-Go/internal/classifier/data/*.onnx /tmp/allmodels/
-ARG TARGETPLATFORM
-RUN if [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
-        cp /tmp/allmodels/*.onnx /models/; \
-    else \
-        cp /tmp/allmodels/*.tflite /models/; \
-    fi && \
-    chmod -R a+r /models/ && \
-    chmod a+x /models && \
-    rm -rf /tmp/allmodels
+# The Silero VAD model ships embedded in the binary (see
+# internal/classifier/humanvoice/embed.go), written out at runtime — there are
+# no external model files to stage into the image.
 
 # Install ALSA library and SOX for audio processing, and other system utilities for debugging
 RUN apt-get update -q && apt-get install -q -y --no-install-recommends \
