@@ -2221,18 +2221,6 @@
               "recent": {
                 "label": "Mostra Miniature su lista Rilevamenti Recenti",
                 "helpText": "Abilita per mostrare miniature delle specie rilevate nella lista rilevamenti recenti"
-              },
-              "imageProvider": {
-                "label": "Fornitore Immagini",
-                "helpText": "Seleziona il fornitore immagini preferito per le miniature uccelli"
-              },
-              "fallbackPolicy": {
-                "label": "Politica di Fallback",
-                "helpText": "Seleziona cosa succede quando il fornitore preferito non trova un'immagine",
-                "options": {
-                  "all": "Prova tutti i fornitori in sequenza",
-                  "none": "Usa solo il fornitore selezionato"
-                }
               }
             },
             "spectrogram": {
@@ -2321,7 +2309,6 @@
       },
       "errors": {
         "localesLoadFailed": "Impossibile caricare opzioni lingua. Usando predefiniti.",
-        "providersLoadFailed": "Impossibile caricare fornitori immagini. Usando predefiniti.",
         "mapLibraryLoadFailed": "Caricamento della libreria mappa non riuscito. Aggiorna la pagina.",
         "mapLoadFailed": "Caricamento della mappa non riuscito. Prova ad aggiornare la pagina.",
         "modalMapLoadFailed": "Caricamento della mappa modale non riuscito. Chiudi e riapri la finestra.",

@@ -54,7 +54,6 @@ vi.mock('$lib/stores/settings', async () => {
         thumbnails: {
           summary: true,
           recent: true,
-          imageProvider: 'wikimedia',
           fallbackPolicy: 'all',
         },
         summaryLimit: 100,
@@ -131,7 +130,6 @@ describe('LocationLanguageStep - UI locale persistence on unmount', () => {
             thumbnails: {
               summary: true,
               recent: true,
-              imageProvider: 'wikimedia',
               fallbackPolicy: 'all',
             },
             summaryLimit: 100,
@@ -150,7 +148,6 @@ describe('LocationLanguageStep - UI locale persistence on unmount', () => {
             thumbnails: {
               summary: true,
               recent: true,
-              imageProvider: 'wikimedia',
               fallbackPolicy: 'all',
             },
             summaryLimit: 100,

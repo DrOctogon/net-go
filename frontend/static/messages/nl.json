@@ -2221,18 +2221,6 @@
               "recent": {
                 "label": "Toon afbeeldingen in de Recent herkend lijst",
                 "helpText": "Aktiveer het tonen van afbeeldingen van herkende soorten in de Recent herkend lijst"
-              },
-              "imageProvider": {
-                "label": "Afbeeldingen leverancier",
-                "helpText": "Kies de voorkeur leverancier van de vogel afbeeldingen"
-              },
-              "fallbackPolicy": {
-                "label": "Terugval beleid",
-                "helpText": "Kies wat te doen wanneer de voorkeur leverancier geen afbeelding kan leveren",
-                "options": {
-                  "all": "Probeer schtereenvolgend alle leveranciers",
-                  "none": "Beperk tot de gekozen leverancier"
-                }
               }
             },
             "spectrogram": {
@@ -2321,7 +2309,6 @@
       },
       "errors": {
         "localesLoadFailed": "Kan taal opties niet laden. Gebruik standaardwaarden.",
-        "providersLoadFailed": "Kan afbeeldings leveranciers niet laden. Gebruik standaardwaarden.",
         "mapLibraryLoadFailed": "Laden van kaartbibliotheek mislukt. Vernieuw de pagina.",
         "mapLoadFailed": "Laden van kaart mislukt. Probeer de pagina te vernieuwen.",
         "modalMapLoadFailed": "Laden van modale kaart mislukt. Sluit het venster en open het opnieuw.",

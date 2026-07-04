@@ -2221,18 +2221,6 @@
               "recent": {
                 "label": "Miniaturbilder in der Liste der aktuellen Erkennungen anzeigen",
                 "helpText": "Aktivieren, um Miniaturbilder erkannter Arten in der Liste der aktuellen Erkennungen anzuzeigen"
-              },
-              "imageProvider": {
-                "label": "Bildanbieter",
-                "helpText": "Wählen Sie den bevorzugten Bildanbieter für Vogel-Miniaturbilder"
-              },
-              "fallbackPolicy": {
-                "label": "Fallback-Richtlinie",
-                "helpText": "Wählen Sie, was passiert, wenn der bevorzugte Anbieter kein Bild findet",
-                "options": {
-                  "all": "Alle Anbieter nacheinander versuchen",
-                  "none": "Nur ausgewählten Anbieter verwenden"
-                }
               }
             },
             "spectrogram": {
@@ -2321,7 +2309,6 @@
       },
       "errors": {
         "localesLoadFailed": "Sprachoptionen konnten nicht geladen werden. Verwende Standardwerte.",
-        "providersLoadFailed": "Bildanbieter konnten nicht geladen werden. Verwende Standardwerte.",
         "mapLibraryLoadFailed": "Kartenbibliothek konnte nicht geladen werden. Bitte aktualisieren Sie die Seite.",
         "mapLoadFailed": "Karte konnte nicht geladen werden. Bitte versuchen Sie, die Seite zu aktualisieren.",
         "modalMapLoadFailed": "Modalkarte konnte nicht geladen werden. Bitte schließen und öffnen Sie das Modal erneut.",

@@ -2221,18 +2221,6 @@
               "recent": {
                 "label": "Miniatűrök megjelenítése a legutóbbi detektálások listában",
                 "helpText": "Engedélyezze a észlelt fajok miniatűrjeinek megjelenítését a legutóbbi detektálások listában"
-              },
-              "imageProvider": {
-                "label": "Képszolgáltató",
-                "helpText": "Válassza ki a preferált képszolgáltatót a madár miniatűrökhöz"
-              },
-              "fallbackPolicy": {
-                "label": "Tartalék stratégia",
-                "helpText": "Válassza ki, mi történjen, ha a preferált szolgáltató nem talál képet",
-                "options": {
-                  "all": "Az összes szolgáltató kipróbálása sorrendben",
-                  "none": "Csak a kiválasztott szolgáltató használata"
-                }
               }
             },
             "spectrogram": {
@@ -2321,7 +2309,6 @@
       },
       "errors": {
         "localesLoadFailed": "A nyelvi opciók betöltése sikertelen. Alapértelmezettek használata.",
-        "providersLoadFailed": "A képszolgáltatók betöltése sikertelen. Alapértelmezettek használata.",
         "mapLibraryLoadFailed": "A térkép könyvtár betöltése sikertelen. Kérjük, frissítse az oldalt.",
         "mapLoadFailed": "A térkép betöltése sikertelen. Kérjük, próbálja frissíteni az oldalt.",
         "modalMapLoadFailed": "A modal térkép betöltése sikertelen. Próbálja bezárni és újra megnyitni a modalt.",

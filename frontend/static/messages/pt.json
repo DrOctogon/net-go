@@ -2221,18 +2221,6 @@
               "recent": {
                 "label": "Mostrar miniaturas na lista de detecções recentes",
                 "helpText": "Ativar para mostrar miniaturas de espécies detectadas na lista de detecções recentes"
-              },
-              "imageProvider": {
-                "label": "Provedor de imagens",
-                "helpText": "Selecione o provedor de imagens preferido para miniaturas de pássaros"
-              },
-              "fallbackPolicy": {
-                "label": "Política de fallback",
-                "helpText": "Selecione o que acontece quando o provedor preferido falha ao encontrar uma imagem",
-                "options": {
-                  "all": "Tentar todos os provedores em sequência",
-                  "none": "Usar apenas o provedor selecionado"
-                }
               }
             },
             "spectrogram": {
@@ -2321,7 +2309,6 @@
       },
       "errors": {
         "localesLoadFailed": "Não foi possível carregar as opções de idioma. Usando padrões.",
-        "providersLoadFailed": "Não foi possível carregar os provedores de imagem. Usando padrões.",
         "mapLibraryLoadFailed": "Falha ao carregar a biblioteca de mapas. Atualize a página.",
         "mapLoadFailed": "Falha ao carregar o mapa. Tente atualizar a página.",
         "modalMapLoadFailed": "Falha ao carregar o mapa modal. Feche e reabra a janela.",

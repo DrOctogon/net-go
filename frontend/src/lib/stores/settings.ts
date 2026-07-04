@@ -622,7 +622,6 @@ export interface Thumbnails {
   debug?: boolean;
   summary: boolean;
   recent: boolean;
-  imageProvider: string;
   fallbackPolicy: string;
 }
 
@@ -961,7 +960,6 @@ function createEmptySettings(): SettingsFormData {
         thumbnails: {
           summary: true,
           recent: true,
-          imageProvider: 'avicommons',
           fallbackPolicy: 'none',
         },
         summaryLimit: 30,

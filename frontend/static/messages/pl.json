@@ -2221,18 +2221,6 @@
               "recent": {
                 "label": "Pokaż Miniatury na Liście Ostatnich Detekcji",
                 "helpText": "Włącz, aby pokazać miniatury wykrytych gatunków na liście ostatnich detekcji"
-              },
-              "imageProvider": {
-                "label": "Dostawca Obrazów",
-                "helpText": "Wybierz preferowanego dostawcę obrazów dla miniatur ptaków"
-              },
-              "fallbackPolicy": {
-                "label": "Polityka Zastępcza",
-                "helpText": "Wybierz, co się stanie, gdy preferowany dostawca nie znajdzie obrazu",
-                "options": {
-                  "all": "Wypróbuj wszystkich dostawców w kolejności",
-                  "none": "Użyj tylko wybranego dostawcy"
-                }
               }
             },
             "spectrogram": {
@@ -2321,7 +2309,6 @@
       },
       "errors": {
         "localesLoadFailed": "Nie można załadować opcji językowych. Używanie domyślnych.",
-        "providersLoadFailed": "Nie można załadować dostawców obrazów. Używanie domyślnych.",
         "mapLibraryLoadFailed": "Nie udało się załadować biblioteki map. Odśwież stronę.",
         "mapLoadFailed": "Nie udało się załadować mapy. Spróbuj odświeżyć stronę.",
         "modalMapLoadFailed": "Nie udało się załadować mapy w oknie modalnym. Zamknij i otwórz okno ponownie.",

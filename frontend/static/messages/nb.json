@@ -2221,18 +2221,6 @@
               "recent": {
                 "label": "Vis miniatyrbilder i listen over siste registreringer",
                 "helpText": "Aktiver for å vise miniatyrbilder av registrerte arter i listen over siste registreringer"
-              },
-              "imageProvider": {
-                "label": "Bildeleverandør",
-                "helpText": "Velg foretrukket bildeleverandør for fugleminiatyrbilder"
-              },
-              "fallbackPolicy": {
-                "label": "Reservepolicy",
-                "helpText": "Velg hva som skjer når foretrukket leverandør ikke finner et bilde",
-                "options": {
-                  "all": "Prøv alle leverandører i rekkefølge",
-                  "none": "Bruk kun valgt leverandør"
-                }
               }
             },
             "spectrogram": {
@@ -2321,7 +2309,6 @@
       },
       "errors": {
         "localesLoadFailed": "Kan ikke laste språkalternativer. Bruker standardverdier.",
-        "providersLoadFailed": "Kan ikke laste bildeleverandører. Bruker standardverdier.",
         "mapLibraryLoadFailed": "Innlasting av kartbibliotek mislyktes. Oppdater siden.",
         "mapLoadFailed": "Innlasting av kart mislyktes. Prøv å oppdatere siden.",
         "modalMapLoadFailed": "Innlasting av kartdialog mislyktes. Prøv å lukke og åpne dialogboksen på nytt.",

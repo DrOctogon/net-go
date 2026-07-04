@@ -2221,18 +2221,6 @@
               "recent": {
                 "label": "Afficher les miniatures dans la liste des détections récentes",
                 "helpText": "Activer pour afficher les miniatures des espèces détectées dans la liste des détections récentes"
-              },
-              "imageProvider": {
-                "label": "Fournisseur d'images",
-                "helpText": "Sélectionnez le fournisseur d'images préféré pour les miniatures d'oiseaux"
-              },
-              "fallbackPolicy": {
-                "label": "Politique de repli",
-                "helpText": "Sélectionnez ce qui se passe lorsque le fournisseur préféré ne trouve pas d'image",
-                "options": {
-                  "all": "Essayer tous les fournisseurs en séquence",
-                  "none": "Utiliser uniquement le fournisseur sélectionné"
-                }
               }
             },
             "spectrogram": {
@@ -2321,7 +2309,6 @@
       },
       "errors": {
         "localesLoadFailed": "Impossible de charger les options de langue. Utilisation des valeurs par défaut.",
-        "providersLoadFailed": "Impossible de charger les fournisseurs d'images. Utilisation des valeurs par défaut.",
         "mapLibraryLoadFailed": "Échec du chargement de la bibliothèque cartographique. Veuillez actualiser la page.",
         "mapLoadFailed": "Échec du chargement de la carte. Veuillez essayer d'actualiser la page.",
         "modalMapLoadFailed": "Échec du chargement de la carte modale. Veuillez fermer et rouvrir la fenêtre.",

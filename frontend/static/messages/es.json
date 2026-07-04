@@ -2221,18 +2221,6 @@
               "recent": {
                 "label": "Mostrar miniaturas en la lista de detecciones recientes",
                 "helpText": "Habilitar para mostrar miniaturas de especies detectadas en la lista de detecciones recientes"
-              },
-              "imageProvider": {
-                "label": "Proveedor de imágenes",
-                "helpText": "Seleccione el proveedor de imágenes preferido para las miniaturas de aves"
-              },
-              "fallbackPolicy": {
-                "label": "Política de respaldo",
-                "helpText": "Seleccione qué sucede cuando el proveedor preferido no encuentra una imagen",
-                "options": {
-                  "all": "Probar todos los proveedores en secuencia",
-                  "none": "Usar solo el proveedor seleccionado"
-                }
               }
             },
             "spectrogram": {
@@ -2321,7 +2309,6 @@
       },
       "errors": {
         "localesLoadFailed": "No se pudieron cargar las opciones de idioma. Usando valores predeterminados.",
-        "providersLoadFailed": "No se pudieron cargar los proveedores de imágenes. Usando valores predeterminados.",
         "mapLibraryLoadFailed": "Error al cargar la biblioteca de mapas. Por favor, actualice la página.",
         "mapLoadFailed": "Error al cargar el mapa. Por favor, intente actualizar la página.",
         "modalMapLoadFailed": "Error al cargar el mapa del modal. Por favor, cierre y vuelva a abrir el modal.",

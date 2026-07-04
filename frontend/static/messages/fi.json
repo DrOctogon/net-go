@@ -2221,18 +2221,6 @@
               "recent": {
                 "label": "Näytä pienoiskuvat viimeisimpien havaintojen listassa",
                 "helpText": "Ota käyttöön näyttääksesi havaittujen lajien pienoiskuvat viimeisimpien havaintojen listassa"
-              },
-              "imageProvider": {
-                "label": "Kuvapalvelu",
-                "helpText": "Valitse ensisijainen kuvapalvelu lintujen pienoiskuville"
-              },
-              "fallbackPolicy": {
-                "label": "Varakuvapalvelu",
-                "helpText": "Valitse mitä tapahtuu, kun ensisijainen palvelu ei löydä kuvaa",
-                "options": {
-                  "all": "Kokeile kaikkia palveluja järjestyksessä",
-                  "none": "Käytä vain valittua palvelua"
-                }
               }
             },
             "spectrogram": {
@@ -2321,7 +2309,6 @@
       },
       "errors": {
         "localesLoadFailed": "Kielivaihtoehtoja ei voitu ladata. Käytetään oletusarvoja.",
-        "providersLoadFailed": "Kuvatoimittajia ei voitu ladata. Käytetään oletusarvoja.",
         "mapLibraryLoadFailed": "Karttakirjaston lataus epäonnistui. Päivitä sivu.",
         "mapLoadFailed": "Kartan lataus epäonnistui. Kokeile päivittää sivu.",
         "modalMapLoadFailed": "Ikkunan kartan lataus epäonnistui. Sulje ja avaa ikkuna uudelleen.",

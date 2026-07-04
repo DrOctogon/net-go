@@ -2221,18 +2221,6 @@
               "recent": {
                 "label": "Vis miniaturebilleder på listen over seneste detektioner",
                 "helpText": "Aktivér for at vise miniaturebilleder af detekterede arter på listen over seneste detektioner"
-              },
-              "imageProvider": {
-                "label": "Billeduldbyder",
-                "helpText": "Vælg den foretrukne billeduldbyder til fugleminiaturebilleder"
-              },
-              "fallbackPolicy": {
-                "label": "Reservepolitik",
-                "helpText": "Vælg hvad der sker, når den foretrukne udbyder ikke finder et billede",
-                "options": {
-                  "all": "Prøv alle udbydere i rækkefølge",
-                  "none": "Brug kun den valgte udbyder"
-                }
               }
             },
             "spectrogram": {
@@ -2321,7 +2309,6 @@
       },
       "errors": {
         "localesLoadFailed": "Kunne ikke indlæse sprogindstillinger. Bruger standardindstillinger.",
-        "providersLoadFailed": "Kunne ikke indlæse billeduldbydere. Bruger standardindstillinger.",
         "mapLibraryLoadFailed": "Kunne ikke indlæse kortbibliotek. Opdater venligst siden.",
         "mapLoadFailed": "Kunne ikke indlæse kort. Prøv venligst at opdatere siden.",
         "modalMapLoadFailed": "Kunne ikke indlæse modalkortet. Prøv venligst at lukke og genåbne modalen.",

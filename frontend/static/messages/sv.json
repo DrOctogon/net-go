@@ -2221,18 +2221,6 @@
               "recent": {
                 "label": "Visa miniatyrbilder i listan över senaste detektioner",
                 "helpText": "Aktivera för att visa miniatyrbilder av detekterade arter i listan över senaste detektioner"
-              },
-              "imageProvider": {
-                "label": "Bildleverantör",
-                "helpText": "Välj föredragen bildleverantör för fågelminiatyrbilder"
-              },
-              "fallbackPolicy": {
-                "label": "Reservpolicy",
-                "helpText": "Välj vad som händer när den föredragna leverantören inte hittar en bild",
-                "options": {
-                  "all": "Prova alla leverantörer i ordning",
-                  "none": "Använd bara vald leverantör"
-                }
               }
             },
             "spectrogram": {
@@ -2321,7 +2309,6 @@
       },
       "errors": {
         "localesLoadFailed": "Kunde inte ladda språkalternativ. Använder standardvärden.",
-        "providersLoadFailed": "Kunde inte ladda bildleverantörer. Använder standardvärden.",
         "mapLibraryLoadFailed": "Kunde inte ladda kartbibliotek. Vänligen uppdatera sidan.",
         "mapLoadFailed": "Kunde inte ladda kartan. Försök att uppdatera sidan.",
         "modalMapLoadFailed": "Kunde inte ladda modalkartan. Försök att stänga och öppna modalen igen.",

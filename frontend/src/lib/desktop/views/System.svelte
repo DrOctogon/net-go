@@ -433,7 +433,7 @@
 
   async function loadBirdnetOverlap(): Promise<void> {
     try {
-      const data = await api.get<{ overlap?: number }>('/api/v2/settings/birdnet');
+      const data = await api.get<{ overlap?: number }>('/api/v2/settings/voicewatch');
       if (typeof data.overlap === 'number') birdnetOverlap = data.overlap;
     } catch {
       // Default overlap 0 is fine

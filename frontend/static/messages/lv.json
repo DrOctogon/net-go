@@ -2221,18 +2221,6 @@
               "recent": {
                 "label": "Rādīt sīktēlus pēdējo noteikšanu sarakstā",
                 "helpText": "Iespējojiet, lai rādītu noteikto sugu sīktēlus pēdējo noteikšanu sarakstā"
-              },
-              "imageProvider": {
-                "label": "Attēlu nodrošinātājs",
-                "helpText": "Izvēlieties vēlamo attēlu nodrošinātāju putnu sīktēliem"
-              },
-              "fallbackPolicy": {
-                "label": "Rezerves politika",
-                "helpText": "Izvēlieties, kas notiek, kad vēlamais nodrošinātājs neatrod attēlu",
-                "options": {
-                  "all": "Izmēģināt visus nodrošinātājus secīgi",
-                  "none": "Izmantot tikai izvēlēto nodrošinātāju"
-                }
               }
             },
             "spectrogram": {
@@ -2321,7 +2309,6 @@
       },
       "errors": {
         "localesLoadFailed": "Neizdevās ielādēt valodu opcijas. Izmanto noklusējuma vērtības.",
-        "providersLoadFailed": "Neizdevās ielādēt attēlu nodrošinātājus. Izmanto noklusējuma vērtības.",
         "mapLibraryLoadFailed": "Neizdevās ielādēt kartes bibliotēku. Lūdzu, atsvaidziniet lapu.",
         "mapLoadFailed": "Neizdevās ielādēt karti. Lūdzu, mēģiniet atsvaidzināt lapu.",
         "modalMapLoadFailed": "Neizdevās ielādēt modālā loga karti. Lūdzu, mēģiniet aizvērt un atkārtoti atvērt modālo logu.",

@@ -241,7 +241,7 @@ Performance Optimizations:
 
     // Update settings store directly for immediate reactivity
     const defaultDashboard: Dashboard = {
-      thumbnails: { summary: true, recent: true, imageProvider: '', fallbackPolicy: '' },
+      thumbnails: { summary: true, recent: true, fallbackPolicy: '' },
       summaryLimit: 30,
     };
 

@@ -2221,18 +2221,6 @@
               "recent": {
                 "label": "Show Thumbnails on Recent Detections list",
                 "helpText": "Enable to show thumbnails of detected species on the recent detections list"
-              },
-              "imageProvider": {
-                "label": "Image Provider",
-                "helpText": "Select the preferred image provider for bird thumbnails"
-              },
-              "fallbackPolicy": {
-                "label": "Fallback Policy",
-                "helpText": "Select what happens when preferred provider fails to find an image",
-                "options": {
-                  "all": "Try all providers in sequence",
-                  "none": "Use only selected provider"
-                }
               }
             },
             "spectrogram": {
@@ -2321,7 +2309,6 @@
       },
       "errors": {
         "localesLoadFailed": "Unable to load language options. Using defaults.",
-        "providersLoadFailed": "Unable to load image providers. Using defaults.",
         "mapLibraryLoadFailed": "Failed to load map library. Please refresh the page.",
         "mapLoadFailed": "Failed to load map. Please try refreshing the page.",
         "modalMapLoadFailed": "Failed to load modal map. Please try closing and reopening the modal.",

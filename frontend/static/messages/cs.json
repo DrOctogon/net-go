@@ -2221,18 +2221,6 @@
               "recent": {
                 "label": "Zobrazit náhledy v seznamu nedávných detekcí",
                 "helpText": "Povolte zobrazení náhledů detekovaných druhů v seznamu nedávných detekcí"
-              },
-              "imageProvider": {
-                "label": "Poskytovatel obrázků",
-                "helpText": "Vyberte preferovaného poskytovatele obrázků pro náhledy ptáků"
-              },
-              "fallbackPolicy": {
-                "label": "Záložní politika",
-                "helpText": "Vyberte, co se stane, když preferovaný poskytovatel obrázek nenajde",
-                "options": {
-                  "all": "Vyzkoušet všechny poskytovatele postupně",
-                  "none": "Použít pouze vybraného poskytovatele"
-                }
               }
             },
             "spectrogram": {
@@ -2321,7 +2309,6 @@
       },
       "errors": {
         "localesLoadFailed": "Nepodařilo se načíst možnosti jazyka. Používají se výchozí nastavení.",
-        "providersLoadFailed": "Nepodařilo se načíst poskytovatele obrázků. Používají se výchozí nastavení.",
         "mapLibraryLoadFailed": "Nepodařilo se načíst knihovnu map. Obnovte stránku.",
         "mapLoadFailed": "Nepodařilo se načíst mapu. Zkuste obnovit stránku.",
         "modalMapLoadFailed": "Nepodařilo se načíst modální mapu. Zkuste okno zavřít a znovu otevřít.",

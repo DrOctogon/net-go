@@ -377,7 +377,6 @@ describe('Settings Store - UI Locale Preservation (#2756/#2760)', () => {
           thumbnails: {
             summary: false,
             recent: false,
-            imageProvider: 'auto',
             fallbackPolicy: 'all',
           },
           summaryLimit: 100,
@@ -415,7 +414,7 @@ describe('Settings Store - UI Locale Preservation (#2756/#2760)', () => {
     // User selects German on the UI Language page.
     settingsActions.updateSection('realtime', {
       dashboard: {
-        thumbnails: { summary: false, recent: false, imageProvider: 'auto', fallbackPolicy: 'all' },
+        thumbnails: { summary: false, recent: false, fallbackPolicy: 'all' },
         summaryLimit: 100,
         locale: 'de',
       },
@@ -433,7 +432,7 @@ describe('Settings Store - UI Locale Preservation (#2756/#2760)', () => {
     seedStore('en');
     settingsActions.updateSection('realtime', {
       dashboard: {
-        thumbnails: { summary: false, recent: false, imageProvider: 'auto', fallbackPolicy: 'all' },
+        thumbnails: { summary: false, recent: false, fallbackPolicy: 'all' },
         summaryLimit: 100,
         locale: 'xx-invalid',
       },
