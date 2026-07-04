@@ -220,14 +220,13 @@ func assertRoutesRegistered(t *testing.T, e *echo.Echo, expectedRoutes []string)
 
 // SpeciesDailySummaryExpected contains expected values for species daily summary assertions.
 type SpeciesDailySummaryExpected struct {
-	CommonName          string
-	SpeciesCode         string
-	Count               int
-	HourlyCounts        []int
-	FirstHeard          string
-	LatestHeard         string
-	HighConfidence      bool
-	ThumbnailURLContain string // Substring that ThumbnailURL should contain
+	CommonName     string
+	SpeciesCode    string
+	Count          int
+	HourlyCounts   []int
+	FirstHeard     string
+	LatestHeard    string
+	HighConfidence bool
 }
 
 // assertSpeciesDailySummary verifies that a SpeciesDailySummary matches expected values.
@@ -242,7 +241,6 @@ func assertSpeciesDailySummary(t *testing.T, species *SpeciesDailySummary, expec
 	assert.Equal(t, expected.FirstHeard, species.FirstHeard, "%s first heard time mismatch", expected.CommonName)
 	assert.Equal(t, expected.LatestHeard, species.LatestHeard, "%s latest heard time mismatch", expected.CommonName)
 	assert.Equal(t, expected.HighConfidence, species.HighConfidence, "%s high confidence mismatch", expected.CommonName)
-	assert.Contains(t, species.ThumbnailURL, expected.ThumbnailURLContain, "%s thumbnail URL mismatch", expected.CommonName)
 }
 
 // setupValidReviewMock configures mock expectations for a valid review operation.

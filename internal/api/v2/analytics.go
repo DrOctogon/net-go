@@ -23,7 +23,6 @@ import (
 	"github.com/tphakala/voicewatch/internal/logger"
 )
 
-const placeholderImageURL = "/ui/assets/bird-placeholder.svg"
 const maxSpeciesBatch = 10
 
 // Analytics constants (file-local)
@@ -115,7 +114,6 @@ type SpeciesDailySummary struct {
 	MaxConfidence      float64 `json:"max_confidence,omitempty"` // Highest detection confidence on this day (0..1)
 	FirstHeard         string  `json:"first_heard,omitempty"`
 	LatestHeard        string  `json:"latest_heard,omitempty"`
-	ThumbnailURL       string  `json:"thumbnail_url,omitempty"`
 	IsNewSpecies       bool    `json:"is_new_species,omitempty"`        // First seen within tracking window
 	DaysSinceFirstSeen int     `json:"days_since_first_seen,omitempty"` // Days since species was first detected
 	DaysSinceLastSeen  int     `json:"days_since_last_seen,omitempty"`  // Days since the previous detection before this return; omitted unless > 0 (first-ever and same-day re-detections are not emitted)
@@ -137,7 +135,6 @@ type SpeciesSummary struct {
 	LastHeard      string  `json:"last_heard,omitempty"`
 	AvgConfidence  float64 `json:"avg_confidence,omitempty"`
 	MaxConfidence  float64 `json:"max_confidence,omitempty"`
-	ThumbnailURL   string  `json:"thumbnail_url,omitempty"`
 }
 
 // HourlyDistribution represents detections aggregated by hour
@@ -152,7 +149,6 @@ type NewSpeciesResponse struct {
 	ScientificName string `json:"scientific_name"`
 	CommonName     string `json:"common_name"`
 	FirstHeardDate string `json:"first_heard_date"`
-	ThumbnailURL   string `json:"thumbnail_url,omitempty"`
 	CountInPeriod  int    `json:"count_in_period"` // How many times seen in the query period
 }
 
@@ -194,7 +190,6 @@ func (c *Controller) initAnalyticsRoutes() {
 	speciesGroup.GET("/daily/batch", c.GetBatchDailySpeciesSummary) // Batch daily summaries endpoint
 	speciesGroup.GET("/summary", c.GetSpeciesSummary)
 	speciesGroup.GET("/detections/new", c.GetNewSpeciesDetections) // Renamed endpoint
-	speciesGroup.GET("/thumbnails", c.GetSpeciesThumbnails)        // Batch thumbnail endpoint
 	speciesGroup.GET("/diversity", c.GetSpeciesDiversity)          // Species diversity over time
 
 	// Time analytics routes (can be implemented later)
@@ -202,12 +197,12 @@ func (c *Controller) initAnalyticsRoutes() {
 	timeGroup.GET("/hourly", c.GetHourlyAnalytics)
 	timeGroup.GET("/hourly/batch", c.GetBatchHourlySpeciesData) // Batch hourly data for multiple species
 	timeGroup.GET("/daily", c.GetDailyAnalytics)
-	timeGroup.GET("/daily/batch", c.GetBatchDailySpeciesData)              // Batch daily trends for multiple species
-	timeGroup.GET("/distribution/hourly", c.GetTimeOfDayDistribution)      // Renamed endpoint for time-of-day distribution
-	timeGroup.GET("/heatmap", c.GetActivityHeatmap)                        // Seasonal density heatmap (date x intra-day slot)
-	timeGroup.GET("/dawn-onset", c.GetDawnChorusOnset)                     // Dawn-chorus onset tracker (daily onset vs civil dawn)
-	timeGroup.GET("/succession", c.GetAcousticSuccession)                  // Acoustic succession streamgraph (top-N species hour-of-day, stacked)
-	timeGroup.GET("/year-over-year", c.GetYearOverYear)                    // Year-over-year tracker (this year-to-date vs same span last year, cumulative)
+	timeGroup.GET("/daily/batch", c.GetBatchDailySpeciesData)         // Batch daily trends for multiple species
+	timeGroup.GET("/distribution/hourly", c.GetTimeOfDayDistribution) // Renamed endpoint for time-of-day distribution
+	timeGroup.GET("/heatmap", c.GetActivityHeatmap)                   // Seasonal density heatmap (date x intra-day slot)
+	timeGroup.GET("/dawn-onset", c.GetDawnChorusOnset)                // Dawn-chorus onset tracker (daily onset vs civil dawn)
+	timeGroup.GET("/succession", c.GetAcousticSuccession)             // Acoustic succession streamgraph (top-N species hour-of-day, stacked)
+	timeGroup.GET("/year-over-year", c.GetYearOverYear)               // Year-over-year tracker (this year-to-date vs same span last year, cumulative)
 
 	// Confidence analytics routes
 	confidenceGroup := analyticsGroup.Group("/confidence")
@@ -270,7 +265,7 @@ func (c *Controller) GetDailySpeciesSummary(ctx echo.Context) error {
 		)
 	}
 
-	// 4. Build Response (including fetching thumbnails)
+	// 4. Build Response
 	result, err := c.buildDailySpeciesSummaryResponse(aggregatedData, selectedDate)
 	if err != nil {
 		// Error logged in helper
@@ -535,9 +530,6 @@ func (c *Controller) buildDailySpeciesSummaryResponse(aggregatedData map[string]
 	// Collect species names with detections
 	scientificNames := collectSpeciesWithDetections(aggregatedData)
 
-	// Batch fetch thumbnail URLs (cached only for fast response)
-	thumbnailURLs := c.batchFetchCachedThumbnails(scientificNames)
-
 	// Parse selected date for status computation
 	statusTime := parseStatusTimeFromDate(selectedDate)
 
@@ -548,8 +540,7 @@ func (c *Controller) buildDailySpeciesSummaryResponse(aggregatedData map[string]
 	result := make([]SpeciesDailySummary, 0, len(scientificNames))
 	for _, scientificName := range scientificNames {
 		data := aggregatedData[scientificName]
-		thumbnailURL := getThumbnailWithFallback(thumbnailURLs, scientificName)
-		summary := buildSpeciesSummaryFromData(&data, thumbnailURL)
+		summary := buildSpeciesSummaryFromData(&data)
 		if status, exists := batchSpeciesStatus[scientificName]; exists {
 			applySpeciesStatusToSummary(&summary, &status)
 		}
@@ -568,12 +559,6 @@ func collectSpeciesWithDetections(aggregatedData map[string]aggregatedBirdInfo) 
 		}
 	}
 	return names
-}
-
-// batchFetchCachedThumbnails returns an empty map.
-// Image providers have been removed as part of the human-voice pivot.
-func (c *Controller) batchFetchCachedThumbnails(_ []string) map[string]string {
-	return make(map[string]string)
 }
 
 // parseStatusTimeFromDate parses selected date for species status computation
@@ -603,16 +588,8 @@ func (c *Controller) batchFetchSpeciesStatus(scientificNames []string, statusTim
 	return tracker.GetBatchSpeciesStatus(scientificNames, statusTime)
 }
 
-// getThumbnailWithFallback returns thumbnail URL or placeholder
-func getThumbnailWithFallback(thumbnailURLs map[string]string, scientificName string) string {
-	if url, ok := thumbnailURLs[scientificName]; ok && url != "" {
-		return url
-	}
-	return placeholderImageURL
-}
-
 // buildSpeciesSummaryFromData creates a SpeciesDailySummary from aggregated data
-func buildSpeciesSummaryFromData(data *aggregatedBirdInfo, thumbnailURL string) SpeciesDailySummary {
+func buildSpeciesSummaryFromData(data *aggregatedBirdInfo) SpeciesDailySummary {
 	hourlyCountsSlice := make([]int, HoursPerDay)
 	copy(hourlyCountsSlice, data.HourlyCounts[:])
 
@@ -626,7 +603,6 @@ func buildSpeciesSummaryFromData(data *aggregatedBirdInfo, thumbnailURL string) 
 		MaxConfidence:  data.MaxConfidence,
 		FirstHeard:     data.First,
 		LatestHeard:    data.Latest,
-		ThumbnailURL:   thumbnailURL,
 	}
 }
 
@@ -696,10 +672,8 @@ func (c *Controller) GetSpeciesSummary(ctx echo.Context) error {
 		)
 	}
 
-	// Build response with thumbnails
-	scientificNames := extractScientificNames(summaryData)
-	thumbnailURLs := c.batchFetchThumbnailsWithLogging(scientificNames, ip, path)
-	response := c.convertSummaryDataToResponse(summaryData, thumbnailURLs)
+	// Build response
+	response := c.convertSummaryDataToResponse(summaryData)
 
 	// Apply limit
 	response, limit := c.applyOptionalLimit(ctx, response, ip, path)
@@ -725,23 +699,8 @@ func (c *Controller) fetchSpeciesSummaryData(ctx echo.Context, startDate, endDat
 	return summaryData, time.Since(dbStart), err
 }
 
-// extractScientificNames extracts scientific names from summary data
-func extractScientificNames(summaryData []datastore.SpeciesSummaryData) []string {
-	names := make([]string, 0, len(summaryData))
-	for i := range summaryData {
-		names = append(names, summaryData[i].ScientificName)
-	}
-	return names
-}
-
-// batchFetchThumbnailsWithLogging returns nil.
-// Image providers have been removed as part of the human-voice pivot.
-func (c *Controller) batchFetchThumbnailsWithLogging(_ []string, _, _ string) map[string]string {
-	return nil
-}
-
 // convertSummaryDataToResponse converts datastore models to API response
-func (c *Controller) convertSummaryDataToResponse(summaryData []datastore.SpeciesSummaryData, thumbnailURLs map[string]string) []SpeciesSummary {
+func (c *Controller) convertSummaryDataToResponse(summaryData []datastore.SpeciesSummaryData) []SpeciesSummary {
 	response := make([]SpeciesSummary, 0, len(summaryData))
 
 	for i := range summaryData {
@@ -755,7 +714,6 @@ func (c *Controller) convertSummaryDataToResponse(summaryData []datastore.Specie
 			LastHeard:      formatTimeIfNotZero(data.LastSeen),
 			AvgConfidence:  data.AvgConfidence,
 			MaxConfidence:  data.MaxConfidence,
-			ThumbnailURL:   getThumbnailWithFallback(thumbnailURLs, data.ScientificName),
 		})
 	}
 
@@ -2065,7 +2023,7 @@ func (c *Controller) GetNewSpeciesDetections(ctx echo.Context) error {
 		)
 	}
 
-	// Build response with thumbnails
+	// Build response
 	response := c.convertNewSpeciesToResponse(newSpeciesData)
 
 	c.logInfoIfEnabled("New species detections retrieved",
@@ -2094,35 +2052,16 @@ func (c *Controller) validateNewSpeciesDateParams(ctx echo.Context, startDate, e
 
 // convertNewSpeciesToResponse converts new species data to API response format
 func (c *Controller) convertNewSpeciesToResponse(newSpeciesData []datastore.NewSpeciesData) []NewSpeciesResponse {
-	scientificNames := extractNewSpeciesNames(newSpeciesData)
-	thumbnailURLs := c.batchFetchThumbnailURLs(scientificNames)
-
 	response := make([]NewSpeciesResponse, 0, len(newSpeciesData))
 	for _, data := range newSpeciesData {
 		response = append(response, NewSpeciesResponse{
 			ScientificName: data.ScientificName,
 			CommonName:     data.CommonName,
 			FirstHeardDate: data.FirstSeenDate,
-			ThumbnailURL:   getThumbnailWithFallback(thumbnailURLs, data.ScientificName),
 			CountInPeriod:  data.CountInPeriod,
 		})
 	}
 	return response
-}
-
-// extractNewSpeciesNames extracts scientific names from new species data
-func extractNewSpeciesNames(data []datastore.NewSpeciesData) []string {
-	names := make([]string, 0, len(data))
-	for _, d := range data {
-		names = append(names, d.ScientificName)
-	}
-	return names
-}
-
-// batchFetchThumbnailURLs returns an empty map.
-// Image providers have been removed as part of the human-voice pivot.
-func (c *Controller) batchFetchThumbnailURLs(_ []string) map[string]string {
-	return make(map[string]string)
 }
 
 // Helper function to sum array values
@@ -2204,28 +2143,6 @@ func sortAndLimitSpeciesSummary(result []SpeciesDailySummary, limit int) []Speci
 	// Apply limit if specified
 	if limit > 0 && limit < len(result) {
 		return result[:limit]
-	}
-	return result
-}
-
-// GetSpeciesThumbnails handles GET /api/v2/analytics/species/thumbnails
-// Returns thumbnail URLs for multiple species in a single request
-func (c *Controller) GetSpeciesThumbnails(ctx echo.Context) error {
-	speciesParams := ctx.QueryParams()["species"]
-	if len(speciesParams) == 0 {
-		return echo.NewHTTPError(http.StatusBadRequest, "No species provided")
-	}
-
-	result := c.buildThumbnailMap(speciesParams)
-	return ctx.JSON(http.StatusOK, result)
-}
-
-// buildThumbnailMap creates a map of species names to placeholder thumbnail URLs.
-// Image providers have been removed as part of the human-voice pivot.
-func (c *Controller) buildThumbnailMap(speciesParams []string) map[string]string {
-	result := make(map[string]string, len(speciesParams))
-	for _, name := range speciesParams {
-		result[name] = placeholderImageURL
 	}
 	return result
 }

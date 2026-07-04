@@ -773,14 +773,13 @@ func TestGetDailySpeciesSummary_MultipleDetections(t *testing.T) {
 	assert.NotNil(t, amcro, "American Crow should be in the response")
 	if amcro != nil {
 		assertSpeciesDailySummary(t, amcro, &SpeciesDailySummaryExpected{
-			CommonName:          "American Crow",
-			SpeciesCode:         "AMCRO",
-			Count:               amcroTotal,
-			HourlyCounts:        expectedAmcroHourlyCounts[:],
-			FirstHeard:          "08:15:00",
-			LatestHeard:         "14:45:00",
-			HighConfidence:      true, // Based on 0.95 > 0.8
-			ThumbnailURLContain: "bird-placeholder",
+			CommonName:     "American Crow",
+			SpeciesCode:    "AMCRO",
+			Count:          amcroTotal,
+			HourlyCounts:   expectedAmcroHourlyCounts[:],
+			FirstHeard:     "08:15:00",
+			LatestHeard:    "14:45:00",
+			HighConfidence: true, // Based on 0.95 > 0.8
 		})
 		// Max confidence is merged from the species summary aggregation
 		assert.InDelta(t, 0.95, amcro.MaxConfidence, 0.001, "American Crow max confidence should be merged")
@@ -790,14 +789,13 @@ func TestGetDailySpeciesSummary_MultipleDetections(t *testing.T) {
 	assert.NotNil(t, rbwo, "Red-bellied Woodpecker should be in the response")
 	if rbwo != nil {
 		assertSpeciesDailySummary(t, rbwo, &SpeciesDailySummaryExpected{
-			CommonName:          "Red-bellied Woodpecker",
-			SpeciesCode:         "RBWO",
-			Count:               rbwoTotal,
-			HourlyCounts:        expectedRbwoHourlyCounts[:],
-			FirstHeard:          "10:20:00",
-			LatestHeard:         "16:05:00",
-			HighConfidence:      true, // Based on 0.8 >= 0.8
-			ThumbnailURLContain: "bird-placeholder",
+			CommonName:     "Red-bellied Woodpecker",
+			SpeciesCode:    "RBWO",
+			Count:          rbwoTotal,
+			HourlyCounts:   expectedRbwoHourlyCounts[:],
+			FirstHeard:     "10:20:00",
+			LatestHeard:    "16:05:00",
+			HighConfidence: true, // Based on 0.8 >= 0.8
 		})
 		// RBWO's max (0.8) is NOT its last note (0.75), so this pins the
 		// max() aggregation rather than a "last-note-wins" implementation.
