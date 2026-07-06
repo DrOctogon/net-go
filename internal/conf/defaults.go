@@ -26,8 +26,8 @@ func setDefaultConfig() {
 
 	// Per-module log files
 	// Core processing modules
-	setModuleLogDefaults("analysis", true)    // Bird detection analysis
-	setModuleLogDefaults("voicewatch", true)     // VoiceWatch model inference
+	setModuleLogDefaults("analysis", true)   // Bird detection analysis
+	setModuleLogDefaults("voicewatch", true) // VoiceWatch model inference
 	// Mirror the voicewatch module to the console so backend selection, model-init,
 	// reload, and bat-scheduler lines are visible in journald/containers and not
 	// only in logs/voicewatch.log. This realigns the viper default with the intent in
@@ -211,6 +211,7 @@ func setDefaultConfig() {
 	viper.SetDefault("realtime.transcription.language", "en")
 	viper.SetDefault("realtime.transcription.keywords", []string{})
 	viper.SetDefault("realtime.transcription.keywordCaseSensitive", false)
+	viper.SetDefault("realtime.transcription.includeTranscriptInAlerts", false)
 
 	// OpenWeather configuration
 	/*
