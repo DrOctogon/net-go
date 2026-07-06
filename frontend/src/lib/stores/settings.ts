@@ -514,6 +514,10 @@ export interface TranscriptionSettings {
   language: string;
   keywords: string[];
   keywordCaseSensitive: boolean;
+  // When false (privacy-first default) the verbatim transcript is withheld from
+  // keyword-match alerts so raw speech never reaches external notification
+  // channels; only the matched keywords are shared. Opt in to include it.
+  includeTranscriptInAlerts: boolean;
 }
 
 // Realtime settings matching backend structure
@@ -954,6 +958,7 @@ function createEmptySettings(): SettingsFormData {
         language: 'en',
         keywords: [],
         keywordCaseSensitive: false,
+        includeTranscriptInAlerts: false,
       },
       weather: weatherDefaults,
       dashboard: {

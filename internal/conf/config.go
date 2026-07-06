@@ -867,6 +867,12 @@ type TranscriptionSettings struct {
 	// KeywordCaseSensitive controls whether keyword matching respects letter case.
 	// Defaults to false (case-insensitive matching).
 	KeywordCaseSensitive bool `yaml:"keywordCaseSensitive" json:"keywordCaseSensitive"`
+	// IncludeTranscriptInAlerts controls whether the full verbatim transcript is
+	// attached to keyword-match alert events. When false (the privacy-first
+	// default) only the matched keywords are shared, so raw speech content is
+	// never egressed to external notification channels (Discord/Telegram/webhooks).
+	// Set true to opt in to including the transcript in alert payloads/templates.
+	IncludeTranscriptInAlerts bool `yaml:"includeTranscriptInAlerts" json:"includeTranscriptInAlerts"`
 }
 
 // SpeciesAction represents a single action configuration
