@@ -580,6 +580,7 @@ func New(settings *conf.Settings, ds datastore.Interface, bn *classifier.Orchest
 	// live for the process lifetime (no cross-restart persistence yet).
 	if sa.Enabled && sa.VoicePrint.Enabled {
 		p.speakerClusterer = speaker.NewClusterer(0) // 0 => DefaultClusterThreshold
+		p.restoreSpeakerClusters()                   // resume speaker IDs across restarts
 	}
 
 	return p
@@ -2319,6 +2320,15 @@ func (p *Processor) ShutdownWithContext(ctx context.Context) error {
 			logger.Error(err),
 			logger.String("operation", "job_queue_shutdown"))
 	}
+
+	// Persist voice-print clusters so SpeakerIDs stay stable across restarts.
+	// Placed AFTER the flusher (which calls Clusterer.Assign) and the job queue
+	// have drained, so the snapshot captures every Assign — including the nextID
+	// increments for clusters created while the final detections drained. A
+	// snapshot taken earlier would omit those and let a later restart re-issue an
+	// already-used SpeakerID to a different speaker. Run before the ctx-expiry
+	// early return below so the clusters are saved even on a timed-out shutdown.
+	p.persistSpeakerClusters()
 
 	// Skip remaining cleanup if context is already expired — these are
 	// nice-to-have disconnects, not critical for data integrity.

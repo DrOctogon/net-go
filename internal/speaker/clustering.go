@@ -17,8 +17,9 @@ const DefaultClusterThreshold = 0.75
 // cluster (cosine >= Threshold) or starts a new one.
 //
 // It is a dependency-free in-memory primitive, deliberately simple so it can be
-// unit tested before a real voice-print model exists. It does NOT persist
-// clusters across restarts; persistence and eviction (e.g. capping or ageing out
+// unit tested before a real voice-print model exists. Its state can be persisted
+// across restarts via Snapshot/Save and restored with Load/NewClustererFromSnapshot
+// (see clustering_persistence.go); cluster eviction (capping or ageing out
 // clusters) can be layered on later. Safe for concurrent use.
 type Clusterer struct {
 	mu        sync.Mutex
