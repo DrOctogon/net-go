@@ -1,7 +1,7 @@
 <!--
 LogoBadge.svelte - Stylized badge logo for VoiceWatch
 
-A compact, stylized badge that can be used as an alternative to the bird image logo.
+A compact, stylized badge that can be used as an alternative to the VoiceWatch image logo.
 Designed for use in collapsed sidebars or compact UI areas.
 
 Props:
@@ -13,7 +13,7 @@ Props:
 -->
 <script lang="ts">
   import { cn } from '$lib/utils/cn';
-  import { Bird } from '@lucide/svelte';
+  import { AudioLines } from '@lucide/svelte';
 
   interface Props {
     size?: 'sm' | 'md' | 'lg';
@@ -68,7 +68,7 @@ Props:
   )}
   aria-hidden="true"
 >
-  <Bird size={getIconSize(size)} strokeWidth={2.5} class="drop-shadow-sm" />
+  <AudioLines size={getIconSize(size)} strokeWidth={2.5} class="drop-shadow-sm" />
 </div>
 
 <style>

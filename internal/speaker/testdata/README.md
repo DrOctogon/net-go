@@ -26,3 +26,24 @@ Regenerate with:
 ```sh
 python3 build_pipeline_probe.py   # needs the `onnx` package (no torch required)
 ```
+
+## Real gender model (operator-supplied)
+
+VoiceWatch ships no speaker model. `export_gender_model.py` produces a real,
+MIT-licensed gender `.onnx` from
+[JaesungHuh/voice-gender-classifier](https://huggingface.co/JaesungHuh/voice-gender-classifier)
+(ECAPA-TDNN) that plugs straight into `SingleOutputAudioModel` + `mapGender2Class`.
+The network does preemphasis + mel + log + mean-norm **in-graph** on a raw 16 kHz
+mono waveform, so the export takes a raw waveform (`waveform[batch, samples]` →
+`logits[batch, 2]`, order `[male, female]`) — matching the factory's
+`normalize=false` wiring.
+
+```sh
+pip install torch torchaudio safetensors onnx onnxscript huggingface_hub
+python3 export_gender_model.py            # writes ./voice_gender_classifier.onnx
+```
+
+Validated end to end through the Go pipeline via `TestONNXGenderModelSmoke`
+(ONNX Runtime 1.25.1): the model's own `example1.wav` → `female` (conf 0.9896)
+and `example2.wav` → `male` (conf 0.9914). The `.onnx` itself is **not** vendored
+— operators supply it.
