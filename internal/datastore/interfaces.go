@@ -181,6 +181,7 @@ type Interface interface {
 	GetAllImageCaches(providerName string) ([]ImageCache, error)
 	GetLockedNotesClipPaths() ([]string, error)
 	ClearNoteClipPathsByNames(clipNames []string) (int64, error)
+	ScrubSpeechDataByClipNames(clipNames []string) (int64, error)
 	CountHourlyDetections(date, hour string, duration int) (int64, error)
 	// Analytics methods
 	GetSpeciesSummaryData(ctx context.Context, startDate, endDate string) ([]SpeciesSummaryData, error)
@@ -2031,6 +2032,61 @@ func (ds *DataStore) ClearNoteClipPathsByNames(clipNames []string) (int64, error
 					Component("datastore").
 					Category(errors.CategoryDatabase).
 					Context("operation", "clear_clip_paths_by_names").
+					Context("clip_count", len(batch)).
+					Build()
+			}
+			batchAffected = result.RowsAffected
+			return nil
+		}, ds.getMetrics())
+
+		if err != nil {
+			return totalAffected, err
+		}
+		totalAffected += batchAffected
+	}
+
+	return totalAffected, nil
+}
+
+// scrubbedSpeechColumns is the set of speech-derived and biometric-adjacent
+// columns cleared by ScrubSpeechDataByClipNames. Kept as a package var so the
+// zero values are allocated once and the intent is documented in one place.
+var scrubbedSpeechColumns = map[string]any{
+	"transcript":            "",
+	"transcript_lang":       "",
+	"keywords_hit":          "",
+	"gender":                "",
+	"gender_confidence":     0,
+	"age_band":              "",
+	"age_confidence":        0,
+	"speaker_id":            "",
+	"voice_print_embedding": nil,
+}
+
+// ScrubSpeechDataByClipNames erases speech-derived and biometric-adjacent fields
+// from notes whose audio clip was removed by the retention policy, so derived
+// voice data never outlives the recording it came from. Updates are batched to
+// stay within SQLite's parameter limit (999). Returns the number of rows scrubbed.
+func (ds *DataStore) ScrubSpeechDataByClipNames(clipNames []string) (int64, error) {
+	if len(clipNames) == 0 {
+		return 0, nil
+	}
+
+	const batchSize = 500
+	var totalAffected int64
+
+	for i := 0; i < len(clipNames); i += batchSize {
+		end := min(i+batchSize, len(clipNames))
+		batch := clipNames[i:end]
+
+		var batchAffected int64
+		err := RetryOnLock(context.Background(), "scrub_speech_data_by_names", func() error {
+			result := ds.DB.Model(&Note{}).Where("clip_name IN ?", batch).Updates(scrubbedSpeechColumns)
+			if result.Error != nil {
+				return errors.New(result.Error).
+					Component("datastore").
+					Category(errors.CategoryDatabase).
+					Context("operation", "scrub_speech_data_by_names").
 					Context("clip_count", len(batch)).
 					Build()
 			}

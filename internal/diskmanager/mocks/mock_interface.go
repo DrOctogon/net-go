@@ -38,3 +38,15 @@ func (m *MockInterface) ClearNoteClipPathsByNames(clipNames []string) (int64, er
 	}
 	return 0, args.Error(1)
 }
+
+// ScrubSpeechDataByClipNames mocks the ScrubSpeechDataByClipNames method
+func (m *MockInterface) ScrubSpeechDataByClipNames(clipNames []string) (int64, error) {
+	args := m.Called(clipNames)
+	if args.Get(0) == nil {
+		return 0, args.Error(1)
+	}
+	if count, ok := args.Get(0).(int64); ok {
+		return count, args.Error(1)
+	}
+	return 0, args.Error(1)
+}

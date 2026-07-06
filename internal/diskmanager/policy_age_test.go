@@ -37,6 +37,11 @@ func (m *MockDB) ClearNoteClipPathsByNames(_ []string) (int64, error) {
 	return 0, nil
 }
 
+// ScrubSpeechDataByClipNames is a mock implementation that does nothing
+func (m *MockDB) ScrubSpeechDataByClipNames(_ []string) (int64, error) {
+	return 0, nil
+}
+
 // TestAgeBasedCleanupFileTypeEligibility tests if the file type check works correctly
 func TestAgeBasedCleanupFileTypeEligibility(t *testing.T) {
 	// Test with different file extensions

@@ -164,7 +164,7 @@ func AgeBasedCleanup(quit <-chan struct{}, db Interface) CleanupResult {
 		quit, retentionCutoffUnix)
 
 	// Clear clip_name references in the database for deleted files
-	clearDeletedClipPaths(db, deletedNames, baseDir, "age")
+	clearDeletedClipPaths(db, deletedNames, baseDir, "age", retention.ScrubSpeechData)
 
 	// Get final disk utilization
 	diskUsage, diskErr := GetDiskUsage(baseDir)

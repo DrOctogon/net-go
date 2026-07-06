@@ -401,7 +401,7 @@ func categorizeFilePath(path string) string {
 // for files that were deleted from disk by the retention policy.
 // deletedPaths contains absolute file paths; baseDir is the audio export root
 // used to compute relative paths matching the clip_name format in the database.
-func clearDeletedClipPaths(db Interface, deletedPaths []string, baseDir, policy string) {
+func clearDeletedClipPaths(db Interface, deletedPaths []string, baseDir, policy string, scrubSpeechData bool) {
 	if len(deletedPaths) == 0 {
 		return
 	}
@@ -424,6 +424,26 @@ func clearDeletedClipPaths(db Interface, deletedPaths []string, baseDir, policy 
 
 	if len(clipNames) == 0 {
 		return
+	}
+
+	// Privacy: when enabled, erase speech-derived and biometric-adjacent data so
+	// it does not outlive the audio clip it was derived from. This MUST run before
+	// clearing the clip paths below, since the scrub matches notes by clip_name and
+	// ClearNoteClipPathsByNames blanks that column. Best-effort — a failure here is
+	// logged but never blocks the retention run.
+	if scrubSpeechData {
+		scrubbed, err := db.ScrubSpeechDataByClipNames(clipNames)
+		if err != nil {
+			log.Warn("Failed to scrub speech data for deleted clips",
+				logger.String("policy", policy),
+				logger.Int("deleted_files", len(clipNames)),
+				logger.Error(err))
+		} else if scrubbed > 0 {
+			log.Info("Scrubbed speech-derived data for deleted clips",
+				logger.String("policy", policy),
+				logger.Int64("records_scrubbed", scrubbed),
+				logger.Int("files_deleted", len(clipNames)))
+		}
 	}
 
 	cleared, err := db.ClearNoteClipPathsByNames(clipNames)

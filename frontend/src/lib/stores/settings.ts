@@ -303,6 +303,11 @@ export interface RetentionSettings {
   maxUsage: string;
   minClips: number;
   keepSpectrograms: boolean;
+  // When true (privacy-first default) speech-derived and biometric-adjacent data
+  // (transcript, keywords, estimated gender/age, speaker id, voice-print) is
+  // erased from a detection when its clip is removed by retention. Backend-
+  // authoritative; optional here so existing retention literals need not restate it.
+  scrubSpeechData?: boolean;
   enabled?: boolean; // legacy, might be present in old data
   maxSize?: number; // legacy, might be present in old data
 }
@@ -885,6 +890,7 @@ function createEmptySettings(): SettingsFormData {
             maxUsage: '80%',
             minClips: 10,
             keepSpectrograms: false,
+            scrubSpeechData: true,
           },
           length: 15, // Default 15 seconds capture length
           preCapture: 3, // Default 3 seconds pre-capture

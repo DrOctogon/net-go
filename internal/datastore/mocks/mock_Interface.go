@@ -132,6 +132,62 @@ func (_c *MockInterface_ClearNoteClipPathsByNames_Call) RunAndReturn(run func([]
 	return _c
 }
 
+// ScrubSpeechDataByClipNames provides a mock function with given fields: clipNames
+func (_m *MockInterface) ScrubSpeechDataByClipNames(clipNames []string) (int64, error) {
+	ret := _m.Called(clipNames)
+
+	if len(ret) == 0 {
+		panic("no return value specified for ScrubSpeechDataByClipNames")
+	}
+
+	var r0 int64
+	var r1 error
+	if rf, ok := ret.Get(0).(func([]string) (int64, error)); ok {
+		return rf(clipNames)
+	}
+	if rf, ok := ret.Get(0).(func([]string) int64); ok {
+		r0 = rf(clipNames)
+	} else {
+		r0 = ret.Get(0).(int64)
+	}
+
+	if rf, ok := ret.Get(1).(func([]string) error); ok {
+		r1 = rf(clipNames)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockInterface_ScrubSpeechDataByClipNames_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'ScrubSpeechDataByClipNames'
+type MockInterface_ScrubSpeechDataByClipNames_Call struct {
+	*mock.Call
+}
+
+// ScrubSpeechDataByClipNames is a helper method to define mock.On call
+//   - clipNames []string
+func (_e *MockInterface_Expecter) ScrubSpeechDataByClipNames(clipNames interface{}) *MockInterface_ScrubSpeechDataByClipNames_Call {
+	return &MockInterface_ScrubSpeechDataByClipNames_Call{Call: _e.mock.On("ScrubSpeechDataByClipNames", clipNames)}
+}
+
+func (_c *MockInterface_ScrubSpeechDataByClipNames_Call) Run(run func(clipNames []string)) *MockInterface_ScrubSpeechDataByClipNames_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].([]string))
+	})
+	return _c
+}
+
+func (_c *MockInterface_ScrubSpeechDataByClipNames_Call) Return(_a0 int64, _a1 error) *MockInterface_ScrubSpeechDataByClipNames_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockInterface_ScrubSpeechDataByClipNames_Call) RunAndReturn(run func([]string) (int64, error)) *MockInterface_ScrubSpeechDataByClipNames_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // Close provides a mock function with no fields
 func (_m *MockInterface) Close() error {
 	ret := _m.Called()
