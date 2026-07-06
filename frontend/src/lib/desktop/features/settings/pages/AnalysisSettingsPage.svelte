@@ -357,6 +357,7 @@
     language: 'en',
     keywords: [],
     keywordCaseSensitive: false,
+    includeTranscriptInAlerts: false,
   };
 
   let transcription = $derived($transcriptionSettings ?? defaultTranscription);
