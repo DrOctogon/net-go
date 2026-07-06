@@ -2313,6 +2313,16 @@ func (ds *Datastore) ClearNoteClipPathsByNames(clipNames []string) (int64, error
 	return totalAffected, nil
 }
 
+// ScrubSpeechDataByClipNames is a no-op on the v2 store. The speech-derived and
+// biometric-adjacent columns (transcript, keywords, gender/age, speaker id,
+// voice-print embedding) are carried only by the legacy Note model, which backs
+// the transcription/speaker pipelines; the v2 detections table has no such
+// columns. Implemented to satisfy diskmanager.Interface so retention can run
+// against either store.
+func (ds *Datastore) ScrubSpeechDataByClipNames(_ []string) (int64, error) {
+	return 0, nil
+}
+
 // ============================================================
 // Image Cache Methods
 // ============================================================

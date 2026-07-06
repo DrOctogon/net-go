@@ -125,7 +125,7 @@ func UsageBasedCleanup(quit <-chan struct{}, db Interface) CleanupResult {
 		quit)
 
 	// Clear clip_name references in the database for deleted files
-	clearDeletedClipPaths(db, deletedNames, baseDir, "usage")
+	clearDeletedClipPaths(db, deletedNames, baseDir, "usage", retention.ScrubSpeechData)
 
 	// --- Calculate Final Usage & Return ---
 	finalUsagePercent := getFinalUsagePercent(baseDir, lastKnownGoodUsagePercent)

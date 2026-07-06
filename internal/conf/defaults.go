@@ -180,6 +180,7 @@ func setDefaultConfig() {
 	viper.SetDefault("realtime.audio.export.retention.maxage", "21d")
 	viper.SetDefault("realtime.audio.export.retention.minclips", 0)
 	viper.SetDefault("realtime.audio.export.retention.keepspectrograms", true)
+	viper.SetDefault("realtime.audio.export.retention.scrubspeechdata", true)
 	viper.SetDefault("realtime.audio.export.retention.checkinterval", DefaultCleanupCheckInterval)
 
 	// Dynamic threshold configuration

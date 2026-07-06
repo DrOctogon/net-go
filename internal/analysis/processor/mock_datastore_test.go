@@ -264,6 +264,9 @@ func (m *ActionMockDatastore) GetLockedNotesClipPaths() ([]string, error) {
 func (m *ActionMockDatastore) ClearNoteClipPathsByNames(_ []string) (int64, error) {
 	return 0, nil
 }
+func (m *ActionMockDatastore) ScrubSpeechDataByClipNames(_ []string) (int64, error) {
+	return 0, nil
+}
 func (m *ActionMockDatastore) CountHourlyDetections(_, _ string, _ int) (int64, error) {
 	return 0, nil
 }

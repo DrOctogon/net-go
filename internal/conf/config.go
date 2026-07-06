@@ -70,6 +70,16 @@ type RetentionSettings struct {
 	MinClips         int    `yaml:"minclips" json:"minClips"`                 // minimum number of clips per species to keep
 	KeepSpectrograms bool   `yaml:"keepspectrograms" json:"keepSpectrograms"` // true to keep spectrograms
 	CheckInterval    int    `yaml:"checkinterval" json:"checkInterval"`       // cleanup check interval in minutes (default: 15)
+	// ScrubSpeechData, when true (the privacy-first default), erases the speech-
+	// derived and biometric-adjacent columns (transcript, matched keywords,
+	// estimated gender/age, speaker id, voice-print embedding) from a detection
+	// when its audio clip is removed by the retention policy. This ties the
+	// lifecycle of derived voice data to the source audio so nothing biometric
+	// outlives the recording it came from. Set false to retain that data after
+	// the clip is gone (e.g. to keep long-term speaker history / "similar voices"
+	// across clip expiry); speaker features are opt-in and off by default, so the
+	// default install has no such data to keep.
+	ScrubSpeechData bool `yaml:"scrubspeechdata" json:"scrubSpeechData"`
 }
 
 // ContinuousRecordingSettings contains settings for continuous full-audio recording.

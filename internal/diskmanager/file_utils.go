@@ -44,6 +44,12 @@ type FileInfo struct {
 type Interface interface {
 	GetLockedNotesClipPaths() ([]string, error)
 	ClearNoteClipPathsByNames(clipNames []string) (int64, error)
+	// ScrubSpeechDataByClipNames erases speech-derived and biometric-adjacent
+	// fields (transcript, matched keywords, estimated gender/age, speaker id,
+	// voice-print embedding) from detections whose clip was removed by retention.
+	// Returns the number of rows scrubbed. Used to keep derived voice data from
+	// outliving the source audio when Retention.ScrubSpeechData is enabled.
+	ScrubSpeechDataByClipNames(clipNames []string) (int64, error)
 }
 
 // LoadPolicy loads the cleanup policies from a CSV file
