@@ -14,7 +14,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/testutil/containers"
+	"github.com/tphakala/voicewatch/internal/testutil/containers"
 )
 
 // setupNtfyContainerForAPI creates a no-auth ntfy container for API integration tests.

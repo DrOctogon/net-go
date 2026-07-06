@@ -1,5 +1,5 @@
 /**
- * Frontend Sentry integration for BirdNET-Go.
+ * Frontend Sentry integration for VoiceWatch.
  *
  * Lazy-loaded only when telemetry is enabled. Provides:
  * - Global error capture (window.onerror, unhandledrejection)

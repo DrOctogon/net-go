@@ -9,23 +9,22 @@ import (
 	"sync"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/analysis/processor"
-	"github.com/tphakala/birdnet-go/internal/analysis/species"
-	apiv2 "github.com/tphakala/birdnet-go/internal/api/v2"
-	"github.com/tphakala/birdnet-go/internal/audiocore"
-	"github.com/tphakala/birdnet-go/internal/audiocore/engine"
-	"github.com/tphakala/birdnet-go/internal/audiocore/schedule"
-	"github.com/tphakala/birdnet-go/internal/audiocore/soundlevel"
-	"github.com/tphakala/birdnet-go/internal/birdweather"
-	"github.com/tphakala/birdnet-go/internal/classifier"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/events"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/mqtt"
-	"github.com/tphakala/birdnet-go/internal/notification"
-	"github.com/tphakala/birdnet-go/internal/observability"
+	"github.com/tphakala/voicewatch/internal/analysis/processor"
+	"github.com/tphakala/voicewatch/internal/analysis/species"
+	apiv2 "github.com/tphakala/voicewatch/internal/api/v2"
+	"github.com/tphakala/voicewatch/internal/audiocore"
+	"github.com/tphakala/voicewatch/internal/audiocore/engine"
+	"github.com/tphakala/voicewatch/internal/audiocore/schedule"
+	"github.com/tphakala/voicewatch/internal/audiocore/soundlevel"
+	"github.com/tphakala/voicewatch/internal/classifier"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/events"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/mqtt"
+	"github.com/tphakala/voicewatch/internal/notification"
+	"github.com/tphakala/voicewatch/internal/observability"
 )
 
 const (
@@ -133,7 +132,7 @@ func NewControlMonitor(wg *sync.WaitGroup, controlChan chan string, quitChan, re
 	// has been built (startup BuildRangeFilter already ran). Forward display reads
 	// the live resolver regardless of map state; only the reverse (search) maps
 	// depend on this re-localize. Locale changes later re-localize via
-	// handleReloadBirdnet (BuildRangeFilter runs before UpdateNameMaps there).
+	// handleReloadVoiceWatch (BuildRangeFilter runs before UpdateNameMaps there).
 	if cm.bn != nil {
 		var ds datastore.Interface
 		if cm.proc != nil && cm.proc.Ds != nil {
@@ -143,7 +142,7 @@ func NewControlMonitor(wg *sync.WaitGroup, controlChan chan string, quitChan, re
 		if cm.apiController != nil {
 			api = cm.apiController
 		}
-		installNameResolver(cm.bn.OpenFaunaResolver(), cm.bn.AllLabels(), ds, api)
+		installNameResolver(nil, cm.bn.AllLabels(), ds, api)
 	}
 
 	// Initialize the sound level manager but don't start it yet
@@ -315,13 +314,11 @@ func (cm *ControlMonitor) handleControlSignal(signal string) {
 	case "rebuild_range_filter":
 		cm.handleRebuildRangeFilter()
 	case "reload_birdnet":
-		cm.handleReloadBirdnet()
+		cm.handleReloadVoiceWatch()
 	case "reconfigure_mqtt":
 		cm.handleReconfigureMQTT()
 	case "reconfigure_rtsp_sources":
 		cm.handleReconfigureStreams()
-	case "reconfigure_birdweather":
-		cm.handleReconfigureBirdWeather()
 	case "update_detection_intervals":
 		cm.handleUpdateDetectionIntervals()
 	case "reconfigure_sound_level":
@@ -387,21 +384,9 @@ func (cm *ControlMonitor) handleReconfigureLiveStream() {
 
 // handleRebuildRangeFilter rebuilds the range filter
 func (cm *ControlMonitor) handleRebuildRangeFilter() {
-	// Guard the orchestrator dereference for consistency with NewControlMonitor,
-	// which only wires bn-dependent surfaces when cm.bn != nil. In realtime
-	// analysis cm.bn is always set; the guard is defensive. Use if/else rather
-	// than an early return so the opportunistic maintenance
-	// cleanup below still runs even when the rebuild itself is skipped.
-	if cm.bn == nil {
-		GetLogger().Warn("Cannot rebuild range filter: BirdNET orchestrator not initialized")
-	} else if err := classifier.BuildRangeFilter(cm.bn); err != nil {
-		GetLogger().Error("Failed to rebuild range filter", logger.Error(err))
-		cm.notifyError("Failed to rebuild range filter", err)
-	} else {
-		GetLogger().Info("Range filter rebuilt successfully")
-		cm.notifySuccess("Range filter rebuilt successfully")
-		emitHotReload("range_filter")
-	}
+	// Range filtering was removed in the human-voice pivot. This handler now only
+	// runs the opportunistic maintenance cleanup that was historically coupled to
+	// the periodic range-filter rebuild.
 
 	// Perform log deduplicator cleanup when range filter is rebuilt
 	// This coupling is for practicality - we wanted to avoid creating new goroutines
@@ -415,41 +400,27 @@ func (cm *ControlMonitor) handleRebuildRangeFilter() {
 	CleanupOverrunTrackers(time.Hour)
 }
 
-// handleReloadBirdnet reloads the BirdNET model
-func (cm *ControlMonitor) handleReloadBirdnet() {
+// handleReloadVoiceWatch reloads the VoiceWatch model
+func (cm *ControlMonitor) handleReloadVoiceWatch() {
 	// Guard the orchestrator dereference for consistency with NewControlMonitor
 	// (see handleRebuildRangeFilter). Defensive: cm.bn is always set in realtime
 	// analysis, but this avoids a panic if the handler is ever reached without an
 	// orchestrator.
 	if cm.bn == nil {
-		GetLogger().Warn("Cannot reload BirdNET model: orchestrator not initialized")
+		GetLogger().Warn("Cannot reload VoiceWatch model: orchestrator not initialized")
 		return
 	}
 	if err := cm.bn.ReloadModel(); err != nil {
-		GetLogger().Error("Failed to reload BirdNET model", logger.Error(err))
-		cm.notifyError("Failed to reload BirdNET model", err)
+		GetLogger().Error("Failed to reload VoiceWatch model", logger.Error(err))
+		cm.notifyError("Failed to reload VoiceWatch model", err)
 		return
 	}
 
-	GetLogger().Info("BirdNET model reloaded successfully")
-	cm.notifySuccess("BirdNET model reloaded successfully")
+	GetLogger().Info("VoiceWatch model reloaded successfully")
+	cm.notifySuccess("VoiceWatch model reloaded successfully")
 
-	// Rebuild range filter after model reload
-	if err := classifier.BuildRangeFilter(cm.bn); err != nil {
-		GetLogger().Error("Failed to rebuild range filter after model reload", logger.Error(err))
-		cm.notifyError("Failed to rebuild range filter", err)
-	} else {
-		GetLogger().Info("Range filter rebuilt successfully")
-		cm.notifySuccess("Range filter rebuilt successfully")
-	}
-
-	// Rebuild name maps with new locale labels (use fresh settings, not stale pointer).
-	// Order matters: BuildRangeFilter above already rebuilt the OpenFauna resolver for
-	// the new locale, and the resolver was installed on Ds/apiController at startup
-	// (NewControlMonitor), so these calls re-localize the cached maps via the
-	// now-current resolver.
-	// Use the full multi-model label set so secondary-model species (bats,
-	// Perch-unique) stay searchable after a locale/model reload, not just the primary.
+	// Rebuild name maps with the reloaded model's labels (use fresh settings, not a
+	// stale pointer) so the cached maps re-localize after a locale/model reload.
 	labels := cm.bn.AllLabels()
 	if cm.proc != nil && cm.proc.Ds != nil {
 		cm.proc.Ds.UpdateNameMaps(labels)
@@ -458,15 +429,6 @@ func (cm *ControlMonitor) handleReloadBirdnet() {
 	if cm.apiController != nil {
 		cm.apiController.UpdateCommonNameMap(labels)
 		GetLogger().Info("API controller common name map updated with new labels")
-	}
-
-	// Reload OV-capable secondary models (e.g. Perch) so a backend/OpenVINO-device
-	// change moves them onto the new device without a restart. No-ops when the
-	// backend/device is unchanged. The primary already reloaded above, so a
-	// secondary failure is surfaced but does not fail the overall reload.
-	if err := cm.bn.ReloadSecondaryModels(); err != nil {
-		GetLogger().Error("Failed to reload secondary models", logger.Error(err))
-		cm.notifyError("Failed to reload secondary models", err)
 	}
 
 	emitHotReload("birdnet_model")
@@ -552,46 +514,6 @@ func (cm *ControlMonitor) handleReconfigureStreams() {
 	if cm.apiController != nil {
 		cm.apiController.BroadcastInferenceTopologyChanged()
 	}
-}
-
-// handleReconfigureBirdWeather reconfigures the BirdWeather integration
-func (cm *ControlMonitor) handleReconfigureBirdWeather() {
-	GetLogger().Info("Reconfiguring BirdWeather integration")
-	settings := conf.Setting()
-
-	if cm.proc == nil {
-		GetLogger().Error("Processor not available for BirdWeather reconfiguration")
-		cm.notifyError("Failed to reconfigure BirdWeather", errors.Newf("processor not available").
-			Component("analysis").
-			Category(errors.CategoryConfiguration).
-			Context("operation", "reconfigure_birdweather").
-			Build())
-		return
-	}
-
-	// First, safely disconnect any existing client
-	cm.proc.DisconnectBwClient()
-
-	// Create new BirdWeather client with updated settings
-	if settings.Realtime.Birdweather.Enabled {
-		bwClient, err := birdweather.New(settings)
-		if err != nil {
-			GetLogger().Error("Failed to create BirdWeather client", logger.Error(err))
-			cm.notifyError("Failed to create BirdWeather client", err)
-			return
-		}
-
-		// Update the processor's BirdWeather client using the thread-safe setter
-		cm.proc.SetBwClient(bwClient)
-		GetLogger().Info("BirdWeather integration configured successfully")
-		cm.notifySuccess("BirdWeather integration configured successfully")
-	} else {
-		// If BirdWeather is disabled, client is already set to nil by DisconnectBwClient
-		GetLogger().Info("BirdWeather integration disabled")
-		cm.notifySuccess("BirdWeather integration disabled")
-	}
-
-	emitHotReload("birdweather")
 }
 
 // handleUpdateDetectionIntervals updates event tracking intervals for species
@@ -870,12 +792,12 @@ func (cm *ControlMonitor) handleReconfigureSpeciesTracking() {
 		return
 	}
 
-	// Adjust seasonal tracking for hemisphere based on BirdNET latitude
+	// Adjust seasonal tracking for hemisphere based on VoiceWatch latitude
 	hemisphereAwareTracking := settings.Realtime.SpeciesTracking
 	if hemisphereAwareTracking.SeasonalTracking.Enabled {
 		hemisphereAwareTracking.SeasonalTracking = conf.GetSeasonalTrackingWithHemisphere(
 			hemisphereAwareTracking.SeasonalTracking,
-			settings.BirdNET.Latitude,
+			settings.VoiceWatch.Latitude,
 		)
 	}
 
@@ -891,7 +813,7 @@ func (cm *ControlMonitor) handleReconfigureSpeciesTracking() {
 	// Replace the existing tracker
 	cm.proc.SetNewSpeciesTracker(newTracker)
 
-	hemisphere := conf.DetectHemisphere(settings.BirdNET.Latitude)
+	hemisphere := conf.DetectHemisphere(settings.VoiceWatch.Latitude)
 	GetLogger().Info("Species tracking reconfigured",
 		logger.Int("window_days", settings.Realtime.SpeciesTracking.NewSpeciesWindowDays),
 		logger.Int("sync_minutes", settings.Realtime.SpeciesTracking.SyncIntervalMinutes),
@@ -916,14 +838,14 @@ func (cm *ControlMonitor) handleReconfigurePushNotifications() {
 	emitHotReload("push_notifications")
 }
 
-// handleRebuildExtendedCapture rebuilds the extended capture species filter
-// when ExtendedCapture settings (Enabled, Species, MaxDuration) change at runtime.
+// handleRebuildExtendedCapture re-applies the extended capture state
+// when ExtendedCapture settings (Enabled, MaxDuration) change at runtime.
 func (cm *ControlMonitor) handleRebuildExtendedCapture() {
-	GetLogger().Info("Rebuilding extended capture species filter")
+	GetLogger().Info("Rebuilding extended capture state")
 
 	if cm.proc == nil {
 		GetLogger().Error("Processor not available for extended capture rebuild")
-		cm.notifyError("Failed to rebuild extended capture filter", errors.Newf("processor not available").
+		cm.notifyError("Failed to rebuild extended capture", errors.Newf("processor not available").
 			Component("analysis").
 			Category(errors.CategoryConfiguration).
 			Context("operation", "rebuild_extended_capture").
@@ -933,8 +855,8 @@ func (cm *ControlMonitor) handleRebuildExtendedCapture() {
 
 	cm.proc.RebuildExtendedCaptureFilter()
 
-	GetLogger().Info("Extended capture species filter rebuilt successfully")
-	cm.notifySuccess("Extended capture species filter rebuilt successfully")
+	GetLogger().Info("Extended capture state rebuilt successfully")
+	cm.notifySuccess("Extended capture rebuilt successfully")
 	emitHotReload("extended_capture")
 }
 
@@ -976,7 +898,7 @@ func (cm *ControlMonitor) handleReconfigureAudioSources() {
 }
 
 // handleRecalculateDynamicThresholds recalculates all dynamic threshold CurrentValue entries
-// when the global BirdNET.Threshold changes. The stored absolute values are recomputed
+// when the global VoiceWatch.Threshold changes. The stored absolute values are recomputed
 // from each species' current level/tier and the new base threshold.
 func (cm *ControlMonitor) handleRecalculateDynamicThresholds() {
 	if cm.proc != nil {

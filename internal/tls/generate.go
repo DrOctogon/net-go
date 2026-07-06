@@ -1,4 +1,4 @@
-// Package tls provides self-signed certificate generation for BirdNET-Go's HTTPS server.
+// Package tls provides self-signed certificate generation for VoiceWatch's HTTPS server.
 package tls
 
 import (
@@ -12,7 +12,7 @@ import (
 	"net"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/errors"
+	"github.com/tphakala/voicewatch/internal/errors"
 )
 
 // SelfSignedOptions configures self-signed certificate generation.
@@ -75,7 +75,7 @@ func GenerateSelfSigned(opts SelfSignedOptions) (certPEM, keyPEM string, err err
 	template := &x509.Certificate{
 		SerialNumber: serialNumber,
 		Subject: pkix.Name{
-			CommonName: "BirdNET-Go",
+			CommonName: "VoiceWatch",
 		},
 		NotBefore:             now,
 		NotAfter:              now.Add(opts.Validity),

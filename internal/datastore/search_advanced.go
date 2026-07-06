@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/errors"
+	"github.com/tphakala/voicewatch/internal/errors"
 	"gorm.io/gorm"
 )
 
@@ -21,6 +21,10 @@ type AdvancedSearchFilters struct {
 	Species       []string
 	Location      []string // Maps to source_node column
 	Locked        *bool
+	Flagged       *bool  // Filters on the notes.flagged column (keyword-flagged detections)
+	Transcript    string // Free-text LIKE filter on notes.transcript (keyword/phrase search)
+	Gender        string // Exact match on notes.gender (speaker-attribute filter); "" = no filter
+	AgeBand       string // Exact match on notes.age_band (speaker-attribute filter); "" = no filter
 	SortAscending bool
 	SortBy        string // "date_desc", "date_asc", "species_asc", "species_desc", "confidence_asc", "confidence_desc", "status"
 	Limit         int
@@ -104,6 +108,27 @@ func (ds *DataStore) SearchNotesAdvanced(filters *AdvancedSearchFilters) ([]Note
 
 	// Apply locked filter
 	query = applyLockedFilter(query, filters.Locked)
+
+	// Apply flagged filter (keyword-flagged detections)
+	if filters.Flagged != nil {
+		query = query.Where("flagged = ?", *filters.Flagged)
+	}
+
+	// Apply transcript filter (free-text substring search on speech-to-text transcript).
+	// LIKE wildcards in the user term are escaped so they are treated as literals.
+	if filters.Transcript != "" {
+		escaped := escapeLikePattern(filters.Transcript)
+		query = query.Where("LOWER(transcript) LIKE LOWER(?) ESCAPE '\\'", "%"+escaped+"%")
+	}
+
+	// Apply speaker-attribute filters (exact match, parameterized). Applied
+	// before the count query is derived (below) so both result and count agree.
+	if filters.Gender != "" {
+		query = query.Where("notes.gender = ?", filters.Gender)
+	}
+	if filters.AgeBand != "" {
+		query = query.Where("notes.age_band = ?", filters.AgeBand)
+	}
 
 	// Apply MinID filter for cursor-based pagination (used by migration worker)
 	if filters.MinID > 0 {
@@ -330,4 +355,14 @@ func applyLockedFilter(query *gorm.DB, locked *bool) *gorm.DB {
 
 	return query.Joins("LEFT JOIN note_locks ON note_locks.note_id = notes.id").
 		Where("note_locks.id IS NULL")
+}
+
+// escapeLikePattern escapes backslash, percent, and underscore in s so that
+// the resulting string can be embedded in a LIKE pattern with ESCAPE '\'
+// and all characters in s are treated as literals (no wildcards).
+func escapeLikePattern(s string) string {
+	s = strings.ReplaceAll(s, `\`, `\\`)
+	s = strings.ReplaceAll(s, `%`, `\%`)
+	s = strings.ReplaceAll(s, `_`, `\_`)
+	return s
 }

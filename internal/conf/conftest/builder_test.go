@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/conf"
+	"github.com/tphakala/voicewatch/internal/conf"
 )
 
 // TestSettingsBuilder_NewTestSettings verifies that NewTestSettings creates a valid builder.
@@ -17,11 +17,11 @@ func TestSettingsBuilder_NewTestSettings(t *testing.T) {
 	require.NotNil(t, builder.settings, "NewTestSettings() builder has nil settings")
 
 	// Verify settings have default values
-	assert.NotZero(t, builder.settings.BirdNET.Threshold, "Expected non-zero default threshold")
+	assert.NotZero(t, builder.settings.VoiceWatch.Threshold, "Expected non-zero default threshold")
 }
 
-// TestSettingsBuilder_WithBirdNET verifies BirdNET configuration.
-func TestSettingsBuilder_WithBirdNET(t *testing.T) {
+// TestSettingsBuilder_WithVoiceWatch verifies BirdNET configuration.
+func TestSettingsBuilder_WithVoiceWatch(t *testing.T) {
 	t.Parallel()
 	tests := []struct {
 		name      string
@@ -59,12 +59,12 @@ func TestSettingsBuilder_WithBirdNET(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			settings := NewTestSettings().
-				WithBirdNET(tt.threshold, tt.latitude, tt.longitude).
+				WithVoiceWatch(tt.threshold, tt.latitude, tt.longitude).
 				Build()
 
-			assert.InDelta(t, tt.threshold, settings.BirdNET.Threshold, 0.0001)
-			assert.InDelta(t, tt.latitude, settings.BirdNET.Latitude, 0.0001)
-			assert.InDelta(t, tt.longitude, settings.BirdNET.Longitude, 0.0001)
+			assert.InDelta(t, tt.threshold, settings.VoiceWatch.Threshold, 0.0001)
+			assert.InDelta(t, tt.latitude, settings.VoiceWatch.Latitude, 0.0001)
+			assert.InDelta(t, tt.longitude, settings.VoiceWatch.Longitude, 0.0001)
 		})
 	}
 }
@@ -252,7 +252,6 @@ func TestSettingsBuilder_WithImageProvider(t *testing.T) {
 				WithImageProvider(tt.provider, tt.fallbackPolicy).
 				Build()
 
-			assert.Equal(t, tt.provider, settings.Realtime.Dashboard.Thumbnails.ImageProvider)
 			assert.Equal(t, tt.fallbackPolicy, settings.Realtime.Dashboard.Thumbnails.FallbackPolicy)
 		})
 	}
@@ -302,14 +301,14 @@ func TestSettingsBuilder_WithWebServer(t *testing.T) {
 func TestSettingsBuilder_MethodChaining(t *testing.T) {
 	t.Parallel()
 	settings := NewTestSettings().
-		WithBirdNET(0.8, 45.0, -122.0).
+		WithVoiceWatch(0.8, 45.0, -122.0).
 		WithMQTT("tcp://localhost:1883", "test/topic").
 		WithAudioExport("/tmp/audio", "mp3", "192k").
 		WithWebServer("8080", true).
 		Build()
 
 	// Verify all settings were applied
-	assert.InDelta(t, 0.8, settings.BirdNET.Threshold, 0.0001)
+	assert.InDelta(t, 0.8, settings.VoiceWatch.Threshold, 0.0001)
 	assert.True(t, settings.Realtime.MQTT.Enabled, "Expected MQTT enabled")
 	assert.True(t, settings.Realtime.Audio.Export.Enabled, "Expected audio export enabled")
 	assert.Equal(t, "8080", settings.WebServer.Port)
@@ -319,19 +318,19 @@ func TestSettingsBuilder_MethodChaining(t *testing.T) {
 func TestSettingsBuilder_Build(t *testing.T) {
 	t.Parallel()
 	settings := NewTestSettings().
-		WithBirdNET(0.7, 40.0, -100.0).
+		WithVoiceWatch(0.7, 40.0, -100.0).
 		Build()
 
 	require.NotNil(t, settings, "Build() returned nil")
 
 	// Verify it's a separate copy (not just a reference)
-	settings.BirdNET.Threshold = 0.9
+	settings.VoiceWatch.Threshold = 0.9
 
 	newSettings := NewTestSettings().
-		WithBirdNET(0.7, 40.0, -100.0).
+		WithVoiceWatch(0.7, 40.0, -100.0).
 		Build()
 
-	assert.InDelta(t, 0.7, newSettings.BirdNET.Threshold, 0.0001, "Build() appears to return shared state")
+	assert.InDelta(t, 0.7, newSettings.VoiceWatch.Threshold, 0.0001, "Build() appears to return shared state")
 }
 
 // TestSettingsBuilder_Apply verifies that Apply sets global test settings.
@@ -344,20 +343,20 @@ func TestSettingsBuilder_Apply(t *testing.T) {
 
 	// Apply new settings
 	appliedSettings := NewTestSettings().
-		WithBirdNET(0.75, 50.0, -120.0).
+		WithVoiceWatch(0.75, 50.0, -120.0).
 		Apply()
 
 	// Verify settings were applied globally
 	currentSettings := conf.GetSettings()
 
-	assert.InDelta(t, 0.75, currentSettings.BirdNET.Threshold, 0.0001, "Expected global threshold to be applied")
-	assert.InDelta(t, 0.75, appliedSettings.BirdNET.Threshold, 0.0001, "Expected returned threshold to match")
+	assert.InDelta(t, 0.75, currentSettings.VoiceWatch.Threshold, 0.0001, "Expected global threshold to be applied")
+	assert.InDelta(t, 0.75, appliedSettings.VoiceWatch.Threshold, 0.0001, "Expected returned threshold to match")
 }
 
 // BenchmarkSettingsBuilder_Build benchmarks the builder Build operation.
 func BenchmarkSettingsBuilder_Build(b *testing.B) {
 	builder := NewTestSettings().
-		WithBirdNET(0.7, 45.0, -122.0).
+		WithVoiceWatch(0.7, 45.0, -122.0).
 		WithMQTT("tcp://localhost:1883", "test/topic")
 
 	b.ReportAllocs()
@@ -373,7 +372,7 @@ func BenchmarkSettingsBuilder_FullChain(b *testing.B) {
 
 	for b.Loop() {
 		_ = NewTestSettings().
-			WithBirdNET(0.8, 45.0, -122.0).
+			WithVoiceWatch(0.8, 45.0, -122.0).
 			WithMQTT("tcp://localhost:1883", "test").
 			WithAudioExport("/tmp/audio", "mp3", "192k").
 			WithSpeciesTracking(7, 3600).

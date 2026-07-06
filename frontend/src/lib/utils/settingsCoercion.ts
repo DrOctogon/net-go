@@ -7,7 +7,7 @@
 
 import { CANDIDATE_SAMPLE_RATES } from '$lib/utils/audio/sampleRate';
 import type {
-  BirdNetSettings,
+  VoiceWatchSettings,
   AudioSettings,
   SecuritySettings,
   SpeciesSettings,
@@ -27,7 +27,7 @@ import type {
 
 // Type for partial/unknown settings data
 type UnknownSettings = Record<string, unknown>;
-type PartialBirdNetSettings = Partial<BirdNetSettings> & UnknownSettings;
+type PartialVoiceWatchSettings = Partial<VoiceWatchSettings> & UnknownSettings;
 type PartialAudioSettings = Partial<AudioSettings> & UnknownSettings;
 type PartialSecuritySettings = Partial<SecuritySettings> & UnknownSettings;
 type PartialSpeciesSettings = Partial<SpeciesSettings> & UnknownSettings;
@@ -200,9 +200,11 @@ function coerceRTSPSettings(settings: unknown): UnknownSettings {
 }
 
 /**
- * Validate and coerce BirdNET settings
+ * Validate and coerce VoiceWatch settings
  */
-export function coerceBirdNetSettings(settings: PartialBirdNetSettings): PartialBirdNetSettings {
+export function coerceVoiceWatchSettings(
+  settings: PartialVoiceWatchSettings
+): PartialVoiceWatchSettings {
   const coerced = { ...settings };
 
   // Sensitivity: 0.5 to 1.5
@@ -778,8 +780,8 @@ export function coerceNotificationSettings(
  */
 export function coerceSettings(section: string, data: UnknownSettings): UnknownSettings {
   switch (section) {
-    case 'birdnet':
-      return coerceBirdNetSettings(data as PartialBirdNetSettings);
+    case 'voicewatch':
+      return coerceVoiceWatchSettings(data as PartialVoiceWatchSettings);
     case 'audio':
       return coerceAudioSettings(data as PartialAudioSettings);
     case 'realtime': {

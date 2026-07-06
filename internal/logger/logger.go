@@ -31,7 +31,7 @@
 //	defer centralLogger.Close()
 //
 //	// Create module-scoped logger
-//	appLogger := centralLogger.Module("birdnet")
+//	appLogger := centralLogger.Module("voicewatch")
 //
 //	// Use structured logging
 //	appLogger.Info("Application started",

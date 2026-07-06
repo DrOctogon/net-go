@@ -6,30 +6,11 @@ import (
 )
 
 var (
-	ErrModelPathRequired = errors.New("birdnet: model path is required")
-	ErrLabelsRequired    = errors.New("birdnet: labels are required")
-	ErrEmptyBatch        = errors.New("birdnet: batch must contain at least one segment")
-	ErrSessionClosed     = errors.New("birdnet: session is closed")
+	ErrModelPathRequired = errors.New("voicewatch: model path is required")
+	ErrLabelsRequired    = errors.New("voicewatch: labels are required")
+	ErrEmptyBatch        = errors.New("voicewatch: batch must contain at least one segment")
+	ErrSessionClosed     = errors.New("voicewatch: session is closed")
 )
-
-type InputSizeError struct {
-	Expected int
-	Got      int
-}
-
-func (e *InputSizeError) Error() string {
-	return fmt.Sprintf("birdnet: expected %d audio samples, got %d", e.Expected, e.Got)
-}
-
-type BatchInputSizeError struct {
-	Index    int
-	Expected int
-	Got      int
-}
-
-func (e *BatchInputSizeError) Error() string {
-	return fmt.Sprintf("birdnet: segment %d has %d audio samples, expected %d", e.Index, e.Got, e.Expected)
-}
 
 type EmbeddingDimMismatchError struct {
 	Expected int
@@ -37,7 +18,7 @@ type EmbeddingDimMismatchError struct {
 }
 
 func (e *EmbeddingDimMismatchError) Error() string {
-	return fmt.Sprintf("birdnet: embedding dimension mismatch: classifier expects %d, got %d", e.Expected, e.Got)
+	return fmt.Sprintf("voicewatch: embedding dimension mismatch: classifier expects %d, got %d", e.Expected, e.Got)
 }
 
 type LabelCountError struct {
@@ -46,7 +27,7 @@ type LabelCountError struct {
 }
 
 func (e *LabelCountError) Error() string {
-	return fmt.Sprintf("birdnet: label count mismatch: model has %d classes but %d labels were provided", e.Expected, e.Got)
+	return fmt.Sprintf("voicewatch: label count mismatch: model has %d classes but %d labels were provided", e.Expected, e.Got)
 }
 
 type ModelDetectionError struct {
@@ -54,7 +35,7 @@ type ModelDetectionError struct {
 }
 
 func (e *ModelDetectionError) Error() string {
-	return fmt.Sprintf("birdnet: cannot detect model type: %s", e.Reason)
+	return fmt.Sprintf("voicewatch: cannot detect model type: %s", e.Reason)
 }
 
 type LabelLoadError struct {
@@ -63,38 +44,19 @@ type LabelLoadError struct {
 }
 
 func (e *LabelLoadError) Error() string {
-	return fmt.Sprintf("birdnet: failed to load labels from %s: %s", e.Path, e.Reason)
+	return fmt.Sprintf("voicewatch: failed to load labels from %s: %s", e.Path, e.Reason)
 }
 
-type InvalidCoordinatesError struct {
-	Latitude  float32
-	Longitude float32
-	Reason    string
-}
-
-func (e *InvalidCoordinatesError) Error() string {
-	return fmt.Sprintf("birdnet: invalid coordinates (%.2f, %.2f): %s", e.Latitude, e.Longitude, e.Reason)
-}
-
-type InvalidDateError struct {
-	Month  int
-	Day    int
+// SpeakerModelIOError indicates a per-attribute speaker model's inputs or
+// outputs could not be matched to the expected single-float-input/
+// single-float-output contract. Tensor names vary across exports, so I/O is
+// matched by element type rather than by name; this error is returned when the
+// model does not have exactly one float32 input and one float32 output (see
+// audiomodel.go).
+type SpeakerModelIOError struct {
 	Reason string
 }
 
-func (e *InvalidDateError) Error() string {
-	return fmt.Sprintf("birdnet: invalid date (month=%d, day=%d): %s", e.Month, e.Day, e.Reason)
-}
-
-// ErrEmptyRangeFilterBatch is returned when PredictBatchRaw receives zero inputs.
-var ErrEmptyRangeFilterBatch = errors.New("birdnet: range filter batch must contain at least one input")
-
-// RangeFilterBatchInputError is returned when the input slice length doesn't match batchSize * 3.
-type RangeFilterBatchInputError struct {
-	Expected int
-	Got      int
-}
-
-func (e *RangeFilterBatchInputError) Error() string {
-	return fmt.Sprintf("birdnet: range filter batch input has %d values, expected %d (batchSize * 3)", e.Got, e.Expected)
+func (e *SpeakerModelIOError) Error() string {
+	return fmt.Sprintf("voicewatch: speaker model I/O routing failed: %s", e.Reason)
 }

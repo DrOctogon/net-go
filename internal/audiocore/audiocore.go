@@ -1,4 +1,4 @@
-// Package audiocore provides the core audio infrastructure for BirdNET-Go.
+// Package audiocore provides the core audio infrastructure for VoiceWatch.
 //
 // It handles audio capture from multiple sources (RTSP streams, HTTP streams,
 // local audio cards), routing audio frames to multiple consumers (model adapters,

@@ -264,8 +264,8 @@ describe('Species Settings Store', () => {
       const completeSettings = createEmptySettings();
       mockLoad.mockResolvedValueOnce({
         main: { name: 'TestNode' },
-        birdnet: {
-          ...completeSettings.birdnet,
+        voicewatch: {
+          ...completeSettings.voicewatch,
           threshold: 0.3,
           locale: 'en',
         },
@@ -321,8 +321,8 @@ describe('Species Settings Store', () => {
       const completeSettings = createEmptySettings();
       mockLoad.mockResolvedValueOnce({
         main: { name: 'TestNode' },
-        birdnet: {
-          ...completeSettings.birdnet,
+        voicewatch: {
+          ...completeSettings.voicewatch,
           threshold: 0.3,
           locale: 'en',
         },

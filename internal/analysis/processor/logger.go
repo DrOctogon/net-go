@@ -2,7 +2,7 @@
 package processor
 
 import (
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 // GetLogger returns the processor package logger scoped to the analysis.processor module.

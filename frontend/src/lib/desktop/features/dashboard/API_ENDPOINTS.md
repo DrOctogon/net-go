@@ -22,8 +22,7 @@
     "hourly_counts": [0, 0, 0, 0, 0, 0, 0, 0, 0, 19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     "high_confidence": true,
     "first_heard": "09:09:54",
-    "latest_heard": "09:09:54",
-    "thumbnail_url": "https://upload.wikimedia.org/..."
+    "latest_heard": "09:09:54"
   }
 ]
 ```

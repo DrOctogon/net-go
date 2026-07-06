@@ -26,8 +26,8 @@ import (
 	"gorm.io/gorm"
 	gormlogger "gorm.io/gorm/logger"
 
-	"github.com/tphakala/birdnet-go/internal/datastore/mocks"
-	"github.com/tphakala/birdnet-go/internal/imports"
+	"github.com/tphakala/voicewatch/internal/datastore/mocks"
+	"github.com/tphakala/voicewatch/internal/imports"
 )
 
 // testDBOnlyBody is the canonical valid db-only import request body used across tests.

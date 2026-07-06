@@ -19,29 +19,26 @@ import (
 	"github.com/patrickmn/go-cache"
 	"github.com/shirou/gopsutil/v3/disk"
 	"github.com/shirou/gopsutil/v3/mem"
-	"github.com/tphakala/birdnet-go/internal/alerting"
-	"github.com/tphakala/birdnet-go/internal/analysis/processor"
-	"github.com/tphakala/birdnet-go/internal/api/auth"
-	"github.com/tphakala/birdnet-go/internal/audiocore"
-	"github.com/tphakala/birdnet-go/internal/audiocore/engine"
-	"github.com/tphakala/birdnet-go/internal/audiocore/ffmpeg"
-	"github.com/tphakala/birdnet-go/internal/classifier"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	datastoreV2 "github.com/tphakala/birdnet-go/internal/datastore/v2"
-	"github.com/tphakala/birdnet-go/internal/datastore/v2/repository"
-	"github.com/tphakala/birdnet-go/internal/ebird"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/health"
-	"github.com/tphakala/birdnet-go/internal/imageprovider"
-	"github.com/tphakala/birdnet-go/internal/imports"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/notification"
-	"github.com/tphakala/birdnet-go/internal/observability"
-	"github.com/tphakala/birdnet-go/internal/securefs"
-	"github.com/tphakala/birdnet-go/internal/spectrogram"
-	"github.com/tphakala/birdnet-go/internal/suncalc"
-	"github.com/tphakala/birdnet-go/internal/sysinfo"
+	"github.com/tphakala/voicewatch/internal/alerting"
+	"github.com/tphakala/voicewatch/internal/analysis/processor"
+	"github.com/tphakala/voicewatch/internal/api/auth"
+	"github.com/tphakala/voicewatch/internal/audiocore"
+	"github.com/tphakala/voicewatch/internal/audiocore/engine"
+	"github.com/tphakala/voicewatch/internal/audiocore/ffmpeg"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	datastoreV2 "github.com/tphakala/voicewatch/internal/datastore/v2"
+	"github.com/tphakala/voicewatch/internal/datastore/v2/repository"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/health"
+	"github.com/tphakala/voicewatch/internal/imports"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/notification"
+	"github.com/tphakala/voicewatch/internal/observability"
+	"github.com/tphakala/voicewatch/internal/securefs"
+	"github.com/tphakala/voicewatch/internal/spectrogram"
+	"github.com/tphakala/voicewatch/internal/suncalc"
+	"github.com/tphakala/voicewatch/internal/sysinfo"
 )
 
 // Tunnel provider constant for unknown providers
@@ -68,11 +65,8 @@ type Controller struct {
 	// settingsMutex.Lock without deadlocking on a non-reentrant RLock. The sibling
 	// engine and audioWatchdog fields use the same atomic-pointer pattern.
 	Settings          atomic.Pointer[conf.Settings]
-	BirdImageCache    *imageprovider.BirdImageCache
 	SunCalc           *suncalc.SunCalc
 	Processor         *processor.Processor
-	EBirdClient       *ebird.Client
-	TaxonomyDB        *classifier.TaxonomyDatabase
 	controlChan       chan string
 	shutdownRequester ShutdownRequester // programmatic shutdown trigger (e.g., for restart)
 	shutdownMu        sync.RWMutex      // protects shutdownRequester
@@ -143,9 +137,6 @@ type Controller struct {
 	// nameResolver is the authoritative localized name source shared with the
 	// classifier orchestrator. Overrides label-derived names in the cached maps.
 	nameResolver atomic.Pointer[datastore.SpeciesNameResolver]
-
-	// Model gallery fields
-	ModelManager *classifier.ModelManager
 
 	// Audio processing fields
 	processingCache     *processingCache
@@ -291,17 +282,6 @@ func WithAudioEngine(e *engine.AudioEngine) Option {
 	}
 }
 
-// WithModelManager sets the ModelManager for model gallery operations.
-func WithModelManager(mm *classifier.ModelManager) Option {
-	return func(c *Controller) {
-		c.ModelManager = mm
-		// Wire the topology-changed callback so model add/remove broadcasts over
-		// the metrics SSE stream. The method value binds c; c.metricsStore is read
-		// lazily at call time, so option ordering is irrelevant.
-		mm.SetTopologyChangedCallback(c.BroadcastInferenceTopologyChanged)
-	}
-}
-
 // WithHealthErrorBuffer injects a shared ErrorRingBuffer created at startup.
 // When set, initDiagnosticsRoutes uses this buffer instead of creating its own,
 // enabling the logger to feed errors into the same buffer the health checks read.
@@ -368,7 +348,7 @@ func (c *Controller) TunnelDetectionMiddleware() echo.MiddlewareFunc {
 // The controller owns the global settings singleton: it reads from the current
 // atomic snapshot on each request and publishes updates back via StoreSettings.
 func New(e *echo.Echo, ds datastore.Interface, settings *conf.Settings,
-	birdImageCache *imageprovider.BirdImageCache, sunCalc *suncalc.SunCalc,
+	sunCalc *suncalc.SunCalc,
 	controlChan chan string,
 	metrics *observability.Metrics, opts ...Option) (*Controller, error) {
 	// Refresh from the global atomic pointer so the controller starts with
@@ -377,7 +357,7 @@ func New(e *echo.Echo, ds datastore.Interface, settings *conf.Settings,
 	if global := conf.GetSettings(); global != nil {
 		settings = global
 	}
-	c, err := NewWithOptions(e, ds, settings, birdImageCache, sunCalc, controlChan, metrics, true, opts...)
+	c, err := NewWithOptions(e, ds, settings, sunCalc, controlChan, metrics, true, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -441,7 +421,7 @@ func ensureDirectoryExists(path string) error {
 // NewWithOptions creates a new API controller with optional route initialization.
 // Set initializeRoutes to false for testing to avoid starting background goroutines.
 func NewWithOptions(e *echo.Echo, ds datastore.Interface, settings *conf.Settings,
-	birdImageCache *imageprovider.BirdImageCache, sunCalc *suncalc.SunCalc,
+	sunCalc *suncalc.SunCalc,
 	controlChan chan string,
 	metrics *observability.Metrics, initializeRoutes bool, opts ...Option) (*Controller, error) {
 
@@ -471,7 +451,6 @@ func NewWithOptions(e *echo.Echo, ds datastore.Interface, settings *conf.Setting
 		DS:                   ds,
 		Repo:                 repo, // Bridge to new domain model (nil if datastore disabled)
 		isGlobalOwner:        settings == conf.GetSettings(),
-		BirdImageCache:       birdImageCache,
 		SunCalc:              sunCalc,
 		controlChan:          controlChan,
 		detectionCache:       cache.New(detectionCacheExpiry, detectionCacheCleanup),
@@ -530,25 +509,6 @@ func NewWithOptions(e *echo.Echo, ds datastore.Interface, settings *conf.Setting
 	// logging, where admins look when debugging auth.
 	c.securityLogger = logger.Global().Module("security")
 
-	// Load local taxonomy database for fast species lookups
-	taxonomyDB, err := classifier.LoadTaxonomyDatabase()
-	if err != nil {
-		c.logWarnIfEnabled("Failed to load taxonomy database", logger.Error(err))
-		c.logWarnIfEnabled("Species taxonomy lookups will fall back to eBird API")
-		// Continue without taxonomy database - eBird API fallback will be used
-		c.TaxonomyDB = nil
-	} else {
-		c.TaxonomyDB = taxonomyDB
-		stats := taxonomyDB.Stats()
-		c.logInfoIfEnabled("Loaded taxonomy database",
-			logger.Any("genus_count", stats["genus_count"]),
-			logger.Any("family_count", stats["family_count"]),
-			logger.Any("species_count", stats["species_count"]),
-			logger.String("version", taxonomyDB.Version),
-			logger.String("updated_at", taxonomyDB.UpdatedAt),
-		)
-	}
-
 	// Apply functional options (auth middleware and service injected from server)
 	for _, opt := range opts {
 		opt(c)
@@ -586,35 +546,6 @@ func NewWithOptions(e *echo.Echo, ds datastore.Interface, settings *conf.Setting
 	// Initialize SSE manager
 	c.sseManager = NewSSEManager()
 
-	// Initialize eBird client if enabled
-	if settings.Realtime.EBird.Enabled {
-		if settings.Realtime.EBird.APIKey == "" {
-			// Create notification for missing API key
-			// The Build() method automatically publishes to the event bus for notifications
-			_ = errors.Newf("eBird integration enabled but API key not configured").
-				Category(errors.CategoryConfiguration).
-				Context("setting", "realtime.ebird.apikey").
-				Component("ebird").
-				Build()
-			log.Warn("eBird integration enabled but API key not configured")
-		} else {
-			ebirdConfig := ebird.Config{
-				APIKey:   settings.Realtime.EBird.APIKey,
-				CacheTTL: time.Duration(settings.Realtime.EBird.CacheTTL) * time.Hour,
-			}
-			ebirdClient, err := ebird.NewClient(ebirdConfig)
-			if err != nil {
-				// Initialization error - already enhanced by ebird.NewClient
-				log.Warn("Failed to initialize eBird client", logger.Error(err))
-				// Continue without eBird client - it's not critical
-			} else {
-				c.EBirdClient = ebirdClient
-				log.Info("Initialized eBird API client")
-			}
-		}
-	} else {
-		log.Debug("eBird integration disabled")
-	}
 
 	// Initialize routes if requested (skip in tests to avoid starting background goroutines)
 	if initializeRoutes {
@@ -723,18 +654,14 @@ func (c *Controller) initRoutes() {
 		{"control routes", c.initControlRoutes},
 		{"auth routes", c.initAuthRoutes},
 		{"media routes", c.initMediaRoutes},
-		{"range routes", c.initRangeRoutes},
-		{"heatmap routes", c.initHeatmapRoutes},
 		{"sse routes", c.initSSERoutes},
 		{"diagnostics routes", c.initDiagnosticsRoutes},
 		{"metrics history routes", c.initMetricsHistoryRoutes},
 		{"notification routes", c.initNotificationRoutes},
 		{"support routes", c.initSupportRoutes},
 		{"debug routes", c.initDebugRoutes},
-		{"species routes", c.initSpeciesRoutes},
 		{"dynamic threshold routes", c.initDynamicThresholdRoutes},
 		{"alert routes", c.initAlertRoutes},
-		{"model routes", c.initModelRoutes},
 		{"insights routes", c.initInsightsRoutes},
 		{"tls routes", c.initTLSRoutes},
 		{"import routes", c.initImportRoutes},
@@ -1188,12 +1115,12 @@ func (c *Controller) GetAuthMiddleware() echo.MiddlewareFunc {
 // InitializeAPI creates a new API controller and registers all routes.
 // Auth middleware and service should be passed via functional options.
 func InitializeAPI(e *echo.Echo, ds datastore.Interface, settings *conf.Settings,
-	birdImageCache *imageprovider.BirdImageCache, sunCalc *suncalc.SunCalc,
+	sunCalc *suncalc.SunCalc,
 	controlChan chan string, proc *processor.Processor,
 	metrics *observability.Metrics, opts ...Option) *Controller {
 
 	// Create API controller with metrics and functional options
-	apiController, err := New(e, ds, settings, birdImageCache, sunCalc, controlChan, metrics, opts...)
+	apiController, err := New(e, ds, settings, sunCalc, controlChan, metrics, opts...)
 	if err != nil {
 		GetLogger().Error("Failed to initialize API", logger.Error(err))
 		os.Exit(1)

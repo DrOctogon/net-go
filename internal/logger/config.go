@@ -55,9 +55,7 @@ const (
 	DefaultAccessLogPath        = "logs/access.log"
 	DefaultAuthLogPath          = "logs/auth.log"
 	DefaultAudioLogPath         = "logs/audio.log"
-	DefaultBirdweatherLogPath   = "logs/birdweather.log"
 	DefaultWeatherLogPath       = "logs/weather.log"
-	DefaultImageproviderLogPath = "logs/imageprovider.log"
 	DefaultSpectrogramLogPath   = "logs/spectrogram.log"
 	DefaultActionsLogPath       = "logs/actions.log"
 	DefaultClassifierLogPath    = "logs/classifier.log"
@@ -145,9 +143,8 @@ func applyConfigDefaults(cfg *LoggingConfig) {
 	ensureModuleOutput(cfg, "audiocore", DefaultAudioLogPath)
 
 	// External service integration logs
-	ensureModuleOutput(cfg, "birdweather", DefaultBirdweatherLogPath)
 	ensureModuleOutput(cfg, "weather", DefaultWeatherLogPath)
-	ensureModuleOutput(cfg, "imageprovider", DefaultImageproviderLogPath)
+
 
 	// Spectrogram generation logs
 	ensureModuleOutput(cfg, "spectrogram", DefaultSpectrogramLogPath)
@@ -156,8 +153,8 @@ func applyConfigDefaults(cfg *LoggingConfig) {
 	// Classifier orchestrator and scheduler logs
 	// ConsoleAlso is true so bat scheduler transitions and model reload events
 	// are visible in journal/container environments.
-	if _, exists := cfg.ModuleOutputs["birdnet"]; !exists {
-		cfg.ModuleOutputs["birdnet"] = ModuleOutput{
+	if _, exists := cfg.ModuleOutputs["voicewatch"]; !exists {
+		cfg.ModuleOutputs["voicewatch"] = ModuleOutput{
 			Enabled:     true,
 			FilePath:    DefaultClassifierLogPath,
 			ConsoleAlso: true,

@@ -3,8 +3,8 @@ package notification
 import (
 	"fmt"
 
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/privacy"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/privacy"
 )
 
 // NotifyError creates an error notification with appropriate priority
@@ -156,7 +156,7 @@ func NotifyStartup(version string) {
 		return
 	}
 
-	title := "BirdNET-Go Started"
+	title := "VoiceWatch Started"
 	message := fmt.Sprintf("Application started successfully (v%s)", version)
 
 	// Build notification fully before broadcast to ensure SSE subscribers see translation keys
@@ -182,7 +182,7 @@ func NotifyShutdown() {
 		return
 	}
 
-	title := "BirdNET-Go Shutting Down"
+	title := "VoiceWatch Shutting Down"
 	message := "Application is shutting down gracefully"
 
 	// Build notification fully before broadcast to ensure SSE subscribers see translation keys
@@ -263,7 +263,7 @@ func scrubIPAddress(ip string) string {
 // Returns the original notification unchanged if either parameter is nil.
 // Otherwise returns the notification with added metadata fields.
 //
-// See: https://github.com/tphakala/birdnet-go/issues/1457
+// See: https://github.com/tphakala/voicewatch/issues/1457
 func EnrichWithTemplateData(notification *Notification, data *TemplateData) *Notification {
 	if notification == nil || data == nil {
 		return notification // Maintain fluent API - nil-in, nil-out

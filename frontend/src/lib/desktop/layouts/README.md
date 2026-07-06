@@ -1,6 +1,6 @@
 # Layout Components
 
-This directory contains the main layout components for the BirdNET-Go Svelte 5 UI.
+This directory contains the main layout components for the VoiceWatch Svelte 5 UI.
 
 ## Components
 

@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/tphakala/birdnet-go/internal/errors"
+	"github.com/tphakala/voicewatch/internal/errors"
 	"github.com/tphakala/simd/f64"
 )
 

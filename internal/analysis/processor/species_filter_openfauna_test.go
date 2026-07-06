@@ -13,13 +13,13 @@ import (
 // TestResolveSpeciesFilter_SecondaryModelScientificLabel verifies that a
 // scientific-only secondary-model label (a bat) in the label union matches a
 // config entry given by scientific name. Before sourcing labels from the model
-// union these never matched because the picker only saw primary BirdNET labels.
+// union these never matched because the picker only saw primary speech model labels.
 func TestResolveSpeciesFilter_SecondaryModelScientificLabel(t *testing.T) {
 	t.Parallel()
 
 	labels := []string{"Turdus merula_Eurasian Blackbird", "Barbastella barbastellus"}
 	isAll, resolved := resolveSpeciesFilter(
-		[]string{"Barbastella barbastellus"}, labels, nil, "", "test",
+		[]string{"Barbastella barbastellus"}, labels, "", "test",
 	)
 
 	assert.False(t, isAll)
@@ -37,7 +37,7 @@ func TestResolveSpeciesFilter_LocalizedCommonNameViaOpenFauna(t *testing.T) {
 
 	labels := []string{"Barbastella barbastellus"}
 	isAll, resolved := resolveSpeciesFilter(
-		[]string{"mopsilepakko"}, labels, nil, "fi", "test",
+		[]string{"mopsilepakko"}, labels, "fi", "test",
 	)
 
 	assert.False(t, isAll)
@@ -56,7 +56,7 @@ func TestResolveSpeciesFilter_ReverseHitNotInLabelsStaysUnresolved(t *testing.T)
 	// but that species is not in the loaded labels here (no bat model loaded).
 	labels := []string{"Turdus merula_Eurasian Blackbird"}
 	isAll, resolved := resolveSpeciesFilter(
-		[]string{"mopsilepakko"}, labels, nil, "fi", "test",
+		[]string{"mopsilepakko"}, labels, "fi", "test",
 	)
 
 	assert.False(t, isAll)
@@ -69,7 +69,7 @@ func TestResolveSpeciesFilter_UnknownEntryStaysUnresolved(t *testing.T) {
 	t.Parallel()
 
 	isAll, resolved := resolveSpeciesFilter(
-		[]string{"definitely-not-a-species-xyz"}, []string{"Turdus merula_Eurasian Blackbird"}, nil, "fi", "test",
+		[]string{"definitely-not-a-species-xyz"}, []string{"Turdus merula_Eurasian Blackbird"}, "fi", "test",
 	)
 
 	assert.False(t, isAll)

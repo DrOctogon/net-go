@@ -11,7 +11,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/tphakala/birdnet-go/internal/errors"
+	"github.com/tphakala/voicewatch/internal/errors"
 )
 
 // Spectrogram size constants define pixel widths for different display contexts.

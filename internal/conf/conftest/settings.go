@@ -5,7 +5,7 @@
 // importable from other packages' tests.
 package conftest
 
-import "github.com/tphakala/birdnet-go/internal/conf"
+import "github.com/tphakala/voicewatch/internal/conf"
 
 // SetTestSettings allows tests to inject their own settings instance.
 // Subsequent conf.GetSettings()/conf.Setting() calls observe the new snapshot
@@ -22,20 +22,19 @@ func GetTestSettings() *conf.Settings {
 
 	// Initialize with defaults
 	settings.Debug = false
-	settings.Main.Name = "BirdNET-Go-Test"
+	settings.Main.Name = "VoiceWatch-Test"
 	settings.Main.TimeAs24h = true
 
 	// Set up minimal test configuration
-	settings.BirdNET.Sensitivity = 1.0
-	settings.BirdNET.Threshold = 0.8
-	settings.BirdNET.Overlap = 0.0
-	settings.BirdNET.Locale = "en"
+	settings.VoiceWatch.Sensitivity = 1.0
+	settings.VoiceWatch.Threshold = 0.8
+	settings.VoiceWatch.Overlap = 0.0
+	settings.VoiceWatch.Locale = "en"
 
 	// Dashboard settings with thumbnails
 	settings.Realtime.Dashboard.Thumbnails.Debug = false
 	settings.Realtime.Dashboard.Thumbnails.Summary = false
 	settings.Realtime.Dashboard.Thumbnails.Recent = true
-	settings.Realtime.Dashboard.Thumbnails.ImageProvider = "avicommons"
 	settings.Realtime.Dashboard.Thumbnails.FallbackPolicy = conf.RetentionPolicyNone
 
 	// Other realtime settings
@@ -69,7 +68,7 @@ func GetTestSettings() *conf.Settings {
 // Example usage:
 //
 //	settings := conftest.NewTestSettings().
-//	    WithBirdNET(0.9, 45.0, -122.0).
+//	    WithVoiceWatch(0.9, 45.0, -122.0).
 //	    WithMQTT("tcp://localhost:1883", "test").
 //	    Build()
 type SettingsBuilder struct {
@@ -83,11 +82,11 @@ func NewTestSettings() *SettingsBuilder {
 	}
 }
 
-// WithBirdNET configures BirdNET-specific settings.
-func (b *SettingsBuilder) WithBirdNET(threshold, latitude, longitude float64) *SettingsBuilder {
-	b.settings.BirdNET.Threshold = threshold
-	b.settings.BirdNET.Latitude = latitude
-	b.settings.BirdNET.Longitude = longitude
+// WithVoiceWatch configures VoiceWatch-specific settings.
+func (b *SettingsBuilder) WithVoiceWatch(threshold, latitude, longitude float64) *SettingsBuilder {
+	b.settings.VoiceWatch.Threshold = threshold
+	b.settings.VoiceWatch.Latitude = latitude
+	b.settings.VoiceWatch.Longitude = longitude
 	return b
 }
 
@@ -122,9 +121,8 @@ func (b *SettingsBuilder) WithRTSPHealthThreshold(seconds int) *SettingsBuilder 
 	return b
 }
 
-// WithImageProvider configures thumbnail image provider settings.
-func (b *SettingsBuilder) WithImageProvider(provider, fallbackPolicy string) *SettingsBuilder {
-	b.settings.Realtime.Dashboard.Thumbnails.ImageProvider = provider
+// WithImageProvider configures thumbnail fallback policy.
+func (b *SettingsBuilder) WithImageProvider(_, fallbackPolicy string) *SettingsBuilder {
 	b.settings.Realtime.Dashboard.Thumbnails.FallbackPolicy = fallbackPolicy
 	return b
 }

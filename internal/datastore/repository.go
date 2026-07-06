@@ -1,11 +1,11 @@
-// Package datastore provides database operations for BirdNET-Go.
+// Package datastore provides database operations for VoiceWatch.
 package datastore
 
 import (
 	"context"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/detection"
+	"github.com/tphakala/voicewatch/internal/detection"
 )
 
 // defaultDetectionLimit is the default number of detections returned by queries.
@@ -60,6 +60,16 @@ type DetectionRepository interface {
 
 	// GetClipPath returns the audio clip path for a detection.
 	GetClipPath(ctx context.Context, id string) (string, error)
+
+	// UpdateTranscript stores the speech-to-text transcript and its language for a
+	// detection. Both fields are additive and optional; an empty transcript clears
+	// any previously stored value.
+	UpdateTranscript(ctx context.Context, id, transcript, language string) error
+
+	// UpdateKeywordFlag marks a detection as flagged and stores the comma-joined
+	// list of matched keywords. Both fields are additive; this only updates the
+	// flag columns and leaves all other fields untouched.
+	UpdateKeywordFlag(ctx context.Context, id string, flagged bool, keywordsHit string) error
 
 	// GetAdditionalResults returns the secondary predictions for a detection.
 	GetAdditionalResults(ctx context.Context, id string) ([]detection.AdditionalResult, error)

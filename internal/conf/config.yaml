@@ -1,4 +1,4 @@
-# BirdNET-Go configuration
+# VoiceWatch configuration
 
 debug: false              # print debug messages, can help with problem solving
 
@@ -23,7 +23,7 @@ logging:
   # machine parsing and log aggregation (ELK, Loki, etc.)
   file_output:
     enabled: true         # enable file output
-    path: logs/birdnet.log # default log file path
+    path: logs/voicewatch.log # default log file path
     max_size: 100         # maximum size in MB before rotation
     max_age: 30           # maximum age in days to keep old logs
     max_rotated_files: 10 # maximum number of old log files to keep
@@ -39,9 +39,9 @@ logging:
       enabled: true
       file_path: logs/analysis.log
       level: info
-    birdnet:
+    voicewatch:
       enabled: true
-      file_path: logs/birdnet.log
+      file_path: logs/voicewatch.log
       level: info
     audio:
       enabled: true
@@ -79,17 +79,9 @@ logging:
       enabled: false      # enable if using MQTT
       file_path: logs/mqtt.log
       level: info
-    birdweather:
-      enabled: false      # enable if using BirdWeather
-      file_path: logs/birdweather.log
-      level: info
     weather:
       enabled: false      # enable if using weather provider
       file_path: logs/weather.log
-      level: info
-    ebird:
-      enabled: false      # enable if using eBird integration
-      file_path: logs/ebird.log
       level: info
 
     # System and support modules
@@ -108,10 +100,6 @@ logging:
     events:
       enabled: true
       file_path: logs/events.log
-      level: info
-    imageprovider:
-      enabled: true
-      file_path: logs/imageprovider.log
       level: info
     monitor:
       enabled: true
@@ -144,21 +132,18 @@ logging:
 
 # Node specific settings
 main:
-  name: BirdNET-Go        # name of node, can be used to identify source of notes
+  name: VoiceWatch        # name of node, can be used to identify source of notes
   timeas24h: true         # true for 24-hour time format, false for 12-hour time format
 
-# BirdNET model specific settings
-birdnet:
+# VoiceWatch model specific settings
+voicewatch:
   sensitivity: 1.0        # sigmoid sensitivity, 0.1 to 1.5
-  threshold: 0.7          # threshold for prediction confidence to report, 0.0 to 1.0
+  threshold: 0.5          # speech-probability threshold to report a voice detection, 0.0 to 1.0
   overlap: 1.5            # overlap between chunks, 0.0 to 2.9
   threads: 0              # 0 to use all available CPU threads
   locale: en-us           # language to use for labels
   latitude: 00.000        # latitude of recording location for prediction filtering
   longitude: 00.000       # longitude of recording location for prediction filtering
-  rangefilter:
-      model: latest       # model to use for range filter: "latest" or "legacy" for previous model
-      threshold: 0.01     # rangefilter species occurrence threshold
   modelpath: ""           # path to external model file (empty for embedded)
   labelpath: ""           # path to external label file (empty for embedded)
   usexnnpack: true        # true to use XNNPACK delegate for inference acceleration
@@ -180,12 +165,39 @@ realtime:
       - name: "Sound Card 1"
         device: "sysdefault"  # ALSA device ID (e.g., "sysdefault", "hw:0,0", "Loopback")
         gain: 0               # input gain in dB (0 = no adjustment)
-        # model: ""           # AI model: "birdnet" (default), "perch_v2", "bat" (future)
+        # model: ""           # AI model: "voicewatch" (default), "perch_v2", "bat" (future)
         # equalizer:          # per-source EQ (omit to use global)
         # quiethours:         # per-source quiet hours
     soundlevel:
       enabled: false      # true to enable sound level monitoring
       interval: 10        # measurement interval in seconds (min 5 recommended, lower values increase CPU load)
+    continuous:
+      # continuously record ALL audio in rolling chunks for later analysis
+      # (voice-print / speaker-ID) — decoupled from the detection pipeline
+      enabled: false          # true to enable continuous full-audio recording
+      path: recordings/       # directory for segment files
+      segmentseconds: 3600    # segment length in seconds (default: 1 hour)
+      retentionhours: 24      # rolling retention window in hours (older files are deleted)
+      format: flac            # audio format: flac or wav
+      samplerate: 0           # output sample rate in Hz (0 = keep source rate)
+    speakerattributes:
+      # opt-in speaker-attribute estimation (gender, relative age band) and
+      # voice-print embeddings for "similar voices". These are demographic
+      # ESTIMATES, not biometric identity recognition; accuracy varies by
+      # accent/language/recording quality. Disabled by default; enabling
+      # requires a restart. No model is bundled yet (scaffold only).
+      enabled: false          # master switch for all speaker-attribute analysis
+      gender:
+        enabled: false        # estimate speaker gender
+        modelpath: ""         # ONNX model path ("" = bundled/default once available)
+        threshold: 0.5        # minimum confidence to keep an estimate (0..1)
+      age:
+        enabled: false        # estimate relative age band (child/teen/adult/senior)
+        modelpath: ""
+        threshold: 0.5
+      voiceprint:
+        enabled: false        # compute + store voice-print embeddings for similarity
+        modelpath: ""
     equalizer:
       enabled: false
       filters:
@@ -205,16 +217,16 @@ realtime:
       endevent: sunrise   # solar event for end (solar mode): "sunrise" or "sunset"
       endoffset: 0        # minutes offset from end event (solar mode, -180 to 180)
     export:
-      enabled: true       # true to export audio clips containing indentified bird calls
+      enabled: true       # true to export audio clips containing detected human voice
       debug: false        # true to enable audio export debug messages
       path: clips/        # path to audio clip export directory
       type: wav           # wav, flac, aac, opus, mp3. Formats other than wav require ffmpeg.
       bitrate: 96k        # bitrate for aac and opus exports
       retention:
-        policy: usage     # retention policy: none, age or usage
-        maxage: 30d       # age policy: maximum age of clips to keep before starting evictions
+        policy: age       # retention policy: none, age or usage
+        maxage: 21d       # age policy: keep a rolling 21 days of voice clips, then delete
         maxusage: 80%     # usage policy: percentage of disk usage to trigger eviction
-        minclips: 10      # minumum number of clips per species to keep before starting evictions
+        minclips: 0       # 0 = pure rolling retention (no minimum kept past maxage)
         keepspectrograms: true # true to keep spectrograms even when clips are deleted
         checkInterval: 15 # cleanup check interval in minutes (default: 15)
 
@@ -224,7 +236,6 @@ realtime:
       debug: false        # true to enable debug mode for image provider
       summary: false      # show thumbnails on summary table
       recent: true        # show thumbnails on recent table
-      imageprovider: avicommons # preferred image provider: avicommons, wikimedia, auto
       fallbackpolicy: none # fallback policy: none (no fallback), all (try all available providers)
  
   dynamicthreshold:
@@ -261,25 +272,15 @@ realtime:
   
   log:
     enabled: false        # true to enable OBS chat log
-    path: birdnet.txt     # path to OBS chat log
+    path: voicewatch.txt     # path to OBS chat log
 
-  birdweather:
-    enabled: false        # true to enable birdweather uploads
-    locationaccuracy: 500 # accuracy of location in meters
-    debug: false          # true to enable birdweather api debug mode
-    id: ""                # birdweather ID
-    retrysettings:
-      enabled: true       # enable retry for failed submissions
-      maxretries: 3       # maximum number of retry attempts
-      initialdelay: 30    # initial delay before first retry in seconds
-      maxdelay: 600       # maximum delay between retries in seconds
-      backoffmultiplier: 2.0  # multiplier for exponential backoff
-
-  ebird:
-    enabled: false        # true to enable eBird API integration
-    apikey: ""            # eBird API key (get from https://ebird.org/api/keygen)
-    cachettl: 24          # cache time-to-live in hours (default: 24)
-    locale: "en"          # locale for eBird data (e.g., "en", "es", "fr")
+  transcription:
+    enabled: false        # true to transcribe saved clips to text (speech-to-text)
+    model: ""             # path to the GGML model file (e.g. ggml-tiny.en.bin); required when enabled
+    binary: "whisper-cli" # whisper.cpp CLI executable (name on PATH or absolute path)
+    language: "en"        # spoken language hint passed to whisper (e.g. "en", "auto")
+    keywords: []          # words/phrases to flag in transcripts (comma list; empty disables keyword flagging)
+    keywordCaseSensitive: false  # true = case-sensitive keyword matching
 
   weather:
     provider: yrno
@@ -295,8 +296,8 @@ realtime:
     enabled: false        # true to enable MQTT
     debug: false          # true to enable MQTT debug
     broker: tcp://localhost:1883 # MQTT broker URL (tcp://, ssl://, tls://, or mqtts://)
-    topic: birdnet        # MQTT topic
-    username: birdnet     # MQTT username
+    topic: voicewatch        # MQTT topic
+    username: voicewatch     # MQTT username
     password: secret      # MQTT password
     retain: false         # true to retain messages
     retrysettings:
@@ -311,14 +312,9 @@ realtime:
       clientcert: ""      # path to client certificate file
       clientkey: ""       # path to client key file
 
-  privacyfilter:          # Privacy filter prevents audio clip saving if human voice 
-    enabled: true         # is detected durin audio capture
-    confidence: 0.05      # threshold for human voice detection
-
-  dogbarkfilter:
-    enabled: true
-    confidence: 0.1       # confidence threshold for dog bark detection
-    remember: 5           # number of minutes to remember dog barks
+  privacyfilter:          # Privacy filter: when enabled, DISCARDS human-voice detections
+    enabled: false        # off by default — VoiceWatch saves all detected voice clips
+    confidence: 0.05      # human-voice confidence above which clips are discarded
 
   daylightfilter:
     enabled: true
@@ -375,7 +371,7 @@ security:
   # - Notification URLs in push notifications
   #
   # Set this to your public hostname when using a reverse proxy
-  # (e.g., "birdnet.home.arpa", "birdnet.example.com")
+  # (e.g., "voicewatch.home.arpa", "voicewatch.example.com")
   #
   # Can also be set via BIRDNET_HOST environment variable
   # Falls back to "localhost" if not configured (works for direct access only)
@@ -388,7 +384,7 @@ security:
   #
   # This takes priority over host/autotls settings for URL generation
   # Use this when your reverse proxy handles SSL termination
-  # (e.g., "https://birdnet.example.com" or "https://birdnet.home.arpa:8443")
+  # (e.g., "https://voicewatch.example.com" or "https://voicewatch.home.arpa:8443")
   #
   # Can also be set via BIRDNET_URL environment variable
   baseurl: ""
@@ -456,12 +452,12 @@ output:
   # if both are enabled, SQLite will be used.
   sqlite:
     enabled: true         # true to enable sqlite output
-    path: birdnet.db      # path to sqlite database
+    path: voicewatch.db      # path to sqlite database
   mysql:
     enabled: false        # true to enable mysql output
-    username: birdnet     # mysql database username
+    username: voicewatch     # mysql database username
     password: secret      # mysql database user password
-    database: birdnet     # mysql database name
+    database: voicewatch     # mysql database name
     host: localhost       # mysql database host
     port: 3306            # mysql database port
 
@@ -551,7 +547,7 @@ notification:
       #   enabled: false
       #   name: "api-service"
       #   endpoints:
-      #     - url: "https://api.example.com/webhooks/birdnet"
+      #     - url: "https://api.example.com/webhooks/voicewatch"
       #       auth:
       #         type: bearer
       #         token_file: "/run/secrets/api_token"  # Read from mounted secret file
@@ -608,7 +604,7 @@ notification:
 
       # Security Best Practices:
       # 1. NEVER commit secrets to git - use environment variables or file references
-      # 2. For Docker: docker run -e WEBHOOK_TOKEN=xyz birdnet-go
+      # 2. For Docker: docker run -e WEBHOOK_TOKEN=xyz voicewatch
       # 3. For Kubernetes: Mount secrets as files in /run/secrets/
       # 4. For development: Create .env file (add to .gitignore!)
       # 5. Use ${VAR:-default} syntax for optional env vars with defaults

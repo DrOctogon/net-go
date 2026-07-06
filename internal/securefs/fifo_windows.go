@@ -13,8 +13,8 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
 	"golang.org/x/sys/windows"
 )
 

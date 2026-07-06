@@ -1,7 +1,7 @@
 /**
  * Global Setup for Reverse Proxy Integration Tests
  *
- * Starts a BirdNET-Go backend and an nginx Docker container configured as a
+ * Starts a VoiceWatch backend and an nginx Docker container configured as a
  * reverse proxy. Tests verify that all valid routes are accessible through
  * the proxy without returning 404 errors.
  *

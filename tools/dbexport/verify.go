@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/tphakala/birdnet-go/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/datastore"
 	"gorm.io/gorm"
 )
 

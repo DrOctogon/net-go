@@ -70,7 +70,7 @@ func TestSettings_MigrateLocationConfigured(t *testing.T) {
 			t.Parallel()
 
 			settings := &Settings{
-				BirdNET: BirdNETConfig{
+				VoiceWatch: VoiceWatchConfig{
 					Latitude:           tt.latitude,
 					Longitude:          tt.longitude,
 					LocationConfigured: tt.locationConfigured,
@@ -79,7 +79,7 @@ func TestSettings_MigrateLocationConfigured(t *testing.T) {
 
 			settings.MigrateLocationConfigured()
 
-			assert.Equal(t, tt.wantConfigured, settings.BirdNET.LocationConfigured,
+			assert.Equal(t, tt.wantConfigured, settings.VoiceWatch.LocationConfigured,
 				"LocationConfigured should be %v for lat=%v, lon=%v",
 				tt.wantConfigured, tt.latitude, tt.longitude)
 		})
@@ -88,7 +88,7 @@ func TestSettings_MigrateLocationConfigured(t *testing.T) {
 
 func TestSettings_MigrateLocationConfigured_Idempotent(t *testing.T) {
 	settings := &Settings{
-		BirdNET: BirdNETConfig{
+		VoiceWatch: VoiceWatchConfig{
 			Latitude:           40.7128,
 			Longitude:          -74.006,
 			LocationConfigured: false,
@@ -97,9 +97,9 @@ func TestSettings_MigrateLocationConfigured_Idempotent(t *testing.T) {
 
 	// First migration
 	settings.MigrateLocationConfigured()
-	assert.True(t, settings.BirdNET.LocationConfigured)
+	assert.True(t, settings.VoiceWatch.LocationConfigured)
 
 	// Second migration should not change anything
 	settings.MigrateLocationConfigured()
-	assert.True(t, settings.BirdNET.LocationConfigured)
+	assert.True(t, settings.VoiceWatch.LocationConfigured)
 }

@@ -1,6 +1,6 @@
 # ONNX Runtime Installation Guide
 
-ONNX Runtime is a shared library required by BirdNET-Go for neural network inference. It powers the BirdNET v2.4 classifier, Perch v2 embeddings, BattyBirdNET bat detection, range filtering, and BirdNET Geomodel features.
+ONNX Runtime is a shared library required by VoiceWatch for neural network inference. It powers the BirdNET v2.4 classifier, Perch v2 embeddings, BattyBirdNET bat detection, range filtering, and BirdNET Geomodel features.
 
 > **Note:** ONNX Runtime will become the sole inference backend in a future release. TensorFlow Lite support is being phased out. If you are setting up a new installation, only ONNX Runtime is needed going forward.
 
@@ -14,7 +14,7 @@ ONNX Runtime is a shared library required by BirdNET-Go for neural network infer
 
 ## Required Version
 
-BirdNET-Go requires **ONNX Runtime 1.25.x**. The Go bindings (`onnxruntime_go`) are compiled against `ORT_API_VERSION 25`, which only exists in the 1.25.x series. Older versions (1.24.x and below) and newer major versions will fail to load.
+VoiceWatch requires **ONNX Runtime 1.25.x**. The Go bindings (`onnxruntime_go`) are compiled against `ORT_API_VERSION 25`, which only exists in the 1.25.x series. Older versions (1.24.x and below) and newer major versions will fail to load.
 
 ## Installing from Release Tarballs
 
@@ -82,7 +82,7 @@ Note: macOS System Integrity Protection strips `DYLD_LIBRARY_PATH` when launchin
 After extracting the archive, keep `onnxruntime.dll` in the **same directory** as `birdnet-go.exe`. Windows loads DLLs from the application directory automatically, so no additional installation is needed.
 
 ```text
-C:\BirdNET-Go\
+C:\VoiceWatch\
   birdnet-go.exe
   onnxruntime.dll
 ```
@@ -156,7 +156,7 @@ curl -fsSL "https://github.com/microsoft/onnxruntime/releases/download/v${VERSIO
   -o onnxruntime.tgz
 ```
 
-Note: BirdNET-Go does not currently publish pre-built binaries for Intel Macs. You would need to build from source.
+Note: VoiceWatch does not currently publish pre-built binaries for Intel Macs. You would need to build from source.
 
 ### Windows (x86_64 / amd64)
 
@@ -178,7 +178,7 @@ Place `onnxruntime.dll` in the same directory as `birdnet-go.exe`.
 
 ### Using the Taskfile (Build from Source)
 
-If you have the BirdNET-Go source tree and [Task](https://taskfile.dev) installed:
+If you have the VoiceWatch source tree and [Task](https://taskfile.dev) installed:
 
 ```bash
 task download-onnxruntime
@@ -224,15 +224,15 @@ otool -L /usr/local/lib/libonnxruntime.dylib
 
 ```powershell
 # Check the DLL exists alongside the binary
-dir C:\BirdNET-Go\onnxruntime.dll
+dir C:\VoiceWatch\onnxruntime.dll
 
 # Or check system-wide
 where.exe onnxruntime.dll
 ```
 
-### BirdNET-Go Startup Check
+### VoiceWatch Startup Check
 
-When BirdNET-Go starts, it logs the ONNX Runtime version it loaded. Look for a line like:
+When VoiceWatch starts, it logs the ONNX Runtime version it loaded. Look for a line like:
 
 ```text
 ONNX Runtime initialized (version 1.25.1)
@@ -281,7 +281,7 @@ Move `onnxruntime.dll` to the same folder as the executable.
 
 ### Wrong ONNX Runtime version
 
-If BirdNET-Go reports version incompatibility errors, download the exact version listed at the top of this guide (currently 1.25.1). Newer major versions may introduce breaking API changes.
+If VoiceWatch reports version incompatibility errors, download the exact version listed at the top of this guide (currently 1.25.1). Newer major versions may introduce breaking API changes.
 
 ### Permission denied errors
 
@@ -314,5 +314,5 @@ If it shows `armv7l`, you are running a 32-bit OS and need to switch to a 64-bit
 ## Further Reading
 
 - [ONNX Runtime GitHub](https://github.com/microsoft/onnxruntime) - official releases and documentation
-- [BirdNET-Go documentation](https://birdnet-go.dev)
-- [BirdNET-Go GitHub](https://github.com/tphakala/birdnet-go) - issues and discussions
+- [VoiceWatch documentation](https://birdnet-go.dev)
+- [VoiceWatch GitHub](https://github.com/tphakala/voicewatch) - issues and discussions

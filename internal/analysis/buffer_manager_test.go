@@ -6,8 +6,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/classifier"
-	"github.com/tphakala/birdnet-go/internal/conf"
+	"github.com/tphakala/voicewatch/internal/classifier"
+	"github.com/tphakala/voicewatch/internal/conf"
 )
 
 func TestMonitorConfig_ReadSize(t *testing.T) {
@@ -69,43 +69,21 @@ func TestBuildMonitorConfig(t *testing.T) {
 	t.Parallel()
 
 	info := &classifier.ModelInfo{
-		ID:   "BirdNET_V2.4",
-		Name: classifier.ModelNameBirdNETv24,
-		Spec: classifier.ModelSpec{SampleRate: 48000, ClipLength: 3 * time.Second},
+		ID:   classifier.RegistryIDHumanVoice,
+		Name: "Human Voice",
+		Spec: classifier.ModelSpec{SampleRate: 16000, ClipLength: 3 * time.Second},
 	}
 
 	cfg := buildMonitorConfig("mic1", info)
 
 	assert.Equal(t, "mic1", cfg.sourceID)
-	assert.Equal(t, "BirdNET_V2.4", cfg.modelID)
-	assert.Equal(t, 48000, cfg.spec.SampleRate)
+	assert.Equal(t, classifier.RegistryIDHumanVoice, cfg.modelID)
+	assert.Equal(t, 16000, cfg.spec.SampleRate)
 	assert.Equal(t, 3*time.Second, cfg.spec.ClipLength)
 
 	// readSize = SampleRate * ClipLengthSec * NumChannels * (BitDepth / 8)
-	// = 48000 * 3 * 1 * 2 = 288000
-	expectedReadSize := 48000 * 3 * conf.NumChannels * (conf.BitDepth / 8)
-	assert.Equal(t, expectedReadSize, cfg.readSize)
-}
-
-func TestBuildMonitorConfig_PerchV2(t *testing.T) {
-	t.Parallel()
-
-	info := &classifier.ModelInfo{
-		ID:   "Perch_V2",
-		Name: classifier.ModelNamePerchV2,
-		Spec: classifier.ModelSpec{SampleRate: 32000, ClipLength: 5 * time.Second},
-	}
-
-	cfg := buildMonitorConfig("stream1", info)
-
-	assert.Equal(t, "stream1", cfg.sourceID)
-	assert.Equal(t, "Perch_V2", cfg.modelID)
-	assert.Equal(t, 32000, cfg.spec.SampleRate)
-	assert.Equal(t, 5*time.Second, cfg.spec.ClipLength)
-
-	// readSize = SampleRate * ClipLengthSec * NumChannels * (BitDepth / 8)
-	// = 32000 * 5 * 1 * 2 = 320000
-	expectedReadSize := 32000 * 5 * conf.NumChannels * (conf.BitDepth / 8)
+	// = 16000 * 3 * 1 * 2 = 96000
+	expectedReadSize := 16000 * 3 * conf.NumChannels * (conf.BitDepth / 8)
 	assert.Equal(t, expectedReadSize, cfg.readSize)
 }
 
@@ -114,7 +92,7 @@ func TestNewBufferManager_NilParams(t *testing.T) {
 
 	_, err := NewBufferManager(nil, nil, nil, nil)
 	require.Error(t, err)
-	assert.Contains(t, err.Error(), "BirdNET instance cannot be nil")
+	assert.Contains(t, err.Error(), "VoiceWatch classifier cannot be nil")
 }
 
 func TestMonitorConfig_OverlapSizeDefault(t *testing.T) {

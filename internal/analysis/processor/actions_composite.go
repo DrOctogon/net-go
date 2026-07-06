@@ -8,9 +8,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/imageprovider"
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 // actionResult is a simple struct to pass action execution results through channels.
@@ -122,32 +121,6 @@ func buildTimeoutError(action Action, timeout time.Duration, step, total int) er
 		Build()
 }
 
-// getBirdImageFromCache retrieves a bird image from cache with proper error handling and logging.
-// This helper consolidates duplicate image retrieval logic used by MqttAction and SSEAction.
-// Returns an empty BirdImage if the cache is nil or if retrieval fails.
-func getBirdImageFromCache(cache *imageprovider.BirdImageCache, scientificName, commonName, correlationID string) imageprovider.BirdImage {
-	if cache == nil {
-		GetLogger().Warn("BirdImageCache is nil, cannot fetch image",
-			logger.String("detection_id", correlationID),
-			logger.String("species", commonName),
-			logger.String("scientific_name", scientificName),
-			logger.String("operation", "check_bird_image_cache"))
-		return imageprovider.BirdImage{}
-	}
-
-	birdImage, err := cache.Get(scientificName)
-	if err != nil {
-		GetLogger().Warn("Error getting bird image from cache",
-			logger.String("detection_id", correlationID),
-			logger.Error(err),
-			logger.String("species", commonName),
-			logger.String("scientific_name", scientificName),
-			logger.String("operation", "get_bird_image"))
-		return imageprovider.BirdImage{}
-	}
-
-	return birdImage
-}
 
 // Execute runs all actions sequentially, stopping on first error
 // This method is designed to prevent deadlocks and handle timeouts properly

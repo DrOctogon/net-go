@@ -4,11 +4,11 @@ import (
 	"strings"
 
 	"github.com/shirou/gopsutil/v3/host"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/mempolicy"
-	"github.com/tphakala/birdnet-go/internal/observability"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/mempolicy"
+	"github.com/tphakala/voicewatch/internal/observability"
 )
 
 // bytesPerMiB converts byte counts to MiB for human-readable startup logging.
@@ -83,10 +83,10 @@ func PrintSystemDetails(settings *conf.Settings) {
 			logger.String("hardware", hwModel))
 	}
 
-	// Log the start of BirdNET-Go Analyzer in realtime mode and its configurations.
+	// Log the start of VoiceWatch Analyzer in realtime mode and its configurations.
 	log.Info("Starting analyzer in realtime mode",
-		logger.Float64("threshold", settings.BirdNET.Threshold),
-		logger.Float64("overlap", settings.BirdNET.Overlap),
-		logger.Float64("sensitivity", settings.BirdNET.Sensitivity),
+		logger.Float64("threshold", settings.VoiceWatch.Threshold),
+		logger.Float64("overlap", settings.VoiceWatch.Overlap),
+		logger.Float64("sensitivity", settings.VoiceWatch.Sensitivity),
 		logger.Int("interval", settings.Realtime.Interval))
 }

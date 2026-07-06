@@ -82,7 +82,7 @@ would.
 A connection that is still `CONNECTING` (the native source is retrying on its
 own) is left alone; the wrapper only takes over once the native source closes.
 
-Note: the class does not track `lastEventId`. BirdNET-Go's SSE endpoints emit no
+Note: the class does not track `lastEventId`. VoiceWatch's SSE endpoints emit no
 `id:` field and the server reads no `lastEventId` parameter, so resumption
 tracking would be dead code here.
 

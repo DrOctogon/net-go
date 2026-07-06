@@ -10,7 +10,6 @@
   - onFreezeStart?: () => void - Callback when interaction starts
   - onFreezeEnd?: () => void - Callback when interaction ends
   - onReview?: () => void - Callback for review action
-  - onToggleSpecies?: () => void - Callback for toggle species action
   - onToggleLock?: () => void - Callback for toggle lock action
   - onDelete?: () => void - Callback for delete action
 -->
@@ -22,8 +21,10 @@
   import MoonBadge from './MoonBadge.svelte';
   import SourceBadge from './SourceBadge.svelte';
   import PlayOverlay from './PlayOverlay.svelte';
-  import SpeciesInfoBar from './SpeciesInfoBar.svelte';
   import ActionMenu from '$lib/desktop/components/ui/ActionMenu.svelte';
+  import SpeakerAttributeChips from '$lib/desktop/components/data/SpeakerAttributeChips.svelte';
+  import { Mic } from '@lucide/svelte';
+  import { highlightKeywords } from '$lib/utils/highlightKeywords';
   import AudioSettingsButton from './AudioSettingsButton.svelte';
   import { cn } from '$lib/utils/cn';
   import { downloadDetectionAudio } from '$lib/utils/audioDownload';
@@ -41,13 +42,11 @@
   interface Props {
     detection: Detection;
     isNew?: boolean;
-    isExcluded?: boolean;
     onFreezeStart?: () => void;
     onFreezeEnd?: () => void;
     onReview?: () => void;
     onMarkCorrect?: () => void;
     onMarkFalsePositive?: () => void;
-    onToggleSpecies?: () => void;
     onToggleLock?: () => void;
     onDelete?: () => void;
   }
@@ -55,13 +54,11 @@
   let {
     detection,
     isNew = false,
-    isExcluded = false,
     onFreezeStart,
     onFreezeEnd,
     onReview,
     onMarkCorrect,
     onMarkFalsePositive,
-    onToggleSpecies,
     onToggleLock,
     onDelete,
   }: Props = $props();
@@ -187,7 +184,7 @@
       {:else if loader.spectrogramUrl}
         <img
           src={loader.spectrogramUrl}
-          alt={t('components.audio.spectrogramForSpecies', { species: detection.commonName })}
+          alt={t('components.audio.spectrogramForDetection')}
           class="spectrogram-image"
           class:opacity-0={loader.state === 'loading'}
           decoding="async"
@@ -213,6 +210,7 @@
         <MoonBadge moonPhaseName={detection.weather.moonPhaseName} />
       {/if}
       <SourceBadge {detection} variant="overlay" />
+      <SpeakerAttributeChips {detection} variant="overlay" />
     </div>
 
     <!-- Center Play Button -->
@@ -226,8 +224,30 @@
       onAudioContextAvailable={handleAudioContextAvailable}
     />
 
-    <!-- Bottom Species Info Bar -->
-    <SpeciesInfoBar {detection} />
+    <!-- Bottom Voice Info Bar: mic icon + transcript, replaces species thumbnail bar -->
+    <div class="voice-info-bar">
+      <!-- Decorative mic icon replaces bird thumbnail -->
+      <div class="voice-mic-icon" aria-hidden="true">
+        <Mic class="w-4 h-4 text-white" aria-hidden="true" />
+      </div>
+      <!-- Transcript (single-line, ellipsis) with full text on hover -->
+      <div class="voice-transcript-area">
+        {#if detection.transcript}
+          <span class="voice-transcript-text" title={detection.transcript}
+            >{#each highlightKeywords(detection.transcript, detection.keywordsHit) as seg, i (i)}{#if seg.match}<mark
+                  class="rounded-sm bg-[var(--color-warning)]/20 text-[var(--color-base-content)] border-b border-[var(--color-warning)]/60 font-medium"
+                  >{seg.text}</mark
+                >{:else}{seg.text}{/if}{/each}</span
+          >
+        {:else}
+          <span class="voice-no-transcript">{t('detections.noTranscript')}</span>
+        {/if}
+      </div>
+      <!-- Detection time -->
+      <div class="voice-time">
+        <span class="voice-time-text">{detection.time}</span>
+      </div>
+    </div>
   </div>
 
   <!-- Top-Right Controls - OUTSIDE overflow-hidden container -->
@@ -246,12 +266,10 @@
     />
     <ActionMenu
       {detection}
-      {isExcluded}
       variant="overlay"
       {onMarkCorrect}
       {onMarkFalsePositive}
       {onReview}
-      {onToggleSpecies}
       {onToggleLock}
       {onDelete}
       onDownload={() => downloadDetectionAudio(detection)}
@@ -326,5 +344,66 @@
     100% {
       box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-primary) 0%, transparent);
     }
+  }
+
+  /* Voice info bar: replaces SpeciesInfoBar at the bottom of the card */
+  .voice-info-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    z-index: 10;
+    background: linear-gradient(to top, rgb(0 0 0 / 0.65), transparent);
+  }
+
+  .voice-mic-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.5rem;
+    background-color: rgb(255 255 255 / 0.12);
+  }
+
+  .voice-transcript-area {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .voice-transcript-text {
+    display: block;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    color: white;
+    line-height: 1.3;
+    text-shadow: 0 1px 2px rgb(0 0 0 / 0.5);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .voice-no-transcript {
+    font-size: 0.875rem;
+    color: rgb(255 255 255 / 0.45);
+    font-style: italic;
+    text-shadow: 0 1px 2px rgb(0 0 0 / 0.5);
+  }
+
+  .voice-time {
+    flex-shrink: 0;
+  }
+
+  .voice-time-text {
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    color: white;
+    text-shadow: 0 1px 2px rgb(0 0 0 / 0.5);
   }
 </style>

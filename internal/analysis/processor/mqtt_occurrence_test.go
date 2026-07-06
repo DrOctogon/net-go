@@ -8,10 +8,10 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/analysis/jobqueue"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/detection"
-	"github.com/tphakala/birdnet-go/internal/mqtt"
+	"github.com/tphakala/voicewatch/internal/analysis/jobqueue"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/detection"
+	"github.com/tphakala/voicewatch/internal/mqtt"
 )
 
 // MockMqttClientWithCapture captures published messages for testing
@@ -111,7 +111,7 @@ func TestMqttAction_IncludesOccurrence(t *testing.T) {
 	action := &MqttAction{
 		Settings:       settings,
 		Result:         testResult, // Domain model (single source of truth)
-		BirdImageCache: nil,        // No image cache for this test
+
 		MqttClient:     mockClient,
 		EventTracker:   eventTracker,
 		RetryConfig:    retryConfig,
@@ -198,7 +198,6 @@ func TestMqttAction_OmitsOccurrenceWhenZero(t *testing.T) {
 	action := &MqttAction{
 		Settings:       settings,
 		Result:         testResult, // Domain model (single source of truth)
-		BirdImageCache: nil,
 		MqttClient:     mockClient,
 		EventTracker:   eventTracker,
 		RetryConfig:    retryConfig,

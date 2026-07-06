@@ -9,7 +9,7 @@ import (
 
 	"github.com/gen2brain/malgo"
 
-	"github.com/tphakala/birdnet-go/internal/audiocore/buffer"
+	"github.com/tphakala/voicewatch/internal/audiocore/buffer"
 )
 
 // benchS32FrameBytes is the size of one representative malgo frame for the

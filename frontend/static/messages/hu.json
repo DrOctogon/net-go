@@ -156,7 +156,8 @@
         "falsePositive": "Hamis pozitív",
         "notReviewed": "Nincs áttekintve",
         "locked": "Zárolva",
-        "unlikely": "Valószínűtlen"
+        "unlikely": "Valószínűtlen",
+        "flagged": "Flagged"
       },
       "form": {
         "correctDetection": "Helyes detektálás",
@@ -200,7 +201,7 @@
     "hoursShort": "ó"
   },
   "pageTitle": {
-    "settings": "Beállítások - BirdNET-Go",
+    "settings": "Beállítások - VoiceWatch",
     "pageNotFound": "404 - Az oldal nem található",
     "serverError": "500 - Belső szerverhiba",
     "componentError": "Komponens betöltési hiba",
@@ -236,26 +237,26 @@
     "askQuestion": "Kérdés feltevése",
     "reportBugAriaLabel": "Hiba bejelentése a GitHubon (új ablakban nyílik meg)",
     "askQuestionAriaLabel": "Kérdés feltevése a GitHub Discussions oldalon (új ablakban nyílik meg)",
-    "viewOnGithubAriaLabel": "BirdNET-Go megtekintése a GitHubon (új ablakban nyílik meg)",
+    "viewOnGithubAriaLabel": "VoiceWatch megtekintése a GitHubon (új ablakban nyílik meg)",
     "health": "Rendszerállapot"
   },
   "about": {
-    "title": "BirdNET-Go",
+    "title": "VoiceWatch",
     "subtitle": "Modern felület valós idejű madárhang detektáláshoz és osztályozáshoz",
-    "logoAlt": "BirdNET-Go logó",
+    "logoAlt": "VoiceWatch logó",
     "overview": "Áttekintés",
-    "overviewText": "A BirdNET-Go egy Go-alapú megvalósítás valós idejű madárhang detektáláshoz és osztályozáshoz, amely a BirdNET projekt alapjaira épül. Ez az alkalmazás felhasználóbarát felületet biztosít a folyamatos madárhang megfigyeléshez és elemzéshez.",
-    "birdnetProject": "BirdNET projekt",
-    "birdnetDescription": "A BirdNET-Go nem lenne lehetséges a BirdNET projekt úttörő munkája nélkül. A BirdNET-Go detektálási képességeit működtető mesterséges intelligencia modell a BirdNET projekt innovatív kutatásának és fejlesztésének az eredménye.",
+    "overviewText": "A VoiceWatch egy Go-alapú megvalósítás valós idejű madárhang detektáláshoz és osztályozáshoz, amely a VoiceWatch projekt alapjaira épül. Ez az alkalmazás felhasználóbarát felületet biztosít a folyamatos madárhang megfigyeléshez és elemzéshez.",
+    "birdnetProject": "VoiceWatch projekt",
+    "birdnetDescription": "A VoiceWatch nem lenne lehetséges a VoiceWatch projekt úttörő munkája nélkül. A VoiceWatch detektálási képességeit működtető mesterséges intelligencia modell a VoiceWatch projekt innovatív kutatásának és fejlesztésének az eredménye.",
     "developedBy": "Fejlesztette",
     "developersText": "A Cornell Lab of Ornithology K. Lisa Yang Conservation Bioacoustics Központja a Chemnitzi Műszaki Egyetemmel együttműködésben:",
     "visitBirdnetAnalyzer": "BirdNET-Analyzer projekt meglátogatása",
     "visitBirdnetAnalyzerAriaLabel": "BirdNET-Analyzer GitHub tárhely meglátogatása",
     "contributors": "Közreműködők",
-    "contributorsText": "A BirdNET-Go számos egyén közös erőfeszítésének köszönhetően nőtt és fejlődött. A kódbeli javításoktól kezdve a funkciójavaslatokig mindannyian felbecsülhetetlen értékű munkával járultak hozzá a projekt jobbá tételéhez.",
+    "contributorsText": "A VoiceWatch számos egyén közös erőfeszítésének köszönhetően nőtt és fejlődött. A kódbeli javításoktól kezdve a funkciójavaslatokig mindannyian felbecsülhetetlen értékű munkával járultak hozzá a projekt jobbá tételéhez.",
     "mainDeveloper": "Fő fejlesztő",
     "githubContributors": "GitHub közreműködők",
-    "contributorsNote": "Külön köszönet ezeknek a közreműködőknek az értékes munkájukért a BirdNET-Go fejlesztésében:",
+    "contributorsNote": "Külön köszönet ezeknek a közreműködőknek az értékes munkájukért a VoiceWatch fejlesztésében:",
     "communityAcknowledgment": "Közösségi elismerés",
     "communityText": "Szeretnénk megköszönni minden felhasználónak is, aki hozzájárult:",
     "bugReports": "Hibajelentések és hibakövetés",
@@ -264,9 +265,9 @@
     "documentation": "Dokumentáció fejlesztések",
     "additionalCredits": "További elismerések",
     "birdnetPiProject": "BirdNET-Pi projekt",
-    "birdnetPiDescription": "Külön köszönet Patrick McGuire-nek a BirdNET-Pi-n végzett inspiráló munkájáért, amely befolyásolta a BirdNET-Go fejlesztését. A BirdNET-Pi bemutatja a madárhang detektálás lehetőségeit beágyazott eszközökön, és magas mércét állított a közösségvezérelt fejlesztés számára.",
+    "birdnetPiDescription": "Külön köszönet Patrick McGuire-nek a BirdNET-Pi-n végzett inspiráló munkájáért, amely befolyásolta a VoiceWatch fejlesztését. A BirdNET-Pi bemutatja a madárhang detektálás lehetőségeit beágyazott eszközökön, és magas mércét állított a közösségvezérelt fejlesztés számára.",
     "visitBirdnetPi": "BirdNET-Pi projekt meglátogatása",
-    "labelTranslations": "BirdNET címke fordítások",
+    "labelTranslations": "VoiceWatch címke fordítások",
     "labelTranslationsBy": "Patrick Levin által biztosítva a BirdNET-Pi projekt számára, Patrick McGuire tollából",
     "patrickLevinGithub": "Patrick Levin GitHub",
     "versionInformation": "Verzióinformáció",
@@ -275,12 +276,12 @@
     "developmentBuild": "Fejlesztői build",
     "unknown": "Ismeretlen",
     "licenseInformation": "Licenc információ",
-    "licenseText": "A BirdNET AI modell és a BirdNET-Go is a",
+    "licenseText": "A VoiceWatch AI modell és a VoiceWatch is a",
     "ccLicense": "Creative Commons Nevezd meg! - Ne add el! - Így add tovább! 4.0 Nemzetközi licenc",
     "licenseDescription": "Ez a licenc lehetővé teszi mások számára, hogy átdolgozzák, adaptálják és fejlesszék ezt a munkát nem kereskedelmi célból, amennyiben megfelelő hivatkozást adnak és az új alkotásokat azonos feltételek mellett licencelik.",
     "dependencyLicenses": "Függőségi licencek",
     "taxonomyDataTitle": "Taxonómia adatok",
-    "taxonomyDataIntro": "A BirdNET-Go beágyazott madár taxonómia adatokat tartalmaz az eBird/Clements listából, amelyek gyors helyi nemzetség- és családbeli kereséseket biztosítanak.",
+    "taxonomyDataIntro": "A VoiceWatch beágyazott madár taxonómia adatokat tartalmaz az eBird/Clements listából, amelyek gyors helyi nemzetség- és családbeli kereséseket biztosítanak.",
     "source": "Forrás",
     "ebirdApiV2": "eBird API v2",
     "copyright": "Szerzői jog",
@@ -290,10 +291,10 @@
     "ebirdOrg": "eBird.org",
     "learnEbirdTaxonomy": "Az eBird taxonómiáról",
     "avicommonsTitle": "Madár miniatűrök",
-    "avicommonsDescription": "A BirdNET-Go kurátusi madárképeket használ az Avicommons könyvtárból, kézzel válogatott, körülvágott és tájékozott madárfényképek Creative Commons licencek alatt.",
-    "githubStarPrompt": "Ha hasznosnak találja a BirdNET-Go-t, kérjük, fontolja meg a projekt csillagozását a GitHub-on. A csillagok segítenek másoknak felfedezni ezt a projektet és támogatják a folyamatos fejlesztést.",
+    "avicommonsDescription": "A VoiceWatch kurátusi madárképeket használ az Avicommons könyvtárból, kézzel válogatott, körülvágott és tájékozott madárfényképek Creative Commons licencek alatt.",
+    "githubStarPrompt": "Ha hasznosnak találja a VoiceWatch-t, kérjük, fontolja meg a projekt csillagozását a GitHub-on. A csillagok segítenek másoknak felfedezni ezt a projektet és támogatják a folyamatos fejlesztést.",
     "viewOnGithub": "Projekt megtekintése a GitHub-on",
-    "visitGithubAriaLabel": "BirdNET-Go GitHub tárhely meglátogatása",
+    "visitGithubAriaLabel": "VoiceWatch GitHub tárhely meglátogatása",
     "visitAvicommonsGithub": "Avicommons GitHub tárhely meglátogatása"
   },
   "notifications": {
@@ -362,11 +363,11 @@
     },
     "content": {
       "startup": {
-        "title": "BirdNET-Go elindult",
+        "title": "VoiceWatch elindult",
         "message": "Az alkalmazás sikeresen elindult (v{version})"
       },
       "shutdown": {
-        "title": "BirdNET-Go leáll",
+        "title": "VoiceWatch leáll",
         "message": "Az alkalmazás szabályosan leáll"
       },
       "detection": {
@@ -396,7 +397,6 @@
         "rebuildingRangeFilter": "Faj tartomány szűrő újraépítése...",
         "updatingIntervals": "Detektálási intervallumok frissítése...",
         "reconfiguringMqtt": "MQTT kapcsolat frissítése...",
-        "reconfiguringBirdweather": "BirdWeather integráció frissítése...",
         "reconfiguringStreams": "Hang streamek frissítése...",
         "reconfiguringTelemetry": "Telemetria beállítások frissítése...",
         "reconfiguringPushNotifications": "Push értesítési szolgáltatók újrakonfigurálása...",
@@ -423,7 +423,7 @@
         "cancelledTitle": "Adatbázis migráció megszakítva",
         "cancelledMessage": "Az adatbázis migráció megszakítva. Bármikor indíthat új migrációt az Adatbázis beállításokból.",
         "completedTitle": "Adatbázis migráció befejezve",
-        "completedMessage": "A migráció befejeződött. Kérjük, indítsa újra a BirdNET-Go-t az új adatbázis használatához.",
+        "completedMessage": "A migráció befejeződött. Kérjük, indítsa újra a VoiceWatch-t az új adatbázis használatához.",
         "errorTitle": "Adatbázis migráció hiba",
         "errorMessage": "A migráció hibák miatt szünetelt. Ellenőrizze a naplókat és próbálja folytatni."
       },
@@ -435,7 +435,7 @@
       },
       "buffer": {
         "overloadTitle": "Hang elemzés túlterhelve",
-        "overloadMessage": "A rendszere {dropRate}% hangmintát dob el a ''{sourceName}'' forrásból, mert nem bírja az elemzést. Csökkentse a BirdNET átfedési értékét a detektálási beállításokban, vagy fontoljon meg egy gyorsabb CPU-ra való váltást."
+        "overloadMessage": "A rendszere {dropRate}% hangmintát dob el a ''{sourceName}'' forrásból, mert nem bírja az elemzést. Csökkentse a VoiceWatch átfedési értékét a detektálási beállításokban, vagy fontoljon meg egy gyorsabb CPU-ra való váltást."
       },
       "ort": {
         "unavailableTitle": "Az ONNX Runtime nem elérhető",
@@ -476,9 +476,6 @@
     "noResultsFound": "Nincs találat",
     "noResultsHint": "Próbálja módosítani a keresési szűrőket",
     "fields": {
-      "species": "Faj",
-      "speciesPlaceholder": "Adja meg a faj nevét",
-      "speciesHelp": "Adja meg a faj teljes vagy részleges nevét (nem érzékeny a nagybetűkre)",
       "dateRange": "Dátumtartomány",
       "dateRangeHelp": "Szűrés dátumtartomány szerint (üresen hagyva minden dátum)",
       "from": "Ettől",
@@ -489,7 +486,14 @@
       "verifiedStatus": "Ellenőrzött állapot",
       "lockedStatus": "Zárolt állapot",
       "timeOfDay": "Napszak",
-      "source": "Hangforrás"
+      "source": "Hangforrás",
+      "transcript": "Transcript",
+      "transcriptHelp": "Search for spoken words in the voice clip transcript (case-insensitive substring match)",
+      "transcriptPlaceholder": "Search transcript...",
+      "flaggedOnly": "Flagged only",
+      "flaggedOnlyHelp": "Limit results to detections whose transcript matched a configured keyword",
+      "gender": "Speaker gender",
+      "ageBand": "Speaker age"
     },
     "advancedFilters": "Speciális szűrők",
     "showAdvancedFilters": "Speciális szűrők megjelenítése",
@@ -563,6 +567,9 @@
       "page": "{current}. oldal / {total}",
       "goToPrevious": "Előző oldal",
       "goToNext": "Következő oldal"
+    },
+    "speakerOptions": {
+      "any": "Any"
     }
   },
   "error": {
@@ -599,18 +606,6 @@
       "empty": "Csend van — most nincs észlelhető madárhang"
     },
     "rejected": "Elutasítva",
-    "newSpeciesHighlights": {
-      "title": "Új és visszatérő fajok",
-      "subtitle": "Első alkalommal és nemrég visszatért észlelések",
-      "trackingDisabled": "Kérjük, aktiválja az \"Fajkövetés engedélyezése\" funkciót ennek a funkciónak a használatához.",
-      "categoryLifetime": "Új fajok",
-      "categoryYear": "Idén új",
-      "categorySeason": "Ebben az évszakban új",
-      "categorySeasonNamed": "Ebben a(z) {season} évszakban új",
-      "maxConfidenceShort": "Max {confidence}%",
-      "detections": "{count, plural, one {# észlelés} other {# észlelés}}",
-      "lastSeen": "Utoljára: {days, plural, =0 {ma} one {# napja} other {# napja}}"
-    },
     "dailySummary": {
       "title": "Napi aktivitás",
       "subtitle": "Faj detektálások óránként",
@@ -666,7 +661,6 @@
         "species": "Faj",
         "weather": "Időjárás",
         "confidence": "Megbízhatóság",
-        "thumbnail": "Miniatűr",
         "status": "Állapot",
         "recording": "Felvétel",
         "actions": "Műveletek"
@@ -695,8 +689,6 @@
         "markCorrect": "Megjelölés helyesként",
         "markFalsePositive": "Megjelölés téves pozitívként",
         "review": "Detektálás áttekintése",
-        "showSpecies": "Faj megjelenítése",
-        "ignoreSpecies": "Faj figyelmen kívül hagyása",
         "lockDetection": "Detektálás zárolása",
         "unlockDetection": "Detektálás zárolásának feloldása",
         "deleteDetection": "Detektálás törlése"
@@ -777,15 +769,30 @@
     "elements": {
       "banner": "Irányítópult banner",
       "dailySummary": "Napi összefoglaló",
-      "newSpeciesHighlights": "Új fajok kiemelése",
       "currentlyHearing": "Jelenleg hallható",
       "detectionsGrid": "Legutóbbi észlelések",
       "liveSpectrogram": "Élő spektrogram",
-      "videoEmbed": "Videó beágyazás"
+      "videoEmbed": "Videó beágyazás",
+      "voiceActivity": "Voice Activity"
+    },
+    "voiceActivity": {
+      "title": "Voice Activity",
+      "subtitle": "Detections by hour — today",
+      "chartAriaLabel": "Bar chart of voice detections per hour for today",
+      "loading": "Loading voice activity...",
+      "empty": "No voice detections today",
+      "errors": {
+        "load": "Failed to load voice activity data"
+      },
+      "bar": {
+        "tooltip": "{count} detection(s) at {hour}:00"
+      }
     }
   },
   "detections": {
     "title": "Detektálások",
+    "humanVoice": "Human Voice",
+    "flaggedByKeywords": "Flagged by keywords: {keywords}",
     "titles": {
       "hourly": "Órási eredmények {date}-án {hour}:00-kor",
       "hourlyRange": "Órási eredmények {date}-án {startHour}:00 - {endHour}:00 között",
@@ -794,12 +801,16 @@
       "allDetections": "Összes detektálás {date}-án"
     },
     "detail": {
-      "species": "Faj",
       "observation": "Megfigyelés",
+      "transcript": {
+        "title": "Transcript",
+        "matchedKeywords": "Matched keywords",
+        "flaggedNotice": "Flagged by keyword",
+        "empty": "No transcript available"
+      },
       "aria": {
         "downloadAudioClip": "Download audio clip for {name} detection",
         "audioRecordingFor": "Audio recording and spectrogram for {name}",
-        "scientificName": "Tudományos név",
         "classificationBadges": "Faj besorolási jelvények",
         "confidence": "Detektálás megbízhatósága {confidence}%",
         "metadata": "Detektálás metaadatok",
@@ -809,8 +820,7 @@
         "commentTimestamp": "Megjegyzés időbélyege",
         "mainRegion": "Detektálás részletei",
         "tabsHeading": "Detektálási információk lapjai",
-        "tabList": "Detektálás részleteinek lapjai",
-        "speciesHeadingSuffix": "detektálás részletei"
+        "tabList": "Detektálás részleteinek lapjai"
       }
     },
     "headers": {
@@ -819,7 +829,6 @@
       "source": "Forrás",
       "species": "Faj",
       "confidence": "Megbízhatóság",
-      "thumbnail": "Miniatűr",
       "status": "Állapot",
       "recording": "Felvétel",
       "actions": "Műveletek"
@@ -936,6 +945,7 @@
         "unknown": "Ismeretlen"
       }
     },
+    "noTranscript": "(no transcript)",
     "row": {
       "viewDetails": "{species} részleteinek megtekintése",
       "play": "Lejátszás",
@@ -974,9 +984,7 @@
       "loading": "Detektálás részleteinek betöltése...",
       "loaded": "Detektálás részletei betöltve: {species}",
       "error": "Hiba a detektálás betöltésekor: {error}",
-      "loadingResults": "{count} eredmény betöltése...",
-      "thumbnailLoading": "{species} bélyegkép betöltése...",
-      "thumbnailLoaded": "{species} bélyegkép betöltve"
+      "loadingResults": "{count} eredmény betöltése..."
     },
     "errors": {
       "notFound": "A detektálás nem található. Lehet, hogy törölték vagy az ID hibás.",
@@ -986,45 +994,34 @@
       "loadFailed": "A detektálás betöltése sikertelen ({status} hiba). Próbálja frissíteni az oldalt.",
       "noIdProvided": "Nincs megadva detektálás ID.",
       "fetchFailed": "A detektálások betöltése sikertelen"
+    },
+    "speaker": {
+      "sectionLabel": "Estimated speaker",
+      "genderAria": "Estimated speaker gender",
+      "ageAria": "Estimated speaker age",
+      "gender": {
+        "male": "Male",
+        "female": "Female",
+        "unknown": "Unknown"
+      },
+      "age": {
+        "child": "Child",
+        "teen": "Teen",
+        "adult": "Adult",
+        "senior": "Senior"
+      }
     }
   },
   "species": {
-    "rarity": {
-      "title": "Faj ritkasága",
-      "score": "Pontszám",
-      "basedOnLocation": "Helyszín alapján: {latitude}, {longitude}",
-      "statuses": {
-        "very_common": "Nagyon gyakori",
-        "common": "Gyakori",
-        "uncommon": "Ritka",
-        "rare": "Nagyon ritka",
-        "very_rare": "Rendkívül ritka",
-        "unknown": "Ismeretlen"
-      }
-    },
-    "taxonomy": {
-      "hierarchy": "Taxonómiai besorolás",
-      "subspecies": "Alfajok",
-      "noData": "Nem érhető el taxonómia adat.",
-      "labels": {
-        "kingdom": "Ország",
-        "phylum": "Törzs",
-        "class": "Osztály",
-        "order": "Rend",
-        "family": "Család",
-        "genus": "Nemzetség",
-        "species": "Faj"
-      }
-    },
     "synonyms": {
       "tabLabel": "Taxonómia szinonimák",
-      "description": "Felülbírálja a tudományos név leképezéseket a madár képkeresésekhez. A BirdNET 2021E taxonómiát használ, de a képek forrásai frissített neveket használhatnak. A beépített leképezések mindig betöltődnek; az Ön felülbírálásai hozzáadódnak vagy helyettesítik azokat.",
-      "birdnetName": "BirdNET név",
+      "description": "Felülbírálja a tudományos név leképezéseket a madár képkeresésekhez. A VoiceWatch 2021E taxonómiát használ, de a képek forrásai frissített neveket használhatnak. A beépített leképezések mindig betöltődnek; az Ön felülbírálásai hozzáadódnak vagy helyettesítik azokat.",
+      "birdnetName": "VoiceWatch név",
       "updatedName": "Frissített név",
       "addButton": "Szinonima hozzáadása",
       "emptyState": "Nincs konfigurálva egyedi taxonómia szinonima sem.",
       "errors": {
-        "unknownSpecies": "A faj nem található a BirdNET címkék között",
+        "unknownSpecies": "A faj nem található a VoiceWatch címkék között",
         "duplicateKey": "Ehhez a fajhoz már létezik szinonima",
         "emptyUpdatedName": "A frissített név kötelező"
       }
@@ -1133,7 +1130,7 @@
         "process": "Folyamat"
       },
       "showAll": "Összes folyamat megjelenítése",
-      "showBirdnetOnly": "Csak BirdNET megjelenítése",
+      "showBirdnetOnly": "Csak VoiceWatch megjelenítése",
       "table": {
         "process": "Folyamat",
         "status": "Állapot",
@@ -1311,9 +1308,9 @@
       "migration": {
         "title": "Adatbázis migráció",
         "description": "Migráció a régi sémáról a normalizált v2 sémára",
-        "requiredNote": "Az adatbázis migráció szükséges a közelgő BirdNET-Go funkciókhoz, amelyek az új normalizált adatbázis sémára támaszkodnak. Az új funkciók nem lesznek elérhetők, amíg a migráció be nem fejeződik.",
+        "requiredNote": "Az adatbázis migráció szükséges a közelgő VoiceWatch funkciókhoz, amelyek az új normalizált adatbázis sémára támaszkodnak. Az új funkciók nem lesznek elérhetők, amíg a migráció be nem fejeződik.",
         "completedTitle": "Migráció befejezve",
-        "completedNote": "Az adatbázisa sikeresen migrálva lett az új sémára. Kérjük, indítsa újra a BirdNET-Go-t az új adatbázis használatához. Megjegyzés: Az új adatbázis kisebb, mert hatékonyabban tárolja az adatokat - ez várható és minden adata megmarad.",
+        "completedNote": "Az adatbázisa sikeresen migrálva lett az új sémára. Kérjük, indítsa újra a VoiceWatch-t az új adatbázis használatához. Megjegyzés: Az új adatbázis kisebb, mert hatékonyabban tárolja az adatokat - ez várható és minden adata megmarad.",
         "starting": "Migráció indítása...",
         "status": {
           "idle": "Indításra kész",
@@ -1834,19 +1831,6 @@
           "axisDate": "Dátum",
           "axisUniqueSpecies": "Egyedi fajok"
         },
-        "accumulation": {
-          "title": "Species Accumulation Curve",
-          "description": "Cumulative number of distinct species detected within the selected period. The curve climbs as new species appear and flattens toward an asymptote once the common ones have been recorded; a still-rising tail means more species are likely waiting to be found.",
-          "noData": "No species accumulation data available",
-          "noDataHint": "Select a wider date range to watch the species list build up over time",
-          "ariaLabel": "Species accumulation curve: cumulative distinct species detected over the period",
-          "axisDate": "Date",
-          "axisSpecies": "Cumulative species",
-          "totalSpecies": "{species} species",
-          "tooltipCumulative": "Cumulative species",
-          "tooltipNew": "New in period",
-          "summary": "Cumulative species accumulation across {days} days, reaching {species} distinct species by the end of the period."
-        },
         "yearOverYear": {
           "title": "Year-over-Year Tracker",
           "description": "Cumulative detections so far this year versus the same calendar dates last year. The shaded band is the running gap between the two; this year's line sitting above last year's means you are ahead of last year's pace.",
@@ -1859,20 +1843,6 @@
           "legendLast": "{year} (last year)",
           "tooltipDelta": "Difference",
           "summary": "Year over year: by {monthDay}, {currentYear} has {thisYear} cumulative detections versus {lastYear} for {previousYear} (a difference of {delta})."
-        },
-        "phenology": {
-          "title": "Arrival & Departure Phenology",
-          "description": "First and last detection of each species within the selected period, drawn as residency bars for the most-detected species. Read it top to bottom in arrival order to see who shows up first and who lingers latest across the season.",
-          "noData": "No phenology data available",
-          "noDataHint": "Select a wider date range to see when species arrive and depart",
-          "ariaLabel": "Arrival and departure phenology: residency bars showing each species' first-to-last detection span",
-          "axisDate": "Date",
-          "summary": "Arrival and departure residency spans for {species} species across the selected period.",
-          "tooltipFirst": "First detected",
-          "tooltipLast": "Last detected",
-          "tooltipResidency": "Residency",
-          "tooltipCount": "Detections",
-          "residencyDays": "{days} days"
         },
         "heatmap": {
           "title": "Seasonal Activity Heatmap",
@@ -1889,13 +1859,8 @@
           "summary": "{total} detections across {days} days. Busiest around {time} on {date}."
         },
         "ridgeline": {
-          "title": "Who Sings When",
-          "description": "Hour-of-day activity for the most-detected species, sorting dawn singers from all-day and nocturnal birds",
-          "noData": "No species activity data available",
-          "noDataHint": "Select a wider date range to compare species activity patterns",
           "ariaLabel": "Who-sings-when ridgeline: hour-of-day activity distribution per species",
           "axisTime": "Time of Day",
-          "note": "Showing the top {count} species by detection volume",
           "tooltipDetections": "Detections",
           "tooltipPeak": "Peak",
           "summary": "Hour-of-day activity for {count} species. Most active: {species} around {time}."
@@ -1990,7 +1955,7 @@
     }
   },
   "settings": {
-    "title": "Beállítások - BirdNET-Go",
+    "title": "Beállítások - VoiceWatch",
     "loading": "Beállítások betöltése...",
     "sections": {
       "analysis": "Elemzés",
@@ -2047,20 +2012,20 @@
           "description": "Fő alkalmazás beállítások konfigurálása"
         },
         "birdnet": {
-          "title": "BirdNET beállítások",
-          "description": "BirdNET AI modell specifikus beállítások konfigurálása"
+          "title": "VoiceWatch beállítások",
+          "description": "VoiceWatch AI modell specifikus beállítások konfigurálása"
         },
         "ui": {
           "title": "Felhasználói felület beállítások",
           "description": "Felhasználói felület testreszabása"
         },
         "customClassifier": {
-          "title": "Egyedi BirdNET osztályozó",
-          "description": "Speciális detektáláshoz egyedi BirdNET modell és címke fájlok konfigurálása",
+          "title": "Egyedi VoiceWatch osztályozó",
+          "description": "Speciális detektáláshoz egyedi VoiceWatch modell és címke fájlok konfigurálása",
           "modelPath": {
             "label": "Modell útvonal (alkalmazás újraindítást igényel)",
             "placeholder": "Modell fájl útvonala",
-            "helpText": "Külső BirdNET modell fájl útvonala. Adjon meg abszolút vagy relatív útvonalat a birdnet-go binárishoz. Üresen hagyva az alapértelmezett beágyazott modellt használja."
+            "helpText": "Külső VoiceWatch modell fájl útvonala. Adjon meg abszolút vagy relatív útvonalat a birdnet-go binárishoz. Üresen hagyva az alapértelmezett beágyazott modellt használja."
           },
           "labelPath": {
             "label": "Címke útvonal (alkalmazás újraindítást igényel)",
@@ -2072,7 +2037,7 @@
           "title": "Dinamikus küszöbérték",
           "description": "Automatikusan állítja a detektálási érzékenységet a korábbi megfigyelések alapján",
           "enable": {
-            "label": "Dinamikus küszöbérték engedélyezése (BirdNET-Go specifikus funkció)",
+            "label": "Dinamikus küszöbérték engedélyezése (VoiceWatch specifikus funkció)",
             "helpText": "Engedélyezi a dinamikus megbízhatósági küszöbérték funkciót az adaptívabb madárhang detektáláshoz."
           },
           "trigger": {
@@ -2118,8 +2083,6 @@
           "warningOff": "Szűrés nélkül a megbízhatósági küszöb feletti minden észlelés azonnal elfogadásra kerül. Ez általában naponta több hamis pozitívat eredményez. Már az enyhe szűrés is jelentősen javítja az eredmények minőségét."
         },
         "rangeFilter": {
-          "title": "Tartomány szűrő",
-          "description": "A detektálást a földrajzi régióban valószínű fajokra korlátozza",
           "stationLocation": {
             "label": "Állomás helyszín",
             "helpText": "Állomás helyszín, az időjárási adatokhoz és a madárfajoknak a régióban való valószínűségére való korlátozáshoz használva."
@@ -2131,33 +2094,6 @@
           "longitude": {
             "label": "Hosszúság",
             "helpText": "Állomás hosszúság, az időjárási adatokhoz és a faj tartomány szűréséhez használva."
-          },
-          "model": {
-            "label": "Tartomány szűrő modell",
-            "helpText": "BirdNET tartomány szűrő modell verzió: legújabb vagy örökölt."
-          },
-          "threshold": {
-            "label": "Küszöbérték",
-            "helpText": "Szabályozza, hogy mely fajok kerülnek be a helyszín és az évszak alapján. Az alapértelmezett (0.01) a legtöbb felhasználónak ajánlott. A magasabb értékek (0.05-0.3) kevesebb fajt tartalmaznak magasabb előfordulási valószínűséggel. A nagyon magas értékek (0.5+) csak a leggyakoribb fajokat tartalmazzák."
-          },
-          "speciesCount": {
-            "label": "Jelenlegi faj szám",
-            "helpText": "A tartomány szűrőbe bevont fajok száma. Automatikusan frissül, amikor a küszöbérték, szélesség vagy hosszúság megváltozik.",
-            "loading": "Betöltés...",
-            "viewSpecies": "Fajok megtekintése"
-          },
-          "downloadTitle": "Fajlista letöltése CSV-ként",
-          "csvDownloaded": "Fajlista sikeresen letöltve",
-          "csvDownloadFailed": "A fajlista letöltése sikertelen. Próbálja újra.",
-          "modal": {
-            "title": "Tartomány szűrő fajok",
-            "speciesCount": "Fajok száma:",
-            "threshold": "Küszöbérték:",
-            "latitude": "Szélesség:",
-            "longitude": "Hosszúság:",
-            "loadingSpecies": "Fajok betöltése...",
-            "noSpeciesFound": "A jelenlegi beállításokkal nem található faj",
-            "close": "Bezárás"
           }
         },
         "database": {
@@ -2285,18 +2221,6 @@
               "recent": {
                 "label": "Miniatűrök megjelenítése a legutóbbi detektálások listában",
                 "helpText": "Engedélyezze a észlelt fajok miniatűrjeinek megjelenítését a legutóbbi detektálások listában"
-              },
-              "imageProvider": {
-                "label": "Képszolgáltató",
-                "helpText": "Válassza ki a preferált képszolgáltatót a madár miniatűrökhöz"
-              },
-              "fallbackPolicy": {
-                "label": "Tartalék stratégia",
-                "helpText": "Válassza ki, mi történjen, ha a preferált szolgáltató nem talál képet",
-                "options": {
-                  "all": "Az összes szolgáltató kipróbálása sorrendben",
-                  "none": "Csak a kiválasztott szolgáltató használata"
-                }
               }
             },
             "spectrogram": {
@@ -2385,10 +2309,6 @@
       },
       "errors": {
         "localesLoadFailed": "A nyelvi opciók betöltése sikertelen. Alapértelmezettek használata.",
-        "providersLoadFailed": "A képszolgáltatók betöltése sikertelen. Alapértelmezettek használata.",
-        "rangeFilterTestFailed": "A tartomány szűrő beállítások tesztelése sikertelen",
-        "rangeFilterLoadFailed": "A faj lista betöltése sikertelen",
-        "rangeFilterCountFailed": "A faj szám betöltése sikertelen",
         "mapLibraryLoadFailed": "A térkép könyvtár betöltése sikertelen. Kérjük, frissítse az oldalt.",
         "mapLoadFailed": "A térkép betöltése sikertelen. Kérjük, próbálja frissíteni az oldalt.",
         "modalMapLoadFailed": "A modal térkép betöltése sikertelen. Próbálja bezárni és újra megnyitni a modalt.",
@@ -2399,7 +2319,7 @@
       "sections": {
         "telemetry": {
           "title": "Hibakövetés és telemetria",
-          "description": "Opcionális hibakövetés a BirdNET-Go megbízhatóságának és teljesítményének javításához"
+          "description": "Opcionális hibakövetés a VoiceWatch megbízhatóságának és teljesítményének javításához"
         },
         "diagnostics": {
           "title": "Támogatás és diagnosztika",
@@ -2411,7 +2331,7 @@
         "privacyPoints": {
           "noPersonalData": "Személyes adat nem kerül gyűjtésre",
           "anonymousData": "Minden telemetria adat névtelen",
-          "helpImprove": "A telemetria adatok segítenek a fejlesztőknek azonosítani és javítani a BirdNET-Go problémákat"
+          "helpImprove": "A telemetria adatok segítenek a fejlesztőknek azonosítani és javítani a VoiceWatch problémákat"
         },
         "enableTracking": "Hibakövetés engedélyezése (önkéntes)"
       },
@@ -2568,7 +2488,7 @@
       },
       "systemInfo": {
         "howToView": "Értesítések megtekintése:",
-        "technicalDetails": "Műszaki részletek a BirdNET-Go értesítéseiről:"
+        "technicalDetails": "Műszaki részletek a VoiceWatch értesítéseiről:"
       },
       "privacy": {
         "title": "Adatvédelmi nyilatkozat külső webhookokhoz",
@@ -2862,63 +2782,16 @@
         "confidenceLabel": "Megbízhatósági küszöbérték az emberi detektáláshoz",
         "confidenceHelp": "Állítsa be az emberi hang detektálás megbízhatósági szintjét, az alacsonyabb érték érzékenyebbé teszi a szűrőt"
       },
-      "falsePositivePrevention": {
-        "title": "Hamis pozitív megelőzés",
-        "description": "Hamis detektálási szűrők konfigurálása",
-        "enableDogBark": "Kutyaugatás szűrő engedélyezése",
-        "disabled": "A kutyaugatás szűrő le van tiltva",
-        "confidenceLabel": "Megbízhatósági küszöbérték",
-        "confidenceHelp": "Állítsa be a kutyaugatás detektálás megbízhatósági szintjét, az alacsonyabb érték érzékenyebbé teszi a szűrőt",
-        "expireTimeLabel": "Kutyaugatás lejárati idő (perc)",
-        "expireTimeHelp": "Állítsa be, mennyi ideig jegyezze meg az észlelt kutyaugatást",
-        "addDogBarkSpeciesLabel": "Kutyaugatás fajok hozzáadása",
-        "addDogBarkSpeciesHelp": "Keresés és hozzáadás olyan fajokhoz, amelyek összetéveszthetők a kutyák ugatásával",
-        "addSpeciesButton": "Hozzáadás"
-      },
-      "speciesNamePlaceholder": "Faj neve",
-      "typeSpeciesName": "Adja meg a faj nevét...",
-      "dogBarkSpeciesList": "Kutyaugatás faj lista",
       "daylightFilter": {
         "title": "Nappali szűrő",
         "description": "Szűrje ki az éjszakai fajok detektálásait a nappali órákban. A konfigurált helyszín civil hajnal/alkonyat határait használja.",
         "enable": "Nappali szűrő engedélyezése",
         "disabled": "A nappali szűrő le van tiltva",
         "offsetLabel": "Nappali ablak eltolás (óra)",
-        "offsetHelp": "Állítsa be a nappali ablakot. A pozitív értékek csökkentik (engedékenyebb, pl. +1 = 1 órával napkelte után kezdődik). A negatív értékek bővítik (szigorúbb, pl. -1 = 1 órával napkelte előtt kezdődik).",
-        "speciesListLabel": "Éjszakai faj lista",
-        "addSpeciesLabel": "Éjszakai faj hozzáadása",
-        "addSpeciesHelp": "Keresés és hozzáadás olyan fajokhoz, nemzetségekhez, családokhoz vagy rendekhez, amelyeket nappal szűrni kell. Alapértelmezett: Strigiformes (minden bagoly). Megjegyzés: az üres lista letiltja a nappali faj szűrést."
-      },
-      "errors": {
-        "speciesLoadFailed": "A faj lista betöltése sikertelen. Próbálja újra."
+        "offsetHelp": "Állítsa be a nappali ablakot. A pozitív értékek csökkentik (engedékenyebb, pl. +1 = 1 órával napkelte után kezdődik). A negatív értékek bővítik (szigorúbb, pl. -1 = 1 órával napkelte előtt kezdődik)."
       }
     },
     "integration": {
-      "birdweather": {
-        "title": "BirdWeather",
-        "description": "Detektálások feltöltése a BirdWeather-re",
-        "ffmpegWarning": {
-          "title": "FFmpeg nem észlelhető",
-          "message": "Kérjük, telepítse az FFmpeg-et a FLAC kódolás támogatásához, a BirdWeather megszünteti a WAV feltöltéseket a tömörített FLAC hangfájlok javára."
-        },
-        "enable": "BirdWeather feltöltések engedélyezése",
-        "token": {
-          "label": "BirdWeather token",
-          "helpText": "Az Ön egyedi BirdWeather token-je."
-        },
-        "threshold": {
-          "label": "Feltöltési küszöbérték",
-          "helpText": "Minimális megbízhatósági küszöbérték a BirdWeather-re történő feltöltésekhez."
-        },
-        "test": {
-          "button": "BirdWeather kapcsolat tesztelése",
-          "loading": "Tesztelés...",
-          "enabledRequired": "A BirdWeather-t engedélyezni kell a teszthez",
-          "tokenRequired": "A BirdWeather token-t meg kell adni",
-          "inProgress": "Teszt folyamatban...",
-          "description": "BirdWeather kapcsolat tesztelése"
-        }
-      },
       "mqtt": {
         "title": "MQTT",
         "description": "MQTT broker kapcsolat konfigurálása",
@@ -2971,14 +2844,14 @@
         "homeAssistant": {
           "title": "Home Assistant auto-felfedezés",
           "enable": "Home Assistant MQTT felfedezés engedélyezése",
-          "description": "Ha engedélyezve van, a BirdNET-Go automatikusan regisztrálja az eszközöket és érzékelőket a Home Assistant-nál az MQTT felfedezés protokollon keresztül. Az eszközök megjelennek a Home Assistant eszköz nyilvántartásában manuális YAML konfiguráció nélkül.",
+          "description": "Ha engedélyezve van, a VoiceWatch automatikusan regisztrálja az eszközöket és érzékelőket a Home Assistant-nál az MQTT felfedezés protokollon keresztül. Az eszközök megjelennek a Home Assistant eszköz nyilvántartásában manuális YAML konfiguráció nélkül.",
           "discoveryPrefix": {
             "label": "Felfedezés előtag",
             "helpText": "Az MQTT téma előtag a Home Assistant felfedezés üzenetekhez. Az alapértelmezett 'homeassistant'. Csak akkor változtassa meg, ha egyedi felfedezés előtagot konfigurált a Home Assistant-ban."
           },
           "deviceName": {
             "label": "Eszköz név",
-            "helpText": "Az alap nevet az eszközökhöz, ahogy megjelennek a Home Assistant-ban. Minden hang forrásnak saját eszköze lesz, amely ehhez a fő BirdNET-Go eszközhöz lesz kapcsolva."
+            "helpText": "Az alap nevet az eszközökhöz, ahogy megjelennek a Home Assistant-ban. Minden hang forrásnak saját eszköze lesz, amely ehhez a fő VoiceWatch eszközhöz lesz kapcsolva."
           },
           "sensorsNote": "<strong>Létrehozott érzékelők:</strong> Minden hang forráshoz a Home Assistant megkapja: Utolsó faj, Megbízhatóság, Tudományos név és Hangszint (ha engedélyezve van). A bridge eszköz tartalmazza az online/offline elérhetőségi állapotot.",
           "discovery": {
@@ -3003,7 +2876,7 @@
       },
       "observability": {
         "title": "Megfigyelhetőség",
-        "description": "A BirdNET-Go teljesítményének és madár detektálási metrikáinak monitorozása Prometheus-kompatibilis végponton keresztül",
+        "description": "A VoiceWatch teljesítményének és madár detektálási metrikáinak monitorozása Prometheus-kompatibilis végponton keresztül",
         "enable": "Megfigyelhetőség integráció engedélyezése",
         "disabled": "A megfigyelhetőség integráció nincs engedélyezve",
         "listenAddress": {
@@ -3091,33 +2964,6 @@
         "responseStreamFailed": "A válasz stream olvasása sikertelen",
         "configurationCheck": "Konfiguráció ellenőrzés",
         "testStageFallback": "Teszt szint fallback"
-      },
-      "ebird": {
-        "title": "eBird",
-        "description": "Csatlakozás az eBird taxonómia adatbázishoz a gazdagított faj adatokhoz, beleértve a taxonómiai besorolást és alfaj információkat.",
-        "enable": "eBird integráció engedélyezése",
-        "enabledRequired": "Az eBird integráció nincs engedélyezve",
-        "apiKey": {
-          "label": "eBird API kulcs",
-          "helpText": "Az Ön eBird API kulcsa. Szerezze be az eBird API portálról."
-        },
-        "locale": {
-          "label": "Faj név nyelv"
-        },
-        "cacheTTL": {
-          "label": "Gyorsítótár időtartam (óra)",
-          "helpText": "Mennyi ideig gyorsítótárazza az eBird taxonómia adatokat. A taxonómia ritkán változik, így a hosszabb gyorsítótár időtartamok csökkentik az API hívásokat."
-        },
-        "note": "Az eBird taxonómiai adatokat biztosít a faj osztályozáshoz és betekintésekhez. Az API kulcs ingyenesen beszerezhető a Cornell Lab of Ornithology-tól.",
-        "apiKeyInfo": "Személyes eBird API kulcs szükséges ehhez az integrációhoz. Ingyenes kulcsot kérhet a <a href=\"https://ebird.org/api/keygen\" class=\"link link-primary\" target=\"_blank\" rel=\"noopener noreferrer\">ebird.org/api/keygen</a> oldalon.",
-        "test": {
-          "button": "eBird kapcsolat tesztelése",
-          "loading": "Tesztelés...",
-          "enabledRequired": "Először engedélyezze az eBird integrációt",
-          "apiKeyRequired": "Az API kulcs szükséges",
-          "inProgress": "Teszt folyamatban...",
-          "description": "eBird API kapcsolat és hitelesítés tesztelése"
-        }
       }
     },
     "audio": {
@@ -3172,7 +3018,7 @@
       },
       "noSources": {
         "warning": "Nincs hang forrás konfigurálva",
-        "description": "A BirdNET-Go-nak hang bemenetre van szüksége a madarak érzékeléséhez. Kérjük, konfiguráljon legalább egy forrást a Hangkártya vagy Streamek lapon."
+        "description": "A VoiceWatch-nak hang bemenetre van szüksége a madarak érzékeléséhez. Kérjük, konfiguráljon legalább egy forrást a Hangkártya vagy Streamek lapon."
       },
       "soundCards": {
         "summary": "{count} hangkártya forrás(ok)",
@@ -3198,12 +3044,12 @@
           "hints": {
             "device": "Válasszon a rendszerén elérhető hangbemeneti eszközök közül",
             "multiple": "Több hangkártyát is beállíthat különböző helyszínekhez",
-            "model": "Minden forrás más detekciós modellt használhat (BirdNET, Perch, Bat)"
+            "model": "Minden forrás más detekciós modellt használhat (VoiceWatch, Perch, Bat)"
           }
         },
         "models": {
-          "birdnetDefault": "BirdNET (Alapértelmezett)",
-          "birdnet": "BirdNET",
+          "birdnetDefault": "VoiceWatch (Alapértelmezett)",
+          "birdnet": "VoiceWatch",
           "perchV2": "Google Perch v2",
           "bat": "Denevérdetektálás"
         },
@@ -3470,10 +3316,6 @@
         "enableHelp": "Ha engedélyezve van, a konfigurált fajok ismételt detektálásai egyetlen hosszabb felvételben egyesülnek.",
         "maxDurationLabel": "Max időtartam",
         "maxDurationHelp": "A kiterjesztett rögzítés maximális hossza. A felvétel növekszik, ahogy az észlelések folytatódnak eddig a határig.",
-        "speciesListLabel": "Kiterjesztetten rögzítendő fajok",
-        "addSpeciesLabel": "Faj hozzáadása",
-        "addSpeciesHelp": "Fajok, amelyek kiterjesztett rögzítést váltanak ki. Támogatja a közhasználatú neveket, tudományos neveket és nemzetség szintű egyeztetést (pl. \"Strix\" egyeztet minden Strix bagollyal).",
-        "addSpeciesButton": "Hozzáadás",
         "disabled": "A kiterjesztett rögzítés le van tiltva"
       },
       "fileSettings": {
@@ -3551,8 +3393,28 @@
         "invalidRetentionPolicy": "Érvénytelen megőrzési szabályzat"
       },
       "models": {
-        "recommendBoth": "A legjobb fajészlelési lefedettség érdekében javasolt a BirdNET és a Perch modellek együttes futtatása.",
-        "perchOnlyWarning": "A Perch önmagában kevesebb észlelést produkál. Az érdemi eredményekhez csökkentse a megbízhatósági küszöböt 0.50-re, vagy aktiválja a BirdNET-et is a jobb lefedettség érdekében."
+        "recommendBoth": "A legjobb fajészlelési lefedettség érdekében javasolt a VoiceWatch és a Perch modellek együttes futtatása.",
+        "perchOnlyWarning": "A Perch önmagában kevesebb észlelést produkál. Az érdemi eredményekhez csökkentse a megbízhatósági küszöböt 0.50-re, vagy aktiválja a VoiceWatch-et is a jobb lefedettség érdekében."
+      },
+      "speakerAttributes": {
+        "title": "Speaker Attributes",
+        "description": "Estimate the speaker's gender and relative age band for human-voice detections. Opt-in and off by default.",
+        "caveat": "These are demographic estimates, not identity recognition. Accuracy varies by accent and recording quality.",
+        "enable": "Enable speaker attributes",
+        "enableHelp": "Master switch for all speaker-attribute estimation.",
+        "disabled": "Speaker attributes are disabled",
+        "gender": {
+          "enable": "Estimate speaker gender",
+          "enableHelp": "Estimate whether the speaker sounds male, female, or unknown.",
+          "thresholdLabel": "Gender confidence threshold",
+          "thresholdHelp": "Discard gender estimates below this confidence."
+        },
+        "age": {
+          "enable": "Estimate speaker age band",
+          "enableHelp": "Estimate a relative age band (child, teen, adult, senior).",
+          "thresholdLabel": "Age confidence threshold",
+          "thresholdHelp": "Discard age estimates below this confidence."
+        }
       }
     },
     "security": {
@@ -3795,342 +3657,6 @@
         "fileReadError": "A kiválasztott fájl olvasása sikertelen"
       }
     },
-    "species": {
-      "pageLabel": "Faj beállítások",
-      "saveError": "A konfiguráció mentése sikertelen \"{species}\" számára. Kérjük, próbálja újra.",
-      "configUpdated": "Konfiguráció frissítve \"{species}\" számára",
-      "configAdded": "Konfiguráció hozzáadva \"{species}\" számára",
-      "duplicateConfigError": "A(z) \"{species}\" faj már rendelkezik konfigurációval. Kérjük, válasszon más nevet.",
-      "activeSpecies": {
-        "title": "Aktív fajok",
-        "tabLabel": "Aktív",
-        "description": "Azon fajok, amelyek az Ön jelenlegi helyszíne és szűrő beállításai alapján detektálásra kerülnek",
-        "stats": {
-          "species": "Faj",
-          "location": "Helyszín",
-          "threshold": "Küszöbérték",
-          "updated": "Frissítve",
-          "justNow": "Épp most",
-          "minutesAgo": "{count} perce",
-          "hoursAgo": "{count} órája"
-        },
-        "search": {
-          "placeholder": "Fajok keresése..."
-        },
-        "badges": {
-          "included": "Beleértve",
-          "configured": "Konfigurálva"
-        },
-        "empty": {
-          "title": "Nem található faj",
-          "description": "Konfigurálja a helyszínét a Fő beállításokban a rendelkezésre álló fajok megtekintéséhez"
-        },
-        "noResults": "Egyetlen faj sem felel meg a keresésnek",
-        "infoNote": "Ez a lista az Ön helyszíne és a tartomány szűrő küszöbértéke alapján készült. A manuálisan belefoglalt fajok mindig hozzáadásra kerülnek.",
-        "retry": "Újra",
-        "expand": "Lista kibontása",
-        "collapse": "Lista összecsukása",
-        "downloadCsv": "CSV letöltése",
-        "errors": {
-          "loadFailed": "Az aktív faj lista betöltése sikertelen"
-        },
-        "locationNotConfigured": {
-          "title": "Helyszín nincs konfigurálva",
-          "description": "Állítsa be a helyszínét a Fő beállításokban a környékén elérhető fajok megtekintéséhez. A tartomány szűrő az Ön helyszíne alapján határozza meg, mely fajok valószínűsíthetők a közelben.",
-          "action": "Helyszín konfigurálása"
-        },
-        "rangeFilterHealth": {
-          "inactive": {
-            "title": "A tartomány szűrő nem aktív",
-            "description": "A detektálásokat jelenleg nem szűri a helyszíned, így a területeden kívüli fajok is jelentésre kerülhetnek. Ellenőrizd a tartomány szűrő modell beállítását a Beállítások oldalon."
-          },
-          "fellBack": {
-            "title": "A beépített tartomány szűrő használata",
-            "description": "A beállított geomodell tartomány szűrőt nem sikerült betölteni, ezért a BirdNET-Go a beépített tartomány szűrőre váltott. A szűrés továbbra is működik, de a geomodell visszaállításához ellenőrizd a Beállítások oldalt."
-          },
-          "mappedZero": {
-            "title": "A tartomány szűrő egyetlen fajra sem illeszkedett",
-            "description": "A geomodell tartomány szűrő az aktív modell egyetlen fajára sem illeszkedett, így minden detektálás kiszűrésre kerülne. Ellenőrizd, hogy a tartomány szűrő címkefájlja megegyezik-e az aktív modellel."
-          }
-        },
-        "columns": {
-          "commonName": "Közhasználatú név",
-          "scientificName": "Tudományos név",
-          "score": "Pontszám",
-          "status": "Állapot"
-        }
-      },
-      "alwaysInclude": {
-        "title": "Mindig belefoglalt fajok",
-        "tabLabel": "Beleértés",
-        "description": "Az ebben a listában szereplő fajok mindig belefoglaltak a detektált fajok közé",
-        "noSpeciesMessage": "Nincs faj hozzáadva a belefoglalt listához"
-      },
-      "alwaysExclude": {
-        "title": "Mindig kizárt fajok",
-        "tabLabel": "Kizárás",
-        "description": "Az ebben a listában szereplő fajok mindig ki vannak zárva a detektálásból",
-        "noSpeciesMessage": "Nincs faj hozzáadva a kizárt listához"
-      },
-      "customConfiguration": {
-        "title": "Egyedi faj konfiguráció",
-        "tabLabel": "Egyedi",
-        "description": "Fajspecifikus küszöbértékek, detektálási intervallumok és műveletek",
-        "helpText": {
-          "intro": "Fajspecifikus beállítások konfigurálása:",
-          "threshold": "Küszöbérték: Minimális megbízhatósági pontszám (0-1) a detektáláshoz",
-          "interval": "Intervallum: Minimális idő másodpercekben az azonos faj egymást követő detektálásai között (0 = globális alapértelmezett használata)",
-          "actions": "Műveletek: Egyedi parancsok végrehajtása, amikor ez a faj detektálásra kerül"
-        },
-        "columnHeaders": {
-          "species": "Faj",
-          "settings": "Beállítások",
-          "actions": "Műveletek"
-        },
-        "badges": {
-          "threshold": "Küszöbérték: {value}",
-          "interval": "Intervallum: {value}s",
-          "customAction": "Egyedi művelet",
-          "executeDefaults": "+Alapértelmezettek"
-        },
-        "dropdown": {
-          "editConfig": "Konfiguráció szerkesztése",
-          "addAction": "Művelet hozzáadása",
-          "remove": "Eltávolítás"
-        },
-        "labels": {
-          "threshold": "Küszöbérték",
-          "interval": "Intervallum",
-          "intervalSeconds": "Intervallum (mp)",
-          "addButton": "Hozzáadás"
-        },
-        "noConfigurationsMessage": "Nincs egyedi faj konfiguráció hozzáadva",
-        "addForm": {
-          "speciesPlaceholder": "Faj neve",
-          "thresholdPlaceholder": "0.5",
-          "intervalPlaceholder": "0"
-        },
-        "addConfiguration": "Konfiguráció hozzáadása",
-        "newConfiguration": "Új konfiguráció",
-        "editing": "Szerkesztés: {species}",
-        "configuredCount": "{count} konfigurálva",
-        "searchPlaceholder": "Gépeljen a kereséshez...",
-        "saving": "Mentés...",
-        "save": "Mentés",
-        "cancel": "Mégse",
-        "configureActions": "Műveletek konfigurálása",
-        "actionsConfigured": "Konfigurálva",
-        "list": {
-          "editTitle": "Konfiguráció szerkesztése",
-          "removeTitle": "Konfiguráció eltávolítása"
-        },
-        "emptyState": {
-          "title": "Még nincs konfiguráció.",
-          "description": "Kattintson a \"Konfiguráció hozzáadása\" gombra a faj detektálási beállítások testreszabásához."
-        },
-        "table": {
-          "columnScientificName": "Tudományos név",
-          "intervalDefault": "Alapértelmezett",
-          "intervalDefaultTooltip": "0 = globális alapértelmezett intervallum használata",
-          "noActions": "Nincs",
-          "searchPlaceholder": "Fajok keresése...",
-          "noResults": "Nincs megfelelő konfiguráció",
-          "editDisabledReason": "Mentse el vagy zárja be a jelenlegi szerkesztőt egy másik faj szerkesztése előtt",
-          "actionsDisabledBusy": "Kérjük, várja meg a jelenlegi művelet befejezését"
-        }
-      },
-      "synonyms": {
-        "tabLabel": "Szinonimák",
-        "description": "Rendelje hozzá a BirdNET tudományos fajneveit újabb taxonómia szerinti megfelelőikhez. Csak tartalékként használatos a madárképek Wikipédiáról és AviCommonsról való lekérésekor; nem nevezi át a fajokat a detektálásokban vagy az irányítópulton.",
-        "helpText": "Ha módosítani szeretné egy faj felületen megjelenő nevét, szerkessze a BirdNET címkefájlját (a „Címke útvonal” beállítás a fő beállítások között).",
-        "birdnetName": "BirdNET név",
-        "updatedName": "Frissített tudományos név",
-        "addButton": "Szinonima hozzáadása",
-        "emptyState": "Nincs taxonómia szinonima konfigurálva",
-        "errors": {
-          "unknownSpecies": "A faj nem található a BirdNET címkék között",
-          "duplicateKey": "Ehhez a fajhoz már létezik szinonima",
-          "emptyUpdatedName": "A frissített név kötelező"
-        }
-      },
-      "actionsModal": {
-        "title": "Műveletek ehhez: {species}",
-        "actionType": {
-          "label": "Művelet típusa",
-          "executeCommand": "Parancs végrehajtása",
-          "onlySupported": "Jelenleg csak a Parancs végrehajtása művelet támogatott"
-        },
-        "command": {
-          "label": "Parancs",
-          "helpText": "Adja meg a végrehajtani kívánt parancs vagy szkript teljes útvonalát"
-        },
-        "parameters": {
-          "label": "Paraméterek",
-          "helpText": "Ezek az értékek sorrendben kerülnek átadásra a parancsának",
-          "placeholder": "Kattintson a lent található gombokra a paraméterek hozzáadásához vagy gépeljen manuálisan",
-          "tooltip": "Használja a lent található gombokat vagy gépeljen közvetlenül (vesszővel elválasztva)",
-          "availableTitle": "Elérhető paraméterek",
-          "buttons": {
-            "commonName": "KözhasználatúNév",
-            "scientificName": "TudományosNév",
-            "confidence": "Megbízhatóság",
-            "time": "Idő",
-            "source": "Forrás",
-            "clearParameters": "Paraméterek törlése"
-          }
-        },
-        "executeDefaults": {
-          "label": "Alapértelmezett műveletek futtatása is (adatbázis tárolás, értesítések stb.)",
-          "helpText": "Engedélyezéskor az Ön egyedi művelete és a rendszer alapértelmezett műveletei is futni fognak. Tiltsa le, ha csak az Ön egyedi művelete fusson."
-        }
-      },
-      "add": "Hozzáadás",
-      "remove": "Eltávolítás",
-      "suggestions": "Faj javaslatok",
-      "addSpeciesToInclude": "Faj hozzáadása a belefoglaltak közé",
-      "addSpeciesToIncludeLabel": "Új faj hozzáadása a belefoglaltak közé",
-      "addSpeciesToExclude": "Faj hozzáadása a kizártak közé",
-      "addSpeciesToExcludeLabel": "Új faj hozzáadása a kizártak közé",
-      "commandPathPlaceholder": "/az/ön/parancs/útvonala",
-      "parametersPlaceholder": "A paraméterek itt jelennek meg",
-      "errors": {
-        "speciesLoadFailed": "A faj lista betöltése sikertelen. Kérjük, próbálja újra."
-      },
-      "tracking": {
-        "title": "Faj követés",
-        "tabLabel": "Követés",
-        "description": "Új faj detektálások követésének konfigurálása időszakok alapján",
-        "enabled": {
-          "label": "Faj követés engedélyezése",
-          "helpText": "Engedélyezéskor a rendszer követi az új faj detektálásokat és küldhet értesítéseket"
-        },
-        "newSpeciesWindowDays": {
-          "label": "Új faj ablak (nap)",
-          "helpText": "Napok száma, ameddig egy faj 'újnak' minősül az első detektálás után (1-365)"
-        },
-        "syncIntervalMinutes": {
-          "label": "Szinkronizálási intervallum (perc)",
-          "helpText": "Milyen gyakran szinkronizálja a követési adatokat az adatbázissal (1-1440)"
-        },
-        "notificationSuppressionHours": {
-          "label": "Értesítés elnyomás (óra)",
-          "helpText": "Órák az azonos faj ismételt értesítéseinek elnyomásához (0-8760)"
-        },
-        "yearly": {
-          "title": "Éves követés",
-          "description": "Minden évben az első érkezések követése",
-          "enabled": {
-            "label": "Éves követés engedélyezése",
-            "helpText": "Követés és értesítés, amikor egy faj először detektálásra kerül minden évben"
-          },
-          "resetMonth": {
-            "label": "Visszaállítási hónap",
-            "helpText": "Hónap, amikor az éves követés visszaáll (1-12)"
-          },
-          "resetDay": {
-            "label": "Visszaállítási nap",
-            "helpText": "A hónap napja, amikor az éves követés visszaáll"
-          },
-          "windowDays": {
-            "label": "Ablak (nap)",
-            "helpText": "Napok az 'ezévben új' jelző megjelenítéséhez (1-365)"
-          }
-        },
-        "seasonal": {
-          "title": "Évszakos követés",
-          "description": "Minden évszakban az első érkezések követése",
-          "enabled": {
-            "label": "Évszakos követés engedélyezése",
-            "helpText": "Követés és értesítés, amikor egy faj először detektálásra kerül minden évszakban"
-          },
-          "windowDays": {
-            "label": "Ablak (nap)",
-            "helpText": "Napok az 'ebben az évszakban új' jelző megjelenítéséhez (1-365)"
-          },
-          "seasons": {
-            "title": "Évszak definíciók",
-            "description": "Adja meg, mikor kezdődik minden évszak. Az évszakok automatikusan az Ön helyszínének félgömbje alapján kerülnek beállításra.",
-            "spring": "Tavasz",
-            "summer": "Nyár",
-            "fall": "Ősz",
-            "winter": "Tél",
-            "wet1": "Esős évszak 1",
-            "dry1": "Száraz évszak 1",
-            "wet2": "Esős évszak 2",
-            "dry2": "Száraz évszak 2",
-            "startMonth": "Kezdési hónap",
-            "startDay": "Kezdési nap",
-            "hemisphereNote": "Az évszak dátumok automatikusan az Ön szélessége alapján kerülnek konfigurálásra. Az északi félgömb a szabványos évszakokat, a déli félgömb eltolódott dátumokat, az egyenlítői régiók pedig esős/száraz évszakokat használnak."
-          }
-        },
-        "months": {
-          "january": "Január",
-          "february": "Február",
-          "march": "Március",
-          "april": "Április",
-          "may": "Május",
-          "june": "Június",
-          "july": "Július",
-          "august": "Augusztus",
-          "september": "Szeptember",
-          "october": "Október",
-          "november": "November",
-          "december": "December"
-        },
-        "units": {
-          "days": "nap",
-          "min": "perc",
-          "hours": "óra"
-        }
-      },
-      "dynamicThreshold": {
-        "tabLabel": "Tanult",
-        "title": "Tanult küszöbértékek",
-        "description": "Ez az oldal a Dinamikus küszöbérték futásidejű adatait mutatja. Ha engedélyezve van a Fő beállítások → Detektálás menüpontban, a küszöbértékek több magas megbízhatóságú detektálás alapján automatikusan kerülnek beállításra. Az itt látható fajok feltételezhetően léteznek ezen a helyszínen.",
-        "stats": {
-          "active": "Aktív",
-          "atMinimum": "Minimumon",
-          "minThreshold": "Min küszöbérték",
-          "validityPeriod": "Érvényességi időszak"
-        },
-        "header": {
-          "species": "Faj",
-          "threshold": "Küszöbérték",
-          "expires": "Lejárat"
-        },
-        "searchPlaceholder": "Faj keresése...",
-        "threshold": "Küszöbérték",
-        "level": "Szint",
-        "expires": "Lejárat",
-        "expired": "Lejárt",
-        "confidence": "Megbízhatóság",
-        "requiredConfidence": "Szükséges megbízhatóság",
-        "resetAll": "Összes visszaállítása",
-        "resetSpecies": "Küszöbérték visszaállítása ehhez a fajhoz",
-        "noEvents": "Nincs küszöbérték változási előzmény",
-        "changeReason": {
-          "highConfidence": "Magas megbízhatóságú detektálás",
-          "expiry": "Küszöbérték lejárt",
-          "manualReset": "Manuális visszaállítás"
-        },
-        "note": "A magas megbízhatóságú detektálások megerősítik, mely fajok léteznek ezen a helyszínen. Több magas megbízhatóságú egyezés után a detektálási küszöbérték biztonságosan csökkentésre kerül a több hívás rögzítéséhez jelentős hamis pozitív kockázat nélkül. A küszöbértékek automatikusan visszaállnak a konfigurált érvényességi időszak után.",
-        "empty": {
-          "title": "Nincs tanult küszöbérték",
-          "description": "A magas megbízhatóságú detektálások automatikusan létrehozzák a fajok tanult küszöbértékeit"
-        },
-        "resetAllConfirm": {
-          "title": "Összes küszöbérték visszaállítása",
-          "message": "Ez visszaállítja az összes {count} tanult küszöbértéket. A fajoknak ismét magas megbízhatósággal kell detektálásra kerülniük a küszöbértékeik csökkentéséhez."
-        },
-        "loadError": "A dinamikus küszöbértékek betöltése sikertelen",
-        "resetSuccess": "Küszöbérték visszaállítva ehhez: {species}",
-        "resetError": "A küszöbérték visszaállítása sikertelen",
-        "resetAllSuccess": "{count} küszöbérték visszaállítva",
-        "resetAllError": "A küszöbértékek visszaállítása sikertelen",
-        "expand": "Esemény előzmények megjelenítése",
-        "collapse": "Esemény előzmények elrejtése"
-      }
-    },
     "database": {
       "sqlitePlaceholder": "SQLite adatbázis útvonal megadása",
       "mysqlHostPlaceholder": "MySQL host megadása",
@@ -4263,7 +3789,6 @@
           "detection_occurred": "Detektálás történt",
           "application_started": "Alkalmazás indítva",
           "application_stopped": "Alkalmazás leállítva",
-          "integration_birdweather_failed": "BirdWeather feltöltés sikertelen",
           "integration_mqtt_connected": "MQTT csatlakoztatva",
           "integration_mqtt_disconnected": "MQTT leválasztva",
           "integration_mqtt_publish_failed": "MQTT publikálás sikertelen",
@@ -4306,9 +3831,13 @@
       "v2Required": "A riasztási szabályokhoz frissített adatbázis-séma szükséges. Az adatbázist frissítheti a",
       "v2RequiredLink": "Rendszer Adatbázis oldalán.",
       "builtInRules": {
-        "newSpecies": {
-          "name": "Új faj detektálva",
-          "description": "Értesít, amikor egy faj először kerül detektálásra"
+        "keywordFlag": {
+          "name": "Keyword flagged",
+          "description": "Notifies when a detection transcript matches a configured keyword"
+        },
+        "speakerAttribute": {
+          "name": "Speaker attribute matched",
+          "description": "Notifies when a detection's estimated speaker attributes (gender, age band) match a rule"
         },
         "streamDisconnected": {
           "name": "Hang stream leválasztva",
@@ -4341,10 +3870,6 @@
         "mqttPublishFailed": {
           "name": "MQTT publikálás sikertelen",
           "description": "Értesít, amikor egy MQTT üzenet publikálása sikertelen"
-        },
-        "birdWeatherFailed": {
-          "name": "BirdWeather feltöltés sikertelen",
-          "description": "Értesít, amikor egy BirdWeather feltöltés sikertelen"
         }
       }
     },
@@ -4371,7 +3896,7 @@
       },
       "appearance": {
         "title": "Megjelenés",
-        "description": "A BirdNET-Go felület megjelenésének és hangulatának testreszabása"
+        "description": "A VoiceWatch felület megjelenésének és hangulatának testreszabása"
       },
       "language": {
         "title": "Nyelv és terület",
@@ -4389,14 +3914,14 @@
         "defaultGainUnit": "dB"
       }
     },
-    "restartRequired": "Néhány változtatáshoz szerver újraindítás szükséges. Kérjük, indítsa újra a BirdNET-Go-t."
+    "restartRequired": "Néhány változtatáshoz szerver újraindítás szükséges. Kérjük, indítsa újra a VoiceWatch-t."
   },
   "auth": {
     "login": "Bejelentkezés",
     "logout": "Kijelentkezés",
     "openLoginModal": "Bejelentkezési ablak megnyitása",
     "loginTitle": "Bejelentkezés",
-    "loginSubtitle": "Hozzáférés a BirdNET-Go irányítópulthoz",
+    "loginSubtitle": "Hozzáférés a VoiceWatch irányítópulthoz",
     "password": "Jelszó",
     "passwordPlaceholder": "Adja meg a jelszavát",
     "enterPassword": "Adja meg a jelszavát",
@@ -4581,7 +4106,7 @@
       "streamError": "Hiba a stream indításakor",
       "streamTitle": "Madárhang stream - {source}",
       "streamTitleDefault": "Madárhang stream",
-      "streamArtist": "BirdNET-Go",
+      "streamArtist": "VoiceWatch",
       "streamAlbum": "Élő közvetítés",
       "playbackError": "Lejátszási hiba: {details}"
     },
@@ -4606,7 +4131,8 @@
       "generating": "Generálás...",
       "waiting": "Waiting...",
       "queuePosition": "Sor: {position}",
-      "loadError": "A hang betöltése sikertelen"
+      "loadError": "A hang betöltése sikertelen",
+      "spectrogramForDetection": "Spectrogram for detection"
     },
     "forms": {
       "numberField": {
@@ -4715,11 +4241,6 @@
       "removeCertificate": "Tanúsítvány eltávolítása",
       "fileReadError": "A fájl olvasása sikertelen",
       "loading": "Tanúsítvány információ betöltése..."
-    },
-    "birdThumbnail": {
-      "viewDetections": "View {name} detections",
-      "largeView": "Large view of {name}",
-      "clickToView": "Click to view detections"
     }
   },
   "connectivity": {
@@ -4800,9 +4321,6 @@
       "mqttNotConfigured": "Az MQTT broker nincs konfigurálva",
       "mqttMetricsUnavailable": "A metrikus példány nem elérhető az MQTT teszthez",
       "mqttClientFailed": "Az MQTT kliens létrehozása sikertelen",
-      "birdweatherDisabled": "A BirdWeather integráció nincs engedélyezve",
-      "birdweatherNotConfigured": "A BirdWeather állomás ID nincs konfigurálva",
-      "birdweatherClientFailed": "A BirdWeather kliens létrehozása sikertelen",
       "noWeatherProvider": "Nincs időjárás szolgáltató kiválasztva",
       "openWeatherKeyRequired": "Az OpenWeather API kulcs kötelező",
       "processorUnavailable": "A processzor nem elérhető",
@@ -4880,10 +4398,10 @@
     "steps": {
       "welcome": {
         "title": "Üdvözöljük",
-        "heading": "Üdvözöljük a BirdNET-Go-ban!",
-        "description": "A BirdNET-Go egy nyílt forráskódú madárhang-azonosító rendszer, amely a mikrofonjából vagy streamjéből hallgatja a hangot, és valós időben azonosítja a madárfajokat.",
-        "credit": "A BirdNET-Go a BirdNET AI modellt használja, amelyet a K. Lisa Yang Center for Conservation Bioacoustics fejlesztett a Cornell Lab of Ornithology-n és a Chemnitz-i Műszaki Egyetemen. A BirdNET-Go egy független közösségi projekt, és nem áll kapcsolatban a BirdNET csapattal.",
-        "learnMore": "Tudjon meg többet a BirdNET-ről",
+        "heading": "Üdvözöljük a VoiceWatch-ban!",
+        "description": "A VoiceWatch egy nyílt forráskódú madárhang-azonosító rendszer, amely a mikrofonjából vagy streamjéből hallgatja a hangot, és valós időben azonosítja a madárfajokat.",
+        "credit": "A VoiceWatch a VoiceWatch AI modellt használja, amelyet a K. Lisa Yang Center for Conservation Bioacoustics fejlesztett a Cornell Lab of Ornithology-n és a Chemnitz-i Műszaki Egyetemen. A VoiceWatch egy független közösségi projekt, és nem áll kapcsolatban a VoiceWatch csapattal.",
+        "learnMore": "Tudjon meg többet a VoiceWatch-ről",
         "cta": "Állítsuk be az Ön madármegfigyelő állomását."
       },
       "locationLanguage": {
@@ -4937,16 +4455,12 @@
         "title": "Adatvédelem és integráció",
         "privacyFilterLabel": "Adatvédelmi szűrő engedélyezése",
         "privacyFilterHelp": "Kiszűri a detektálásokat, amikor emberi hangok észlelhetők a mikrofon közelében",
-        "birdweatherLabel": "Detektálások megosztása a BirdWeather-rel",
-        "birdweatherHelp": " Ossza meg madár detektálásait a BirdWeather közösségi hálózattal",
-        "birdweatherIdLabel": "BirdWeather állomás ID",
-        "birdweatherIdPlaceholder": "Adja meg a BirdWeather állomás ID-jét",
         "errorReportingLabel": "Névtelen hiba jelentések küldése",
-        "errorReportingHelp": "Segítsen fejleszteni a BirdNET-Go-t névtelen hiba jelentések küldésével, amikor valami hibásan működik"
+        "errorReportingHelp": "Segítsen fejleszteni a VoiceWatch-t névtelen hiba jelentések küldésével, amikor valami hibásan működik"
       },
       "responsibleUse": {
-        "title": "A BirdNET-Go felelős használata",
-        "intro": "A BirdNET-Go egy hatékony eszköl, amely AI-asszisztált azonosítással javítja a madárlesési élményt. A madárlesés és a természetvédelem legjobb eredményeinek biztosításához:",
+        "title": "A VoiceWatch felelős használata",
+        "intro": "A VoiceWatch egy hatékony eszköl, amely AI-asszisztált azonosítással javítja a madárlesési élményt. A madárlesés és a természetvédelem legjobb eredményeinek biztosításához:",
         "point1": "Mielőtt megosztaná a megfigyeléseket, tekintse át és ellenőrizze a detektálásokat",
         "point2": "A megbízhatósági pontszámokat útmutatóként használja, ne abszolút igazságként",
         "point3": "Hasonlítsa össze a terepi útmutatókkal és a helyi szakértelemmel",
@@ -5005,26 +4519,6 @@
         "helpText": "A fajok köznapi neveihez használt nyelv a felületen."
       }
     },
-    "rangeFilter": {
-      "birdOnlyNote": "A területszűrő csak madár osztályozókra vonatkozik. A denevérmodellek saját fajlistákat használnak.",
-      "status": {
-        "title": "Területszűrő áttekintés",
-        "geomodelInfo": "BirdNET Geomodell {version} - {species} ismert faj",
-        "autoSelected": "Automatikusan kiválasztott",
-        "manual": "Kézi",
-        "classifier": "Osztályozó",
-        "totalSpecies": "Összes faj",
-        "withRangeData": "Területi adattal",
-        "withoutRangeData": "Területi adat nélkül",
-        "withRangeDataTooltip": "Fajok, amelyeket a geomodell ki tud értékelni földrajzi valószínűség szempontjából az Ön helyén",
-        "withoutRangeDataTooltip": "Fajok földrajzi adat nélkül a geomodellben, az alábbi nem térképezett fajok beállítás kezeli",
-        "noFilter": "Nincs aktív területszűrő",
-        "passUnmapped": {
-          "label": "Területi adat nélküli fajok engedélyezése",
-          "helpText": "Engedélyezze azon fajok detektálását, amelyekhez a geomodellnek nincs földrajzi adata. Kikapcsolva ezek a fajok mindig kiszűrésre kerülnek."
-        }
-      }
-    },
     "advanced": {
       "title": "Haladó",
       "description": "Feldolgozási és egyéni modell beállítások."
@@ -5039,7 +4533,7 @@
       "loading": "Modellek betöltése...",
       "retry": "Újra",
       "builtIn": "Beépített",
-      "builtInDescription": "A BirdNET csapat beépített madárfaj-osztályozója.",
+      "builtInDescription": "A VoiceWatch csapat beépített madárfaj-osztályozója.",
       "species": "{count} faj",
       "install": "Telepítés",
       "installing": "Telepítés...",
@@ -5091,7 +4585,7 @@
       "reinstall": "Újratelepítés",
       "reinstalling": "Újratelepítés...",
       "reinstallComplete": "Fájlok sikeresen ellenőrizve",
-      "geomodelBadge": "Tartalmazza a BirdNET v3.0 geomodellt",
+      "geomodelBadge": "Tartalmazza a VoiceWatch v3.0 geomodellt",
       "onnxRuntimeRequired": "ONNX Runtime szükséges, amely nem elérhető ezen a rendszeren.",
       "onnxRuntimeMissing": "Az ONNX Runtime nem elérhető. Ez a modell nem futtatható.",
       "unavailable": "Nem elérhető"
@@ -5106,6 +4600,45 @@
     },
     "dynamicThreshold": {
       "birdOnlyNote": "A dinamikus küszöb csak a madárosztályozókra vonatkozik."
+    },
+    "transcription": {
+      "title": "Transcription & Keyword Flagging",
+      "description": "Transcribe audio clips offline with Whisper and flag detections whose transcription contains defined keywords.",
+      "enable": {
+        "label": "Enable Transcription",
+        "helpText": "Enables offline speech-to-text transcription for detected audio clips using whisper.cpp."
+      },
+      "modelPath": {
+        "label": "Whisper Model Path",
+        "placeholder": "ggml-tiny.en.bin",
+        "helpText": "Path to the GGML model file used for transcription. Required when transcription is enabled.",
+        "required": "A model path is required when transcription is enabled. Enter the path to a GGML model file (e.g. ggml-tiny.en.bin)."
+      },
+      "language": {
+        "label": "Language",
+        "placeholder": "en",
+        "helpText": "BCP-47 language code for transcription (e.g. en, de, fr). Leave as en for English-only models."
+      },
+      "advanced": {
+        "title": "Advanced",
+        "binary": {
+          "label": "Whisper Binary",
+          "placeholder": "whisper-cli",
+          "helpText": "Name or absolute path of the whisper-cli executable. Defaults to whisper-cli on PATH."
+        }
+      },
+      "keywords": {
+        "label": "Flag Keywords",
+        "inputPlaceholder": "Add a keyword...",
+        "helpText": "Detections whose transcription contains any of these words will be flagged for review.",
+        "addButton": "Add",
+        "emptyState": "No keywords added yet. Enter a word above and click Add.",
+        "removeAriaLabel": "Remove keyword \"{keyword}\""
+      },
+      "caseSensitive": {
+        "label": "Case-Sensitive Matching",
+        "helpText": "When enabled, keyword matching distinguishes uppercase from lowercase letters (e.g. \"Fire\" will not match \"fire\")."
+      }
     }
   },
   "restart": {
@@ -5123,7 +4656,9 @@
       "webserver": "Web server / network settings",
       "database": "Database settings",
       "logging": "Logging settings",
-      "tlsCertificate": "TLS certificate"
+      "tlsCertificate": "TLS certificate",
+      "continuousRecording": "Continuous recording settings",
+      "speakerAttributes": "Speaker attribute settings"
     }
   },
   "help": {
@@ -5167,7 +4702,7 @@
       },
       "step2": {
         "title": "Telepítési módszer",
-        "description": "Hogyan telepítette a BirdNET-Go-t: install.sh szkript, Docker Compose, kézi fordítás vagy egyéb."
+        "description": "Hogyan telepítette a VoiceWatch-t: install.sh szkript, Docker Compose, kézi fordítás vagy egyéb."
       },
       "step3": {
         "title": "Rendszerinformációk",
@@ -5236,7 +4771,7 @@
       "fetchFailed": "Diagnosztika betöltése sikertelen"
     },
     "export": {
-      "reportTitle": "BirdNET-Go Rendszerállapot Jelentés",
+      "reportTitle": "VoiceWatch Rendszerállapot Jelentés",
       "statusLabel": "Állapot",
       "timeLabel": "Idő",
       "durationLabel": "Időtartam",

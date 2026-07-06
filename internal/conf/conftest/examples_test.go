@@ -11,20 +11,20 @@ func ExampleNewTestSettings() {
 	// Create settings with minimal configuration for unit tests
 	settings := NewTestSettings().Build()
 
-	fmt.Printf("Default threshold: %.1f\n", settings.BirdNET.Threshold)
+	fmt.Printf("Default threshold: %.1f\n", settings.VoiceWatch.Threshold)
 	// Output: Default threshold: 0.8
 }
 
-// ExampleSettingsBuilder_WithBirdNET demonstrates configuring BirdNET settings.
+// ExampleSettingsBuilder_WithVoiceWatch demonstrates configuring BirdNET settings.
 // Use this when your test needs specific BirdNET threshold or location values.
-func ExampleSettingsBuilder_WithBirdNET() {
+func ExampleSettingsBuilder_WithVoiceWatch() {
 	settings := NewTestSettings().
-		WithBirdNET(0.7, 45.5, -122.6).
+		WithVoiceWatch(0.7, 45.5, -122.6).
 		Build()
 
 	fmt.Printf("Threshold: %.1f, Latitude: %.1f\n",
-		settings.BirdNET.Threshold,
-		settings.BirdNET.Latitude)
+		settings.VoiceWatch.Threshold,
+		settings.VoiceWatch.Latitude)
 	// Output: Threshold: 0.7, Latitude: 45.5
 }
 
@@ -45,7 +45,7 @@ func ExampleSettingsBuilder_WithMQTT() {
 // Multiple configuration methods can be chained together for complex test scenarios.
 func ExampleSettingsBuilder_methodChaining() {
 	settings := NewTestSettings().
-		WithBirdNET(0.75, 40.0, -100.0).
+		WithVoiceWatch(0.75, 40.0, -100.0).
 		WithMQTT("tcp://localhost:1883", "test/topic").
 		WithAudioExport("/tmp/audio", "mp3", "192k").
 		WithWebServer("8080", true).
@@ -68,7 +68,7 @@ func Example_complexScenario() {
 	// - Web dashboard
 
 	settings := NewTestSettings().
-		WithBirdNET(0.75, 45.5231, -122.6765). // Portland, OR coordinates
+		WithVoiceWatch(0.75, 45.5231, -122.6765). // Portland, OR coordinates
 		WithMQTT("ssl://broker.hivemq.com:8883", "backyard/birds").
 		WithAudioExport("/data/recordings", "mp3", "192k").
 		WithSpeciesTracking(7, 60). // 7-day window, sync every 60 minutes
@@ -77,14 +77,14 @@ func Example_complexScenario() {
 		Build()
 
 	// Verify the complex configuration
-	fmt.Printf("BirdNET threshold: %.2f\n", settings.BirdNET.Threshold)
+	fmt.Printf("VoiceWatch threshold: %.2f\n", settings.VoiceWatch.Threshold)
 	fmt.Printf("MQTT enabled: %v\n", settings.Realtime.MQTT.Enabled)
 	fmt.Printf("Audio export: %s\n", settings.Realtime.Audio.Export.Type)
 	fmt.Printf("Species tracking: %v\n", settings.Realtime.SpeciesTracking.Enabled)
 	fmt.Printf("Web server port: %s\n", settings.WebServer.Port)
 
 	// Output:
-	// BirdNET threshold: 0.75
+	// VoiceWatch threshold: 0.75
 	// MQTT enabled: true
 	// Audio export: mp3
 	// Species tracking: true

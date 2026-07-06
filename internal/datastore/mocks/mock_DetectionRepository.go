@@ -5,8 +5,8 @@ package mocks
 import (
 	context "context"
 
-	datastore "github.com/tphakala/birdnet-go/internal/datastore"
-	detection "github.com/tphakala/birdnet-go/internal/detection"
+	datastore "github.com/tphakala/voicewatch/internal/datastore"
+	detection "github.com/tphakala/voicewatch/internal/detection"
 
 	mock "github.com/stretchr/testify/mock"
 )
@@ -1040,6 +1040,104 @@ func (_c *MockDetectionRepository_SetReview_Call) Return(_a0 error) *MockDetecti
 }
 
 func (_c *MockDetectionRepository_SetReview_Call) RunAndReturn(run func(context.Context, string, string) error) *MockDetectionRepository_SetReview_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// UpdateTranscript provides a mock function with given fields: ctx, id, transcript, language
+func (_m *MockDetectionRepository) UpdateTranscript(ctx context.Context, id string, transcript string, language string) error {
+	ret := _m.Called(ctx, id, transcript, language)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateTranscript")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, string, string, string) error); ok {
+		r0 = rf(ctx, id, transcript, language)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// MockDetectionRepository_UpdateTranscript_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateTranscript'
+type MockDetectionRepository_UpdateTranscript_Call struct {
+	*mock.Call
+}
+
+// UpdateTranscript is a helper method to define mock.On call
+//   - ctx context.Context
+//   - id string
+//   - transcript string
+//   - language string
+func (_e *MockDetectionRepository_Expecter) UpdateTranscript(ctx interface{}, id interface{}, transcript interface{}, language interface{}) *MockDetectionRepository_UpdateTranscript_Call {
+	return &MockDetectionRepository_UpdateTranscript_Call{Call: _e.mock.On("UpdateTranscript", ctx, id, transcript, language)}
+}
+
+func (_c *MockDetectionRepository_UpdateTranscript_Call) Run(run func(ctx context.Context, id string, transcript string, language string)) *MockDetectionRepository_UpdateTranscript_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(string), args[2].(string), args[3].(string))
+	})
+	return _c
+}
+
+func (_c *MockDetectionRepository_UpdateTranscript_Call) Return(_a0 error) *MockDetectionRepository_UpdateTranscript_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *MockDetectionRepository_UpdateTranscript_Call) RunAndReturn(run func(context.Context, string, string, string) error) *MockDetectionRepository_UpdateTranscript_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// UpdateKeywordFlag provides a mock function with given fields: ctx, id, flagged, keywordsHit
+func (_m *MockDetectionRepository) UpdateKeywordFlag(ctx context.Context, id string, flagged bool, keywordsHit string) error {
+	ret := _m.Called(ctx, id, flagged, keywordsHit)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateKeywordFlag")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, string, bool, string) error); ok {
+		r0 = rf(ctx, id, flagged, keywordsHit)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// MockDetectionRepository_UpdateKeywordFlag_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateKeywordFlag'
+type MockDetectionRepository_UpdateKeywordFlag_Call struct {
+	*mock.Call
+}
+
+// UpdateKeywordFlag is a helper method to define mock.On call
+//   - ctx context.Context
+//   - id string
+//   - flagged bool
+//   - keywordsHit string
+func (_e *MockDetectionRepository_Expecter) UpdateKeywordFlag(ctx interface{}, id interface{}, flagged interface{}, keywordsHit interface{}) *MockDetectionRepository_UpdateKeywordFlag_Call {
+	return &MockDetectionRepository_UpdateKeywordFlag_Call{Call: _e.mock.On("UpdateKeywordFlag", ctx, id, flagged, keywordsHit)}
+}
+
+func (_c *MockDetectionRepository_UpdateKeywordFlag_Call) Run(run func(ctx context.Context, id string, flagged bool, keywordsHit string)) *MockDetectionRepository_UpdateKeywordFlag_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(string), args[2].(bool), args[3].(string))
+	})
+	return _c
+}
+
+func (_c *MockDetectionRepository_UpdateKeywordFlag_Call) Return(_a0 error) *MockDetectionRepository_UpdateKeywordFlag_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *MockDetectionRepository_UpdateKeywordFlag_Call) RunAndReturn(run func(context.Context, string, bool, string) error) *MockDetectionRepository_UpdateKeywordFlag_Call {
 	_c.Call.Return(run)
 	return _c
 }

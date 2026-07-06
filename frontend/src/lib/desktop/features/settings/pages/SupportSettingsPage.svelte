@@ -1,7 +1,7 @@
 <!--
   Support Settings Page Component
 
-  Purpose: Support dump generation and diagnostic features for BirdNET-Go.
+  Purpose: Support dump generation and diagnostic features for VoiceWatch.
   Note: Telemetry settings have been moved to the Main Settings General tab.
 
   Features:

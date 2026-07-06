@@ -1,4 +1,4 @@
-// config.go defines the configuration types for the BirdNET-Go application.
+// config.go defines the configuration types for the VoiceWatch application.
 package conf
 
 import (
@@ -10,8 +10,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 // Hemisphere detection thresholds
@@ -72,6 +72,48 @@ type RetentionSettings struct {
 	CheckInterval    int    `yaml:"checkinterval" json:"checkInterval"`       // cleanup check interval in minutes (default: 15)
 }
 
+// ContinuousRecordingSettings contains settings for continuous full-audio recording.
+// When enabled, one ffmpeg process per enabled RTSP stream records all audio into
+// time-segmented files for later voice-print / speaker-ID analysis, completely
+// decoupled from the detection pipeline.
+type ContinuousRecordingSettings struct {
+	Enabled        bool   `yaml:"enabled" json:"enabled" mapstructure:"enabled"`                      // true to enable continuous full-audio recording
+	Path           string `yaml:"path" json:"path" mapstructure:"path"`                               // directory for segment files
+	SegmentSeconds int    `yaml:"segmentseconds" json:"segmentSeconds" mapstructure:"segmentseconds"` // segment length in seconds
+	RetentionHours int    `yaml:"retentionhours" json:"retentionHours" mapstructure:"retentionhours"` // rolling retention window in hours (older files are deleted)
+	Format         string `yaml:"format" json:"format" mapstructure:"format"`                         // audio format: flac or wav
+	SampleRate     int    `yaml:"samplerate" json:"sampleRate" mapstructure:"samplerate"`             // output sample rate in Hz (0 = keep source rate)
+}
+
+// SpeakerAttributesSettings configures opt-in speaker-attribute estimation
+// (gender, relative age band) and voice-print embeddings for human-voice
+// detections. These are demographic *estimates*, not biometric identity
+// recognition. Disabled by default for privacy; enabling requires a restart
+// because the analyzer is constructed once at pipeline startup. All fields are
+// scalars (the nested structs contain only scalars) so the settings are
+// comparable, which the restart-change detector relies on.
+type SpeakerAttributesSettings struct {
+	Enabled    bool                  `yaml:"enabled" json:"enabled" mapstructure:"enabled"`          // master switch for all speaker-attribute analysis
+	Gender     SpeakerAttributeModel `yaml:"gender" json:"gender" mapstructure:"gender"`             // gender estimation
+	Age        SpeakerAttributeModel `yaml:"age" json:"age" mapstructure:"age"`                      // relative age-band estimation
+	VoicePrint VoicePrintSettings    `yaml:"voiceprint" json:"voicePrint" mapstructure:"voiceprint"` // speaker-embedding extraction for "similar voices"
+}
+
+// SpeakerAttributeModel holds per-attribute enablement, the ONNX model path, and
+// the minimum confidence below which an estimate is discarded.
+type SpeakerAttributeModel struct {
+	Enabled   bool    `yaml:"enabled" json:"enabled" mapstructure:"enabled"`       // true to run this attribute's model
+	ModelPath string  `yaml:"modelpath" json:"modelPath" mapstructure:"modelpath"` // path to the ONNX model ("" = use bundled/default once available)
+	Threshold float64 `yaml:"threshold" json:"threshold" mapstructure:"threshold"` // minimum confidence to keep an estimate (0..1)
+}
+
+// VoicePrintSettings configures speaker-embedding extraction used for the
+// "similar voices" lookup.
+type VoicePrintSettings struct {
+	Enabled   bool   `yaml:"enabled" json:"enabled" mapstructure:"enabled"`       // true to compute and store voice-print embeddings
+	ModelPath string `yaml:"modelpath" json:"modelPath" mapstructure:"modelpath"` // path to the embedding model
+}
+
 // AudioSettings contains settings for audio processing and export.
 // SoundLevelSettings contains settings for sound level monitoring
 type SoundLevelSettings struct {
@@ -94,18 +136,20 @@ type AudioSourceConfig struct {
 }
 
 type AudioSettings struct {
-	Sources         []AudioSourceConfig `yaml:"sources" json:"sources" mapstructure:"sources"`                  // Audio capture devices
-	Source          string              `yaml:"source,omitempty" json:"source,omitempty" mapstructure:"source"` // Legacy: migrated to Sources on load
-	FfmpegPath      string              `yaml:"ffmpegpath" mapstructure:"ffmpegpath" json:"ffmpegPath"`         // path to ffmpeg, runtime value
-	FfmpegVersion   string              `yaml:"-" json:"ffmpegVersion,omitempty"`                               // ffmpeg version string, runtime value
-	FfmpegMajor     int                 `yaml:"-" json:"ffmpegMajor,omitempty"`                                 // ffmpeg major version number, runtime value
-	FfmpegMinor     int                 `yaml:"-" json:"ffmpegMinor,omitempty"`                                 // ffmpeg minor version number, runtime value
-	SoxPath         string              `yaml:"soxpath" mapstructure:"soxpath" json:"soxPath"`                  // path to sox, runtime value
-	SoxAudioTypes   []string            `yaml:"-" json:"-"`                                                     // supported audio types of sox, runtime value
-	FfprobePath     string              `yaml:"-" json:"-"`                                                     // path to ffprobe, derived from ffmpeg path at runtime
-	StreamTransport string              `yaml:"streamtransport" json:"streamTransport"`                         // preferred transport for audio streaming: "auto", "sse", or "ws"
-	Export          ExportSettings      `yaml:"export" json:"export"`                                           // export settings
-	SoundLevel      SoundLevelSettings  `yaml:"soundlevel" json:"soundLevel"`                                   // sound level monitoring settings
+	Sources           []AudioSourceConfig         `yaml:"sources" json:"sources" mapstructure:"sources"`                               // Audio capture devices
+	Source            string                      `yaml:"source,omitempty" json:"source,omitempty" mapstructure:"source"`              // Legacy: migrated to Sources on load
+	FfmpegPath        string                      `yaml:"ffmpegpath" mapstructure:"ffmpegpath" json:"ffmpegPath"`                      // path to ffmpeg, runtime value
+	FfmpegVersion     string                      `yaml:"-" json:"ffmpegVersion,omitempty"`                                            // ffmpeg version string, runtime value
+	FfmpegMajor       int                         `yaml:"-" json:"ffmpegMajor,omitempty"`                                              // ffmpeg major version number, runtime value
+	FfmpegMinor       int                         `yaml:"-" json:"ffmpegMinor,omitempty"`                                              // ffmpeg minor version number, runtime value
+	SoxPath           string                      `yaml:"soxpath" mapstructure:"soxpath" json:"soxPath"`                               // path to sox, runtime value
+	SoxAudioTypes     []string                    `yaml:"-" json:"-"`                                                                  // supported audio types of sox, runtime value
+	FfprobePath       string                      `yaml:"-" json:"-"`                                                                  // path to ffprobe, derived from ffmpeg path at runtime
+	StreamTransport   string                      `yaml:"streamtransport" json:"streamTransport"`                                      // preferred transport for audio streaming: "auto", "sse", or "ws"
+	Export            ExportSettings              `yaml:"export" json:"export"`                                                        // export settings
+	SoundLevel        SoundLevelSettings          `yaml:"soundlevel" json:"soundLevel"`                                                // sound level monitoring settings
+	Continuous        ContinuousRecordingSettings `yaml:"continuous" json:"continuous" mapstructure:"continuous"`                      // continuous full-audio recording settings
+	SpeakerAttributes SpeakerAttributesSettings   `yaml:"speakerattributes" json:"speakerAttributes" mapstructure:"speakerattributes"` // opt-in speaker attribute estimation + voice print
 
 	Equalizer  EqualizerSettings `yaml:"equalizer" json:"equalizer"`                             // equalizer settings (global default)
 	QuietHours QuietHoursConfig  `yaml:"quietHours" json:"quietHours" mapstructure:"quietHours"` // quiet hours (global default, legacy)
@@ -153,7 +197,6 @@ type Thumbnails struct {
 	Debug          bool   `yaml:"debug" json:"debug"`                   // true to enable debug mode
 	Summary        bool   `yaml:"summary" json:"summary"`               // show thumbnails on summary table
 	Recent         bool   `yaml:"recent" json:"recent"`                 // show thumbnails on recent table
-	ImageProvider  string `yaml:"imageprovider" json:"imageProvider"`   // preferred image provider: "auto", "wikimedia", "avicommons"
 	FallbackPolicy string `yaml:"fallbackpolicy" json:"fallbackPolicy"` // fallback policy: "none", "all" - try all available providers if preferred fails
 }
 
@@ -332,24 +375,6 @@ type RetrySettings struct {
 	BackoffMultiplier float64 `yaml:"backoffmultiplier" json:"backoffMultiplier"` // multiplier for exponential backoff
 }
 
-// BirdweatherSettings contains settings for BirdWeather API integration.
-type BirdweatherSettings struct {
-	Enabled          bool          `yaml:"enabled" json:"enabled"`                   // true to enable birdweather uploads
-	Debug            bool          `yaml:"debug" json:"debug"`                       // true to enable debug mode
-	ID               string        `yaml:"id" json:"id"`                             // birdweather ID
-	Threshold        float64       `yaml:"threshold" json:"threshold"`               // threshold for prediction confidence for uploads
-	LocationAccuracy float64       `yaml:"locationaccuracy" json:"locationAccuracy"` // accuracy of location in meters
-	RetrySettings    RetrySettings `yaml:"retrysettings" json:"retrySettings"`       // settings for retry mechanism
-}
-
-// EBirdSettings contains settings for eBird API integration.
-type EBirdSettings struct {
-	Enabled  bool   `yaml:"enabled" json:"enabled"`   // true to enable eBird integration
-	APIKey   string `yaml:"apikey" json:"apiKey"`     // eBird API key
-	CacheTTL int    `yaml:"cachettl" json:"cacheTTL"` // cache time-to-live in hours (default: 24)
-	Locale   string `yaml:"locale" json:"locale"`     // locale for eBird data (e.g., "en", "es")
-}
-
 // WeatherSettings contains all weather-related settings
 type WeatherSettings struct {
 	Provider     string               `yaml:"provider" json:"provider"`         // "none", "yrno", "openweather", or "wunderground"
@@ -501,22 +526,12 @@ type PrivacyFilterSettings struct {
 	Confidence float32 `yaml:"confidence" json:"confidence"` // confidence threshold for human detection
 }
 
-// DogBarkFilterSettings contains settings for the dog bark filter.
-type DogBarkFilterSettings struct {
-	Debug      bool     `yaml:"debug" json:"debug"`           // true to enable debug mode
-	Enabled    bool     `yaml:"enabled" json:"enabled"`       // true to enable dog bark filter
-	Confidence float32  `yaml:"confidence" json:"confidence"` // confidence threshold for dog bark detection
-	Remember   int      `yaml:"remember" json:"remember"`     // how long we should remember bark for filtering?
-	Species    []string `yaml:"species" json:"species"`       // species list for filtering
-}
-
-// DaylightFilterSettings contains settings for the daylight species filter.
-// It discards detections of configured species (default: nocturnal birds) during daylight hours.
+// DaylightFilterSettings contains settings for the daylight filter.
+// When enabled it discards all detections that occur during daylight hours.
 type DaylightFilterSettings struct {
-	Debug   bool     `yaml:"debug" json:"debug"`     // true to enable debug logging
-	Enabled bool     `yaml:"enabled" json:"enabled"` // true to enable daylight filter
-	Offset  int      `yaml:"offset" json:"offset"`   // hours to adjust daylight window; positive = shrink (lenient), negative = expand (strict)
-	Species []string `yaml:"species" json:"species"` // species, families, orders, or genera to filter during daylight
+	Debug   bool `yaml:"debug" json:"debug"`     // true to enable debug logging
+	Enabled bool `yaml:"enabled" json:"enabled"` // true to enable daylight filter
+	Offset  int  `yaml:"offset" json:"offset"`   // hours to adjust daylight window; positive = shrink (lenient), negative = expand (strict)
 }
 
 // RTSPHealthSettings contains settings for RTSP stream health monitoring.
@@ -684,7 +699,7 @@ type MQTTTLSSettings struct {
 type HomeAssistantSettings struct {
 	Enabled         bool   `yaml:"enabled" mapstructure:"enabled" json:"enabled"`                           // true to enable HA auto-discovery
 	DiscoveryPrefix string `yaml:"discovery_prefix" mapstructure:"discovery_prefix" json:"discoveryPrefix"` // HA discovery topic prefix (default: homeassistant)
-	DeviceName      string `yaml:"device_name" mapstructure:"device_name" json:"deviceName"`                // base name for devices (default: BirdNET-Go)
+	DeviceName      string `yaml:"device_name" mapstructure:"device_name" json:"deviceName"`                // base name for devices (default: VoiceWatch)
 }
 
 // TelemetrySettings contains settings for telemetry.
@@ -739,10 +754,9 @@ func (f *FalsePositiveFilterSettings) Validate() error {
 // ExtendedCaptureSettings contains settings for extended capture mode.
 // Extended capture produces a single audio clip for long continuous calling sessions.
 type ExtendedCaptureSettings struct {
-	Enabled              bool     `yaml:"enabled" json:"enabled" mapstructure:"enabled"`
-	MaxDuration          int      `yaml:"maxduration" json:"maxDuration" mapstructure:"maxDuration"`
-	CaptureBufferSeconds int      `yaml:"capturebufferseconds" json:"captureBufferSeconds" mapstructure:"captureBufferSeconds"`
-	Species              []string `yaml:"species" json:"species" mapstructure:"species"`
+	Enabled              bool `yaml:"enabled" json:"enabled" mapstructure:"enabled"`
+	MaxDuration          int  `yaml:"maxduration" json:"maxDuration" mapstructure:"maxDuration"`
+	CaptureBufferSeconds int  `yaml:"capturebufferseconds" json:"captureBufferSeconds" mapstructure:"captureBufferSeconds"`
 }
 
 // EffectiveCaptureBufferSeconds returns the capture buffer duration to use for
@@ -824,11 +838,8 @@ type RealtimeSettings struct {
 		Path    string `yaml:"path" json:"path"`       // path to OBS chat log
 	} `yaml:"log" json:"log"`
 	LogDeduplication LogDeduplicationSettings `yaml:"logdeduplication" json:"logDeduplication"` // Log deduplication settings
-	Birdweather      BirdweatherSettings      `yaml:"birdweather" json:"birdweather"`           // Birdweather integration settings
-	EBird            EBirdSettings            `yaml:"ebird" json:"ebird"`                       // eBird integration settings
 	OpenWeather      OpenWeatherSettings      `yaml:"-" json:"-"`                               // OpenWeather integration settings
 	PrivacyFilter    PrivacyFilterSettings    `yaml:"privacyfilter" json:"privacyFilter"`       // Privacy filter settings
-	DogBarkFilter    DogBarkFilterSettings    `yaml:"dogbarkfilter" json:"dogBarkFilter"`       // Dog bark filter settings
 	DaylightFilter   DaylightFilterSettings   `yaml:"daylightfilter" json:"daylightFilter"`     // Daylight filter settings
 	RTSP             RTSPSettings             `yaml:"rtsp" json:"rtsp"`                         // RTSP settings
 	MQTT             MQTTSettings             `yaml:"mqtt" json:"mqtt"`                         // MQTT settings
@@ -838,6 +849,24 @@ type RealtimeSettings struct {
 	Weather          WeatherSettings          `yaml:"weather" json:"weather"`                   // Weather provider related settings
 	SpeciesTracking  SpeciesTrackingSettings  `yaml:"speciestracking" json:"speciesTracking"`   // New species tracking settings
 	ExtendedCapture  ExtendedCaptureSettings  `yaml:"extendedcapture" json:"extendedCapture"`   // Extended capture for long calling species
+	Transcription    TranscriptionSettings    `yaml:"transcription" json:"transcription"`       // Speech-to-text transcription of saved clips
+}
+
+// TranscriptionSettings configures speech-to-text transcription of saved audio
+// clips. When enabled, the configured backend (whisper.cpp CLI) transcribes each
+// exported clip off the hot path and stores the transcript alongside the detection.
+type TranscriptionSettings struct {
+	Enabled  bool   `yaml:"enabled" json:"enabled"`   // true to enable transcription of saved clips
+	Model    string `yaml:"model" json:"model"`       // path to the GGML model file (e.g. ggml-tiny.en.bin); required when enabled
+	Binary   string `yaml:"binary" json:"binary"`     // whisper.cpp CLI executable (name on PATH or absolute path; default: whisper-cli)
+	Language string `yaml:"language" json:"language"` // spoken language hint passed to whisper (e.g. "en", "auto")
+	// Keywords is an optional list of words/phrases to flag in transcripts. When a
+	// transcript contains any keyword (word-boundary match), the detection is
+	// flagged and an alert is emitted. Empty list disables keyword flagging.
+	Keywords []string `yaml:"keywords" json:"keywords"`
+	// KeywordCaseSensitive controls whether keyword matching respects letter case.
+	// Defaults to false (case-insensitive matching).
+	KeywordCaseSensitive bool `yaml:"keywordCaseSensitive" json:"keywordCaseSensitive"`
 }
 
 // SpeciesAction represents a single action configuration
@@ -1199,26 +1228,25 @@ type InputConfig struct {
 	Watch     bool   `yaml:"-" json:"-"` // true to watch directory for new files
 }
 
-type BirdNETConfig struct {
-	Version            string              `yaml:"version,omitempty" json:"version,omitempty"`                 // model version: "2.4", "3.0"
-	Debug              bool                `yaml:"debug" json:"debug"`                                         // true to enable debug mode
-	Sensitivity        float64             `yaml:"sensitivity" json:"sensitivity"`                             // birdnet analysis sigmoid sensitivity
-	Threshold          float64             `yaml:"threshold" json:"threshold"`                                 // threshold for prediction confidence to report
-	Overlap            float64             `yaml:"overlap" json:"overlap"`                                     // birdnet analysis overlap between chunks
-	Longitude          float64             `yaml:"longitude" json:"longitude"`                                 // longitude of recording location for prediction filtering
-	Latitude           float64             `yaml:"latitude" json:"latitude"`                                   // latitude of recording location for prediction filtering
-	LocationConfigured bool                `yaml:"locationconfigured" json:"locationConfigured"`               // true when location has been explicitly configured by the user
-	Threads            int                 `yaml:"threads" json:"threads"`                                     // number of CPU threads to use for analysis
-	Locale             string              `yaml:"locale" json:"locale"`                                       // language to use for labels
-	RangeFilter        RangeFilterSettings `yaml:"rangefilter" json:"rangeFilter"`                             // range filter settings
-	ModelPath          string              `yaml:"modelpath,omitempty" json:"modelPath,omitempty"`             // path to external model file (empty for embedded)
-	LabelPath          string              `yaml:"labelpath,omitempty" json:"labelPath,omitempty"`             // path to external label file (empty for embedded)
-	Labels             []string            `yaml:"-" json:"-"`                                                 // list of available species labels, runtime value
-	UseXNNPACK         bool                `yaml:"usexnnpack" json:"useXnnpack"`                               // true to use XNNPACK delegate for inference acceleration
-	ONNXRuntimePath    string              `yaml:"onnxruntimepath,omitempty" json:"onnxRuntimePath,omitempty"` // path to ONNX Runtime shared library (required for ONNX models)
-	OpenVINOPath       string              `yaml:"openvinopath,omitempty" json:"openVinoPath,omitempty"`       // path to libopenvino_c shared library (OpenVINO image variants only)
-	Backend            string              `yaml:"backend,omitempty" json:"backend,omitempty"`                 // inference backend preference: "auto" (default), "onnx", or "openvino"
-	OpenVINODevice     string              `yaml:"openvinodevice,omitempty" json:"openVinoDevice,omitempty"`   // OpenVINO device preference: "auto" (default), "cpu", or "gpu"
+type VoiceWatchConfig struct {
+	Version            string   `yaml:"version,omitempty" json:"version,omitempty"`                 // model version: "2.4", "3.0"
+	Debug              bool     `yaml:"debug" json:"debug"`                                         // true to enable debug mode
+	Sensitivity        float64  `yaml:"sensitivity" json:"sensitivity"`                             // birdnet analysis sigmoid sensitivity
+	Threshold          float64  `yaml:"threshold" json:"threshold"`                                 // threshold for prediction confidence to report
+	Overlap            float64  `yaml:"overlap" json:"overlap"`                                     // birdnet analysis overlap between chunks
+	Longitude          float64  `yaml:"longitude" json:"longitude"`                                 // longitude of recording location for prediction filtering
+	Latitude           float64  `yaml:"latitude" json:"latitude"`                                   // latitude of recording location for prediction filtering
+	LocationConfigured bool     `yaml:"locationconfigured" json:"locationConfigured"`               // true when location has been explicitly configured by the user
+	Threads            int      `yaml:"threads" json:"threads"`                                     // number of CPU threads to use for analysis
+	Locale             string   `yaml:"locale" json:"locale"`                                       // language to use for labels
+	ModelPath          string   `yaml:"modelpath,omitempty" json:"modelPath,omitempty"`             // path to external model file (empty for embedded)
+	LabelPath          string   `yaml:"labelpath,omitempty" json:"labelPath,omitempty"`             // path to external label file (empty for embedded)
+	Labels             []string `yaml:"-" json:"-"`                                                 // list of available species labels, runtime value
+	UseXNNPACK         bool     `yaml:"usexnnpack" json:"useXnnpack"`                               // true to use XNNPACK delegate for inference acceleration
+	ONNXRuntimePath    string   `yaml:"onnxruntimepath,omitempty" json:"onnxRuntimePath,omitempty"` // path to ONNX Runtime shared library (required for ONNX models)
+	OpenVINOPath       string   `yaml:"openvinopath,omitempty" json:"openVinoPath,omitempty"`       // path to libopenvino_c shared library (OpenVINO image variants only)
+	Backend            string   `yaml:"backend,omitempty" json:"backend,omitempty"`                 // inference backend preference: "auto" (default), "onnx", or "openvino"
+	OpenVINODevice     string   `yaml:"openvinodevice,omitempty" json:"openVinoDevice,omitempty"`   // OpenVINO device preference: "auto" (default), "cpu", or "gpu"
 }
 
 // Inference backend preferences for BirdNET.Backend.
@@ -1237,56 +1265,13 @@ const (
 	OVDeviceGPU  = "gpu"
 )
 
-// RangeFilterSettings contains settings for the range filter
-type RangeFilterSettings struct {
-	Debug                   bool                `yaml:"debug" json:"debug"`                               // true to enable debug mode
-	Model                   string              `yaml:"model" json:"model"`                               // range filter model version: "legacy" for v1, "v3" for geomodel v3.0, or empty/default for v2
-	ModelPath               string              `yaml:"modelpath" json:"modelPath"`                       // path to external meta model file (empty for embedded)
-	LabelsPath              string              `yaml:"labelspath,omitempty" json:"labelsPath,omitempty"` // path to geomodel labels file (required when geomodel differs from classifier labels)
-	Threshold               float32             `yaml:"threshold" json:"threshold"`                       // rangefilter species occurrence threshold
-	PassUnmappedSpecies     bool                `yaml:"passunmappedspecies" json:"passUnmappedSpecies"`   // true to pass through species absent from geomodel (score 1.0); false to filter them out (score 0.0)
-	Species                 []string            `yaml:"-" json:"species,omitempty"`                       // list of included species, runtime value
-	IncludedScientificNames map[string]struct{} `yaml:"-" json:"-"`                                       // O(1) lookup set of included scientific names (lowercase), runtime value
-	LastUpdated             time.Time           `yaml:"-" json:"lastUpdated"`                             // last time the species list was updated, runtime value
-}
-
-// PerchConfig holds configuration for the Google Perch v2 model.
-type PerchConfig struct {
-	ModelPath string  `yaml:"modelpath,omitempty" json:"modelPath,omitempty"` // path to Perch v2 ONNX model file
-	LabelPath string  `yaml:"labelpath,omitempty" json:"labelPath,omitempty"` // path to Perch v2 label CSV file
-	Threshold float64 `yaml:"threshold" json:"threshold"`                     // confidence threshold for detections
-	Locale    string  `yaml:"locale,omitempty" json:"locale,omitempty"`       // locale for species label translation
-}
-
-// BatConfig holds configuration for bat detection using BirdNET v2.4 embeddings.
-type BatConfig struct {
-	EmbeddingModel      string                      `yaml:"embeddingmodel,omitempty" json:"embeddingModel,omitempty"`   // path to BirdNET v2.4 embeddings ONNX model
-	ClassifierModel     string                      `yaml:"classifiermodel,omitempty" json:"classifierModel,omitempty"` // path to bat species classifier ONNX model
-	LabelPath           string                      `yaml:"labelpath,omitempty" json:"labelPath,omitempty"`             // path to bat species labels file
-	Threshold           float64                     `yaml:"threshold" json:"threshold"`                                 // confidence threshold for bat detections
-	Locale              string                      `yaml:"locale,omitempty" json:"locale,omitempty"`                   // locale for species label translation
-	NighttimeOnly       bool                        `yaml:"nighttimeonly" json:"nighttimeOnly"`                         // restrict bat detection to nighttime (civil dusk to civil dawn)
-	FalsePositiveFilter FalsePositiveFilterSettings `yaml:"falsepositivefilter" json:"falsePositiveFilter"`             // false positive filtering for bat detections (level 0-5)
-	UltrasonicFilter    UltrasonicFilterConfig      `yaml:"ultrasonicfilter" json:"ultrasonicFilter"`                   // post-detection ultrasonic validation filter
-}
-
-// UltrasonicFilterConfig controls the post-detection ultrasonic validation filter for bat detections.
-// The filter measures temporal variability of ultrasonic energy (US frame CV) in the source audio.
-// Real bat echolocation produces bursts of ultrasonic energy (high CV), while false positives
-// from audible-range sounds show flat ultrasonic energy at the noise floor (low CV).
-type UltrasonicFilterConfig struct {
-	Enabled          bool    `yaml:"enabled" json:"enabled"`                   // enable ultrasonic validation filter
-	CVThreshold      float64 `yaml:"cvthreshold" json:"cvThreshold"`           // detections with US frame CV below this are tagged unlikely
-	FFTSize          int     `yaml:"fftsize" json:"fftSize"`                   // FFT window size in samples (must be power of 2)
-	HopSize          int     `yaml:"hopsize" json:"hopSize"`                   // STFT hop size in samples
-	FrequencySplitHz int     `yaml:"frequencysplithz" json:"frequencySplitHz"` // boundary between audible and ultrasonic bands in Hz
-}
-
-// BSGConfig holds configuration for BSG regional bird models.
-type BSGConfig struct {
-	ModelPath string `yaml:"modelpath,omitempty" json:"modelPath,omitempty"` // path to BSG ONNX model file
-	LabelPath string `yaml:"labelpath,omitempty" json:"labelPath,omitempty"` // path to BSG label file
-	Locale    string `yaml:"locale,omitempty" json:"locale,omitempty"`       // locale for species label translation
+// HumanVoiceConfig holds configuration for human voice / speech detection
+// using a Silero VAD ONNX model. Mirrors the simplest model config shape
+// (model path + confidence threshold). Phase 2 wires this into the model
+// orchestrator load path; Phase 1 only declares the type.
+type HumanVoiceConfig struct {
+	ModelPath string  `yaml:"modelpath,omitempty" json:"modelPath,omitempty"` // path to the Silero VAD ONNX model file
+	Threshold float64 `yaml:"threshold" json:"threshold"`                     // confidence threshold for human voice detections
 }
 
 // ModelsConfig holds global model enablement and management settings.
@@ -1357,7 +1342,7 @@ type AllowSubnetBypass struct {
 
 // TrustedProxyCloudflarePreset is the reserved Security.TrustedProxies entry
 // that expands to Cloudflare's published edge IP ranges, sparing operators from
-// pasting the full CIDR list when fronting BirdNET-Go with Cloudflare.
+// pasting the full CIDR list when fronting VoiceWatch with Cloudflare.
 const TrustedProxyCloudflarePreset = "cloudflare"
 
 // PublicAccess defines which features are accessible without authentication.
@@ -1651,7 +1636,7 @@ type BackupConfig struct {
 	} `yaml:"operationtimeouts" json:"operationTimeouts"`
 }
 
-// Settings contains all configuration options for the BirdNET-Go application.
+// Settings contains all configuration options for the VoiceWatch application.
 type Settings struct {
 	Debug bool `yaml:"debug" json:"debug"` // true to enable debug mode
 
@@ -1665,15 +1650,13 @@ type Settings struct {
 	Logging logger.LoggingConfig `yaml:"logging" json:"logging" mapstructure:"logging"` // centralized logging configuration
 
 	Main struct {
-		Name      string `yaml:"name" json:"name"`           // name of BirdNET-Go node, can be used to identify source of notes
+		Name      string `yaml:"name" json:"name"`           // name of VoiceWatch node, can be used to identify source of notes
 		TimeAs24h bool   `yaml:"timeas24h" json:"timeAs24h"` // true 24-hour time format, false 12-hour time format
 	} `yaml:"main" json:"main"`
 
-	BirdNET BirdNETConfig `yaml:"birdnet" json:"birdnet"` // BirdNET configuration
-	Perch   PerchConfig   `yaml:"perch" json:"perch"`     // Perch v2 model configuration
-	Bat     BatConfig     `yaml:"bat" json:"bat"`         // Bat detection configuration
-	BSG     BSGConfig     `yaml:"bsg" json:"bsg"`         // BSG regional bird model configuration
-	Models  ModelsConfig  `yaml:"models" json:"models"`   // Global model enablement and management
+	VoiceWatch VoiceWatchConfig `yaml:"voicewatch" json:"voicewatch"` // VoiceWatch configuration
+	HumanVoice HumanVoiceConfig `yaml:"humanvoice" json:"humanVoice"` // Human voice / speech detection configuration
+	Models     ModelsConfig     `yaml:"models" json:"models"`         // Global model enablement and management
 
 	LowMemory LowMemoryConfig `yaml:"lowmemory" json:"lowMemory" mapstructure:"lowmemory"` // Low-memory mode override (auto/on/off) for constrained systems
 

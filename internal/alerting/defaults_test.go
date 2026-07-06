@@ -38,3 +38,22 @@ func TestDefaultRules_UniqueNames(t *testing.T) {
 		names[rule.Name] = true
 	}
 }
+
+func TestDefaultRules_KeywordFlagRuleExists(t *testing.T) {
+	rules := DefaultRules()
+	var found bool
+	for _, rule := range rules {
+		if rule.EventName != EventKeywordMatched {
+			continue
+		}
+		found = true
+		assert.Equal(t, ObjectTypeKeywordFlag, rule.ObjectType, "keyword rule must use ObjectTypeKeywordFlag")
+		assert.Equal(t, TriggerTypeEvent, rule.TriggerType, "keyword rule must be event-triggered")
+		assert.True(t, rule.BuiltIn, "keyword rule must be built-in")
+		assert.True(t, rule.Enabled, "keyword rule must be enabled by default")
+		assert.Equal(t, RuleKeyKeywordFlagName, rule.NameKey, "keyword rule NameKey must match i18n constant")
+		assert.Equal(t, RuleKeyKeywordFlagDesc, rule.DescriptionKey, "keyword rule DescriptionKey must match i18n constant")
+		assert.NotEmpty(t, rule.Actions, "keyword rule must have at least one action")
+	}
+	assert.True(t, found, "built-in keyword-flag rule (EventKeywordMatched) not found in DefaultRules")
+}

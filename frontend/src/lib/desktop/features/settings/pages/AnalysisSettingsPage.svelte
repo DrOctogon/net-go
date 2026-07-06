@@ -1,20 +1,19 @@
 <!--
   Analysis Settings Page Component
 
-  Purpose: Configure BirdNET-Go analysis settings including detection thresholds,
-  false positive filtering, range filter, dynamic threshold, and manage the
+  Purpose: Configure VoiceWatch analysis settings including detection thresholds,
+  false positive filtering, dynamic threshold, and manage the
   model gallery (install/uninstall additional classifier models).
 
   Features:
   - Two main tabs: Settings and Models
-  - Settings tab: Detection settings, false positive filter, range filter,
+  - Settings tab: Detection settings, false positive filter,
     dynamic threshold, and advanced options
   - Models tab: Model gallery with Installed and Available tabs
   - Confidence threshold slider for bird detection
   - Bat detection threshold slider (visible when a bat model is installed)
   - Locale selector with flag icons for species labels
   - False positive filter with colored level badge
-  - Range filter with species count, view/download functionality
   - Dynamic threshold with enable/disable and parameter tuning
   - Advanced section with processing threads and custom classifier paths
   - License acceptance dialog for model installation
@@ -27,7 +26,6 @@
 -->
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { downloadBlob } from '$lib/utils/fileHelpers';
   import type { CatalogEntry, DownloadProgress } from '$lib/types/models';
   import {
     fetchCatalog,
@@ -53,18 +51,18 @@
   import {
     settingsStore,
     settingsActions,
-    birdnetSettings,
+    voicewatchSettings,
     dynamicThresholdSettings,
     realtimeSettings,
     batSettings,
+    transcriptionSettings,
+    type TranscriptionSettings,
   } from '$lib/stores/settings';
   import { cn } from '$lib/utils/cn.js';
-  import { api, ApiError, getCsrfToken } from '$lib/utils/api';
-  import { buildAppUrl } from '$lib/utils/urlHelpers';
+  import { api, ApiError } from '$lib/utils/api';
   import { toastActions } from '$lib/stores/toast';
-  import { formatBytes, formatNumber } from '$lib/utils/formatters';
+  import { formatBytes } from '$lib/utils/formatters';
   import { safeArrayAccess } from '$lib/utils/security';
-  import { loggers } from '$lib/utils/logger';
   import { t } from '$lib/i18n';
   import {
     Download,
@@ -82,6 +80,7 @@
     XCircle,
     X,
     Check,
+    Plus,
     Settings as SettingsIcon,
   } from '@lucide/svelte';
 
@@ -89,10 +88,8 @@
   import logoGoogle from '$lib/assets/logos/logo-google.png';
   import logoJyu from '$lib/assets/logos/logo-jyu.jpeg';
 
-  const logger = loggers.settings;
-
   const MODEL_LOGOS: Record<string, string> = {
-    birdnet: logoBirdnet,
+    human_voice: logoBirdnet,
     perch: logoGoogle,
     bsg: logoJyu,
   };
@@ -131,7 +128,7 @@
 
   // ── Store-derived state ───────────────────────────────────────────────
   let store = $derived($settingsStore);
-  let birdnet = $derived($birdnetSettings);
+  let birdnet = $derived($voicewatchSettings);
   let dynamicThreshold = $derived(
     $dynamicThresholdSettings ?? {
       enabled: false,
@@ -168,7 +165,7 @@
     catalog.filter(e => !e.installed && e.category === 'geomodel')
   );
 
-  // ── BirdNET locale loading ────────────────────────────────────────────
+  // ── VoiceWatch locale loading ────────────────────────────────────────────
   interface BirdnetLocaleOption extends SelectOption {
     localeCode: FlagLocale;
   }
@@ -302,7 +299,7 @@
     });
 
     if (currentOverlap < newMinOverlap) {
-      settingsActions.updateSection('birdnet', { overlap: newMinOverlap });
+      settingsActions.updateSection('voicewatch', { overlap: newMinOverlap });
       toastActions.info(
         t('settings.main.sections.falsePositiveFilter.overlapAdjusted', {
           overlap: newMinOverlap.toFixed(1),
@@ -312,7 +309,7 @@
       newMinOverlap < oldMinOverlap &&
       Math.abs(currentOverlap - oldMinOverlap) < OVERLAP_COMPARISON_TOLERANCE
     ) {
-      settingsActions.updateSection('birdnet', { overlap: newMinOverlap });
+      settingsActions.updateSection('voicewatch', { overlap: newMinOverlap });
       toastActions.info(
         t('settings.main.sections.falsePositiveFilter.overlapReduced', {
           overlap: newMinOverlap.toFixed(1),
@@ -321,325 +318,9 @@
     }
   }
 
-  // ── Range filter state and functions ──────────────────────────────────
-  interface RangeFilterSpecies {
-    commonName?: string;
-    scientificName?: string;
-    label?: string;
-  }
-
-  interface GeomodelStatus {
-    version: string;
-    totalSpecies: number;
-    autoSelected: boolean;
-  }
-
-  interface ClassifierCoverage {
-    id: string;
-    name: string;
-    totalSpecies: number;
-    withRangeData: number;
-    withoutRangeData: number;
-  }
-
-  interface RangeFilterStatus {
-    geomodel: GeomodelStatus | null;
-    classifiers: ClassifierCoverage[];
-    passUnmappedSpecies: boolean;
-    threshold: number;
-    locationConfigured: boolean;
-    lastUpdated: string;
-  }
-
-  let rangeFilterStatus = $state<RangeFilterStatus | null>(null);
-
-  async function loadRangeFilterStatus() {
-    try {
-      rangeFilterStatus = await api.get<RangeFilterStatus>('/api/v2/range/status');
-    } catch (err) {
-      logger.error('Failed to load range filter status:', err);
-    }
-  }
-
-  let rangeFilterState = $state<{
-    speciesCount: number | null;
-    loading: boolean;
-    testing: boolean;
-    downloading: boolean;
-    error: string | null;
-    showModal: boolean;
-    species: RangeFilterSpecies[];
-  }>({
-    speciesCount: null,
-    loading: false,
-    testing: false,
-    downloading: false,
-    error: null,
-    showModal: false,
-    species: [],
-  });
-
-  // Focus management for modal accessibility
-  let previouslyFocusedElement: HTMLElement | null = null;
-
-  function getFocusableElements(container: HTMLElement): HTMLElement[] {
-    const focusableSelectors = [
-      'button:not([disabled])',
-      'input:not([disabled])',
-      'select:not([disabled])',
-      'textarea:not([disabled])',
-      'a[href]',
-      '[tabindex]:not([tabindex="-1"])',
-    ];
-
-    const elements = container.querySelectorAll(focusableSelectors.join(', '));
-    return Array.from(elements).filter(el => {
-      const style = window.getComputedStyle(el as HTMLElement);
-      return style.display !== 'none' && style.visibility !== 'hidden';
-    }) as HTMLElement[];
-  }
-
-  function handleFocusTrap(event: KeyboardEvent, modal: HTMLElement) {
-    if (event.key !== 'Tab') return;
-
-    const focusableElements = getFocusableElements(modal);
-    if (focusableElements.length === 0) return;
-
-    const firstElement = focusableElements[0];
-    const lastElement = focusableElements[focusableElements.length - 1];
-
-    if (event.shiftKey) {
-      if (document.activeElement === firstElement) {
-        event.preventDefault();
-        lastElement.focus();
-      }
-    } else {
-      if (document.activeElement === lastElement) {
-        event.preventDefault();
-        firstElement.focus();
-      }
-    }
-  }
-
-  let modalTrapHandler: ((_event: KeyboardEvent) => void) | null = null;
-  let modalElement: HTMLElement | null = null;
-
-  $effect(() => {
-    let focusTimer: ReturnType<typeof setTimeout> | undefined;
-
-    if (rangeFilterState.showModal) {
-      previouslyFocusedElement = document.activeElement as HTMLElement;
-
-      focusTimer = setTimeout(() => {
-        const modal = document.querySelector(
-          '[role="dialog"][aria-labelledby="modal-title"]'
-        ) as HTMLElement;
-        if (modal) {
-          const focusableElements = getFocusableElements(modal);
-          if (focusableElements.length > 0) {
-            focusableElements[0].focus();
-          } else {
-            modal.focus();
-          }
-
-          modalElement = modal;
-          modalTrapHandler = (event: KeyboardEvent) => handleFocusTrap(event, modal);
-          modal.addEventListener('keydown', modalTrapHandler);
-        }
-      }, 0);
-    } else if (previouslyFocusedElement) {
-      previouslyFocusedElement.focus();
-      previouslyFocusedElement = null;
-    }
-
-    return () => {
-      clearTimeout(focusTimer);
-      if (modalElement && modalTrapHandler) {
-        modalElement.removeEventListener('keydown', modalTrapHandler);
-        modalElement = null;
-        modalTrapHandler = null;
-      }
-    };
-  });
-
-  let debounceTimer: ReturnType<typeof setTimeout> | undefined;
-  let loadingDelayTimer: ReturnType<typeof setTimeout> | undefined;
-  let rangeFilterAbortController: AbortController | null = null;
-
-  function debouncedTestRangeFilter() {
-    rangeFilterAbortController?.abort();
-    rangeFilterAbortController = null;
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => {
-      testCurrentRangeFilter();
-    }, 150);
-  }
-
-  async function loadRangeFilterCount() {
-    try {
-      interface CountResponse {
-        count: number;
-      }
-      const data = await api.get<CountResponse>('/api/v2/range/species/count');
-      rangeFilterState.speciesCount = data.count;
-    } catch (err) {
-      logger.error('Failed to load range filter count:', err);
-      rangeFilterState.error = t('settings.main.errors.rangeFilterCountFailed');
-    }
-  }
-
-  async function testCurrentRangeFilter() {
-    if (rangeFilterState.testing || !birdnet?.locationConfigured) return;
-
-    clearTimeout(loadingDelayTimer);
-
-    loadingDelayTimer = setTimeout(() => {
-      rangeFilterState.testing = true;
-    }, 100);
-
-    rangeFilterState.error = null;
-    rangeFilterAbortController = new AbortController();
-
-    try {
-      const data = await api.post<{ count: number; species?: RangeFilterSpecies[] }>(
-        '/api/v2/range/species/test',
-        {
-          latitude: birdnet?.latitude,
-          longitude: birdnet?.longitude,
-          threshold: birdnet?.rangeFilter?.threshold,
-        },
-        { signal: rangeFilterAbortController.signal }
-      );
-
-      rangeFilterState.speciesCount = data.count;
-
-      if (rangeFilterState.showModal) {
-        rangeFilterState.species = data.species || [];
-      }
-    } catch (err) {
-      if (err instanceof Error && err.name === 'AbortError') return;
-      logger.error('Failed to test range filter:', err);
-      rangeFilterState.error = t('settings.main.errors.rangeFilterTestFailed');
-      rangeFilterState.speciesCount = null;
-    } finally {
-      clearTimeout(loadingDelayTimer);
-      rangeFilterState.testing = false;
-      rangeFilterAbortController = null;
-    }
-  }
-
-  async function loadRangeFilterSpecies() {
-    if (rangeFilterState.loading || !birdnet?.locationConfigured) return;
-
-    rangeFilterState.loading = true;
-    rangeFilterState.error = null;
-
-    try {
-      const data = await settingsActions.loadRangeFilterSpecies();
-      rangeFilterState.species = data.species;
-      rangeFilterState.speciesCount = data.count;
-    } catch (err) {
-      logger.error('Failed to load species list:', err);
-      rangeFilterState.error = t('settings.main.errors.rangeFilterLoadFailed');
-    } finally {
-      rangeFilterState.loading = false;
-    }
-  }
-
-  // Narrow derived values so the effect only fires when coordinates or threshold change
-  const rangeFilterLat = $derived($birdnetSettings?.latitude);
-  const rangeFilterLng = $derived($birdnetSettings?.longitude);
-  const rangeFilterThreshold = $derived($birdnetSettings?.rangeFilter?.threshold);
-  const rangeFilterConfigured = $derived($birdnetSettings?.locationConfigured);
-
-  $effect(() => {
-    const _lat = rangeFilterLat;
-    const _lng = rangeFilterLng;
-    const _threshold = rangeFilterThreshold;
-    const configured = rangeFilterConfigured;
-
-    if (configured && _lat != null && _lng != null && _threshold != null) {
-      debouncedTestRangeFilter();
-    }
-
-    return () => {
-      clearTimeout(debounceTimer);
-      clearTimeout(loadingDelayTimer);
-      rangeFilterAbortController?.abort();
-    };
-  });
-
-  async function downloadSpeciesCSV() {
-    if (rangeFilterState.downloading || !birdnet?.locationConfigured) return;
-
-    try {
-      rangeFilterState.downloading = true;
-
-      const params = new URLSearchParams({
-        latitude: (birdnet?.latitude ?? 0).toString(),
-        longitude: (birdnet?.longitude ?? 0).toString(),
-        threshold: (birdnet?.rangeFilter?.threshold ?? 0.01).toString(),
-      });
-
-      const response = await fetch(buildAppUrl(`/api/v2/range/species/csv?${params}`), {
-        headers: {
-          'X-CSRF-Token': getCsrfToken() || '',
-          Accept: 'text/csv',
-        },
-      });
-
-      if (!response.ok) {
-        let msg = t('settings.errors.csvDownloadFailed');
-        if (response.headers.get('Content-Type')?.includes('application/json')) {
-          try {
-            const data: unknown = await response.clone().json();
-            if (
-              data &&
-              typeof data === 'object' &&
-              'message' in data &&
-              typeof (data as Record<string, unknown>).message === 'string'
-            ) {
-              msg = (data as Record<string, unknown>).message as string;
-            }
-          } catch {
-            // ignore parsing errors
-          }
-        }
-        throw new Error(msg);
-      }
-
-      const cd =
-        response.headers.get('Content-Disposition') ||
-        response.headers.get('content-disposition') ||
-        '';
-      let filename = 'birdnet_species.csv';
-      const fnStar = cd.match(/filename\*\s*=\s*([^']*)''([^;]+)/i);
-      if (fnStar && fnStar[2]) {
-        try {
-          filename = decodeURIComponent(fnStar[2]);
-        } catch {
-          /* keep default */
-        }
-      } else {
-        const fn = cd.match(/filename\s*=\s*"([^"]+)"/i) || cd.match(/filename\s*=\s*([^;]+)/i);
-        if (fn && fn[1]) filename = fn[1].trim();
-      }
-
-      const blob = await response.blob();
-      downloadBlob(blob, filename);
-
-      toastActions.success(t('settings.main.sections.rangeFilter.csvDownloaded'));
-    } catch (err) {
-      logger.error('Failed to download species CSV:', err);
-      toastActions.error(t('settings.main.sections.rangeFilter.csvDownloadFailed'));
-    } finally {
-      rangeFilterState.downloading = false;
-    }
-  }
-
   // ── Update handlers ───────────────────────────────────────────────────
   function updateBirdnetSetting(key: string, value: string | number) {
-    settingsActions.updateSection('birdnet', { [key]: value });
+    settingsActions.updateSection('voicewatch', { [key]: value });
   }
 
   function updateDynamicThreshold(key: string, value: number | boolean) {
@@ -666,6 +347,60 @@
     settingsActions.updateSection('bat', {
       falsePositiveFilter: { level: newLevel },
     });
+  }
+
+  // ── Transcription & keyword-flagging state ────────────────────────────
+  const defaultTranscription: TranscriptionSettings = {
+    enabled: false,
+    model: '',
+    binary: 'whisper-cli',
+    language: 'en',
+    keywords: [],
+    keywordCaseSensitive: false,
+  };
+
+  let transcription = $derived($transcriptionSettings ?? defaultTranscription);
+
+  /** Indicates a configuration error: enabled but no model path set. */
+  let transcriptionModelMissing = $derived(transcription.enabled && !transcription.model.trim());
+
+  function updateTranscription<K extends keyof TranscriptionSettings>(
+    key: K,
+    value: TranscriptionSettings[K]
+  ) {
+    settingsActions.updateSection('realtime', {
+      transcription: { ...transcription, [key]: value },
+    });
+  }
+
+  // Local state for the keyword input field
+  let keywordInput = $state('');
+
+  function addKeyword() {
+    const trimmed = keywordInput.trim();
+    if (!trimmed) return;
+    const current = Array.isArray(transcription.keywords) ? transcription.keywords : [];
+    if (current.includes(trimmed)) {
+      keywordInput = '';
+      return;
+    }
+    updateTranscription('keywords', [...current, trimmed]);
+    keywordInput = '';
+  }
+
+  function removeKeyword(index: number) {
+    const current = Array.isArray(transcription.keywords) ? transcription.keywords : [];
+    updateTranscription(
+      'keywords',
+      current.filter((_, i) => i !== index)
+    );
+  }
+
+  function handleKeywordKeydown(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      addKeyword();
+    }
   }
 
   // ── FP filter level definitions for the shared component ─────────────
@@ -764,7 +499,7 @@
   }
 
   function updateThreshold(value: number) {
-    settingsActions.updateSection('birdnet', { threshold: value });
+    settingsActions.updateSection('voicewatch', { threshold: value });
   }
 
   // ── Gallery tab definitions ───────────────────────────────────────────
@@ -805,8 +540,6 @@
   onMount(() => {
     loadCatalog();
     loadBirdnetLocales();
-    loadRangeFilterCount();
-    loadRangeFilterStatus();
     return () => {
       if (progressCleanup) progressCleanup();
       clearTimeout(completionTimer);
@@ -994,8 +727,8 @@
       description={t('analysis.bird.description')}
       defaultOpen={true}
       originalData={{
-        threshold: store.originalData.birdnet?.threshold,
-        locale: store.originalData.birdnet?.locale,
+        threshold: store.originalData.voicewatch?.threshold,
+        locale: store.originalData.voicewatch?.locale,
         fpFilter: store.originalData.realtime?.falsePositiveFilter?.level ?? 0,
       }}
       currentData={{
@@ -1141,197 +874,6 @@
       </SettingsSection>
     {/if}
 
-    <!-- 3. Range Filter -->
-    <SettingsSection
-      title={t('settings.main.sections.rangeFilter.title')}
-      description={t('settings.main.sections.rangeFilter.description')}
-      originalData={store.originalData.birdnet?.rangeFilter}
-      currentData={birdnet?.rangeFilter}
-    >
-      <SettingsNote><span>{t('analysis.rangeFilter.birdOnlyNote')}</span></SettingsNote>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-        <NumberField
-          label={t('settings.main.sections.rangeFilter.threshold.label')}
-          value={birdnet?.rangeFilter?.threshold ?? 0.01}
-          onUpdate={value =>
-            settingsActions.updateSection('birdnet', {
-              rangeFilter: { ...birdnet?.rangeFilter, threshold: value },
-            })}
-          min={0.0}
-          max={0.99}
-          step={0.01}
-          helpText={t('settings.main.sections.rangeFilter.threshold.helpText')}
-          disabled={store.isLoading || store.isSaving}
-        />
-
-        <div>
-          <div class="flex justify-start mb-1">
-            <span class="text-sm text-[var(--color-base-content)]"
-              >{t('settings.main.sections.rangeFilter.speciesCount.label')}</span
-            >
-          </div>
-          <div class="flex items-center gap-3">
-            <div
-              class="text-2xl font-bold text-[var(--color-primary)] tabular-nums"
-              class:opacity-60={rangeFilterState.testing}
-            >
-              {rangeFilterState.speciesCount !== null
-                ? formatNumber(rangeFilterState.speciesCount)
-                : '-'}
-            </div>
-            {#if rangeFilterState.testing}
-              <span
-                class="inline-block w-4 h-4 border-2 border-[var(--color-base-300)] border-t-[var(--color-primary)] rounded-full animate-spin"
-              ></span>
-            {/if}
-          </div>
-          <div class="flex gap-2 mt-2">
-            <button
-              type="button"
-              class="inline-flex items-center justify-center h-8 px-3 text-sm font-medium rounded-lg border border-[var(--color-base-content)]/30 bg-transparent hover:bg-black/5 dark:hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={!rangeFilterState.speciesCount ||
-                rangeFilterState.loading ||
-                !birdnet?.locationConfigured}
-              onclick={() => {
-                rangeFilterState.showModal = true;
-                loadRangeFilterSpecies();
-              }}
-            >
-              {t('settings.main.sections.rangeFilter.speciesCount.viewSpecies')}
-            </button>
-            <button
-              type="button"
-              class="inline-flex items-center justify-center gap-2 h-8 px-3 text-sm font-medium rounded-lg bg-[var(--color-primary)] text-[var(--color-primary-content)] hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={!rangeFilterState.speciesCount ||
-                rangeFilterState.downloading ||
-                !birdnet?.locationConfigured}
-              onclick={downloadSpeciesCSV}
-              aria-label={t('common.aria.downloadCsv')}
-            >
-              <Download class="size-4" />
-              {t('analytics.filters.exportCsv')}
-            </button>
-          </div>
-          <span class="help-text mt-1">
-            {t('settings.main.sections.rangeFilter.speciesCount.helpText')}
-          </span>
-        </div>
-      </div>
-
-      {#if rangeFilterStatus && rangeFilterStatus.geomodel}
-        <details
-          class="mt-4 rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-200)]/50"
-        >
-          <summary
-            class="cursor-pointer select-none px-4 py-3 text-sm font-medium text-[var(--color-base-content)] hover:bg-[var(--color-base-200)] rounded-lg transition-colors"
-          >
-            {t('analysis.rangeFilter.status.title')}
-          </summary>
-          <div class="px-4 pb-4">
-            <!-- Geomodel info line -->
-            <div class="flex items-center gap-2 text-sm mb-3">
-              <span class="font-medium">
-                {t('analysis.rangeFilter.status.geomodelInfo', {
-                  version: rangeFilterStatus.geomodel.version,
-                  species: formatNumber(rangeFilterStatus.geomodel.totalSpecies),
-                })}
-              </span>
-              <span
-                class={cn(
-                  'inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium',
-                  rangeFilterStatus.geomodel.autoSelected
-                    ? 'bg-[var(--color-success)]/15 text-[var(--color-success)]'
-                    : 'bg-[var(--color-base-300)] text-[var(--color-base-content)]/80'
-                )}
-              >
-                {rangeFilterStatus.geomodel.autoSelected
-                  ? t('analysis.rangeFilter.status.autoSelected')
-                  : t('analysis.rangeFilter.status.manual')}
-              </span>
-            </div>
-
-            <!-- Per-classifier coverage table -->
-            {#if rangeFilterStatus.classifiers.length > 0}
-              <div class="overflow-x-auto">
-                <table class="w-full text-sm">
-                  <thead>
-                    <tr class="border-b border-[var(--color-base-300)]">
-                      <th
-                        class="text-left py-2 pr-4 font-medium text-[var(--color-base-content)]/60"
-                        >{t('analysis.rangeFilter.status.classifier')}</th
-                      >
-                      <th
-                        class="text-right py-2 px-4 font-medium text-[var(--color-base-content)]/60"
-                        >{t('analysis.rangeFilter.status.totalSpecies')}</th
-                      >
-                      <th
-                        class="text-right py-2 px-4 font-medium text-[var(--color-base-content)]/60"
-                        title={t('analysis.rangeFilter.status.withRangeDataTooltip')}
-                        >{t('analysis.rangeFilter.status.withRangeData')}</th
-                      >
-                      <th
-                        class="text-right py-2 pl-4 font-medium text-[var(--color-base-content)]/60"
-                        title={t('analysis.rangeFilter.status.withoutRangeDataTooltip')}
-                        >{t('analysis.rangeFilter.status.withoutRangeData')}</th
-                      >
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {#each rangeFilterStatus.classifiers as classifier (classifier.id)}
-                      <tr class="border-b border-[var(--color-base-300)]/50 last:border-0">
-                        <td class="py-2 pr-4 font-medium">{classifier.name}</td>
-                        <td class="py-2 px-4 text-right tabular-nums"
-                          >{formatNumber(classifier.totalSpecies)}</td
-                        >
-                        <td class="py-2 px-4 text-right tabular-nums"
-                          >{formatNumber(classifier.withRangeData)}</td
-                        >
-                        <td class="py-2 pl-4 text-right tabular-nums"
-                          >{formatNumber(classifier.withoutRangeData)}</td
-                        >
-                      </tr>
-                    {/each}
-                  </tbody>
-                </table>
-              </div>
-            {/if}
-          </div>
-        </details>
-
-        <!-- Pass unmapped species toggle (always visible, outside collapsible) -->
-        <div class="mt-3">
-          <Checkbox
-            label={t('analysis.rangeFilter.status.passUnmapped.label')}
-            checked={birdnet?.rangeFilter?.passUnmappedSpecies ?? false}
-            onchange={value =>
-              settingsActions.updateSection('birdnet', {
-                rangeFilter: { ...birdnet?.rangeFilter, passUnmappedSpecies: value },
-              })}
-            helpText={t('analysis.rangeFilter.status.passUnmapped.helpText')}
-            disabled={store.isLoading || store.isSaving}
-          />
-        </div>
-      {/if}
-
-      {#if rangeFilterState.error}
-        <div
-          class="flex items-start gap-3 p-4 rounded-lg mt-4 bg-[color-mix(in_srgb,var(--color-error)_15%,transparent)] text-[var(--color-error)]"
-          role="alert"
-        >
-          <XCircle class="size-5 shrink-0" />
-          <span>{rangeFilterState.error}</span>
-          <button
-            type="button"
-            class="ml-auto inline-flex items-center justify-center p-1.5 rounded-md bg-transparent hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
-            onclick={() => (rangeFilterState.error = null)}
-          >
-            <X class="size-4" />
-          </button>
-        </div>
-      {/if}
-    </SettingsSection>
-
     <!-- 4. Dynamic Threshold -->
     <SettingsSection
       title={t('settings.main.sections.dynamicThreshold.title')}
@@ -1395,9 +937,9 @@
       description={t('analysis.advanced.description')}
       defaultOpen={false}
       originalData={{
-        threads: store.originalData.birdnet?.threads,
-        modelPath: store.originalData.birdnet?.modelPath,
-        labelPath: store.originalData.birdnet?.labelPath,
+        threads: store.originalData.voicewatch?.threads,
+        modelPath: store.originalData.voicewatch?.modelPath,
+        labelPath: store.originalData.voicewatch?.labelPath,
       }}
       currentData={{
         threads: birdnet?.threads,
@@ -1437,6 +979,160 @@
           helpText={t('settings.main.sections.customClassifier.labelPath.helpText')}
           disabled={store.isLoading || store.isSaving}
           onchange={value => updateBirdnetSetting('labelPath', value)}
+        />
+      </div>
+    </SettingsSection>
+
+    <!-- 6. Transcription & Keyword Flagging -->
+    <SettingsSection
+      title={t('analysis.transcription.title')}
+      description={t('analysis.transcription.description')}
+      defaultOpen={false}
+      originalData={store.originalData.realtime?.transcription}
+      currentData={store.formData.realtime?.transcription}
+    >
+      <!-- Enable toggle -->
+      <Checkbox
+        checked={transcription.enabled}
+        label={t('analysis.transcription.enable.label')}
+        helpText={t('analysis.transcription.enable.helpText')}
+        disabled={store.isLoading || store.isSaving}
+        onchange={value => updateTranscription('enabled', value)}
+      />
+
+      <!-- Model path + language -->
+      <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <TextInput
+            id="transcription-model-path"
+            value={transcription.model}
+            label={t('analysis.transcription.modelPath.label')}
+            placeholder={t('analysis.transcription.modelPath.placeholder')}
+            helpText={transcriptionModelMissing
+              ? undefined
+              : t('analysis.transcription.modelPath.helpText')}
+            disabled={store.isLoading || store.isSaving}
+            onchange={value => updateTranscription('model', value)}
+          />
+          {#if transcriptionModelMissing}
+            <p
+              id="transcription-model-required"
+              class="mt-1 text-sm text-[var(--color-error)]"
+              role="alert"
+              aria-live="polite"
+            >
+              {t('analysis.transcription.modelPath.required')}
+            </p>
+          {/if}
+        </div>
+
+        <TextInput
+          id="transcription-language"
+          value={transcription.language}
+          label={t('analysis.transcription.language.label')}
+          placeholder={t('analysis.transcription.language.placeholder')}
+          helpText={t('analysis.transcription.language.helpText')}
+          disabled={store.isLoading || store.isSaving}
+          onchange={value => updateTranscription('language', value)}
+        />
+      </div>
+
+      <!-- Advanced: binary path -->
+      <details
+        class="mt-4 rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-200)]/50"
+      >
+        <summary
+          class="cursor-pointer select-none px-4 py-3 text-sm font-medium text-[var(--color-base-content)] hover:bg-[var(--color-base-200)] rounded-lg transition-colors"
+        >
+          {t('analysis.transcription.advanced.title')}
+        </summary>
+        <div class="px-4 pb-4 pt-2">
+          <TextInput
+            id="transcription-binary"
+            value={transcription.binary}
+            label={t('analysis.transcription.advanced.binary.label')}
+            placeholder={t('analysis.transcription.advanced.binary.placeholder')}
+            helpText={t('analysis.transcription.advanced.binary.helpText')}
+            disabled={store.isLoading || store.isSaving}
+            onchange={value => updateTranscription('binary', value)}
+          />
+        </div>
+      </details>
+
+      <!-- Keyword list editor -->
+      <div class="mt-6 space-y-3">
+        <div>
+          <label class="label justify-start" for="transcription-keyword-input">
+            <span class="label-text capitalize">{t('analysis.transcription.keywords.label')}</span>
+          </label>
+          <div class="flex gap-2">
+            <input
+              id="transcription-keyword-input"
+              type="text"
+              class="input input-sm flex-1"
+              placeholder={t('analysis.transcription.keywords.inputPlaceholder')}
+              bind:value={keywordInput}
+              disabled={store.isLoading || store.isSaving}
+              onkeydown={handleKeywordKeydown}
+              aria-label={t('analysis.transcription.keywords.label')}
+              aria-describedby="transcription-keyword-help"
+            />
+            <button
+              type="button"
+              class="inline-flex items-center justify-center gap-1.5 h-8 px-3 text-sm font-medium rounded-lg bg-[var(--color-primary)] text-[var(--color-primary-content)] hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={store.isLoading || store.isSaving || !keywordInput.trim()}
+              onclick={addKeyword}
+              aria-label={t('analysis.transcription.keywords.addButton')}
+            >
+              <Plus class="size-4" />
+              {t('analysis.transcription.keywords.addButton')}
+            </button>
+          </div>
+          <span id="transcription-keyword-help" class="help-text mt-1 block">
+            {t('analysis.transcription.keywords.helpText')}
+          </span>
+        </div>
+
+        <!-- Keyword chips -->
+        {#if transcription.keywords.length === 0}
+          <p class="text-sm text-[var(--color-base-content)]/60 italic">
+            {t('analysis.transcription.keywords.emptyState')}
+          </p>
+        {:else}
+          <div
+            class="flex flex-wrap gap-2"
+            role="list"
+            aria-label={t('analysis.transcription.keywords.label')}
+          >
+            {#each transcription.keywords as keyword, i (keyword)}
+              <span
+                class="inline-flex items-center gap-1 rounded-full bg-[var(--color-primary)]/15 pl-3 pr-1.5 py-1 text-sm font-medium text-[var(--color-primary)]"
+                role="listitem"
+              >
+                {keyword}
+                <button
+                  type="button"
+                  class="inline-flex items-center justify-center size-5 rounded-full hover:bg-[var(--color-primary)]/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-1 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={store.isLoading || store.isSaving}
+                  onclick={() => removeKeyword(i)}
+                  aria-label={t('analysis.transcription.keywords.removeAriaLabel', { keyword })}
+                >
+                  <X class="size-3.5" />
+                </button>
+              </span>
+            {/each}
+          </div>
+        {/if}
+      </div>
+
+      <!-- Case-sensitive toggle -->
+      <div class="mt-4">
+        <Checkbox
+          checked={transcription.keywordCaseSensitive}
+          label={t('analysis.transcription.caseSensitive.label')}
+          helpText={t('analysis.transcription.caseSensitive.helpText')}
+          disabled={store.isLoading || store.isSaving}
+          onchange={value => updateTranscription('keywordCaseSensitive', value)}
         />
       </div>
     </SettingsSection>
@@ -1481,7 +1177,7 @@
       </div>
     {:else}
       <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <!-- Built-in BirdNET model (always present) -->
+        <!-- Built-in VoiceWatch model (always present) -->
         <div
           class="rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-200)] p-4"
         >
@@ -2112,134 +1808,3 @@
     </div>
   {/if}
 </dialog>
-
-<!-- Range Filter Species Modal -->
-{#if rangeFilterState.showModal}
-  <div
-    class="fixed inset-0 bg-black/50 flex items-center justify-center backdrop-blur-sm"
-    style:z-index="9999"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="modal-title"
-    tabindex="-1"
-    onclick={e => e.target === e.currentTarget && (rangeFilterState.showModal = false)}
-    onkeydown={e => e.key === 'Escape' && (rangeFilterState.showModal = false)}
-  >
-    <div
-      class="bg-[var(--color-base-100)] rounded-2xl p-6 max-w-4xl max-h-[80vh] overflow-hidden flex flex-col shadow-2xl"
-      role="document"
-    >
-      <div class="flex justify-between items-center mb-4">
-        <h3 id="modal-title" class="text-xl font-semibold">
-          {t('settings.main.sections.rangeFilter.modal.title')}
-        </h3>
-        <button
-          type="button"
-          class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-transparent hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
-          aria-label={t('common.aria.closeModal')}
-          onclick={() => (rangeFilterState.showModal = false)}
-        >
-          <X class="size-5" />
-        </button>
-      </div>
-
-      <div class="mb-4 p-3 bg-[var(--color-base-200)]/50 rounded-lg">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-          <div>
-            <span class="text-[var(--color-base-content)] opacity-60"
-              >{t('settings.main.sections.rangeFilter.modal.speciesCount')}</span
-            >
-            <span class="font-medium ml-1">{rangeFilterState.speciesCount}</span>
-          </div>
-          <div>
-            <span class="text-[var(--color-base-content)] opacity-60"
-              >{t('settings.main.sections.rangeFilter.modal.threshold')}</span
-            >
-            <span class="font-medium ml-1">{birdnet?.rangeFilter?.threshold}</span>
-          </div>
-          <div>
-            <span class="text-[var(--color-base-content)] opacity-60"
-              >{t('settings.main.sections.rangeFilter.modal.latitude')}</span
-            >
-            <span class="font-medium ml-1">{birdnet?.latitude}</span>
-          </div>
-          <div>
-            <span class="text-[var(--color-base-content)] opacity-60"
-              >{t('settings.main.sections.rangeFilter.modal.longitude')}</span
-            >
-            <span class="font-medium ml-1">{birdnet?.longitude}</span>
-          </div>
-        </div>
-      </div>
-
-      {#if rangeFilterState.error}
-        <div
-          class="flex items-start gap-3 p-4 rounded-lg mb-4 bg-[color-mix(in_srgb,var(--color-error)_15%,transparent)] text-[var(--color-error)]"
-          role="alert"
-        >
-          <XCircle class="size-5 shrink-0" />
-          <span>{rangeFilterState.error}</span>
-          <button
-            type="button"
-            class="ml-auto inline-flex items-center justify-center p-1.5 rounded-md bg-transparent hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
-            onclick={() => (rangeFilterState.error = null)}
-          >
-            <X class="size-4" />
-          </button>
-        </div>
-      {/if}
-
-      <div class="flex-1 overflow-auto">
-        {#if rangeFilterState.loading}
-          <div class="text-center py-12">
-            <span
-              class="inline-block w-8 h-8 border-4 border-[var(--color-base-300)] border-t-[var(--color-primary)] rounded-full animate-spin"
-            ></span>
-            <p class="mt-3 text-[var(--color-base-content)] opacity-90">
-              {t('settings.main.sections.rangeFilter.modal.loadingSpecies')}
-            </p>
-          </div>
-        {:else if rangeFilterState.species.length > 0}
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-            {#each rangeFilterState.species as species, index (`${species.scientificName}_${species.commonName}_${index}`)}
-              <div class="p-3 rounded-lg hover:bg-[var(--color-base-200)]/50 transition-colors">
-                <div class="font-medium">{species.commonName}</div>
-                <div class="text-sm text-[var(--color-base-content)] opacity-60 italic">
-                  {species.scientificName}
-                </div>
-              </div>
-            {/each}
-          </div>
-        {:else}
-          <div class="text-center py-12 text-[var(--color-base-content)] opacity-60">
-            {t('settings.main.sections.rangeFilter.modal.noSpeciesFound')}
-          </div>
-        {/if}
-      </div>
-
-      <div
-        class="flex justify-between items-center mt-4 pt-4 border-t border-[var(--color-base-200)]"
-      >
-        <button
-          type="button"
-          class="inline-flex items-center justify-center gap-2 h-8 px-3 text-sm font-medium rounded-lg bg-[var(--color-primary)] text-[var(--color-primary-content)] hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          onclick={downloadSpeciesCSV}
-          disabled={rangeFilterState.loading ||
-            rangeFilterState.downloading ||
-            !rangeFilterState.speciesCount}
-          aria-label={t('common.aria.downloadCsv')}
-        >
-          <Download class="size-4" />
-          {t('analytics.filters.exportCsv')}
-        </button>
-        <button
-          type="button"
-          class="inline-flex items-center justify-center h-10 px-4 text-sm font-medium rounded-lg border border-[var(--color-base-content)]/30 bg-transparent hover:bg-black/5 dark:hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2 transition-colors"
-          onclick={() => (rangeFilterState.showModal = false)}
-        >
-          {t('settings.main.sections.rangeFilter.modal.close')}
-        </button>
-      </div>
-    </div>
-  </div>
-{/if}

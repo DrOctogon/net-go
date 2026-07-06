@@ -1,6 +1,6 @@
 # Desktop UI Components Library
 
-A comprehensive collection of reusable Svelte 5 components for the BirdNET-Go desktop application.
+A comprehensive collection of reusable Svelte 5 components for the VoiceWatch desktop application.
 
 ## 🎯 Design Principles
 
@@ -59,10 +59,6 @@ A comprehensive collection of reusable Svelte 5 components for the BirdNET-Go de
 - [MultiStageOperation](#multistageoperation) - Multi-step operation handler
 - [NotificationBell](#notificationbell) - Notification indicator
 - [SearchBox](#searchbox) - Search input with functionality
-
-### Utilities
-
-- [image-utils.ts](#image-utils) - Image handling utilities
 
 ---
 
@@ -484,12 +480,10 @@ Context action menu rendered as a `MoreVertical` (⋮) trigger with a popover li
 ```ts
 interface Props {
   detection: Detection;
-  isExcluded?: boolean;
   variant?: 'default' | 'overlay';
   onMarkCorrect?: () => void;
   onMarkFalsePositive?: () => void;
   onReview?: () => void;
-  onToggleSpecies?: () => void;
   onToggleLock?: () => void;
   onDelete?: () => void;
   onDownload?: () => void;
@@ -502,7 +496,7 @@ interface Props {
 **Features:**
 
 - Quick-review shortcuts (Correct / Incorrect) at the top, hidden when the detection is locked
-- Review, Ignore/Show species, Lock/Unlock, Delete actions (existing)
+- Review, Lock/Unlock, Delete actions (existing)
 - Optional Download item when `onDownload` is provided
 - Viewport-aware positioning (flips above the trigger when there is not enough space below)
 - `variant="overlay"` swaps to a dark palette suitable for spectrogram overlays
@@ -522,33 +516,6 @@ interface Props {
   onDownload={handleDownload}
 />
 ```
-
----
-
-### Image Utils
-
-**File**: `image-utils.ts`
-
-Utility functions for image handling.
-
-```typescript
-export function handleBirdImageError(e: Event): void;
-```
-
-**Usage:**
-
-```svelte
-<script>
-  import { handleBirdImageError } from '$lib/desktop/components/ui/image-utils.js';
-</script>
-
-<img src="/api/species-image/{species}" alt="Bird" onerror={handleBirdImageError} />
-```
-
-**Features:**
-
-- Bird-specific error handling
-- Automatic placeholder fallback
 
 ---
 
@@ -613,8 +580,7 @@ export function handleBirdImageError(e: Event): void;
 ### Import Patterns
 
 ```svelte
-// Correct import path import Badge from '$lib/desktop/components/ui/Badge.svelte'; import {handleBirdImageError}
-from '$lib/desktop/components/ui/image-utils.js';
+// Correct import path import Badge from '$lib/desktop/components/ui/Badge.svelte';
 ```
 
 ### Snippet Usage

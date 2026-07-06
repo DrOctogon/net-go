@@ -1,6 +1,6 @@
-# BirdNet-Go API Package
+# VoiceWatch API Package
 
-This package implements the HTTP server and RESTful API for the BirdNET-Go application, providing endpoints for bird detection data management, analytics, system control, and more.
+This package implements the HTTP server and RESTful API for the VoiceWatch application, providing endpoints for bird detection data management, analytics, system control, and more.
 
 ## Package Structure
 
@@ -32,10 +32,9 @@ internal/api/
     ├── detections.go      - Bird detection CRUD endpoints
     ├── dynamic_thresholds.go - Dynamic detection threshold logic
     ├── filesystem.go      - Secure filesystem browsing endpoint
-    ├── integrations.go    - External service integrations (MQTT, BirdWeather, Weather)
-    ├── media.go           - Media serving (audio, spectrograms, species images)
+    ├── integrations.go    - External service integrations (MQTT, Weather)
+    ├── media.go           - Media serving (audio, spectrograms)
     ├── notifications.go   - Notification management & SSE stream
-    ├── range.go           - Range filter management and testing
     ├── search.go          - Detection search with filtering
     ├── settings.go        - Application settings management & hot reload
     ├── settings_audio.go  - Audio settings hot reload logic
@@ -73,15 +72,14 @@ The server uses functional options pattern for configuration:
 
 ```go
 import (
-    "github.com/tphakala/birdnet-go/internal/api"
-    "github.com/tphakala/birdnet-go/internal/conf"
+    "github.com/tphakala/voicewatch/internal/api"
+    "github.com/tphakala/voicewatch/internal/conf"
 )
 
 // Create server with options
 server, err := api.New(
     settings,
     api.WithDataStore(dataStore),
-    api.WithBirdImageCache(imageCache),
     api.WithProcessor(processor),
     api.WithMetrics(metrics),
     api.WithControlChannel(controlChan),
@@ -104,7 +102,6 @@ server.Shutdown()
 |--------|---------|
 | `WithLogger(logger)` | Set standard logger |
 | `WithDataStore(ds)` | Set database interface |
-| `WithBirdImageCache(cache)` | Set species image cache |
 | `WithSunCalc(sc)` | Set sun calculator |
 | `WithProcessor(proc)` | Set analysis processor |
 | `WithOAuth2Server(oauth)` | Set OAuth2 server |
@@ -228,7 +225,6 @@ The middleware in `auth/middleware.go` follows this decision flow:
 
 ### Media Access
 
-- Retrieve bird images by scientific name
 - Access detection audio samples
 - Generate and view spectrograms for detections
 
@@ -244,13 +240,7 @@ The middleware in `auth/middleware.go` follows this decision flow:
 - Stream health SSE for monitoring RTSP sources
 - Notification SSE for real-time alerts
 - HLS audio streaming for live audio playback
-- Structured detection data with species images and metadata
-
-### Range Filter Management
-
-- View current range filter species count and list
-- Test range filter with custom parameters (location, threshold, date)
-- Rebuild range filter with current settings
+- Structured detection data with metadata
 
 ## API Design Principles
 
@@ -284,86 +274,17 @@ The API follows a consistent pattern for organizing routes:
 
 The API provides several endpoints for accessing media related to bird detections:
 
-1. **Species Images**:
-   - `GET /api/v2/media/species-image?name={scientificName}` - Retrieves an image for a bird species using its scientific name
-   - Redirects to the appropriate image from configured providers (e.g., AviCommons)
-   - Falls back to a placeholder if no image is available
-
-2. **Audio Clips**:
+1. **Audio Clips**:
    - `GET /api/v2/audio/{id}` - Retrieves the audio clip for a detection by ID
    - `GET /api/v2/media/audio/{filename}` - Retrieves an audio clip by filename (legacy endpoint)
    - `GET /api/v2/media/audio?id={id}` - Convenience endpoint that redirects to ID-based endpoint
 
-3. **Spectrograms**:
+2. **Spectrograms**:
    - `GET /api/v2/spectrogram/{id}?width={width}` - Generates a spectrogram for a detection by ID
    - `GET /api/v2/media/spectrogram/{filename}?width={width}` - Generates a spectrogram by filename (legacy endpoint)
    - The width parameter is optional and defaults to 800px
 
 All media endpoints use secure file access through the SecureFS implementation which prevents path traversal attacks.
-
-### Range Filter API Endpoints
-
-The API provides endpoints for managing and testing the BirdNET range filter, which filters species predictions based on geographic location and seasonal occurrence:
-
-1. **Species Count**:
-   - `GET /api/v2/range/species/count` - Returns the count of species currently included in the range filter
-   - Response includes count, last updated timestamp, threshold, and location coordinates
-
-2. **Species List**:
-   - `GET /api/v2/range/species/list` - Returns the complete list of species in the current range filter
-   - Each species includes label, scientific name, common name, and score
-   - Response includes metadata about the filter (count, last updated, threshold, location)
-
-3. **Range Filter Testing**:
-   - `POST /api/v2/range/species/test` - Tests the range filter with custom parameters
-   - Request body includes latitude, longitude, threshold, and optional date/week
-   - Returns species that would be included with the test parameters
-   - Useful for previewing filter results before changing settings
-
-4. **Range Filter Rebuild**:
-   - `POST /api/v2/range/rebuild` - Rebuilds the range filter using current location and threshold settings
-   - Updates the species list based on current configuration
-   - Returns success status and updated species count
-
-Example test request:
-
-```json
-{
-  "latitude": 60.1699,
-  "longitude": 24.9384,
-  "threshold": 0.01,
-  "date": "2024-06-15"
-}
-```
-
-Example response:
-
-```json
-{
-  "species": [
-    {
-      "label": "Turdus merula_Eurasian Blackbird",
-      "scientificName": "Turdus merula",
-      "commonName": "Eurasian Blackbird",
-      "score": 0.85
-    }
-  ],
-  "count": 1,
-  "threshold": 0.01,
-  "location": {
-    "latitude": 60.1699,
-    "longitude": 24.9384
-  },
-  "testDate": "2024-06-15T00:00:00Z",
-  "week": 24,
-  "parameters": {
-    "inputLatitude": 60.1699,
-    "inputLongitude": 24.9384,
-    "inputThreshold": 0.01,
-    "inputDate": "2024-06-15"
-  }
-}
-```
 
 ### Server-Sent Events (SSE) API Endpoints
 
@@ -372,7 +293,7 @@ The API provides real-time bird detection streaming via Server-Sent Events, allo
 1. **Detection Stream**:
    - `GET /api/v2/detections/stream` - Opens an SSE connection for real-time detection streaming
    - Sends all new bird detections as they are processed
-   - Each detection includes complete note data, bird image information, and thumbnail URL
+   - Each detection includes complete note data and metadata
    - Connection includes periodic heartbeat messages to maintain the stream
 
 2. **SSE Status**:
@@ -403,14 +324,8 @@ Each detection event contains all the same data as a database entry plus additio
   "confidence": 0.85,
   "verified": "unverified",
   "locked": false,
-  "birdImage": {
-    "url": "https://avicommons.org/...",
-    "attribution": "...",
-    "license": "..."
-  },
   "timestamp": "2024-06-15T14:30:25Z",
-  "eventType": "new_detection",
-  "thumbnailUrl": "http://localhost:8080/api/v2/media/species-image?name=Turdus merula"
+  "eventType": "new_detection"
 }
 ```
 
@@ -447,7 +362,7 @@ eventSource.onerror = function (event) {
 - **Automatic reconnection**: Clients can implement reconnection logic on connection loss
 - **Concurrent clients**: Multiple clients can connect simultaneously
 - **Efficient delivery**: Uses event frequency tracking to prevent spam
-- **Rich metadata**: Each detection includes species images and thumbnail URLs
+- **Rich metadata**: Each detection includes complete detection metadata
 - **Cross-origin support**: Includes CORS headers for web browser clients
 
 **Notes:**
@@ -662,10 +577,9 @@ The API includes comprehensive endpoints for managing application settings:
    | Category | Action | Notification |
    |----------|--------|--------------|
    | BirdNET model | `reload_birdnet` | ✅ |
-   | Range filter | `rebuild_range_filter` | ✅ |
+   | Species filter | `rebuild_range_filter` | ✅ |
    | Species intervals | `update_detection_intervals` | ✅ |
    | MQTT | `reconfigure_mqtt` | ✅ |
-   | BirdWeather | `reconfigure_birdweather` | ✅ |
    | RTSP sources | `reconfigure_rtsp_sources` | ✅ |
    | Telemetry | `reconfigure_telemetry` | ✅ |
    | Species tracking | `reconfigure_species_tracking` | ✅ |

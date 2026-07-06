@@ -27,7 +27,9 @@ UID_GID="${SMOKE_UID_GID:-568:568}"
 TIMEOUT_SECONDS="${SMOKE_TIMEOUT:-90}"
 
 # Markers, kept in one place so assertions and docs stay in sync.
-START_MARKER="BirdNET-Go starting"
+# The human-voice detector (Silero VAD) logs this once the model is loaded and
+# the app has reached a running state — the pivot's readiness signal.
+START_MARKER="Human voice model initialized"
 FAIL_MARKERS="APPLICATION STARTUP FAILED|Cannot load settings|permission denied|/etc/localtime.*Permission denied"
 
 echo "==> Starting '$IMAGE' as --user $UID_GID (no HOME, no BIRDNET_UID)"

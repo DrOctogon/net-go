@@ -6,8 +6,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/health"
-	"github.com/tphakala/birdnet-go/internal/observability"
+	"github.com/tphakala/voicewatch/internal/health"
+	"github.com/tphakala/voicewatch/internal/observability"
 )
 
 // makeBuckets builds a slice of HourlyBuckets anchored to a reference time.

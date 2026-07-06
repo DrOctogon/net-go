@@ -27,14 +27,14 @@ func setDefaultConfig() {
 	// Per-module log files
 	// Core processing modules
 	setModuleLogDefaults("analysis", true)    // Bird detection analysis
-	setModuleLogDefaults("birdnet", true)     // BirdNET model inference
-	// Mirror the birdnet module to the console so backend selection, model-init,
+	setModuleLogDefaults("voicewatch", true)     // VoiceWatch model inference
+	// Mirror the voicewatch module to the console so backend selection, model-init,
 	// reload, and bat-scheduler lines are visible in journald/containers and not
-	// only in logs/birdnet.log. This realigns the viper default with the intent in
+	// only in logs/voicewatch.log. This realigns the viper default with the intent in
 	// logger/config.go (applyConfigDefaults), which the generated config was
 	// silently overriding. Console mirroring is filtered at the console level
 	// (info), so the module's debug-level per-inference file logs never reach stdout.
-	viper.SetDefault("logging.modules.birdnet.console_also", true)
+	viper.SetDefault("logging.modules.voicewatch.console_also", true)
 	setModuleLogDefaults("audio", true)       // Audio capture/processing
 	setModuleLogDefaults("datastore", true)   // Database operations
 	setModuleLogDefaults("spectrogram", true) // Spectrogram generation
@@ -46,10 +46,8 @@ func setDefaultConfig() {
 	setModuleLogDefaults("security", true) // Security operations
 
 	// Integration modules
-	setModuleLogDefaults("mqtt", false)        // MQTT client (disabled by default)
-	setModuleLogDefaults("birdweather", false) // BirdWeather integration (disabled by default)
-	setModuleLogDefaults("weather", false)     // Weather providers (disabled by default)
-	setModuleLogDefaults("ebird", false)       // eBird integration (disabled by default)
+	setModuleLogDefaults("mqtt", false)    // MQTT client (disabled by default)
+	setModuleLogDefaults("weather", false) // Weather providers (disabled by default)
 
 	// System and support modules
 	setModuleLogDefaults("backup", true)                          // Backup operations
@@ -57,7 +55,6 @@ func setDefaultConfig() {
 	setModuleLogDefaults("diskmanager", true)                     // Disk management
 	viper.SetDefault("logging.modules.diskmanager.level", "info") // Override: runs per-clip, debug floods log
 	setModuleLogDefaults("events", true)                          // Event bus
-	setModuleLogDefaults("imageprovider", true)                   // Bird image provider
 	setModuleLogDefaults("monitor", true)                         // System monitoring
 	setModuleLogDefaults("notifications", true)                   // Push notifications
 	setModuleLogDefaults("securefs", true)                        // Secure filesystem operations
@@ -65,46 +62,28 @@ func setDefaultConfig() {
 	setModuleLogDefaults("telemetry", true)                       // Telemetry/metrics
 
 	// Main configuration
-	viper.SetDefault("main.name", "BirdNET-Go")
+	viper.SetDefault("main.name", "VoiceWatch")
 	viper.SetDefault("main.timeas24h", true)
 
 	// Low-memory mode: auto-detect constrained systems by default.
 	viper.SetDefault("lowmemory.mode", LowMemoryModeAuto)
 
-	// BirdNET configuration
-	viper.SetDefault("birdnet.debug", false)
-	viper.SetDefault("birdnet.sensitivity", 1.0)
-	viper.SetDefault("birdnet.threshold", 0.8)
-	viper.SetDefault("birdnet.overlap", 0.0)
-	viper.SetDefault("birdnet.threads", 0)
-	viper.SetDefault("birdnet.locale", DefaultFallbackLocale)
-	viper.SetDefault("birdnet.latitude", 0.000)
-	viper.SetDefault("birdnet.longitude", 0.000)
-	viper.SetDefault("birdnet.modelpath", "")
-	viper.SetDefault("birdnet.labelpath", "")
-	viper.SetDefault("birdnet.usexnnpack", true)
+	// VoiceWatch configuration
+	viper.SetDefault("voicewatch.debug", false)
+	viper.SetDefault("voicewatch.sensitivity", 1.0)
+	viper.SetDefault("voicewatch.threshold", 0.5)
+	viper.SetDefault("voicewatch.overlap", 0.0)
+	viper.SetDefault("voicewatch.threads", 0)
+	viper.SetDefault("voicewatch.locale", DefaultFallbackLocale)
+	viper.SetDefault("voicewatch.latitude", 0.000)
+	viper.SetDefault("voicewatch.longitude", 0.000)
+	viper.SetDefault("voicewatch.modelpath", "")
+	viper.SetDefault("voicewatch.labelpath", "")
+	viper.SetDefault("voicewatch.usexnnpack", true)
 	viper.SetDefault("taxonomysynonyms", map[string]string{})
 
-	// Range filter configuration
-	viper.SetDefault("birdnet.rangefilter.debug", false)
-	viper.SetDefault("birdnet.rangefilter.model", "latest")
-	viper.SetDefault("birdnet.rangefilter.threshold", 0.01)
-
-	// Perch model configuration
-	viper.SetDefault("perch.threshold", 0.5)
-
-	// Bat detection configuration
-	viper.SetDefault("bat.threshold", 0.5)
-	viper.SetDefault("bat.nighttimeonly", true)
-	viper.SetDefault("bat.falsepositivefilter.level", 2)
-	viper.SetDefault("bat.ultrasonicfilter.enabled", true)
-	viper.SetDefault("bat.ultrasonicfilter.cvthreshold", 0.15)
-	viper.SetDefault("bat.ultrasonicfilter.fftsize", 8192)
-	viper.SetDefault("bat.ultrasonicfilter.hopsize", 4096)
-	viper.SetDefault("bat.ultrasonicfilter.frequencysplithz", 20000)
-
-	// Global model enablement (BirdNET only by default)
-	viper.SetDefault("models.enabled", []string{"birdnet"})
+	// Global model enablement (VoiceWatch only by default)
+	viper.SetDefault("models.enabled", []string{"voicewatch"})
 
 	// Realtime configuration
 	viper.SetDefault("realtime.interval", 15)
@@ -120,6 +99,16 @@ func setDefaultConfig() {
 	// Sound level monitoring configuration
 	viper.SetDefault("realtime.audio.soundlevel.enabled", false)
 	viper.SetDefault("realtime.audio.soundlevel.interval", 10)
+
+	// Continuous full-audio recording configuration
+	// Records ALL audio from each enabled RTSP stream in rolling chunks for later
+	// voice-print / speaker-ID analysis, decoupled from the detection pipeline.
+	viper.SetDefault("realtime.audio.continuous.enabled", false)
+	viper.SetDefault("realtime.audio.continuous.path", "recordings/")
+	viper.SetDefault("realtime.audio.continuous.segmentseconds", 3600)
+	viper.SetDefault("realtime.audio.continuous.retentionhours", 24)
+	viper.SetDefault("realtime.audio.continuous.format", "flac")
+	viper.SetDefault("realtime.audio.continuous.samplerate", 0)
 
 	// Audio capture configuration
 	viper.SetDefault("realtime.audio.export.debug", false)
@@ -168,7 +157,6 @@ func setDefaultConfig() {
 	viper.SetDefault("realtime.dashboard.thumbnails.debug", false)
 	viper.SetDefault("realtime.dashboard.thumbnails.summary", false)
 	viper.SetDefault("realtime.dashboard.thumbnails.recent", true)
-	viper.SetDefault("realtime.dashboard.thumbnails.imageprovider", "avicommons")
 	viper.SetDefault("realtime.dashboard.thumbnails.fallbackpolicy", "none")
 	viper.SetDefault("realtime.dashboard.summarylimit", 30)
 	viper.SetDefault("realtime.dashboard.locale", "en")               // Default UI locale
@@ -187,10 +175,10 @@ func setDefaultConfig() {
 	// Retention policy configuration
 	viper.SetDefault("realtime.audio.export.retention.enabled", true)
 	viper.SetDefault("realtime.audio.export.retention.debug", false)
-	viper.SetDefault("realtime.audio.export.retention.policy", "usage")
+	viper.SetDefault("realtime.audio.export.retention.policy", "age")
 	viper.SetDefault("realtime.audio.export.retention.maxusage", "80%")
-	viper.SetDefault("realtime.audio.export.retention.maxage", "30d")
-	viper.SetDefault("realtime.audio.export.retention.minclips", 10)
+	viper.SetDefault("realtime.audio.export.retention.maxage", "21d")
+	viper.SetDefault("realtime.audio.export.retention.minclips", 0)
 	viper.SetDefault("realtime.audio.export.retention.keepspectrograms", true)
 	viper.SetDefault("realtime.audio.export.retention.checkinterval", DefaultCleanupCheckInterval)
 
@@ -213,25 +201,15 @@ func setDefaultConfig() {
 
 	// Log configuration
 	viper.SetDefault("realtime.log.enabled", false)
-	viper.SetDefault("realtime.log.path", "birdnet.txt")
+	viper.SetDefault("realtime.log.path", "voicewatch.txt")
 
-	// BirdWeather configuration
-	viper.SetDefault("realtime.birdweather.enabled", false)
-	viper.SetDefault("realtime.birdweather.debug", false)
-	viper.SetDefault("realtime.birdweather.id", "")
-	viper.SetDefault("realtime.birdweather.threshold", 0.7)
-	viper.SetDefault("realtime.birdweather.locationaccuracy", 0)
-	viper.SetDefault("realtime.birdweather.retrysettings.enabled", true)
-	viper.SetDefault("realtime.birdweather.retrysettings.maxretries", 10)
-	viper.SetDefault("realtime.birdweather.retrysettings.initialdelay", 60)
-	viper.SetDefault("realtime.birdweather.retrysettings.maxdelay", 3600)
-	viper.SetDefault("realtime.birdweather.retrysettings.backoffmultiplier", 2.0)
-
-	// eBird configuration
-	viper.SetDefault("realtime.ebird.enabled", false)
-	viper.SetDefault("realtime.ebird.apikey", "")
-	viper.SetDefault("realtime.ebird.cachettl", 24) // 24 hours default
-	viper.SetDefault("realtime.ebird.locale", "en")
+	// Transcription configuration (speech-to-text of saved clips)
+	viper.SetDefault("realtime.transcription.enabled", false)
+	viper.SetDefault("realtime.transcription.model", "")
+	viper.SetDefault("realtime.transcription.binary", "whisper-cli")
+	viper.SetDefault("realtime.transcription.language", "en")
+	viper.SetDefault("realtime.transcription.keywords", []string{})
+	viper.SetDefault("realtime.transcription.keywordCaseSensitive", false)
 
 	// OpenWeather configuration
 	/*
@@ -272,7 +250,7 @@ func setDefaultConfig() {
 	viper.SetDefault("realtime.mqtt.enabled", false)
 	viper.SetDefault("realtime.mqtt.debug", false)
 	viper.SetDefault("realtime.mqtt.broker", "tcp://localhost:1883")
-	viper.SetDefault("realtime.mqtt.topic", "birdnet")
+	viper.SetDefault("realtime.mqtt.topic", "voicewatch")
 	viper.SetDefault("realtime.mqtt.username", "")
 	viper.SetDefault("realtime.mqtt.password", "")
 	viper.SetDefault("realtime.mqtt.retain", false)
@@ -285,19 +263,12 @@ func setDefaultConfig() {
 	// Home Assistant MQTT auto-discovery configuration
 	viper.SetDefault("realtime.mqtt.homeassistant.enabled", false)
 	viper.SetDefault("realtime.mqtt.homeassistant.discovery_prefix", "homeassistant")
-	viper.SetDefault("realtime.mqtt.homeassistant.device_name", "BirdNET-Go")
+	viper.SetDefault("realtime.mqtt.homeassistant.device_name", "VoiceWatch")
 
 	// Privacy filter configuration
-	viper.SetDefault("realtime.privacyfilter.enabled", true)
+	viper.SetDefault("realtime.privacyfilter.enabled", false)
 	viper.SetDefault("realtime.privacyfilter.debug", false)
 	viper.SetDefault("realtime.privacyfilter.confidence", 0.05)
-
-	// Dog bark filter configuration
-	viper.SetDefault("realtime.dogbarkfilter.enabled", false)
-	viper.SetDefault("realtime.dogbarkfilter.debug", false)
-	viper.SetDefault("realtime.dogbarkfilter.remember", 5)
-	viper.SetDefault("realtime.dogbarkfilter.confidence", 0.1)
-	viper.SetDefault("realtime.dogbarkfilter.species", []string{})
 
 	// Telemetry configuration
 	viper.SetDefault("realtime.telemetry.enabled", false)
@@ -359,13 +330,13 @@ func setDefaultConfig() {
 
 	// SQLite output configuration
 	viper.SetDefault("output.sqlite.enabled", true)
-	viper.SetDefault("output.sqlite.path", "birdnet.db")
+	viper.SetDefault("output.sqlite.path", "voicewatch.db")
 
 	// MySQL output configuration
 	viper.SetDefault("output.mysql.enabled", false)
-	viper.SetDefault("output.mysql.username", "birdnet")
+	viper.SetDefault("output.mysql.username", "voicewatch")
 	viper.SetDefault("output.mysql.password", "secret")
-	viper.SetDefault("output.mysql.database", "birdnet")
+	viper.SetDefault("output.mysql.database", "voicewatch")
 	viper.SetDefault("output.mysql.host", "localhost")
 	viper.SetDefault("output.mysql.port", 3306)
 
@@ -387,7 +358,7 @@ func setDefaultConfig() {
 	// Basic authentication configuration
 	viper.SetDefault("security.basicauth.enabled", false)
 	viper.SetDefault("security.basicauth.password", "")
-	viper.SetDefault("security.basicauth.clientid", "birdnet-client")
+	viper.SetDefault("security.basicauth.clientid", "voicewatch-client")
 	viper.SetDefault("security.basicauth.redirecturi", "/settings")
 	viper.SetDefault("security.basicauth.authcodeexp", "10m")
 	viper.SetDefault("security.basicauth.accesstokenexp", "1h")

@@ -423,7 +423,7 @@ func (rm *RotationManager) recoverDiskSpace() bool {
 // testDiskSpace checks if we can create a file (disk has space).
 func (rm *RotationManager) testDiskSpace() bool {
 	dir := filepath.Dir(rm.basePath)
-	f, err := os.CreateTemp(dir, ".birdnet_disk_test_*")
+	f, err := os.CreateTemp(dir, ".voicewatch_disk_test_*")
 	if err != nil {
 		return false
 	}

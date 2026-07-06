@@ -1,7 +1,7 @@
 /**
  * Integration Test Setup (Browser Mode)
  *
- * This setup file configures tests to run in a real browser against a real BirdNET-Go backend.
+ * This setup file configures tests to run in a real browser against a real VoiceWatch backend.
  * Unlike unit tests which mock API calls in jsdom, integration tests use real browser APIs
  * and make real HTTP requests through the Vite proxy.
  *

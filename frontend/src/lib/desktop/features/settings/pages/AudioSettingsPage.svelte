@@ -1,7 +1,7 @@
 <!--
   Audio Settings Page Component
 
-  Purpose: Audio configuration settings for BirdNET-Go including audio capture,
+  Purpose: Audio configuration settings for VoiceWatch including audio capture,
   filters, sound level monitoring, export settings, and retention policies.
 
   Features:
@@ -40,9 +40,11 @@
     rtspSettings,
     realtimeSettings,
     extendedCaptureSettings,
+    speakerAttributesSettings,
     type AudioSourceConfig,
     type EqualizerFilterType,
     type StreamConfig,
+    type SpeakerAttributesSettings,
   } from '$lib/stores/settings';
   import { hasSettingsChanged } from '$lib/utils/settingsChanges';
   import SettingsTabs, {
@@ -53,7 +55,6 @@
   import SettingsNote from '$lib/desktop/features/settings/components/SettingsNote.svelte';
   import EmptyState from '$lib/desktop/features/settings/components/EmptyState.svelte';
   import AudioEqualizerSettings from '$lib/desktop/features/settings/components/AudioEqualizerSettings.svelte';
-  import SpeciesListEditor from '$lib/desktop/components/forms/SpeciesListEditor.svelte';
   import { t } from '$lib/i18n';
   import { getLocale } from '$lib/i18n';
   import { loggers } from '$lib/utils/logger';
@@ -69,8 +70,6 @@
     Info,
   } from '@lucide/svelte';
   import { api } from '$lib/utils/api';
-  import { normalizeForLookup } from '$lib/utils/speciesNames';
-  import { localizeSpeciesName } from '$lib/utils/speciesDisplay';
 
   const logger = loggers.audio;
 
@@ -205,7 +204,15 @@
     )
   );
 
-  // Processing tab changes (equalizer + sound level + normalization)
+  // Speaker Attributes section changes
+  let speakerAttributesHasChanges = $derived(
+    hasSettingsChanged(
+      store.originalData.realtime?.audio?.speakerAttributes,
+      store.formData.realtime?.audio?.speakerAttributes
+    )
+  );
+
+  // Processing tab changes (equalizer + sound level + normalization + speaker attributes)
   let processingTabHasChanges = $derived(
     hasSettingsChanged(
       {
@@ -216,7 +223,9 @@
         equalizer: store.formData.realtime?.audio?.equalizer,
         soundLevel: store.formData.realtime?.audio?.soundLevel,
       }
-    ) || normalizationHasChanges
+    ) ||
+      normalizationHasChanges ||
+      speakerAttributesHasChanges
   );
 
   // Clip Recording section changes (enable, capture settings)
@@ -320,102 +329,12 @@
   const EXTENDED_CAPTURE_MAX_DURATION = 1200;
   const EXTENDED_CAPTURE_DURATION_STEP = 30;
 
-  // Species list API state for extended capture (reuses ApiState<T>)
-  interface SpeciesListResponse {
-    species?: Array<{ label: string; scientificName?: string; commonName?: string }>;
-    genera?: string[];
-    families?: Array<{ name: string; commonName: string }>;
-    orders?: string[];
-  }
-
-  // Suffix appended to genus entries in the predictions list for display
-  const GENUS_SUFFIX = ' (Genus)';
-  const FAMILY_SUFFIX = ' (Family)';
-  const ORDER_SUFFIX = ' (Order)';
-
-  let speciesListState = $state<ApiState<string[]>>({
-    loading: true,
-    error: null,
-    data: [],
+  let extendedCaptureSettingsLocal = $derived({
+    enabled: false,
+    maxDuration: 120,
+    captureBufferSeconds: 0,
+    ...($extendedCaptureSettings ?? {}),
   });
-
-  // Normalized species value -> scientific name (species entries only; taxonomy
-  // group rows have no scientific name and display verbatim).
-  let speciesScientificMap = $state(new Map<string, string>());
-
-  // Resolve a stored extended-capture value to its visitor-locale label. Taxonomy
-  // group rows (genus/family/order) fall through to their verbatim value.
-  function localizeSpeciesLabel(value: string): string {
-    return localizeSpeciesName(speciesScientificMap.get(normalizeForLookup(value)), value);
-  }
-
-  $effect(() => {
-    loadSpeciesList();
-  });
-
-  async function loadSpeciesList() {
-    speciesListState.loading = true;
-    speciesListState.error = null;
-
-    try {
-      const data = await api.get<SpeciesListResponse>('/api/v2/range/species/list');
-      if (data?.species && Array.isArray(data.species)) {
-        // Species common names, building a value -> scientific name map for display.
-        const sciMap = new Map<string, string>();
-        const speciesNames = data.species.map(sp => {
-          const value = sp.commonName ?? sp.label.replace('_', ' - ');
-          if (sp.scientificName) {
-            sciMap.set(normalizeForLookup(value), sp.scientificName);
-          }
-          return value;
-        });
-        speciesScientificMap = sciMap;
-
-        // Taxonomy group entries from server (with display suffixes)
-        const generaEntries = (data.genera ?? []).map(g => `${g}${GENUS_SUFFIX}`);
-        const familyEntries = (data.families ?? []).map(f =>
-          f.commonName ? `${f.name} — ${f.commonName}${FAMILY_SUFFIX}` : `${f.name}${FAMILY_SUFFIX}`
-        );
-        const orderEntries = (data.orders ?? []).map(o => `${o}${ORDER_SUFFIX}`);
-
-        speciesListState.data = [
-          ...orderEntries,
-          ...familyEntries,
-          ...generaEntries,
-          ...speciesNames,
-        ];
-      } else {
-        speciesListState.data = [];
-        speciesScientificMap = new Map();
-      }
-    } catch (error) {
-      logger.warn('Failed to load species list for extended capture', error, {
-        component: 'AudioSettingsPage',
-        action: 'loadSpeciesList',
-      });
-      speciesListState.error = t('settings.filters.errors.speciesLoadFailed');
-      speciesListState.data = [];
-      speciesScientificMap = new Map();
-    } finally {
-      speciesListState.loading = false;
-    }
-  }
-
-  let extendedCaptureSettingsLocal = $derived(
-    (() => {
-      const defaults = {
-        enabled: false,
-        maxDuration: 120,
-        captureBufferSeconds: 0,
-        species: [] as string[],
-      };
-      const merged = { ...defaults, ...($extendedCaptureSettings ?? {}) };
-      return {
-        ...merged,
-        species: Array.isArray(merged.species) ? merged.species : [],
-      };
-    })()
-  );
 
   // Check if ffmpeg is available
   let ffmpegAvailable = $state(true); // Assume true for now
@@ -567,27 +486,60 @@
     });
   }
 
-  function handleExtendedCaptureSpeciesChange(updatedSpecies: string[]) {
-    // Strip taxonomy suffixes and extract scientific names before storing
-    const cleaned = updatedSpecies.map(s => {
-      if (s.endsWith(GENUS_SUFFIX)) return s.slice(0, -GENUS_SUFFIX.length);
-      if (s.endsWith(FAMILY_SUFFIX)) {
-        // Extract scientific name from "Strigidae — Owls (Family)" or "Strigidae (Family)"
-        const withoutSuffix = s.slice(0, -FAMILY_SUFFIX.length);
-        const dashIdx = withoutSuffix.indexOf(' — ');
-        return dashIdx >= 0 ? withoutSuffix.slice(0, dashIdx) : withoutSuffix;
-      }
-      if (s.endsWith(ORDER_SUFFIX)) return s.slice(0, -ORDER_SUFFIX.length);
-      return s;
-    });
+  // Speaker attributes (opt-in estimated gender + age band). Merge stored values
+  // over defaults so partial/absent config still yields a complete object to bind.
+  let speakerAttributes = $derived<SpeakerAttributesSettings>(
+    (() => {
+      const sa = $speakerAttributesSettings;
+      return {
+        enabled: sa?.enabled ?? false,
+        gender: {
+          enabled: sa?.gender?.enabled ?? false,
+          modelPath: sa?.gender?.modelPath ?? '',
+          threshold: sa?.gender?.threshold ?? 0.5,
+        },
+        age: {
+          enabled: sa?.age?.enabled ?? false,
+          modelPath: sa?.age?.modelPath ?? '',
+          threshold: sa?.age?.threshold ?? 0.5,
+        },
+        voicePrint: {
+          enabled: sa?.voicePrint?.enabled ?? false,
+          modelPath: sa?.voicePrint?.modelPath ?? '',
+        },
+      };
+    })()
+  );
+
+  // Persist a partial speaker-attribute update. Writes through updateSection so
+  // the change is hot-reload safe (no startup-time branching in the UI).
+  function updateSpeakerAttributes(next: Partial<SpeakerAttributesSettings>) {
     settingsActions.updateSection('realtime', {
-      ...$realtimeSettings,
-      extendedCapture: {
-        ...extendedCaptureSettingsLocal,
-        captureBufferSeconds: 0,
-        species: cleaned,
+      audio: {
+        ...$audioSettings!,
+        speakerAttributes: { ...speakerAttributes, ...next },
       },
     });
+  }
+
+  function updateSpeakerMasterEnabled(enabled: boolean) {
+    updateSpeakerAttributes({ enabled });
+  }
+
+  function updateSpeakerGenderEnabled(enabled: boolean) {
+    updateSpeakerAttributes({ gender: { ...speakerAttributes.gender, enabled } });
+  }
+
+  function updateSpeakerGenderThreshold(threshold: number) {
+    updateSpeakerAttributes({ gender: { ...speakerAttributes.gender, threshold } });
+  }
+
+  function updateSpeakerAgeEnabled(enabled: boolean) {
+    updateSpeakerAttributes({ age: { ...speakerAttributes.age, enabled } });
+  }
+
+  function updateSpeakerAgeThreshold(threshold: number) {
+    updateSpeakerAttributes({ age: { ...speakerAttributes.age, threshold } });
   }
 
   // Handle equalizer updates from the AudioEqualizerSettings component
@@ -1016,6 +968,106 @@
         </fieldset>
       </div>
     </SettingsSection>
+
+    <!-- Speaker Attributes (opt-in estimated gender + age band) -->
+    <SettingsSection
+      title={t('settings.audio.speakerAttributes.title')}
+      description={t('settings.audio.speakerAttributes.description')}
+      originalData={store.originalData.realtime?.audio?.speakerAttributes}
+      currentData={store.formData.realtime?.audio?.speakerAttributes}
+    >
+      <div class="space-y-4">
+        <!-- Privacy / accuracy caveat -->
+        <div
+          class="flex items-start gap-3 p-4 rounded-lg bg-[color-mix(in_srgb,var(--color-info)_15%,transparent)] text-[var(--color-info)]"
+        >
+          <Info class="size-6 shrink-0" />
+          <span>{t('settings.audio.speakerAttributes.caveat')}</span>
+        </div>
+
+        <!-- Master enable -->
+        <Checkbox
+          checked={speakerAttributes.enabled}
+          label={t('settings.audio.speakerAttributes.enable')}
+          helpText={t('settings.audio.speakerAttributes.enableHelp')}
+          disabled={store.isLoading || store.isSaving}
+          onchange={updateSpeakerMasterEnabled}
+        />
+
+        <!-- Per-attribute models, gated on the master switch -->
+        <fieldset
+          disabled={!speakerAttributes.enabled || store.isLoading || store.isSaving}
+          class="contents"
+          aria-describedby="speaker-attributes-status"
+        >
+          <span id="speaker-attributes-status" class="sr-only">
+            {speakerAttributes.enabled
+              ? t('settings.audio.speakerAttributes.enable')
+              : t('settings.audio.speakerAttributes.disabled')}
+          </span>
+          <div
+            class="space-y-6 transition-opacity duration-200"
+            class:opacity-50={!speakerAttributes.enabled}
+          >
+            <!-- Gender estimation -->
+            <div class="space-y-3">
+              <Checkbox
+                checked={speakerAttributes.gender.enabled}
+                label={t('settings.audio.speakerAttributes.gender.enable')}
+                helpText={t('settings.audio.speakerAttributes.gender.enableHelp')}
+                disabled={!speakerAttributes.enabled || store.isLoading || store.isSaving}
+                onchange={updateSpeakerGenderEnabled}
+              />
+              <div class="settings-form-grid">
+                <InlineSlider
+                  label={t('settings.audio.speakerAttributes.gender.thresholdLabel')}
+                  value={speakerAttributes.gender.threshold}
+                  onUpdate={updateSpeakerGenderThreshold}
+                  min={0}
+                  max={1}
+                  step={0.05}
+                  size="sm"
+                  disabled={!speakerAttributes.enabled ||
+                    !speakerAttributes.gender.enabled ||
+                    store.isLoading ||
+                    store.isSaving}
+                  formatValue={(v: number) => `${Math.round(v * 100)}%`}
+                  helpText={t('settings.audio.speakerAttributes.gender.thresholdHelp')}
+                />
+              </div>
+            </div>
+
+            <!-- Age-band estimation -->
+            <div class="space-y-3">
+              <Checkbox
+                checked={speakerAttributes.age.enabled}
+                label={t('settings.audio.speakerAttributes.age.enable')}
+                helpText={t('settings.audio.speakerAttributes.age.enableHelp')}
+                disabled={!speakerAttributes.enabled || store.isLoading || store.isSaving}
+                onchange={updateSpeakerAgeEnabled}
+              />
+              <div class="settings-form-grid">
+                <InlineSlider
+                  label={t('settings.audio.speakerAttributes.age.thresholdLabel')}
+                  value={speakerAttributes.age.threshold}
+                  onUpdate={updateSpeakerAgeThreshold}
+                  min={0}
+                  max={1}
+                  step={0.05}
+                  size="sm"
+                  disabled={!speakerAttributes.enabled ||
+                    !speakerAttributes.age.enabled ||
+                    store.isLoading ||
+                    store.isSaving}
+                  formatValue={(v: number) => `${Math.round(v * 100)}%`}
+                  helpText={t('settings.audio.speakerAttributes.age.thresholdHelp')}
+                />
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+    </SettingsSection>
   </div>
 {/snippet}
 
@@ -1213,22 +1265,6 @@
                 helpText={t('settings.audio.extendedCapture.maxDurationHelp')}
               />
             </div>
-
-            <!-- Species List -->
-            <SpeciesListEditor
-              species={extendedCaptureSettingsLocal.species}
-              disabled={!extendedCaptureSettingsLocal.enabled || store.isLoading || store.isSaving}
-              predictions={speciesListState.data}
-              localizeLabel={localizeSpeciesLabel}
-              predictionsLoading={speciesListState.loading}
-              listLabel={t('settings.audio.extendedCapture.speciesListLabel')}
-              addLabel={t('settings.audio.extendedCapture.addSpeciesLabel')}
-              addPlaceholder={t('settings.filters.typeSpeciesName')}
-              addHelpText={t('settings.audio.extendedCapture.addSpeciesHelp')}
-              addButtonText={t('settings.audio.extendedCapture.addSpeciesButton')}
-              hasChanges={false}
-              onSpeciesChange={handleExtendedCaptureSpeciesChange}
-            />
           </div>
         </fieldset>
       </div>

@@ -1,6 +1,6 @@
 #!/usr/bin/env tsx
 /**
- * Translation file validator for BirdNET-Go i18n
+ * Translation file validator for VoiceWatch i18n
  *
  * Validates translation files for:
  * - Completeness (missing/extra keys)
@@ -54,7 +54,6 @@ const SKIP_UNTRANSLATED_KEYWORDS = [
   'shoutrrr',
   'webhook',
   'mqtt',
-  'birdweather',
   'ifttt',
   'google',
   'oauth',
@@ -79,8 +78,8 @@ const SKIP_UNTRANSLATED_KEYWORDS = [
   'ebu',
   'r128',
   // Brand names
+  'voicewatch',
   'birdnet',
-  'ebird',
   'github',
   'flickr',
   'wikipedia',

@@ -10,8 +10,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/tphakala/birdnet-go/internal/conf/conftest"
-	"github.com/tphakala/birdnet-go/internal/errors"
+	"github.com/tphakala/voicewatch/internal/conf/conftest"
+	"github.com/tphakala/voicewatch/internal/errors"
 )
 
 // TestInvalidFileNameErrorMessages tests that the error messages for invalid file names are detailed
@@ -206,7 +206,7 @@ func TestGetAudioFilesSkipsNonBirdNETFiles(t *testing.T) {
 	mockDB := &MockDB{}
 	files, err := GetAudioFiles(tempDir, allowedFileTypes, mockDB)
 
-	require.NoError(t, err, "non-BirdNET files should not cause errors")
+	require.NoError(t, err, "non-VoiceWatch files should not cause errors")
 	require.Len(t, files, 1)
 	assert.Equal(t, "bubo_bubo", files[0].Species)
 }
@@ -224,7 +224,7 @@ func TestGetAudioFilesOnlyNonBirdNETFiles(t *testing.T) {
 	mockDB := &MockDB{}
 	files, err := GetAudioFiles(tempDir, allowedFileTypes, mockDB)
 
-	require.NoError(t, err, "directory with only non-BirdNET files should not error")
+	require.NoError(t, err, "directory with only non-VoiceWatch files should not error")
 	assert.Empty(t, files)
 }
 

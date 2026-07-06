@@ -1,6 +1,6 @@
 package app
 
-import "github.com/tphakala/birdnet-go/internal/logger"
+import "github.com/tphakala/voicewatch/internal/logger"
 
 // getLogger returns the app package logger scoped to the app module.
 // Fetched dynamically to ensure it uses the current centralized logger.

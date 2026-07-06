@@ -34,7 +34,7 @@
   // built as HTML and injected via {@html}, the same way these strings carried
   // their anchors before the URLs were de-embedded from the locale files.
   //
-  // The URLs are operator-controlled branding, but BirdNET-Go commonly runs over
+  // The URLs are operator-controlled branding, but VoiceWatch commonly runs over
   // plain HTTP on home networks where the config response is not integrity
   // protected, so harden the value before it reaches {@html}: require an http(s)
   // scheme (blocks javascript:/data: payloads) and escape any attribute-breaking

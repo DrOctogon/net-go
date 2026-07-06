@@ -177,9 +177,9 @@ func TestNoOpRecorder(t *testing.T) {
 func TestRecorderWithRealMetrics(t *testing.T) {
 	t.Parallel()
 
-	t.Run("BirdNETMetrics", func(t *testing.T) {
-		// This test verifies that BirdNETMetrics implements Recorder
-		var _ Recorder = (*BirdNETMetrics)(nil)
+	t.Run("VoiceWatchMetrics", func(t *testing.T) {
+		// This test verifies that VoiceWatchMetrics implements Recorder
+		var _ Recorder = (*VoiceWatchMetrics)(nil)
 	})
 
 	t.Run("DatastoreMetrics", func(t *testing.T) {

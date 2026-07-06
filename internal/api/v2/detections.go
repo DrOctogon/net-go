@@ -15,13 +15,13 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/patrickmn/go-cache"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	detectionPkg "github.com/tphakala/birdnet-go/internal/detection"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/notification"
-	"github.com/tphakala/birdnet-go/internal/suncalc"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	detectionPkg "github.com/tphakala/voicewatch/internal/detection"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/notification"
+	"github.com/tphakala/voicewatch/internal/suncalc"
 )
 
 // dateValidationError represents a date parameter validation failure.
@@ -158,6 +158,9 @@ func (c *Controller) initDetectionRoutes() {
 	detectionGroup.POST("/:id/lock", c.LockDetection)
 	detectionGroup.POST("/ignore", c.IgnoreSpecies)
 	detectionGroup.GET("/ignored", c.GetExcludedSpecies)
+	// Similar-voices correlation returns cross-detection links; gate behind auth
+	// (it exposes more than a single record once embeddings exist).
+	detectionGroup.GET("/:id/similar", c.GetSimilarDetections)
 
 	// Batch operation endpoints
 	batchGroup := detectionGroup.Group("/batch")
@@ -191,6 +194,15 @@ type DetectionResponse struct {
 	Verified           string            `json:"verified"`
 	Locked             bool              `json:"locked"`
 	Unlikely           bool              `json:"unlikely,omitempty"`
+	Transcript         string            `json:"transcript,omitempty"`     // Speech-to-text transcript of the clip
+	TranscriptLang     string            `json:"transcriptLang,omitempty"` // Language of the transcript (e.g. "en")
+	Flagged            bool              `json:"flagged,omitempty"`        // True when the transcript matched a configured keyword
+	KeywordsHit        []string          `json:"keywordsHit,omitempty"`    // Keywords that matched the transcript
+	Gender             string            `json:"gender,omitempty"`         // Estimated speaker gender (opt-in speaker attributes)
+	GenderConfidence   float64           `json:"genderConfidence,omitempty"`
+	AgeBand            string            `json:"ageBand,omitempty"` // Estimated relative age band
+	AgeConfidence      float64           `json:"ageConfidence,omitempty"`
+	SpeakerID          string            `json:"speakerId,omitempty"` // Voice-print cluster id
 	Comments           []CommentResponse `json:"comments,omitempty"`
 	Weather            *WeatherInfo      `json:"weather,omitempty"`
 	TimeOfDay          string            `json:"timeOfDay,omitempty"`
@@ -270,6 +282,10 @@ type detectionQueryParams struct {
 	Verified   string
 	Location   string
 	Locked     string
+	Flagged    string
+	Transcript string
+	Gender     string
+	AgeBand    string
 	// Sorting
 	SortBy string
 	// Include additional data
@@ -279,12 +295,13 @@ type detectionQueryParams struct {
 // advancedSearchCacheKey generates a deterministic cache key for advanced search queries.
 // Includes all filter parameters to avoid cache collisions.
 func (p *detectionQueryParams) advancedSearchCacheKey() string {
-	return fmt.Sprintf("adv_search:%s:%d:%d:%s:%s:%s:%s:%s:%s:%s:%s:%s:%s:%s:%s:%d",
+	return fmt.Sprintf("adv_search:%s:%d:%d:%s:%s:%s:%s:%s:%s:%s:%s:%s:%s:%s:%s:%s:%s:%d:%s:%s",
 		p.Search, p.NumResults, p.Offset,
 		p.Confidence, p.TimeOfDay, p.HourRange,
-		p.Verified, p.Location, p.Locked,
+		p.Verified, p.Location, p.Locked, p.Flagged, p.Transcript,
 		p.Species, p.Date, p.StartDate+":"+p.EndDate,
-		p.SortBy, p.QueryType, p.Hour, p.Duration)
+		p.SortBy, p.QueryType, p.Hour, p.Duration,
+		p.Gender, p.AgeBand)
 }
 
 // parseDetectionQueryParams extracts and validates query parameters from the request
@@ -304,6 +321,10 @@ func (c *Controller) parseDetectionQueryParams(ctx echo.Context) (*detectionQuer
 		Verified:   ctx.QueryParam("verified"),
 		Location:   ctx.QueryParam("location"),
 		Locked:     ctx.QueryParam("locked"),
+		Flagged:    ctx.QueryParam("flagged"),
+		Transcript: ctx.QueryParam("transcript"),
+		Gender:     ctx.QueryParam("gender"),
+		AgeBand:    ctx.QueryParam("ageBand"),
 		// Sorting
 		SortBy: ctx.QueryParam("sortBy"),
 		// Include weather data
@@ -618,7 +639,8 @@ func (c *Controller) GetDetections(ctx echo.Context) error {
 func (p *detectionQueryParams) needsAdvancedRouting() bool {
 	if p.Confidence != "" || p.TimeOfDay != "" ||
 		p.HourRange != "" || p.Verified != "" ||
-		p.Location != "" || p.Locked != "" ||
+		p.Location != "" || p.Locked != "" || p.Flagged != "" ||
+		p.Transcript != "" || p.Gender != "" || p.AgeBand != "" ||
 		p.StartDate != "" || p.EndDate != "" {
 		return true
 	}
@@ -711,6 +733,25 @@ func (c *Controller) convertNotesToDetectionResponses(notes []datastore.Note, in
 	return detections
 }
 
+// splitKeywordsHit converts the comma-joined KeywordsHit column into a slice for
+// the API response. Returns nil (omitted from JSON) when no keywords matched.
+func splitKeywordsHit(keywordsHit string) []string {
+	if keywordsHit == "" {
+		return nil
+	}
+	parts := strings.Split(keywordsHit, ",")
+	out := make([]string, 0, len(parts))
+	for _, p := range parts {
+		if trimmed := strings.TrimSpace(p); trimmed != "" {
+			out = append(out, trimmed)
+		}
+	}
+	if len(out) == 0 {
+		return nil
+	}
+	return out
+}
+
 // noteToDetectionResponse converts a single note to a detection response
 func (c *Controller) noteToDetectionResponse(note *datastore.Note, includeWeather bool, weatherCache map[string][]datastore.HourlyWeather) DetectionResponse {
 	detection := DetectionResponse{
@@ -725,6 +766,15 @@ func (c *Controller) noteToDetectionResponse(note *datastore.Note, includeWeathe
 		Confidence:     note.Confidence,
 		Locked:         note.Locked,
 		Unlikely:       note.Unlikely,
+		Transcript:     note.Transcript,
+		TranscriptLang: note.TranscriptLang,
+		Flagged:        note.Flagged,
+		KeywordsHit:    splitKeywordsHit(note.KeywordsHit),
+		Gender:           note.Gender,
+		GenderConfidence: note.GenderConfidence,
+		AgeBand:          note.AgeBand,
+		AgeConfidence:    note.AgeConfidence,
+		SpeakerID:        note.SpeakerID,
 	}
 
 	// populate source info if available
@@ -1127,6 +1177,15 @@ func (c *Controller) buildAdvancedSearchFilters(params *detectionQueryParams) da
 		locked := params.Locked == QueryValueTrue
 		filters.Locked = &locked
 	}
+	if params.Flagged != "" {
+		flagged := params.Flagged == QueryValueTrue
+		filters.Flagged = &flagged
+	}
+	if params.Transcript != "" {
+		filters.Transcript = params.Transcript
+	}
+	filters.Gender = validSpeakerGenderFilter(params.Gender)
+	filters.AgeBand = validSpeakerAgeBandFilter(params.AgeBand)
 
 	// Apply sorting
 	filters.SortBy = params.SortBy

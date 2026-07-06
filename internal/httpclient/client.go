@@ -35,7 +35,7 @@ const (
 	defaultDialKeepAlive         = 30 * time.Second
 
 	// Default User-Agent
-	defaultUserAgent = "BirdNET-Go"
+	defaultUserAgent = "VoiceWatch"
 )
 
 // Client is a production-grade HTTP client with context management and timeouts.

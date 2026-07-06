@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/errors"
+	"github.com/tphakala/voicewatch/internal/errors"
 )
 
 // BenchmarkFastPathNoConsumers tests the performance when no consumers are registered

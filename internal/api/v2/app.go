@@ -7,13 +7,12 @@ import (
 	"strings"
 
 	"github.com/labstack/echo/v4"
-	"github.com/tphakala/birdnet-go/internal/api/middleware"
-	"github.com/tphakala/birdnet-go/internal/branding"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/datastore/v2/repository"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/speciesdict"
-	"github.com/tphakala/birdnet-go/internal/telemetry"
+	"github.com/tphakala/voicewatch/internal/api/middleware"
+	"github.com/tphakala/voicewatch/internal/branding"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/datastore/v2/repository"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/telemetry"
 )
 
 // App config endpoint constants
@@ -34,7 +33,6 @@ type AppConfigResponse struct {
 	CSRFToken          string                `json:"csrfToken"`
 	Security           SecurityConfigDTO     `json:"security"`
 	Version            string                `json:"version"`
-	SpeciesDictVersion string                `json:"speciesDictVersion"`        // dataset version for content-addressed dictionary URL construction
 	BasePath           string                `json:"basePath"`                  // reverse proxy prefix for frontend URL construction
 	ColorScheme        string                `json:"colorScheme,omitempty"`     // admin-configured color scheme for all visitors
 	CustomColors       *conf.CustomColors    `json:"customColors,omitempty"`    // custom scheme hex colors (when colorScheme is "custom")
@@ -192,7 +190,6 @@ func (c *Controller) GetAppConfig(ctx echo.Context) error {
 			PrivateMode: settings.Security.PrivateMode,
 		},
 		Version:            settings.Version,
-		SpeciesDictVersion: speciesdict.Version(),
 		BasePath:           basePath,
 		ColorScheme:        settings.Realtime.Dashboard.ColorScheme,
 		CustomColors:       settings.Realtime.Dashboard.CustomColors,
@@ -317,7 +314,7 @@ func (c *Controller) hasZeroDetections(ctx context.Context) bool {
 // isExistingInstall returns true if multiple signals indicate this is a configured
 // installation rather than a genuinely fresh one. Checks are ordered cheapest-first.
 func (c *Controller) isExistingInstall(ctx context.Context, settings *conf.Settings) bool {
-	if settings.BirdNET.Latitude != 0 || settings.BirdNET.Longitude != 0 {
+	if settings.VoiceWatch.Latitude != 0 || settings.VoiceWatch.Longitude != 0 {
 		return true
 	}
 	if len(settings.Realtime.Audio.Sources) > 0 {

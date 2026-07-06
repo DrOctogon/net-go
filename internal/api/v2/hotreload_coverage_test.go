@@ -7,7 +7,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/conf"
+	"github.com/tphakala/voicewatch/internal/conf"
 )
 
 type hotReloadCategory string
@@ -44,38 +44,31 @@ var hotReloadRegistry = map[string]hotReloadEntry{
 	// --- Main ---
 	"Main": {categories: []hotReloadCategory{hotReloadDisplay}},
 
-	// --- BirdNET ---
-	"BirdNET.Debug":       {categories: []hotReloadCategory{hotReloadFresh}},
-	"BirdNET.Sensitivity": {categories: []hotReloadCategory{hotReloadFresh}},
-	"BirdNET.Threshold": {
+	// --- VoiceWatch ---
+	"VoiceWatch.Debug":       {categories: []hotReloadCategory{hotReloadFresh}},
+	"VoiceWatch.Sensitivity": {categories: []hotReloadCategory{hotReloadFresh}},
+	"VoiceWatch.Threshold": {
 		categories: []hotReloadCategory{hotReloadFresh},
 		action:     "recalculate_dynamic_thresholds",
 	},
-	"BirdNET.Overlap":            {categories: []hotReloadCategory{hotReloadFresh}},
-	"BirdNET.Longitude":          {categories: []hotReloadCategory{hotReloadDisplay}, action: "rebuild_range_filter"},
-	"BirdNET.Latitude":           {categories: []hotReloadCategory{hotReloadDisplay}, action: "rebuild_range_filter"},
-	"BirdNET.LocationConfigured": {categories: []hotReloadCategory{hotReloadDisplay}},
-	"BirdNET.Threads":            {categories: []hotReloadCategory{hotReloadFresh}, action: "reload_birdnet"},
-	"BirdNET.Locale":             {categories: []hotReloadCategory{hotReloadDisplay}, action: "reload_birdnet"},
-	"BirdNET.RangeFilter":        {categories: []hotReloadCategory{hotReloadFresh}, action: "rebuild_range_filter"},
-	"BirdNET.ModelPath":          {categories: []hotReloadCategory{hotReloadFresh}, action: "reload_birdnet"},
-	"BirdNET.LabelPath":          {categories: []hotReloadCategory{hotReloadFresh}, action: "reload_birdnet"},
-	"BirdNET.Labels":             {categories: []hotReloadCategory{hotReloadRuntime}},
-	"BirdNET.UseXNNPACK":         {categories: []hotReloadCategory{hotReloadFresh}, action: "reload_birdnet"},
-	"BirdNET.ONNXRuntimePath":    {categories: []hotReloadCategory{hotReloadRestart}},
-	"BirdNET.OpenVINOPath":       {categories: []hotReloadCategory{hotReloadRestart}},
-	"BirdNET.Backend":            {categories: []hotReloadCategory{hotReloadFresh}, action: "reload_birdnet"},
-	"BirdNET.OpenVINODevice":     {categories: []hotReloadCategory{hotReloadFresh}, action: "reload_birdnet"},
-	"BirdNET.Version":            {categories: []hotReloadCategory{hotReloadFresh}, action: "reload_birdnet"},
+	"VoiceWatch.Overlap":            {categories: []hotReloadCategory{hotReloadFresh}},
+	"VoiceWatch.Longitude":          {categories: []hotReloadCategory{hotReloadDisplay}},
+	"VoiceWatch.Latitude":           {categories: []hotReloadCategory{hotReloadDisplay}},
+	"VoiceWatch.LocationConfigured": {categories: []hotReloadCategory{hotReloadDisplay}},
+	"VoiceWatch.Threads":            {categories: []hotReloadCategory{hotReloadFresh}, action: "reload_voicewatch"},
+	"VoiceWatch.Locale":             {categories: []hotReloadCategory{hotReloadDisplay}, action: "reload_voicewatch"},
+	"VoiceWatch.ModelPath":          {categories: []hotReloadCategory{hotReloadFresh}, action: "reload_voicewatch"},
+	"VoiceWatch.LabelPath":          {categories: []hotReloadCategory{hotReloadFresh}, action: "reload_voicewatch"},
+	"VoiceWatch.Labels":             {categories: []hotReloadCategory{hotReloadRuntime}},
+	"VoiceWatch.UseXNNPACK":         {categories: []hotReloadCategory{hotReloadFresh}, action: "reload_voicewatch"},
+	"VoiceWatch.ONNXRuntimePath":    {categories: []hotReloadCategory{hotReloadRestart}},
+	"VoiceWatch.OpenVINOPath":       {categories: []hotReloadCategory{hotReloadRestart}},
+	"VoiceWatch.Backend":            {categories: []hotReloadCategory{hotReloadFresh}, action: "reload_voicewatch"},
+	"VoiceWatch.OpenVINODevice":     {categories: []hotReloadCategory{hotReloadFresh}, action: "reload_voicewatch"},
+	"VoiceWatch.Version":            {categories: []hotReloadCategory{hotReloadFresh}, action: "reload_voicewatch"},
 
-	// --- Perch ---
-	"Perch": {categories: []hotReloadCategory{hotReloadRestart}},
-
-	// --- Bat ---
-	"Bat": {categories: []hotReloadCategory{hotReloadFresh}},
-
-	// --- BSG ---
-	"BSG": {categories: []hotReloadCategory{hotReloadRestart}},
+	// --- HumanVoice ---
+	"HumanVoice": {categories: []hotReloadCategory{hotReloadFresh}},
 
 	// --- Models ---
 	"Models": {categories: []hotReloadCategory{hotReloadRestart}},
@@ -119,6 +112,17 @@ var hotReloadRegistry = map[string]hotReloadEntry{
 	"Realtime.Audio.Equalizer":            {categories: []hotReloadCategory{hotReloadFresh}},
 	"Realtime.Audio.QuietHours":           {categories: []hotReloadCategory{hotReloadFresh}, action: "reconfigure_quiet_hours"},
 	"Realtime.Audio.Watchdog":             {categories: []hotReloadCategory{hotReloadRestart}},
+	// Continuous full-audio recorder is constructed once at pipeline start
+	// (audio_pipeline_service) with no live reconfigure path; changes apply on
+	// restart.
+	"Realtime.Audio.Continuous": {categories: []hotReloadCategory{hotReloadRestart}},
+	// Speaker-attribute analyzer (gender/age/voice-print) is constructed once at
+	// pipeline start with no live reconfigure path; changes apply on restart.
+	"Realtime.Audio.SpeakerAttributes": {categories: []hotReloadCategory{hotReloadRestart}},
+
+	// -- Transcription (read per detection job from the live settings pointer;
+	// changes apply to subsequent detections without restart). --
+	"Realtime.Transcription": {categories: []hotReloadCategory{hotReloadFresh}},
 
 	// -- Dashboard (display only, read per-request by frontend) --
 	"Realtime.Dashboard": {categories: []hotReloadCategory{hotReloadDisplay}},
@@ -145,18 +149,11 @@ var hotReloadRegistry = map[string]hotReloadEntry{
 		action:     "reconfigure_log_deduplication",
 	},
 
-	// -- Birdweather --
-	"Realtime.Birdweather": {categories: []hotReloadCategory{hotReloadFresh}, action: "reconfigure_birdweather"},
-
-	// -- eBird --
-	"Realtime.EBird": {categories: []hotReloadCategory{hotReloadFresh}},
-
 	// -- OpenWeather (runtime, yaml:"-") --
 	"Realtime.OpenWeather": {categories: []hotReloadCategory{hotReloadRuntime}},
 
 	// -- Filters --
 	"Realtime.PrivacyFilter":  {categories: []hotReloadCategory{hotReloadFresh}},
-	"Realtime.DogBarkFilter":  {categories: []hotReloadCategory{hotReloadFresh}},
 	"Realtime.DaylightFilter": {categories: []hotReloadCategory{hotReloadFresh}},
 
 	// -- RTSP --
@@ -214,7 +211,6 @@ var hotReloadRegistry = map[string]hotReloadEntry{
 	"Realtime.ExtendedCapture.Enabled":              {categories: []hotReloadCategory{hotReloadFresh}, action: "rebuild_extended_capture"},
 	"Realtime.ExtendedCapture.MaxDuration":          {categories: []hotReloadCategory{hotReloadFresh}, action: "rebuild_extended_capture"},
 	"Realtime.ExtendedCapture.CaptureBufferSeconds": {categories: []hotReloadCategory{hotReloadNotify}},
-	"Realtime.ExtendedCapture.Species":              {categories: []hotReloadCategory{hotReloadFresh}, action: "rebuild_extended_capture"},
 
 	// --- WebServer ---
 	"WebServer.Debug":          {categories: []hotReloadCategory{hotReloadFresh}},
@@ -430,5 +426,5 @@ func isProjectType(t reflect.Type) bool {
 	if pkg == "" {
 		return true // anonymous struct
 	}
-	return strings.HasPrefix(pkg, "github.com/tphakala/birdnet-go")
+	return strings.HasPrefix(pkg, "github.com/tphakala/voicewatch")
 }

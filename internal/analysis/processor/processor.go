@@ -15,26 +15,25 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/analysis/jobqueue"
-	"github.com/tphakala/birdnet-go/internal/analysis/species"
-	"github.com/tphakala/birdnet-go/internal/audiocore"
-	"github.com/tphakala/birdnet-go/internal/audiocore/buffer"
-	"github.com/tphakala/birdnet-go/internal/audiocore/convert"
-	"github.com/tphakala/birdnet-go/internal/audiocore/ultrasonic"
-	"github.com/tphakala/birdnet-go/internal/birdweather"
-	"github.com/tphakala/birdnet-go/internal/classifier"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	"github.com/tphakala/birdnet-go/internal/detection"
-	"github.com/tphakala/birdnet-go/internal/imageprovider"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/mqtt"
-	"github.com/tphakala/birdnet-go/internal/notification"
-	"github.com/tphakala/birdnet-go/internal/observability"
-	"github.com/tphakala/birdnet-go/internal/privacy"
-	"github.com/tphakala/birdnet-go/internal/securefs"
-	"github.com/tphakala/birdnet-go/internal/spectrogram"
-	"github.com/tphakala/birdnet-go/internal/suncalc"
+	"github.com/tphakala/voicewatch/internal/analysis/jobqueue"
+	"github.com/tphakala/voicewatch/internal/analysis/species"
+	"github.com/tphakala/voicewatch/internal/audiocore"
+	"github.com/tphakala/voicewatch/internal/audiocore/buffer"
+	"github.com/tphakala/voicewatch/internal/audiocore/convert"
+	"github.com/tphakala/voicewatch/internal/classifier"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/detection"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/mqtt"
+	"github.com/tphakala/voicewatch/internal/notification"
+	"github.com/tphakala/voicewatch/internal/observability"
+	"github.com/tphakala/voicewatch/internal/privacy"
+	"github.com/tphakala/voicewatch/internal/securefs"
+	"github.com/tphakala/voicewatch/internal/speaker"
+	"github.com/tphakala/voicewatch/internal/spectrogram"
+	"github.com/tphakala/voicewatch/internal/suncalc"
+	"github.com/tphakala/voicewatch/internal/transcription"
 )
 
 // Compile-time assertion to ensure *spectrogram.PreRenderer implements PreRendererSubmit
@@ -56,13 +55,12 @@ type Processor struct {
 	Ds                   datastore.Interface           // Legacy - to be removed after migration
 	Repo                 datastore.DetectionRepository // New - preferred for detection operations
 	Bn                   *classifier.Orchestrator
-	log                  logger.Logger // Logger inherited from analysis package with "processor" child module
-	BwClient             *birdweather.BwClient
-	bwClientMutex        sync.RWMutex // Mutex to protect BwClient access
+	speakerAnalyzer      speaker.Analyzer   // Opt-in speaker-attribute analyzer (gender/age/voice-print); NoopAnalyzer when disabled
+	speakerClusterer     *speaker.Clusterer // Online voice-print clustering to assign SpeakerID; nil when speaker attributes disabled
+	log                  logger.Logger      // Logger inherited from analysis package with "processor" child module
 	MqttClient           mqtt.Client
 	mqttMutex            sync.RWMutex // Mutex to protect MQTT client access
 	mqttNotReadyWarnOnce sync.Once    // Ensures the "client not ready" warning logs at most once per process to avoid flood
-	BirdImageCache       *imageprovider.BirdImageCache
 	EventTracker         *EventTracker
 	eventTrackerMu       sync.RWMutex            // Mutex to protect EventTracker access
 	NewSpeciesTracker    *species.SpeciesTracker // Tracks new species detections
@@ -70,7 +68,6 @@ type Processor struct {
 	lastSyncAttempt      time.Time               // Last time sync was attempted
 	syncMutex            sync.Mutex              // Mutex to protect sync operations
 	syncInProgress       atomic.Bool             // Flag to prevent overlapping syncs
-	LastDogDetection     map[string]time.Time    // keep track of dog barks per audio source
 	LastHumanDetection   map[string]time.Time    // keep track of human vocal per audio source
 	Metrics              *observability.Metrics
 	DynamicThresholds    map[string]*DynamicThreshold
@@ -79,8 +76,7 @@ type Processor struct {
 	pendingResetAll      bool                // True if a full reset is pending, protected by thresholdsMutex
 	pendingDetections    map[string]PendingDetection
 	pendingMutex         sync.RWMutex // RWMutex to protect access to pendingDetections (RLock for snapshots)
-	dogDetectionMutex    sync.Mutex
-	detectionMutex       sync.RWMutex // Mutex to protect LastDogDetection and LastHumanDetection maps
+	detectionMutex       sync.RWMutex // Mutex to protect LastHumanDetection map
 	controlChan          chan string
 	JobQueue             *jobqueue.JobQueue // Queue for managing job retries
 	workerCancel         context.CancelFunc // Function to cancel worker goroutines
@@ -92,8 +88,8 @@ type Processor struct {
 	preRendererOnce      sync.Once          // Ensures pre-renderer is initialized only once
 	startOnce            sync.Once          // Ensures Start() is called only once
 	// SSE related fields
-	SSEBroadcaster      func(note *datastore.Note, birdImage *imageprovider.BirdImage) error // Function to broadcast detection via SSE
-	sseBroadcasterMutex sync.RWMutex                                                         // Mutex to protect SSE broadcaster access
+	SSEBroadcaster      func(note *datastore.Note) error // Function to broadcast detection via SSE
+	sseBroadcasterMutex sync.RWMutex                     // Mutex to protect SSE broadcaster access
 
 	// Pending detection broadcast fields
 	PendingBroadcaster      func(snapshot []SSEPendingDetection) // Function to broadcast pending detections via SSE
@@ -139,20 +135,10 @@ type Processor struct {
 	lastDetectionCache map[string]*recentDetectionList
 	lastDetectionMu    sync.RWMutex
 
-	// Extended capture fields
-	extendedCaptureSpecies map[string]bool // Resolved set of scientific names eligible for extended capture
-	extendedCaptureAll     bool            // True when all species qualify (empty species list)
-	extendedCaptureMu      sync.RWMutex    // Protects extendedCaptureSpecies and extendedCaptureAll
-
-	// Daylight filter fields
-	daylightFilterSpecies map[string]bool  // Resolved set of scientific names to filter during daylight
-	daylightFilterAll     bool             // Currently unused; empty species list resolves to filter-nothing
-	daylightFilterMu      sync.RWMutex     // Protects daylightFilterSpecies and daylightFilterAll
-	sunCalc               *suncalc.SunCalc // Injected sun calculator for daylight determination
-
-	// Cached taxonomy database (lazy-loaded, shared across init functions)
-	taxonomyDB     *classifier.TaxonomyDatabase
-	taxonomyDBOnce sync.Once
+	// Daylight filter fields. The daylight filter and extended capture are both
+	// global features (they apply to every detection when enabled), so no
+	// per-species resolution state is kept here.
+	sunCalc *suncalc.SunCalc // Injected sun calculator for daylight determination
 
 	// invalidCommandPaths records ExecuteCommand action command paths that
 	// have recently failed validation (missing, unreadable, non-executable,
@@ -193,7 +179,7 @@ type Detections struct {
 	CorrelationID string                       // Unique detection identifier for log correlation
 	pcmData3s     []byte                       // 3s PCM data containing the detection
 	Result        detection.Result             // Detection result containing highest match
-	Results       []detection.AdditionalResult // Additional BirdNET prediction results
+	Results       []detection.AdditionalResult // Additional VoiceWatch prediction results
 }
 
 // PendingDetection struct represents a single detection held in memory,
@@ -329,7 +315,7 @@ func validateAndLogFilterConfig(settings *conf.Settings) {
 	}
 
 	level := settings.Realtime.FalsePositiveFilter.Level
-	overlap := settings.BirdNET.Overlap
+	overlap := settings.VoiceWatch.Overlap
 	minOverlap := getMinimumOverlapForLevel(level)
 
 	// Calculate what minDetections will be with current settings
@@ -343,31 +329,6 @@ func validateAndLogFilterConfig(settings *conf.Settings) {
 		validateOverlapForLevel(level, overlap, minOverlap, minDetections)
 		warnAboutHardwareRequirements(level, overlap)
 	}
-}
-
-// validateAndLogBatFilterConfig validates the bat false positive filter configuration
-// and logs the effective minDetections. The bat model uses a fixed 50% overlap,
-// so there are no overlap-related warnings.
-func validateAndLogBatFilterConfig(settings *conf.Settings) {
-	if err := settings.Bat.FalsePositiveFilter.Validate(); err != nil {
-		GetLogger().Error("Invalid bat false positive filter configuration, falling back to level 0",
-			logger.Error(err),
-			logger.Int("fallback_level", 0),
-			logger.String("operation", "bat_false_positive_filter_validation"))
-		settings.Bat.FalsePositiveFilter.Level = 0
-	}
-
-	level := settings.Bat.FalsePositiveFilter.Level
-	if level == 0 {
-		return
-	}
-
-	minDetections := calculateBatMinDetections(settings)
-	GetLogger().Info("Bat false positive filter active",
-		logger.Int("level", level),
-		logger.String("level_name", getLevelName(level)),
-		logger.Int("min_detections", minDetections),
-		logger.String("operation", "bat_false_positive_filter_config"))
 }
 
 // initLogDeduplicator creates and configures the log deduplicator.
@@ -411,7 +372,7 @@ func initSpeciesTracker(settings *conf.Settings, ds datastore.Interface) *specie
 	if hemisphereAwareTracking.SeasonalTracking.Enabled {
 		hemisphereAwareTracking.SeasonalTracking = conf.GetSeasonalTrackingWithHemisphere(
 			hemisphereAwareTracking.SeasonalTracking,
-			settings.BirdNET.Latitude,
+			settings.VoiceWatch.Latitude,
 		)
 	}
 
@@ -422,32 +383,15 @@ func initSpeciesTracker(settings *conf.Settings, ds datastore.Interface) *specie
 	// spurious "new species" notifications fire from the not-yet-populated maps.
 	tracker.InitFromDatabaseAsync()
 
-	hemisphere := conf.DetectHemisphere(settings.BirdNET.Latitude)
+	hemisphere := conf.DetectHemisphere(settings.VoiceWatch.Latitude)
 	GetLogger().Info("Species tracking enabled",
 		logger.Int("window_days", settings.Realtime.SpeciesTracking.NewSpeciesWindowDays),
 		logger.Int("sync_interval_minutes", settings.Realtime.SpeciesTracking.SyncIntervalMinutes),
 		logger.String("hemisphere", hemisphere),
-		logger.Float64("latitude", settings.BirdNET.Latitude),
+		logger.Float64("latitude", settings.VoiceWatch.Latitude),
 		logger.String("operation", "species_tracking_config"))
 
 	return tracker
-}
-
-// initBirdWeatherClient initializes the BirdWeather client if enabled.
-func (p *Processor) initBirdWeatherClient(settings *conf.Settings) {
-	if !settings.Realtime.Birdweather.Enabled {
-		return
-	}
-
-	bwClient, err := birdweather.New(settings)
-	if err != nil {
-		GetLogger().Error("Failed to create BirdWeather client",
-			logger.Error(err),
-			logger.String("operation", "birdweather_client_init"),
-			logger.String("integration", "birdweather"))
-		return
-	}
-	p.SetBwClient(bwClient)
 }
 
 // initDynamicThresholds loads and starts persistence for dynamic thresholds if enabled.
@@ -468,7 +412,10 @@ func (p *Processor) initDynamicThresholds(settings *conf.Settings) {
 // New creates a new Processor with the given dependencies.
 // The parentLog parameter should be the analysis package logger, which will be used to create
 // a child logger with ".processor" suffix for hierarchical logging (e.g., "analysis.processor").
-func New(settings *conf.Settings, ds datastore.Interface, bn *classifier.Orchestrator, metrics *observability.Metrics, birdImageCache *imageprovider.BirdImageCache, parentLog logger.Logger) *Processor {
+// New creates a new Processor with the given dependencies.
+// The parentLog parameter should be the analysis package logger, which will be used to create
+// a child logger with ".processor" suffix for hierarchical logging (e.g., "analysis.processor").
+func New(settings *conf.Settings, ds datastore.Interface, bn *classifier.Orchestrator, metrics *observability.Metrics, parentLog logger.Logger) *Processor {
 	// Create child logger from parent for hierarchical logging
 	var procLog logger.Logger
 	if parentLog != nil {
@@ -479,18 +426,16 @@ func New(settings *conf.Settings, ds datastore.Interface, bn *classifier.Orchest
 	}
 
 	p := &Processor{
-		Settings:       settings,
-		Ds:             ds,
-		Repo:           datastore.NewDetectionRepository(ds, nil), // Bridge to new domain model
-		Bn:             bn,
-		log:            procLog,
-		BirdImageCache: birdImageCache,
+		Settings: settings,
+		Ds:       ds,
+		Repo:     datastore.NewDetectionRepository(ds, nil), // Bridge to new domain model
+		Bn:       bn,
+		log:      procLog,
 		EventTracker: NewEventTrackerWithConfig(
 			time.Duration(settings.Realtime.Interval)*time.Second,
 			settings.Realtime.Species.Config,
 		),
 		Metrics:            metrics,
-		LastDogDetection:   make(map[string]time.Time),
 		LastHumanDetection: make(map[string]time.Time),
 		DynamicThresholds:  make(map[string]*DynamicThreshold),
 		pendingResets:      make(map[string]struct{}),
@@ -545,7 +490,6 @@ func New(settings *conf.Settings, ds datastore.Interface, bn *classifier.Orchest
 
 	// Validate and log false positive filter configuration
 	validateAndLogFilterConfig(settings)
-	validateAndLogBatFilterConfig(settings)
 
 	// Validate user-configured custom ExecuteCommand action paths up front
 	// so that a misconfigured command path produces a single user-facing
@@ -561,9 +505,6 @@ func New(settings *conf.Settings, ds datastore.Interface, bn *classifier.Orchest
 	// NOTE: Background goroutines (detection processor, worker pool, flusher)
 	// are NOT started here. Call Start() after wiring BufferMgr and Registry
 	// to avoid a race where detections arrive before the buffer manager is set.
-
-	// Initialize BirdWeather client if enabled
-	p.initBirdWeatherClient(settings)
 
 	// Initialize MQTT client if enabled in settings
 	p.initializeMQTT(settings)
@@ -606,6 +547,39 @@ func New(settings *conf.Settings, ds datastore.Interface, bn *classifier.Orchest
 	// Initialize spectrogram pre-renderer if mode is "prerender"
 	if settings.Realtime.Dashboard.Spectrogram.IsPreRenderEnabled() {
 		p.initPreRenderer()
+	}
+
+	// Initialize the speaker-attribute analyzer (gender/age/voice-print). It is
+	// constructed once here from the current settings; changing the settings
+	// requires a restart (see speakerAttributesSettingsChanged in api/v2). When
+	// disabled or no model is available, New returns a NoopAnalyzer.
+	sa := settings.Realtime.Audio.SpeakerAttributes
+	speakerAnalyzer, err := speaker.New(speaker.Config{
+		Enabled:             sa.Enabled,
+		GenderEnabled:       sa.Gender.Enabled,
+		AgeEnabled:          sa.Age.Enabled,
+		VoicePrintEnabled:   sa.VoicePrint.Enabled,
+		GenderModelPath:     sa.Gender.ModelPath,
+		AgeModelPath:        sa.Age.ModelPath,
+		VoicePrintModelPath: sa.VoicePrint.ModelPath,
+	})
+	if err != nil {
+		// Do not fail processor startup on a model-load error; fall back to the
+		// no-op analyzer so detections keep flowing. The failure is logged (not
+		// silent) so the user can see attributes are disabled.
+		GetLogger().Error("Failed to construct speaker-attribute analyzer; falling back to no-op (speaker attributes disabled)",
+			logger.String("error", err.Error()),
+			logger.String("operation", "speaker_analyzer_init"))
+		speakerAnalyzer = speaker.NoopAnalyzer{}
+	}
+	p.speakerAnalyzer = speakerAnalyzer
+
+	// Voice-print clusterer assigns a stable SpeakerID from embeddings produced
+	// by the analyzer. Created only when voice-print analysis is enabled; it is
+	// inert (never called) otherwise since no embeddings are produced. Clusters
+	// live for the process lifetime (no cross-restart persistence yet).
+	if sa.Enabled && sa.VoicePrint.Enabled {
+		p.speakerClusterer = speaker.NewClusterer(0) // 0 => DefaultClusterThreshold
 	}
 
 	return p
@@ -693,10 +667,7 @@ func (p *Processor) processDetections(item classifier.Results) {
 				maxConf = r.Confidence
 			}
 		}
-		threshold := float32(settings.BirdNET.Threshold)
-		if item.ModelID == classifier.RegistryIDBat {
-			threshold = float32(settings.Bat.Threshold)
-		}
+		threshold := float32(settings.VoiceWatch.Threshold)
 		p.pipelineStats.RecordInference(item.Source.ID, item.ModelID, len(item.Results), len(detectionResults), maxConf, threshold)
 	}
 
@@ -775,8 +746,8 @@ func (p *Processor) processDetections(item classifier.Results) {
 			}
 		}
 
-		// Apply extended capture if species qualifies
-		if p.isExtendedCaptureSpecies(det.Result.Species.ScientificName) {
+		// Apply extended capture to every detection when the feature is enabled
+		if p.isExtendedCaptureEnabled() {
 			p.applyExtendedCapture(mapKey, now, detectionWindow)
 		}
 
@@ -793,7 +764,7 @@ func (p *Processor) processDetections(item classifier.Results) {
 	p.broadcastPendingSnapshot(snapshot)
 }
 
-// processResults processes the results from the BirdNET prediction and returns a list of detections.
+// processResults processes the results from the VoiceWatch prediction and returns a list of detections.
 //
 //nolint:gocritic // hugeParam: Pass by value is intentional - avoids pointer dereferencing in hot path
 func (p *Processor) processResults(settings *conf.Settings, item classifier.Results) []Detections {
@@ -801,8 +772,8 @@ func (p *Processor) processResults(settings *conf.Settings, item classifier.Resu
 	detections := make([]Detections, 0, len(item.Results))
 
 	// Collect processing time metric
-	if settings.Realtime.Telemetry.Enabled && p.Metrics != nil && p.Metrics.BirdNET != nil {
-		p.Metrics.BirdNET.SetProcessTime(float64(item.ElapsedTime.Milliseconds()))
+	if settings.Realtime.Telemetry.Enabled && p.Metrics != nil && p.Metrics.VoiceWatch != nil {
+		p.Metrics.VoiceWatch.SetProcessTime(float64(item.ElapsedTime.Milliseconds()))
 	}
 
 	// Sync species tracker if needed
@@ -835,9 +806,8 @@ func (p *Processor) processResults(settings *conf.Settings, item classifier.Resu
 			continue // Skip invalid or partially parsed species
 		}
 
-		// Handle dog and human detection, this sets LastDogDetection and LastHumanDetection which is
-		// later used to discard detection if privacy filter or dog bark filters are enabled in settings.
-		p.handleDogDetection(settings, item, result)
+		// Handle human detection, this sets LastHumanDetection which is
+		// later used to discard detection if the privacy filter is enabled in settings.
 		p.handleHumanDetection(settings, item, result)
 
 		// Determine confidence threshold and check filters
@@ -852,7 +822,7 @@ func (p *Processor) processResults(settings *conf.Settings, item classifier.Resu
 		// species passes the range filter. This is independent of whether the
 		// detection is saved below (saved detections also clear this bar).
 		if result.Confidence > baseThreshold {
-			inRange := !shouldApplyRangeFilter(item.ModelID, settings) || settings.IsSpeciesIncluded(result.Species)
+			inRange := true
 			p.updateLastDetection(item.ModelID, commonName, scientificName, float64(result.Confidence), feedTime, inRange, feedThrottle)
 		}
 
@@ -865,74 +835,16 @@ func (p *Processor) processResults(settings *conf.Settings, item classifier.Resu
 		detections = append(detections, det)
 	}
 
-	// Run ultrasonic validation filter on bat detections. Computed once per chunk
-	// since all detections share the same source audio.
-	if len(detections) > 0 && item.ModelID == classifier.RegistryIDBat {
-		p.applyUltrasonicFilter(settings, item, detections)
-	}
-
 	return detections
-}
-
-// applyUltrasonicFilter runs the ultrasonic validation filter on a batch of bat detections.
-// It computes the US frame CV once from the shared PCM audio and tags all detections
-// as unlikely when the CV falls below the configured threshold. The PCM data is at
-// the source sample rate (e.g., 256kHz), not the model's internal 48kHz rate.
-//
-//nolint:gocritic // hugeParam: Pass by value is intentional for item
-func (p *Processor) applyUltrasonicFilter(settings *conf.Settings, item classifier.Results, detections []Detections) {
-	filterCfg := settings.Bat.UltrasonicFilter
-	if !filterCfg.Enabled {
-		return
-	}
-
-	resolved := p.resolveAudioSource(item.Source)
-	sourceRate := resolved.SampleRate
-	if sourceRate <= 0 || sourceRate <= filterCfg.FrequencySplitHz*2 {
-		return
-	}
-
-	if len(item.PCMdata) < 4 {
-		return
-	}
-
-	samples := convert.BytesToFloat64PCM16(item.PCMdata)
-	cv, ok := ultrasonic.ComputeUSFrameCV(samples, sourceRate, filterCfg)
-	sourceName := resolved.DisplayName
-	if !ok {
-		GetLogger().Debug("ultrasonic filter: insufficient data for CV computation",
-			logger.String("source", sourceName),
-			logger.Int("sample_count", len(samples)),
-			logger.Int("sample_rate", sourceRate))
-		return
-	}
-
-	unlikely := ultrasonic.IsUnlikely(cv, filterCfg)
-	logFields := []logger.Field{
-		logger.Float64("us_frame_cv", cv),
-		logger.Float64("threshold", filterCfg.CVThreshold),
-		logger.Bool("unlikely", unlikely),
-		logger.String("source", sourceName),
-		logger.Int("detections", len(detections)),
-	}
-	if unlikely {
-		GetLogger().Info("ultrasonic validation: detections tagged unlikely", logFields...)
-		for i := range detections {
-			detections[i].Result.Unlikely = true
-			detections[i].Result.UltrasonicCV = cv
-			detections[i].Result.UltrasonicCVThreshold = filterCfg.CVThreshold
-		}
-	} else {
-		GetLogger().Debug("ultrasonic validation filter result", logFields...)
-	}
 }
 
 // parseAndValidateSpecies parses species information and validates it
 //
 //nolint:gocritic // hugeParam: Pass by value is intentional - avoids pointer dereferencing in hot path
 func (p *Processor) parseAndValidateSpecies(settings *conf.Settings, result datastore.Results, item classifier.Results) (scientificName, commonName, speciesCode, speciesLowercase string) {
-	// Use BirdNET's EnrichResultWithTaxonomy to get species information
-	scientificName, commonName, speciesCode = p.Bn.EnrichResultWithTaxonomy(result.Species)
+	// Parse the species label into scientific/common/code components.
+	parsed := detection.ParseSpeciesString(result.Species)
+	scientificName, commonName, speciesCode = parsed.ScientificName, parsed.CommonName, parsed.Code
 
 	// Skip processing if scientific name is missing. Common name may be empty
 	// for models like Perch v2 that return scientific-name-only labels.
@@ -952,7 +864,7 @@ func (p *Processor) parseAndValidateSpecies(settings *conf.Settings, result data
 	}
 
 	// Log placeholder taxonomy codes if using custom model
-	if settings.BirdNET.ModelPath != "" && settings.Debug && speciesCode != "" {
+	if settings.VoiceWatch.ModelPath != "" && settings.Debug && speciesCode != "" {
 		if len(speciesCode) == 8 && (speciesCode[:2] == "XX" || (speciesCode[0] >= 'A' && speciesCode[0] <= 'Z' && speciesCode[1] >= 'A' && speciesCode[1] <= 'Z')) {
 			GetLogger().Debug("using placeholder taxonomy code",
 				logger.String("taxonomy_code", speciesCode),
@@ -971,37 +883,18 @@ func (p *Processor) parseAndValidateSpecies(settings *conf.Settings, result data
 	return
 }
 
-// shouldApplyRangeFilter returns true if the given model should have its
-// detections filtered by the geographic range filter.
-// BirdNET (any version), Perch, and unknown models are filtered. Perch returns
-// scientific-name labels, and the included-species set stores scientific names
-// for O(1) lookup, so the normal range list applies even when the active range
-// model is the embedded BirdNET geomodel rather than v3.
-// Bat/BSG: never filtered (independent species sets, no geomodel coverage).
-func shouldApplyRangeFilter(modelID string, settings *conf.Settings) bool {
-	if settings == nil || !settings.BirdNET.LocationConfigured {
-		return false
-	}
-	mInfo := classifier.DetectionModelInfoForID(modelID)
-	if mInfo.Name == detection.DefaultModelName || mInfo.Name == classifier.DetectionNamePerch {
-		return true
-	}
-	return false
-}
-
 // shouldFilterDetection checks if a detection should be filtered out
 func (p *Processor) shouldFilterDetection(settings *conf.Settings, result datastore.Results, commonName, scientificName, speciesLowercase string, baseThreshold float32, source, modelID string) (shouldFilter bool, confidenceThreshold float32) {
-	// Check human detection privacy filter. Match the raw label so Perch v2's
-	// FSD50K human classes are caught too, not just BirdNET's "Human *" classes.
-	if isHumanVocalization(result.Species) && result.Confidence > baseThreshold {
-		return true, 0 // Filter out human detections for privacy
+	// Privacy filter (opt-in, off by default): when enabled, discard human-voice
+	// detections so audio containing speech is not retained. VoiceWatch's purpose
+	// is to DETECT and store human voice, so detections pass through and are saved
+	// unless an operator explicitly turns the privacy filter on.
+	if settings.Realtime.PrivacyFilter.Enabled && isHumanVocalization(result.Species) && result.Confidence > baseThreshold {
+		return true, 0
 	}
 
-	// Check species exclusion filter (ignore list).
-	// This is the authoritative per-detection check. The range filter also excludes these
-	// species when building the included list, but that only works when the range filter
-	// model is active and location is configured. This check ensures excluded species are
-	// always filtered regardless of range filter state.
+	// Check species exclusion filter (ignore list). This is the authoritative
+	// per-detection check ensuring excluded species are always filtered out.
 	if isSpeciesExcluded(commonName, scientificName, settings.Realtime.Species.Exclude) {
 		if settings.Debug {
 			GetLogger().Debug("Detection filtered: species is on exclude list",
@@ -1038,23 +931,11 @@ func (p *Processor) shouldFilterDetection(settings *conf.Settings, result datast
 		return true, confidenceThreshold
 	}
 
-	if shouldApplyRangeFilter(modelID, settings) && !settings.IsSpeciesIncluded(result.Species) {
-		if settings.Debug {
-			GetLogger().Debug("species not on included list",
-				logger.String("species", result.Species),
-				logger.Float32("confidence", result.Confidence),
-				logger.String("model_id", modelID),
-				logger.String("operation", "species_inclusion_filter"))
-		}
-		return true, confidenceThreshold
-	}
-
 	return false, confidenceThreshold
 }
 
 // isSpeciesExcluded checks if a species (by common or scientific name) matches any entry
-// in the exclude list. Matching is case-insensitive and supports either name form, consistent
-// with the range filter's matchesSpecies logic (see birdnet/range_filter.go).
+// in the exclude list. Matching is case-insensitive and supports either name form.
 func isSpeciesExcluded(commonName, scientificName string, excludeList []string) bool {
 	for _, excluded := range excludeList {
 		if strings.EqualFold(commonName, excluded) || strings.EqualFold(scientificName, excluded) {
@@ -1088,8 +969,8 @@ func (p *Processor) createDetection(settings *conf.Settings, item classifier.Res
 	beginTime := item.StartTime
 	endTime := item.StartTime.Add(captureLength - preCaptureLength)
 
-	// Get occurrence probability for this species at detection time
-	occurrence := p.Bn.GetSpeciesOccurrenceAtTime(result.Species, item.StartTime)
+	// Occurrence probability is not available without taxonomy/range data.
+	occurrence := 0.0
 
 	// Compute detection time once to ensure Result has consistent timestamp
 	// This prevents date mismatch around midnight when time.Now() would be called separately
@@ -1156,10 +1037,10 @@ func (p *Processor) createDetectionResult(settings *conf.Settings,
 			Code:           speciesCode,
 		},
 		Confidence:     math.Round(confidence*100) / 100,
-		Latitude:       settings.BirdNET.Latitude,
-		Longitude:      settings.BirdNET.Longitude,
-		Threshold:      settings.BirdNET.Threshold,
-		Sensitivity:    settings.BirdNET.Sensitivity,
+		Latitude:       settings.VoiceWatch.Latitude,
+		Longitude:      settings.VoiceWatch.Longitude,
+		Threshold:      settings.VoiceWatch.Threshold,
+		Sensitivity:    settings.VoiceWatch.Sensitivity,
 		ClipName:       clipName,
 		ProcessingTime: elapsedTime,
 		Occurrence:     math.Max(0.0, math.Min(1.0, occurrence)),
@@ -1210,7 +1091,7 @@ func (p *Processor) resolveAudioSource(source datastore.AudioSource) detection.A
 // convertToAdditionalResults converts a slice of datastore.Results to detection.AdditionalResult,
 // deduplicating by scientific name and keeping the highest confidence for each species.
 // The primary species is excluded since it's already stored as Detection.LabelID.
-// Custom BirdNET classifiers can have the same species at multiple positions in the label file,
+// Custom VoiceWatch classifiers can have the same species at multiple positions in the label file,
 // producing duplicate entries in prediction results that would cause UNIQUE constraint violations.
 func convertToAdditionalResults(results []datastore.Results, primaryScientificName string) []detection.AdditionalResult {
 	additional := make([]detection.AdditionalResult, 0, len(results))
@@ -1269,23 +1150,6 @@ func (p *Processor) syncSpeciesTrackerIfNeeded() {
 	}
 }
 
-// handleDogDetection handles the detection of dog barks and updates the last detection timestamp.
-//
-//nolint:gocritic // hugeParam: Pass by value is intentional - avoids pointer dereferencing in hot path
-func (p *Processor) handleDogDetection(settings *conf.Settings, item classifier.Results, result datastore.Results) {
-	if settings.Realtime.DogBarkFilter.Enabled && isDogDetection(result.Species) &&
-		result.Confidence > settings.Realtime.DogBarkFilter.Confidence {
-		GetLogger().Info("dog detection filtered",
-			logger.Float32("confidence", result.Confidence),
-			logger.Float32("threshold", float32(settings.Realtime.DogBarkFilter.Confidence)),
-			logger.String("source", p.getDisplayNameForSource(item.Source.ID)),
-			logger.String("operation", "dog_bark_filter"))
-		p.detectionMutex.Lock()
-		p.LastDogDetection[item.Source.ID] = item.StartTime
-		p.detectionMutex.Unlock()
-	}
-}
-
 // handleHumanDetection handles the detection of human vocalizations and updates the last detection timestamp.
 //
 //nolint:gocritic // hugeParam: Pass by value is intentional - avoids pointer dereferencing in hot path
@@ -1299,7 +1163,7 @@ func (p *Processor) handleHumanDetection(settings *conf.Settings, item classifie
 			logger.String("source", p.getDisplayNameForSource(item.Source.ID)),
 			logger.String("operation", "privacy_filter"))
 		// put human detection timestamp into LastHumanDetection map. This is used to discard
-		// bird detections if a human vocalization is detected after the first detection
+		// any detection that coincides with (or follows) detected human speech
 		p.detectionMutex.Lock()
 		p.LastHumanDetection[item.Source.ID] = item.StartTime
 		p.detectionMutex.Unlock()
@@ -1308,8 +1172,7 @@ func (p *Processor) handleHumanDetection(settings *conf.Settings, item classifie
 
 // getBaseConfidenceThreshold retrieves the confidence threshold for a species, using custom or global thresholds.
 // It supports lookup by both common name and scientific name for consistency with include/exclude matching.
-// The modelID parameter selects which global threshold to use when no per-species config exists:
-// bat models use settings.Bat.Threshold, all others use settings.BirdNET.Threshold.
+// Per-species config takes precedence; otherwise settings.VoiceWatch.Threshold is used.
 func (p *Processor) getBaseConfidenceThreshold(settings *conf.Settings, commonName, scientificName, modelID string) float32 {
 	// Check if species has a custom threshold using both common and scientific name lookup
 	if config, exists := lookupSpeciesConfig(settings.Realtime.Species.Config, commonName, scientificName); exists {
@@ -1323,11 +1186,8 @@ func (p *Processor) getBaseConfidenceThreshold(settings *conf.Settings, commonNa
 		return float32(config.Threshold)
 	}
 
-	// Fall back to model-specific global threshold
-	if modelID == classifier.RegistryIDBat {
-		return float32(settings.Bat.Threshold)
-	}
-	return float32(settings.BirdNET.Threshold)
+	// Fall back to the global threshold.
+	return float32(settings.VoiceWatch.Threshold)
 }
 
 // generateClipName generates a clip name for the given scientific name and confidence.
@@ -1409,8 +1269,8 @@ func (p *Processor) shouldDiscardDetection(item *PendingDetection, settings *con
 		p.detectionMutex.RLock()
 		lastHumanDetection, exists := p.LastHumanDetection[item.Source]
 		p.detectionMutex.RUnlock()
-		// Discard when a human voice was detected at or after the bird detection
-		// started. Using !Before (>=) rather than After (>) so a human and a bird
+		// Discard when human voice was detected at or after this detection
+		// started. Using !Before (>=) rather than After (>) so a detection
 		// sharing the exact same audio chunk (equal timestamps) still trips the
 		// privacy filter instead of leaking the detection.
 		if exists && !lastHumanDetection.Before(item.FirstDetected) {
@@ -1422,31 +1282,6 @@ func (p *Processor) shouldDiscardDetection(item *PendingDetection, settings *con
 				logger.String("source", p.getDisplayNameForSource(item.Source)),
 				logger.String("operation", "privacy_filter"))
 			return true, "privacy filter"
-		}
-	}
-
-	// Check dog bark filter
-	if settings.Realtime.DogBarkFilter.Enabled {
-		if settings.Realtime.DogBarkFilter.Debug {
-			p.detectionMutex.RLock()
-			GetLogger().Debug("last dog detection status",
-				logger.Any("last_detections", p.LastDogDetection),
-				logger.String("operation", "dog_detection_debug"))
-			p.detectionMutex.RUnlock()
-		}
-		p.detectionMutex.RLock()
-		lastDogDetection := p.LastDogDetection[item.Source]
-		p.detectionMutex.RUnlock()
-		if p.CheckDogBarkFilter(item.Detection.Result.Species.CommonName, lastDogDetection) ||
-			p.CheckDogBarkFilter(item.Detection.Result.Species.ScientificName, lastDogDetection) {
-			// Add structured logging for dog bark filter
-			GetLogger().Debug("Detection discarded by dog bark filter",
-				logger.String("species", item.Detection.Result.Species.CommonName),
-				logger.Time("detection_time", item.FirstDetected),
-				logger.Time("last_dog_detection", lastDogDetection),
-				logger.String("source", p.getDisplayNameForSource(item.Source)),
-				logger.String("operation", "dog_bark_filter"))
-			return true, "recent dog bark"
 		}
 	}
 
@@ -1476,8 +1311,10 @@ func (p *Processor) shouldDiscardDetection(item *PendingDetection, settings *con
 	return false, ""
 }
 
-// processApprovedDetection handles an approved detection by sending it to the worker queue
-func (p *Processor) processApprovedDetection(item *PendingDetection, speciesName string) {
+// processApprovedDetection handles an approved detection by sending it to the worker queue.
+// ctx is the flusher lifecycle context, threaded to the speaker-attribute seam so a
+// blocking model honors shutdown cancellation.
+func (p *Processor) processApprovedDetection(ctx context.Context, item *PendingDetection, speciesName string) {
 	settings := p.currentSettings()
 
 	GetLogger().Info("approving detection",
@@ -1514,6 +1351,11 @@ func (p *Processor) processApprovedDetection(item *PendingDetection, speciesName
 		}
 	}
 
+	// Estimate speaker attributes (gender/age/voice-print) on the detection's
+	// audio before actions are built, so they ride into the database save via
+	// NoteFromResult. No-op (and instant) unless the opt-in analyzer is enabled.
+	p.analyzeSpeakerAttributes(ctx, item)
+
 	actionList := p.getActionsForItem(&item.Detection)
 	for _, action := range actionList {
 		task := &Task{Type: TaskTypeAction, Detection: item.Detection, Action: action}
@@ -1535,9 +1377,9 @@ func (p *Processor) processApprovedDetection(item *PendingDetection, speciesName
 		}
 	}
 
-	// Update BirdNET metrics detection counter if enabled
-	if settings.Realtime.Telemetry.Enabled && p.Metrics != nil && p.Metrics.BirdNET != nil {
-		p.Metrics.BirdNET.IncrementDetectionCounter(item.Detection.Result.Species.CommonName)
+	// Update VoiceWatch metrics detection counter if enabled
+	if settings.Realtime.Telemetry.Enabled && p.Metrics != nil && p.Metrics.VoiceWatch != nil {
+		p.Metrics.VoiceWatch.IncrementDetectionCounter(item.Detection.Result.Species.CommonName)
 	}
 }
 
@@ -1577,7 +1419,7 @@ func (p *Processor) processApprovedDetection(item *PendingDetection, speciesName
 // calculateMinDetectionsFromSettings computes minimum detections from settings alone.
 // This is a standalone function that doesn't require a Processor instance.
 func calculateMinDetectionsFromSettings(settings *conf.Settings) int {
-	// BirdNET uses 3-second chunks for analysis
+	// VoiceWatch uses 3-second audio chunks for analysis
 	const chunkDurationSeconds = 3.0
 	// Bird vocalization reference window - typical duration of a bird call
 	// Used to calculate how many detections are possible within a single vocalization
@@ -1590,7 +1432,7 @@ func calculateMinDetectionsFromSettings(settings *conf.Settings) int {
 
 	// Get filtering level from settings
 	level := settings.Realtime.FalsePositiveFilter.Level
-	overlap := settings.BirdNET.Overlap
+	overlap := settings.VoiceWatch.Overlap
 
 	// Level 0: no filtering
 	if level == 0 {
@@ -1697,7 +1539,7 @@ func (p *Processor) flushPendingDetections() (pendingCount, flushedCount int) {
 			logger.Int("required", itemMinDetections),
 			logger.String("operation", "flush_detection"))
 
-		p.processApprovedDetection(&item, speciesName)
+		p.processApprovedDetection(p.flusherCtx, &item, speciesName)
 		delete(p.pendingDetections, mapKey)
 		flushedCount++
 
@@ -1729,26 +1571,17 @@ func (p *Processor) flushPendingDetections() (pendingCount, flushedCount int) {
 	return pendingCount, flushedCount
 }
 
-// logMinDetectionsChanges logs when bird or bat minDetections values change
-// due to a config hot-reload, helping operators verify that FP filter
-// adjustments took effect.
-func logMinDetectionsChanges(settings *conf.Settings, lastBird, lastBat *int) {
+// logMinDetectionsChanges logs when minDetections changes due to a config hot-reload,
+// helping operators verify that FP filter adjustments took effect.
+func logMinDetectionsChanges(settings *conf.Settings, lastBird *int) {
 	bird := calculateMinDetectionsFromSettings(settings)
-	bat := calculateBatMinDetections(settings)
 	if *lastBird != -1 && bird != *lastBird {
-		GetLogger().Info("bird minDetections updated due to config change",
+		GetLogger().Info("minDetections updated due to config change",
 			logger.Int("old_value", *lastBird),
 			logger.Int("new_value", bird),
 			logger.String("operation", "pending_flusher_config_update"))
 	}
-	if *lastBat != -1 && bat != *lastBat {
-		GetLogger().Info("bat minDetections updated due to config change",
-			logger.Int("old_value", *lastBat),
-			logger.Int("new_value", bat),
-			logger.String("operation", "pending_flusher_config_update"))
-	}
 	*lastBird = bird
-	*lastBat = bat
 }
 
 // pendingDetectionsFlusher runs a goroutine that periodically checks the pending detections
@@ -1762,12 +1595,12 @@ func (p *Processor) pendingDetectionsFlusher() {
 		ticker := time.NewTicker(DefaultFlushInterval)
 		defer ticker.Stop()
 
-		lastBirdMinDet, lastBatMinDet := -1, -1
+		lastBirdMinDet := -1
 
 		for {
 			select {
 			case <-ticker.C:
-				logMinDetectionsChanges(p.currentSettings(), &lastBirdMinDet, &lastBatMinDet)
+				logMinDetectionsChanges(p.currentSettings(), &lastBirdMinDet)
 				pendingCount, flushedCount := p.flushPendingDetections()
 
 				if pendingCount > 0 || flushedCount > 0 {
@@ -1993,7 +1826,6 @@ func (p *Processor) getDefaultActions(det *Detections) []Action {
 		sseAction = &SSEAction{
 			Settings:       settings,
 			Result:         det.Result, // Domain model (single source of truth)
-			BirdImageCache: p.BirdImageCache,
 			EventTracker:   p.GetEventTracker(),
 			DetectionCtx:   detectionCtx, // Share context from DatabaseAction (provides database ID)
 			RetryConfig:    sseRetryConfig,
@@ -2012,14 +1844,13 @@ func (p *Processor) getDefaultActions(det *Detections) []Action {
 			mqttRetryConfig := retryConfigFromSettings(settings.Realtime.MQTT.RetrySettings)
 
 			mqttAction = &MqttAction{
-				Settings:       settings,
-				MqttClient:     mqttClient,
-				EventTracker:   p.GetEventTracker(),
-				DetectionCtx:   detectionCtx, // Share context from DatabaseAction
-				Result:         det.Result,   // Domain model (single source of truth)
-				BirdImageCache: p.BirdImageCache,
-				RetryConfig:    mqttRetryConfig,
-				CorrelationID:  det.CorrelationID,
+				Settings:      settings,
+				MqttClient:    mqttClient,
+				EventTracker:  p.GetEventTracker(),
+				DetectionCtx:  detectionCtx, // Share context from DatabaseAction
+				Result:        det.Result,   // Domain model (single source of truth)
+				RetryConfig:   mqttRetryConfig,
+				CorrelationID: det.CorrelationID,
 			}
 		}
 	}
@@ -2045,8 +1876,8 @@ func (p *Processor) getDefaultActions(det *Detections) []Action {
 	// race where a client requests audio before export completes, using server-side
 	// wait with retries and 503 + Retry-After responses.
 	//
-	// See: https://github.com/tphakala/birdnet-go/issues/1158 (race condition)
-	// See: https://github.com/tphakala/birdnet-go/issues/1748 (detection ID in MQTT)
+	// See: https://github.com/tphakala/voicewatch/issues/1158 (race condition)
+	// See: https://github.com/tphakala/voicewatch/issues/1748 (detection ID in MQTT)
 	var sequentialActions []Action
 	if databaseAction != nil {
 		sequentialActions = append(sequentialActions, databaseAction)
@@ -2081,37 +1912,28 @@ func (p *Processor) getDefaultActions(det *Detections) []Action {
 		actions = append(actions, p.buildSaveAudioAction(det, detectionCtx))
 	}
 
-	// Add BirdWeatherAction if enabled and client is initialized
-	// NOTE: BirdWeather runs independently (doesn't need detection ID from database)
-	if settings.Realtime.Birdweather.Enabled {
-		bwClient := p.GetBwClient() // Use getter for thread safety
-		if bwClient != nil {
-			bwRetryConfig := retryConfigFromSettings(settings.Realtime.Birdweather.RetrySettings)
-
-			actions = append(actions, &BirdWeatherAction{
-				Settings:      settings,
-				EventTracker:  p.GetEventTracker(),
-				BwClient:      bwClient,
-				Result:        det.Result, // Domain model (single source of truth)
-				pcmData:       det.pcmData3s,
-				RetryConfig:   bwRetryConfig,
-				CorrelationID: det.CorrelationID,
-			})
-		}
-	}
-
-	// Check if UpdateRangeFilterAction needs to be executed for the day
-	// Use atomic check-and-set to prevent race conditions (see GitHub issue #1357)
-	// This ensures only ONE goroutine will trigger the daily range filter update,
-	// preventing concurrent updates that could cause species list inconsistencies
-	if conf.ShouldUpdateRangeFilterToday() {
-		GetLogger().Info("Scheduling daily range filter update",
-			logger.Time("last_updated", settings.GetLastRangeFilterUpdate()),
-			logger.String("operation", "update_range_filter"))
-		// Add UpdateRangeFilterAction if it hasn't been executed today
-		actions = append(actions, &UpdateRangeFilterAction{
-			Bn:       p.Bn,
-			Settings: settings,
+	// Add TranscribeAction if transcription is enabled. It runs as an INDEPENDENT
+	// action (its own job) AFTER the DatabaseAction so it can read the
+	// database-assigned detection ID from the shared DetectionContext. Running it
+	// off the Database -> SSE -> MQTT composite ensures slow speech-to-text never
+	// blocks real-time broadcasts. The Transcriber is constructed from config; if
+	// the binary or model is missing it skips gracefully at Execute time.
+	if settings.Realtime.Transcription.Enabled && databaseAction != nil {
+		transcriber := transcription.NewWhisperCLI(transcription.Config{
+			Binary:   settings.Realtime.Transcription.Binary,
+			Model:    settings.Realtime.Transcription.Model,
+			Language: settings.Realtime.Transcription.Language,
+		})
+		actions = append(actions, &TranscribeAction{
+			Settings:      settings,
+			Result:        det.Result,
+			Transcriber:   transcriber,
+			Repo:          p.Repo,
+			EventTracker:  p.GetEventTracker(),
+			DetectionCtx:  detectionCtx, // Share context from DatabaseAction (provides detection ID)
+			RetryConfig:   newTranscribeRetryConfig(),
+			ClipName:      det.Result.ClipName,
+			CorrelationID: det.CorrelationID,
 		})
 	}
 
@@ -2247,31 +2069,6 @@ func (p *Processor) readCaptureSegment(sourceID string, startTime time.Time, dur
 	return cb.ReadSegment(startTime, endTime)
 }
 
-// GetBwClient safely returns the current BirdWeather client
-func (p *Processor) GetBwClient() *birdweather.BwClient {
-	p.bwClientMutex.RLock()
-	defer p.bwClientMutex.RUnlock()
-	return p.BwClient
-}
-
-// SetBwClient safely sets a new BirdWeather client
-func (p *Processor) SetBwClient(client *birdweather.BwClient) {
-	p.bwClientMutex.Lock()
-	defer p.bwClientMutex.Unlock()
-	p.BwClient = client
-}
-
-// DisconnectBwClient safely disconnects and removes the BirdWeather client
-func (p *Processor) DisconnectBwClient() {
-	p.bwClientMutex.Lock()
-	defer p.bwClientMutex.Unlock()
-	// Call the Close method if the client exists
-	if p.BwClient != nil {
-		p.BwClient.Close()
-		p.BwClient = nil
-	}
-}
-
 // SetEventTracker safely replaces the current EventTracker
 func (p *Processor) SetEventTracker(tracker *EventTracker) {
 	p.eventTrackerMu.Lock()
@@ -2306,27 +2103,27 @@ func (p *Processor) GetJobQueueStats() jobqueue.JobStatsSnapshot {
 	return p.JobQueue.GetStats()
 }
 
-// GetBn returns the BirdNET instance
+// GetBn returns the VoiceWatch classifier orchestrator
 //
-// Deprecated: Use GetBirdNET instead
+// Deprecated: Use GetOrchestrator instead
 func (p *Processor) GetBn() *classifier.Orchestrator {
 	return p.Bn
 }
 
-// GetBirdNET returns the BirdNET instance
-func (p *Processor) GetBirdNET() *classifier.Orchestrator {
+// GetOrchestrator returns the VoiceWatch classifier orchestrator
+func (p *Processor) GetOrchestrator() *classifier.Orchestrator {
 	return p.Bn
 }
 
-// SetSSEBroadcaster safely sets the SSE broadcaster function
-func (p *Processor) SetSSEBroadcaster(broadcaster func(note *datastore.Note, birdImage *imageprovider.BirdImage) error) {
+// SetSSEBroadcaster safely sets the SSE broadcaster function.
+func (p *Processor) SetSSEBroadcaster(broadcaster func(note *datastore.Note) error) {
 	p.sseBroadcasterMutex.Lock()
 	defer p.sseBroadcasterMutex.Unlock()
 	p.SSEBroadcaster = broadcaster
 }
 
-// GetSSEBroadcaster safely returns the current SSE broadcaster function
-func (p *Processor) GetSSEBroadcaster() func(note *datastore.Note, birdImage *imageprovider.BirdImage) error {
+// GetSSEBroadcaster safely returns the current SSE broadcaster function.
+func (p *Processor) GetSSEBroadcaster() func(note *datastore.Note) error {
 	p.sseBroadcasterMutex.RLock()
 	defer p.sseBroadcasterMutex.RUnlock()
 	return p.SSEBroadcaster
@@ -2531,9 +2328,6 @@ func (p *Processor) ShutdownWithContext(ctx context.Context) error {
 			logger.String("operation", "processor_shutdown"))
 		return nil //nolint:nilerr // Context expiration during non-critical cleanup is acceptable; not a failure.
 	}
-
-	// Disconnect BirdWeather client
-	p.DisconnectBwClient()
 
 	// Disconnect MQTT client if connected
 	mqttClient := p.GetMQTTClient()

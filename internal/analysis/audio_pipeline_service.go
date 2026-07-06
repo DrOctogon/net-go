@@ -12,24 +12,24 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/alerting"
-	"github.com/tphakala/birdnet-go/internal/audiocore"
-	"github.com/tphakala/birdnet-go/internal/audiocore/buffer"
-	"github.com/tphakala/birdnet-go/internal/audiocore/engine"
-	"github.com/tphakala/birdnet-go/internal/audiocore/equalizer"
-	"github.com/tphakala/birdnet-go/internal/audiocore/ffmpeg"
-	"github.com/tphakala/birdnet-go/internal/audiocore/schedule"
-	"github.com/tphakala/birdnet-go/internal/audiocore/soundlevel"
-	"github.com/tphakala/birdnet-go/internal/classifier"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	"github.com/tphakala/birdnet-go/internal/diskmanager"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/notification"
-	"github.com/tphakala/birdnet-go/internal/observability"
-	"github.com/tphakala/birdnet-go/internal/privacy"
-	"github.com/tphakala/birdnet-go/internal/weather"
+	"github.com/tphakala/voicewatch/internal/alerting"
+	"github.com/tphakala/voicewatch/internal/audiocore"
+	"github.com/tphakala/voicewatch/internal/audiocore/buffer"
+	"github.com/tphakala/voicewatch/internal/audiocore/engine"
+	"github.com/tphakala/voicewatch/internal/audiocore/equalizer"
+	"github.com/tphakala/voicewatch/internal/audiocore/ffmpeg"
+	"github.com/tphakala/voicewatch/internal/audiocore/schedule"
+	"github.com/tphakala/voicewatch/internal/audiocore/soundlevel"
+	"github.com/tphakala/voicewatch/internal/classifier"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/diskmanager"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/notification"
+	"github.com/tphakala/voicewatch/internal/observability"
+	"github.com/tphakala/voicewatch/internal/privacy"
+	"github.com/tphakala/voicewatch/internal/weather"
 )
 
 // audioPipelineServiceName is the service name used for logging and diagnostics.
@@ -47,7 +47,7 @@ const policyNone = "none"
 // weather polling, and the restart loop for audio capture.
 type AudioPipelineService struct {
 	settings   *conf.Settings
-	bnAnalyzer *BirdNETAnalyzer
+	bnAnalyzer *VoiceWatchAnalyzer
 	dbService  *DatabaseService
 	apiService *APIServerService
 	engine     *engine.AudioEngine
@@ -56,6 +56,7 @@ type AudioPipelineService struct {
 	bufferMgr           *BufferManager
 	ctrlMonitor         *ControlMonitor
 	quietHoursScheduler *schedule.QuietHoursScheduler
+	continuousRecorder  *ContinuousRecorder
 	soundLevelChan      chan soundlevel.SoundLevelData
 	restartChan         chan struct{}
 	done                chan struct{}
@@ -86,7 +87,7 @@ type AudioPipelineService struct {
 
 // NewAudioPipelineService creates a new AudioPipelineService with the given dependencies.
 // The service is not started; call Start() to initialize the audio pipeline.
-func NewAudioPipelineService(settings *conf.Settings, bnAnalyzer *BirdNETAnalyzer, dbService *DatabaseService, apiService *APIServerService, audioEngine *engine.AudioEngine) *AudioPipelineService {
+func NewAudioPipelineService(settings *conf.Settings, bnAnalyzer *VoiceWatchAnalyzer, dbService *DatabaseService, apiService *APIServerService, audioEngine *engine.AudioEngine) *AudioPipelineService {
 	return &AudioPipelineService{
 		settings:   settings,
 		bnAnalyzer: bnAnalyzer,
@@ -156,8 +157,8 @@ func (p *AudioPipelineService) Start(_ context.Context) error {
 			Context("operation", "start_precondition_check").
 			Build()
 	}
-	if p.bnAnalyzer == nil || p.bnAnalyzer.BirdNET() == nil {
-		return errors.Newf("audio-pipeline requires an initialized birdnet model; birdnet-analyzer service must be started first").
+	if p.bnAnalyzer == nil || p.bnAnalyzer.Orchestrator() == nil {
+		return errors.Newf("audio-pipeline requires an initialized voicewatch model; voicewatch-analyzer service must be started first").
 			Component("analysis.audio_pipeline").
 			Category(errors.CategorySystem).
 			Context("operation", "start_precondition_check").
@@ -172,7 +173,7 @@ func (p *AudioPipelineService) Start(_ context.Context) error {
 	}
 
 	settings := p.settings
-	bn := p.bnAnalyzer.BirdNET()
+	bn := p.bnAnalyzer.Orchestrator()
 	dataStore := p.dbService.DataStore()
 	metrics := p.apiService.Metrics()
 
@@ -216,9 +217,9 @@ func (p *AudioPipelineService) Start(_ context.Context) error {
 	p.restartChan = make(chan struct{}, 10)
 	p.done = make(chan struct{})
 
-	// NOTE: Previously called birdnet.ResizeQueue(5) here, but this caused a race
+	// NOTE: Previously called the classifier queue ResizeQueue(5) here, but this caused a race
 	// condition: the detection processor goroutine (started by APIServerService)
-	// ranges over birdnet.ResultsQueue, and ResizeQueue closes the old channel
+	// ranges over the classifier ResultsQueue, and ResizeQueue closes the old channel
 	// and creates a new one. The processor's range loop exits on the closed
 	// channel, killing the detection pipeline. The default queue size of 100 is
 	// fine; shrinking to 5 added unnecessary backpressure with no benefit.
@@ -327,9 +328,6 @@ func (p *AudioPipelineService) Start(_ context.Context) error {
 		ctrl.SetSourceRestarter(p.RestartSource)
 	}
 
-	// Inject suncalc into the orchestrator for bat nighttime scheduling.
-	bn.SetSunCalc(p.apiService.SunCalc())
-
 	// Publish application started alert event.
 	alerting.TryPublish(&alerting.AlertEvent{
 		ObjectType: alerting.ObjectTypeApplication,
@@ -381,6 +379,15 @@ func (p *AudioPipelineService) Start(_ context.Context) error {
 			}
 		}
 	})
+
+	// Start continuous full-audio recorder for archival / voice-print analysis.
+	// Decoupled from the detection pipeline: one ffmpeg process per RTSP stream.
+	p.continuousRecorder = NewContinuousRecorder(settings)
+	if err := p.continuousRecorder.Start(context.Background()); err != nil {
+		log.Warn("continuous recorder failed to start",
+			logger.Error(err),
+			logger.String("operation", "start_continuous_recorder"))
+	}
 
 	startSucceeded = true
 	return nil
@@ -438,6 +445,14 @@ func (p *AudioPipelineService) Stop(ctx context.Context) error {
 	// Stop audio level stats logger.
 	if p.audioLevelStats != nil {
 		p.audioLevelStats.Stop()
+	}
+
+	// Stop continuous recorder (cancels ffmpeg processes and retention goroutine).
+	if p.continuousRecorder != nil {
+		log.Info("stopping continuous recorder",
+			logger.String("operation", "shutdown_continuous_recorder"))
+		p.continuousRecorder.Stop()
+		p.continuousRecorder = nil
 	}
 
 	// Close done channel to signal restart loop and clip cleanup goroutines.
@@ -889,14 +904,14 @@ func (p *AudioPipelineService) registerConsumersForSources(sourceIDs []string, s
 	log := audiocore.GetLogger()
 
 	// Build a lookup of all loaded model infos keyed by registry ID.
-	modelInfoSlice := p.bnAnalyzer.BirdNET().ModelInfos()
+	modelInfoSlice := p.bnAnalyzer.Orchestrator().ModelInfos()
 	allModelInfos := make(map[string]classifier.ModelInfo, len(modelInfoSlice))
 	for i := range modelInfoSlice {
 		allModelInfos[modelInfoSlice[i].ID] = modelInfoSlice[i]
 	}
 
 	// Primary model fallback targets for sources with no model config.
-	primaryTargets := []classifier.ModelInfo{p.bnAnalyzer.BirdNET().PrimaryModelInfo()}
+	primaryTargets := []classifier.ModelInfo{p.bnAnalyzer.Orchestrator().PrimaryModelInfo()}
 
 	bufMgr := p.engine.BufferManager()
 	currentSettings := conf.Setting()
@@ -1110,12 +1125,12 @@ func (p *AudioPipelineService) reconfigureChangedSources(audioLevelChan chan aud
 	var loadedModels map[string]classifier.ModelInfo
 	var primaryModelID string
 	if p.bnAnalyzer != nil {
-		modelInfoSlice := p.bnAnalyzer.BirdNET().ModelInfos()
+		modelInfoSlice := p.bnAnalyzer.Orchestrator().ModelInfos()
 		loadedModels = make(map[string]classifier.ModelInfo, len(modelInfoSlice))
 		for i := range modelInfoSlice {
 			loadedModels[modelInfoSlice[i].ID] = modelInfoSlice[i]
 		}
-		primaryModelID = p.bnAnalyzer.BirdNET().PrimaryModelID()
+		primaryModelID = p.bnAnalyzer.Orchestrator().PrimaryModelID()
 	}
 	bufMgr := p.engine.BufferManager()
 
@@ -1505,13 +1520,13 @@ func (p *AudioPipelineService) probeStreamSampleRate(url, name string) streamPro
 // monitorConfig gets the correct spec (sample rate + clip length).
 func (p *AudioPipelineService) buildMonitorConfigs(sourceModelMap map[string][]string, sourceIDs []string) map[string][]monitorConfig {
 	// Build lookup of loaded models by registry ID.
-	modelInfoSlice := p.bnAnalyzer.BirdNET().ModelInfos()
+	modelInfoSlice := p.bnAnalyzer.Orchestrator().ModelInfos()
 	loadedModels := make(map[string]classifier.ModelInfo, len(modelInfoSlice))
 	for i := range modelInfoSlice {
 		loadedModels[modelInfoSlice[i].ID] = modelInfoSlice[i]
 	}
 
-	primaryInfo := p.bnAnalyzer.BirdNET().PrimaryModelInfo()
+	primaryInfo := p.bnAnalyzer.Orchestrator().PrimaryModelInfo()
 	result := make(map[string][]monitorConfig, len(sourceIDs))
 
 	for _, sid := range sourceIDs {

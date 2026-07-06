@@ -57,7 +57,7 @@ func TestPrepareSettingsForSave_EnabledWithExistingSeasons(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			settings := &Settings{}
-			settings.BirdNET.LocationConfigured = true
+			settings.VoiceWatch.LocationConfigured = true
 			settings.Realtime.SpeciesTracking.SeasonalTracking.Enabled = true
 			settings.Realtime.SpeciesTracking.SeasonalTracking.Seasons = maps.Clone(customSeasons)
 
@@ -97,7 +97,7 @@ func TestPrepareSettingsForSave_NorthernHemisphere(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			settings := &Settings{}
-			settings.BirdNET.LocationConfigured = true
+			settings.VoiceWatch.LocationConfigured = true
 			settings.Realtime.SpeciesTracking.SeasonalTracking.Enabled = true
 			settings.Realtime.SpeciesTracking.SeasonalTracking.Seasons = nil
 
@@ -133,7 +133,7 @@ func TestPrepareSettingsForSave_SouthernHemisphere(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			settings := &Settings{}
-			settings.BirdNET.LocationConfigured = true
+			settings.VoiceWatch.LocationConfigured = true
 			settings.Realtime.SpeciesTracking.SeasonalTracking.Enabled = true
 			settings.Realtime.SpeciesTracking.SeasonalTracking.Seasons = nil
 
@@ -180,7 +180,7 @@ func TestPrepareSettingsForSave_CorrectsSouthernHemisphere(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			settings := &Settings{}
-			settings.BirdNET.LocationConfigured = true
+			settings.VoiceWatch.LocationConfigured = true
 			settings.Realtime.SpeciesTracking.SeasonalTracking.Enabled = true
 			settings.Realtime.SpeciesTracking.SeasonalTracking.Seasons = maps.Clone(nhDefaults)
 
@@ -212,7 +212,7 @@ func TestPrepareSettingsForSave_PreservesNorthernForNorthern(t *testing.T) {
 	}
 
 	settings := &Settings{}
-	settings.BirdNET.LocationConfigured = true
+	settings.VoiceWatch.LocationConfigured = true
 	settings.Realtime.SpeciesTracking.SeasonalTracking.Enabled = true
 	settings.Realtime.SpeciesTracking.SeasonalTracking.Seasons = maps.Clone(nhDefaults)
 
@@ -245,7 +245,7 @@ func TestPrepareSettingsForSave_EquatorialRegion(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			settings := &Settings{}
-			settings.BirdNET.LocationConfigured = true
+			settings.VoiceWatch.LocationConfigured = true
 			settings.Realtime.SpeciesTracking.SeasonalTracking.Enabled = true
 			settings.Realtime.SpeciesTracking.SeasonalTracking.Seasons = nil
 
@@ -296,7 +296,7 @@ func TestPrepareSettingsForSave_PreservesCustomSeasonNames(t *testing.T) {
 	}
 
 	settings := &Settings{}
-	settings.BirdNET.LocationConfigured = true
+	settings.VoiceWatch.LocationConfigured = true
 	settings.Realtime.SpeciesTracking.SeasonalTracking.Enabled = true
 	settings.Realtime.SpeciesTracking.SeasonalTracking.Seasons = maps.Clone(customSeasons)
 
@@ -317,7 +317,7 @@ func TestPrepareSettingsForSave_PreservesCustomSeasonNames(t *testing.T) {
 func TestPrepareSettingsForSave_DoesNotMutateInput(t *testing.T) {
 	t.Parallel()
 	originalSettings := &Settings{}
-	originalSettings.BirdNET.LocationConfigured = true
+	originalSettings.VoiceWatch.LocationConfigured = true
 	originalSettings.Realtime.SpeciesTracking.SeasonalTracking.Enabled = true
 	originalSettings.Realtime.SpeciesTracking.SeasonalTracking.Seasons = nil
 
@@ -349,7 +349,7 @@ func TestPrepareSettingsForSave_DifferentLatitudes(t *testing.T) {
 		t.Run(lat.expectedHemisphere, func(t *testing.T) {
 			t.Parallel()
 			settings := &Settings{}
-			settings.BirdNET.LocationConfigured = true
+			settings.VoiceWatch.LocationConfigured = true
 			settings.Realtime.SpeciesTracking.SeasonalTracking.Enabled = true
 			settings.Realtime.SpeciesTracking.SeasonalTracking.Seasons = nil
 
@@ -364,7 +364,7 @@ func TestPrepareSettingsForSave_DifferentLatitudes(t *testing.T) {
 // BenchmarkPrepareSettingsForSave benchmarks the preparation function.
 func BenchmarkPrepareSettingsForSave(b *testing.B) {
 	settings := &Settings{}
-	settings.BirdNET.LocationConfigured = true
+	settings.VoiceWatch.LocationConfigured = true
 	settings.Realtime.SpeciesTracking.SeasonalTracking.Enabled = true
 	settings.Realtime.SpeciesTracking.SeasonalTracking.Seasons = nil
 
@@ -378,7 +378,7 @@ func BenchmarkPrepareSettingsForSave(b *testing.B) {
 // BenchmarkPrepareSettingsForSave_WithExistingSeasons benchmarks with existing seasons.
 func BenchmarkPrepareSettingsForSave_WithExistingSeasons(b *testing.B) {
 	settings := &Settings{}
-	settings.BirdNET.LocationConfigured = true
+	settings.VoiceWatch.LocationConfigured = true
 	settings.Realtime.SpeciesTracking.SeasonalTracking.Enabled = true
 	settings.Realtime.SpeciesTracking.SeasonalTracking.Seasons = map[string]Season{
 		"winter": {StartMonth: 1, StartDay: 1},

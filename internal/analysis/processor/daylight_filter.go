@@ -1,104 +1,42 @@
 package processor
 
 import (
-	"strings"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/suncalc"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/suncalc"
 )
 
-// SetSunCalc injects the sun calculator into the processor and initializes
-// the daylight filter species list. This is called after processor creation
-// when the suncalc instance becomes available.
+// SetSunCalc injects the sun calculator into the processor. This is called
+// after processor creation when the suncalc instance becomes available.
 func (p *Processor) SetSunCalc(sc *suncalc.SunCalc) {
 	p.sunCalc = sc
 	p.initDaylightFilter()
 }
 
-// initDaylightFilter resolves the daylight filter species list at startup.
-// Follows the same pattern as initExtendedCapture(). Safe to re-call on settings refresh.
+// initDaylightFilter logs the daylight filter state at startup. The filter is
+// global: when enabled it applies to every detection, so there is no species
+// list to resolve. Safe to re-call on settings refresh.
 func (p *Processor) initDaylightFilter() {
 	settings := p.currentSettings()
 
 	if !settings.Realtime.DaylightFilter.Enabled {
-		p.daylightFilterMu.Lock()
-		p.daylightFilterAll = false
-		p.daylightFilterSpecies = nil
-		p.daylightFilterMu.Unlock()
 		return
 	}
 
-	// Skip if location has not been explicitly configured by the user
-	if !settings.BirdNET.LocationConfigured {
+	// Warn if location has not been explicitly configured by the user. Without a
+	// configured location the daylight window cannot be computed, so the filter
+	// stays inactive (see checkDaylightFilter).
+	if !settings.VoiceWatch.LocationConfigured {
 		GetLogger().Warn("Daylight filter enabled but location not configured, filter will not be active",
 			logger.String("operation", "daylight_filter_init"))
-		p.daylightFilterMu.Lock()
-		p.daylightFilterAll = false
-		p.daylightFilterSpecies = nil
-		p.daylightFilterMu.Unlock()
 		return
 	}
 
-	// Resolve config entries against the full multi-model label union (primary plus
-	// secondary models such as bats/Perch) so secondary-model species match. Fall
-	// back to the primary labels if the orchestrator is unavailable.
-	var labels []string
-	if p.Bn != nil {
-		labels = p.Bn.AllLabels()
-	}
-	if len(labels) == 0 {
-		labels = settings.BirdNET.Labels
-	}
-	locale := settings.BirdNET.Locale
-
-	// Get cached taxonomy database for genus/family/order resolution
-	taxonomyDB := p.getTaxonomyDB()
-
-	isAll, resolved := resolveSpeciesFilter(
-		settings.Realtime.DaylightFilter.Species, labels, taxonomyDB, locale, "daylight_filter",
-	)
-
-	// For an exclusionary filter, empty species list means "filter nothing",
-	// not "filter everything". Override the isAll=true default from resolveSpeciesFilter.
-	if isAll {
-		GetLogger().Warn("Daylight filter has empty species list, no species will be filtered",
-			logger.String("operation", "daylight_filter_init"))
-		p.daylightFilterMu.Lock()
-		p.daylightFilterAll = false
-		p.daylightFilterSpecies = nil
-		p.daylightFilterMu.Unlock()
-		return
-	}
-
-	p.daylightFilterMu.Lock()
-	p.daylightFilterAll = false
-	p.daylightFilterSpecies = resolved
-	p.daylightFilterMu.Unlock()
-
-	GetLogger().Info("Daylight filter enabled for filtered species",
-		logger.Int("species_count", len(resolved)),
+	GetLogger().Info("Daylight filter enabled for all detections",
 		logger.Int("offset_hours", settings.Realtime.DaylightFilter.Offset),
 		logger.String("operation", "daylight_filter_init"))
-}
-
-// isDaylightFilterSpecies checks if a species is in the daylight filter set.
-func (p *Processor) isDaylightFilterSpecies(scientificName string) bool {
-	settings := p.currentSettings()
-
-	if !settings.Realtime.DaylightFilter.Enabled {
-		return false
-	}
-
-	p.daylightFilterMu.RLock()
-	defer p.daylightFilterMu.RUnlock()
-
-	if p.daylightFilterAll {
-		return true
-	}
-
-	return p.daylightFilterSpecies[strings.ToLower(scientificName)]
 }
 
 // isDaylight checks if a time falls within the daylight window.
@@ -133,8 +71,9 @@ func (p *Processor) isDaylight(t time.Time) (bool, error) {
 }
 
 // checkDaylightFilter returns true if the detection should be discarded.
-// A detection is discarded when the species is in the filter set AND the
-// detection time falls within the daylight window. Fails open on suncalc errors.
+// The filter is global: any detection whose time falls within the daylight
+// window is discarded when the filter is enabled. Fails open on suncalc errors
+// and stays inactive until a location has been configured.
 func (p *Processor) checkDaylightFilter(scientificName string, detectionTime time.Time) bool {
 	settings := p.currentSettings()
 
@@ -142,7 +81,9 @@ func (p *Processor) checkDaylightFilter(scientificName string, detectionTime tim
 		return false
 	}
 
-	if !p.isDaylightFilterSpecies(scientificName) {
+	// Without a configured location the daylight window cannot be computed,
+	// so the filter stays inactive rather than filtering on a bogus window.
+	if !settings.VoiceWatch.LocationConfigured {
 		return false
 	}
 

@@ -1,6 +1,6 @@
 # RTSP Troubleshooting Guide
 
-This guide covers common RTSP streaming issues and their solutions in BirdNET-Go, including advanced configuration options for problematic cameras.
+This guide covers common RTSP streaming issues and their solutions in VoiceWatch, including advanced configuration options for problematic cameras.
 
 ## Table of Contents
 
@@ -44,7 +44,7 @@ Check network connectivity, verify RTSP credentials, and adjust health monitorin
 
 ## Health Monitoring Configuration
 
-BirdNET-Go includes configurable health monitoring for RTSP streams:
+VoiceWatch includes configurable health monitoring for RTSP streams:
 
 ```yaml
 realtime:
@@ -304,7 +304,7 @@ realtime:
 ffmpeg -rtsp_transport tcp -i rtsp://camera-ip:554/stream -t 10 -f null -
 ```
 
-### 2. Monitor BirdNET-Go Logs
+### 2. Monitor VoiceWatch Logs
 
 Look for these patterns in logs:
 
@@ -425,11 +425,11 @@ realtime:
 
 If you're still experiencing issues:
 
-1. **Check the GitHub Issues**: Search for similar problems in the [BirdNET-Go GitHub repository](https://github.com/tphakala/birdnet-go/issues)
+1. **Check the GitHub Issues**: Search for similar problems in the [VoiceWatch GitHub repository](https://github.com/tphakala/voicewatch/issues)
 
 2. **Enable Debug Logging**: Add `-loglevel warning` to see detailed FFmpeg output
 
-3. **Test with FFmpeg Directly**: Verify the stream works outside of BirdNET-Go
+3. **Test with FFmpeg Directly**: Verify the stream works outside of VoiceWatch
 
 4. **Provide Logs**: Include relevant log entries when reporting issues
 

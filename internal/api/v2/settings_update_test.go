@@ -10,7 +10,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/conf"
+	"github.com/tphakala/voicewatch/internal/conf"
 )
 
 // TestDashboardLayoutWidthPersistence verifies that changing element width from
@@ -103,7 +103,7 @@ func TestDashboardLayoutWidthPersistence(t *testing.T) {
 func TestMergePreservesJSONDashFields(t *testing.T) {
 	initialSettings := getTestSettings(t)
 	// Set runtime-only field (json:"-") that must survive a merge
-	initialSettings.BirdNET.Labels = []string{"species1", "species2"}
+	initialSettings.VoiceWatch.Labels = []string{"species1", "species2"}
 
 	e := echo.New()
 	controller := &Controller{
@@ -118,12 +118,12 @@ func TestMergePreservesJSONDashFields(t *testing.T) {
 	body, err := json.Marshal(update)
 	require.NoError(t, err)
 
-	req := httptest.NewRequest(http.MethodPatch, "/api/v2/settings/birdnet", bytes.NewReader(body))
+	req := httptest.NewRequest(http.MethodPatch, "/api/v2/settings/voicewatch", bytes.NewReader(body))
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 	rec := httptest.NewRecorder()
 	ctx := e.NewContext(req, rec)
 	ctx.SetParamNames("section")
-	ctx.SetParamValues("birdnet")
+	ctx.SetParamValues("voicewatch")
 
 	err = controller.UpdateSectionSettings(ctx)
 	require.NoError(t, err)
@@ -131,19 +131,17 @@ func TestMergePreservesJSONDashFields(t *testing.T) {
 
 	// Runtime field must be preserved — Labels is json:"-" and would be
 	// destroyed if zeroJSONSliceFields zeroed json:"-" tagged slices.
-	assert.Equal(t, []string{"species1", "species2"}, controller.Settings.Load().BirdNET.Labels,
-		"BirdNET.Labels (json:\"-\") must survive merge")
+	assert.Equal(t, []string{"species1", "species2"}, controller.Settings.Load().VoiceWatch.Labels,
+		"VoiceWatch.Labels (json:\"-\") must survive merge")
 }
 
 // TestDashboardPartialUpdate verifies dashboard settings preserve unmodified fields
 func TestDashboardPartialUpdate(t *testing.T) {
 	// Get initial settings and override some values for testing
 	initialSettings := getTestSettings(t)
-	initialSettings.Realtime.Dashboard.Thumbnails.ImageProvider = "testprovider"
 	initialSettings.Realtime.Dashboard.SummaryLimit = 200
 
 	// Capture initial values
-	initialProvider := initialSettings.Realtime.Dashboard.Thumbnails.ImageProvider
 	initialLimit := initialSettings.Realtime.Dashboard.SummaryLimit
 	initialRecent := initialSettings.Realtime.Dashboard.Thumbnails.Recent
 
@@ -188,8 +186,7 @@ func TestDashboardPartialUpdate(t *testing.T) {
 	settings := controller.Settings.Load()
 	assert.False(t, settings.Realtime.Dashboard.Thumbnails.Summary)                        // Changed
 	assert.Equal(t, initialRecent, settings.Realtime.Dashboard.Thumbnails.Recent)          // Preserved
-	assert.Equal(t, initialProvider, settings.Realtime.Dashboard.Thumbnails.ImageProvider) // Preserved
-	assert.Equal(t, initialLimit, settings.Realtime.Dashboard.SummaryLimit)                // Preserved
+	assert.Equal(t, initialLimit, settings.Realtime.Dashboard.SummaryLimit) // Preserved
 }
 
 // TestWeatherPartialUpdate verifies weather settings preserve unmodified fields
@@ -313,12 +310,12 @@ func TestBirdNETCoordinatesUpdate(t *testing.T) {
 	body, err := json.Marshal(update)
 	require.NoError(t, err)
 
-	req := httptest.NewRequest(http.MethodPatch, "/api/v2/settings/birdnet", bytes.NewReader(body))
+	req := httptest.NewRequest(http.MethodPatch, "/api/v2/settings/voicewatch", bytes.NewReader(body))
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 	rec := httptest.NewRecorder()
 	ctx := e.NewContext(req, rec)
 	ctx.SetParamNames("section")
-	ctx.SetParamValues("birdnet")
+	ctx.SetParamValues("voicewatch")
 
 	// Execute update
 	err = controller.UpdateSectionSettings(ctx)
@@ -327,56 +324,10 @@ func TestBirdNETCoordinatesUpdate(t *testing.T) {
 
 	// Verify settings were preserved
 	settings := controller.Settings.Load()
-	assert.InDelta(t, 51.5074, settings.BirdNET.Latitude, 0.0001)                    // Changed
-	assert.InDelta(t, -0.1278, settings.BirdNET.Longitude, 0.0001)                   // Changed
-	assert.InDelta(t, 1.0, settings.BirdNET.Sensitivity, 0.0001)                     // Preserved
-	assert.InDelta(t, 0.8, settings.BirdNET.Threshold, 0.0001)                       // Preserved
-	assert.Equal(t, "latest", settings.BirdNET.RangeFilter.Model)                    // Preserved
-	assert.InDelta(t, float32(0.03), settings.BirdNET.RangeFilter.Threshold, 0.0001) // Preserved
-}
-
-// TestNestedRangeFilterUpdate verifies nested updates preserve parent fields
-func TestNestedRangeFilterUpdate(t *testing.T) {
-	// Get initial settings (already has the values we need from getTestSettings)
-	initialSettings := getTestSettings(t)
-
-	// Create controller with settings
-	e := echo.New()
-	controller := &Controller{
-		Echo:                e,
-		controlChan:         make(chan string, 10),
-		DisableSaveSettings: true,
-	}
-	controller.Settings.Store(initialSettings)
-
-	// Update only range filter threshold
-	update := map[string]any{
-		"rangeFilter": map[string]any{
-			"threshold": 0.05,
-		},
-	}
-
-	body, err := json.Marshal(update)
-	require.NoError(t, err)
-
-	req := httptest.NewRequest(http.MethodPatch, "/api/v2/settings/birdnet", bytes.NewReader(body))
-	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	rec := httptest.NewRecorder()
-	ctx := e.NewContext(req, rec)
-	ctx.SetParamNames("section")
-	ctx.SetParamValues("birdnet")
-
-	// Execute update
-	err = controller.UpdateSectionSettings(ctx)
-	require.NoError(t, err)
-	assert.Equal(t, http.StatusOK, rec.Code)
-
-	// Verify settings were preserved
-	settings := controller.Settings.Load()
-	assert.InDelta(t, float32(0.05), settings.BirdNET.RangeFilter.Threshold, 0.0001) // Changed
-	assert.InDelta(t, 40.7128, settings.BirdNET.Latitude, 0.0001)                    // Preserved
-	assert.InDelta(t, -74.0060, settings.BirdNET.Longitude, 0.0001)                  // Preserved
-	assert.Equal(t, "latest", settings.BirdNET.RangeFilter.Model)                    // Preserved
+	assert.InDelta(t, 51.5074, settings.VoiceWatch.Latitude, 0.0001)                    // Changed
+	assert.InDelta(t, -0.1278, settings.VoiceWatch.Longitude, 0.0001)                   // Changed
+	assert.InDelta(t, 1.0, settings.VoiceWatch.Sensitivity, 0.0001) // Preserved
+	assert.InDelta(t, 0.8, settings.VoiceWatch.Threshold, 0.0001)   // Preserved
 }
 
 // TestAudioExportPartialUpdate verifies audio export settings preserve unmodified fields
@@ -490,8 +441,6 @@ func TestSpeciesConfigUpdate(t *testing.T) {
 func TestEmptyUpdatePreservesEverything(t *testing.T) {
 	// Get initial settings and override some values for testing
 	initialSettings := getTestSettings(t)
-	initialSettings.Realtime.Dashboard.Thumbnails.ImageProvider = "wikimedia"
-
 	// Get initial state
 	initialJSON, err := json.Marshal(initialSettings.Realtime.Dashboard)
 	require.NoError(t, err)
@@ -674,11 +623,11 @@ func TestStreamsSettingsChanged_DetectsModelEdits(t *testing.T) {
 		new  []string
 		want bool
 	}{
-		{"identical model list", []string{"birdnet"}, []string{"birdnet"}, false},
-		{"model added", []string{"birdnet"}, []string{"birdnet", "perch_v2"}, true},
-		{"model removed", []string{"birdnet", "perch_v2"}, []string{"birdnet"}, true},
-		{"model reordered", []string{"birdnet", "perch_v2"}, []string{"perch_v2", "birdnet"}, true},
-		{"replaced entirely", []string{"birdnet"}, []string{"perch_v2"}, true},
+		{"identical model list", []string{"voicewatch"}, []string{"voicewatch"}, false},
+		{"model added", []string{"voicewatch"}, []string{"voicewatch", "perch_v2"}, true},
+		{"model removed", []string{"voicewatch", "perch_v2"}, []string{"voicewatch"}, true},
+		{"model reordered", []string{"voicewatch", "perch_v2"}, []string{"perch_v2", "voicewatch"}, true},
+		{"replaced entirely", []string{"voicewatch"}, []string{"perch_v2"}, true},
 		{"both empty", nil, nil, false},
 		{"nil vs empty slice", nil, []string{}, false},
 	}
@@ -718,11 +667,11 @@ func TestAudioDeviceSettingChanged_DetectsModelsEdits(t *testing.T) {
 		new  []string
 		want bool
 	}{
-		{"identical model list", []string{"birdnet"}, []string{"birdnet"}, false},
-		{"model added", []string{"birdnet"}, []string{"birdnet", "perch_v2"}, true},
-		{"model removed", []string{"birdnet", "perch_v2"}, []string{"birdnet"}, true},
-		{"model reordered", []string{"birdnet", "perch_v2"}, []string{"perch_v2", "birdnet"}, true},
-		{"replaced entirely", []string{"birdnet"}, []string{"perch_v2"}, true},
+		{"identical model list", []string{"voicewatch"}, []string{"voicewatch"}, false},
+		{"model added", []string{"voicewatch"}, []string{"voicewatch", "perch_v2"}, true},
+		{"model removed", []string{"voicewatch", "perch_v2"}, []string{"voicewatch"}, true},
+		{"model reordered", []string{"voicewatch", "perch_v2"}, []string{"perch_v2", "voicewatch"}, true},
+		{"replaced entirely", []string{"voicewatch"}, []string{"perch_v2"}, true},
 		{"both empty", nil, nil, false},
 		{"nil vs empty slice", nil, []string{}, false},
 	}
@@ -751,7 +700,7 @@ func TestStreamsSettingsChanged_BackwardCompatibility(t *testing.T) {
 			Type:      conf.StreamTypeRTSP,
 			Transport: "tcp",
 			Enabled:   true,
-			Models:    []string{"birdnet"},
+			Models:    []string{"voicewatch"},
 		}}
 		return s
 	}
@@ -803,7 +752,7 @@ func TestStreamsSettingsChanged_ChannelMode(t *testing.T) {
 			Transport:   "tcp",
 			Enabled:     true,
 			ChannelMode: mode,
-			Models:      []string{"birdnet"},
+			Models:      []string{"voicewatch"},
 		}}
 		return s
 	}

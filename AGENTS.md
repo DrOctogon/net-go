@@ -1,4 +1,4 @@
-# AI Agent Instructions for BirdNET-Go
+# AI Agent Instructions for VoiceWatch
 
 These instructions apply to all AI coding agents working on this repository,
 regardless of tool (Claude Code, Codex, Cursor, Gemini, Windsurf, Copilot, etc.).

@@ -1,7 +1,7 @@
 // Package alerting provides the notification alerting rules engine.
 package alerting
 
-import "github.com/tphakala/birdnet-go/internal/events"
+import "github.com/tphakala/voicewatch/internal/events"
 
 // Object types define the categories of things that can be monitored.
 const (
@@ -11,6 +11,8 @@ const (
 	ObjectTypeIntegration = "integration"
 	ObjectTypeDevice      = "device"
 	ObjectTypeSystem      = "system"
+	ObjectTypeKeywordFlag = "keyword_flag"
+	ObjectTypeSpeakerAttr = "speaker_attr"
 )
 
 // Trigger types define how a rule is activated.
@@ -31,14 +33,17 @@ const (
 	EventApplicationStarted = "application.started"
 	EventApplicationStopped = "application.stopped"
 
-	EventBirdWeatherFailed = "integration.birdweather_failed"
-	EventMQTTConnected     = "integration.mqtt_connected"
+	EventMQTTConnected = "integration.mqtt_connected"
 	EventMQTTDisconnected  = "integration.mqtt_disconnected"
 	EventMQTTPublishFailed = "integration.mqtt_publish_failed"
 
 	EventDeviceStarted = "device.started"
 	EventDeviceStopped = "device.stopped"
 	EventDeviceError   = "device.error"
+
+	EventKeywordMatched = "keyword.matched"
+
+	EventSpeakerAttributeMatched = "speaker.attribute_matched"
 )
 
 // Metric names identify threshold-based metrics.
@@ -86,6 +91,15 @@ const (
 	PropertyNoveltyEpisodeDays  = events.DetectionMetadataNoveltyEpisodeDays
 	PropertyNoveltyEpisodeStart = events.DetectionMetadataNoveltyEpisodeStart
 	PropertyIsNewSpecies        = "is_new_species"
+
+	// Properties for keyword-flag events.
+	PropertyKeywords    = "keywords"
+	PropertyTranscript  = "transcript"
+	PropertyDetectionID = "detection_id"
+
+	// Properties for speaker-attribute events.
+	PropertySpeakerGender  = "gender"
+	PropertySpeakerAgeBand = "age_band"
 )
 
 // Action targets identify where notifications are sent.
@@ -98,9 +112,7 @@ const (
 // These correspond to entries in the frontend i18n files under
 // "settings.alerts.builtInRules.*".
 const (
-	RuleKeyNewSpeciesName  = "settings.alerts.builtInRules.newSpecies.name"
-	RuleKeyNewSpeciesDesc  = "settings.alerts.builtInRules.newSpecies.description"
-	RuleKeyStreamDiscName  = "settings.alerts.builtInRules.streamDisconnected.name"
+	RuleKeyStreamDiscName = "settings.alerts.builtInRules.streamDisconnected.name"
 	RuleKeyStreamDiscDesc  = "settings.alerts.builtInRules.streamDisconnected.description"
 	RuleKeyStreamErrorName = "settings.alerts.builtInRules.streamError.name"
 	RuleKeyStreamErrorDesc = "settings.alerts.builtInRules.streamError.description"
@@ -116,8 +128,12 @@ const (
 	RuleKeyMQTTDiscDesc    = "settings.alerts.builtInRules.mqttDisconnected.description"
 	RuleKeyMQTTPublishName = "settings.alerts.builtInRules.mqttPublishFailed.name"
 	RuleKeyMQTTPublishDesc = "settings.alerts.builtInRules.mqttPublishFailed.description"
-	RuleKeyBirdWeatherName = "settings.alerts.builtInRules.birdWeatherFailed.name"
-	RuleKeyBirdWeatherDesc = "settings.alerts.builtInRules.birdWeatherFailed.description"
+
+	RuleKeyKeywordFlagName = "settings.alerts.builtInRules.keywordFlag.name"
+	RuleKeyKeywordFlagDesc = "settings.alerts.builtInRules.keywordFlag.description"
+
+	RuleKeySpeakerAttrName = "settings.alerts.builtInRules.speakerAttribute.name"
+	RuleKeySpeakerAttrDesc = "settings.alerts.builtInRules.speakerAttribute.description"
 )
 
 // Alert notification i18n key constants.

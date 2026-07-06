@@ -1,6 +1,6 @@
 # Event Bus Package
 
-The `events` package implements a high-performance, asynchronous event bus system designed to decouple error reporting from notification and telemetry systems in BirdNET-Go. This package is the core of the async event system redesign (issue #833).
+The `events` package implements a high-performance, asynchronous event bus system designed to decouple error reporting from notification and telemetry systems in VoiceWatch. This package is the core of the async event system redesign (issue #833).
 
 ## Overview
 
@@ -123,7 +123,7 @@ eventBus, err := events.Initialize(config)
 ### Registering Consumers
 
 ```go
-import "github.com/tphakala/birdnet-go/internal/logger"
+import "github.com/tphakala/voicewatch/internal/logger"
 
 // Implement EventConsumer interface
 type MyConsumer struct {

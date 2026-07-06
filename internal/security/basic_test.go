@@ -20,9 +20,9 @@ import (
 	"github.com/markbates/goth/gothic"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/conf/conftest"
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/conf/conftest"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 // parseURLOrFail parses a URL string and fails the test if parsing fails

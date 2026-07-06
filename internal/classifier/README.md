@@ -1,199 +1,72 @@
-# BirdNET Package
+# Classifier Package
 
-The BirdNET package forms the core of the BirdNET-Go application, providing functionality for bird species identification using machine learning techniques. This package interfaces with TensorFlow Lite models to analyze audio data and identify bird species based on their sounds.
+The `classifier` package hosts the audio-classification model that powers
+VoiceWatch detection. It provides a generic, backend-agnostic single-model host
+plus the shipped model implementation.
+
+> **Human-voice pivot:** This package was the BirdNET-Go multi-model
+> bird-identification core (primary BirdNET + secondary Perch/Bat, geographic
+> range-filter coordination, eBird taxonomy, name-resolver chain, model
+> gallery). Those were removed in the pivot and replaced by a thin single-model
+> host that runs an embedded [Silero VAD](https://github.com/snakers4/silero-vad)
+> speech detector. The upstream BirdNET-Go heritage is retained in the project's
+> identifiers and attribution.
 
 ## Package Overview
 
-The package implements the following key functionalities:
-
-- Loading and initialization of TensorFlow Lite models for bird species recognition
-- Audio sample processing and analysis
-- Species probability calculation and filtering based on geographic location and time of year
-- Results queuing and processing for downstream consumption
-- Taxonomy integration with eBird taxonomy codes
+- **Generic model host** — a thin orchestrator that owns one active
+  `ModelInstance` and serializes inference against it.
+- **Single-model registry** — the supported-model registry, currently just the
+  Silero VAD "Human Voice" model.
+- **Backend-agnostic interfaces** — `ModelInstance` / `ModelSpec` abstractions
+  that keep the host independent of the inference backend (TFLite, ONNX Runtime,
+  OpenVINO).
+- **Results queue** — an ownership-transfer channel for passing inference
+  results to downstream consumers without deep-copying PCM audio.
 
 ## Core Components
 
-### BirdNET Struct
+### Orchestrator (`orchestrator.go`)
 
-The main structure that encapsulates the TensorFlow Lite interpreters and configuration settings.
+Owns the single loaded model and serializes inference against it. The concrete
+`ModelInstance` (`humanvoice.Model`) is constructed in the analysis layer and
+injected via `NewOrchestrator`, which avoids a `humanvoice` → `classifier`
+import cycle. Reports the loaded model's device via `RuntimeInfo()`.
 
-```go
-type BirdNET struct {
-    AnalysisInterpreter *tflite.Interpreter  // Interpreter for the main bird identification model
-    RangeInterpreter    *tflite.Interpreter  // Interpreter for the range filter model
-    Settings            *conf.Settings       // Application configuration settings
-    ModelInfo           ModelInfo            // Information about the current model
-    TaxonomyMap         TaxonomyMap          // Mapping of species codes to names and vice versa
-    TaxonomyPath        string               // Path to custom taxonomy file, if used
-    mu                  sync.Mutex           // Mutex for thread safety
-}
-```
+### Model Registry (`model_registry.go`)
 
-### Analysis Functionality
+The single source of truth for supported models — reduced to the Silero VAD
+"Human Voice" model. Defines the inference-backend identifiers
+(`BackendTFLite` / `BackendONNX` are static model file-type metadata;
+`BackendOpenVINO` is a live execution provider reported at runtime) and the
+model's quantization precision, which is orthogonal to the backend.
 
-The package provides methods for analyzing audio samples and producing detection results:
+### Model Interfaces (`model.go`)
 
-- `Predict()` - Performs inference on audio samples to detect bird species
-- `EnrichResultWithTaxonomy()` - Adds taxonomy information to detection results
+`ModelInstance` and `ModelSpec` define the multi-model abstraction. `ModelSpec`
+describes a model's fixed audio requirements (sample rate, clip length); overlap
+is intentionally excluded — it comes from the false-positive-filter
+configuration. Device names (`deviceCPU`, or a concrete OpenVINO device) are
+reported by `ModelInstance.RuntimeInfo()`; the orchestrator returns
+`deviceUnknown` when no model is loaded.
 
-### Model Registry
+### Results Queue (`queue.go`)
 
-The package includes a model registry system to support different BirdNET models:
+`Results` carries a clip's inference output and metadata. `ResultsQueue` is a
+channel with ownership-transfer semantics: once a `Results` is sent, the sender
+must not modify it, so the pipeline can hand off PCM audio without a deep copy.
+`Results.Copy()` provides an explicit deep copy when independent ownership is
+needed.
 
-```go
-// ModelInfo represents metadata about a BirdNET model
-type ModelInfo struct {
-    ID               string   // Unique identifier for the model
-    Name             string   // User-friendly name
-    Description      string   // Description of the model
-    SupportedLocales []string // List of supported locale codes
-    DefaultLocale    string   // Default locale if none is specified
-    NumSpecies       int      // Number of species in the model
-    CustomPath       string   // Path to custom model file, if any
-}
-```
+### Human Voice Model (`humanvoice/`)
 
-Key functions:
-
-- `DetermineModelInfo()` - Identifies model type from filepath or model identifier
-- `IsLocaleSupported()` - Validates if a locale is supported by the model
-
-### Label Files
-
-The package exclusively uses the V2.4 format label files, which contain species names in the format "ScientificName_CommonName" and are available in multiple languages.
-
-The language-specific files follow the naming pattern `BirdNET_GLOBAL_6K_V2.4_Labels_<locale>.txt`, where `<locale>` is the locale identifier (e.g., `en_uk`, `de`, `fr`).
-
-The package handles two locale formats:
-
-- Hyphenated format in the API (e.g., `en-uk`, `pt-br`): Used in settings and code
-- Underscore format in filenames (e.g., `en_uk`, `pt_BR`): Used in label filenames
-
-The system automatically converts between these formats, allowing users to specify locales with hyphens while the files use underscores. For locales with region codes (like `pt-br`), the region part is also capitalized in the filename format (e.g., `pt_BR`).
-
-Label files are embedded directly in the binary using Go's `embed` package, eliminating the need for external files during deployment.
-
-Key functions:
-
-- `GetLabelFileData()` - Loads the appropriate label file based on model version and locale
-- `loadEmbeddedLabels()` - Loads embedded label files based on the model and locale
-- `loadExternalLabels()` - Allows loading custom label files from external sources
-
-### Taxonomy Integration
-
-The package provides integrated eBird taxonomy data to enhance species identification:
-
-```go
-// TaxonomyMap is a bidirectional mapping between eBird codes and species names
-type TaxonomyMap map[string]string
-```
-
-Key functions:
-
-- `LoadTaxonomyData()` - Loads taxonomy data from embedded or custom file
-- `GetSpeciesCodeFromName()` - Gets eBird code for a species name
-- `GetSpeciesNameFromCode()` - Gets species name for an eBird code
-- `SplitSpeciesName()` - Splits species name into scientific and common parts
-- `EnrichResultWithTaxonomy()` - Adds taxonomy information to detection results
-
-Example usage of taxonomy enrichment:
-
-```go
-scientific, common, code := bn.EnrichResultWithTaxonomy(result.Species)
-fmt.Printf("Species: %s (%s), eBird code: %s, Confidence: %.2f\n",
-    common, scientific, code, result.Confidence)
-```
-
-### Range Filtering
-
-The package implements a sophisticated range filtering system that uses location and seasonal data to filter bird species predictions:
-
-- `predictFilter()` - Applies TensorFlow model to predict species based on location and time
-- `GetProbableSpecies()` - Filters and sorts bird species based on location-specific scores
-- `BuildRangeFilter()` - Updates the range filter with current probable species
-
-The range filtering system uses a specialized TensorFlow Lite model that takes three inputs:
-
-- Latitude (float)
-- Longitude (float)
-- Week number (float, 1-52)
-
-This helps reduce false positives by filtering out species that are unlikely to be present in a given location during a particular season.
-
-### Results Management
-
-The package includes a queuing system for handling results from audio analysis:
-
-- `Results` struct - Contains detection results and related metadata
-- `ResultsQueue` - Channel for sending analysis results to consuming components
-
-## Embedded Resources
-
-The package embeds several key resources:
-
-- TensorFlow Lite models for bird species identification:
-  - `BirdNET_GLOBAL_6K_V2.4_Model_FP32.tflite` - Primary model for species identification
-  - `BirdNET_GLOBAL_6K_V2.4_MData_Model_FP16.tflite` - Legacy range filter model
-  - `BirdNET_GLOBAL_6K_V2.4_MData_Model_V2_FP16.tflite` - Updated range filter model
-
-- Taxonomy and label data:
-  - `eBird_taxonomy_codes_2021E.json` - eBird taxonomy mapping between species codes and names
-  - `data/labels/V2.4/*.txt` - V2.4 label files in multiple languages
-
-## Usage
-
-A typical usage pattern involves:
-
-```go
-// Create new BirdNET instance
-bn, err := birdnet.NewBirdNET(settings)
-if err != nil {
-    // Handle error
-}
-
-// Process audio chunk
-results, err := bn.Predict(audioSample)
-if err != nil {
-    // Handle error
-}
-
-// Process results with taxonomy information
-for _, result := range results {
-    scientific, common, code := bn.EnrichResultWithTaxonomy(result.Species)
-    fmt.Printf("Species: %s (%s), eBird code: %s, Confidence: %.2f\n",
-        common, scientific, code, result.Confidence)
-}
-```
+The shipped `ModelInstance`: a Silero VAD ONNX model that produces per-frame
+speech probabilities and aggregates each clip into a single "Human Voice"
+detection. The model file is embedded in the binary (`embed.go`) and written to
+disk at runtime on first use. See `humanvoice/humanvoice.go`.
 
 ## Thread Safety
 
-The package implements thread safety mechanisms to allow usage in concurrent contexts:
-
-- A mutex protects the TensorFlow interpreters from concurrent access
-- The results queue provides a thread-safe way to communicate results between components
-
-## Performance Optimizations
-
-The package includes several optimizations for performance:
-
-- Automatic thread count determination based on available CPU cores
-- Optional XNNPACK delegate support for accelerated inference
-- Performance core optimization on supported hardware
-- Efficient queue system to handle analysis results asynchronously
-
-## Cross-Platform Support
-
-The package is designed to work on multiple platforms:
-
-- Linux (including Raspberry Pi and other SBCs)
-- macOS
-- Windows
-
-## Dependencies
-
-The package depends on:
-
-- `github.com/tphakala/go-tflite` - TensorFlow Lite bindings for Go
-- `github.com/tphakala/go-tflite/delegates/xnnpack` - XNNPACK acceleration for TensorFlow Lite
-- Internal packages including `conf`, `datastore`, `detection`, and `cpuspec`
+The orchestrator serializes inference against the single loaded model, and the
+results queue is a channel — both are safe for concurrent use by the audio
+pipeline and its consumers.

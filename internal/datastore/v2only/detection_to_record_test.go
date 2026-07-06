@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/tphakala/birdnet-go/internal/datastore/v2/entities"
+	"github.com/tphakala/voicewatch/internal/datastore/v2/entities"
 )
 
 // TestDetectionToRecord_Verified is a regression test for GitHub issue #2769:

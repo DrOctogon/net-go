@@ -8,10 +8,10 @@ import (
 
 	"github.com/getsentry/sentry-go"
 	"github.com/labstack/echo/v4"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/restart"
-	"github.com/tphakala/birdnet-go/internal/sysinfo"
-	"github.com/tphakala/birdnet-go/internal/telemetry"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/restart"
+	"github.com/tphakala/voicewatch/internal/sysinfo"
+	"github.com/tphakala/voicewatch/internal/telemetry"
 )
 
 // ControlAction represents a control action request
@@ -79,7 +79,7 @@ func (c *Controller) GetAvailableActions(ctx echo.Context) error {
 		},
 		{
 			Action:      ActionReloadModel,
-			Description: "Reload the BirdNET model",
+			Description: "Reload the VoiceWatch model",
 		},
 		{
 			Action:      ActionRebuildFilter,
@@ -184,7 +184,7 @@ func (c *Controller) RestartAnalysis(ctx echo.Context) error {
 }
 
 // ReloadModel handles POST /api/v2/control/reload
-// Reloads the BirdNET model
+// Reloads the VoiceWatch model
 func (c *Controller) ReloadModel(ctx echo.Context) error {
 	return c.handleControlSignal(ctx, SignalReloadModel, ActionReloadModel,
 		"Received request to reload model", "Model reload signal sent")

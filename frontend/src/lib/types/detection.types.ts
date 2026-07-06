@@ -26,6 +26,14 @@ export interface Detection {
   verified: 'correct' | 'false_positive' | 'unverified';
   locked: boolean;
   unlikely?: boolean;
+  transcript?: string; // Speech-to-text transcript of the clip
+  transcriptLang?: string; // Language of the transcript (e.g. "en")
+  flagged?: boolean; // True when the transcript matched a configured keyword
+  keywordsHit?: string[]; // Keywords that matched the transcript
+  gender?: string; // Estimated speaker gender ("male" | "female" | "unknown"; empty = no estimate)
+  genderConfidence?: number; // Confidence of the gender estimate (0..1)
+  ageBand?: string; // Estimated relative age band ("child" | "teen" | "adult" | "senior"; empty = no estimate)
+  ageConfidence?: number; // Confidence of the age-band estimate (0..1)
   comments?: Comment[];
   clipName?: string;
   weather?: Weather;
@@ -179,7 +187,6 @@ export interface DailySpeciesSummary {
   max_confidence?: number; // Highest detection confidence for the day (fraction 0..1)
   first_heard: string;
   latest_heard: string;
-  thumbnail_url: string;
   // Species tracking metadata
   is_new_species?: boolean; // True if first seen within tracking window (persistent from API)
   days_since_first_seen?: number; // Days since species was first detected

@@ -15,20 +15,20 @@ import (
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	"github.com/shirou/gopsutil/v3/host"
-	"github.com/tphakala/birdnet-go/internal/audiocore"
-	"github.com/tphakala/birdnet-go/internal/classifier"
-	"github.com/tphakala/birdnet-go/internal/classifier/inferencestats"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/health"
-	"github.com/tphakala/birdnet-go/internal/health/checks"
-	"github.com/tphakala/birdnet-go/internal/inference"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/notification"
-	"github.com/tphakala/birdnet-go/internal/observability"
-	"github.com/tphakala/birdnet-go/internal/privacy"
-	"github.com/tphakala/birdnet-go/internal/weather"
+	"github.com/tphakala/voicewatch/internal/audiocore"
+	"github.com/tphakala/voicewatch/internal/classifier"
+	"github.com/tphakala/voicewatch/internal/classifier/inferencestats"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/health"
+	"github.com/tphakala/voicewatch/internal/health/checks"
+	"github.com/tphakala/voicewatch/internal/inference"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/notification"
+	"github.com/tphakala/voicewatch/internal/observability"
+	"github.com/tphakala/voicewatch/internal/privacy"
+	"github.com/tphakala/voicewatch/internal/weather"
 )
 
 // diagnosticsStatusResponse is the quick health summary returned by GET /status.
@@ -135,28 +135,13 @@ func (c *Controller) registerHealthChecks() {
 		}),
 		checks.NewResultsQueueDropCheck(c.healthMetricsStore, c.healthEvents.Recent),
 		checks.NewORTAvailabilityCheck(func() (available, initialized bool, version, libraryPath, errMsg string) {
-			status := inference.CheckORTAvailability(c.currentSettings().BirdNET.ONNXRuntimePath)
+			status := inference.CheckORTAvailability(c.currentSettings().VoiceWatch.ONNXRuntimePath)
 			return status.Available, status.Initialized, status.Version, status.LibraryPath, status.Error
 		}),
 		checks.NewOpenVINOAvailabilityCheck(func() (supported, active bool) {
 			status := inference.CheckOpenVINOAvailability()
 			return status.Supported, status.Active
 		}),
-		checks.NewRangeFilterCheck(func() checks.RangeFilterStatusInfo {
-			orch, err := c.getBirdNETInstance()
-			if err != nil || orch == nil {
-				return checks.RangeFilterStatusInfo{}
-			}
-			st := orch.RangeFilterStatus()
-			return checks.RangeFilterStatusInfo{
-				LocationConfigured: st.LocationConfigured,
-				Active:             st.Active,
-				FellBack:           st.FellBack,
-				GeomodelActive:     st.Geomodel != nil,
-				MappedSpecies:      st.MappedSpecies,
-			}
-		}),
-
 		// Stream checks
 		checks.NewStreamConnectivityCheck(getStreamHealthInfos),
 		checks.NewStreamErrorRateCheck(c.healthMetricsStore, c.healthEvents.Recent),
@@ -208,20 +193,6 @@ func (c *Controller) registerHealthChecks() {
 					return false
 				}
 				return client.IsConnected()
-			},
-		),
-		checks.NewBirdWeatherCheck(
-			func() bool { return c.currentSettings().Realtime.Birdweather.Enabled },
-			func() (bool, string) {
-				proc := c.Processor
-				if proc == nil {
-					return false, "Processor unavailable"
-				}
-				bw := proc.GetBwClient()
-				if bw == nil {
-					return false, "BirdWeather client not initialized"
-				}
-				return bw.Status()
 			},
 		),
 		checks.NewNotificationProvidersCheck(func() (int, int, string) {
@@ -295,7 +266,7 @@ func (c *Controller) buildModelLoadInfoProvider() func() []checks.ModelLoadInfo 
 		if p == nil {
 			return nil
 		}
-		bn := p.GetBirdNET()
+		bn := p.GetOrchestrator()
 		if bn == nil {
 			return nil
 		}
@@ -327,21 +298,13 @@ func (c *Controller) buildPerModelInferenceProvider() func() []checks.ModelInfer
 		if p == nil {
 			return nil
 		}
-		bn := p.GetBirdNET()
+		bn := p.GetOrchestrator()
 		if bn == nil {
 			return nil
 		}
-		counters := classifier.GetInferenceCounters()
-		snapshots := counters.PeekAll()
-		if len(snapshots) == 0 {
-			return nil
-		}
-		infos := bn.ModelInfos()
-		infoMap := make(map[string]*classifier.ModelInfo, len(infos))
-		for i := range infos {
-			infoMap[infos[i].ID] = &infos[i]
-		}
-		return mapInferenceSnapshots(snapshots, infoMap)
+		// Per-model inference counters are not tracked in the human-voice facade
+		// (Phase 2c-3); the inference health chart is sourced from real stats in 2d.
+		return nil
 	}
 }
 

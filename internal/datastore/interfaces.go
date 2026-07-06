@@ -22,14 +22,14 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/datastore/dbstats"
-	"github.com/tphakala/birdnet-go/internal/datastore/entities"
-	"github.com/tphakala/birdnet-go/internal/detection"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/observability/metrics"
-	"github.com/tphakala/birdnet-go/internal/suncalc" // Import suncalc
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/datastore/dbstats"
+	"github.com/tphakala/voicewatch/internal/datastore/entities"
+	"github.com/tphakala/voicewatch/internal/detection"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/observability/metrics"
+	"github.com/tphakala/voicewatch/internal/suncalc" // Import suncalc
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	gormlogger "gorm.io/gorm/logger"
@@ -340,7 +340,7 @@ func (ds *DataStore) CountDetectionsSince(ctx context.Context, since time.Time) 
 // NewDataStore creates a new DataStore instance based on the provided configuration context.
 func New(settings *conf.Settings) Interface {
 	// Create a SunCalc instance to be shared by all datastore implementations
-	sunCalc := suncalc.NewSunCalc(settings.BirdNET.Latitude, settings.BirdNET.Longitude)
+	sunCalc := suncalc.NewSunCalc(settings.VoiceWatch.Latitude, settings.VoiceWatch.Longitude)
 
 	switch {
 	case settings.Output.SQLite.Enabled:
@@ -393,7 +393,7 @@ func (ds *DataStore) UpdateNameMaps(_ []string) {}
 // SpeciesNameResolver resolves a scientific name to a localized common name,
 // returning "" when unknown. Satisfied by *openfauna.Resolver. The locale argument
 // is accepted for interface symmetry; resolvers are built for the active species
-// locale (settings.BirdNET.Locale), not a per-call locale.
+// locale (settings.VoiceWatch.Locale), not a per-call locale.
 type SpeciesNameResolver interface {
 	Resolve(scientificName, locale string) string
 	// ResolveLocal returns a name only if it is already resident in memory (no
@@ -2094,10 +2094,20 @@ type SearchFilters struct {
 	UnlockedOnly      bool
 	Device            string
 	TimeOfDay         string // "any", "day", "night", "sunrise", "sunset"
-	Page              int
-	PerPage           int
-	SortBy            string
-	Ctx               context.Context // Add context for cancellation/timeout
+	// Transcript is a free-text LIKE filter on the notes.transcript column.
+	// Empty means no filter. The match is case-insensitive substring.
+	Transcript string
+	// Flagged, when non-nil, restricts results to notes where flagged = *Flagged.
+	// nil means no filter (both flagged and unflagged are returned).
+	Flagged *bool
+	// Gender / AgeBand are exact-match speaker-attribute filters on the
+	// notes.gender / notes.age_band columns. Empty means no filter.
+	Gender  string
+	AgeBand string
+	Page    int
+	PerPage int
+	SortBy  string
+	Ctx     context.Context // Add context for cancellation/timeout
 }
 
 // sanitise validates and normalises the search filters, returning an error for invalid combinations.
@@ -2255,6 +2265,20 @@ func applyCommonFilters(query *gorm.DB, filters *SearchFilters, ds *DataStore) *
 
 	if filters.Device != "" {
 		query = query.Where("notes.source_node LIKE ?", "%"+filters.Device+"%")
+	}
+
+	if filters.Transcript != "" {
+		escaped := escapeLikePattern(filters.Transcript)
+		query = query.Where("LOWER(notes.transcript) LIKE LOWER(?) ESCAPE '\\'", "%"+escaped+"%")
+	}
+	if filters.Flagged != nil {
+		query = query.Where("notes.flagged = ?", *filters.Flagged)
+	}
+	if filters.Gender != "" {
+		query = query.Where("notes.gender = ?", filters.Gender)
+	}
+	if filters.AgeBand != "" {
+		query = query.Where("notes.age_band = ?", filters.AgeBand)
 	}
 
 	return query

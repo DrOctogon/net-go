@@ -156,7 +156,8 @@
         "falsePositive": "Afgekeurd",
         "notReviewed": "Niet beoordeeld",
         "locked": "Vergrendeld",
-        "unlikely": "Onwaarschijnlijk"
+        "unlikely": "Onwaarschijnlijk",
+        "flagged": "Flagged"
       },
       "form": {
         "correctDetection": "Herkenning goedgekeurd",
@@ -200,7 +201,7 @@
     "hoursShort": "u"
   },
   "pageTitle": {
-    "settings": "Instellingen - BirdNET-Go",
+    "settings": "Instellingen - VoiceWatch",
     "pageNotFound": "404 - Pagina niet gevonden",
     "serverError": "500 - Interne serverfout",
     "componentError": "Component laadfout",
@@ -236,26 +237,26 @@
     "askQuestion": "Stel een vraag",
     "reportBugAriaLabel": "Meld een bug op GitHub (opent in nieuw venster)",
     "askQuestionAriaLabel": "Stel een vraag op GitHub Discussions (opent in nieuw venster)",
-    "viewOnGithubAriaLabel": "Bekijk BirdNET-Go op GitHub (opent in nieuw venster)",
+    "viewOnGithubAriaLabel": "Bekijk VoiceWatch op GitHub (opent in nieuw venster)",
     "health": "Health"
   },
   "about": {
-    "title": "BirdNET-Go",
+    "title": "VoiceWatch",
     "subtitle": "Een moderne interface voor real-time vogelgeluids herkenning en classificatie",
     "logoAlt": "BirdNET-Go-logo",
     "overview": "Overzicht",
-    "overviewText": "BirdNET-Go is een Go-gebaseerde implementatie voor real-time vogelgeluids herkenning en classificatie, gebouwd op de basis van het BirdNET project. Deze applicatie biedt een gebruiksvriendelijke interface voor continue vogelgeluids monitoring en analyse.",
-    "birdnetProject": "BirdNET-project",
-    "birdnetDescription": "BirdNET-Go zou niet mogelijk zijn zonder het baanbrekende werk van het BirdNET project. Het kunstmatige intelligentie model dat de herkenningsmogelijkheden van BirdNET-Go aandrijft is het resultaat van het innovatieve onderzoek en ontwikkeling van het BirdNET project.",
+    "overviewText": "VoiceWatch is een Go-gebaseerde implementatie voor real-time vogelgeluids herkenning en classificatie, gebouwd op de basis van het BirdNET project. Deze applicatie biedt een gebruiksvriendelijke interface voor continue vogelgeluids monitoring en analyse.",
+    "birdnetProject": "VoiceWatch-project",
+    "birdnetDescription": "VoiceWatch zou niet mogelijk zijn zonder het baanbrekende werk van het BirdNET project. Het kunstmatige intelligentie model dat de herkenningsmogelijkheden van VoiceWatch aandrijft is het resultaat van het innovatieve onderzoek en ontwikkeling van het BirdNET project.",
     "developedBy": "Ontwikkeld door",
     "developersText": "Het K. Lisa Yang Center for Conservation Bioacoustics van het Cornell Lab of Ornithology in samenwerking met de Technische Universiteit Chemnitz:",
     "visitBirdnetAnalyzer": "Bezoek BirdNET-Analyzer Project",
     "visitBirdnetAnalyzerAriaLabel": "Bezoek de BirdNET-Analyzer GitHub repository",
     "contributors": "Bijdragers",
-    "contributorsText": "BirdNET-Go is gegroeid en verbeterd dankzij de gezamenlijke inspanningen van veel individuen. Hun bijdragen, variërend van code verbeteringen tot functie suggesties, zijn van onschatbare waarde geweest om dit project beter te maken.",
+    "contributorsText": "VoiceWatch is gegroeid en verbeterd dankzij de gezamenlijke inspanningen van veel individuen. Hun bijdragen, variërend van code verbeteringen tot functie suggesties, zijn van onschatbare waarde geweest om dit project beter te maken.",
     "mainDeveloper": "Hoofd Ontwikkelaar",
     "githubContributors": "GitHub Bijdragers",
-    "contributorsNote": "Speciale dank aan deze bijdragers voor hun waardevolle werk aan het verbeteren van BirdNET-Go:",
+    "contributorsNote": "Speciale dank aan deze bijdragers voor hun waardevolle werk aan het verbeteren van VoiceWatch:",
     "communityAcknowledgment": "Gemeenschap Erkenning",
     "communityText": "We willen ook onze dankbaarheid uitspreken aan alle gebruikers die hebben bijgedragen door:",
     "bugReports": "Foutmeldingen en issue tracking",
@@ -264,9 +265,9 @@
     "documentation": "Documentatie verbeteringen",
     "additionalCredits": "Aanvullende Credits",
     "birdnetPiProject": "BirdNET-Pi-project",
-    "birdnetPiDescription": "Speciale dank aan Patrick McGuire voor zijn inspirerende werk aan BirdNET-Pi, dat de ontwikkeling van BirdNET-Go heeft beïnvloed. BirdNET-Pi demonstreert het potentieel van vogelgeluids herkenning op embedded apparaten en heeft een hoge standaard gezet voor community-gedreven ontwikkeling.",
+    "birdnetPiDescription": "Speciale dank aan Patrick McGuire voor zijn inspirerende werk aan BirdNET-Pi, dat de ontwikkeling van VoiceWatch heeft beïnvloed. BirdNET-Pi demonstreert het potentieel van vogelgeluids herkenning op embedded apparaten en heeft een hoge standaard gezet voor community-gedreven ontwikkeling.",
     "visitBirdnetPi": "Bezoek BirdNET-Pi Project",
-    "labelTranslations": "BirdNET Label Vertalingen",
+    "labelTranslations": "VoiceWatch Label Vertalingen",
     "labelTranslationsBy": "Aangeleverd door Patrick Levin voor het BirdNET-Pi project van Patrick McGuire",
     "patrickLevinGithub": "GitHub van Patrick Levin",
     "versionInformation": "Versie Informatie",
@@ -275,12 +276,12 @@
     "developmentBuild": "Ontwikkel Build",
     "unknown": "Onbekend",
     "licenseInformation": "Licentie Informatie",
-    "licenseText": "Zowel het BirdNET AI model als BirdNET-Go zijn gelicenseerd onder de",
+    "licenseText": "Zowel het VoiceWatch AI model als VoiceWatch zijn gelicenseerd onder de",
     "ccLicense": "Creative Commons Naamsvermelding-NietCommercieel-GelijkDelen 4.0 Internationaal Licentie",
     "licenseDescription": "Deze licentie staat anderen toe om dit werk niet-commercieel te remixen, aan te passen en erop voort te bouwen, zolang er gepaste erkenning wordt gegeven en nieuwe creaties onder identieke voorwaarden worden gelicenseerd.",
     "dependencyLicenses": "Afhankelijkheids Licenties",
     "taxonomyDataTitle": "Taxonomie Gegevens",
-    "taxonomyDataIntro": "BirdNET-Go bevat ingebedde vogel taxonomie gegevens afgeleid van de eBird/Clements Checklist, voor snelle lokale geslacht en familie opzoekingen.",
+    "taxonomyDataIntro": "VoiceWatch bevat ingebedde vogel taxonomie gegevens afgeleid van de eBird/Clements Checklist, voor snelle lokale geslacht en familie opzoekingen.",
     "source": "Bron",
     "ebirdApiV2": "eBird API v2",
     "copyright": "Auteursrecht",
@@ -290,10 +291,10 @@
     "ebirdOrg": "eBird.org",
     "learnEbirdTaxonomy": "Meer informatie over eBird Taxonomie",
     "avicommonsTitle": "Vogelafbeeldingen",
-    "avicommonsDescription": "BirdNET-Go gebruikt gecureerde vogelafbeeldingen van Avicommons, een bibliotheek van zorgvuldig geselecteerde, bijgesneden en georiënteerde vogelfoto's onder Creative Commons-licenties.",
-    "githubStarPrompt": "Als u BirdNET-Go waardevol vindt, overweeg dan om het project een ster te geven op GitHub. Sterren helpen anderen dit project te ontdekken en ondersteunen de verdere ontwikkeling.",
+    "avicommonsDescription": "VoiceWatch gebruikt gecureerde vogelafbeeldingen van Avicommons, een bibliotheek van zorgvuldig geselecteerde, bijgesneden en georiënteerde vogelfoto's onder Creative Commons-licenties.",
+    "githubStarPrompt": "Als u VoiceWatch waardevol vindt, overweeg dan om het project een ster te geven op GitHub. Sterren helpen anderen dit project te ontdekken en ondersteunen de verdere ontwikkeling.",
     "viewOnGithub": "Bekijk project op GitHub",
-    "visitGithubAriaLabel": "Bezoek BirdNET-Go GitHub repository",
+    "visitGithubAriaLabel": "Bezoek VoiceWatch GitHub repository",
     "visitAvicommonsGithub": "Bezoek Avicommons GitHub repository"
   },
   "notifications": {
@@ -362,11 +363,11 @@
     },
     "content": {
       "startup": {
-        "title": "BirdNET-Go gestart",
+        "title": "VoiceWatch gestart",
         "message": "Applicatie succesvol gestart (v{version})"
       },
       "shutdown": {
-        "title": "BirdNET-Go wordt afgesloten",
+        "title": "VoiceWatch wordt afgesloten",
         "message": "Applicatie wordt netjes afgesloten"
       },
       "detection": {
@@ -396,7 +397,6 @@
         "rebuildingRangeFilter": "Soortenverspreidingsfilter wordt opnieuw opgebouwd...",
         "updatingIntervals": "Detectie-intervallen worden bijgewerkt...",
         "reconfiguringMqtt": "MQTT-verbinding wordt bijgewerkt...",
-        "reconfiguringBirdweather": "BirdWeather-integratie wordt bijgewerkt...",
         "reconfiguringStreams": "Audiostreams worden bijgewerkt...",
         "reconfiguringTelemetry": "Telemetrie-instellingen worden bijgewerkt...",
         "reconfiguringPushNotifications": "Pushmeldingsproviders herconfigureren...",
@@ -423,7 +423,7 @@
         "cancelledTitle": "Databasemigratie geannuleerd",
         "cancelledMessage": "De databasemigratie is geannuleerd. U kunt op elk moment een nieuwe migratie starten vanuit de database-instellingen.",
         "completedTitle": "Databasemigratie voltooid",
-        "completedMessage": "Migratie voltooid. Herstart BirdNET-Go om over te schakelen naar de nieuwe database.",
+        "completedMessage": "Migratie voltooid. Herstart VoiceWatch om over te schakelen naar de nieuwe database.",
         "errorTitle": "Databasemigratiefout",
         "errorMessage": "Migratie gepauzeerd vanwege fouten. Controleer de logs en probeer te hervatten."
       },
@@ -435,7 +435,7 @@
       },
       "buffer": {
         "overloadTitle": "Audio-analyse overbelast",
-        "overloadMessage": "Uw systeem verliest {dropRate} % van de audiosamples van bron ''{sourceName}'' omdat het de analyse niet kan bijhouden. Verlaag de BirdNET-overlappingswaarde in de detectie-instellingen of overweeg een snellere CPU."
+        "overloadMessage": "Uw systeem verliest {dropRate} % van de audiosamples van bron ''{sourceName}'' omdat het de analyse niet kan bijhouden. Verlaag de VoiceWatch-overlappingswaarde in de detectie-instellingen of overweeg een snellere CPU."
       },
       "ort": {
         "unavailableTitle": "ONNX Runtime niet beschikbaar",
@@ -476,9 +476,6 @@
     "noResultsFound": "Niets gevonden",
     "noResultsHint": "Probeer je zoek filters aan te passen",
     "fields": {
-      "species": "Soort",
-      "speciesPlaceholder": "Zoek op (deel van) soort naam ...",
-      "speciesHelp": "Voer (deel van) een soort naam in (niet hoofdletter gevoelig)",
       "dateRange": "Periode",
       "dateRangeHelp": "Filter herkeningen naar periode (laat blanko voor de maximale periode)",
       "from": "Vanaf",
@@ -489,7 +486,14 @@
       "verifiedStatus": "Status beoordeling",
       "lockedStatus": "Status vergrendeling",
       "timeOfDay": "Tijdstip",
-      "source": "Audiobron"
+      "source": "Audiobron",
+      "transcript": "Transcript",
+      "transcriptHelp": "Search for spoken words in the voice clip transcript (case-insensitive substring match)",
+      "transcriptPlaceholder": "Search transcript...",
+      "flaggedOnly": "Flagged only",
+      "flaggedOnlyHelp": "Limit results to detections whose transcript matched a configured keyword",
+      "gender": "Speaker gender",
+      "ageBand": "Speaker age"
     },
     "advancedFilters": "Uitgebreide filters",
     "showAdvancedFilters": "Toon uitgebreide filters",
@@ -563,6 +567,9 @@
       "page": "Pagina {current} van {total}",
       "goToPrevious": "Naar de vorige pagina",
       "goToNext": "Naar de volgende pagina"
+    },
+    "speakerOptions": {
+      "any": "Any"
     }
   },
   "error": {
@@ -599,18 +606,6 @@
       "empty": "Alles rustig — momenteel geen vogels gedetecteerd"
     },
     "rejected": "Afgewezen",
-    "newSpeciesHighlights": {
-      "title": "Nieuwe & terugkerende soorten",
-      "subtitle": "Eerste waarnemingen en recente terugkeer",
-      "trackingDisabled": "Schakel \"Soorten volgen inschakelen\" in om deze functie te gebruiken.",
-      "categoryLifetime": "Nieuwe soort",
-      "categoryYear": "Nieuw dit jaar",
-      "categorySeason": "Nieuw dit seizoen",
-      "categorySeasonNamed": "Nieuw dit {season}",
-      "maxConfidenceShort": "Max {confidence}%",
-      "detections": "{count, plural, one {# detectie} other {# detecties}}",
-      "lastSeen": "Laatst: {days, plural, =0 {vandaag} one {# dag geleden} other {# dagen geleden}}"
-    },
     "dailySummary": {
       "title": "Dagactiviteit",
       "subtitle": "Detecties per uur",
@@ -666,7 +661,6 @@
         "species": "Soort",
         "weather": "Weer",
         "confidence": "Betrouwbaarheid",
-        "thumbnail": "Afbeelding",
         "status": "Status",
         "recording": "Geluid opname",
         "actions": "Akties"
@@ -695,8 +689,6 @@
         "markCorrect": "Juist",
         "markFalsePositive": "Onjuist",
         "review": "Herkenning beoordelen",
-        "showSpecies": "Soort tonen",
-        "ignoreSpecies": "Soort negeren",
         "lockDetection": "Herkenning vergrendelen",
         "unlockDetection": "Herkenning ontgrendelen",
         "deleteDetection": "Herkenning verwijderen"
@@ -777,15 +769,30 @@
     "elements": {
       "banner": "Dashboard-banner",
       "dailySummary": "Dagelijks overzicht",
-      "newSpeciesHighlights": "Nieuwe soorten in de kijker",
       "currentlyHearing": "Momenteel gehoord",
       "detectionsGrid": "Recente detecties",
       "liveSpectrogram": "Live spectrogram",
-      "videoEmbed": "Video-inbedding"
+      "videoEmbed": "Video-inbedding",
+      "voiceActivity": "Voice Activity"
+    },
+    "voiceActivity": {
+      "title": "Voice Activity",
+      "subtitle": "Detections by hour — today",
+      "chartAriaLabel": "Bar chart of voice detections per hour for today",
+      "loading": "Loading voice activity...",
+      "empty": "No voice detections today",
+      "errors": {
+        "load": "Failed to load voice activity data"
+      },
+      "bar": {
+        "tooltip": "{count} detection(s) at {hour}:00"
+      }
     }
   },
   "detections": {
     "title": "Herkend",
+    "humanVoice": "Human Voice",
+    "flaggedByKeywords": "Flagged by keywords: {keywords}",
     "titles": {
       "hourly": "Herkend om {hour}:00 uur op {date}",
       "hourlyRange": "Herkend tussen {startHour}:00 en {endHour}:00 uur op {date}",
@@ -794,12 +801,16 @@
       "allDetections": "Alles herkend op {date}"
     },
     "detail": {
-      "species": "Soort",
       "observation": "Waarneming",
+      "transcript": {
+        "title": "Transcript",
+        "matchedKeywords": "Matched keywords",
+        "flaggedNotice": "Flagged by keyword",
+        "empty": "No transcript available"
+      },
       "aria": {
         "downloadAudioClip": "Download audio clip for {name} detection",
         "audioRecordingFor": "Audio recording and spectrogram for {name}",
-        "scientificName": "Wetenschappelijke naam",
         "classificationBadges": "Soortclassificatie-badges",
         "confidence": "Betrouwbaarheid herkenning {confidence}%",
         "metadata": "Meta informatie herkenning",
@@ -809,8 +820,7 @@
         "commentTimestamp": "Tijdstempel van notitie",
         "mainRegion": "Herkenningsdetails",
         "tabsHeading": "Tabbladen met herkenningsinformatie",
-        "tabList": "Tabbladen met herkenningsdetails",
-        "speciesHeadingSuffix": "herkenningsdetails"
+        "tabList": "Tabbladen met herkenningsdetails"
       }
     },
     "headers": {
@@ -819,7 +829,6 @@
       "source": "Bron",
       "species": "Soort",
       "confidence": "Betrouwbaarheid",
-      "thumbnail": "afbeelding",
       "status": "Status",
       "recording": "Geluid opname",
       "actions": "Akties"
@@ -936,6 +945,7 @@
         "unknown": "Onbekend"
       }
     },
+    "noTranscript": "(no transcript)",
     "row": {
       "viewDetails": "Bekijk details voor {species}",
       "play": "Afspelen",
@@ -974,9 +984,7 @@
       "loading": "Herkenningsdetails laden...",
       "loaded": "Herkenningsdetails geladen voor {species}",
       "error": "Fout bij het laden van herkenning: {error}",
-      "loadingResults": "{count} resultaten laden...",
-      "thumbnailLoading": "{species} miniatuur laden...",
-      "thumbnailLoaded": "Miniatuur van {species} geladen"
+      "loadingResults": "{count} resultaten laden..."
     },
     "errors": {
       "notFound": "Detectie niet gevonden. Deze is mogelijk verwijderd of de ID is onjuist.",
@@ -986,45 +994,34 @@
       "loadFailed": "Kon detectie niet laden (Fout {status}). Ververs de pagina.",
       "noIdProvided": "Geen detectie-ID opgegeven.",
       "fetchFailed": "Detecties konden niet worden opgehaald"
+    },
+    "speaker": {
+      "sectionLabel": "Estimated speaker",
+      "genderAria": "Estimated speaker gender",
+      "ageAria": "Estimated speaker age",
+      "gender": {
+        "male": "Male",
+        "female": "Female",
+        "unknown": "Unknown"
+      },
+      "age": {
+        "child": "Child",
+        "teen": "Teen",
+        "adult": "Adult",
+        "senior": "Senior"
+      }
     }
   },
   "species": {
-    "rarity": {
-      "title": "Soort zeldzaamheid",
-      "score": "Score",
-      "basedOnLocation": "Gebaseerd op locatie: {latitude}, {longitude}",
-      "statuses": {
-        "very_common": "Zeer algemeen",
-        "common": "Algemeen",
-        "uncommon": "Ongewoon",
-        "rare": "Zeldzaam",
-        "very_rare": "Zeer zeldzaam",
-        "unknown": "Onbekend"
-      }
-    },
-    "taxonomy": {
-      "hierarchy": "Taxonomische klassificatie",
-      "subspecies": "Ondersoort",
-      "noData": "Geen taxonomische informatie beschikbaar.",
-      "labels": {
-        "kingdom": "Rijk",
-        "phylum": "Stam",
-        "class": "Klasse",
-        "order": "Orde",
-        "family": "Familie",
-        "genus": "Geslacht",
-        "species": "Soort"
-      }
-    },
     "synonyms": {
       "tabLabel": "Taxonomie-synoniemen",
-      "description": "Overschrijf de toewijzingen van wetenschappelijke namen die worden gebruikt voor het zoeken naar vogelafbeeldingen. BirdNET gebruikt de 2021E-taxonomie, maar afbeeldingsbronnen kunnen bijgewerkte namen gebruiken. Ingebouwde toewijzingen worden altijd geladen; uw overschrijvingen worden toegevoegd of vervangen deze.",
-      "birdnetName": "BirdNET-naam",
+      "description": "Overschrijf de toewijzingen van wetenschappelijke namen die worden gebruikt voor het zoeken naar vogelafbeeldingen. VoiceWatch gebruikt de 2021E-taxonomie, maar afbeeldingsbronnen kunnen bijgewerkte namen gebruiken. Ingebouwde toewijzingen worden altijd geladen; uw overschrijvingen worden toegevoegd of vervangen deze.",
+      "birdnetName": "VoiceWatch-naam",
       "updatedName": "Bijgewerkte naam",
       "addButton": "Synoniem toevoegen",
       "emptyState": "Geen aangepaste taxonomie-synoniemen geconfigureerd.",
       "errors": {
-        "unknownSpecies": "Soort niet gevonden in BirdNET-labels",
+        "unknownSpecies": "Soort niet gevonden in VoiceWatch-labels",
         "duplicateKey": "Er bestaat al een synoniem voor deze soort",
         "emptyUpdatedName": "Bijgewerkte naam is vereist"
       }
@@ -1133,7 +1130,7 @@
         "process": "Proces"
       },
       "showAll": "Toon alle processen",
-      "showBirdnetOnly": "Toon alleen BirdNET",
+      "showBirdnetOnly": "Toon alleen VoiceWatch",
       "table": {
         "process": "Proces",
         "status": "Status",
@@ -1311,9 +1308,9 @@
       "migration": {
         "title": "Databasemigratie",
         "description": "Migreer van oud schema naar genormaliseerd v2 schema",
-        "requiredNote": "Databasemigratie is vereist voor aankomende BirdNET-Go-functies die afhankelijk zijn van het nieuwe genormaliseerde databaseschema. Nieuwe functies zijn pas beschikbaar na voltooiing van de migratie.",
+        "requiredNote": "Databasemigratie is vereist voor aankomende VoiceWatch-functies die afhankelijk zijn van het nieuwe genormaliseerde databaseschema. Nieuwe functies zijn pas beschikbaar na voltooiing van de migratie.",
         "completedTitle": "Migratie voltooid",
-        "completedNote": "Uw database is succesvol gemigreerd naar het nieuwe schema. Herstart BirdNET-Go om over te schakelen naar de nieuwe database. Opmerking: De nieuwe database is kleiner omdat deze gegevens efficiënter opslaat - dit is normaal en al uw gegevens zijn behouden.",
+        "completedNote": "Uw database is succesvol gemigreerd naar het nieuwe schema. Herstart VoiceWatch om over te schakelen naar de nieuwe database. Opmerking: De nieuwe database is kleiner omdat deze gegevens efficiënter opslaat - dit is normaal en al uw gegevens zijn behouden.",
         "starting": "Migratie wordt gestart...",
         "status": {
           "idle": "Klaar om te starten",
@@ -1394,7 +1391,7 @@
         },
         "notes": {
           "in_progress": "U kunt het systeem normaal blijven gebruiken terwijl de migratie op de achtergrond draait.",
-          "dual_write": "Migratie is bezig. Uw gegevens zijn veilig - alle nieuwe detecties worden opgeslagen in beide databases. U kunt BirdNET-Go gewoon blijven gebruiken.",
+          "dual_write": "Migratie is bezig. Uw gegevens zijn veilig - alle nieuwe detecties worden opgeslagen in beide databases. U kunt VoiceWatch gewoon blijven gebruiken.",
           "migrating": "Bestaande detecties worden gekopieerd naar de nieuwe database. Dit kan even duren afhankelijk van hoeveel detecties u heeft. U kunt op elk moment pauzeren en hervatten.",
           "validating": "Controleren of alle records correct zijn gekopieerd. Bijna klaar!",
           "cutover": "Overschakelen naar de nieuwe database. Dit duurt slechts een moment.",
@@ -1834,19 +1831,6 @@
           "axisDate": "Datum",
           "axisUniqueSpecies": "Unieke soorten"
         },
-        "accumulation": {
-          "title": "Species Accumulation Curve",
-          "description": "Cumulative number of distinct species detected within the selected period. The curve climbs as new species appear and flattens toward an asymptote once the common ones have been recorded; a still-rising tail means more species are likely waiting to be found.",
-          "noData": "No species accumulation data available",
-          "noDataHint": "Select a wider date range to watch the species list build up over time",
-          "ariaLabel": "Species accumulation curve: cumulative distinct species detected over the period",
-          "axisDate": "Date",
-          "axisSpecies": "Cumulative species",
-          "totalSpecies": "{species} species",
-          "tooltipCumulative": "Cumulative species",
-          "tooltipNew": "New in period",
-          "summary": "Cumulative species accumulation across {days} days, reaching {species} distinct species by the end of the period."
-        },
         "yearOverYear": {
           "title": "Year-over-Year Tracker",
           "description": "Cumulative detections so far this year versus the same calendar dates last year. The shaded band is the running gap between the two; this year's line sitting above last year's means you are ahead of last year's pace.",
@@ -1859,20 +1843,6 @@
           "legendLast": "{year} (last year)",
           "tooltipDelta": "Difference",
           "summary": "Year over year: by {monthDay}, {currentYear} has {thisYear} cumulative detections versus {lastYear} for {previousYear} (a difference of {delta})."
-        },
-        "phenology": {
-          "title": "Arrival & Departure Phenology",
-          "description": "First and last detection of each species within the selected period, drawn as residency bars for the most-detected species. Read it top to bottom in arrival order to see who shows up first and who lingers latest across the season.",
-          "noData": "No phenology data available",
-          "noDataHint": "Select a wider date range to see when species arrive and depart",
-          "ariaLabel": "Arrival and departure phenology: residency bars showing each species' first-to-last detection span",
-          "axisDate": "Date",
-          "summary": "Arrival and departure residency spans for {species} species across the selected period.",
-          "tooltipFirst": "First detected",
-          "tooltipLast": "Last detected",
-          "tooltipResidency": "Residency",
-          "tooltipCount": "Detections",
-          "residencyDays": "{days} days"
         },
         "heatmap": {
           "title": "Seasonal Activity Heatmap",
@@ -1889,13 +1859,8 @@
           "summary": "{total} detections across {days} days. Busiest around {time} on {date}."
         },
         "ridgeline": {
-          "title": "Who Sings When",
-          "description": "Hour-of-day activity for the most-detected species, sorting dawn singers from all-day and nocturnal birds",
-          "noData": "No species activity data available",
-          "noDataHint": "Select a wider date range to compare species activity patterns",
           "ariaLabel": "Who-sings-when ridgeline: hour-of-day activity distribution per species",
           "axisTime": "Time of Day",
-          "note": "Showing the top {count} species by detection volume",
           "tooltipDetections": "Detections",
           "tooltipPeak": "Peak",
           "summary": "Hour-of-day activity for {count} species. Most active: {species} around {time}."
@@ -1990,7 +1955,7 @@
     }
   },
   "settings": {
-    "title": "BirdNET-Go instellingen",
+    "title": "VoiceWatch instellingen",
     "loading": "Instellingen inlezen ...",
     "sections": {
       "analysis": "Analyse",
@@ -2047,20 +2012,20 @@
           "description": "Configureer hoofd applicatie instellingen"
         },
         "birdnet": {
-          "title": "BirdNET Instellingen",
-          "description": "Configureer BirdNET AI model specifieke instellingen"
+          "title": "VoiceWatch Instellingen",
+          "description": "Configureer VoiceWatch AI model specifieke instellingen"
         },
         "ui": {
           "title": "Gebruikersinterface Instellingen",
           "description": "Pas gebruikersinterface aan"
         },
         "customClassifier": {
-          "title": "Aangepaste BirdNET Classifier",
-          "description": "Configureer aangepaste BirdNET model en label bestanden voor gespecialiseerde herkenning",
+          "title": "Aangepaste VoiceWatch Classifier",
+          "description": "Configureer aangepaste VoiceWatch model en label bestanden voor gespecialiseerde herkenning",
           "modelPath": {
             "label": "Model Pad (Vereist herstart om toe te passen)",
             "placeholder": "Pad naar model bestand",
-            "helpText": "Pad naar extern BirdNET model bestand. Voer absoluut of relatief pad in naar birdnet-go binary. Laat leeg om het standaard ingebedde model te gebruiken."
+            "helpText": "Pad naar extern VoiceWatch model bestand. Voer absoluut of relatief pad in naar birdnet-go binary. Laat leeg om het standaard ingebedde model te gebruiken."
           },
           "labelPath": {
             "label": "Labelpad (Vereist herstart om toe te passen)",
@@ -2072,7 +2037,7 @@
           "title": "Dynamische Drempelwaarde",
           "description": "Pas de detectiegevoeligheid automatisch aan op basis van eerdere waarnemingen",
           "enable": {
-            "label": "Schakel Dynamische Drempelwaarde in (BirdNET-Go specifieke functie)",
+            "label": "Schakel Dynamische Drempelwaarde in (VoiceWatch specifieke functie)",
             "helpText": "Schakelt dynamische betrouwbaarheids drempelwaarde functie in voor meer adaptieve vogelroep herkenning."
           },
           "trigger": {
@@ -2118,8 +2083,6 @@
           "warningOff": "Zonder filtering wordt elke detectie boven de betrouwbaarheidsdrempel onmiddellijk geaccepteerd. Dit levert doorgaans meerdere vals-positieven per dag op. Zelfs lage filtering verbetert de resultaatkwaliteit aanzienlijk."
         },
         "rangeFilter": {
-          "title": "Bereik Filter",
-          "description": "Beperk detectie tot soorten die waarschijnlijk voorkomen in uw geografische regio",
           "stationLocation": {
             "label": "Station Locatie",
             "helpText": "Station locatie, gebruikt voor weersgegevens en om vogelsoorten te beperken tot diegenen die waarschijnlijk voorkomen in de regio."
@@ -2131,33 +2094,6 @@
           "longitude": {
             "label": "Lengtegraad",
             "helpText": "Station lengtegraad, gebruikt voor weersgegevens en om vogelsoorten naar bereik te filteren."
-          },
-          "model": {
-            "label": "Bereik Filter Model",
-            "helpText": "BirdNET bereik filter model versie: latest of legacy."
-          },
-          "threshold": {
-            "label": "Drempelwaarde",
-            "helpText": "Bepaalt welke soorten worden opgenomen op basis van hun waarschijnlijkheid van voorkomen voor jouw locatie en tijd van het jaar. Standaard (0.01) wordt aanbevolen voor de meeste gebruikers. Hogere waarden (0.05-0.3) omvatten minder soorten met hogere waarschijnlijkheid van voorkomen. Zeer hoge waarden (0.5+) omvatten alleen de meest voorkomende soorten."
-          },
-          "speciesCount": {
-            "label": "Huidig Aantal Soorten",
-            "helpText": "Aantal soorten opgenomen in bereik filter. Wordt automatisch bijgewerkt wanneer drempelwaarde, breedtegraad of lengtegraad wijzigt.",
-            "loading": "Inlezen...",
-            "viewSpecies": "Bekijk Soorten"
-          },
-          "downloadTitle": "Download soorten lijst als CSV",
-          "csvDownloaded": "Soorten lijst succesvol gedownload",
-          "csvDownloadFailed": "Downloaden van soorten lijst mislukt. Probeer het opnieuw.",
-          "modal": {
-            "title": "Bereik Filter Soorten",
-            "speciesCount": "Aantal Soorten:",
-            "threshold": "Drempelwaarde:",
-            "latitude": "Breedtegraad:",
-            "longitude": "Lengtegraad:",
-            "loadingSpecies": "Soorten inlezen...",
-            "noSpeciesFound": "Geen soorten gevonden met huidige instellingen",
-            "close": "Sluiten"
           }
         },
         "database": {
@@ -2285,18 +2221,6 @@
               "recent": {
                 "label": "Toon afbeeldingen in de Recent herkend lijst",
                 "helpText": "Aktiveer het tonen van afbeeldingen van herkende soorten in de Recent herkend lijst"
-              },
-              "imageProvider": {
-                "label": "Afbeeldingen leverancier",
-                "helpText": "Kies de voorkeur leverancier van de vogel afbeeldingen"
-              },
-              "fallbackPolicy": {
-                "label": "Terugval beleid",
-                "helpText": "Kies wat te doen wanneer de voorkeur leverancier geen afbeelding kan leveren",
-                "options": {
-                  "all": "Probeer schtereenvolgend alle leveranciers",
-                  "none": "Beperk tot de gekozen leverancier"
-                }
               }
             },
             "spectrogram": {
@@ -2385,10 +2309,6 @@
       },
       "errors": {
         "localesLoadFailed": "Kan taal opties niet laden. Gebruik standaardwaarden.",
-        "providersLoadFailed": "Kan afbeeldings leveranciers niet laden. Gebruik standaardwaarden.",
-        "rangeFilterTestFailed": "Testen van bereik filter instellingen mislukt",
-        "rangeFilterLoadFailed": "Laden van soorten lijst mislukt",
-        "rangeFilterCountFailed": "Laden van soorten aantal mislukt",
         "mapLibraryLoadFailed": "Laden van kaartbibliotheek mislukt. Vernieuw de pagina.",
         "mapLoadFailed": "Laden van kaart mislukt. Probeer de pagina te vernieuwen.",
         "modalMapLoadFailed": "Laden van modale kaart mislukt. Sluit het venster en open het opnieuw.",
@@ -2399,7 +2319,7 @@
       "sections": {
         "telemetry": {
           "title": "Fout Tracking & Telemetrie",
-          "description": "Optionele fout tracking om BirdNET-Go betrouwbaarheid en prestaties te verbeteren"
+          "description": "Optionele fout tracking om VoiceWatch betrouwbaarheid en prestaties te verbeteren"
         },
         "diagnostics": {
           "title": "Ondersteuning & Diagnostiek",
@@ -2411,7 +2331,7 @@
         "privacyPoints": {
           "noPersonalData": "Geen persoonlijke gegevens worden verzameld",
           "anonymousData": "Alle telemetrie gegevens zijn anoniem",
-          "helpImprove": "Telemetrie gegevens helpen ontwikkelaars problemen in BirdNET-Go te identificeren en op te lossen"
+          "helpImprove": "Telemetrie gegevens helpen ontwikkelaars problemen in VoiceWatch te identificeren en op te lossen"
         },
         "enableTracking": "Schakel Fout Tracking in (Opt-in)"
       },
@@ -2568,7 +2488,7 @@
       },
       "systemInfo": {
         "howToView": "Hoe meldingen te bekijken:",
-        "technicalDetails": "Technische details over meldingen in BirdNET-Go:"
+        "technicalDetails": "Technische details over meldingen in VoiceWatch:"
       },
       "privacy": {
         "title": "Privacy Kennisgeving voor Externe Webhooks",
@@ -2862,63 +2782,16 @@
         "confidenceLabel": "Betrouwbaarheids Drempelwaarde voor Menselijke Detectie",
         "confidenceHelp": "Stel het betrouwbaarheidsniveau in voor menselijke stem detectie, lagere waarde maakt filter gevoeliger"
       },
-      "falsePositivePrevention": {
-        "title": "Vals Positief Preventie",
-        "description": "Configureer valse detectie filters",
-        "enableDogBark": "Schakel Hondengeblaf Filter in",
-        "disabled": "Hondengeblaf filter is uitgeschakeld",
-        "confidenceLabel": "Betrouwbaarheids Drempelwaarde",
-        "confidenceHelp": "Stel het betrouwbaarheidsniveau in voor hondengeblaf detectie, lagere waarde maakt filter gevoeliger",
-        "expireTimeLabel": "Hondengeblaf Verlooptijd (Minuten)",
-        "expireTimeHelp": "Stel in hoe lang een gedetecteerd hondengeblaf wordt onthouden",
-        "addDogBarkSpeciesLabel": "Voeg Hondengeblaf Soorten toe",
-        "addDogBarkSpeciesHelp": "Zoek en voeg soorten toe die verward kunnen worden met hondengeblaf",
-        "addSpeciesButton": "Toevoegen"
-      },
-      "speciesNamePlaceholder": "Soorten naam",
-      "typeSpeciesName": "Typ soorten naam...",
-      "dogBarkSpeciesList": "Hondengeblaf Soorten Lijst",
       "daylightFilter": {
         "title": "Daglichtfilter",
         "description": "Filter detecties van nachtelijke soorten tijdens daglichturen. Gebruikt de burgerlijke schemering/dageraad grenzen van uw geconfigureerde locatie.",
         "enable": "Daglichtfilter inschakelen",
         "disabled": "Daglichtfilter is uitgeschakeld",
         "offsetLabel": "Daglichtvenster Offset (Uren)",
-        "offsetHelp": "Pas het daglichtvenster aan. Positieve waarden verkleinen het (soepeler, bijv. +1 = begint 1u na dageraad). Negatieve waarden vergroten het (strenger, bijv. -1 = begint 1u voor dageraad).",
-        "speciesListLabel": "Nachtelijke Soortenlijst",
-        "addSpeciesLabel": "Nachtelijke Soort Toevoegen",
-        "addSpeciesHelp": "Zoek en voeg soorten, geslachten, families of ordes toe om te filteren bij daglicht. Standaard: Strigiformes (alle uilen). Opmerking: een lege lijst filtert GEEN soorten bij daglicht."
-      },
-      "errors": {
-        "speciesLoadFailed": "Laden van soorten lijst mislukt. Probeer het opnieuw."
+        "offsetHelp": "Pas het daglichtvenster aan. Positieve waarden verkleinen het (soepeler, bijv. +1 = begint 1u na dageraad). Negatieve waarden vergroten het (strenger, bijv. -1 = begint 1u voor dageraad)."
       }
     },
     "integration": {
-      "birdweather": {
-        "title": "BirdWeather",
-        "description": "Upload herkenningen naar BirdWeather",
-        "ffmpegWarning": {
-          "title": "FFmpeg niet gedetecteerd",
-          "message": "Installeer FFmpeg om FLAC encoding ondersteuning in te schakelen, BirdWeather stopt met WAV uploads ten gunste van gecomprimeerde FLAC audio bestanden."
-        },
-        "enable": "Schakel BirdWeather Uploads in",
-        "token": {
-          "label": "BirdWeather-token",
-          "helpText": "Jouw unieke BirdWeather token."
-        },
-        "threshold": {
-          "label": "Upload Drempelwaarde",
-          "helpText": "Minimum betrouwbaarheids drempelwaarde voor het uploaden van voorspellingen naar BirdWeather."
-        },
-        "test": {
-          "button": "Test BirdWeather Verbinding",
-          "loading": "Testen...",
-          "enabledRequired": "BirdWeather moet ingeschakeld zijn om te testen",
-          "tokenRequired": "BirdWeather token moet worden opgegeven",
-          "inProgress": "Test bezig...",
-          "description": "Test BirdWeather verbinding"
-        }
-      },
       "mqtt": {
         "title": "MQTT",
         "description": "Configureer MQTT broker verbinding",
@@ -2971,14 +2844,14 @@
         "homeAssistant": {
           "title": "Home Assistant Auto-Discovery",
           "enable": "Schakel Home Assistant MQTT Discovery in",
-          "description": "Wanneer ingeschakeld, registreert BirdNET-Go automatisch apparaten en sensoren bij Home Assistant via het MQTT discovery protocol. Apparaten verschijnen in het Home Assistant apparatenregister zonder handmatige YAML-configuratie.",
+          "description": "Wanneer ingeschakeld, registreert VoiceWatch automatisch apparaten en sensoren bij Home Assistant via het MQTT discovery protocol. Apparaten verschijnen in het Home Assistant apparatenregister zonder handmatige YAML-configuratie.",
           "discoveryPrefix": {
             "label": "Discovery-prefix",
             "helpText": "Het MQTT topic prefix voor Home Assistant discovery berichten. Standaard is 'homeassistant'. Wijzig dit alleen als je een aangepast discovery prefix hebt geconfigureerd in Home Assistant."
           },
           "deviceName": {
             "label": "Apparaatnaam",
-            "helpText": "De basisnaam voor apparaten zoals ze verschijnen in Home Assistant. Elke audiobron heeft zijn eigen apparaat gekoppeld aan dit hoofd BirdNET-Go apparaat."
+            "helpText": "De basisnaam voor apparaten zoals ze verschijnen in Home Assistant. Elke audiobron heeft zijn eigen apparaat gekoppeld aan dit hoofd VoiceWatch apparaat."
           },
           "sensorsNote": "<strong>Aangemaakte Sensoren:</strong> Voor elke audiobron ontvangt Home Assistant: Laatste Soort, Betrouwbaarheid, Wetenschappelijke Naam en Geluidsniveau (indien ingeschakeld). Het bridge apparaat bevat online/offline beschikbaarheidsstatus.",
           "discovery": {
@@ -3003,7 +2876,7 @@
       },
       "observability": {
         "title": "Observeerbaar",
-        "description": "Monitor BirdNET-Go's prestaties en vogel detectie metrieken via Prometheus-compatible endpoint",
+        "description": "Monitor VoiceWatch's prestaties en vogel detectie metrieken via Prometheus-compatible endpoint",
         "enable": "Schakel Observeerbaar Integratie in",
         "disabled": "Observeerbaar integratie is niet ingeschakeld",
         "listenAddress": {
@@ -3091,33 +2964,6 @@
         "responseStreamFailed": "Antwoordstroom kon niet worden gelezen",
         "configurationCheck": "Configuratiecontrole",
         "testStageFallback": "Testfase"
-      },
-      "ebird": {
-        "title": "eBird",
-        "description": "Verbind met de eBird-taxonomiedatabase voor verrijkte soortengegevens inclusief taxonomische classificatie en ondersoortinformatie.",
-        "enable": "eBird-integratie inschakelen",
-        "enabledRequired": "eBird-integratie is niet ingeschakeld",
-        "apiKey": {
-          "label": "eBird API-sleutel",
-          "helpText": "Uw eBird API-sleutel. Verkrijg er een via het eBird API-portaal."
-        },
-        "locale": {
-          "label": "Taal van soortnamen"
-        },
-        "cacheTTL": {
-          "label": "Cacheduur (uren)",
-          "helpText": "Hoe lang taxonomiegegevens van eBird in de cache worden bewaard. Taxonomie verandert zelden, dus langere cachetijden verminderen API-aanroepen."
-        },
-        "note": "eBird levert taxonomische gegevens voor soortclassificatie en inzichten. De API-sleutel is gratis verkrijgbaar bij het Cornell Lab of Ornithology.",
-        "apiKeyInfo": "Een persoonlijke eBird API-sleutel is vereist voor deze integratie. Je kunt een gratis sleutel aanvragen op <a href=\"https://ebird.org/api/keygen\" class=\"link link-primary\" target=\"_blank\" rel=\"noopener noreferrer\">ebird.org/api/keygen</a>.",
-        "test": {
-          "button": "eBird-verbinding testen",
-          "loading": "Testen...",
-          "enabledRequired": "Schakel eerst eBird-integratie in",
-          "apiKeyRequired": "API-sleutel is vereist",
-          "inProgress": "Test wordt uitgevoerd...",
-          "description": "Test eBird API-connectiviteit en authenticatie"
-        }
       }
     },
     "audio": {
@@ -3172,7 +3018,7 @@
       },
       "noSources": {
         "warning": "Geen Audio Bronnen Geconfigureerd",
-        "description": "BirdNET-Go heeft een audio invoer nodig om vogels te detecteren. Configureer alstublieft tenminste één bron in het Geluidskaart of Streams tabblad."
+        "description": "VoiceWatch heeft een audio invoer nodig om vogels te detecteren. Configureer alstublieft tenminste één bron in het Geluidskaart of Streams tabblad."
       },
       "soundCards": {
         "summary": "{count} geluidskaartbron(nen)",
@@ -3198,12 +3044,12 @@
           "hints": {
             "device": "Kies uit de beschikbare audio-invoerapparaten op uw systeem",
             "multiple": "U kunt meerdere geluidskaarten configureren voor verschillende locaties",
-            "model": "Elke bron kan een ander detectiemodel gebruiken (BirdNET, Perch, Bat)"
+            "model": "Elke bron kan een ander detectiemodel gebruiken (VoiceWatch, Perch, Bat)"
           }
         },
         "models": {
-          "birdnetDefault": "BirdNET (Standaard)",
-          "birdnet": "BirdNET",
+          "birdnetDefault": "VoiceWatch (Standaard)",
+          "birdnet": "VoiceWatch",
           "perchV2": "Google Perch v2",
           "bat": "Vleermuisdetectie"
         },
@@ -3470,10 +3316,6 @@
         "enableHelp": "Wanneer ingeschakeld, worden herhaalde detecties van geconfigureerde soorten samengevoegd tot één langere opname.",
         "maxDurationLabel": "Maximale duur",
         "maxDurationHelp": "Maximale lengte van een uitgebreide opnameclip. De opname groeit naarmate detecties doorgaan, tot deze limiet.",
-        "speciesListLabel": "Soorten voor uitgebreide opname",
-        "addSpeciesLabel": "Soort toevoegen",
-        "addSpeciesHelp": "Soorten die uitgebreide opname activeren. Ondersteunt gewone namen, wetenschappelijke namen en matching op genusniveau (bijv. \"Strix\" omvat alle Strix-uilen).",
-        "addSpeciesButton": "Toevoegen",
         "disabled": "Uitgebreide opname is uitgeschakeld"
       },
       "fileSettings": {
@@ -3551,8 +3393,28 @@
         "invalidRetentionPolicy": "Ongeldig bewarings beleid"
       },
       "models": {
-        "recommendBoth": "Voor de beste soortdetectie wordt aanbevolen om zowel BirdNET als Perch samen te gebruiken.",
-        "perchOnlyWarning": "Perch alleen produceert minder detecties. Verlaag de betrouwbaarheidsdrempel naar 0.50 voor zinvolle resultaten, of activeer BirdNET erbij voor een betere dekking."
+        "recommendBoth": "Voor de beste soortdetectie wordt aanbevolen om zowel VoiceWatch als Perch samen te gebruiken.",
+        "perchOnlyWarning": "Perch alleen produceert minder detecties. Verlaag de betrouwbaarheidsdrempel naar 0.50 voor zinvolle resultaten, of activeer VoiceWatch erbij voor een betere dekking."
+      },
+      "speakerAttributes": {
+        "title": "Speaker Attributes",
+        "description": "Estimate the speaker's gender and relative age band for human-voice detections. Opt-in and off by default.",
+        "caveat": "These are demographic estimates, not identity recognition. Accuracy varies by accent and recording quality.",
+        "enable": "Enable speaker attributes",
+        "enableHelp": "Master switch for all speaker-attribute estimation.",
+        "disabled": "Speaker attributes are disabled",
+        "gender": {
+          "enable": "Estimate speaker gender",
+          "enableHelp": "Estimate whether the speaker sounds male, female, or unknown.",
+          "thresholdLabel": "Gender confidence threshold",
+          "thresholdHelp": "Discard gender estimates below this confidence."
+        },
+        "age": {
+          "enable": "Estimate speaker age band",
+          "enableHelp": "Estimate a relative age band (child, teen, adult, senior).",
+          "thresholdLabel": "Age confidence threshold",
+          "thresholdHelp": "Discard age estimates below this confidence."
+        }
       }
     },
     "security": {
@@ -3795,342 +3657,6 @@
         "fileReadError": "Kan het geselecteerde bestand niet lezen"
       }
     },
-    "species": {
-      "pageLabel": "Soortinstellingen",
-      "saveError": "Opslaan van configuratie voor \"{species}\" mislukt. Probeer het opnieuw.",
-      "configUpdated": "Configuratie voor \"{species}\" bijgewerkt",
-      "configAdded": "Configuratie voor \"{species}\" toegevoegd",
-      "duplicateConfigError": "Soort \"{species}\" heeft al een configuratie. Kies een andere naam.",
-      "activeSpecies": {
-        "title": "Actieve Soorten",
-        "tabLabel": "Actief",
-        "description": "Soorten die worden gedetecteerd op basis van uw huidige locatie en filterinstellingen",
-        "stats": {
-          "species": "Soorten",
-          "location": "Locatie",
-          "threshold": "Drempelwaarde",
-          "updated": "Bijgewerkt",
-          "justNow": "Zojuist",
-          "minutesAgo": "{count}m geleden",
-          "hoursAgo": "{count}u geleden"
-        },
-        "search": {
-          "placeholder": "Zoek soorten..."
-        },
-        "badges": {
-          "included": "Opgenomen",
-          "configured": "Geconfigureerd"
-        },
-        "empty": {
-          "title": "Geen soorten gevonden",
-          "description": "Configureer uw locatie in Hoofdinstellingen om beschikbare soorten te zien"
-        },
-        "noResults": "Geen soorten komen overeen met uw zoekopdracht",
-        "infoNote": "Deze lijst is gebaseerd op uw locatie en de drempelwaarde van het bereikfilter. Handmatig toegevoegde soorten worden altijd opgenomen.",
-        "retry": "Opnieuw proberen",
-        "expand": "Lijst uitvouwen",
-        "collapse": "Lijst invouwen",
-        "downloadCsv": "CSV downloaden",
-        "errors": {
-          "loadFailed": "Kan de lijst met actieve soorten niet laden"
-        },
-        "locationNotConfigured": {
-          "title": "Locatie niet geconfigureerd",
-          "description": "Stel uw locatie in bij Hoofdinstellingen om soorten in uw omgeving te zien. Het bereikfilter gebruikt uw locatie om te bepalen welke soorten waarschijnlijk in de buurt voorkomen.",
-          "action": "Locatie configureren"
-        },
-        "rangeFilterHealth": {
-          "inactive": {
-            "title": "Bereikfilter inactief",
-            "description": "Detecties worden op dit moment niet gefilterd op basis van uw locatie, dus soorten van buiten uw omgeving kunnen worden gemeld. Controleer de configuratie van het bereikfiltermodel in Hoofdinstellingen."
-          },
-          "fellBack": {
-            "title": "Ingebouwd bereikfilter wordt gebruikt",
-            "description": "Het geconfigureerde geomodel-bereikfilter kon niet worden geladen, dus BirdNET-Go is teruggevallen op het ingebouwde bereikfilter. Het filteren werkt nog steeds, maar controleer Hoofdinstellingen om het geomodel te herstellen."
-          },
-          "mappedZero": {
-            "title": "Bereikfilter kwam met geen enkele soort overeen",
-            "description": "Het geomodel-bereikfilter kwam met geen enkele soort van het actieve model overeen, dus elke detectie zou worden weggefilterd. Controleer of het labelbestand van het bereikfilter overeenkomt met het actieve model."
-          }
-        },
-        "columns": {
-          "commonName": "Naam",
-          "scientificName": "Wetenschappelijke naam",
-          "score": "Score",
-          "status": "Status"
-        }
-      },
-      "alwaysInclude": {
-        "title": "Altijd Opnemen Soorten",
-        "tabLabel": "Opnemen",
-        "description": "Soorten in deze lijst worden altijd opgenomen in het bereik van gedetecteerde soorten",
-        "noSpeciesMessage": "Geen soorten toegevoegd aan de opname lijst"
-      },
-      "alwaysExclude": {
-        "title": "Altijd Uitsluiten Soorten",
-        "tabLabel": "Uitsluiten",
-        "description": "Soorten in deze lijst worden altijd uitgesloten van detectie",
-        "noSpeciesMessage": "Geen soorten toegevoegd aan de uitsluit lijst"
-      },
-      "customConfiguration": {
-        "title": "Aangepaste Soorten Configuratie",
-        "tabLabel": "Aangepast",
-        "description": "Soorten specifieke drempelwaardes, detectie intervallen, en acties",
-        "helpText": {
-          "intro": "Configureer soorten-specifieke instellingen:",
-          "threshold": "Drempelwaarde: Minimum betrouwbaarheidsscore (0-1) vereist voor detectie",
-          "interval": "Interval: Minimum tijd in seconden tussen detecties van dezelfde soorten (0 = gebruik globale standaard)",
-          "actions": "Acties: Aangepaste commando's uit te voeren wanneer deze soorten worden gedetecteerd"
-        },
-        "columnHeaders": {
-          "species": "Soorten",
-          "settings": "Instellingen",
-          "actions": "Acties"
-        },
-        "badges": {
-          "threshold": "Drempelwaarde: {value}",
-          "interval": "Interval: {value}s",
-          "customAction": "Aangepaste Actie",
-          "executeDefaults": "+Standaarden"
-        },
-        "dropdown": {
-          "editConfig": "Wijzig Config",
-          "addAction": "Voeg Actie Toe",
-          "remove": "Verwijderen"
-        },
-        "labels": {
-          "threshold": "Drempelwaarde",
-          "interval": "Interval",
-          "intervalSeconds": "Interval (sec)",
-          "addButton": "Toevoegen"
-        },
-        "noConfigurationsMessage": "Geen aangepaste soorten configuraties toegevoegd",
-        "addForm": {
-          "speciesPlaceholder": "Soorten naam",
-          "thresholdPlaceholder": "0.5",
-          "intervalPlaceholder": "0"
-        },
-        "addConfiguration": "Configuratie Toevoegen",
-        "newConfiguration": "Nieuwe Configuratie",
-        "editing": "Bewerken: {species}",
-        "configuredCount": "{count} geconfigureerd",
-        "searchPlaceholder": "Typ om te zoeken...",
-        "saving": "Opslaan...",
-        "save": "Opslaan",
-        "cancel": "Annuleren",
-        "configureActions": "Acties Configureren",
-        "actionsConfigured": "Geconfigureerd",
-        "list": {
-          "editTitle": "Configuratie bewerken",
-          "removeTitle": "Configuratie verwijderen"
-        },
-        "emptyState": {
-          "title": "Nog geen configuraties.",
-          "description": "Klik op \"Configuratie Toevoegen\" om soorten detectie instellingen aan te passen."
-        },
-        "table": {
-          "columnScientificName": "Wetenschappelijke naam",
-          "intervalDefault": "Standaard",
-          "intervalDefaultTooltip": "0 = gebruik het globale standaardinterval",
-          "noActions": "Geen",
-          "searchPlaceholder": "Zoek soorten...",
-          "noResults": "Geen overeenkomende configuraties",
-          "editDisabledReason": "Sla de huidige editor op of sluit deze voordat u een andere soort bewerkt",
-          "actionsDisabledBusy": "Een moment geduld tot de huidige bewerking is voltooid"
-        }
-      },
-      "synonyms": {
-        "tabLabel": "Synoniemen",
-        "description": "Koppel wetenschappelijke BirdNET-namen aan hun bijgewerkte equivalenten in een nieuwere taxonomie. Wordt alleen als fallback gebruikt bij het ophalen van vogelfoto's van Wikipedia en AviCommons; hernoemt geen soorten in detecties of op het dashboard.",
-        "helpText": "Om te wijzigen hoe een soort in de interface wordt weergegeven, bewerk uw BirdNET-labelbestand (instelling \"Labelpad\" onder Hoofdinstellingen).",
-        "birdnetName": "BirdNET-naam",
-        "updatedName": "Bijgewerkte wetenschappelijke naam",
-        "addButton": "Synoniem toevoegen",
-        "emptyState": "Geen taxonomie-synoniemen geconfigureerd",
-        "errors": {
-          "unknownSpecies": "Soort niet gevonden in BirdNET-labels",
-          "duplicateKey": "Er bestaat al een synoniem voor deze soort",
-          "emptyUpdatedName": "De bijgewerkte naam is vereist"
-        }
-      },
-      "actionsModal": {
-        "title": "Acties voor {species}",
-        "actionType": {
-          "label": "Actie Type",
-          "executeCommand": "Voer Commando Uit",
-          "onlySupported": "Momenteel worden alleen Voer Commando Uit acties ondersteund"
-        },
-        "command": {
-          "label": "Commando",
-          "helpText": "Geef het volledige pad naar het commando of script dat u wilt uitvoeren"
-        },
-        "parameters": {
-          "label": "Parameters",
-          "helpText": "Deze waardes worden doorgegeven aan uw commando in de vermelde volgorde",
-          "placeholder": "Klik op de knoppen hieronder om parameters toe te voegen of typ handmatig",
-          "tooltip": "Gebruik de knoppen hieronder of typ direct (kommagescheiden)",
-          "availableTitle": "Beschikbare Parameters",
-          "buttons": {
-            "commonName": "CommonName",
-            "scientificName": "WetenschappelijkeNaam",
-            "confidence": "Betrouwbaarheid",
-            "time": "Tijd",
-            "source": "Bron",
-            "clearParameters": "Wis Parameters"
-          }
-        },
-        "executeDefaults": {
-          "label": "Voer ook standaard acties uit (database opslag, meldingen, etc.)",
-          "helpText": "Wanneer ingeschakeld, worden zowel uw aangepaste actie als de standaard acties van het systeem uitgevoerd. Wanneer uitgeschakeld, wordt alleen uw aangepaste actie uitgevoerd."
-        }
-      },
-      "add": "Toevoegen",
-      "remove": "Verwijderen",
-      "suggestions": "Soortsuggesties",
-      "addSpeciesToInclude": "Voeg soorten toe om op te nemen",
-      "addSpeciesToIncludeLabel": "Voeg Nieuwe Soorten toe om Op te Nemen",
-      "addSpeciesToExclude": "Voeg soorten toe om uit te sluiten",
-      "addSpeciesToExcludeLabel": "Voeg Nieuwe Soorten toe om Uit te Sluiten",
-      "commandPathPlaceholder": "/pad/naar/uw/commando",
-      "parametersPlaceholder": "Parameters verschijnen hier",
-      "errors": {
-        "speciesLoadFailed": "Laden van soorten lijst mislukt. Probeer opnieuw."
-      },
-      "tracking": {
-        "title": "Volgen",
-        "tabLabel": "Volgen",
-        "description": "Configureer het volgen van nieuwe soorten detecties op basis van tijdsperioden",
-        "enabled": {
-          "label": "Soortenvolging inschakelen",
-          "helpText": "Wanneer ingeschakeld, volgt het systeem nieuwe soorten detecties en kan meldingen verzenden"
-        },
-        "newSpeciesWindowDays": {
-          "label": "Nieuwe soort venster (dagen)",
-          "helpText": "Aantal dagen dat een soort als 'nieuw' wordt beschouwd na eerste detectie (1-365)"
-        },
-        "syncIntervalMinutes": {
-          "label": "Synchronisatie-interval (minuten)",
-          "helpText": "Hoe vaak volggegevens worden gesynchroniseerd met de database (1-1440)"
-        },
-        "notificationSuppressionHours": {
-          "label": "Meldingsonderdrukking (uren)",
-          "helpText": "Uren om dubbele meldingen voor dezelfde soort te onderdrukken (0-8760)"
-        },
-        "yearly": {
-          "title": "Jaarlijks volgen",
-          "description": "Volg de eerste aankomsten van soorten elk jaar",
-          "enabled": {
-            "label": "Jaarlijks volgen inschakelen",
-            "helpText": "Volg en meld wanneer een soort voor het eerst elk jaar wordt gedetecteerd"
-          },
-          "resetMonth": {
-            "label": "Reset maand",
-            "helpText": "Maand waarin jaarlijks volgen wordt gereset (1-12)"
-          },
-          "resetDay": {
-            "label": "Reset dag",
-            "helpText": "Dag van de maand waarop jaarlijks volgen wordt gereset"
-          },
-          "windowDays": {
-            "label": "Venster (dagen)",
-            "helpText": "Dagen om 'nieuw dit jaar' indicator te tonen (1-365)"
-          }
-        },
-        "seasonal": {
-          "title": "Seizoensvolging",
-          "description": "Volg de eerste aankomsten van soorten elk seizoen",
-          "enabled": {
-            "label": "Seizoensvolging inschakelen",
-            "helpText": "Volg en meld wanneer een soort voor het eerst elk seizoen wordt gedetecteerd"
-          },
-          "windowDays": {
-            "label": "Venster (dagen)",
-            "helpText": "Dagen om 'nieuw dit seizoen' indicator te tonen (1-365)"
-          },
-          "seasons": {
-            "title": "Seizoensdefinities",
-            "description": "Definieer wanneer elk seizoen begint. Seizoenen worden automatisch aangepast op basis van de breedtegraad van uw locatie.",
-            "spring": "Lente",
-            "summer": "Zomer",
-            "fall": "Herfst",
-            "winter": "Winter",
-            "wet1": "Natte seizoen 1",
-            "dry1": "Droge seizoen 1",
-            "wet2": "Natte seizoen 2",
-            "dry2": "Droge seizoen 2",
-            "startMonth": "Startmaand",
-            "startDay": "Startdag",
-            "hemisphereNote": "Seizoensdatums worden automatisch geconfigureerd op basis van uw breedtegraad. Het noordelijk halfrond gebruikt standaard seizoenen, het zuidelijk halfrond heeft verschoven datums, en equatoriale regio's gebruiken natte/droge seizoenen."
-          }
-        },
-        "months": {
-          "january": "Januari",
-          "february": "Februari",
-          "march": "Maart",
-          "april": "April",
-          "may": "Mei",
-          "june": "Juni",
-          "july": "Juli",
-          "august": "Augustus",
-          "september": "September",
-          "october": "Oktober",
-          "november": "November",
-          "december": "December"
-        },
-        "units": {
-          "days": "dagen",
-          "min": "min",
-          "hours": "uur"
-        }
-      },
-      "dynamicThreshold": {
-        "tabLabel": "Geleerd",
-        "title": "Geleerde drempels",
-        "description": "Deze pagina toont runtime data van dynamische drempels. Wanneer ingeschakeld in Hoofdinstellingen → Detectie, worden drempels automatisch aangepast door meerdere detecties met hoge betrouwbaarheid. Soorten die hier worden getoond, worden verondersteld op deze locatie te bestaan.",
-        "stats": {
-          "active": "Actief",
-          "atMinimum": "Op minimum",
-          "minThreshold": "Min. drempel",
-          "validityPeriod": "Geldigheidsperiode"
-        },
-        "header": {
-          "species": "Soort",
-          "threshold": "Drempel",
-          "expires": "Verloopt"
-        },
-        "searchPlaceholder": "Zoek soorten...",
-        "threshold": "Drempel",
-        "level": "Niveau",
-        "expires": "Verloopt",
-        "expired": "Verlopen",
-        "confidence": "Betrouwbaarheid",
-        "requiredConfidence": "Vereiste betrouwbaarheid",
-        "resetAll": "Alles resetten",
-        "resetSpecies": "Reset drempel voor deze soort",
-        "noEvents": "Geen drempelwijzigingsgeschiedenis",
-        "changeReason": {
-          "highConfidence": "Detectie met hoge betrouwbaarheid",
-          "expiry": "Drempel verlopen",
-          "manualReset": "Handmatige reset"
-        },
-        "note": "Detecties met hoge betrouwbaarheid bevestigen welke soorten op deze locatie bestaan. Na meerdere matches met hoge betrouwbaarheid wordt de detectiedrempel veilig verlaagd om meer geluiden te vangen zonder significant risico op fout-positieven. Drempels worden automatisch gereset na de geconfigureerde geldigheidsperiode.",
-        "empty": {
-          "title": "Geen geleerde drempels",
-          "description": "Detecties met hoge betrouwbaarheid creëren automatisch geleerde drempels voor soorten"
-        },
-        "resetAllConfirm": {
-          "title": "Alle drempels resetten",
-          "message": "Dit zal alle {count} geleerde drempels resetten. Soorten moeten opnieuw met hoge betrouwbaarheid worden gedetecteerd om hun drempels te verlagen."
-        },
-        "loadError": "Laden van dynamische drempels mislukt",
-        "resetSuccess": "Drempel gereset voor {species}",
-        "resetError": "Resetten van drempel mislukt",
-        "resetAllSuccess": "{count} drempels gereset",
-        "resetAllError": "Resetten van drempels mislukt",
-        "expand": "Gebeurtenisgeschiedenis tonen",
-        "collapse": "Gebeurtenisgeschiedenis verbergen"
-      }
-    },
     "database": {
       "sqlitePlaceholder": "Voer SQLite database pad in",
       "mysqlHostPlaceholder": "Voer MySQL host in",
@@ -4263,7 +3789,6 @@
           "detection_occurred": "Detectie uitgevoerd",
           "application_started": "Applicatie gestart",
           "application_stopped": "Applicatie gestopt",
-          "integration_birdweather_failed": "BirdWeather-upload mislukt",
           "integration_mqtt_connected": "MQTT verbonden",
           "integration_mqtt_disconnected": "MQTT verbroken",
           "integration_mqtt_publish_failed": "MQTT-publicatie mislukt",
@@ -4306,9 +3831,13 @@
       "v2Required": "Waarschuwingsregels vereisen een bijgewerkt databaseschema. U kunt uw database bijwerken via de",
       "v2RequiredLink": "Systeem-databasepagina.",
       "builtInRules": {
-        "newSpecies": {
-          "name": "Nieuwe soort gedetecteerd",
-          "description": "Meldt wanneer een soort voor het eerst wordt gedetecteerd"
+        "keywordFlag": {
+          "name": "Keyword flagged",
+          "description": "Notifies when a detection transcript matches a configured keyword"
+        },
+        "speakerAttribute": {
+          "name": "Speaker attribute matched",
+          "description": "Notifies when a detection's estimated speaker attributes (gender, age band) match a rule"
         },
         "streamDisconnected": {
           "name": "Audiostream verbroken",
@@ -4341,10 +3870,6 @@
         "mqttPublishFailed": {
           "name": "MQTT publicatie mislukt",
           "description": "Meldt wanneer het publiceren van een MQTT-bericht mislukt"
-        },
-        "birdWeatherFailed": {
-          "name": "BirdWeather-upload mislukt",
-          "description": "Meldt wanneer een BirdWeather-upload mislukt"
         }
       }
     },
@@ -4371,7 +3896,7 @@
       },
       "appearance": {
         "title": "Uiterlijk",
-        "description": "Pas het uiterlijk van uw BirdNET-Go-interface aan"
+        "description": "Pas het uiterlijk van uw VoiceWatch-interface aan"
       },
       "language": {
         "title": "Taal en regionaal",
@@ -4389,14 +3914,14 @@
         "defaultGainUnit": "dB"
       }
     },
-    "restartRequired": "Sommige wijzigingen vereisen een herstart van de server. Herstart BirdNET-Go."
+    "restartRequired": "Sommige wijzigingen vereisen een herstart van de server. Herstart VoiceWatch."
   },
   "auth": {
     "login": "Aanmelden",
     "logout": "Afmelden",
     "openLoginModal": "Open aanmeld scherm",
     "loginTitle": "Aanmelden",
-    "loginSubtitle": "Toegang tot je BirdNET-Go dashboard",
+    "loginSubtitle": "Toegang tot je VoiceWatch dashboard",
     "password": "Wachtwoord",
     "passwordPlaceholder": "Vul je wachtwoord in",
     "enterPassword": "Voer je wachtwoord in",
@@ -4581,7 +4106,7 @@
       "streamError": "Fout bij starten van stream",
       "streamTitle": "Vogelaudiostream - {source}",
       "streamTitleDefault": "Vogelaudiostream",
-      "streamArtist": "BirdNET-Go",
+      "streamArtist": "VoiceWatch",
       "streamAlbum": "Livestream",
       "playbackError": "Afspeelfout: {details}"
     },
@@ -4606,7 +4131,8 @@
       "generating": "Genereren...",
       "waiting": "Waiting...",
       "queuePosition": "Wachtrij: {position}",
-      "loadError": "Kan audio niet laden"
+      "loadError": "Kan audio niet laden",
+      "spectrogramForDetection": "Spectrogram for detection"
     },
     "forms": {
       "numberField": {
@@ -4715,11 +4241,6 @@
       "removeCertificate": "Certificaat verwijderen",
       "fileReadError": "Kan bestand niet lezen",
       "loading": "Certificaatinformatie laden..."
-    },
-    "birdThumbnail": {
-      "viewDetections": "View {name} detections",
-      "largeView": "Large view of {name}",
-      "clickToView": "Click to view detections"
     }
   },
   "connectivity": {
@@ -4800,9 +4321,6 @@
       "mqttNotConfigured": "MQTT-broker niet geconfigureerd",
       "mqttMetricsUnavailable": "Metriekinstantie niet beschikbaar voor MQTT-test",
       "mqttClientFailed": "Kan MQTT-client niet aanmaken",
-      "birdweatherDisabled": "BirdWeather-integratie is niet ingeschakeld",
-      "birdweatherNotConfigured": "BirdWeather-station-ID niet geconfigureerd",
-      "birdweatherClientFailed": "Kan BirdWeather-client niet aanmaken",
       "noWeatherProvider": "Geen weerprovider geselecteerd",
       "openWeatherKeyRequired": "OpenWeather API-sleutel is vereist",
       "processorUnavailable": "Processor niet beschikbaar",
@@ -4880,10 +4398,10 @@
     "steps": {
       "welcome": {
         "title": "Welkom",
-        "heading": "Welkom bij BirdNET-Go!",
-        "description": "BirdNET-Go is een open-source vogelgeluiden-identificatiesysteem dat luistert naar audio van je microfoon of stream en vogelsoorten in realtime identificeert.",
-        "credit": "BirdNET-Go maakt gebruik van het BirdNET AI-model, ontwikkeld door het K. Lisa Yang Center for Conservation Bioacoustics aan het Cornell Lab of Ornithology en de Technische Universiteit Chemnitz. BirdNET-Go is een onafhankelijk communityproject en is niet gelieerd aan het BirdNET-team.",
-        "learnMore": "Meer informatie over BirdNET",
+        "heading": "Welkom bij VoiceWatch!",
+        "description": "VoiceWatch is een open-source vogelgeluiden-identificatiesysteem dat luistert naar audio van je microfoon of stream en vogelsoorten in realtime identificeert.",
+        "credit": "VoiceWatch maakt gebruik van het VoiceWatch AI-model, ontwikkeld door het K. Lisa Yang Center for Conservation Bioacoustics aan het Cornell Lab of Ornithology en de Technische Universiteit Chemnitz. VoiceWatch is een onafhankelijk communityproject en is niet gelieerd aan het VoiceWatch-team.",
+        "learnMore": "Meer informatie over VoiceWatch",
         "cta": "Laten we je vogelmonitoringstation instellen."
       },
       "locationLanguage": {
@@ -4937,16 +4455,12 @@
         "title": "Privacy en integratie",
         "privacyFilterLabel": "Privacyfilter inschakelen",
         "privacyFilterHelp": "Filtert detecties uit wanneer menselijke stemmen worden gedetecteerd bij de microfoon",
-        "birdweatherLabel": "Detecties delen met BirdWeather",
-        "birdweatherHelp": "Draag je vogeldetecties bij aan het BirdWeather-gemeenschapsnetwerk",
-        "birdweatherIdLabel": "BirdWeather Station-ID",
-        "birdweatherIdPlaceholder": "Voer je BirdWeather station-ID in",
         "errorReportingLabel": "Anonieme foutrapporten verzenden",
-        "errorReportingHelp": "Help BirdNET-Go te verbeteren door anonieme foutrapporten te verzenden wanneer er iets misgaat"
+        "errorReportingHelp": "Help VoiceWatch te verbeteren door anonieme foutrapporten te verzenden wanneer er iets misgaat"
       },
       "responsibleUse": {
-        "title": "Verantwoord gebruik van BirdNET-Go",
-        "intro": "BirdNET-Go is een krachtig hulpmiddel dat je vogelervaring verbetert door AI-ondersteunde identificatie. Om de beste resultaten voor zowel vogelen als natuurbehoud te waarborgen:",
+        "title": "Verantwoord gebruik van VoiceWatch",
+        "intro": "VoiceWatch is een krachtig hulpmiddel dat je vogelervaring verbetert door AI-ondersteunde identificatie. Om de beste resultaten voor zowel vogelen als natuurbehoud te waarborgen:",
         "point1": "Controleer en verifieer detecties voordat je waarnemingen deelt",
         "point2": "Gebruik de betrouwbaarheidsscores als richtlijn, niet als absolute waarheid",
         "point3": "Vergelijk met veldgidsen en lokale expertise",
@@ -5005,26 +4519,6 @@
         "helpText": "Taal voor de gangbare soortnamen in de interface."
       }
     },
-    "rangeFilter": {
-      "birdOnlyNote": "Bereikfilter geldt alleen voor vogelclassificatoren. Vleermuismodellen gebruiken hun eigen soortenlijsten.",
-      "status": {
-        "title": "Gebiedsfilter overzicht",
-        "geomodelInfo": "BirdNET Geomodel {version} - {species} bekende soorten",
-        "autoSelected": "Automatisch geselecteerd",
-        "manual": "Handmatig",
-        "classifier": "Classificator",
-        "totalSpecies": "Totaal aantal soorten",
-        "withRangeData": "Met gebiedsgegevens",
-        "withoutRangeData": "Zonder gebiedsgegevens",
-        "withRangeDataTooltip": "Soorten waarvoor het geomodel de geografische waarschijnlijkheid op uw locatie kan evalueren",
-        "withoutRangeDataTooltip": "Soorten zonder geografische gegevens in het geomodel, afgehandeld door de instelling voor niet-gekoppelde soorten hieronder",
-        "noFilter": "Geen gebiedsfilter actief",
-        "passUnmapped": {
-          "label": "Soorten zonder gebiedsgegevens toestaan",
-          "helpText": "Detecties toestaan van soorten waarvoor het geomodel geen geografische gegevens heeft. Wanneer uitgeschakeld, worden deze soorten altijd uitgefilterd."
-        }
-      }
-    },
     "advanced": {
       "title": "Geavanceerd",
       "description": "Verwerking en aangepaste modelconfiguratie."
@@ -5039,7 +4533,7 @@
       "loading": "Modellen laden...",
       "retry": "Opnieuw proberen",
       "builtIn": "Ingebouwd",
-      "builtInDescription": "Ingebouwde vogelsoortclassificator van het BirdNET-team.",
+      "builtInDescription": "Ingebouwde vogelsoortclassificator van het VoiceWatch-team.",
       "species": "{count} soorten",
       "install": "Installeren",
       "installing": "Installeren...",
@@ -5091,7 +4585,7 @@
       "reinstall": "Opnieuw installeren",
       "reinstalling": "Opnieuw installeren...",
       "reinstallComplete": "Bestanden succesvol geverifieerd",
-      "geomodelBadge": "Bevat BirdNET v3.0 geomodel",
+      "geomodelBadge": "Bevat VoiceWatch v3.0 geomodel",
       "onnxRuntimeRequired": "Vereist ONNX Runtime dat niet beschikbaar is op dit systeem.",
       "onnxRuntimeMissing": "ONNX Runtime is niet beschikbaar. Dit model kan niet worden uitgevoerd.",
       "unavailable": "Niet beschikbaar"
@@ -5106,6 +4600,45 @@
     },
     "dynamicThreshold": {
       "birdOnlyNote": "Dynamische drempel geldt alleen voor vogelclassificatoren."
+    },
+    "transcription": {
+      "title": "Transcription & Keyword Flagging",
+      "description": "Transcribe audio clips offline with Whisper and flag detections whose transcription contains defined keywords.",
+      "enable": {
+        "label": "Enable Transcription",
+        "helpText": "Enables offline speech-to-text transcription for detected audio clips using whisper.cpp."
+      },
+      "modelPath": {
+        "label": "Whisper Model Path",
+        "placeholder": "ggml-tiny.en.bin",
+        "helpText": "Path to the GGML model file used for transcription. Required when transcription is enabled.",
+        "required": "A model path is required when transcription is enabled. Enter the path to a GGML model file (e.g. ggml-tiny.en.bin)."
+      },
+      "language": {
+        "label": "Language",
+        "placeholder": "en",
+        "helpText": "BCP-47 language code for transcription (e.g. en, de, fr). Leave as en for English-only models."
+      },
+      "advanced": {
+        "title": "Advanced",
+        "binary": {
+          "label": "Whisper Binary",
+          "placeholder": "whisper-cli",
+          "helpText": "Name or absolute path of the whisper-cli executable. Defaults to whisper-cli on PATH."
+        }
+      },
+      "keywords": {
+        "label": "Flag Keywords",
+        "inputPlaceholder": "Add a keyword...",
+        "helpText": "Detections whose transcription contains any of these words will be flagged for review.",
+        "addButton": "Add",
+        "emptyState": "No keywords added yet. Enter a word above and click Add.",
+        "removeAriaLabel": "Remove keyword \"{keyword}\""
+      },
+      "caseSensitive": {
+        "label": "Case-Sensitive Matching",
+        "helpText": "When enabled, keyword matching distinguishes uppercase from lowercase letters (e.g. \"Fire\" will not match \"fire\")."
+      }
     }
   },
   "restart": {
@@ -5123,7 +4656,9 @@
       "webserver": "Web server / network settings",
       "database": "Database settings",
       "logging": "Logging settings",
-      "tlsCertificate": "TLS certificate"
+      "tlsCertificate": "TLS certificate",
+      "continuousRecording": "Continuous recording settings",
+      "speakerAttributes": "Speaker attribute settings"
     }
   },
   "help": {
@@ -5167,7 +4702,7 @@
       },
       "step2": {
         "title": "Uw installatiemethode",
-        "description": "Hoe u BirdNET-Go heeft geïnstalleerd: install.sh-script, Docker Compose, handmatige build of anders."
+        "description": "Hoe u VoiceWatch heeft geïnstalleerd: install.sh-script, Docker Compose, handmatige build of anders."
       },
       "step3": {
         "title": "Systeeminformatie",
@@ -5236,7 +4771,7 @@
       "fetchFailed": "Failed to load diagnostics"
     },
     "export": {
-      "reportTitle": "BirdNET-Go System Health Report",
+      "reportTitle": "VoiceWatch System Health Report",
       "statusLabel": "Status",
       "timeLabel": "Time",
       "durationLabel": "Duration",

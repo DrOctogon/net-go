@@ -5,9 +5,9 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	"github.com/tphakala/birdnet-go/internal/detection"
-	"github.com/tphakala/birdnet-go/internal/labels/nonbird"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/detection"
+	"github.com/tphakala/voicewatch/internal/labels/nonbird"
 )
 
 // perchModelInfo returns a ModelInfo for a Perch/multi-taxa model.
@@ -24,7 +24,7 @@ func perchModelInfo() detection.ModelInfo {
 // birdModelInfo returns a ModelInfo that resolves to ModelTypeBird.
 func birdModelInfo() detection.ModelInfo {
 	return detection.ModelInfo{
-		Name:    "BirdNET",
+		Name:    "VoiceWatch",
 		Version: "2.4",
 		Variant: "default",
 	}
@@ -85,7 +85,7 @@ func TestSave_BirdLabel_GetsSpeciesLabelType(t *testing.T) {
 	require.NoError(t, ds.Save(note, nil))
 
 	ctx := t.Context()
-	birdModel, err := ds.model.GetOrCreate(ctx, "BirdNET", "2.4", "default", "bird", nil)
+	birdModel, err := ds.model.GetOrCreate(ctx, "VoiceWatch", "2.4", "default", "bird", nil)
 	require.NoError(t, err)
 
 	label, err := ds.label.GetOrCreate(ctx, "Turdus merula", birdModel.ID, ds.speciesLabelTypeID, ds.avesClassID)
@@ -122,7 +122,7 @@ func TestSave_EmptyRawLabel_FallsBackToSpecies(t *testing.T) {
 	// The note was saved with the default BirdNET model (no Model field set).
 	// Fetch the created label.
 	ctx := t.Context()
-	defaultModel, err := ds.model.GetOrCreate(ctx, "BirdNET", "2.4", "default", "bird", nil)
+	defaultModel, err := ds.model.GetOrCreate(ctx, "VoiceWatch", "2.4", "default", "bird", nil)
 	require.NoError(t, err)
 
 	label, err := ds.label.GetOrCreate(ctx, "Passer domesticus", defaultModel.ID, ds.speciesLabelTypeID, ds.avesClassID)

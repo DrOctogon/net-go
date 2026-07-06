@@ -1,4 +1,4 @@
-// Package observability provides Prometheus metrics functionality for monitoring the BirdNET-Go application.
+// Package observability provides Prometheus metrics functionality for monitoring the VoiceWatch application.
 // Sentry-related monitoring and error telemetry are handled in the telemetry package.
 package observability
 
@@ -8,9 +8,9 @@ import (
 	"net/http"
 	"sync"
 
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	metricspkg "github.com/tphakala/birdnet-go/internal/observability/metrics"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/logger"
+	metricspkg "github.com/tphakala/voicewatch/internal/observability/metrics"
 )
 
 // Endpoint handles all operations related to Prometheus-compatible telemetry.

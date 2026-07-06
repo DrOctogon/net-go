@@ -10,8 +10,8 @@ import (
 	"github.com/getsentry/sentry-go"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/privacy"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/privacy"
 )
 
 //nolint:gocognit // test requires multiple scenarios for comprehensive coverage
@@ -435,7 +435,7 @@ func TestApplyStacktracePrivacyFilters_ErrorLevel(t *testing.T) {
 				Frames: []sentry.Frame{
 					{
 						Function: "myFunc",
-						Module:   "github.com/tphakala/birdnet-go/internal/audiocore",
+						Module:   "github.com/tphakala/voicewatch/internal/audiocore",
 						Filename: "internal/audiocore/capture.go",
 						AbsPath:  "/home/user/birdnet-go/internal/audiocore/capture.go",
 						Lineno:   42,

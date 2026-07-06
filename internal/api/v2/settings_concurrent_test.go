@@ -163,13 +163,13 @@ func runSameSectionScenario(t *testing.T, goroutineID int, controller *Controlle
 // runDifferentSectionsScenario handles updates to different sections
 func runDifferentSectionsScenario(t *testing.T, goroutineID int, controller *Controller, errorsChan chan error, successMutex *sync.Mutex, successCount *int) error {
 	t.Helper()
-	sections := []string{"dashboard", "mqtt", "birdnet", "weather", "audio"}
+	sections := []string{"dashboard", "mqtt", "voicewatch", "weather", "audio"}
 	section := sections[goroutineID%len(sections)]
 
 	updates := map[string]any{
 		"dashboard": map[string]any{"summaryLimit": 100 + goroutineID},
 		"mqtt":      map[string]any{"topic": fmt.Sprintf("topic-%d", goroutineID)},
-		"birdnet":   map[string]any{"threshold": 0.1 + float64(goroutineID)*0.01},
+		"voicewatch":   map[string]any{"threshold": 0.1 + float64(goroutineID)*0.01},
 		"weather":   map[string]any{"pollInterval": 60 + goroutineID},
 		"audio":     map[string]any{"export": map[string]any{"bitrate": fmt.Sprintf("%dk", 96+goroutineID)}},
 	}

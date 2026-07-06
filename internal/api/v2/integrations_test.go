@@ -5,7 +5,6 @@ package api
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -43,17 +42,7 @@ func runIntegrationConnectionHandlerTest(t *testing.T, handlerFunc func(*Control
 			tc.setupSettings(controller)
 
 			// Create request with appropriate body
-			var req *http.Request
-			if strings.Contains(endpoint, "birdweather") {
-				// BirdWeather endpoint expects JSON body matching the controller settings
-				bwSettings := controller.Settings.Load().Realtime.Birdweather
-				bodyJSON := fmt.Sprintf(`{"enabled":%t,"id":%q,"threshold":%f,"locationAccuracy":%f}`,
-					bwSettings.Enabled, bwSettings.ID, bwSettings.Threshold, bwSettings.LocationAccuracy)
-				req = httptest.NewRequest(http.MethodPost, endpoint, strings.NewReader(bodyJSON))
-				req.Header.Set("Content-Type", "application/json")
-			} else {
-				req = httptest.NewRequest(http.MethodPost, endpoint, http.NoBody)
-			}
+			req := httptest.NewRequest(http.MethodPost, endpoint, http.NoBody)
 			rec := httptest.NewRecorder()
 			c := e.NewContext(req, rec)
 
@@ -128,9 +117,6 @@ func TestInitIntegrationsRoutesRegistration(t *testing.T) {
 	assertRoutesRegistered(t, e, []string{
 		"GET /api/v2/integrations/mqtt/status",
 		"POST /api/v2/integrations/mqtt/test",
-		"GET /api/v2/integrations/birdweather/status",
-		"POST /api/v2/integrations/birdweather/test",
-		"POST /api/v2/integrations/ebird/test",
 	})
 }
 
@@ -173,29 +159,6 @@ func (m *MockMQTTClient) TestConnection(ctx context.Context, resultChan chan<- m
 		return
 	}
 	m.Called(ctx, resultChan)
-}
-
-// MockBirdWeatherClient is a mock implementation for BirdWeather client testing
-type MockBirdWeatherClient struct {
-	mock.Mock
-	TestConnectFunc func(ctx context.Context, resultChan chan<- map[string]any)
-	CloseFunc       func()
-}
-
-func (m *MockBirdWeatherClient) TestConnection(ctx context.Context, resultChan chan<- map[string]any) {
-	if m.TestConnectFunc != nil {
-		m.TestConnectFunc(ctx, resultChan)
-		return
-	}
-	m.Called(ctx, resultChan)
-}
-
-func (m *MockBirdWeatherClient) Close() {
-	if m.CloseFunc != nil {
-		m.CloseFunc()
-		return
-	}
-	m.Called()
 }
 
 // TestGetMQTTStatus tests the GetMQTTStatus handler
@@ -272,85 +235,6 @@ func TestGetMQTTStatus(t *testing.T) {
 	}
 }
 
-// TestGetBirdWeatherStatus tests the GetBirdWeatherStatus handler
-func TestGetBirdWeatherStatus(t *testing.T) {
-	// Define test cases
-	testCases := []struct {
-		name           string
-		bwEnabled      bool
-		bwID           string
-		bwThreshold    float64
-		bwLocationAcc  float64
-		expectedStatus int
-		validateResult func(*testing.T, map[string]any)
-	}{
-		{
-			name:           "BirdWeather Disabled",
-			bwEnabled:      false,
-			bwID:           "",
-			bwThreshold:    0.7,
-			bwLocationAcc:  50.0,
-			expectedStatus: http.StatusOK,
-			validateResult: func(t *testing.T, result map[string]any) {
-				t.Helper()
-				assert.False(t, result["enabled"].(bool), "Enabled should be false")
-				assert.Empty(t, result["station_id"], "Station ID should be empty")
-				assert.InDelta(t, 0.7, result["threshold"], 0.01, "Threshold should match configuration")
-				assert.InDelta(t, 50.0, result["location_accuracy"], 0.01, "Location accuracy should match configuration")
-			},
-		},
-		{
-			name:           "BirdWeather Enabled",
-			bwEnabled:      true,
-			bwID:           "ABC123",
-			bwThreshold:    0.8,
-			bwLocationAcc:  100.0,
-			expectedStatus: http.StatusOK,
-			validateResult: func(t *testing.T, result map[string]any) {
-				t.Helper()
-				assert.True(t, result["enabled"].(bool), "Enabled should be true")
-				assert.Equal(t, "ABC123", result["station_id"], "Station ID should match configuration")
-				assert.InDelta(t, 0.8, result["threshold"], 0.01, "Threshold should match configuration")
-				assert.InDelta(t, 100.0, result["location_accuracy"], 0.01, "Location accuracy should match configuration")
-			},
-		},
-	}
-
-	// Run all test cases
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			// Setup
-			e, _, controller := setupTestEnvironment(t)
-
-			// Configure settings for the test case
-			controller.Settings.Load().Realtime.Birdweather.Enabled = tc.bwEnabled
-			controller.Settings.Load().Realtime.Birdweather.ID = tc.bwID
-			controller.Settings.Load().Realtime.Birdweather.Threshold = tc.bwThreshold
-			controller.Settings.Load().Realtime.Birdweather.LocationAccuracy = tc.bwLocationAcc
-
-			// Create request context
-			req := httptest.NewRequest(http.MethodGet, "/api/v2/integrations/birdweather/status", http.NoBody)
-			rec := httptest.NewRecorder()
-			c := e.NewContext(req, rec)
-
-			// Call the handler
-			err := controller.GetBirdWeatherStatus(c)
-			require.NoError(t, err)
-
-			// Check status code
-			assert.Equal(t, tc.expectedStatus, rec.Code)
-
-			// Parse response body
-			var result map[string]any
-			err = json.Unmarshal(rec.Body.Bytes(), &result)
-			require.NoError(t, err)
-
-			// Validate the result using the test case's validation function
-			tc.validateResult(t, result)
-		})
-	}
-}
-
 // TestTestMQTTConnection tests the TestMQTTConnection handler
 func TestTestMQTTConnection(t *testing.T) {
 	// Define test cases
@@ -381,115 +265,6 @@ func TestTestMQTTConnection(t *testing.T) {
 	}
 
 	runIntegrationConnectionHandlerTest(t, (*Controller).TestMQTTConnection, "/api/v2/integrations/mqtt/test", testCases)
-}
-
-// TestTestBirdWeatherConnection tests the TestBirdWeatherConnection handler
-func TestTestBirdWeatherConnection(t *testing.T) {
-	// Define test cases
-	testCases := []struct {
-		name           string
-		setupSettings  func(*Controller)
-		expectedStatus int
-		expectedBody   string
-	}{
-		{
-			name: "BirdWeather Not Enabled",
-			setupSettings: func(controller *Controller) {
-				controller.Settings.Load().Realtime.Birdweather.Enabled = false
-				controller.Settings.Load().Realtime.Birdweather.ID = "ABC123"
-			},
-			expectedStatus: http.StatusOK,
-			expectedBody:   `{"success":false,"message":"BirdWeather integration is not enabled","state":"failed"}`,
-		},
-		{
-			name: "Station ID Not Configured",
-			setupSettings: func(controller *Controller) {
-				controller.Settings.Load().Realtime.Birdweather.Enabled = true
-				controller.Settings.Load().Realtime.Birdweather.ID = ""
-			},
-			expectedStatus: http.StatusBadRequest,
-			expectedBody:   `{"success":false,"message":"BirdWeather station ID not configured","state":"failed"}`,
-		},
-	}
-
-	runIntegrationConnectionHandlerTest(t, (*Controller).TestBirdWeatherConnection, "/api/v2/integrations/birdweather/test", testCases)
-}
-
-// TestTestEBirdConnection tests the TestEBirdConnection handler
-func TestTestEBirdConnection(t *testing.T) {
-	testCases := []struct {
-		name           string
-		requestBody    string
-		expectedStatus int
-		expectError    bool
-		validateResult func(*testing.T, string)
-	}{
-		{
-			name:           "eBird Not Enabled",
-			requestBody:    `{"enabled":false,"apiKey":"test-key","locale":"en"}`,
-			expectedStatus: http.StatusOK,
-			validateResult: func(t *testing.T, body string) {
-				t.Helper()
-				assert.Contains(t, body, `"success":false`)
-				assert.Contains(t, body, "not enabled")
-			},
-		},
-		{
-			name:           "API Key Not Configured",
-			requestBody:    `{"enabled":true,"apiKey":"","locale":"en"}`,
-			expectedStatus: http.StatusBadRequest,
-			validateResult: func(t *testing.T, body string) {
-				t.Helper()
-				assert.Contains(t, body, `"success":false`)
-				assert.Contains(t, body, "API key is required")
-			},
-		},
-		{
-			name:           "Invalid Request Body",
-			requestBody:    `{invalid json`,
-			expectedStatus: http.StatusBadRequest,
-			expectError:    true,
-			validateResult: func(t *testing.T, body string) {
-				t.Helper()
-				assert.Contains(t, body, "error")
-			},
-		},
-		{
-			name:           "Valid Request Enters Streaming",
-			requestBody:    `{"enabled":true,"apiKey":"test-key-123","locale":"en"}`,
-			expectedStatus: http.StatusOK,
-			validateResult: func(t *testing.T, body string) {
-				t.Helper()
-				assert.NotEmpty(t, body, "Response body should not be empty")
-			},
-		},
-	}
-
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			e, _, controller := setupTestEnvironment(t)
-
-			req := httptest.NewRequest(http.MethodPost, "/api/v2/integrations/ebird/test",
-				strings.NewReader(tc.requestBody))
-			req.Header.Set("Content-Type", "application/json")
-			rec := httptest.NewRecorder()
-			c := e.NewContext(req, rec)
-
-			err := controller.TestEBirdConnection(c)
-
-			if tc.expectError {
-				if err != nil {
-					return
-				}
-			} else {
-				require.NoError(t, err)
-			}
-
-			assert.Equal(t, tc.expectedStatus, rec.Code)
-
-			tc.validateResult(t, strings.TrimSpace(rec.Body.String()))
-		})
-	}
 }
 
 // TestWriteJSONResponse tests the writeJSONResponse helper function
@@ -539,14 +314,6 @@ func TestMQTTConnectionWithClientDisconnection(t *testing.T) {
 	runIntegrationConnectionWithDisconnectionTest(t, (*Controller).TestMQTTConnection, "/api/v2/integrations/mqtt/test", func(controller *Controller) {
 		controller.Settings.Load().Realtime.MQTT.Enabled = true
 		controller.Settings.Load().Realtime.MQTT.Broker = testMQTTBroker
-	})
-}
-
-// Advanced test for BirdWeather connection with client disconnection
-func TestBirdWeatherConnectionWithClientDisconnection(t *testing.T) {
-	runIntegrationConnectionWithDisconnectionTest(t, (*Controller).TestBirdWeatherConnection, "/api/v2/integrations/birdweather/test", func(controller *Controller) {
-		controller.Settings.Load().Realtime.Birdweather.Enabled = true
-		controller.Settings.Load().Realtime.Birdweather.ID = "ABC123"
 	})
 }
 
@@ -617,37 +384,6 @@ func TestErrorHandlingForIntegrations(t *testing.T) {
 		assert.Equal(t, http.StatusOK, rec.Code, "HTTP status should be OK")
 	})
 
-	t.Run("BirdWeather Client Creation Error", func(t *testing.T) {
-		// Setup
-		e, _, controller := setupTestEnvironment(t)
-
-		// Configure settings to enable BirdWeather but with invalid configuration
-		controller.Settings.Load().Realtime.Birdweather.Enabled = true
-		controller.Settings.Load().Realtime.Birdweather.ID = "INVALID_ID"
-
-		// Create JSON request body for BirdWeather test
-		requestBody := `{
-			"enabled": true,
-			"id": "INVALID_ID",
-			"threshold": 0.8,
-			"locationAccuracy": 50.0,
-			"debug": false
-		}`
-		req := httptest.NewRequest(http.MethodPost, "/api/v2/integrations/birdweather/test", strings.NewReader(requestBody))
-		req.Header.Set("Content-Type", "application/json")
-		rec := httptest.NewRecorder()
-		c := e.NewContext(req, rec)
-
-		// Call handler
-		err := controller.TestBirdWeatherConnection(c)
-
-		// For streaming responses, we verify that the handler completes without error
-		require.NoError(t, err, "Handler should not return an error")
-
-		// And that the HTTP status is set correctly
-		assert.Equal(t, http.StatusOK, rec.Code, "HTTP status should be OK")
-	})
-
 	t.Run("MQTT Connection Context Cancellation", func(t *testing.T) {
 		// Setup
 		e, _, controller := setupTestEnvironment(t)
@@ -673,42 +409,6 @@ func TestErrorHandlingForIntegrations(t *testing.T) {
 
 		// Call handler - should return no error even when context is cancelled
 		err := controller.TestMQTTConnection(c)
-		require.NoError(t, err, "Handler should not return an error")
-	})
-
-	t.Run("BirdWeather Connection Context Cancellation", func(t *testing.T) {
-		// Setup
-		e, _, controller := setupTestEnvironment(t)
-
-		// Configure settings to enable BirdWeather
-		controller.Settings.Load().Realtime.Birdweather.Enabled = true
-		controller.Settings.Load().Realtime.Birdweather.ID = "VALID_ID" // Use a valid-looking ID
-
-		// Create a cancellable context
-		ctx, cancel := context.WithCancel(t.Context())
-		defer cancel()
-
-		// Create JSON request body for BirdWeather test
-		requestBody := `{
-			"enabled": true,
-			"id": "VALID_ID",
-			"threshold": 0.8,
-			"locationAccuracy": 50.0,
-			"debug": false
-		}`
-		req := httptest.NewRequest(http.MethodPost, "/api/v2/integrations/birdweather/test", strings.NewReader(requestBody)).WithContext(ctx)
-		req.Header.Set("Content-Type", "application/json")
-		rec := httptest.NewRecorder()
-		c := e.NewContext(req, rec)
-
-		// Cancel the context after a very short delay
-		go func() {
-			time.Sleep(50 * time.Millisecond)
-			cancel()
-		}()
-
-		// Call handler - should return no error even when context is cancelled
-		err := controller.TestBirdWeatherConnection(c)
 		require.NoError(t, err, "Handler should not return an error")
 	})
 

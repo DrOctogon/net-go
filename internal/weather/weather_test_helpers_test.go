@@ -7,7 +7,7 @@ import (
 
 	"github.com/jarcoal/httpmock"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/conf"
+	"github.com/tphakala/voicewatch/internal/conf"
 )
 
 // createTestSettings creates test settings with configurable provider.
@@ -15,7 +15,7 @@ func createTestSettings(t *testing.T, provider string, opts ...func(*conf.Settin
 	t.Helper()
 
 	settings := &conf.Settings{
-		BirdNET: conf.BirdNETConfig{
+		VoiceWatch: conf.VoiceWatchConfig{
 			Latitude:  60.1699, // Helsinki
 			Longitude: 24.9384,
 		},

@@ -271,11 +271,6 @@ vi.mock('$lib/utils/settingsApi.js', () => {
         enabled: true,
         path: '/tmp/test.db',
       },
-      rangeFilter: {
-        threshold: 0.01,
-        speciesCount: null,
-        species: [],
-      },
     },
     audio: {
       source: 'sysdefault',
@@ -316,24 +311,8 @@ vi.mock('$lib/utils/settingsApi.js', () => {
         confidence: 0.9,
         debug: false,
       },
-      dogBark: {
-        enabled: false,
-        confidence: 0.7,
-        remember: 300,
-        debug: false,
-        species: [],
-      },
     },
     integration: {
-      birdweather: {
-        enabled: false,
-        id: '',
-        latitude: 0,
-        longitude: 0,
-        locationAccuracy: 500,
-        threshold: 0.8,
-        debug: false,
-      },
       mqtt: {
         enabled: false,
         broker: 'localhost',
@@ -409,13 +388,9 @@ vi.mock('$lib/utils/settingsApi.js', () => {
       load: vi.fn().mockResolvedValue(defaultSettings),
       save: vi.fn().mockResolvedValue({ success: true }),
       test: {
-        birdweather: vi.fn().mockResolvedValue({ success: true, message: 'Test successful' }),
         mqtt: vi.fn().mockResolvedValue({ success: true, message: 'Test successful' }),
         database: vi.fn().mockResolvedValue({ success: true, message: 'Test successful' }),
         audio: vi.fn().mockResolvedValue({ success: true, message: 'Test successful' }),
-      },
-      rangeFilter: {
-        testSpecies: vi.fn().mockResolvedValue({ count: 0, species: [] }),
       },
       species: {
         search: vi.fn().mockResolvedValue([]),

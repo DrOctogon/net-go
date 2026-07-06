@@ -2,7 +2,7 @@
   TerminalPage.svelte - Browser terminal using xterm.js
 
   Purpose:
-  - Provides shell access to the BirdNET-Go host via WebSocket PTY bridge
+  - Provides shell access to the VoiceWatch host via WebSocket PTY bridge
   - Only functional when EnableTerminal is set in server config
   - Shows disabled state when terminal is turned off
   - Supports multiple color themes (Dark, Light, High Contrast)
@@ -322,7 +322,7 @@
       '<!DOCTYPE html><html lang="' +
       (document.documentElement.lang || 'en') +
       '"><head><meta charset="UTF-8"/>' +
-      '<title>BirdNET-Go \u2014 ' +
+      '<title>VoiceWatch \u2014 ' +
       t('terminal.title') +
       '</title></head>' +
       '<body>' +

@@ -1,5 +1,5 @@
 /**
- * Advanced search query parser for BirdNET-Go
+ * Advanced search query parser for VoiceWatch
  *
  * Supports syntax like:
  * - "Robin confidence:>85"

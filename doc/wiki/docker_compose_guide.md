@@ -1,10 +1,10 @@
-# BirdNET-Go Docker Compose Guide
+# VoiceWatch Docker Compose Guide
 
-This guide provides instructions for setting up and running BirdNET-Go using Docker Compose, which is an alternative to the `install.sh` script and systemd service method.
+This guide provides instructions for setting up and running VoiceWatch using Docker Compose, which is an alternative to the `install.sh` script and systemd service method.
 
 ## Container Registry Options
 
-BirdNET-Go Docker images are available from two registries:
+VoiceWatch Docker images are available from two registries:
 
 - **GitHub Container Registry (Primary)**: `ghcr.io/tphakala/birdnet-go`
 - **Docker Hub (Mirror)**: `tphakala/birdnet-go`
@@ -19,7 +19,7 @@ Both registries contain identical images and can be used interchangeably. The ex
 
 ## Setup Instructions
 
-1. **Create a new directory for BirdNET-Go:**
+1. **Create a new directory for VoiceWatch:**
 
    ```bash
    mkdir -p ~/birdnet-go-app
@@ -27,7 +27,7 @@ Both registries contain identical images and can be used interchangeably. The ex
    ```
 
 2. **Create the docker-compose.yml file:**
-   Create a file named `docker-compose.yml` in this directory and copy the content from the [premade docker-compose.yml](https://github.com/tphakala/birdnet-go/blob/main/Docker/docker-compose.yml) file in the repository, or the example below.
+   Create a file named `docker-compose.yml` in this directory and copy the content from the [premade docker-compose.yml](https://github.com/tphakala/voicewatch/blob/main/Docker/docker-compose.yml) file in the repository, or the example below.
 
 3. **Create config and data directories:**
 
@@ -46,7 +46,7 @@ Both registries contain identical images and can be used interchangeably. The ex
    BIRDNET_GID=1000
    ```
 
-5. **Start BirdNET-Go:**
+5. **Start VoiceWatch:**
    ```bash
    docker-compose up -d
    ```
@@ -74,12 +74,12 @@ The configuration includes a RAM disk (tmpfs) mount for the HLS streaming segmen
 
 - The `/config/hls` directory is mounted as a 50MB RAM disk
 - This improves streaming performance by storing temporary stream segments in memory
-- The RAM disk is automatically configured with the same UID/GID as your BirdNET-Go user
+- The RAM disk is automatically configured with the same UID/GID as your VoiceWatch user
 - This temporary storage is cleared on container restart (which is expected for stream segments)
 
 ## Internet Access Using Cloudflare Tunnel
 
-The Docker Compose configuration includes an option to use Cloudflare Tunnel (cloudflared) to securely expose your BirdNET-Go instance to the internet without opening ports on your router/firewall.
+The Docker Compose configuration includes an option to use Cloudflare Tunnel (cloudflared) to securely expose your VoiceWatch instance to the internet without opening ports on your router/firewall.
 
 **For comprehensive instructions and security best practices, see the dedicated [Cloudflare Tunnel Guide](cloudflare_tunnel_guide.md).**
 
@@ -111,7 +111,7 @@ Key benefits of using Cloudflare Tunnel:
    docker-compose up -d
    ```
 
-> **IMPORTANT**: When exposing BirdNET-Go to the internet, always enable authentication to prevent unauthorized access. See the [Cloudflare Tunnel Guide](cloudflare_tunnel_guide.md#enabling-authentication) for details on security implications and configuration.
+> **IMPORTANT**: When exposing VoiceWatch to the internet, always enable authentication to prevent unauthorized access. See the [Cloudflare Tunnel Guide](cloudflare_tunnel_guide.md#enabling-authentication) for details on security implications and configuration.
 
 ### Port Configuration
 
@@ -134,13 +134,13 @@ To match your user's permissions:
 
 ## Common Commands
 
-- **Start BirdNET-Go:**
+- **Start VoiceWatch:**
 
   ```bash
   docker-compose up -d
   ```
 
-- **Stop BirdNET-Go:**
+- **Stop VoiceWatch:**
 
   ```bash
   docker-compose down
@@ -160,7 +160,7 @@ To match your user's permissions:
 
 ## Accessing the Web Interface
 
-Once running, you can access the BirdNET-Go web interface at:
+Once running, you can access the VoiceWatch web interface at:
 
 - http://localhost:8080 (replace 8080 with your configured port)
 - Or using your machine's IP address: http://YOUR_IP:8080
@@ -172,13 +172,13 @@ Once running, you can access the BirdNET-Go web interface at:
 - **Port conflicts:** If port 8080 is already in use, change the port mapping in your docker-compose file
 - **Permission errors:** Set the correct UID/GID for your user with the environment variables
 
-## Securing BirdNET-Go for Internet Access
+## Securing VoiceWatch for Internet Access
 
-When exposing BirdNET-Go to the internet (using Cloudflare Tunnel or other methods), it's **strongly recommended** to enable authentication to prevent unauthorized access to your data and settings.
+When exposing VoiceWatch to the internet (using Cloudflare Tunnel or other methods), it's **strongly recommended** to enable authentication to prevent unauthorized access to your data and settings.
 
 ### Authentication Options
 
-BirdNET-Go supports several authentication methods that can be configured in the `config.yaml` file:
+VoiceWatch supports several authentication methods that can be configured in the `config.yaml` file:
 
 1. **Basic Authentication**:
 
@@ -254,4 +254,4 @@ Note: When using Cloudflare Tunnel, the connection between Cloudflare and your s
 
 ## Additional Configuration
 
-For more advanced configuration options, refer to the BirdNET-Go documentation. After initial setup, you can modify the configuration file at `./config/config.yaml`.
+For more advanced configuration options, refer to the VoiceWatch documentation. After initial setup, you can modify the configuration file at `./config/config.yaml`.

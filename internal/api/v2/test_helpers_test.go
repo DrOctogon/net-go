@@ -11,7 +11,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/conf"
+	"github.com/tphakala/voicewatch/internal/conf"
 )
 
 // Test MQTT topic constant
@@ -48,7 +48,6 @@ func getTestSettings(t *testing.T) *conf.Settings {
 	settings.Realtime.Dashboard.SummaryLimit = 100 // Valid range: 10-1000
 	settings.Realtime.Dashboard.Thumbnails.Summary = true
 	settings.Realtime.Dashboard.Thumbnails.Recent = true
-	settings.Realtime.Dashboard.Thumbnails.ImageProvider = "avicommons"
 	settings.Realtime.Dashboard.Locale = "en"
 
 	// Weather settings
@@ -61,13 +60,11 @@ func getTestSettings(t *testing.T) *conf.Settings {
 	settings.Realtime.MQTT.Topic = testMQTTTopic
 
 	// BirdNET settings
-	settings.BirdNET.Latitude = 40.7128
-	settings.BirdNET.Longitude = testNewYorkLongitude
-	settings.BirdNET.Sensitivity = 1.0
-	settings.BirdNET.Threshold = 0.8
-	settings.BirdNET.Locale = "en"
-	settings.BirdNET.RangeFilter.Model = "latest"
-	settings.BirdNET.RangeFilter.Threshold = 0.03
+	settings.VoiceWatch.Latitude = 40.7128
+	settings.VoiceWatch.Longitude = testNewYorkLongitude
+	settings.VoiceWatch.Sensitivity = 1.0
+	settings.VoiceWatch.Threshold = 0.8
+	settings.VoiceWatch.Locale = "en"
 
 	// Audio settings
 	settings.Realtime.Audio.Sources = []conf.AudioSourceConfig{{
@@ -96,7 +93,7 @@ func getTestSettings(t *testing.T) *conf.Settings {
 	// Output settings - SQLite path for prerequisite checks
 	// Use t.TempDir() for test-isolated, auto-cleaned directory
 	settings.Output.SQLite.Enabled = true
-	settings.Output.SQLite.Path = filepath.Join(t.TempDir(), "birdnet-test.db")
+	settings.Output.SQLite.Path = filepath.Join(t.TempDir(), "voicewatch-test.db")
 
 	// Initialize other maps to prevent nil pointer issues
 	settings.Realtime.MQTT.RetrySettings.MaxRetries = 3

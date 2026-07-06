@@ -14,7 +14,7 @@ const lastDetectionCap = 20
 // detectionThrottleTarget is the spacing the Last-heard feed aims for between
 // repeat entries of the same species. The actual per-model interval snaps this to
 // a whole number of the model's analysis segments (clip length), so feed entries
-// line up with segment boundaries (e.g. 9s for 3s BirdNET segments, 10s for 5s
+// line up with segment boundaries (e.g. 9s for 3s VoiceWatch segments, 10s for 5s
 // Perch segments). Throttling keeps a continuously singing bird from flooding the
 // feed while still showing its detection cadence over time.
 const detectionThrottleTarget = 9 * time.Second

@@ -4,9 +4,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/classifier"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/openfauna"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/openfauna"
 )
 
 // Extended capture timeout thresholds.
@@ -18,100 +17,38 @@ const (
 	extendedCaptureLongWait        = 60 * time.Second
 )
 
-// getTaxonomyDB returns the cached taxonomy database, loading it on first call.
-// Returns nil if the database cannot be loaded (with a warning logged).
-func (p *Processor) getTaxonomyDB() *classifier.TaxonomyDatabase {
-	p.taxonomyDBOnce.Do(func() {
-		db, err := classifier.LoadTaxonomyDatabase()
-		if err != nil {
-			GetLogger().Warn("Failed to load taxonomy database, genus/family/order filtering unavailable",
-				logger.Any("error", err),
-				logger.String("operation", "taxonomy_db_load"))
-			return
-		}
-		p.taxonomyDB = db
-	})
-	return p.taxonomyDB
-}
-
-// RebuildExtendedCaptureFilter re-resolves the extended capture species filter
-// from the current settings. This is called by the control monitor when
-// ExtendedCapture settings (Enabled, Species, MaxDuration) change at runtime.
+// RebuildExtendedCaptureFilter re-applies the extended capture state from the
+// current settings. This is called by the control monitor when ExtendedCapture
+// settings (Enabled, MaxDuration) change at runtime.
 func (p *Processor) RebuildExtendedCaptureFilter() {
 	p.initExtendedCapture()
 }
 
-// initExtendedCapture resolves the extended capture species filter at startup.
-// Called from Processor.New(). Safe to re-call on settings refresh.
+// initExtendedCapture logs the extended capture state at startup. Extended
+// capture is global: when enabled it applies to every detection, so there is
+// no species list to resolve. Called from Processor.New(). Safe to re-call on
+// settings refresh.
 func (p *Processor) initExtendedCapture() {
 	settings := p.currentSettings()
 
 	if !settings.Realtime.ExtendedCapture.Enabled {
-		p.extendedCaptureMu.Lock()
-		p.extendedCaptureAll = false
-		p.extendedCaptureSpecies = nil
-		p.extendedCaptureMu.Unlock()
 		return
 	}
 
-	// Resolve config entries against the full multi-model label union (primary plus
-	// secondary models such as bats/Perch) so secondary-model species match. Fall
-	// back to the primary labels if the orchestrator is unavailable.
-	var labels []string
-	if p.Bn != nil {
-		labels = p.Bn.AllLabels()
-	}
-	if len(labels) == 0 {
-		labels = settings.BirdNET.Labels
-	}
-	locale := settings.BirdNET.Locale
-
-	// Get cached taxonomy database for genus/family/order resolution
-	taxonomyDB := p.getTaxonomyDB()
-
-	isAll, resolved := resolveSpeciesFilter(
-		settings.Realtime.ExtendedCapture.Species, labels, taxonomyDB, locale, "extended_capture",
-	)
-
-	p.extendedCaptureMu.Lock()
-	p.extendedCaptureAll = isAll
-	p.extendedCaptureSpecies = resolved
-	p.extendedCaptureMu.Unlock()
-
-	if isAll {
-		GetLogger().Info("Extended capture enabled for all species",
-			logger.Int("max_duration_seconds", settings.Realtime.ExtendedCapture.MaxDuration),
-			logger.String("operation", "extended_capture_init"))
-	} else {
-		GetLogger().Info("Extended capture enabled for filtered species",
-			logger.Int("species_count", len(resolved)),
-			logger.Int("max_duration_seconds", settings.Realtime.ExtendedCapture.MaxDuration),
-			logger.String("operation", "extended_capture_init"))
-	}
+	GetLogger().Info("Extended capture enabled for all detections",
+		logger.Int("max_duration_seconds", settings.Realtime.ExtendedCapture.MaxDuration),
+		logger.String("operation", "extended_capture_init"))
 }
 
-// isExtendedCaptureSpecies checks if a species qualifies for extended capture.
-func (p *Processor) isExtendedCaptureSpecies(scientificName string) bool {
-	settings := p.currentSettings()
-
-	if !settings.Realtime.ExtendedCapture.Enabled {
-		return false
-	}
-
-	p.extendedCaptureMu.RLock()
-	defer p.extendedCaptureMu.RUnlock()
-
-	if p.extendedCaptureAll {
-		return true
-	}
-
-	return p.extendedCaptureSpecies[strings.ToLower(scientificName)]
+// isExtendedCaptureEnabled reports whether extended capture applies. Extended
+// capture is global: every detection qualifies when the feature is enabled.
+func (p *Processor) isExtendedCaptureEnabled() bool {
+	return p.currentSettings().Realtime.ExtendedCapture.Enabled
 }
 
 // resolveSpeciesFilter resolves the config species list into a set of scientific names.
 // Returns (isAll, resolvedSet) where isAll=true means all species qualify.
-// taxonomyDB may be nil if taxonomy is unavailable.
-func resolveSpeciesFilter(configSpecies, labels []string, taxonomyDB *classifier.TaxonomyDatabase, locale, operationName string) (isAll bool, resolvedSet map[string]bool) {
+func resolveSpeciesFilter(configSpecies, labels []string, locale, operationName string) (isAll bool, resolvedSet map[string]bool) {
 	if len(configSpecies) == 0 {
 		return true, nil
 	}
@@ -152,35 +89,6 @@ func resolveSpeciesFilter(configSpecies, labels []string, taxonomyDB *classifier
 		if sci, ok := commonToScientific[entryLower]; ok {
 			resolved[sci] = true
 			continue
-		}
-
-		// Try taxonomy lookups if database is available.
-		// Use non-telemetry Lookup* methods to avoid Sentry noise for
-		// localized common names that don't match any genus/family/order.
-		if taxonomyDB != nil {
-			// Try as genus name
-			if genusSpecies := taxonomyDB.LookupAllSpeciesInGenus(entry); genusSpecies != nil {
-				for _, sp := range genusSpecies {
-					resolved[strings.ToLower(sp)] = true
-				}
-				continue
-			}
-
-			// Try as family name
-			if familySpecies := taxonomyDB.LookupAllSpeciesInFamily(entry); familySpecies != nil {
-				for _, sp := range familySpecies {
-					resolved[strings.ToLower(sp)] = true
-				}
-				continue
-			}
-
-			// Try as order name
-			if orderSpecies := taxonomyDB.LookupAllSpeciesInOrder(entry); orderSpecies != nil {
-				for _, sp := range orderSpecies {
-					resolved[strings.ToLower(sp)] = true
-				}
-				continue
-			}
 		}
 
 		// Defer to the OpenFauna reverse lookup below.

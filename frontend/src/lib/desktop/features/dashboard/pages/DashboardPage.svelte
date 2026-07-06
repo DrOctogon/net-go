@@ -42,7 +42,6 @@ Performance Optimizations:
   import { ReconnectingEventSource } from '$lib/utils/ReconnectingEventSource';
   import CurrentlyHearingCard from '$lib/desktop/features/dashboard/components/CurrentlyHearingCard.svelte';
   import DailySummaryCard from '$lib/desktop/features/dashboard/components/DailySummaryCard.svelte';
-  import NewSpeciesHighlightsCard from '$lib/desktop/features/dashboard/components/NewSpeciesHighlightsCard.svelte';
   import DetectionCardGrid from '$lib/desktop/features/dashboard/components/DetectionCardGrid.svelte';
   import { t } from '$lib/i18n';
   import type { DailySpeciesSummary, Detection } from '$lib/types/detection.types';
@@ -70,7 +69,7 @@ Performance Optimizations:
   import { connectionState } from '$lib/stores/connectionState.svelte';
   import { appState } from '$lib/stores/appState.svelte';
   import {
-    birdnetSettings,
+    voicewatchSettings,
     dashboardLayout,
     settingsDataLoaded,
     settingsStore,
@@ -81,6 +80,7 @@ Performance Optimizations:
   import BannerCard from '$lib/desktop/features/dashboard/components/BannerCard.svelte';
   import VideoEmbedCard from '$lib/desktop/features/dashboard/components/VideoEmbedCard.svelte';
   import MiniSpectrogram from '$lib/desktop/features/dashboard/components/MiniSpectrogram.svelte';
+  import VoiceActivityCard from '$lib/desktop/features/dashboard/components/VoiceActivityCard.svelte';
   import DashboardEditMode from '$lib/desktop/features/dashboard/components/DashboardEditMode.svelte';
   import DailySummaryConfigForm from '$lib/desktop/features/dashboard/components/DailySummaryConfigForm.svelte';
   import {
@@ -241,7 +241,7 @@ Performance Optimizations:
 
     // Update settings store directly for immediate reactivity
     const defaultDashboard: Dashboard = {
-      thumbnails: { summary: true, recent: true, imageProvider: '', fallbackPolicy: '' },
+      thumbnails: { summary: true, recent: true, fallbackPolicy: '' },
       summaryLimit: 30,
     };
 
@@ -959,7 +959,7 @@ Performance Optimizations:
   const isViewingToday = $derived(selectedDate === serverTodayDate);
 
   // Location availability for banner map toggle
-  let birdnet = $derived($birdnetSettings);
+  let birdnet = $derived($voicewatchSettings);
   let hasLocation = $derived((birdnet?.latitude ?? 0) !== 0 || (birdnet?.longitude ?? 0) !== 0);
 
   // Queue daily summary updates with debouncing for rapid updates
@@ -1106,7 +1106,6 @@ Performance Optimizations:
         high_confidence: detection.confidence >= 0.8,
         first_heard: detection.time,
         latest_heard: detection.time,
-        thumbnail_url: '', // Empty string will trigger fallback in BirdThumbnailPopup
         isNew: true,
       };
       // Set the hourly count for the specific hour safely using splice
@@ -1569,13 +1568,6 @@ Performance Optimizations:
             serverTimezone = tz;
           }}
         />
-      {:else if element.type === 'new-species-highlights'}
-        <NewSpeciesHighlightsCard
-          data={dailySummary}
-          {selectedDate}
-          {showThumbnails}
-          isToday={isViewingToday}
-        />
       {:else if element.type === 'currently-hearing'}
         <CurrentlyHearingCard detections={isViewingToday ? pendingDetections : []} />
       {:else if element.type === 'live-spectrogram'}
@@ -1601,6 +1593,8 @@ Performance Optimizations:
           editMode={inEditMode}
           onUpdate={config => onElementUpdate({ ...element, video: config })}
         />
+      {:else if element.type === 'voice-activity'}
+        <VoiceActivityCard />
       {/if}
     {/snippet}
   </DashboardEditMode>

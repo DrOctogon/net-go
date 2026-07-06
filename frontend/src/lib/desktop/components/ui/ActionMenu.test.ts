@@ -77,7 +77,6 @@ describe('ActionMenu', () => {
       props: {
         detection: createMockDetection(),
         onReview: vi.fn(),
-        onToggleSpecies: vi.fn(),
         onToggleLock: vi.fn(),
         onDelete: vi.fn(),
       },
@@ -87,7 +86,6 @@ describe('ActionMenu', () => {
     await fireEvent.click(button);
 
     expect(screen.getByRole('menuitem', { name: /review detection/i })).toBeInTheDocument();
-    expect(screen.getByRole('menuitem', { name: /ignore species/i })).toBeInTheDocument();
     expect(screen.getByRole('menuitem', { name: /lock detection/i })).toBeInTheDocument();
     expect(screen.getByRole('menuitem', { name: /delete detection/i })).toBeInTheDocument();
   });
@@ -109,25 +107,6 @@ describe('ActionMenu', () => {
     await fireEvent.click(reviewButton);
 
     expect(onReview).toHaveBeenCalledTimes(1);
-  });
-
-  it('calls onToggleSpecies when toggle species button is clicked', async () => {
-    const onToggleSpecies = vi.fn();
-
-    render(ActionMenu, {
-      props: {
-        detection: createMockDetection(),
-        onToggleSpecies,
-      },
-    });
-
-    const button = screen.getByRole('button', { name: /actions menu/i });
-    await fireEvent.click(button);
-
-    const toggleButton = screen.getByRole('menuitem', { name: /ignore species/i });
-    await fireEvent.click(toggleButton);
-
-    expect(onToggleSpecies).toHaveBeenCalledTimes(1);
   });
 
   it('calls onToggleLock when lock button is clicked', async () => {
@@ -166,21 +145,6 @@ describe('ActionMenu', () => {
     await fireEvent.click(deleteButton);
 
     expect(onDelete).toHaveBeenCalledTimes(1);
-  });
-
-  it('shows "Show species" when species is excluded', async () => {
-    render(ActionMenu, {
-      props: {
-        detection: createMockDetection(),
-        isExcluded: true,
-        onToggleSpecies: vi.fn(),
-      },
-    });
-
-    const button = screen.getByRole('button', { name: /actions menu/i });
-    await fireEvent.click(button);
-
-    expect(screen.getByRole('menuitem', { name: /show species/i })).toBeInTheDocument();
   });
 
   it('shows "Unlock detection" when detection is locked', async () => {

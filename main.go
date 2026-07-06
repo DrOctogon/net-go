@@ -1,7 +1,6 @@
 package main
 
 import (
-	"embed"
 	"fmt"
 	"log/slog"
 	"os"
@@ -13,16 +12,14 @@ import (
 
 	"github.com/getsentry/sentry-go"
 	"github.com/spf13/viper"
-	"github.com/tphakala/birdnet-go/cmd"
-	"github.com/tphakala/birdnet-go/internal/analysis"
-	"github.com/tphakala/birdnet-go/internal/api"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/health"
-	"github.com/tphakala/birdnet-go/internal/imageprovider"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/restart"
-	"github.com/tphakala/birdnet-go/internal/telemetry"
+	"github.com/tphakala/voicewatch/cmd"
+	"github.com/tphakala/voicewatch/internal/analysis"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/health"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/restart"
+	"github.com/tphakala/voicewatch/internal/telemetry"
 )
 
 // buildTime is the time when the binary was built.
@@ -30,12 +27,6 @@ var buildDate string
 
 // version holds the Git version tag
 var version string
-
-//go:embed internal/imageprovider/data/latest.json
-var imageDataFs embed.FS // Embed image provider data
-
-// ImageProviderRegistry is a global registry for image providers
-var imageProviderRegistry *imageprovider.ImageProviderRegistry
 
 func main() {
 	exitCode := mainWithExitCode()
@@ -74,7 +65,7 @@ func mainWithExitCode() int {
 	}()
 
 	// Check if profiling is enabled
-	if os.Getenv("BIRDNET_GO_PROFILE") == "1" {
+	if os.Getenv("VOICEWATCH_PROFILE") == "1" {
 		bootLog.Info("CPU profiling enabled")
 		// Create a unique profile name with timestamp
 		now := time.Now()
@@ -99,24 +90,12 @@ func mainWithExitCode() int {
 		defer pprof.StopCPUProfile()
 	}
 
-	// Publish the embedded image data to the API server
-	api.ImageDataFs = imageDataFs
-
-	// Initialize the image provider registry
-	imageProviderRegistry = imageprovider.NewImageProviderRegistry()
-	api.ImageProviderRegistry = imageProviderRegistry
-
 	// Load the configuration
 	settings := conf.Setting()
 	if settings == nil {
 		bootLog.Error("Failed to load configuration")
 		return 1
 	}
-
-	// Apply taxonomy synonym overrides from config.
-	// Pass nil for knownLabels: BirdNET labels are not yet loaded at this stage.
-	// Validation only runs via the API settings endpoint where labels are populated.
-	imageprovider.SetCustomSynonyms(settings.TaxonomySynonyms, nil)
 
 	// Set runtime values
 	settings.Version = version
@@ -163,7 +142,7 @@ func mainWithExitCode() int {
 	}
 	settings.SystemID = systemID
 
-	mainLog.Info("BirdNET-Go starting",
+	mainLog.Info("VoiceWatch starting",
 		logger.String("version", settings.Version),
 		logger.String("build_date", settings.BuildDate),
 		logger.String("config_file", viper.ConfigFileUsed()))

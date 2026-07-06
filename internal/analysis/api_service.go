@@ -3,42 +3,40 @@ package analysis
 import (
 	"context"
 
-	"github.com/tphakala/birdnet-go/internal/analysis/processor"
-	"github.com/tphakala/birdnet-go/internal/api"
-	apiv2 "github.com/tphakala/birdnet-go/internal/api/v2"
-	"github.com/tphakala/birdnet-go/internal/app"
-	"github.com/tphakala/birdnet-go/internal/audiocore"
-	"github.com/tphakala/birdnet-go/internal/audiocore/engine"
-	"github.com/tphakala/birdnet-go/internal/backup"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/health"
-	"github.com/tphakala/birdnet-go/internal/imageprovider"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/monitor"
-	"github.com/tphakala/birdnet-go/internal/notification"
-	"github.com/tphakala/birdnet-go/internal/observability"
-	"github.com/tphakala/birdnet-go/internal/security"
-	"github.com/tphakala/birdnet-go/internal/suncalc"
-	"github.com/tphakala/birdnet-go/internal/telemetry"
+	"github.com/tphakala/voicewatch/internal/analysis/processor"
+	"github.com/tphakala/voicewatch/internal/api"
+	apiv2 "github.com/tphakala/voicewatch/internal/api/v2"
+	"github.com/tphakala/voicewatch/internal/app"
+	"github.com/tphakala/voicewatch/internal/audiocore"
+	"github.com/tphakala/voicewatch/internal/audiocore/engine"
+	"github.com/tphakala/voicewatch/internal/backup"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/health"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/monitor"
+	"github.com/tphakala/voicewatch/internal/notification"
+	"github.com/tphakala/voicewatch/internal/observability"
+	"github.com/tphakala/voicewatch/internal/security"
+	"github.com/tphakala/voicewatch/internal/suncalc"
+	"github.com/tphakala/voicewatch/internal/telemetry"
 )
 
 // apiServerServiceName is the service name used for logging and diagnostics.
 const apiServerServiceName = "api-server"
 
 // APIServerService manages the HTTP API server, processor, and related subsystems
-// as an app.Service. It owns the lifecycle of the API server, processor, bird image
-// cache, SunCalc, OAuth2 server, system monitor, and the control/audio-level channels.
+// as an app.Service. It owns the lifecycle of the API server, processor,
+// SunCalc, OAuth2 server, system monitor, and the control/audio-level channels.
 type APIServerService struct {
 	settings   *conf.Settings
-	bnAnalyzer *BirdNETAnalyzer
+	bnAnalyzer *VoiceWatchAnalyzer
 	dbService  *DatabaseService
 	metrics    *observability.Metrics
 	engine     *engine.AudioEngine
 
 	server         *api.Server
 	proc           *processor.Processor
-	birdImageCache *imageprovider.BirdImageCache
 	sunCalc        *suncalc.SunCalc
 	oauth2Server   *security.OAuth2Server
 	systemMonitor  *monitor.SystemMonitor
@@ -52,7 +50,7 @@ type APIServerService struct {
 
 // NewAPIServerService creates a new APIServerService with the given dependencies.
 // The service is not started; call Start() to initialize all subsystems.
-func NewAPIServerService(settings *conf.Settings, bnAnalyzer *BirdNETAnalyzer, dbService *DatabaseService, metrics *observability.Metrics, audioEngine *engine.AudioEngine) *APIServerService {
+func NewAPIServerService(settings *conf.Settings, bnAnalyzer *VoiceWatchAnalyzer, dbService *DatabaseService, metrics *observability.Metrics, audioEngine *engine.AudioEngine) *APIServerService {
 	return &APIServerService{
 		settings:   settings,
 		bnAnalyzer: bnAnalyzer,
@@ -68,7 +66,7 @@ func (s *APIServerService) Name() string {
 }
 
 // Start initializes and starts the API server and all dependent subsystems.
-// It fails fast if required dependencies (DataStore, BirdNET) are not available.
+// It fails fast if required dependencies (DataStore, VoiceWatch) are not available.
 //
 //nolint:gocognit // Orchestration function that initializes multiple subsystems in sequence.
 func (s *APIServerService) Start(ctx context.Context) error {
@@ -106,8 +104,8 @@ func (s *APIServerService) Start(ctx context.Context) error {
 			Context("operation", "start_precondition_check").
 			Build()
 	}
-	if s.bnAnalyzer == nil || s.bnAnalyzer.BirdNET() == nil {
-		return errors.Newf("api-server requires an initialized birdnet model; birdnet-analyzer service must be started first").
+	if s.bnAnalyzer == nil || s.bnAnalyzer.Orchestrator() == nil {
+		return errors.Newf("api-server requires an initialized voicewatch model; voicewatch-analyzer service must be started first").
 			Component("analysis.api_service").
 			Category(errors.CategorySystem).
 			Context("operation", "start_precondition_check").
@@ -115,19 +113,16 @@ func (s *APIServerService) Start(ctx context.Context) error {
 	}
 
 	dataStore := s.dbService.DataStore()
-	bn := s.bnAnalyzer.BirdNET()
+	bn := s.bnAnalyzer.Orchestrator()
 
-	// Update BirdNET model loaded metric.
-	UpdateBirdNETModelLoadedMetric(s.metrics.BirdNET, bn)
-
-	// Initialize bird image cache.
-	s.birdImageCache = initBirdImageCache(s.settings, dataStore, s.metrics)
+	// Update VoiceWatch model loaded metric.
+	UpdateVoiceWatchModelLoadedMetric(s.metrics.VoiceWatch, bn)
 
 	// Create SunCalc for sunrise/sunset calculations.
-	s.sunCalc = suncalc.NewSunCalc(s.settings.BirdNET.Latitude, s.settings.BirdNET.Longitude)
+	s.sunCalc = suncalc.NewSunCalc(s.settings.VoiceWatch.Latitude, s.settings.VoiceWatch.Longitude)
 
 	// Create processor.
-	s.proc = processor.New(s.settings, dataStore, bn, s.metrics, s.birdImageCache, GetLogger())
+	s.proc = processor.New(s.settings, dataStore, bn, s.metrics, GetLogger())
 	s.proc.SetSunCalc(s.sunCalc)
 
 	// Initialize backup system (optional; failure is non-fatal).
@@ -178,7 +173,6 @@ func (s *APIServerService) Start(ctx context.Context) error {
 
 	serverOpts := []api.ServerOption{
 		api.WithDataStore(dataStore),
-		api.WithBirdImageCache(s.birdImageCache),
 		api.WithProcessor(s.proc),
 		api.WithMetrics(s.metrics),
 		api.WithControlChannel(s.controlChan),
@@ -191,10 +185,6 @@ func (s *APIServerService) Start(ctx context.Context) error {
 	if buf := health.GlobalErrorBuffer(); buf != nil {
 		serverOpts = append(serverOpts, api.WithHealthErrorBuffer(buf))
 	}
-	if mm := s.bnAnalyzer.ModelManager(); mm != nil {
-		serverOpts = append(serverOpts, api.WithModelManager(mm))
-	}
-
 	apiServer, err := api.New(
 		s.settings,
 		serverOpts...,

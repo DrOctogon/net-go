@@ -3,7 +3,7 @@ package repository
 import (
 	"context"
 
-	"github.com/tphakala/birdnet-go/internal/datastore/v2/entities"
+	"github.com/tphakala/voicewatch/internal/datastore/v2/entities"
 )
 
 // LabelRepository provides access to the labels table.

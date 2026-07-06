@@ -7,13 +7,13 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/audiocore/soundlevel"
+	"github.com/tphakala/voicewatch/internal/audiocore/soundlevel"
 )
 
 // TestCompactSoundLevelData_IncludesNodeName tests that the node name is included in MQTT messages
 func TestCompactSoundLevelData_IncludesNodeName(t *testing.T) {
 	// Test data
-	nodeName := "BirdNET-Go-TestNode"
+	nodeName := "VoiceWatch-TestNode"
 	soundData := soundlevel.SoundLevelData{
 		Timestamp: time.Now(),
 		Source:    "test-source",
@@ -61,7 +61,7 @@ func TestCompactSoundLevelData_IncludesNodeName(t *testing.T) {
 
 	// Verify JSON contains the node field
 	jsonStr := string(jsonData)
-	assert.Contains(t, jsonStr, `"node":"BirdNET-Go-TestNode"`, "JSON should contain node field with correct value")
+	assert.Contains(t, jsonStr, `"node":"VoiceWatch-TestNode"`, "JSON should contain node field with correct value")
 }
 
 // TestCompactSoundLevelData_EmptyNodeName tests handling of empty node name

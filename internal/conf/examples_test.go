@@ -4,17 +4,17 @@ import (
 	"fmt"
 )
 
-// ExampleValidateBirdNETSettings demonstrates validating BirdNET configuration
+// ExampleValidateVoiceWatchSettings demonstrates validating BirdNET configuration
 // without side effects. This is useful for testing validation logic in isolation.
-func ExampleValidateBirdNETSettings() {
-	config := &BirdNETConfig{
+func ExampleValidateVoiceWatchSettings() {
+	config := &VoiceWatchConfig{
 		Sensitivity: 1.0,
 		Threshold:   0.7,
 		Latitude:    45.0,
 		Longitude:   -122.0,
 	}
 
-	result := ValidateBirdNETSettings(config)
+	result := ValidateVoiceWatchSettings(config)
 
 	if result.Valid {
 		fmt.Println("Configuration is valid")
@@ -24,15 +24,15 @@ func ExampleValidateBirdNETSettings() {
 	// Output: Configuration is valid
 }
 
-// ExampleValidateBirdNETSettings_invalid demonstrates handling validation errors.
+// ExampleValidateVoiceWatchSettings_invalid demonstrates handling validation errors.
 // The ValidationResult contains all errors and warnings without logging.
-func ExampleValidateBirdNETSettings_invalid() {
-	config := &BirdNETConfig{
+func ExampleValidateVoiceWatchSettings_invalid() {
+	config := &VoiceWatchConfig{
 		Threshold: 1.5,   // Invalid: must be between 0 and 1
 		Latitude:  100.0, // Invalid: must be between -90 and 90
 	}
 
-	result := ValidateBirdNETSettings(config)
+	result := ValidateVoiceWatchSettings(config)
 
 	if !result.Valid {
 		fmt.Printf("Found %d validation errors\n", len(result.Errors))
@@ -88,7 +88,7 @@ func ExampleValidateWebhookProvider() {
 // This function is used internally by SaveSettings to add default seasons based on latitude.
 func Example_prepareSettingsForSave() {
 	settings := &Settings{}
-	settings.BirdNET.LocationConfigured = true
+	settings.VoiceWatch.LocationConfigured = true
 	settings.Realtime.SpeciesTracking.SeasonalTracking.Enabled = true
 	// No seasons defined yet
 
@@ -124,11 +124,11 @@ func Example_testHelpers() {
 	// This example shows the pattern, but doesn't actually run as a test
 
 	// Example 1: Validating a configuration passes
-	config := &BirdNETConfig{
+	config := &VoiceWatchConfig{
 		Threshold: 0.7,
 		Latitude:  45.0,
 	}
-	_ = ValidateBirdNETSettings(config)
+	_ = ValidateVoiceWatchSettings(config)
 
 	// Instead of manual checks:
 	// if !result.Valid || len(result.Errors) > 0 { ... }
@@ -137,10 +137,10 @@ func Example_testHelpers() {
 	// assertValidationPasses(t, result)
 
 	// Example 2: Checking for specific errors
-	invalidConfig := &BirdNETConfig{
+	invalidConfig := &VoiceWatchConfig{
 		Threshold: 1.5, // Invalid
 	}
-	_ = ValidateBirdNETSettings(invalidConfig)
+	_ = ValidateVoiceWatchSettings(invalidConfig)
 
 	// Instead of looping through errors:
 	// Use helper:
@@ -154,14 +154,14 @@ func Example_testHelpers() {
 // in application code using the pure validation functions.
 func Example_validationWorkflow() {
 	// User-provided configuration
-	userConfig := &BirdNETConfig{
+	userConfig := &VoiceWatchConfig{
 		Threshold: 0.7,
 		Latitude:  45.0,
 		Longitude: -122.0,
 	}
 
 	// Validate without side effects
-	result := ValidateBirdNETSettings(userConfig)
+	result := ValidateVoiceWatchSettings(userConfig)
 
 	if !result.Valid {
 		// Collect all errors for user feedback
@@ -182,7 +182,7 @@ func Example_validationWorkflow() {
 
 	// Apply normalized configuration
 	if result.Normalized != nil {
-		normalized := result.Normalized.(*BirdNETConfig)
+		normalized := result.Normalized.(*VoiceWatchConfig)
 		fmt.Printf("Using configuration with threshold: %.1f\n", normalized.Threshold)
 	}
 

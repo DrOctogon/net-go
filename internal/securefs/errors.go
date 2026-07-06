@@ -3,7 +3,7 @@
 package securefs
 
 import (
-	"github.com/tphakala/birdnet-go/internal/errors"
+	"github.com/tphakala/voicewatch/internal/errors"
 )
 
 // Sentinel errors for the securefs package.

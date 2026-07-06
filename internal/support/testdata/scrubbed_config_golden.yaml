@@ -249,13 +249,6 @@ realtime:
             imageProvider: auto
             recent: true
             summary: true
-    dogBarkFilter:
-        confidence: 0.7
-        debug: false
-        enabled: true
-        remember: 15
-        species:
-            - Canis lupus familiaris
     dynamicThreshold:
         debug: false
         enabled: true

@@ -104,7 +104,7 @@ func BenchmarkRecordAudioConversionError_FmtSprintf(b *testing.B) {
 	}
 }
 
-func TestRecordBirdNETProcessingOverrun(t *testing.T) {
+func TestRecordVoiceWatchProcessingOverrun(t *testing.T) {
 	t.Parallel()
 
 	t.Run("records counter and histograms", func(t *testing.T) {
@@ -113,10 +113,10 @@ func TestRecordBirdNETProcessingOverrun(t *testing.T) {
 		m, err := NewMyAudioMetrics(registry)
 		require.NoError(t, err)
 
-		m.RecordBirdNETProcessingOverrun("mic_0", 3.5, 2.4)
+		m.RecordVoiceWatchProcessingOverrun("mic_0", 3.5, 2.4)
 
 		// Counter incremented
-		count := testutil.ToFloat64(m.birdnetProcessingOverrunsTotal.WithLabelValues("mic_0"))
+		count := testutil.ToFloat64(m.voicewatchProcessingOverrunsTotal.WithLabelValues("mic_0"))
 		assert.InDelta(t, 1.0, count, 0.01)
 
 		// Verify histograms were observed by collecting all metrics from registry
@@ -126,10 +126,10 @@ func TestRecordBirdNETProcessingOverrun(t *testing.T) {
 		var foundDuration, foundRatio bool
 		for _, mf := range metricFamilies {
 			switch mf.GetName() {
-			case "myaudio_birdnet_processing_overrun_duration_seconds":
+			case "myaudio_voicewatch_processing_overrun_duration_seconds":
 				foundDuration = true
 				assert.Positive(t, mf.GetMetric()[0].GetHistogram().GetSampleCount())
-			case "myaudio_birdnet_processing_overrun_ratio":
+			case "myaudio_voicewatch_processing_overrun_ratio":
 				foundRatio = true
 				assert.Positive(t, mf.GetMetric()[0].GetHistogram().GetSampleCount())
 			}
@@ -145,10 +145,10 @@ func TestRecordBirdNETProcessingOverrun(t *testing.T) {
 		require.NoError(t, err)
 
 		for range 5 {
-			m.RecordBirdNETProcessingOverrun("rtsp_camera1", 4.0, 2.4)
+			m.RecordVoiceWatchProcessingOverrun("rtsp_camera1", 4.0, 2.4)
 		}
 
-		count := testutil.ToFloat64(m.birdnetProcessingOverrunsTotal.WithLabelValues("rtsp_camera1"))
+		count := testutil.ToFloat64(m.voicewatchProcessingOverrunsTotal.WithLabelValues("rtsp_camera1"))
 		assert.InDelta(t, 5.0, count, 0.01)
 	})
 
@@ -158,17 +158,17 @@ func TestRecordBirdNETProcessingOverrun(t *testing.T) {
 		m, err := NewMyAudioMetrics(registry)
 		require.NoError(t, err)
 
-		m.RecordBirdNETProcessingOverrun("mic_zero", 3.0, 0)
+		m.RecordVoiceWatchProcessingOverrun("mic_zero", 3.0, 0)
 
 		// Counter should still increment
-		count := testutil.ToFloat64(m.birdnetProcessingOverrunsTotal.WithLabelValues("mic_zero"))
+		count := testutil.ToFloat64(m.voicewatchProcessingOverrunsTotal.WithLabelValues("mic_zero"))
 		assert.InDelta(t, 1.0, count, 0.01)
 
 		// Ratio histogram should have zero samples (skipped due to zero buffer length)
 		metricFamilies, err := registry.Gather()
 		require.NoError(t, err)
 		for _, mf := range metricFamilies {
-			if mf.GetName() == "myaudio_birdnet_processing_overrun_ratio" {
+			if mf.GetName() == "myaudio_voicewatch_processing_overrun_ratio" {
 				for _, metric := range mf.GetMetric() {
 					assert.Zero(t, metric.GetHistogram().GetSampleCount(),
 						"ratio histogram should have no samples when buffer length is zero")

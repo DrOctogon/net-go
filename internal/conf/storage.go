@@ -10,8 +10,8 @@ import (
 	"sync/atomic"
 
 	"github.com/spf13/viper"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
 	"gopkg.in/yaml.v3"
 )
 
@@ -106,13 +106,6 @@ func Load() (*Settings, error) {
 		persistMigration(settings, "dashboard layout")
 	}
 
-	// Reconcile an orphaned geomodel-shaped range filter config with the
-	// gallery-managed shared files on disk (promote to v3 when present, clear
-	// dead references when absent).
-	if settings.MigrateOrphanGeomodelRangeFilter() {
-		persistMigration(settings, "orphan geomodel range filter")
-	}
-
 	// Apply default transport to RTSP/RTMP streams that don't specify one
 	settings.Realtime.RTSP.ApplyStreamDefaults()
 
@@ -138,11 +131,11 @@ func Load() (*Settings, error) {
 	// API returns correct season dates from the start. Without this,
 	// Viper defaults (Northern Hemisphere) would be served regardless
 	// of the configured latitude.
-	locationConfigured := settings.BirdNET.LocationConfigured
+	locationConfigured := settings.VoiceWatch.LocationConfigured
 	if settings.Realtime.SpeciesTracking.SeasonalTracking.Enabled && locationConfigured {
 		settings.Realtime.SpeciesTracking.SeasonalTracking = GetSeasonalTrackingWithHemisphere(
 			settings.Realtime.SpeciesTracking.SeasonalTracking,
-			settings.BirdNET.Latitude,
+			settings.VoiceWatch.Latitude,
 		)
 	}
 
@@ -424,7 +417,7 @@ func Setting() *Settings {
 func prepareSettingsForSave(s *Settings, latitude float64) Settings {
 	settingsCopy := *s
 
-	locationConfigured := s.BirdNET.LocationConfigured
+	locationConfigured := s.VoiceWatch.LocationConfigured
 	if settingsCopy.Realtime.SpeciesTracking.SeasonalTracking.Enabled && locationConfigured {
 		settingsCopy.Realtime.SpeciesTracking.SeasonalTracking = GetSeasonalTrackingWithHemisphere(
 			settingsCopy.Realtime.SpeciesTracking.SeasonalTracking,
@@ -449,13 +442,13 @@ func SaveSettings() error {
 	}
 
 	// Deep-clone the published snapshot before mutating it in
-	// prepareSettingsForSave. The snapshot is immutable (range filter
-	// writers use clone-mutate-publish), so CloneSettings captures a
-	// consistent point-in-time copy without additional locking.
+	// prepareSettingsForSave. The snapshot is immutable (writers use
+	// clone-mutate-publish), so CloneSettings captures a consistent
+	// point-in-time copy without additional locking.
 	settingsCopy := *CloneSettings(current)
 
 	// Apply data transformations (seasonal tracking, etc.) on the clone.
-	settingsCopy = prepareSettingsForSave(&settingsCopy, current.BirdNET.Latitude)
+	settingsCopy = prepareSettingsForSave(&settingsCopy, current.VoiceWatch.Latitude)
 
 	// Find the path of the current config file
 	configPath, err := FindConfigFile()

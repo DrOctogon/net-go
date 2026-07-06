@@ -2,7 +2,7 @@
 package classifier
 
 import (
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 // GetLogger returns the classifier package logger scoped to the birdnet module.

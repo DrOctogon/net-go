@@ -158,7 +158,7 @@ fields = append(fields, extraFields...)
 
 ## Import Rules
 
-- **Use** `"github.com/tphakala/birdnet-go/internal/errors"` (never standard `"errors"`)
+- **Use** `"github.com/tphakala/voicewatch/internal/errors"` (never standard `"errors"`)
 - **Use** `internal/logging` for structured logging
 - Specify `.Component()` and `.Category()` for telemetry
 - Register new components in error package's `init()`
@@ -292,7 +292,7 @@ mockery --config .mockery.yaml
 import (
     "testing"
     "github.com/stretchr/testify/mock"
-    "github.com/tphakala/birdnet-go/internal/datastore/mocks"
+    "github.com/tphakala/voicewatch/internal/datastore/mocks"
 )
 
 func TestMyFunction(t *testing.T) {

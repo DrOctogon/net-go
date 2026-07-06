@@ -12,7 +12,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-const projectModulePath = "github.com/tphakala/birdnet-go"
+const projectModulePath = "github.com/tphakala/voicewatch"
 
 // TestAllSettingsStructsHaveYAMLTags verifies that every exported field in the
 // Settings struct tree that has a json: tag also has an explicit yaml: tag.
@@ -105,27 +105,19 @@ func TestSettingsYAMLRoundTrip(t *testing.T) {
 	t.Parallel()
 
 	original := Settings{}
-	// EBird (the corrupted struct from #2429)
-	original.Realtime.EBird.Locale = "en-uk"
-	original.Realtime.EBird.CacheTTL = 48
-	original.Realtime.EBird.APIKey = "test-key"
 	// Retention (5 previously-mismatched fields)
 	original.Realtime.Audio.Export.Retention.MaxAge = "30d"
 	original.Realtime.Audio.Export.Retention.MaxUsage = "80%"
 	original.Realtime.Audio.Export.Retention.MinClips = 10
 	original.Realtime.Audio.Export.Retention.CheckInterval = 15
 	// Dashboard
-	original.Realtime.Dashboard.Thumbnails.ImageProvider = "avicommons"
 	original.Realtime.Dashboard.SummaryLimit = 30
 	original.Realtime.Dashboard.TemperatureUnit = "fahrenheit"
 	// DynamicThreshold
 	original.Realtime.DynamicThreshold.ValidHours = 24
-	// RetrySettings (via Birdweather)
-	original.Realtime.Birdweather.RetrySettings.MaxRetries = 5
-	original.Realtime.Birdweather.RetrySettings.InitialDelay = 30
 	// BirdNET
-	original.BirdNET.Locale = "fi"
-	original.BirdNET.UseXNNPACK = true
+	original.VoiceWatch.Locale = "fi"
+	original.VoiceWatch.UseXNNPACK = true
 	// Security
 	original.Security.SessionDuration = 168 * time.Hour
 	// WebServer
@@ -139,21 +131,15 @@ func TestSettingsYAMLRoundTrip(t *testing.T) {
 	require.NoError(t, err)
 
 	// Verify fields from each major subsystem survived
-	assert.Equal(t, "en-uk", restored.Realtime.EBird.Locale)
-	assert.Equal(t, 48, restored.Realtime.EBird.CacheTTL)
-	assert.Equal(t, "test-key", restored.Realtime.EBird.APIKey)
 	assert.Equal(t, "30d", restored.Realtime.Audio.Export.Retention.MaxAge)
 	assert.Equal(t, "80%", restored.Realtime.Audio.Export.Retention.MaxUsage)
 	assert.Equal(t, 10, restored.Realtime.Audio.Export.Retention.MinClips)
 	assert.Equal(t, 15, restored.Realtime.Audio.Export.Retention.CheckInterval)
-	assert.Equal(t, "avicommons", restored.Realtime.Dashboard.Thumbnails.ImageProvider)
 	assert.Equal(t, 30, restored.Realtime.Dashboard.SummaryLimit)
 	assert.Equal(t, "fahrenheit", restored.Realtime.Dashboard.TemperatureUnit)
 	assert.Equal(t, 24, restored.Realtime.DynamicThreshold.ValidHours)
-	assert.Equal(t, 5, restored.Realtime.Birdweather.RetrySettings.MaxRetries)
-	assert.Equal(t, 30, restored.Realtime.Birdweather.RetrySettings.InitialDelay)
-	assert.Equal(t, "fi", restored.BirdNET.Locale)
-	assert.True(t, restored.BirdNET.UseXNNPACK)
+	assert.Equal(t, "fi", restored.VoiceWatch.Locale)
+	assert.True(t, restored.VoiceWatch.UseXNNPACK)
 	assert.Equal(t, 168*time.Hour, restored.Security.SessionDuration)
 	assert.Equal(t, "8080", restored.WebServer.Port)
 }

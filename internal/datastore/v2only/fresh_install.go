@@ -7,12 +7,12 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/conf"
-	v2 "github.com/tphakala/birdnet-go/internal/datastore/v2"
-	"github.com/tphakala/birdnet-go/internal/datastore/v2/entities"
-	"github.com/tphakala/birdnet-go/internal/datastore/v2/repository"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/conf"
+	v2 "github.com/tphakala/voicewatch/internal/datastore/v2"
+	"github.com/tphakala/voicewatch/internal/datastore/v2/entities"
+	"github.com/tphakala/voicewatch/internal/datastore/v2/repository"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 // InitializeFreshInstall creates a new v2-only datastore for fresh installations.
@@ -156,7 +156,7 @@ func InitializeFreshInstall(settings *conf.Settings, log logger.Logger, speciesC
 	avesClassID := avesClass.ID
 
 	// Get the default model (seeded by Initialize)
-	defaultModel, err := modelRepo.GetByNameVersionVariant(ctx, "BirdNET", "2.4", "default")
+	defaultModel, err := modelRepo.GetByNameVersionVariant(ctx, "VoiceWatch", "2.4", "default")
 	if err != nil {
 		_ = manager.Close()
 		return nil, errors.New(err).
@@ -183,7 +183,7 @@ func InitializeFreshInstall(settings *conf.Settings, log logger.Logger, speciesC
 		DefaultModelID:     defaultModel.ID,
 		SpeciesLabelTypeID: speciesLabelType.ID,
 		AvesClassID:        &avesClassID,
-		Labels:             settings.BirdNET.Labels, // Required for locale-specific common name resolution
+		Labels:             settings.VoiceWatch.Labels, // Required for locale-specific common name resolution
 		SpeciesCodeMap:     speciesCodeMap,
 	})
 	if err != nil {

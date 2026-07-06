@@ -6,11 +6,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/audiocore/buffer"
-	"github.com/tphakala/birdnet-go/internal/classifier"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/audiocore/buffer"
+	"github.com/tphakala/voicewatch/internal/classifier"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 const bufferMonitorDebugEveryTicks = 300
@@ -46,7 +46,7 @@ type BufferManager struct {
 // if any required parameter is nil, following project guidelines.
 //
 // Parameters:
-//   - bn: BirdNET instance for audio analysis
+//   - bn: VoiceWatch classifier for audio analysis
 //   - bufMgr: AudioCore buffer manager for analysis buffer access
 //   - quitChan: Channel for coordinated shutdown signaling
 //   - wg: WaitGroup for goroutine lifecycle management
@@ -57,7 +57,7 @@ type BufferManager struct {
 func NewBufferManager(bn *classifier.Orchestrator, bufMgr *buffer.Manager, quitChan chan struct{}, wg *sync.WaitGroup) (*BufferManager, error) {
 	// Validate required parameters
 	if bn == nil {
-		return nil, errors.Newf("BirdNET instance cannot be nil").
+		return nil, errors.Newf("VoiceWatch classifier cannot be nil").
 			Component("analysis.buffer").
 			Category(errors.CategoryValidation).
 			Context("operation", "new_buffer_manager").
@@ -101,7 +101,7 @@ func NewBufferManager(bn *classifier.Orchestrator, bufMgr *buffer.Manager, quitC
 // and panics if validation fails.
 //
 // Parameters:
-//   - bn: BirdNET instance for audio analysis
+//   - bn: VoiceWatch classifier for audio analysis
 //   - bufMgr: AudioCore buffer manager for analysis buffer access
 //   - quitChan: Channel for coordinated shutdown signaling
 //   - wg: WaitGroup for goroutine lifecycle management
@@ -133,9 +133,9 @@ func (m *BufferManager) AddMonitor(source string) error {
 			Build()
 	}
 
-	// Check if BirdNET instance is available
+	// Check if VoiceWatch classifier is available
 	if m.bn == nil {
-		return errors.Newf("BirdNET instance not initialized").
+		return errors.Newf("VoiceWatch classifier not initialized").
 			Component("analysis.buffer").
 			Category(errors.CategoryBuffer).
 			Context("operation", "add_monitor").
@@ -177,9 +177,9 @@ func (m *BufferManager) AddMonitors(source string, models []monitorConfig) error
 			Build()
 	}
 
-	// Check if BirdNET instance is available
+	// Check if VoiceWatch classifier is available
 	if m.bn == nil {
-		return errors.Newf("BirdNET instance not initialized").
+		return errors.Newf("VoiceWatch classifier not initialized").
 			Component("analysis.buffer").
 			Category(errors.CategoryBuffer).
 			Context("operation", "add_monitors").
@@ -386,7 +386,7 @@ func (m *BufferManager) UpdateMonitors(sourceModels map[string][]monitorConfig) 
 }
 
 // analysisBufferMonitor reads from the audiocore analysis buffer and feeds
-// audio chunks to the BirdNET analysis pipeline.
+// audio chunks to the VoiceWatch analysis pipeline.
 func (m *BufferManager) analysisBufferMonitor(quitChan chan struct{}, cfg *monitorConfig) {
 	detectionOffset := cfg.spec.ClipLength
 	const pollInterval = 100 * time.Millisecond
@@ -471,13 +471,6 @@ func (m *BufferManager) processMonitorTick(
 				logger.Int("data_len", len(data)),
 				logger.Int("expected", analysisWindowBytes))
 		}
-		return true, hasReadBuffer
-	}
-
-	// Skip inference for models that are currently inactive (e.g., bat model
-	// during daytime when nighttime-only scheduling is enabled). The buffered
-	// audio data is released by the existing defer release().
-	if !m.bn.IsModelActive(cfg.modelID) {
 		return true, hasReadBuffer
 	}
 

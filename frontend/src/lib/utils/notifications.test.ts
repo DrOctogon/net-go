@@ -348,19 +348,19 @@ describe('translateField', () => {
 describe('translateNotification', () => {
   it('returns original title and message when no keys are present', () => {
     const notification = createTestNotification({
-      title: 'BirdNET-Go Started',
+      title: 'VoiceWatch Started',
       message: 'Application started (v1.0)',
     });
 
     const result = translateNotification(notification);
 
-    expect(result.title).toBe('BirdNET-Go Started');
+    expect(result.title).toBe('VoiceWatch Started');
     expect(result.message).toBe('Application started (v1.0)');
   });
 
   it('falls back to original text when translation keys are not found', () => {
     const notification = createTestNotification({
-      title: 'BirdNET-Go Started',
+      title: 'VoiceWatch Started',
       message: 'Application started (v1.0)',
       title_key: 'notifications.content.startup.title',
       message_key: 'notifications.content.startup.message',
@@ -370,7 +370,7 @@ describe('translateNotification', () => {
     // These keys aren't in the test setup translations, so t() returns the key itself
     const result = translateNotification(notification);
 
-    expect(result.title).toBe('BirdNET-Go Started');
+    expect(result.title).toBe('VoiceWatch Started');
     expect(result.message).toBe('Application started (v1.0)');
   });
 

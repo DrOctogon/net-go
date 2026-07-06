@@ -16,9 +16,9 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/detection"
-	"github.com/tphakala/birdnet-go/internal/mqtt"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/detection"
+	"github.com/tphakala/voicewatch/internal/mqtt"
 )
 
 // MockMQTTClient captures published messages for testing.
@@ -222,7 +222,6 @@ func TestMqttAction_Execute_PayloadContainsAllFields(t *testing.T) {
 		MqttClient:     mockClient,
 		EventTracker:   eventTracker,
 		DetectionCtx:   detectionCtx,
-		BirdImageCache: nil, // Not needed for this test
 	}
 
 	err := action.Execute(t.Context(), nil)

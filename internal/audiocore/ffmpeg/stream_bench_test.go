@@ -7,8 +7,8 @@ package ffmpeg
 import (
 	"testing"
 
-	"github.com/tphakala/birdnet-go/internal/audiocore"
-	"github.com/tphakala/birdnet-go/internal/audiocore/buffer"
+	"github.com/tphakala/voicewatch/internal/audiocore"
+	"github.com/tphakala/voicewatch/internal/audiocore/buffer"
 )
 
 // benchReadDispatchSize approximates the typical sub-slice size handed to the

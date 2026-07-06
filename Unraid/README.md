@@ -1,15 +1,15 @@
-# BirdNET-Go for Unraid
+# VoiceWatch for Unraid
 
-This directory contains the Unraid Community Applications template and documentation for running BirdNET-Go on Unraid systems.
+This directory contains the Unraid Community Applications template and documentation for running VoiceWatch on Unraid systems.
 
 ## Overview
 
-BirdNET-Go is a real-time bird species identification system that uses deep learning models to analyze audio streams and identify bird species with confidence scores. It's perfect for:
+VoiceWatch is a real-time human-voice detector that uses on-device AI to analyze audio streams and identify speech with confidence scores. It's designed for:
 
-- **Backyard Birding**: Monitor birds visiting your garden or feeder
-- **Research**: Collect data on local bird populations and behavior
-- **Wildlife Monitoring**: Long-term species monitoring with automated recording
-- **Education**: Learn about local bird species through audio identification
+- **Home Security**: Detect human voices in monitored areas
+- **Privacy Monitoring**: Know when audio capture picks up speech
+- **Always-On Listening**: Long-term speech activity logging with automated recording
+- **Local-Only Processing**: All inference runs on-device; no audio leaves the machine
 
 ## Features
 
@@ -30,25 +30,25 @@ BirdNET-Go is a real-time bird species identification system that uses deep lear
    - Go to **Apps** tab in Unraid WebGUI
    - Click **Install** on Community Applications
 
-2. **Install BirdNET-Go**:
+2. **Install VoiceWatch**:
    - Go to **Apps** tab
-   - Search for "BirdNET-Go"
+   - Search for "VoiceWatch"
    - Click **Install**
    - Configure the settings (see Configuration section below)
    - Click **Apply**
 
 ### Method 2: Manual Template Installation
 
-If BirdNET-Go is not yet available in Community Applications:
+If VoiceWatch is not yet available in Community Applications:
 
 1. **Add Template URL**:
    - Go to **Docker** tab in Unraid WebGUI
    - Click **Add Container**
-   - Set Template Repository to: `https://raw.githubusercontent.com/tphakala/birdnet-go/main/unraid/birdnet-go.xml`
+   - Set Template Repository to: `https://raw.githubusercontent.com/tphakala/voicewatch/main/unraid/voicewatch.xml`
    - Click **Save**
 
 2. **Install from Template**:
-   - Search for "BirdNET-Go" in your templates
+   - Search for "VoiceWatch" in your templates
    - Click the template to install
    - Configure settings and click **Apply**
 
@@ -72,7 +72,7 @@ If BirdNET-Go is not yet available in Community Applications:
 
 ### Audio Device Requirements
 
-BirdNET-Go requires access to audio input devices. The template automatically includes:
+VoiceWatch requires access to audio input devices. The template automatically includes:
 
 - `--device /dev/snd` - Access to all sound devices
 - `--add-host="host.docker.internal:host-gateway"` - Network access for RTSP streams
@@ -82,7 +82,7 @@ BirdNET-Go requires access to audio input devices. The template automatically in
 ### USB Microphones and Sound Cards
 
 1. **Connect your audio device** to your Unraid server
-2. **Start the container** - BirdNET-Go will auto-detect available devices
+2. **Start the container** - VoiceWatch will auto-detect available devices
 3. **Configure audio source**:
    - Open the web interface at `http://your-unraid-ip:8080`
    - Go to **Settings** → **Audio Capture**
@@ -147,7 +147,7 @@ Create dedicated shares for better organization:
 
 ### Security Considerations
 
-BirdNET-Go includes built-in authentication options:
+VoiceWatch includes built-in authentication options:
 
 1. **Basic Authentication**: Username/password protection
 2. **OAuth2**: Google or GitHub authentication
@@ -186,15 +186,15 @@ Configure security in the web interface under **Settings** → **Security**.
 ### Getting Help
 
 1. **Check Logs**: View container logs in Unraid Docker tab
-2. **Community Support**: Visit [BirdNET-Go Discussions](https://github.com/tphakala/birdnet-go/discussions)
-3. **Report Issues**: [GitHub Issues](https://github.com/tphakala/birdnet-go/issues)
+2. **Community Support**: Visit [VoiceWatch Discussions](https://github.com/tphakala/voicewatch/discussions)
+3. **Report Issues**: [GitHub Issues](https://github.com/tphakala/voicewatch/issues)
 4. **Unraid Forums**: Post in the Unraid Community Applications section
 
 ## Integration Examples
 
 ### Home Assistant
 
-BirdNET-Go supports MQTT for Home Assistant integration:
+VoiceWatch supports MQTT for Home Assistant integration:
 
 ```yaml
 # configuration.yaml
@@ -224,7 +224,7 @@ Set up notifications for rare bird species or high-confidence detections.
 ### Manual Update
 
 1. Go to **Docker** tab
-2. Click **Force Update** on the BirdNET-Go container
+2. Click **Force Update** on the VoiceWatch container
 3. The container will download the latest nightly image
 
 ## Backup and Restore
@@ -242,4 +242,4 @@ Use Unraid's built-in backup tools or third-party plugins to backup the entire a
 
 ## License
 
-BirdNET-Go is open source software. See the [main repository](https://github.com/tphakala/birdnet-go) for license details.
+VoiceWatch is open source software. See the [main repository](https://github.com/tphakala/voicewatch) for license details.

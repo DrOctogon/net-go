@@ -8,8 +8,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 // MinSoundLevelInterval is the minimum sound level interval in seconds to prevent excessive CPU usage
@@ -43,9 +43,6 @@ func sanitizeStringField(s string) string {
 
 // Precompiled regular expressions for validation
 var (
-	// birdweatherIDPattern validates Birdweather ID format (24 alphanumeric characters)
-	birdweatherIDPattern = regexp.MustCompile(`^[a-zA-Z0-9]{24}$`)
-
 	// gpsCoordPattern matches the GPS-coordinate-as-device-string
 	// misconfiguration seen in the wild. The leading colon is optional:
 	// the originally reported case was `:45.5,-120.5` (an ALSA-style
@@ -65,13 +62,11 @@ var (
 )
 
 // ValidAudioModels contains recognized AI model identifiers.
-// Empty string is also valid (defaults to birdnet).
+// Empty string is also valid (defaults to voicewatch).
 var ValidAudioModels = map[string]bool{
-	"":             true, // default (birdnet)
-	ModelIDBirdNET: true,
-	ModelIDPerchV2: true,
-	ModelIDBat:     true,
-	ModelIDBSG:     true,
+	"":               true, // default (voicewatch)
+	ModelIDVoiceWatch:   true,
+	ModelIDHumanVoice: true,
 }
 
 // ValidationError is the set of fatal validation findings produced by
@@ -200,14 +195,14 @@ func ValidateSettings(settings *Settings) error {
 		settings.LowMemory.Mode = LowMemoryModeAuto
 	}
 
-	// Default empty BirdNET locale to "en" so downstream label loading
+	// Default empty VoiceWatch locale to "en" so downstream label loading
 	// always has a valid locale to work with.
-	if settings.BirdNET.Locale == "" {
-		settings.BirdNET.Locale = "en"
+	if settings.VoiceWatch.Locale == "" {
+		settings.VoiceWatch.Locale = "en"
 	}
 
-	// Validate BirdNET settings
-	if err := validateBirdNETSettings(&settings.BirdNET); err != nil {
+	// Validate VoiceWatch settings
+	if err := validateVoiceWatchSettings(&settings.VoiceWatch); err != nil {
 		ve.Errors = append(ve.Errors, err.Error())
 	}
 
@@ -223,11 +218,6 @@ func ValidateSettings(settings *Settings) error {
 
 	// Validate Realtime settings
 	if err := validateRealtimeSettings(&settings.Realtime); err != nil {
-		ve.Errors = append(ve.Errors, err.Error())
-	}
-
-	// Validate Birdweather settings
-	if err := validateBirdweatherSettings(&settings.Realtime.Birdweather); err != nil {
 		ve.Errors = append(ve.Errors, err.Error())
 	}
 

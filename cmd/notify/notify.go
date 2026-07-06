@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"github.com/spf13/cobra"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/notification"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/notification"
 )
 
 // Command returns a cobra command that sends a test notification via the notification service
@@ -30,13 +30,13 @@ func Command(settings *conf.Settings) *cobra.Command {
 
 Examples:
   # Basic notification
-  birdnet-go notify --type=info --priority=low --title="Test" --message="Hello"
+  voicewatch notify --type=info --priority=low --title="Test" --message="Hello"
   
   # Notification with confidence metadata for testing confidence filters
-  birdnet-go notify --type=detection --metadata="confidence=0.95" --metadata="species=robin"
+  voicewatch notify --type=detection --metadata="confidence=0.95" --metadata="species=robin"
   
   # Multiple metadata with different types
-  birdnet-go notify --metadata="confidence=0.85" --metadata="verified=true" --metadata="location=backyard"`,
+  voicewatch notify --metadata="confidence=0.85" --metadata="verified=true" --metadata="location=backyard"`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// Map type
 			var ntype notification.Type

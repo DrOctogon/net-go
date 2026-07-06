@@ -62,7 +62,7 @@ const (
 
 // Settings section name constants
 const (
-	SettingsSectionBirdnet   = "birdnet"
+	SettingsSectionVoiceWatch = "voicewatch"
 	SettingsSectionWebserver = "webserver"
 	SettingsSectionRealtime  = "realtime"
 	SettingsSectionAudio     = "audio"

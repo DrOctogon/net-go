@@ -14,10 +14,10 @@ import (
 	"time"
 
 	"github.com/labstack/echo/v4"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/restart"
-	tlspkg "github.com/tphakala/birdnet-go/internal/tls"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/restart"
+	tlspkg "github.com/tphakala/voicewatch/internal/tls"
 )
 
 // TLS validity constraints
@@ -315,7 +315,7 @@ func (c *Controller) DownloadTLSCertificate(ctx echo.Context) error {
 
 	certPath := tlsMgr.GetCertificatePath(tlsServiceName, conf.TLSCertTypeServerCert)
 
-	ctx.Response().Header().Set("Content-Disposition", `attachment; filename="birdnet-go.crt"`)
+	ctx.Response().Header().Set("Content-Disposition", `attachment; filename="voicewatch.crt"`)
 
 	return ctx.File(certPath)
 }

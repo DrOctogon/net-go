@@ -12,7 +12,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/conf"
+	"github.com/tphakala/voicewatch/internal/conf"
 )
 
 // isFieldSkipped checks if a field name appears in the skipped fields list.
@@ -23,8 +23,7 @@ func isFieldSkipped(skippedFields []any, expectedSkip string) bool {
 			continue
 		}
 		if skippedStr == expectedSkip ||
-			skippedStr == "BirdNET."+expectedSkip ||
-			skippedStr == "BirdNET.RangeFilter."+expectedSkip {
+			skippedStr == "VoiceWatch."+expectedSkip {
 			return true
 		}
 	}
@@ -74,7 +73,7 @@ func TestBoundaryValues(t *testing.T) {
 		},
 		{
 			name:    "Zero threshold",
-			section: "birdnet",
+			section: "voicewatch",
 			boundaryData: map[string]any{
 				"threshold": 0.0,
 			},
@@ -82,7 +81,7 @@ func TestBoundaryValues(t *testing.T) {
 		},
 		{
 			name:    "Maximum threshold",
-			section: "birdnet",
+			section: "voicewatch",
 			boundaryData: map[string]any{
 				"threshold": 1.0,
 			},
@@ -90,7 +89,7 @@ func TestBoundaryValues(t *testing.T) {
 		},
 		{
 			name:    "Minimum latitude",
-			section: "birdnet",
+			section: "voicewatch",
 			boundaryData: map[string]any{
 				"latitude": -90.0,
 			},
@@ -98,7 +97,7 @@ func TestBoundaryValues(t *testing.T) {
 		},
 		{
 			name:    "Maximum latitude",
-			section: "birdnet",
+			section: "voicewatch",
 			boundaryData: map[string]any{
 				"latitude": 90.0,
 			},
@@ -106,7 +105,7 @@ func TestBoundaryValues(t *testing.T) {
 		},
 		{
 			name:    "Minimum longitude",
-			section: "birdnet",
+			section: "voicewatch",
 			boundaryData: map[string]any{
 				"longitude": -180.0,
 			},
@@ -114,7 +113,7 @@ func TestBoundaryValues(t *testing.T) {
 		},
 		{
 			name:    "Maximum longitude",
-			section: "birdnet",
+			section: "voicewatch",
 			boundaryData: map[string]any{
 				"longitude": 180.0,
 			},
@@ -254,16 +253,6 @@ func TestSpecialCharacterHandling(t *testing.T) {
 			},
 			description: "Should handle HTML entities",
 		},
-		{
-			name:    "Mixed case field names",
-			section: "birdnet",
-			specialData: map[string]any{
-				"rangeFilter": map[string]any{
-					"threshold": 0.05,
-				},
-			},
-			description: "Should handle camelCase field names",
-		},
 	}
 
 	for _, tt := range tests {
@@ -307,26 +296,13 @@ func TestFieldPermissionEnforcement(t *testing.T) {
 		shouldSkip  []string
 	}{
 		{
-			name:    "Runtime fields in BirdNET",
-			section: "birdnet",
+			name:    "Runtime fields in VoiceWatch",
+			section: "voicewatch",
 			update: map[string]any{
 				"labels": []string{"test1", "test2"}, // Runtime field
 			},
 			description: "Should skip runtime-only fields",
 			shouldSkip:  []string{"Labels"},
-		},
-		{
-			name:    "RangeFilter runtime fields",
-			section: "birdnet",
-			update: map[string]any{
-				"rangeFilter": map[string]any{
-					"species":     []string{"test species"}, // Runtime field
-					"lastUpdated": "2024-01-01T00:00:00Z",   // Runtime field
-					"threshold":   0.05,                     // Allowed field
-				},
-			},
-			description: "Should skip runtime fields in nested objects",
-			shouldSkip:  []string{"Species", "LastUpdated"},
 		},
 		{
 			name:    "Audio runtime fields",

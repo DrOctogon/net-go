@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/spf13/viper"
-	"github.com/tphakala/birdnet-go/internal/conf"
+	"github.com/tphakala/voicewatch/internal/conf"
 )
 
 // Config holds the configuration for the export tool.
@@ -72,7 +72,7 @@ func (c *Config) loadFromConfigFile() error {
 	if configPath == "" {
 		// Try default locations, preferring home directory
 		if homeDir, err := conf.GetUserHomeDir(); err == nil {
-			p := filepath.Join(homeDir, ".config", "birdnet-go", "config.yaml")
+			p := filepath.Join(homeDir, ".config", "voicewatch", "config.yaml")
 			if _, statErr := os.Stat(p); statErr == nil {
 				configPath = p
 			}

@@ -1,4 +1,4 @@
-// Package datastore provides database operations for BirdNET-Go.
+// Package datastore provides database operations for VoiceWatch.
 package datastore
 
 import (
@@ -7,8 +7,10 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/datastore/mapper"
-	"github.com/tphakala/birdnet-go/internal/detection"
+	"gorm.io/gorm"
+
+	"github.com/tphakala/voicewatch/internal/datastore/mapper"
+	"github.com/tphakala/voicewatch/internal/detection"
 )
 
 const (
@@ -306,6 +308,51 @@ func (r *detectionRepository) GetClipPath(ctx context.Context, id string) (strin
 	return path, nil
 }
 
+// UpdateTranscript stores the speech-to-text transcript and language for a
+// detection. It updates only the transcript columns, leaving all other fields
+// untouched. Following the v2 detection repository convention, the write is
+// performed as a targeted column update inside a transaction.
+func (r *detectionRepository) UpdateTranscript(ctx context.Context, id, transcript, language string) error {
+	noteID, err := r.parseID(id)
+	if err != nil {
+		return err
+	}
+	if err := r.store.Transaction(func(tx *gorm.DB) error {
+		return tx.WithContext(ctx).
+			Model(&Note{}).
+			Where("id = ?", noteID).
+			Updates(map[string]any{
+				"transcript":      transcript,
+				"transcript_lang": language,
+			}).Error
+	}); err != nil {
+		return fmt.Errorf("failed to update transcript for detection %s: %w", id, err)
+	}
+	return nil
+}
+
+// UpdateKeywordFlag marks a detection as flagged and stores the comma-joined list
+// of matched keywords. It updates only the flag columns, leaving all other fields
+// untouched, mirroring the targeted-update convention of UpdateTranscript.
+func (r *detectionRepository) UpdateKeywordFlag(ctx context.Context, id string, flagged bool, keywordsHit string) error {
+	noteID, err := r.parseID(id)
+	if err != nil {
+		return err
+	}
+	if err := r.store.Transaction(func(tx *gorm.DB) error {
+		return tx.WithContext(ctx).
+			Model(&Note{}).
+			Where("id = ?", noteID).
+			Updates(map[string]any{
+				"flagged":      flagged,
+				"keywords_hit": keywordsHit,
+			}).Error
+	}); err != nil {
+		return fmt.Errorf("failed to update keyword flag for detection %s: %w", id, err)
+	}
+	return nil
+}
+
 // GetAdditionalResults returns the secondary predictions for a detection.
 func (r *detectionRepository) GetAdditionalResults(ctx context.Context, id string) ([]detection.AdditionalResult, error) {
 	results, err := r.store.GetNoteResults(id)
@@ -357,12 +404,18 @@ func NoteFromResult(result *detection.Result) Note {
 			SafeString:  result.AudioSource.SafeString,
 			DisplayName: result.AudioSource.DisplayName,
 		},
-		Unlikely:   result.Unlikely,
-		Occurrence: result.Occurrence,
-		Verified:   result.Verified,
-		Locked:     result.Locked,
-		Model:      result.Model,
-		RawLabel:   result.RawLabel,
+		Unlikely:            result.Unlikely,
+		Occurrence:          result.Occurrence,
+		Verified:            result.Verified,
+		Locked:              result.Locked,
+		Model:               result.Model,
+		RawLabel:            result.RawLabel,
+		Gender:              result.Gender,
+		GenderConfidence:    result.GenderConfidence,
+		AgeBand:             result.AgeBand,
+		AgeConfidence:       result.AgeConfidence,
+		SpeakerID:           result.SpeakerID,
+		VoicePrintEmbedding: result.VoicePrintEmbedding,
 	}
 }
 
@@ -423,10 +476,16 @@ func (r *detectionRepository) noteToResult(note *Note) (*detection.Result, error
 		Sensitivity:    note.Sensitivity,
 		ClipName:       note.ClipName,
 		ProcessingTime: note.ProcessingTime,
-		Unlikely:       note.Unlikely,
-		Occurrence:     note.Occurrence,
-		Verified:       note.Verified,
-		Locked:         note.Locked,
+		Unlikely:            note.Unlikely,
+		Occurrence:          note.Occurrence,
+		Verified:            note.Verified,
+		Locked:              note.Locked,
+		Gender:              note.Gender,
+		GenderConfidence:    note.GenderConfidence,
+		AgeBand:             note.AgeBand,
+		AgeConfidence:       note.AgeConfidence,
+		SpeakerID:           note.SpeakerID,
+		VoicePrintEmbedding: note.VoicePrintEmbedding,
 	}
 
 	// Use the note's model info if populated, otherwise fall back to default.

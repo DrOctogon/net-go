@@ -12,10 +12,10 @@ export interface BackendModel {
   recommendedSampleRate?: number;
 }
 
-export const DEFAULT_MODEL_ID = 'birdnet';
+export const DEFAULT_MODEL_ID = 'human_voice';
 
 const FALLBACK_MODELS: BackendModel[] = [
-  { id: DEFAULT_MODEL_ID, name: 'BirdNET v2.4 (TFLite)', category: 'bird' },
+  { id: DEFAULT_MODEL_ID, name: 'Human Voice Detector', category: 'human' },
 ];
 
 let fetchedModels = $state<BackendModel[]>([]);

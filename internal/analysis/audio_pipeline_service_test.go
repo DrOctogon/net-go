@@ -6,10 +6,10 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/app"
-	"github.com/tphakala/birdnet-go/internal/audiocore"
-	"github.com/tphakala/birdnet-go/internal/classifier"
-	"github.com/tphakala/birdnet-go/internal/conf"
+	"github.com/tphakala/voicewatch/internal/app"
+	"github.com/tphakala/voicewatch/internal/audiocore"
+	"github.com/tphakala/voicewatch/internal/classifier"
+	"github.com/tphakala/voicewatch/internal/conf"
 )
 
 // Compile-time interface compliance check.
@@ -50,43 +50,17 @@ func TestResolveModelTargets_SingleModel(t *testing.T) {
 	t.Parallel()
 
 	loaded := map[string]classifier.ModelInfo{
-		"BirdNET_V2.4": {
-			ID:   "BirdNET_V2.4",
-			Name: "BirdNET",
-			Spec: classifier.ModelSpec{SampleRate: 48000, ClipLength: 3 * time.Second},
+		classifier.RegistryIDHumanVoice: {
+			ID:   classifier.RegistryIDHumanVoice,
+			Name: "Human Voice",
+			Spec: classifier.ModelSpec{SampleRate: 16000, ClipLength: 3 * time.Second},
 		},
 	}
 
-	targets := resolveModelTargets([]string{"birdnet"}, loaded)
+	targets := resolveModelTargets([]string{conf.ModelIDHumanVoice}, loaded)
 	require.Len(t, targets, 1)
-	assert.Equal(t, "BirdNET_V2.4", targets[0].ID)
-	assert.Equal(t, 48000, targets[0].Spec.SampleRate)
-}
-
-func TestResolveModelTargets_MultiModel(t *testing.T) {
-	t.Parallel()
-
-	loaded := map[string]classifier.ModelInfo{
-		"BirdNET_V2.4": {
-			ID:   "BirdNET_V2.4",
-			Spec: classifier.ModelSpec{SampleRate: 48000, ClipLength: 3 * time.Second},
-		},
-		"Perch_V2": {
-			ID:   "Perch_V2",
-			Spec: classifier.ModelSpec{SampleRate: 32000, ClipLength: 5 * time.Second},
-		},
-	}
-
-	targets := resolveModelTargets([]string{"birdnet", "perch_v2"}, loaded)
-	require.Len(t, targets, 2)
-
-	// Collect results into a map for order-independent assertion.
-	targetMap := make(map[string]int, len(targets))
-	for _, tgt := range targets {
-		targetMap[tgt.ID] = tgt.Spec.SampleRate
-	}
-	assert.Equal(t, 48000, targetMap["BirdNET_V2.4"])
-	assert.Equal(t, 32000, targetMap["Perch_V2"])
+	assert.Equal(t, classifier.RegistryIDHumanVoice, targets[0].ID)
+	assert.Equal(t, 16000, targets[0].Spec.SampleRate)
 }
 
 func TestResolveModelTargets_UnknownConfigID(t *testing.T) {
@@ -107,17 +81,11 @@ func TestResolveModelTargets_UnknownConfigID(t *testing.T) {
 func TestResolveModelTargets_KnownButNotLoaded(t *testing.T) {
 	t.Parallel()
 
-	// perch_v2 is a known config ID but is not in the loaded models map.
-	loaded := map[string]classifier.ModelInfo{
-		"BirdNET_V2.4": {
-			ID:   "BirdNET_V2.4",
-			Spec: classifier.ModelSpec{SampleRate: 48000},
-		},
-	}
+	// human_voice resolves to classifier.RegistryIDHumanVoice but is not in the loaded models map.
+	loaded := map[string]classifier.ModelInfo{}
 
-	targets := resolveModelTargets([]string{"birdnet", "perch_v2"}, loaded)
-	require.Len(t, targets, 1, "only birdnet should resolve, perch_v2 is not loaded")
-	assert.Equal(t, "BirdNET_V2.4", targets[0].ID)
+	targets := resolveModelTargets([]string{conf.ModelIDHumanVoice}, loaded)
+	assert.Empty(t, targets, "human_voice resolves to HumanVoice but HumanVoice is not loaded")
 }
 
 func TestBuildLivenessConfig_AllDefaults(t *testing.T) {

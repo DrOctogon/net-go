@@ -112,7 +112,7 @@ describe('Settings API - Secret redaction contract', () => {
   // Configured secrets are replaced with REDACTED, unconfigured ones are empty.
   const SANITIZED_RESPONSE = {
     main: { name: 'TestNode' },
-    birdnet: {
+    voicewatch: {
       sensitivity: 1.0,
       threshold: 0.8,
       locale: 'en',

@@ -4,11 +4,12 @@ package conf
 
 import (
 	"math"
+	"os"
 	"slices"
 	"strings"
 
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 // Realtime interval constants
@@ -56,6 +57,11 @@ func validateRealtimeSettings(settings *RealtimeSettings) error {
 		return err
 	}
 
+	// Validate continuous recording settings
+	if err := validateContinuousRecordingSettings(&settings.Audio.Continuous); err != nil {
+		return err
+	}
+
 	// Validate species settings
 	if err := validateSpeciesConfigSettings(&settings.Species); err != nil {
 		return err
@@ -80,6 +86,51 @@ func validateRealtimeSettings(settings *RealtimeSettings) error {
 	// Validate dynamic threshold settings
 	if err := validateDynamicThresholdSettings(&settings.DynamicThreshold); err != nil {
 		return err
+	}
+
+	// Validate transcription settings
+	if err := validateTranscriptionSettings(&settings.Transcription); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// validateTranscriptionSettings validates the speech-to-text transcription
+// settings. Transcription is optional; validation only applies when enabled.
+// When enabled, the configured model file must exist on disk so the backend can
+// load it.
+func validateTranscriptionSettings(settings *TranscriptionSettings) error {
+	if !settings.Enabled {
+		return nil
+	}
+
+	if strings.TrimSpace(settings.Model) == "" {
+		return errors.Newf("transcription model path must be set when transcription is enabled").
+			Category(errors.CategoryValidation).
+			Context("validation_type", "transcription-model").
+			Build()
+	}
+
+	if _, err := os.Stat(settings.Model); err != nil {
+		return errors.Newf("transcription model path %q does not exist: %v", settings.Model, err).
+			Category(errors.CategoryValidation).
+			Context("validation_type", "transcription-model").
+			Context("model", settings.Model).
+			Build()
+	}
+
+	// Reject blank (whitespace-only) keyword entries so a misconfigured list
+	// surfaces at startup instead of silently never matching. An empty list is
+	// valid and simply disables keyword flagging.
+	for i, kw := range settings.Keywords {
+		if strings.TrimSpace(kw) == "" {
+			return errors.Newf("transcription keyword at index %d must not be blank", i).
+				Category(errors.CategoryValidation).
+				Context("validation_type", "transcription-keyword").
+				Context("keyword_index", i).
+				Build()
+		}
 	}
 
 	return nil
@@ -536,5 +587,51 @@ func validateSpeciesConfigSettings(settings *SpeciesSettings) error {
 				Build()
 		}
 	}
+	return nil
+}
+
+// validContinuousRecordingFormats contains all supported audio formats for continuous recording.
+var validContinuousRecordingFormats = []string{"flac", "wav"}
+
+// validateContinuousRecordingSettings validates the continuous recording settings.
+// When enabled, segmentseconds and retentionhours must be positive, format must be
+// flac or wav, and samplerate must be non-negative.
+func validateContinuousRecordingSettings(settings *ContinuousRecordingSettings) error {
+	if !settings.Enabled {
+		return nil
+	}
+
+	if settings.SegmentSeconds <= 0 {
+		return errors.Newf("continuous recording segmentSeconds must be positive when enabled, got %d", settings.SegmentSeconds).
+			Category(errors.CategoryValidation).
+			Context("validation_type", "continuous-recording-segment-seconds").
+			Context("segment_seconds", settings.SegmentSeconds).
+			Build()
+	}
+
+	if settings.RetentionHours <= 0 {
+		return errors.Newf("continuous recording retentionHours must be positive when enabled, got %d", settings.RetentionHours).
+			Category(errors.CategoryValidation).
+			Context("validation_type", "continuous-recording-retention-hours").
+			Context("retention_hours", settings.RetentionHours).
+			Build()
+	}
+
+	if !slices.Contains(validContinuousRecordingFormats, settings.Format) {
+		return errors.Newf("continuous recording format must be one of %v, got %q", validContinuousRecordingFormats, settings.Format).
+			Category(errors.CategoryValidation).
+			Context("validation_type", "continuous-recording-format").
+			Context("format", settings.Format).
+			Build()
+	}
+
+	if settings.SampleRate < 0 {
+		return errors.Newf("continuous recording sampleRate must be non-negative, got %d", settings.SampleRate).
+			Category(errors.CategoryValidation).
+			Context("validation_type", "continuous-recording-sample-rate").
+			Context("sample_rate", settings.SampleRate).
+			Build()
+	}
+
 	return nil
 }

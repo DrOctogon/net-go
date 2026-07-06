@@ -77,6 +77,6 @@ apiGroup.GET("/protected/resource", handlerFunc)
 
 - `github.com/labstack/echo/v4`: Web framework.
 - `github.com/markbates/goth/gothic`: Session management, particularly for OAuth and storing user IDs post-login.
-- `github.com/tphakala/birdnet-go/internal/security`: Provides the underlying authentication logic adapted by `SecurityAdapter`.
+- `github.com/tphakala/voicewatch/internal/security`: Provides the underlying authentication logic adapted by `SecurityAdapter`.
 - `log/slog`: Structured logging (used for compatibility with security package).
 - `golang.org/x/tools/cmd/stringer`: Used via `go generate` for `AuthMethod`.

@@ -2,7 +2,6 @@ package api
 
 import (
 	"context"
-	"embed"
 	"fmt"
 	"net"
 	"net/http"
@@ -17,37 +16,27 @@ import (
 	"github.com/labstack/echo/v4"
 	echomw "github.com/labstack/echo/v4/middleware"
 	"github.com/markbates/goth/gothic"
-	"github.com/tphakala/birdnet-go/frontend"
-	"github.com/tphakala/birdnet-go/internal/analysis/processor"
-	"github.com/tphakala/birdnet-go/internal/api/auth"
-	mw "github.com/tphakala/birdnet-go/internal/api/middleware"
-	apiv2 "github.com/tphakala/birdnet-go/internal/api/v2"
-	"github.com/tphakala/birdnet-go/internal/audiocore"
-	"github.com/tphakala/birdnet-go/internal/audiocore/engine"
-	"github.com/tphakala/birdnet-go/internal/classifier"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	datastoreV2 "github.com/tphakala/birdnet-go/internal/datastore/v2"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/health"
-	"github.com/tphakala/birdnet-go/internal/imageprovider"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/observability"
-	"github.com/tphakala/birdnet-go/internal/security"
-	"github.com/tphakala/birdnet-go/internal/suncalc"
+	"github.com/tphakala/voicewatch/frontend"
+	"github.com/tphakala/voicewatch/internal/analysis/processor"
+	"github.com/tphakala/voicewatch/internal/api/auth"
+	mw "github.com/tphakala/voicewatch/internal/api/middleware"
+	apiv2 "github.com/tphakala/voicewatch/internal/api/v2"
+	"github.com/tphakala/voicewatch/internal/audiocore"
+	"github.com/tphakala/voicewatch/internal/audiocore/engine"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	datastoreV2 "github.com/tphakala/voicewatch/internal/datastore/v2"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/health"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/observability"
+	"github.com/tphakala/voicewatch/internal/security"
+	"github.com/tphakala/voicewatch/internal/suncalc"
 
 	"golang.org/x/crypto/acme/autocert"
 )
 
-// ImageDataFs holds the embedded image provider data filesystem.
-// This is set by main.go before starting the server.
-var ImageDataFs embed.FS
-
-// ImageProviderRegistry is set by main.go before starting the server.
-// It provides access to bird image providers.
-var ImageProviderRegistry *imageprovider.ImageProviderRegistry
-
-// Server is the main HTTP server for BirdNET-Go.
+// Server is the main HTTP server for VoiceWatch.
 // It manages the Echo framework instance, middleware, and all HTTP routes.
 type Server struct {
 	// Core components
@@ -60,7 +49,6 @@ type Server struct {
 	// Dependencies
 	dataStore      datastore.Interface
 	v2Manager      datastoreV2.Manager
-	birdImageCache *imageprovider.BirdImageCache
 	sunCalc        *suncalc.SunCalc
 	processor      *processor.Processor
 	oauth2Server   *security.OAuth2Server
@@ -72,9 +60,6 @@ type Server struct {
 
 	// Audio engine (unified audio subsystem)
 	engine *engine.AudioEngine
-
-	// Model gallery manager (optional, nil when not configured)
-	modelManager *classifier.ModelManager
 
 	// Health error buffer shared between the logger and health checks
 	healthErrors *health.ErrorRingBuffer
@@ -192,13 +177,6 @@ func WithDataStore(ds datastore.Interface) ServerOption {
 	}
 }
 
-// WithBirdImageCache sets the bird image cache for the server.
-func WithBirdImageCache(cache *imageprovider.BirdImageCache) ServerOption {
-	return func(s *Server) {
-		s.birdImageCache = cache
-	}
-}
-
 // WithSunCalc sets the sun calculator for the server.
 func WithSunCalc(sc *suncalc.SunCalc) ServerOption {
 	return func(s *Server) {
@@ -252,13 +230,6 @@ func WithV2Manager(mgr datastoreV2.Manager) ServerOption {
 func WithAudioEngine(e *engine.AudioEngine) ServerOption {
 	return func(s *Server) {
 		s.engine = e
-	}
-}
-
-// WithModelManager sets the ModelManager for model gallery operations.
-func WithModelManager(mm *classifier.ModelManager) ServerOption {
-	return func(s *Server) {
-		s.modelManager = mm
 	}
 }
 
@@ -507,9 +478,6 @@ func (s *Server) setupRoutes() error {
 		apiv2.WithMetricsStore(observability.NewMemoryStore(apiv2.MetricsHistoryMaxPoints)),
 		apiv2.WithAudioEngine(s.engine),
 	}
-	if s.modelManager != nil {
-		v2Opts = append(v2Opts, apiv2.WithModelManager(s.modelManager))
-	}
 	if s.healthErrors != nil {
 		v2Opts = append(v2Opts, apiv2.WithHealthErrorBuffer(s.healthErrors))
 	}
@@ -519,7 +487,6 @@ func (s *Server) setupRoutes() error {
 		s.echo,
 		s.dataStore,
 		s.settings,
-		s.birdImageCache,
 		s.sunCalc,
 		s.controlChan,
 		s.metrics,

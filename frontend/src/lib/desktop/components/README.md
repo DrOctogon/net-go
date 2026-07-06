@@ -25,6 +25,7 @@ This folder contains **shared components** used across the application. Feature-
 - `ConfidenceCircle.svelte` - Circular confidence indicator with progress ring
 - `DataTable.svelte` - Generic data table with controlled (parent-driven) sorting
 - `SortableDataTable.svelte` - Card-wrapped table with built-in client-side sorting and search, header bar (icon/title/count/search/actions), and loading/empty/no-results states; composes SortableHeader, ResizableContainer, and EmptyState
+- `SpeakerAttributeChips.svelte` - Estimated speaker gender + age-band chips with confidence (e.g. "Female · 87%"); `default`/`overlay` variants; renders nothing when the detection has no estimates
 - `StatsCard.svelte` - Statistical information card
 - `StatusBadges.svelte` - Status indicators (verified, locked, etc.)
 - `WeatherDetails.svelte` - Detailed weather display for modals (vertical layout, icons always visible)
@@ -90,7 +91,6 @@ This folder contains **shared components** used across the application. Feature-
 - `LoginModal.svelte` - User login modal
 - `ReviewModal.svelte` - Detection review modal
 - `SpeciesBadges.svelte` - Reusable species status and lock badges for modals
-- `SpeciesThumbnail.svelte` - Reusable species thumbnail image component
 
 ## Review
 
@@ -139,7 +139,6 @@ This folder contains **shared components** used across the application. Feature-
 ## Utility Files
 
 - `hls-config.ts` - HLS video streaming configuration
-- `image-utils.ts` - Image utility functions
 
 ## Test Files
 
@@ -157,8 +156,6 @@ The following components are located in their feature directories:
 - `PlayOverlay.svelte` - Audio play button overlay for detection cards
 - `ConfidenceBadge.svelte` - Confidence level badge display
 - `WeatherBadge.svelte` - Weather condition badge display
-- `SpeciesInfoBar.svelte` - Species information bar with thumbnail
-- `BirdThumbnailPopup.svelte` - Hover popup showing larger bird image
 
 ### Detections (`features/detections/components/`)
 

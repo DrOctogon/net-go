@@ -11,8 +11,8 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/datastore/v2/repository"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/datastore/v2/repository"
 )
 
 // mockInsightsRepo is a simple mock for handler tests. When err is non-nil every
@@ -62,7 +62,7 @@ func setupInsightsTestController(t *testing.T, mock *mockInsightsRepo) (*echo.Ec
 	t.Helper()
 	e := echo.New()
 	settingsVal := &conf.Settings{
-		BirdNET: conf.BirdNETConfig{
+		VoiceWatch: conf.VoiceWatchConfig{
 			Labels: []string{
 				"Turdus merula_Eurasian Blackbird",
 				"Parus major_Great Tit",
@@ -74,7 +74,7 @@ func setupInsightsTestController(t *testing.T, mock *mockInsightsRepo) (*echo.Ec
 		insightsRepo: mock,
 	}
 	controller.Settings.Store(settingsVal)
-	controller.UpdateCommonNameMap(controller.Settings.Load().BirdNET.Labels)
+	controller.UpdateCommonNameMap(controller.Settings.Load().VoiceWatch.Labels)
 	return e, controller
 }
 

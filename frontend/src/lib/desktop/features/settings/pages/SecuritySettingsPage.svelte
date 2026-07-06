@@ -1,7 +1,7 @@
 <!--
   Security Settings Page Component
 
-  Purpose: Configure authentication and access control for BirdNET-Go including
+  Purpose: Configure authentication and access control for VoiceWatch including
   HTTPS/TLS settings, basic authentication, OAuth2 social login providers, and
   subnet-based authentication bypass.
 

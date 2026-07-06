@@ -9,23 +9,19 @@ import (
 	"net/http"
 	"reflect"
 	"slices"
-	"sort"
 	"strconv"
 	"strings"
 	"text/template"
 	"time"
-	"unicode/utf8"
-
 	"github.com/labstack/echo/v4"
-	"github.com/tphakala/birdnet-go/internal/audiocore/schedule"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/events"
-	"github.com/tphakala/birdnet-go/internal/imageprovider"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/notification"
-	"github.com/tphakala/birdnet-go/internal/restart"
-	"github.com/tphakala/birdnet-go/internal/support"
-	"github.com/tphakala/birdnet-go/internal/telemetry"
+	"github.com/tphakala/voicewatch/internal/audiocore/schedule"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/events"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/notification"
+	"github.com/tphakala/voicewatch/internal/restart"
+	"github.com/tphakala/voicewatch/internal/support"
+	"github.com/tphakala/voicewatch/internal/telemetry"
 	"gopkg.in/yaml.v3"
 )
 
@@ -67,13 +63,11 @@ func (c *Controller) initSettingsRoutes() {
 	// Routes for settings
 	// GET /api/v2/settings - Retrieves all application settings
 	settingsGroup.GET("", c.GetAllSettings)
-	// GET /api/v2/settings/locales - Retrieves available locales for BirdNET (must be before /:section)
+	// GET /api/v2/settings/locales - Retrieves available locales for VoiceWatch (must be before /:section)
 	settingsGroup.GET("/locales", c.GetLocales)
-	// GET /api/v2/settings/imageproviders - Retrieves available image providers (must be before /:section)
-	settingsGroup.GET("/imageproviders", c.GetImageProviders)
 	// GET /api/v2/settings/systemid - Retrieves the system ID for support tracking (must be before /:section)
 	settingsGroup.GET("/systemid", c.GetSystemID)
-	// GET /api/v2/settings/:section - Retrieves settings for a specific section (e.g., birdnet, webserver)
+	// GET /api/v2/settings/:section - Retrieves settings for a specific section (e.g., voicewatch, webserver)
 	// NOTE: /settings/dashboard is intentionally registered publicly above and
 	// will match before this parameterized route.
 	settingsGroup.GET("/:section", c.GetSectionSettings)
@@ -227,7 +221,7 @@ func (c *Controller) UpdateSettings(ctx echo.Context) error {
 
 	// Publish to the global atomic pointer only when this controller owns
 	// it (production). Determined once at construction, so out-of-band
-	// StoreSettings calls (range filter, etc.) cannot desynchronize it.
+	// StoreSettings calls cannot desynchronize it.
 	publishGlobal := c.isGlobalOwner
 
 	// Parse the request body
@@ -260,10 +254,10 @@ func (c *Controller) UpdateSettings(ctx echo.Context) error {
 		updated.Realtime.Species.Config = conf.NormalizeSpeciesConfigKeys(updated.Realtime.Species.Config)
 	}
 
-	// Ensure LocationConfigured is set when birdnet coordinates are present.
+	// Ensure LocationConfigured is set when voicewatch coordinates are present.
 	// Backward compatibility with older frontends that don't send the flag.
-	if updated.BirdNET.Latitude != 0 || updated.BirdNET.Longitude != 0 {
-		updated.BirdNET.LocationConfigured = true
+	if updated.VoiceWatch.Latitude != 0 || updated.VoiceWatch.Longitude != 0 {
+		updated.VoiceWatch.LocationConfigured = true
 	}
 
 	// Migrate legacy single audio source if a cached frontend sent it.
@@ -324,7 +318,6 @@ func (c *Controller) UpdateSettings(ctx echo.Context) error {
 	}
 
 	telemetry.UpdateTelemetryEnabled()
-	imageprovider.SetCustomSynonyms(updated.TaxonomySynonyms, updated.BirdNET.Labels)
 
 	if publishGlobal && !c.DisableSaveSettings {
 		c.logAPIRequest(ctx, logger.LogLevelInfo, "Settings updated and saved successfully",
@@ -592,10 +585,9 @@ func (c *Controller) publishAndSaveSettings(current, updated *conf.Settings) err
 
 // getSettingsOrFallback returns the current settings snapshot for write handlers.
 // When this controller owns the global singleton (production), it reads from
-// conf.GetSettings() so that out-of-band publishers (range filter rebuild,
-// ShouldUpdateRangeFilterToday, etc.) are not silently overwritten by a stale
-// per-controller pointer. For test controllers that inject a standalone *Settings,
-// the controller's own atomic snapshot is returned as-is.
+// conf.GetSettings() so that out-of-band publishers are not silently overwritten
+// by a stale per-controller pointer. For test controllers that inject a standalone
+// *Settings, the controller's own atomic snapshot is returned as-is.
 func (c *Controller) getSettingsOrFallback() *conf.Settings {
 	if c.isGlobalOwner {
 		if s := conf.GetSettings(); s != nil {
@@ -649,7 +641,7 @@ func (c *Controller) UpdateSectionSettings(ctx echo.Context) error {
 
 	// Publish globally when the controller owns the global singleton.
 	// Determined once at construction, immune to pointer desync from
-	// out-of-band StoreSettings calls (range filter rebuild, etc.).
+	// out-of-band StoreSettings calls.
 	publishGlobal := c.isGlobalOwner
 
 	requestBody, err := parseAndValidateJSON(ctx)
@@ -673,11 +665,11 @@ func (c *Controller) UpdateSectionSettings(ctx echo.Context) error {
 		return c.HandleError(ctx, err, "Cannot save: some secret fields contain the redacted placeholder because their identifying key was changed while the secret was hidden. Re-enter the secret values.", http.StatusBadRequest)
 	}
 
-	// Ensure LocationConfigured is set when birdnet coordinates are present.
+	// Ensure LocationConfigured is set when voicewatch coordinates are present.
 	// Backward compatibility with older frontends that don't send the flag.
-	if strings.EqualFold(section, SettingsSectionBirdnet) {
-		if updated.BirdNET.Latitude != 0 || updated.BirdNET.Longitude != 0 {
-			updated.BirdNET.LocationConfigured = true
+	if strings.EqualFold(section, SettingsSectionVoiceWatch) {
+		if updated.VoiceWatch.Latitude != 0 || updated.VoiceWatch.Longitude != 0 {
+			updated.VoiceWatch.LocationConfigured = true
 		}
 	}
 
@@ -739,9 +731,6 @@ func (c *Controller) UpdateSectionSettings(ctx echo.Context) error {
 	}
 
 	telemetry.UpdateTelemetryEnabled()
-
-	// Rebuild taxonomy synonym lookup cache if overrides changed
-	imageprovider.SetCustomSynonyms(updated.TaxonomySynonyms, updated.BirdNET.Labels)
 
 	return ctx.JSON(http.StatusOK, map[string]any{
 		"message":          fmt.Sprintf("%s settings updated successfully", section),
@@ -969,8 +958,8 @@ func getSettingsSectionValue(settings *conf.Settings, section string) (any, erro
 
 	// Map section names to their corresponding pointers
 	switch section {
-	case SettingsSectionBirdnet:
-		return &settings.BirdNET, nil
+	case SettingsSectionVoiceWatch:
+		return &settings.VoiceWatch, nil
 	case SettingsSectionWebserver:
 		return &settings.WebServer, nil
 	case "security":
@@ -987,16 +976,12 @@ func getSettingsSectionValue(settings *conf.Settings, section string) (any, erro
 		return &settings.Realtime.Weather, nil
 	case "mqtt":
 		return &settings.Realtime.MQTT, nil
-	case "birdweather":
-		return &settings.Realtime.Birdweather, nil
 	case SettingsSectionSpecies:
 		return &settings.Realtime.Species, nil
 	case "rtsp":
 		return &settings.Realtime.RTSP, nil
 	case "privacyfilter":
 		return &settings.Realtime.PrivacyFilter, nil
-	case "dogbarkfilter":
-		return &settings.Realtime.DogBarkFilter, nil
 	case "telemetry":
 		return &settings.Realtime.Telemetry, nil
 	case "sentry":
@@ -1011,10 +996,6 @@ func getSettingsSectionValue(settings *conf.Settings, section string) (any, erro
 		return &settings.Backup, nil
 	case "output":
 		return &settings.Output, nil
-	case "perch":
-		return &settings.Perch, nil
-	case "bat":
-		return &settings.Bat, nil
 	case "models":
 		return &settings.Models, nil
 	case "taxonomysynonyms":
@@ -1039,12 +1020,12 @@ func handleGenericSection(sectionPtr any, data json.RawMessage, sectionName stri
 	}
 
 	// Apply field-level permissions if needed
-	// Note: getBlockedFieldMap uses capitalized section names (e.g., "BirdNET", "Realtime")
+	// Note: getBlockedFieldMap uses capitalized section names (e.g., "VoiceWatch", "Realtime")
 	// We need to map our lowercase section names to the expected capitalized format
 	capitalizedSectionName := ""
 	switch sectionName {
-	case SettingsSectionBirdnet:
-		capitalizedSectionName = "BirdNET"
+	case SettingsSectionVoiceWatch:
+		capitalizedSectionName = "VoiceWatch"
 	case SettingsSectionRealtime:
 		capitalizedSectionName = "Realtime"
 	case SettingsSectionWebserver:
@@ -1078,7 +1059,7 @@ func getSectionValidators() map[string]sectionValidator {
 		"rtsp":                   validateStreamsSection,
 		"security":               validateSecuritySection,
 		"main":                   validateMainSection,
-		SettingsSectionBirdnet:   validateBirdNETSection,
+		SettingsSectionVoiceWatch:   validateVoiceWatchSection,
 		SettingsSectionWebserver: validateWebServerSection,
 		SettingsSectionSpecies:   validateSpeciesSection,
 		SettingsSectionRealtime:  validateRealtimeSection,
@@ -1451,8 +1432,8 @@ func validateMainSectionValues(updateMap map[string]any) error {
 	return validateBoolField(updateMap, "timeAs24h", "timeAs24h")
 }
 
-// validateBirdNETSection validates BirdNET settings
-func validateBirdNETSection(data json.RawMessage) error {
+// validateVoiceWatchSection validates VoiceWatch settings
+func validateVoiceWatchSection(data json.RawMessage) error {
 	var updateMap map[string]any
 	if err := json.Unmarshal(data, &updateMap); err != nil {
 		return err
@@ -1608,8 +1589,8 @@ func getSettingsSection(settings *conf.Settings, section string) (any, error) {
 
 	// Check nested fields
 	switch section {
-	case SettingsSectionBirdnet:
-		return settings.BirdNET, nil
+	case SettingsSectionVoiceWatch:
+		return settings.VoiceWatch, nil
 	case SettingsSectionWebserver:
 		return settings.WebServer, nil
 	case "security":
@@ -1626,8 +1607,6 @@ func getSettingsSection(settings *conf.Settings, section string) (any, error) {
 		return settings.Realtime.Weather, nil
 	case "mqtt":
 		return settings.Realtime.MQTT, nil
-	case "birdweather":
-		return settings.Realtime.Birdweather, nil
 	case SettingsSectionSpecies:
 		return settings.Realtime.Species, nil
 	default:
@@ -1756,9 +1735,6 @@ func sanitizeSettingsForAPI(s *conf.Settings) *conf.Settings {
 	sanitized.Realtime.Weather.OpenWeather.APIKey = redact(s.Realtime.Weather.OpenWeather.APIKey)
 	sanitized.Realtime.Weather.Wunderground.APIKey = redact(s.Realtime.Weather.Wunderground.APIKey)
 
-	// --- eBird API key ---
-	sanitized.Realtime.EBird.APIKey = redact(s.Realtime.EBird.APIKey)
-
 	// --- Backup secrets ---
 	sanitized.Backup.EncryptionKey = redact(s.Backup.EncryptionKey)
 
@@ -1869,9 +1845,6 @@ func restoreRedactedSecrets(current, incoming *conf.Settings) error {
 	restore(&current.Realtime.Weather.OpenWeather.APIKey, &incoming.Realtime.Weather.OpenWeather.APIKey)
 	restore(&current.Realtime.Weather.Wunderground.APIKey, &incoming.Realtime.Weather.Wunderground.APIKey)
 
-	// eBird
-	restore(&current.Realtime.EBird.APIKey, &incoming.Realtime.EBird.APIKey)
-
 	// Backup
 	restore(&current.Backup.EncryptionKey, &incoming.Backup.EncryptionKey)
 
@@ -1961,7 +1934,6 @@ func validateNoRedactedSentinels(s *conf.Settings) error {
 	check(s.Output.MySQL.Password, "output.mysql.password")
 	check(s.Realtime.Weather.OpenWeather.APIKey, "realtime.weather.openWeather.apiKey")
 	check(s.Realtime.Weather.Wunderground.APIKey, "realtime.weather.wunderground.apiKey")
-	check(s.Realtime.EBird.APIKey, "realtime.ebird.apiKey")
 	check(s.Backup.EncryptionKey, "backup.encryptionKey")
 
 	// Array-based OAuth providers
@@ -2028,7 +2000,6 @@ func clearRedactedSentinels(s *conf.Settings) {
 	clearField(&s.Output.MySQL.Password)
 	clearField(&s.Realtime.Weather.OpenWeather.APIKey)
 	clearField(&s.Realtime.Weather.Wunderground.APIKey)
-	clearField(&s.Realtime.EBird.APIKey)
 	clearField(&s.Backup.EncryptionKey)
 
 	for i := range s.Security.OAuthProviders {
@@ -2084,15 +2055,9 @@ func getBlockedFieldMap() map[string]any {
 		"ValidationWarnings": true, // Runtime validation state
 		"Input":              true, // File/directory analysis mode config
 
-		// BirdNET section - block runtime fields
-		"BirdNET": map[string]any{
+		// VoiceWatch section - block runtime fields
+		"VoiceWatch": map[string]any{
 			"Labels": true, // Runtime list populated from label file
-			// Block RangeFilter runtime fields
-			"RangeFilter": map[string]any{
-				"Model":       true, // Model type is configured in config.yaml, frontend should not overwrite
-				"Species":     true, // Runtime species list populated by range filter
-				"LastUpdated": true, // Runtime timestamp of last filter update
-			},
 		},
 
 		// Security section - block runtime/internal fields only
@@ -2134,20 +2099,20 @@ type settingsChangeCheck struct {
 const (
 	reasonWebserverRestart = "restart.reasons.webserver"
 	reasonDatabaseRestart  = "restart.reasons.database"
-	reasonLoggingRestart   = "restart.reasons.logging"
-	reasonTLSCertRestart   = "restart.reasons.tlsCertificate"
+	reasonLoggingRestart    = "restart.reasons.logging"
+	reasonTLSCertRestart    = "restart.reasons.tlsCertificate"
+	reasonContinuousRestart        = "restart.reasons.continuousRecording"
+	reasonSpeakerAttributesRestart = "restart.reasons.speakerAttributes"
 )
 
 // settingsChangeChecks defines all settings change detectors in order of execution.
 // Each check has a detection function, action to trigger, and toast notification.
 var settingsChangeChecks = []settingsChangeCheck{
-	{"BirdNET", "reload_birdnet", birdnetSettingsChanged, "Reloading BirdNET model with new settings...", notification.MsgSettingsReloadingBirdnet, "info", toastDurationLong},
-	{"Range filter", "rebuild_range_filter", rangeFilterSettingsChanged, "Rebuilding species range filter...", notification.MsgSettingsRebuildingRangeFilter, "info", toastDurationMedium},
+	{"VoiceWatch", "reload_voicewatch", voicewatchSettingsChanged, "Reloading VoiceWatch model with new settings...", notification.MsgSettingsReloadingVoiceWatch, "info", toastDurationLong},
 	{"Species interval", "update_detection_intervals", intervalSettingsChanged, "Updating detection intervals...", notification.MsgSettingsUpdatingIntervals, "info", toastDurationShort},
 	{"Base threshold", "recalculate_dynamic_thresholds", baseThresholdChanged, "Recalculating dynamic thresholds...", notification.MsgSettingsRecalculatingThresholds, "info", toastDurationShort},
 	{"Dynamic thresholds", "reconfigure_dynamic_thresholds", dynamicThresholdEnabledChanged, "Reconfiguring dynamic thresholds...", notification.MsgSettingsReconfiguringDynamicThresholds, "info", toastDurationMedium},
 	{"MQTT", "reconfigure_mqtt", mqttSettingsChanged, "Reconfiguring MQTT connection...", notification.MsgSettingsReconfiguringMqtt, "info", toastDurationMedium},
-	{"BirdWeather", "reconfigure_birdweather", birdWeatherSettingsChanged, "Reconfiguring BirdWeather integration...", notification.MsgSettingsReconfiguringBirdweather, "info", toastDurationMedium},
 	{"Streams", "reconfigure_rtsp_sources", streamsSettingsChanged, "Reconfiguring audio streams...", notification.MsgSettingsReconfiguringStreams, "info", toastDurationMedium},
 	{"Telemetry", "reconfigure_telemetry", telemetrySettingsChanged, "Reconfiguring telemetry settings...", notification.MsgSettingsReconfiguringTelemetry, "info", toastDurationShort},
 	{"Species tracking", "reconfigure_species_tracking", speciesTrackingSettingsChanged, "Reconfiguring species tracking...", notification.MsgSettingsReconfiguringSpeciesTracking, "info", toastDurationShort},
@@ -2156,6 +2121,8 @@ var settingsChangeChecks = []settingsChangeCheck{
 	{"Web server", "", webserverSettingsChanged, "Web server settings changed. Restart required to apply.", notification.MsgSettingsWebserverRestart, "warning", toastDurationExtended},
 	{"Database", "", outputSettingsChanged, "Database settings changed. Restart required to apply.", notification.MsgSettingsDatabaseRestart, "warning", toastDurationExtended},
 	{"Logging", "", loggingSettingsChanged, "Logging settings changed. Restart required to apply.", notification.MsgSettingsLoggingRestart, "warning", toastDurationExtended},
+	{"Continuous recording", "", continuousRecordingSettingsChanged, "Continuous recording settings changed. Restart required to apply.", "", "warning", toastDurationExtended},
+	{"Speaker attributes", "", speakerAttributesSettingsChanged, "Speaker attribute settings changed. Restart required to apply.", "", "warning", toastDurationExtended},
 	{"Log deduplication", "reconfigure_log_deduplication", logDeduplicationSettingsChanged, "Reconfiguring log deduplication...", "", "info", toastDurationShort},
 	{"RTSP health", "reconfigure_rtsp_health", rtspHealthSettingsChanged, "Reconfiguring RTSP health monitoring...", "", "info", toastDurationShort},
 	{"Monitoring", "reconfigure_monitoring", monitoringSettingsChanged, "Reconfiguring system monitoring...", "", "info", toastDurationShort},
@@ -2169,9 +2136,11 @@ var settingsChangeChecks = []settingsChangeCheck{
 // above; settings_restart_test.go cross-validates these keys against the table
 // names and against the hot-reload registry's `restart` category.
 var restartRequiringChecks = map[string]string{
-	"Web server": reasonWebserverRestart,
-	"Database":   reasonDatabaseRestart,
-	"Logging":    reasonLoggingRestart,
+	"Web server":           reasonWebserverRestart,
+	"Database":             reasonDatabaseRestart,
+	"Logging":              reasonLoggingRestart,
+	"Continuous recording": reasonContinuousRestart,
+	"Speaker attributes":   reasonSpeakerAttributesRestart,
 }
 
 // handleSettingsChanges checks if important settings have changed and triggers appropriate actions
@@ -2260,44 +2229,62 @@ func (c *Controller) sendReconfigActions(actions []string, debugEnabled bool) {
 	}
 }
 
+// continuousRecordingSettingsChanged reports whether the continuous full-audio
+// recorder configuration changed. The recorder is constructed once at pipeline
+// start (audio_pipeline_service) with no live reconfigure path, so any change
+// requires a restart to take effect. All Continuous fields are scalars, so a
+// struct comparison is sufficient.
+func continuousRecordingSettingsChanged(old, current *conf.Settings) bool {
+	return old.Realtime.Audio.Continuous != current.Realtime.Audio.Continuous
+}
+
+// speakerAttributesSettingsChanged reports whether the opt-in speaker-attribute
+// analysis configuration changed. The analyzer (gender/age/voice-print models)
+// is constructed once at pipeline start with no live reconfigure path, so any
+// change requires a restart. SpeakerAttributesSettings and its nested structs
+// are all scalars, so a struct comparison is sufficient.
+func speakerAttributesSettingsChanged(old, current *conf.Settings) bool {
+	return old.Realtime.Audio.SpeakerAttributes != current.Realtime.Audio.SpeakerAttributes
+}
+
 // intervalSettingsChanged checks if species interval or global interval settings have changed.
 func intervalSettingsChanged(old, current *conf.Settings) bool {
 	return speciesIntervalSettingsChanged(old, current) || old.Realtime.Interval != current.Realtime.Interval
 }
 
-// birdnetSettingsChanged checks if BirdNET settings have changed
-func birdnetSettingsChanged(oldSettings, currentSettings *conf.Settings) bool {
-	// Check for changes in BirdNET locale
-	if oldSettings.BirdNET.Locale != currentSettings.BirdNET.Locale {
+// voicewatchSettingsChanged checks if VoiceWatch settings have changed
+func voicewatchSettingsChanged(oldSettings, currentSettings *conf.Settings) bool {
+	// Check for changes in VoiceWatch locale
+	if oldSettings.VoiceWatch.Locale != currentSettings.VoiceWatch.Locale {
 		return true
 	}
 
-	// Check for changes in BirdNET threads
-	if oldSettings.BirdNET.Threads != currentSettings.BirdNET.Threads {
+	// Check for changes in VoiceWatch threads
+	if oldSettings.VoiceWatch.Threads != currentSettings.VoiceWatch.Threads {
 		return true
 	}
 
-	// Check for changes in BirdNET model path
-	if oldSettings.BirdNET.ModelPath != currentSettings.BirdNET.ModelPath {
+	// Check for changes in VoiceWatch model path
+	if oldSettings.VoiceWatch.ModelPath != currentSettings.VoiceWatch.ModelPath {
 		return true
 	}
 
-	// Check for changes in BirdNET label path
-	if oldSettings.BirdNET.LabelPath != currentSettings.BirdNET.LabelPath {
+	// Check for changes in VoiceWatch label path
+	if oldSettings.VoiceWatch.LabelPath != currentSettings.VoiceWatch.LabelPath {
 		return true
 	}
 
-	// Check for changes in BirdNET XNNPACK acceleration
-	if oldSettings.BirdNET.UseXNNPACK != currentSettings.BirdNET.UseXNNPACK {
+	// Check for changes in VoiceWatch XNNPACK acceleration
+	if oldSettings.VoiceWatch.UseXNNPACK != currentSettings.VoiceWatch.UseXNNPACK {
 		return true
 	}
 
-	// Check for changes in BirdNET inference backend preference. OpenVINOPath is
+	// Check for changes in VoiceWatch inference backend preference. OpenVINOPath is
 	// intentionally NOT checked here: it is restart-required (the OpenVINO core
 	// loads the library once via InitOpenVINO and libopenvino_c cannot be safely
 	// unloaded), so a runtime path change is declared hotReloadRestart, matching
 	// ONNXRuntimePath.
-	if oldSettings.BirdNET.Backend != currentSettings.BirdNET.Backend {
+	if oldSettings.VoiceWatch.Backend != currentSettings.VoiceWatch.Backend {
 		return true
 	}
 
@@ -2305,22 +2292,22 @@ func birdnetSettingsChanged(oldSettings, currentSettings *conf.Settings) bool {
 	// recompiles the model on the new device, so a reload is needed; the OpenVINO
 	// core itself stays loaded (only the compiled model and infer request are
 	// rebuilt), so this is hot-reloadable, not restart-required. The reload path
-	// (handleReloadBirdnet) rebuilds the primary BirdNET classifier and then
+	// handleReloadVoiceWatch rebuilds the primary VoiceWatch classifier and then
 	// reloads the OV-capable secondary models (e.g. Perch) via
 	// Orchestrator.ReloadSecondaryModels, so a device/backend change applies to
 	// both without a restart.
-	if oldSettings.BirdNET.OpenVINODevice != currentSettings.BirdNET.OpenVINODevice {
+	if oldSettings.VoiceWatch.OpenVINODevice != currentSettings.VoiceWatch.OpenVINODevice {
 		return true
 	}
 
 	return false
 }
 
-// baseThresholdChanged checks if the global BirdNET confidence threshold has changed.
+// baseThresholdChanged checks if the global VoiceWatch confidence threshold has changed.
 // When this changes, dynamic threshold CurrentValue entries must be recalculated
 // since they store absolute values derived from the base threshold.
 func baseThresholdChanged(oldSettings, currentSettings *conf.Settings) bool {
-	return oldSettings.BirdNET.Threshold != currentSettings.BirdNET.Threshold
+	return oldSettings.VoiceWatch.Threshold != currentSettings.VoiceWatch.Threshold
 }
 
 // dynamicThresholdEnabledChanged checks if the DynamicThreshold.Enabled flag was toggled.
@@ -2328,29 +2315,6 @@ func baseThresholdChanged(oldSettings, currentSettings *conf.Settings) bool {
 // to match the new state.
 func dynamicThresholdEnabledChanged(oldSettings, currentSettings *conf.Settings) bool {
 	return oldSettings.Realtime.DynamicThreshold.Enabled != currentSettings.Realtime.DynamicThreshold.Enabled
-}
-
-// rangeFilterSettingsChanged checks if range filter settings have changed
-func rangeFilterSettingsChanged(oldSettings, currentSettings *conf.Settings) bool {
-	// Check for changes in species include/exclude lists
-	if !reflect.DeepEqual(oldSettings.Realtime.Species.Include, currentSettings.Realtime.Species.Include) {
-		return true
-	}
-	if !reflect.DeepEqual(oldSettings.Realtime.Species.Exclude, currentSettings.Realtime.Species.Exclude) {
-		return true
-	}
-
-	// Check for changes in BirdNET range filter settings
-	if !reflect.DeepEqual(oldSettings.BirdNET.RangeFilter, currentSettings.BirdNET.RangeFilter) {
-		return true
-	}
-
-	// Check for changes in BirdNET latitude and longitude
-	if oldSettings.BirdNET.Latitude != currentSettings.BirdNET.Latitude || oldSettings.BirdNET.Longitude != currentSettings.BirdNET.Longitude {
-		return true
-	}
-
-	return false
 }
 
 // mqttSettingsChanged checks if MQTT settings have changed
@@ -2383,7 +2347,7 @@ func mqttSettingsChanged(oldSettings, currentSettings *conf.Settings) bool {
 // requires the audio engine to reconfigure RTSP sources.
 //
 // Per-stream Models is included: when a user adds or removes a classifier on
-// a stream (e.g., enables Perch v2 alongside BirdNET) the orchestrator must
+// a stream (e.g., enables Perch v2 alongside VoiceWatch) the orchestrator must
 // rebind the stream's analysis pipeline. Without this check, the save
 // persists to disk but the running pipeline keeps using the previous model
 // set until a restart — silently breaking the hot-reload contract.
@@ -2454,28 +2418,6 @@ func speciesIntervalSettingsChanged(oldSettings, currentSettings *conf.Settings)
 	}
 
 	// No relevant changes detected
-	return false
-}
-
-// birdWeatherSettingsChanged checks if BirdWeather integration settings have changed
-func birdWeatherSettingsChanged(oldSettings, currentSettings *conf.Settings) bool {
-	// Check for changes in BirdWeather enabled state
-	if oldSettings.Realtime.Birdweather.Enabled != currentSettings.Realtime.Birdweather.Enabled {
-		return true
-	}
-
-	// Check for changes in BirdWeather credentials and configuration
-	if oldSettings.Realtime.Birdweather.ID != currentSettings.Realtime.Birdweather.ID ||
-		oldSettings.Realtime.Birdweather.Threshold != currentSettings.Realtime.Birdweather.Threshold ||
-		oldSettings.Realtime.Birdweather.LocationAccuracy != currentSettings.Realtime.Birdweather.LocationAccuracy {
-		return true
-	}
-
-	// Check for debug mode changes
-	if oldSettings.Realtime.Birdweather.Debug != currentSettings.Realtime.Birdweather.Debug {
-		return true
-	}
-
 	return false
 }
 
@@ -2637,12 +2579,6 @@ type LocaleData struct {
 	Name string `json:"name"`
 }
 
-// ImageProviderOption represents an image provider option
-type ImageProviderOption struct {
-	Value   string `json:"value"`
-	Display string `json:"display"`
-}
-
 // GetLocales handles GET /api/v2/settings/locales
 func (c *Controller) GetLocales(ctx echo.Context) error {
 	c.logAPIRequest(ctx, logger.LogLevelInfo, "Getting available locales")
@@ -2655,57 +2591,6 @@ func (c *Controller) GetLocales(ctx echo.Context) error {
 	c.logAPIRequest(ctx, logger.LogLevelInfo, "Retrieved locales successfully", logger.Int("count", len(locales)))
 
 	return ctx.JSON(http.StatusOK, locales)
-}
-
-// capitalizeProviderName returns a display name for the provider with first letter capitalized.
-func capitalizeProviderName(name string) string {
-	if name == "" {
-		return "(unknown)"
-	}
-	r, size := utf8.DecodeRuneInString(name)
-	return strings.ToUpper(string(r)) + name[size:]
-}
-
-// collectImageProviders collects and sorts image providers from the registry.
-func (c *Controller) collectImageProviders(ctx echo.Context) (providers []ImageProviderOption, count int) {
-	providers = []ImageProviderOption{{Value: "auto", Display: "Auto (Default)"}}
-
-	cache := c.BirdImageCache
-	if cache == nil {
-		c.logAPIRequest(ctx, logger.LogLevelWarn, "BirdImageCache is nil, cannot get provider names")
-		return providers, count
-	}
-
-	registry := cache.GetRegistry()
-	if registry == nil {
-		c.logAPIRequest(ctx, logger.LogLevelWarn, "ImageProviderRegistry is nil, cannot get provider names")
-		return providers, count
-	}
-
-	registry.RangeProviders(func(name string, _ *imageprovider.BirdImageCache) bool {
-		providers = append(providers, ImageProviderOption{Value: name, Display: capitalizeProviderName(name)})
-		count++
-		return true
-	})
-
-	// Sort providers alphabetically by display name (excluding 'auto')
-	if len(providers) > minSortableElements {
-		sub := providers[1:]
-		sort.Slice(sub, func(i, j int) bool { return sub[i].Display < sub[j].Display })
-	}
-
-	return providers, count
-}
-
-// GetImageProviders handles GET /api/v2/settings/imageproviders
-func (c *Controller) GetImageProviders(ctx echo.Context) error {
-	c.logAPIRequest(ctx, logger.LogLevelInfo, "Getting available image providers")
-
-	providers, providerCount := c.collectImageProviders(ctx)
-
-	c.logAPIRequest(ctx, logger.LogLevelInfo, "Retrieved image providers successfully", logger.Int("count", len(providers)), logger.Int("provider_count", providerCount))
-
-	return ctx.JSON(http.StatusOK, map[string]any{"providers": providers})
 }
 
 // GetSystemID handles GET /api/v2/settings/systemid

@@ -1,11 +1,12 @@
-# BirdNET-Go
+# VoiceWatch
 
 <p align="center">
   <img src="doc/BirdNET-Go-logo.webp" />
+  <!-- VoiceWatch logo redesign pending; current asset is the upstream BirdNET-Go logo -->
 </p>
 <p align="center">
   <!-- Project Status -->
-  <a href="https://github.com/tphakala/birdnet-go/releases">
+  <a href="https://github.com/tphakala/voicewatch/releases">
     <img src="https://img.shields.io/github/v/release/tphakala/birdnet-go?include_prereleases&style=flat-square&color=blue">
   </a>
   <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
@@ -19,20 +20,20 @@
   <a href="https://golang.org">
     <img src="https://img.shields.io/badge/Built%20with-Go-teal?style=flat-square&logo=go">
   </a>
-  <a href="https://goreportcard.com/report/github.com/tphakala/birdnet-go">
-    <img src="https://goreportcard.com/badge/github.com/tphakala/birdnet-go?style=flat-square">
+  <a href="https://goreportcard.com/report/github.com/tphakala/voicewatch">
+    <img src="https://goreportcard.com/badge/github.com/tphakala/voicewatch?style=flat-square">
   </a>
 
   <br>
 
   <!-- Community -->
-  <a href="https://github.com/tphakala/birdnet-go/network/members">
+  <a href="https://github.com/tphakala/voicewatch/network/members">
     <img src="https://img.shields.io/github/forks/tphakala/birdnet-go?style=flat-square&color=purple">
-  <a href="https://github.com/tphakala/birdnet-go/graphs/contributors">
+  <a href="https://github.com/tphakala/voicewatch/graphs/contributors">
     <img src="https://img.shields.io/github/contributors/tphakala/birdnet-go?style=flat-square&color=orange">
   </a>
   </a>
-  <a href="https://github.com/tphakala/birdnet-go/issues">
+  <a href="https://github.com/tphakala/voicewatch/issues">
     <img src="https://img.shields.io/github/issues/tphakala/birdnet-go?style=flat-square&color=red">
   </a>
   <a href="https://discord.gg/gcSCFGUtsd">
@@ -44,30 +45,32 @@
   </a>
 </p>
 
-**Realtime soundscape analyser for birds, wildlife, and bats.**
+**Realtime human-voice detector for live audio.**
 
-Self-hosted, 24/7, local AI inference. BirdNET-Go ingests soundcard input or network audio streams, runs multi-model classification, and presents detections in a fast web UI. Runs on a Raspberry Pi.
+Self-hosted, 24/7, local AI inference. VoiceWatch ingests soundcard input or network audio streams, runs on-device voice-activity detection, and presents detections in a fast web UI. Runs on a Raspberry Pi. No audio leaves the machine.
+
+> **Project status:** VoiceWatch has pivoted from multi-species bird identification to a single-purpose **human-voice (speech) detector**. The bird/wildlife classifiers, model gallery, range filter, and taxonomy have been removed; detection now uses an embedded [Silero VAD](https://github.com/snakers4/silero-vad) model. The repository name and platform heritage are retained.
 
 ## Highlights
 
-- **Multi-model AI gallery**: install BirdNET v2.4, Google Perch v2, BattyBirdNET regional bat classifiers, and the BirdNET Geomodel v3.0 from inside the app, no rebuild needed.
-- **Run multiple models in parallel** against separate audio sources and let cross-model agreement boost confidence on shared detections.
-- **Live spectrogram streaming** and **detection heatmaps** rendered straight in the browser.
-- **Alert rules engine** that routes detections to Discord, Slack, Telegram, ntfy, Pushover, Gotify, Matrix, webhooks, browser push, MQTT (with Home Assistant discovery), shell scripts, and BirdWeather.
+- **Embedded speech detection** with the Silero VAD ONNX model — no setup, no downloads, runs out of the box.
+- **Local-only inference**. Audio is analysed on-device; nothing is sent to the cloud.
+- **Live spectrogram streaming** rendered straight in the browser.
+- **Alert rules engine** that routes detections to Discord, Slack, Telegram, ntfy, Pushover, Gotify, Matrix, webhooks, browser push, MQTT (with Home Assistant discovery), and shell scripts.
 - **Production-ready ops**: onboarding wizard, OIDC/SSO, TLS certificate management, hot-reload settings, system health page, database doctor, and one-click support dumps.
-- **Installable as a PWA**, with 15 UI languages and species names in 40+ languages.
-- **Local-only by default**. Optional Sentry telemetry is strictly opt-in.
+- **Installable as a PWA**, with 15 UI languages.
+- Optional Sentry telemetry is strictly opt-in.
 
 ## Quick install
 
 Debian, Ubuntu, and Raspberry Pi OS:
 
 ```bash
-curl -fsSL https://github.com/tphakala/birdnet-go/raw/main/install.sh -o install.sh
+curl -fsSL https://github.com/tphakala/voicewatch/raw/main/install.sh -o install.sh
 bash ./install.sh
 ```
 
-Docker images are published for `linux/amd64` and `linux/arm64`. Pre-built binaries for Linux, Windows, and macOS ship with each [release](https://github.com/tphakala/birdnet-go/releases). See the [installation guide](https://github.com/tphakala/birdnet-go/wiki/installation.md), [hardware recommendations](https://github.com/tphakala/birdnet-go/wiki/hardware.md), and [security guide](doc/wiki/security.md) for details.
+Docker images are published for `linux/amd64` and `linux/arm64`. Pre-built binaries for Linux, Windows, and macOS ship with each [release](https://github.com/tphakala/voicewatch/releases). See the [installation guide](https://github.com/tphakala/voicewatch/wiki/installation.md), [hardware recommendations](https://github.com/tphakala/voicewatch/wiki/hardware.md), and [security guide](doc/wiki/security.md) for details.
 
 ## Web Dashboard
 
@@ -77,21 +80,22 @@ Docker images are published for `linux/amd64` and `linux/arm64`. Pre-built binar
 
 ### Detection
 
-- **BirdNET v2.4** (default, embedded, 6,500+ bird species)
-- **Google Perch v2** via ONNX (14,795 species across birds, insects, amphibians, and mammals) with taxonomy-based species names
-- **BattyBirdNET** bat classifiers, 11 regional models covering Africa, the Americas, East Asia, Europe, the Middle East, South Asia, Southeast Asia, and the USA (Linux + ultrasonic-capable device)
-- **BirdNET Geomodel v3.0** for location-based range filtering (12,012 species)
-- **Cross-model detection consensus**: agreement between models strengthens confidence and flags disagreements for review
-- **Custom classifiers**: bring your own TFLite model and label set
-- **Configurable false-positive filtering** for accurate results: Deep Detection (repeat-confirmation within a 15-second window), per-species dynamic thresholds, location-based range filter, privacy and dog-bark filters, and per-classifier bat false-positive levels ([guide](https://github.com/tphakala/birdnet-go/wiki/BirdNET%E2%80%90Go-Guide#deep-detection))
-- Per-model and per-source confidence thresholds
+- **Silero VAD** speech detection (embedded, ONNX), analysing audio at the model's native 16 kHz
+- Single "Human Voice" class with a per-detection speech-confidence score
+- **Configurable false-positive filtering**: Deep Detection (repeat-confirmation within a 15-second window) and per-source confidence thresholds
+- Optional privacy filter (off by default) that discards human-voice clips when enabled, plus per-source quiet hours
+
+### Speaker attributes (opt-in, default off)
+
+- Optional **estimated speaker gender and relative age band** per detection, plus a voice-print embedding used to group likely-same-speaker clips
+- Surfaced as confidence-tagged chips in the detection list/detail and as `gender` / `age_band` search filters and alert conditions
+- **Estimates, not identity recognition** — demographic inferences whose accuracy varies by accent, language, and recording quality. Disabled by default; each attribute (gender / age / voice-print) is individually toggled
+- **No model ships with VoiceWatch** — you supply an ONNX model file per attribute (see the privacy statement and `docs/HUMAN_VOICE_MODEL_PLAN.md`)
 
 ### Audio inputs
 
-- Soundcard capture and RTSP / RTSPS streams, including multiple sources in parallel with independent model assignment
-- Sample rates up to 256 kHz for ultrasonic bat detection
+- Soundcard capture and RTSP / RTSPS streams, including multiple sources in parallel
 - Audio liveness watchdog with tiered recovery for flaky streams
-- Stream sample-rate probing and per-model recommendation banners in the UI
 - Audio equalizer, per-source quiet hours, daylight filter, and extended capture mode
 - Offline analysis of audio files
 
@@ -100,13 +104,11 @@ Docker images are published for `linux/amd64` and `linux/arm64`. Pre-built binar
 - Svelte 5 + TypeScript single-page app
 - Installable as a Progressive Web App (PWA)
 - Onboarding wizard for first-run setup
-- Live spectrogram visualization for active streams ([live audio streaming](https://github.com/tphakala/birdnet-go/wiki/BirdNET%E2%80%90Go-Guide#live-audio-streaming))
-- Detection heatmaps with ONNX-accelerated rendering
+- Live spectrogram visualization for active streams ([live audio streaming](https://github.com/tphakala/voicewatch/wiki/BirdNET%E2%80%90Go-Guide#live-audio-streaming))
 - Customizable dashboard layout, color schemes, and a "Currently Hearing" card
 - Multiselect and bulk actions on the detections list
 - Browser terminal (xterm.js over WebSocket PTY) for in-app administration
 - 15 UI languages: English, German, French, Spanish, Portuguese, Dutch, Polish, Italian, Czech, Slovak, Hungarian, Finnish, Swedish, Danish, Latvian
-- Species names in 40+ languages
 
 ### Alerts and integrations
 
@@ -114,16 +116,14 @@ Docker images are published for `linux/amd64` and `linux/arm64`. Pre-built binar
 - Multi-target delivery via [shoutrrr](https://github.com/nicholas-fedor/shoutrrr): Discord, Slack, Telegram, ntfy, Pushover, Gotify, Matrix, Bark, IFTTT, and more
 - Webhooks with custom templates, shell-script hooks, and browser push notifications
 - MQTT publishing with Home Assistant auto-discovery
-- BirdWeather.com API integration
 - Prometheus metrics endpoint
-- Live spectrogram and realtime log output for OBS overlays on bird-feeder streams
+- Live spectrogram and realtime log output for OBS overlays
 
 ### Storage and data
 
 - SQLite (default) or MySQL with retry-aware write paths for contention
 - Automatic backups with real-time status polling
-- Format-aware audio clip export
-- Embedded eBird/Clements taxonomy (2,374 genera, 254 families, 11,145 species) for fast offline lookups
+- Format-aware audio clip export — every detected voice clip is stored, with a configurable rolling retention (age-based, **21-day default**); older clips are auto-pruned
 
 ### Operations
 
@@ -132,28 +132,26 @@ Docker images are published for `linux/amd64` and `linux/arm64`. Pre-built binar
 - Help & Support page with guided bug reporting and one-click support dumps
 - OIDC / SSO with Google, GitHub, and generic providers, including RP-Initiated Logout
 - TLS certificate management UI with transactional writes and backup/restore
-- Hot-reload for settings, model installs, and per-source model assignments (no restart)
+- Hot-reload for settings and per-source assignments (no restart)
 - Optional, opt-in Sentry telemetry with strict privacy filtering
 
 ### Platform
 
 - Linux, Windows, and macOS
-- Single static binary with the BirdNET TFLite model embedded
-- Optional ONNX Runtime for Perch, BattyBirdNET, and BirdNET Geomodel v3.0 ([install guide](https://github.com/tphakala/birdnet-go/wiki/ONNX-Runtime-Installation))
+- Single binary with the Silero VAD model embedded
+- Requires the ONNX Runtime shared library ([install guide](https://github.com/tphakala/voicewatch/wiki/ONNX-Runtime-Installation))
 - Multi-arch Docker images
 - Runs comfortably on a Raspberry Pi 4 or equivalent 64-bit single-board computer
 
 ## Documentation
 
-- [FAQ](https://github.com/tphakala/birdnet-go/wiki/FAQ) - common questions, issues, and workarounds
-- [User guide](https://github.com/tphakala/birdnet-go/wiki/BirdNET%E2%80%90Go-Guide)
-- [Installation](https://github.com/tphakala/birdnet-go/wiki/installation.md)
-- [Hardware recommendations](https://github.com/tphakala/birdnet-go/wiki/hardware.md)
-- [ONNX Runtime installation](https://github.com/tphakala/birdnet-go/wiki/ONNX-Runtime-Installation)
-- [Detection pipeline](https://github.com/tphakala/birdnet-go/wiki/detection-pipeline.md)
-- [Database Doctor](https://github.com/tphakala/birdnet-go/wiki/Database-Doctor)
-- [Training a custom classifier](https://github.com/tphakala/birdnet-go/wiki/Training-a-Custom-Classifier)
-- [Cloudflare Tunnel](https://github.com/tphakala/birdnet-go/wiki/cloudflare_tunnel_guide.md)
+- [FAQ](https://github.com/tphakala/voicewatch/wiki/FAQ) - common questions, issues, and workarounds
+- [User guide](https://github.com/tphakala/voicewatch/wiki/BirdNET%E2%80%90Go-Guide)
+- [Installation](https://github.com/tphakala/voicewatch/wiki/installation.md)
+- [Hardware recommendations](https://github.com/tphakala/voicewatch/wiki/hardware.md)
+- [ONNX Runtime installation](https://github.com/tphakala/voicewatch/wiki/ONNX-Runtime-Installation)
+- [Database Doctor](https://github.com/tphakala/voicewatch/wiki/Database-Doctor)
+- [Cloudflare Tunnel](https://github.com/tphakala/voicewatch/wiki/cloudflare_tunnel_guide.md)
 - [Security](doc/wiki/security.md)
 - [Telemetry and privacy](doc/wiki/telemetry-privacy.md)
 - [RTSP troubleshooting](doc/wiki/rtsp-troubleshooting.md)
@@ -163,14 +161,14 @@ Docker images are published for `linux/amd64` and `linux/arm64`. Pre-built binar
 > See [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide.
 
 ```bash
-git clone https://github.com/tphakala/birdnet-go.git
+git clone https://github.com/tphakala/voicewatch.git
 cd birdnet-go
 
 # Install Task (if not already installed)
 # Linux: sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b /usr/local/bin
 # macOS: brew install go-task
 
-task setup-dev    # installs Go 1.25, Node LTS, build tools, linters, Playwright
+task setup-dev    # installs Go, Node LTS, build tools, linters, Playwright
 task              # build
 task dev_server   # hot-reload dev server (or: air realtime)
 ```
@@ -181,24 +179,9 @@ Join the [Discord server](https://discord.gg/gcSCFGUtsd) for support, discussion
 
 ## Related projects
 
-### Core and extensions
-
-- [BirdNET-Analyzer](https://github.com/birdnet-team/BirdNET-Analyzer): upstream BirdNET project
-- [BirdNET-Go Classifiers](https://github.com/tphakala/birdnet-go-classifiers): enhanced BirdNET classifiers with additional species
-- [BattyBirdNET-Analyzer](https://github.com/rdz-oss/BattyBirdNET-Analyzer): bat classifier models, installable via the in-app gallery
-
-### Companion tools
-
-- [birda](https://github.com/tphakala/birda): fast CLI for offline bird species detection on existing audio files, using BirdNET and Perch AI models
-- [birda-gui](https://github.com/tphakala/birda-gui): desktop GUI for birda (Electron + Svelte 5) for audio analysis, detection browsing, and species visualization
-
 ### System integration
 
 - [Cockpit BirdNET-Go](https://github.com/tphakala/cockpit-birdnet-go): web-based system management plugin using the Cockpit framework
-
-### Migration tools
-
-- [BirdNET-Pi2Go](https://github.com/tphakala/birdnet-pi2go): database converter for migrating from BirdNET-Pi (deprecated, not compatible with the current BirdNET-Go database schema; a native import is planned)
 
 ### Hardware solutions
 
@@ -206,10 +189,6 @@ Join the [Discord server](https://discord.gg/gcSCFGUtsd) for support, discussion
 - [ESP32 Audio Streamer](https://github.com/jpmurray/esp32-audio-streamer): alternative ESP32 RTSP streaming solution
 - [M5Stack Atom Echo RTSP Mic](https://github.com/stedrow/birdnetgo-m5stack-atom-echo-rtsp-mic): RTSP audio server for M5Stack Atom Echo, no soldering required
 - [M5Stack AtomS3 Lite PDM Mic](https://github.com/matthew73210/birdnetgo-m5stack-AtomS3-Lite-PDM-rtsp-mic): RTSP audio server with MEMS PDM microphone
-
-### Mobile apps
-
-- [Perch](https://github.com/arunrajiah/perch): open-source Android/iOS companion app. Connects to BirdNET-Go via the BirdWeather API. Live detection feed, audio playback, species browser, 14-day chart, and notifications for favourite species. MIT licensed.
 
 ## Contributing
 
@@ -223,20 +202,6 @@ For setup, workflow, and quality gates, see [CONTRIBUTING.md](CONTRIBUTING.md):
 
 All contributions must follow privacy-by-design principles, the automated code-quality gates, and the CC BY-NC-SA 4.0 license terms.
 
-## Data sources
-
-### Taxonomy data
-
-BirdNET-Go embeds taxonomy data derived from the eBird/Clements Checklist:
-
-- **Source**: [eBird API v2](https://api.ebird.org/v2/ref/taxonomy/ebird)
-- **Copyright**: (c) Cornell Lab of Ornithology
-- **License**: used under eBird API Terms of Use for non-commercial purposes
-- **Attribution**: taxonomy data powered by [eBird.org](https://ebird.org)
-- **Coverage**: 2,374 genera, 254 families, 11,145 species
-
-For more information, see the [eBird Taxonomy](https://ebird.org/science/use-ebird-data/the-ebird-taxonomy).
-
 ## License
 
 Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International.
@@ -245,8 +210,8 @@ Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International.
 
 Created and maintained by Tomi P. Hakala.
 
-A growing list of community contributors keeps the project moving forward. The current list lives on the [GitHub contributors page](https://github.com/tphakala/birdnet-go/graphs/contributors).
+A growing list of community contributors keeps the project moving forward. The current list lives on the [GitHub contributors page](https://github.com/tphakala/voicewatch/graphs/contributors).
 
-The BirdNET AI model is by the K. Lisa Yang Center for Conservation Bioacoustics at the Cornell Lab of Ornithology in collaboration with Chemnitz University of Technology (Stefan Kahl, Connor Wood, Maximilian Eibl, Holger Klinck).
+Speech detection uses the [Silero VAD](https://github.com/snakers4/silero-vad) model by Silero Team, used under the MIT license.
 
-Google Perch v2 ONNX conversion by [Justin Chuby](https://huggingface.co/justinchuby/BirdNET-onnx). BattyBirdNET bat classifier models by [R.D. Zinck](https://github.com/rdz-oss/BattyBirdNET-Analyzer). BirdNET label translations by Patrick Levin for the BirdNET-Pi project by Patrick McGuire.
+BirdNET-Go began as a Go implementation of [BirdNET](https://github.com/birdnet-team/BirdNET-Analyzer) by the K. Lisa Yang Center for Conservation Bioacoustics at the Cornell Lab of Ornithology in collaboration with Chemnitz University of Technology (Stefan Kahl, Connor Wood, Maximilian Eibl, Holger Klinck); that heritage shaped the audio pipeline and UI retained here.

@@ -9,8 +9,8 @@ import (
 	"path/filepath"
 	"sync"
 
-	"github.com/tphakala/birdnet-go/internal/audiocore/audiotemp"
-	"github.com/tphakala/birdnet-go/internal/errors"
+	"github.com/tphakala/voicewatch/internal/audiocore/audiotemp"
+	"github.com/tphakala/voicewatch/internal/errors"
 	goflac "github.com/tphakala/go-flac/pcm"
 )
 

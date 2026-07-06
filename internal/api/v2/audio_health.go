@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
-	"github.com/tphakala/birdnet-go/internal/audiocore"
+	"github.com/tphakala/voicewatch/internal/audiocore"
 )
 
 // AudioHealthResponse wraps the per-source health snapshots.

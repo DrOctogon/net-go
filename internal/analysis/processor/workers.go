@@ -5,10 +5,10 @@ import (
 	"context"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/analysis/jobqueue"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/privacy"
+	"github.com/tphakala/voicewatch/internal/analysis/jobqueue"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/privacy"
 )
 
 // TaskType defines types of tasks that can be handled by the worker.
@@ -129,10 +129,10 @@ func getJobQueueRetryConfig(action Action) jobqueue.RetryConfig {
 	}
 
 	switch a := action.(type) {
-	case *BirdWeatherAction:
-		return a.RetryConfig // Now directly returns jobqueue.RetryConfig
 	case *MqttAction:
 		return a.RetryConfig // Now directly returns jobqueue.RetryConfig
+	case *TranscribeAction:
+		return a.RetryConfig // Retry until the detection ID and clip file are ready
 	case *SaveAudioAction:
 		// Only deferred SaveAudioActions (those waiting for an Extended
 		// Capture tail) need retry. Regular eager-read actions return

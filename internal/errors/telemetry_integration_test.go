@@ -72,7 +72,7 @@ func TestShouldReportToSentry_FiltersNoRouteToHost(t *testing.T) {
 func TestShouldReportToSentry_FiltersDNSErrors(t *testing.T) {
 	t.Parallel()
 	ee := New(fmt.Errorf("dial tcp: lookup en.wikipedia.org: server misbehaving")).
-		Component("imageprovider").
+		Component("myaudio").
 		Category(CategoryNetwork).
 		Build()
 	assert.False(t, shouldReportToSentry(ee))
@@ -106,16 +106,6 @@ func TestShouldReportToSentry_FiltersNoteNotFound(t *testing.T) {
 	assert.False(t, shouldReportToSentry(ee))
 }
 
-func TestShouldReportToSentry_FiltersEBirdTaxonomyNotFound(t *testing.T) {
-	t.Parallel()
-	// Non-bird species (e.g., Canis latrans) are expected to be absent from eBird
-	ee := New(fmt.Errorf("species not found in eBird taxonomy: Canis latrans")).
-		Component("ebird").
-		Category(CategoryNotFound).
-		Build()
-	assert.False(t, shouldReportToSentry(ee))
-}
-
 func TestShouldReportToSentry_FiltersDynamicThresholdNotFound(t *testing.T) {
 	t.Parallel()
 	// A user querying the dynamic threshold for a species that has none is a
@@ -132,82 +122,10 @@ func TestShouldReportToSentry_AllowsNetworkCategoryCodeBugs(t *testing.T) {
 	t.Parallel()
 	// Network category error that is NOT environmental noise should still report
 	ee := New(fmt.Errorf("unexpected status code 500 from API")).
-		Component("imageprovider").
+		Component("myaudio").
 		Category(CategoryNetwork).
 		Build()
 	assert.True(t, shouldReportToSentry(ee))
-}
-
-// TestShouldReportToSentry_FiltersWikipediaRateLimitNoise verifies that the
-// imageprovider Wikipedia rate-limit (HTTP 429) and circuit-breaker-open
-// failures are suppressed. These are built with CategoryNetwork (see
-// internal/imageprovider/wikipedia.go: checkCircuitBreaker, handleHTTPStatusError,
-// handleCircuitBreaker, and the diagnostic rate-limit path). The circuit breaker
-// already throttles requests when Wikipedia rate-limits the client, so forwarding
-// a Sentry event for every rejected request is pure noise. The exact wordings
-// asserted here are real substrings of the messages those code paths produce,
-// lowercased to match how shouldReportToSentry compares against
-// networkNoisePatterns.
-func TestShouldReportToSentry_FiltersWikipediaRateLimitNoise(t *testing.T) {
-	t.Parallel()
-
-	tests := []struct {
-		name       string
-		err        error
-		wantReport bool
-	}{
-		{
-			// Direct HTTP 429 from handleHTTPStatusError:
-			// "Wikipedia API returned status %d: %s". This is the original,
-			// highest-volume noise (the breaker has not opened yet). 429 is
-			// purely environmental throttling, so every occurrence is suppressed.
-			name:       "direct HTTP 429 is suppressed",
-			err:        fmt.Errorf("Wikipedia API returned status 429: too many requests"),
-			wantReport: false,
-		},
-		{
-			// Produced by checkCircuitBreaker: "Wikipedia API circuit breaker open: %s"
-			// (repeated per-call rejection while the breaker is open).
-			name:       "circuit breaker open rejection is suppressed",
-			err:        fmt.Errorf("Wikipedia API circuit breaker open: Rate limited (HTTP 429): too many requests"),
-			wantReport: false,
-		},
-		{
-			// Produced by the diagnostic path: "Wikipedia rate limit exceeded: %s"
-			name:       "rate limit exceeded diagnostic error is suppressed",
-			err:        fmt.Errorf("Wikipedia rate limit exceeded: Rate limit exceeded (HTTP 429)"),
-			wantReport: false,
-		},
-		{
-			// Regression guard: a genuine server-side failure in the same
-			// category must still reach Sentry so real bugs stay visible.
-			name:       "genuine HTTP 500 is still reported",
-			err:        fmt.Errorf("Wikipedia API returned status 500: internal server error"),
-			wantReport: true,
-		},
-		{
-			// Regression guard: a 403 user-agent policy violation is a real,
-			// actionable signal (not benign throttling) and must still report.
-			// This pins that the suppression is scoped to 429, not all statuses.
-			name:       "HTTP 403 policy violation is still reported",
-			err:        fmt.Errorf("Wikipedia API returned status 403: user-agent policy violation"),
-			wantReport: true,
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			t.Parallel()
-			ee := New(tt.err).
-				Component("imageprovider").
-				Category(CategoryNetwork).
-				Context("operation", "api_error").
-				Build()
-			got := shouldReportToSentry(ee)
-			assert.Equal(t, tt.wantReport, got,
-				"shouldReportToSentry(%q) = %v, want %v", tt.err, got, tt.wantReport)
-		})
-	}
 }
 
 // TestShouldReportToSentry_CategoryLimitNotificationOnly verifies that the
@@ -216,9 +134,9 @@ func TestShouldReportToSentry_FiltersWikipediaRateLimitNoise(t *testing.T) {
 // component="notification", and that single sentinel is what every caller
 // (notification push providers AND birdweather uploads, which reuse the
 // same breaker) receives, so the notification-only filter suppresses both
-// in practice. Other CategoryLimit producers (eBird API quota, analysis job
-// queue full, spectrogram pre-render memory limits) are legitimate
-// operational signals that ops needs to see and must still reach Sentry.
+// in practice. Other CategoryLimit producers (analysis job queue full,
+// spectrogram pre-render memory limits) are legitimate operational signals
+// that ops needs to see and must still reach Sentry.
 func TestShouldReportToSentry_CategoryLimitNotificationOnly(t *testing.T) {
 	t.Parallel()
 
@@ -239,12 +157,6 @@ func TestShouldReportToSentry_CategoryLimitNotificationOnly(t *testing.T) {
 			component:  "notification",
 			err:        fmt.Errorf("circuit breaker is half-open, too many requests"),
 			wantReport: false,
-		},
-		{
-			name:       "ebird API quota exhaustion is reported",
-			component:  "ebird",
-			err:        fmt.Errorf("ebird API quota exceeded"),
-			wantReport: true,
 		},
 		{
 			name:       "analysis job queue full is reported",

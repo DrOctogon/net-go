@@ -7,10 +7,10 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	"github.com/tphakala/birdnet-go/internal/detection"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/detection"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 const (
@@ -323,7 +323,7 @@ func mapToResult(row *SourceDetection, ts time.Time, sourceNode string) *detecti
 		Threshold:   row.Cutoff,
 		Sensitivity: row.Sensitivity,
 		Model: detection.ModelInfo{
-			Name:    "BirdNET",
+			Name:    "VoiceWatch",
 			Version: "birdnet-pi",
 			Variant: "import",
 		},

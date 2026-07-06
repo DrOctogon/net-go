@@ -1,4 +1,4 @@
-// Package observability provides metrics and monitoring capabilities for the BirdNET-Go application.
+// Package observability provides metrics and monitoring capabilities for the VoiceWatch application.
 package observability
 
 import "time"

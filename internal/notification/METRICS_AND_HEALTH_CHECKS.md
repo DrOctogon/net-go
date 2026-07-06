@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the comprehensive observability, reliability, and safety features implemented for BirdNET-Go's push notification system.
+This document describes the comprehensive observability, reliability, and safety features implemented for VoiceWatch's push notification system.
 
 ## Features Implemented
 

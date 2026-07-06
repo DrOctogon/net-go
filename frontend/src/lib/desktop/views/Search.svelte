@@ -3,8 +3,8 @@
   import SourceBadge from '$lib/desktop/features/dashboard/components/SourceBadge.svelte';
   import AudioPlayer from '$lib/desktop/components/media/AudioPlayer.svelte';
   import MobileAudioPlayer from '$lib/desktop/components/media/MobileAudioPlayer.svelte';
+  import Checkbox from '$lib/desktop/components/forms/Checkbox.svelte';
   import DatePicker from '$lib/desktop/components/ui/DatePicker.svelte';
-  import { handleBirdImageError } from '$lib/desktop/components/ui/image-utils';
   import TimeOfDayIcon from '$lib/desktop/components/ui/TimeOfDayIcon.svelte';
   import { getLocale, t } from '$lib/i18n';
   import { dashboardSettings } from '$lib/stores/settings';
@@ -31,12 +31,13 @@
   import { hasReviewPermission, isAuthenticated } from '$lib/utils/auth';
   import { loggers } from '$lib/utils/logger';
   import { buildAppUrl } from '$lib/utils/urlHelpers';
-  import {
-    loadDictionary,
-    searchScientificByCommon,
-    PER_VISITOR_SPECIES_LOCALE_ENABLED,
-  } from '$lib/stores/speciesDictionary.svelte';
   import { localizeSpeciesName } from '$lib/utils/speciesDisplay';
+  import {
+    SPEAKER_GENDERS,
+    SPEAKER_AGE_BANDS,
+    type SpeakerGender,
+    type SpeakerAgeBand,
+  } from '$lib/utils/speakerAttributes';
 
   // SPINNER CONTROL: Set to false to disable loading spinners (reduces flickering)
   // Change back to true to re-enable spinners for testing
@@ -165,12 +166,16 @@
   }
 
   // Component state
-  let speciesSearchTerm = $state('');
   let dateRange = $state<DateRange>({ start: '', end: '' });
   let confidenceRange = $state<ConfidenceRange>({ min: 0, max: 100 });
   let verifiedStatus = $state<VerifiedStatus>('any');
   let lockedStatus = $state<LockedStatus>('any');
   let timeOfDayFilter = $state<TimeOfDayFilter>('any');
+  let transcriptTerm = $state('');
+  let flaggedOnly = $state(false);
+  // Speaker-attribute filters: 'any' means "do not filter" and is not sent.
+  let genderFilter = $state<'any' | SpeakerGender>('any');
+  let ageBandFilter = $state<'any' | SpeakerAgeBand>('any');
   let formSubmitted = $state(false);
   let advancedFilters = $state(false);
   let isLoading = $state(false);
@@ -268,34 +273,9 @@
     expandedItems.clear(); // Reset expanded state when loading new results
 
     try {
-      // Resolve the typed text to scientific names via the visitor's per-locale
-      // dictionary. Always send the raw term as the free-text species filter too:
-      // the backend OR-s the free-text species (scientific_name LIKE) with the
-      // resolved speciesScientific label IDs, so sending both makes the resolved
-      // path a strict superset and avoids dropping scientific-substring matches
-      // when the typed text is both a resolvable common name and a substring of a
-      // scientific name.
-      //
-      // Ensure the per-locale dictionary is loaded before resolving. The submit
-      // handler can fire immediately after first paint or a locale switch, before
-      // the dictionary fetch has completed; resolving against empty maps would
-      // silently fall back to the raw term (which the backend cannot resolve for a
-      // foreign-locale name). loadDictionary is cached, so awaiting it when already
-      // loaded is effectively instant.
-      //
-      // PARKED behind PER_VISITOR_SPECIES_LOCALE_ENABLED: while off, we skip the
-      // per-visitor dictionary entirely and send only the raw term, so search
-      // resolves in the server-side species language (settings.BirdNET.Locale).
-      let resolvedScientific: string[] = [];
-      if (PER_VISITOR_SPECIES_LOCALE_ENABLED) {
-        await loadDictionary();
-        resolvedScientific = searchScientificByCommon(speciesSearchTerm);
-      }
-
       // Build request body
+      const trimmedTranscript = transcriptTerm.trim();
       const requestBody = {
-        species: speciesSearchTerm,
-        speciesScientific: resolvedScientific,
         dateStart: dateRange.start,
         dateEnd: dateRange.end,
         confidenceMin: confidenceRange.min / 100,
@@ -306,6 +286,10 @@
         timeOfDay: timeOfDayFilter,
         page: currentPage,
         sortBy: sortBy,
+        ...(trimmedTranscript !== '' ? { transcript: trimmedTranscript } : {}),
+        ...(flaggedOnly ? { flagged: true } : {}),
+        ...(genderFilter !== 'any' ? { gender: genderFilter } : {}),
+        ...(ageBandFilter !== 'any' ? { ageBand: ageBandFilter } : {}),
       };
 
       interface SearchResponse {
@@ -333,7 +317,6 @@
 
   // Reset form
   function resetForm() {
-    speciesSearchTerm = '';
     dateRange.start = '';
     dateRange.end = '';
     confidenceRange.min = 0;
@@ -342,6 +325,10 @@
     lockedStatus = 'any';
     sourceFilter = '';
     timeOfDayFilter = 'any';
+    transcriptTerm = '';
+    flaggedOnly = false;
+    genderFilter = 'any';
+    ageBandFilter = 'any';
     formSubmitted = false;
     results = [];
     errorMessage = '';
@@ -475,36 +462,6 @@
       >
         <!-- Basic Search Fields -->
         <div class="gap-4 search-form-grid">
-          <!-- Species -->
-          <div class="form-control">
-            <label class="label" for="species">
-              <span class="label-text">{t('search.fields.species')}</span>
-              <span
-                class="help-icon"
-                onmouseenter={() => (showTooltip = 'species')}
-                onmouseleave={() => (showTooltip = null)}
-                onfocus={() => (showTooltip = 'species')}
-                onblur={() => (showTooltip = null)}
-                role="button"
-                tabindex="0"
-                aria-label={t('search.fields.speciesHelp')}
-                aria-describedby="speciesTooltip">ⓘ</span
-              >
-            </label>
-            <input
-              type="text"
-              id="species"
-              bind:value={speciesSearchTerm}
-              placeholder={t('search.fields.speciesPlaceholder')}
-              class="input w-full"
-            />
-            {#if showTooltip === 'species'}
-              <div class="tooltip" id="speciesTooltip" role="tooltip">
-                {t('search.fields.speciesHelp')}
-              </div>
-            {/if}
-          </div>
-
           <!-- Date Range -->
           <div class="form-control">
             <label class="label" for="dateRangeStart">
@@ -544,6 +501,37 @@
             {#if showTooltip === 'dateRange'}
               <div class="tooltip" id="dateRangeTooltip" role="tooltip">
                 {t('search.fields.dateRangeHelp')}
+              </div>
+            {/if}
+          </div>
+
+          <!-- Transcript Search -->
+          <div class="form-control">
+            <label class="label" for="transcriptSearch">
+              <span class="label-text">{t('search.fields.transcript')}</span>
+              <span
+                class="help-icon"
+                onmouseenter={() => (showTooltip = 'transcript')}
+                onmouseleave={() => (showTooltip = null)}
+                onfocus={() => (showTooltip = 'transcript')}
+                onblur={() => (showTooltip = null)}
+                role="button"
+                tabindex="0"
+                aria-label={t('search.fields.transcriptHelp')}
+                aria-describedby="transcriptTooltip">ⓘ</span
+              >
+            </label>
+            <input
+              type="text"
+              id="transcriptSearch"
+              class="input w-full"
+              bind:value={transcriptTerm}
+              placeholder={t('search.fields.transcriptPlaceholder')}
+              aria-describedby="transcriptTooltip"
+            />
+            {#if showTooltip === 'transcript'}
+              <div class="tooltip" id="transcriptTooltip" role="tooltip">
+                {t('search.fields.transcriptHelp')}
               </div>
             {/if}
           </div>
@@ -633,6 +621,15 @@
               {/if}
             </div>
 
+            <!-- Flagged Only Toggle -->
+            <div class="form-control">
+              <Checkbox
+                bind:checked={flaggedOnly}
+                label={t('search.fields.flaggedOnly')}
+                helpText={t('search.fields.flaggedOnlyHelp')}
+              />
+            </div>
+
             <!-- Status & Time of Day Filters -->
             <div class="gap-6 search-filters-grid">
               <!-- Verified Status -->
@@ -671,6 +668,32 @@
                   <option value="night">{t('search.timeOfDayOptions.night')}</option>
                   <option value="sunrise">{t('search.timeOfDayOptions.sunrise')}</option>
                   <option value="sunset">{t('search.timeOfDayOptions.sunset')}</option>
+                </select>
+              </div>
+
+              <!-- Speaker Gender -->
+              <div class="form-control">
+                <label class="label" for="genderFilter">
+                  <span class="label-text">{t('search.fields.gender')}</span>
+                </label>
+                <select id="genderFilter" bind:value={genderFilter} class="select w-full">
+                  <option value="any">{t('search.speakerOptions.any')}</option>
+                  {#each SPEAKER_GENDERS as gender (gender)}
+                    <option value={gender}>{t(`detections.speaker.gender.${gender}`)}</option>
+                  {/each}
+                </select>
+              </div>
+
+              <!-- Speaker Age Band -->
+              <div class="form-control">
+                <label class="label" for="ageBandFilter">
+                  <span class="label-text">{t('search.fields.ageBand')}</span>
+                </label>
+                <select id="ageBandFilter" bind:value={ageBandFilter} class="select w-full">
+                  <option value="any">{t('search.speakerOptions.any')}</option>
+                  {#each SPEAKER_AGE_BANDS as ageBand (ageBand)}
+                    <option value={ageBand}>{t(`detections.speaker.age.${ageBand}`)}</option>
+                  {/each}
                 </select>
               </div>
 
@@ -873,47 +896,6 @@
                   </td>
                   <td>
                     <div class="flex items-center gap-2">
-                      <!-- Add bird image thumbnail -->
-                      <div
-                        class="w-12 h-9 rounded-md overflow-hidden bg-gray-100 shrink-0 cursor-pointer hover:ring-2 hover:ring-primary transition-all focus:outline-hidden focus:ring-2 focus:ring-[var(--color-primary)]"
-                        onclick={() => toggleExpand(result.id)}
-                        onkeydown={e => {
-                          if (e.key === 'Enter' || e.key === ' ') {
-                            e.preventDefault();
-                            toggleExpand(result.id);
-                          }
-                        }}
-                        aria-label={isExpanded(result.id)
-                          ? t('search.detailsPanel.collapseDetails', {
-                              species: displayName || t('search.detailsPanel.unknownSpecies'),
-                            })
-                          : t('search.detailsPanel.expandDetails', {
-                              species: displayName || t('search.detailsPanel.unknownSpecies'),
-                            })}
-                        aria-expanded={isExpanded(result.id)}
-                        role="button"
-                        tabindex="0"
-                      >
-                        <!-- PERFORMANCE OPTIMIZATION: Enhanced image loading attributes -->
-                        <!-- loading="lazy": Defer loading until image enters viewport -->
-                        <!-- decoding="async": Decode image off-main-thread to prevent UI blocking -->
-                        <!-- fetchpriority="low": Lower network priority for species thumbnails -->
-                        <img
-                          src={buildAppUrl(
-                            `/api/v2/media/species-image?name=${encodeURIComponent(result.scientificName)}`
-                          )}
-                          alt={displayName || t('search.detailsPanel.unknownSpecies')}
-                          class="w-full h-full object-cover"
-                          onerror={e => {
-                            const target = e.currentTarget as HTMLImageElement;
-                            target.src = buildAppUrl('/ui/assets/bird-placeholder.svg');
-                            target.classList.add('p-2');
-                          }}
-                          loading="lazy"
-                          decoding="async"
-                          fetchpriority="low"
-                        />
-                      </div>
                       <div>
                         <div class="font-bold">
                           {displayName || t('search.detailsPanel.unknownSpecies')}
@@ -1091,50 +1073,10 @@
                           : 'bg-[var(--color-base-200)]'}"
                       >
                         <!-- Expanded content -->
-                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                           <!-- Weather Information Container -->
                           <div class="bg-[var(--color-base-200)] rounded-box p-4">
                             <WeatherInfo detectionId={result.id} units={temperatureUnits} />
-                          </div>
-
-                          <!-- Bird Image Container (Middle Column) -->
-                          <div
-                            class="bg-[var(--color-base-200)] rounded-box p-4 flex flex-col justify-center items-center"
-                          >
-                            <div
-                              class="w-full aspect-[4/3] rounded-md overflow-hidden bg-gray-100 cursor-pointer hover:brightness-90 transition-all focus:outline-hidden focus:ring-2 focus:ring-[var(--color-primary)]"
-                              onclick={() => toggleExpand(result.id)}
-                              onkeydown={e => {
-                                if (e.key === 'Enter' || e.key === ' ') {
-                                  e.preventDefault();
-                                  toggleExpand(result.id);
-                                }
-                              }}
-                              role="button"
-                              tabindex="0"
-                              aria-label={t('search.detailsPanel.collapseDetails', {
-                                species: displayName || t('search.detailsPanel.unknownSpecies'),
-                              })}
-                              aria-expanded={isExpanded(result.id)}
-                              aria-controls="expanded-row-{result.id}"
-                              title={t('search.detailsPanel.clickToCollapse')}
-                            >
-                              <img
-                                src={buildAppUrl(
-                                  `/api/v2/media/species-image?name=${encodeURIComponent(result.scientificName)}`
-                                )}
-                                alt={displayName || t('search.detailsPanel.unknownSpecies')}
-                                class="w-full h-full object-cover"
-                                onerror={e => {
-                                  const target = e.currentTarget as HTMLImageElement;
-                                  target.src = buildAppUrl('/ui/assets/bird-placeholder.svg');
-                                  target.classList.add('p-2');
-                                }}
-                                loading="lazy"
-                                decoding="async"
-                                fetchpriority="low"
-                              />
-                            </div>
                           </div>
 
                           <!-- Audio Player -->
@@ -1183,21 +1125,6 @@
                 <!-- Thumbnail and names -->
                 <div class="flex-1 min-w-0">
                   <div class="flex items-center gap-2">
-                    <div
-                      class="w-12 h-9 rounded-md overflow-hidden bg-[var(--color-base-200)] shrink-0"
-                    >
-                      <img
-                        src={buildAppUrl(
-                          `/api/v2/media/species-image?name=${encodeURIComponent(result.scientificName)}`
-                        )}
-                        alt={displayName || t('search.detailsPanel.unknownSpecies')}
-                        class="w-full h-full object-cover"
-                        onerror={handleBirdImageError}
-                        loading="lazy"
-                        decoding="async"
-                        fetchpriority="low"
-                      />
-                    </div>
                     <div class="min-w-0">
                       <div class="font-semibold leading-tight truncate">
                         {displayName || t('search.detailsPanel.unknownSpecies')}

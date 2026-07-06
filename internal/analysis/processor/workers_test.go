@@ -10,10 +10,10 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/analysis/jobqueue"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/detection"
-	"github.com/tphakala/birdnet-go/internal/privacy"
+	"github.com/tphakala/voicewatch/internal/analysis/jobqueue"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/detection"
+	"github.com/tphakala/voicewatch/internal/privacy"
 )
 
 // Mock types are now defined in test_helpers_test.go:
@@ -151,14 +151,6 @@ func TestGetJobQueueRetryConfig(t *testing.T) {
 		testRetryConfigOverride = nil
 	}()
 	// Create test retry configurations
-	bwRetryConfig := jobqueue.RetryConfig{
-		Enabled:      true,
-		MaxRetries:   3,
-		InitialDelay: 10 * time.Second,
-		MaxDelay:     60 * time.Second,
-		Multiplier:   2.0,
-	}
-
 	mqttRetryConfig := jobqueue.RetryConfig{
 		Enabled:      true,
 		MaxRetries:   5,
@@ -168,10 +160,6 @@ func TestGetJobQueueRetryConfig(t *testing.T) {
 	}
 
 	// Create test actions with retry configurations
-	bwAction := &BirdWeatherAction{
-		RetryConfig: bwRetryConfig,
-	}
-
 	mqttAction := &MqttAction{
 		RetryConfig: mqttRetryConfig,
 	}
@@ -186,12 +174,6 @@ func TestGetJobQueueRetryConfig(t *testing.T) {
 		wantEnabled    bool
 		wantMaxRetries int
 	}{
-		{
-			name:           "BirdWeatherAction",
-			action:         bwAction,
-			wantEnabled:    true,
-			wantMaxRetries: 3,
-		},
 		{
 			name:           "MqttAction",
 			action:         mqttAction,
@@ -246,12 +228,7 @@ func TestGetJobQueueRetryConfig(t *testing.T) {
 			assert.Equal(t, tt.wantMaxRetries, config.MaxRetries, "getJobQueueRetryConfig() MaxRetries")
 
 			// For actions with retry configuration, check if the full configuration is preserved
-			switch tt.action.(type) {
-			case *BirdWeatherAction:
-				assert.Equal(t, bwRetryConfig.InitialDelay, config.InitialDelay, "getJobQueueRetryConfig() InitialDelay")
-				assert.Equal(t, bwRetryConfig.MaxDelay, config.MaxDelay, "getJobQueueRetryConfig() MaxDelay")
-				assert.InDelta(t, bwRetryConfig.Multiplier, config.Multiplier, 0, "getJobQueueRetryConfig() Multiplier")
-			case *MqttAction:
+			if _, ok := tt.action.(*MqttAction); ok {
 				assert.Equal(t, mqttRetryConfig.InitialDelay, config.InitialDelay, "getJobQueueRetryConfig() InitialDelay")
 				assert.Equal(t, mqttRetryConfig.MaxDelay, config.MaxDelay, "getJobQueueRetryConfig() MaxDelay")
 				assert.InDelta(t, mqttRetryConfig.Multiplier, config.Multiplier, 0, "getJobQueueRetryConfig() Multiplier")
@@ -287,15 +264,6 @@ func TestEnqueueTask(t *testing.T) {
 			action Action
 		}{
 			{"MockAction", &MockAction{}},
-			{"BirdWeatherAction", &BirdWeatherAction{
-				RetryConfig: jobqueue.RetryConfig{
-					Enabled:      true,
-					MaxRetries:   3,
-					InitialDelay: 10 * time.Second,
-					MaxDelay:     60 * time.Second,
-					Multiplier:   2.0,
-				},
-			}},
 			{"MqttAction", &MqttAction{
 				RetryConfig: jobqueue.RetryConfig{
 					Enabled:      true,

@@ -9,11 +9,11 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/analysis/processor"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	"github.com/tphakala/birdnet-go/internal/datastore/mocks"
-	"github.com/tphakala/birdnet-go/internal/errors"
+	"github.com/tphakala/voicewatch/internal/analysis/processor"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/datastore/mocks"
+	"github.com/tphakala/voicewatch/internal/errors"
 )
 
 func TestGetMergedThresholdData_NoDuplicates(t *testing.T) {
@@ -27,7 +27,7 @@ func TestGetMergedThresholdData_NoDuplicates(t *testing.T) {
 	mockDS.EXPECT().GetAllDynamicThresholds().Return([]datastore.DynamicThreshold{
 		{
 			SpeciesName:    "Tawny Owl",
-			ModelName:      "BirdNET",
+			ModelName:      "VoiceWatch",
 			ScientificName: "Strix aluco",
 			Level:          1,
 			CurrentValue:   0.45,
@@ -40,10 +40,10 @@ func TestGetMergedThresholdData_NoDuplicates(t *testing.T) {
 	// Processor memory stores with composite key "modelID:speciesLowercase"
 	proc := &processor.Processor{
 		Settings: &conf.Settings{
-			BirdNET: conf.BirdNETConfig{Threshold: 0.6},
+			VoiceWatch: conf.VoiceWatchConfig{Threshold: 0.6},
 		},
 		DynamicThresholds: map[string]*processor.DynamicThreshold{
-			"BirdNET:tawny owl": {
+			"VoiceWatch:tawny owl": {
 				Level:          2,
 				CurrentValue:   0.3,
 				Timer:          expires,
@@ -92,10 +92,10 @@ func TestGetMergedThresholdData_MemoryOnlySpecies(t *testing.T) {
 	// Processor memory has a species not in the database
 	proc := &processor.Processor{
 		Settings: &conf.Settings{
-			BirdNET: conf.BirdNETConfig{Threshold: 0.6},
+			VoiceWatch: conf.VoiceWatchConfig{Threshold: 0.6},
 		},
 		DynamicThresholds: map[string]*processor.DynamicThreshold{
-			"BirdNET:eurasian blue tit": {
+			"VoiceWatch:eurasian blue tit": {
 				Level:          1,
 				CurrentValue:   0.45,
 				Timer:          expires,
@@ -135,7 +135,7 @@ func TestGetMergedThresholdData_DatabaseOnlySpecies(t *testing.T) {
 	mockDS.EXPECT().GetAllDynamicThresholds().Return([]datastore.DynamicThreshold{
 		{
 			SpeciesName:    "Common Blackbird",
-			ModelName:      "BirdNET",
+			ModelName:      "VoiceWatch",
 			ScientificName: "Turdus merula",
 			Level:          1,
 			CurrentValue:   0.45,
@@ -148,7 +148,7 @@ func TestGetMergedThresholdData_DatabaseOnlySpecies(t *testing.T) {
 	// Processor has no thresholds (empty map)
 	proc := &processor.Processor{
 		Settings: &conf.Settings{
-			BirdNET: conf.BirdNETConfig{Threshold: 0.6},
+			VoiceWatch: conf.VoiceWatchConfig{Threshold: 0.6},
 		},
 		DynamicThresholds: map[string]*processor.DynamicThreshold{},
 	}

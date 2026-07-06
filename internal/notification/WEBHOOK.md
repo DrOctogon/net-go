@@ -2,7 +2,7 @@
 
 ## Overview
 
-The webhook provider enables BirdNET-Go to send notifications to custom HTTP/HTTPS endpoints with support for:
+The webhook provider enables VoiceWatch to send notifications to custom HTTP/HTTPS endpoints with support for:
 
 - **Multiple endpoints** with automatic failover
 - **Flexible authentication** (Bearer, Basic, Custom headers)
@@ -117,7 +117,7 @@ endpoints:
     headers:
       X-Custom-Header: "custom-value"
       X-Request-ID: "birdnet-go"
-      User-Agent: "BirdNET-Go/1.0"
+      User-Agent: "VoiceWatch/1.0"
 ```
 
 ### Custom JSON Template
@@ -271,7 +271,7 @@ endpoints:
 
 - [ ] **Use HTTPS in production**
   - Webhook URLs should use `https://` not `http://`
-  - Validate SSL certificates (BirdNET-Go does this by default)
+  - Validate SSL certificates (VoiceWatch does this by default)
 
 - [ ] **Rotate secrets regularly**
   - Change tokens/passwords periodically
@@ -283,7 +283,7 @@ endpoints:
 
 - [ ] **Monitor for leaks**
   - Check logs don't contain tokens
-  - BirdNET-Go never logs secret values
+  - VoiceWatch never logs secret values
 
 - [ ] **Secure your endpoints**
   - Validate webhook signatures if your API supports them
@@ -341,7 +341,7 @@ When no custom template is specified, the webhook provider sends:
 
 ## Detection Metadata Fields
 
-Detection notifications include additional metadata fields with the `bg_` prefix (BirdNET-Go specific fields). These fields are available in custom templates for webhook providers.
+Detection notifications include additional metadata fields with the `bg_` prefix (VoiceWatch specific fields). These fields are available in custom templates for webhook providers.
 
 ### Template Safety and Error Handling
 
@@ -461,7 +461,7 @@ Or set environment variable:
 export BIRDNET_HOST="birdnet.example.com"
 ```
 
-When localhost URLs are used with external webhooks, BirdNET-Go logs an informational warning at startup.
+When localhost URLs are used with external webhooks, VoiceWatch logs an informational warning at startup.
 
 ## Use Cases
 
@@ -661,7 +661,7 @@ notification:
 
 ## Testing Your Webhook
 
-Use the BirdNET-Go notification test command:
+Use the VoiceWatch notification test command:
 
 ```bash
 # Test webhook with a test notification
@@ -670,7 +670,7 @@ birdnet-go notify --type=error --title="Test Webhook" --message="Testing webhook
 
 ## Monitoring and Metrics
 
-The webhook provider integrates with BirdNET-Go's Prometheus metrics:
+The webhook provider integrates with VoiceWatch's Prometheus metrics:
 
 - `notification_provider_deliveries_total{provider="webhook",status="success"}`
 - `notification_provider_delivery_duration_seconds{provider="webhook"}`
@@ -769,4 +769,4 @@ When modifying the webhook provider:
 
 - [Push Notification System Documentation](./METRICS_AND_HEALTH_CHECKS.md)
 - [DoS Protection Guide](./DOS_PROTECTION.md)
-- [GitHub Issue #882](https://github.com/tphakala/birdnet-go/issues/882)
+- [GitHub Issue #882](https://github.com/tphakala/voicewatch/issues/882)

@@ -6,8 +6,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/suncalc"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/suncalc"
 )
 
 // TestNightFilterExcludesSunriseSunsetWindows verifies that the "Night" time-of-day
@@ -50,8 +50,8 @@ func TestNightFilterExcludesSunriseSunsetWindows(t *testing.T) {
 
 	// Create test database with location settings
 	settings := &conf.Settings{}
-	settings.BirdNET.Latitude = latitude
-	settings.BirdNET.Longitude = longitude
+	settings.VoiceWatch.Latitude = latitude
+	settings.VoiceWatch.Longitude = longitude
 
 	ds := createDatabase(t, settings)
 

@@ -10,7 +10,7 @@ import (
 
 // Tests for issue #493: validation code quality improvements.
 
-// Item 1: validateBirdNETSettings no longer takes unused *Settings param.
+// Item 1: validateVoiceWatchSettings no longer takes unused *Settings param.
 // Covered implicitly by compilation: the call site in ValidateSettings
 // passes only one argument. No runtime test needed beyond the existing
 // TestValidateSoundLevelSettings suite exercising the full path.
@@ -39,8 +39,7 @@ func TestNilGuards(t *testing.T) {
 		name     string
 		validate func() ValidationResult
 	}{
-		{"ValidateBirdNETSettings", func() ValidationResult { return ValidateBirdNETSettings(nil) }},
-		{"ValidateBirdweatherSettings", func() ValidationResult { return ValidateBirdweatherSettings(nil) }},
+		{"ValidateVoiceWatchSettings", func() ValidationResult { return ValidateVoiceWatchSettings(nil) }},
 		{"ValidateMQTTSettings", func() ValidationResult { return ValidateMQTTSettings(nil) }},
 		{"ValidateWebServerSettings", func() ValidationResult { return ValidateWebServerSettings(nil) }},
 		{"ValidateTelemetrySettings", func() ValidationResult { return ValidateTelemetrySettings(nil) }},

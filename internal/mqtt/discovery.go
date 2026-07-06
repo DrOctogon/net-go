@@ -9,10 +9,10 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/tphakala/birdnet-go/internal/branding"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/branding"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 // Sensor type constants to avoid magic strings
@@ -23,8 +23,8 @@ const (
 	SensorSoundLevel     = "sound_level"
 )
 
-// deviceIDPrefix is the standard prefix for all BirdNET-Go device identifiers
-const deviceIDPrefix = "birdnet_go"
+// deviceIDPrefix is the standard prefix for all VoiceWatch device identifiers
+const deviceIDPrefix = "voicewatch"
 
 // Status payload constants for MQTT availability and state
 const (
@@ -154,7 +154,7 @@ type DiscoveryOrigin struct {
 type DiscoveryConfig struct {
 	DiscoveryPrefix string // Home Assistant discovery topic prefix (default: homeassistant)
 	BaseTopic       string // Base MQTT topic for state messages (e.g., birdnet)
-	DeviceName      string // Base name for devices (e.g., BirdNET-Go)
+	DeviceName      string // Base name for devices (e.g., VoiceWatch)
 	NodeID          string // Node identifier (typically main.name from config)
 	Version         string // Software version
 }

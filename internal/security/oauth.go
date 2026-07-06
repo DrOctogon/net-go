@@ -30,9 +30,9 @@ import (
 	"github.com/markbates/goth/providers/openidConnect"
 	"golang.org/x/oauth2"
 
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 var (
@@ -311,7 +311,7 @@ func validateSessionSecret(settings *conf.Settings) {
 func handleEmptySessionSecret(settings *conf.Settings) {
 	GetLogger().Error("CRITICAL SECURITY WARNING: SessionSecret is empty. A temporary secret will be generated, but this should be fixed in configuration.",
 		logger.Bool("debug_mode", settings.WebServer.Debug),
-		logger.String("recommendation", "BirdNET-Go will auto-generate a SessionSecret on next restart"))
+		logger.String("recommendation", "VoiceWatch will auto-generate a SessionSecret on next restart"))
 
 	tempSecret, err := conf.GenerateRandomSecret()
 	if err != nil {

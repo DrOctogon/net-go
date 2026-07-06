@@ -7,8 +7,8 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 const (
@@ -24,7 +24,7 @@ const (
 	// EventTypeError represents error events such as failures, exceptions, or operational issues
 	EventTypeError EventType = "error"
 
-	// EventTypeDetection represents bird detection events from the BirdNET analysis engine
+	// EventTypeDetection represents detection events from the VoiceWatch analysis engine
 	EventTypeDetection EventType = "detection"
 
 	// EventTypeUnknown represents events that cannot be categorized into the above types

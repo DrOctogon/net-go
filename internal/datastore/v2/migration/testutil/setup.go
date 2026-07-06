@@ -10,13 +10,13 @@ import (
 
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	datastoreV2 "github.com/tphakala/birdnet-go/internal/datastore/v2"
-	"github.com/tphakala/birdnet-go/internal/datastore/v2/entities"
-	"github.com/tphakala/birdnet-go/internal/datastore/v2/migration"
-	"github.com/tphakala/birdnet-go/internal/datastore/v2/repository"
-	"github.com/tphakala/birdnet-go/internal/detection"
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	datastoreV2 "github.com/tphakala/voicewatch/internal/datastore/v2"
+	"github.com/tphakala/voicewatch/internal/datastore/v2/entities"
+	"github.com/tphakala/voicewatch/internal/datastore/v2/migration"
+	"github.com/tphakala/voicewatch/internal/datastore/v2/repository"
+	"github.com/tphakala/voicewatch/internal/detection"
+	"github.com/tphakala/voicewatch/internal/logger"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	gormlogger "gorm.io/gorm/logger"
@@ -596,6 +596,10 @@ func (r *testDetectionRepo) UpdateComment(_ context.Context, _ uint, _ string) e
 func (r *testDetectionRepo) DeleteComment(_ context.Context, _ uint) error           { return nil }
 func (r *testDetectionRepo) GetClipPath(_ context.Context, _ string) (string, error) {
 	return "", nil
+}
+func (r *testDetectionRepo) UpdateTranscript(_ context.Context, _, _, _ string) error { return nil }
+func (r *testDetectionRepo) UpdateKeywordFlag(_ context.Context, _ string, _ bool, _ string) error {
+	return nil
 }
 func (r *testDetectionRepo) GetAdditionalResults(_ context.Context, _ string) ([]detection.AdditionalResult, error) {
 	return nil, nil

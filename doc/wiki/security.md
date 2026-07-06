@@ -2,7 +2,7 @@
 
 ## Authentication Methods
 
-BirdNET-Go provides three authentication methods that can be used independently or in combination. You can configure the security settings in the BirdNET-Go security settings or directly in the `config.yaml` file.
+VoiceWatch provides three authentication methods that can be used independently or in combination. You can configure the security settings in the VoiceWatch security settings or directly in the `config.yaml` file.
 
 ### Basic Password Authentication
 
@@ -21,7 +21,7 @@ security:
 
 ### Social Authentication
 
-BirdNET-Go supports OAuth authentication through Google and GitHub identity providers. To implement either provider, you'll need to generate the corresponding client ID and secret, then configure them through the Security settings or in the configuration file. Remember to set the Redirect URI parameter in your Google or GitHub developer console to match the value configured in `redirecturi`. The `userid` is a list of accepted authenticated user emails.
+VoiceWatch supports OAuth authentication through Google and GitHub identity providers. To implement either provider, you'll need to generate the corresponding client ID and secret, then configure them through the Security settings or in the configuration file. Remember to set the Redirect URI parameter in your Google or GitHub developer console to match the value configured in `redirecturi`. The `userid` is a list of accepted authenticated user emails.
 
 ```yaml
 security:
@@ -47,7 +47,7 @@ security:
 
 ## Authentication Bypass
 
-If you are running BirdNET-Go on a trusted network, you can bypass authentication either by configuring a Cloudflare Tunnel with Cloudflare Access enabled, or by specifying a trusted subnet. Both options will allow access to the application without any authentication.
+If you are running VoiceWatch on a trusted network, you can bypass authentication either by configuring a Cloudflare Tunnel with Cloudflare Access enabled, or by specifying a trusted subnet. Both options will allow access to the application without any authentication.
 
 Both options can be configured through the web interface or in the `config.yaml` file:
 
@@ -61,7 +61,7 @@ security:
 
 ### Cloudflare Access Authentication Bypass
 
-Cloudflare Access provides an authentication layer that uses your existing identity providers, such as Google or GitHub accounts, to control access to your applications. When using Cloudflare Access for authentication, you can configure BirdNET-Go to trust traffic coming through the Cloudflare tunnel. The system authenticates requests by validating the `Cf-Access-Jwt-Assertion` header containing a JWT token from Cloudflare.
+Cloudflare Access provides an authentication layer that uses your existing identity providers, such as Google or GitHub accounts, to control access to your applications. When using Cloudflare Access for authentication, you can configure VoiceWatch to trust traffic coming through the Cloudflare tunnel. The system authenticates requests by validating the `Cf-Access-Jwt-Assertion` header containing a JWT token from Cloudflare.
 
 To add even more security, you can also require that the Cloudflare Team Domain Name and Policy audience are valid in the JWT token. Enable these by defining them in the `config.yaml` file:
 
@@ -81,7 +81,7 @@ See the following links for more information on Cloudflare Access:
 
 ### Subnet-based Authentication Bypass
 
-When enabled, BirdNET-Go will allow access to the application without any authentication if the client's IP address is within the specified subnet. Home routers typically use `192.168.1.0/24`, `192.168.0.0/24` or `172.16.0.0/24`.
+When enabled, VoiceWatch will allow access to the application without any authentication if the client's IP address is within the specified subnet. Home routers typically use `192.168.1.0/24`, `192.168.0.0/24` or `172.16.0.0/24`.
 
 ## Authentication Recovery
 

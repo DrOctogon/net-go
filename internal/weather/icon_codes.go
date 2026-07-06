@@ -1,6 +1,6 @@
 package weather
 
-import "github.com/tphakala/birdnet-go/internal/logger"
+import "github.com/tphakala/voicewatch/internal/logger"
 
 // IconCode represents a standardized weather icon code
 type IconCode string

@@ -9,16 +9,13 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/analysis/jobqueue"
-	"github.com/tphakala/birdnet-go/internal/analysis/species"
-	"github.com/tphakala/birdnet-go/internal/audiocore/buffer"
-	"github.com/tphakala/birdnet-go/internal/birdweather"
-	"github.com/tphakala/birdnet-go/internal/classifier"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	"github.com/tphakala/birdnet-go/internal/detection"
-	"github.com/tphakala/birdnet-go/internal/imageprovider"
-	"github.com/tphakala/birdnet-go/internal/mqtt"
+	"github.com/tphakala/voicewatch/internal/analysis/jobqueue"
+	"github.com/tphakala/voicewatch/internal/analysis/species"
+	"github.com/tphakala/voicewatch/internal/audiocore/buffer"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/detection"
+	"github.com/tphakala/voicewatch/internal/mqtt"
 )
 
 // Timeout and interval constants
@@ -52,6 +49,28 @@ type DetectionContext struct {
 	// This flag is available for any late consumers that need to know whether the
 	// audio file exists on disk.
 	ClipSaved atomic.Bool
+
+	// transcript holds the speech-to-text transcript produced by TranscribeAction,
+	// shared with any late consumers. nil until transcription completes.
+	transcript atomic.Pointer[TranscriptResult]
+}
+
+// TranscriptResult is the transcript and its language stored in a DetectionContext
+// by TranscribeAction for downstream consumers.
+type TranscriptResult struct {
+	Text     string
+	Language string
+}
+
+// SetTranscript stores the transcript produced for this detection.
+func (c *DetectionContext) SetTranscript(text, language string) {
+	c.transcript.Store(&TranscriptResult{Text: text, Language: language})
+}
+
+// Transcript returns the transcript stored for this detection, or nil if
+// transcription has not completed (or is disabled).
+func (c *DetectionContext) Transcript() *TranscriptResult {
+	return c.transcript.Load()
 }
 
 // Action is the base interface for all actions that can be executed.
@@ -150,23 +169,10 @@ type PreRendererSubmit interface {
 	Stop() // Graceful shutdown
 }
 
-type BirdWeatherAction struct {
-	Settings      *conf.Settings
-	Result        detection.Result // Domain model (single source of truth)
-	pcmData       []byte
-	BwClient      *birdweather.BwClient
-	EventTracker  *EventTracker
-	RetryConfig   jobqueue.RetryConfig // Configuration for retry behavior
-	Description   string
-	CorrelationID string     // Detection correlation ID for log tracking
-	mu            sync.Mutex // Protect concurrent access to Result and pcmData
-}
-
 type MqttAction struct {
-	Settings       *conf.Settings
-	Result         detection.Result // Domain model (single source of truth)
-	BirdImageCache *imageprovider.BirdImageCache
-	MqttClient     mqtt.Client
+	Settings   *conf.Settings
+	Result     detection.Result // Domain model (single source of truth)
+	MqttClient mqtt.Client
 	EventTracker   *EventTracker
 	DetectionCtx   *DetectionContext    // Shared context from DatabaseAction
 	RetryConfig    jobqueue.RetryConfig // Configuration for retry behavior
@@ -175,26 +181,18 @@ type MqttAction struct {
 	mu             sync.Mutex // Protect concurrent access to Result
 }
 
-type UpdateRangeFilterAction struct {
-	Bn          *classifier.Orchestrator
-	Settings    *conf.Settings
-	Description string
-	mu          sync.Mutex // Protect concurrent access to Settings
-}
-
 type SSEAction struct {
-	Settings       *conf.Settings
-	Result         detection.Result // Domain model (single source of truth)
-	BirdImageCache *imageprovider.BirdImageCache
-	EventTracker   *EventTracker
-	DetectionCtx   *DetectionContext    // Shared context from DatabaseAction (provides database ID)
-	RetryConfig    jobqueue.RetryConfig // Configuration for retry behavior
-	Description    string
-	CorrelationID  string     // Detection correlation ID for log tracking
-	mu             sync.Mutex // Protect concurrent access to Result
-	// SSEBroadcaster is a function that broadcasts detection data
-	// This allows the action to be independent of the specific API implementation
-	SSEBroadcaster func(note *datastore.Note, birdImage *imageprovider.BirdImage) error
+	Settings      *conf.Settings
+	Result        detection.Result // Domain model (single source of truth)
+	EventTracker  *EventTracker
+	DetectionCtx  *DetectionContext    // Shared context from DatabaseAction (provides database ID)
+	RetryConfig   jobqueue.RetryConfig // Configuration for retry behavior
+	Description   string
+	CorrelationID string     // Detection correlation ID for log tracking
+	mu            sync.Mutex // Protect concurrent access to Result
+	// SSEBroadcaster is a function that broadcasts detection data.
+	// This allows the action to be independent of the specific API implementation.
+	SSEBroadcaster func(note *datastore.Note) error
 }
 
 // CompositeAction executes multiple actions sequentially, ensuring proper dependency management.
@@ -256,28 +254,12 @@ func (a *SaveAudioAction) GetDescription() string {
 	return "Save audio clip to file"
 }
 
-// GetDescription returns a human-readable description of the BirdWeatherAction
-func (a *BirdWeatherAction) GetDescription() string {
-	if a.Description != "" {
-		return a.Description
-	}
-	return "Upload detection to BirdWeather"
-}
-
 // GetDescription returns a human-readable description of the MqttAction
 func (a *MqttAction) GetDescription() string {
 	if a.Description != "" {
 		return a.Description
 	}
 	return "Publish detection to MQTT"
-}
-
-// GetDescription returns a human-readable description of the UpdateRangeFilterAction
-func (a *UpdateRangeFilterAction) GetDescription() string {
-	if a.Description != "" {
-		return a.Description
-	}
-	return "Update BirdNET range filter"
 }
 
 // GetDescription returns a human-readable description of the SSEAction

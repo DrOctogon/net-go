@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/tphakala/birdnet-go/internal/audiocore"
+	"github.com/tphakala/voicewatch/internal/audiocore"
 )
 
 // TestAudioLevelSSEDataFormat tests the AudioLevelSSEData struct marshaling

@@ -11,8 +11,8 @@ import (
 	"time"
 
 	"github.com/sj14/astral/pkg/astral"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/observability/metrics"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/observability/metrics"
 )
 
 // SunEventTimes holds the calculated sun event times in local time

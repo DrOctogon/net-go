@@ -397,9 +397,7 @@ func init() {
 	RegisterComponent("ffmpeg-manager", "ffmpeg-manager")
 	RegisterComponent("ffmpeg-stream", "ffmpeg-stream")
 	RegisterComponent("datastore", "datastore")
-	RegisterComponent("imageprovider", "imageprovider")
 	RegisterComponent("diskmanager", "diskmanager")
-	RegisterComponent("ebird", "ebird")
 	RegisterComponent("mqtt", "mqtt")
 	RegisterComponent("weather", "weather")
 	RegisterComponent("conf", "configuration")
@@ -456,7 +454,7 @@ func quickComponentLookup(depth int) string {
 	funcName := fn.Name()
 
 	// Skip if it's our own error package
-	if strings.Contains(funcName, "github.com/tphakala/birdnet-go/internal/errors") {
+	if strings.Contains(funcName, "github.com/tphakala/voicewatch/internal/errors") {
 		return ""
 	}
 
@@ -501,7 +499,7 @@ func detectComponentFull() string {
 		funcName := fn.Name()
 
 		// Skip internal error package functions
-		if strings.Contains(funcName, "github.com/tphakala/birdnet-go/internal/errors") {
+		if strings.Contains(funcName, "github.com/tphakala/voicewatch/internal/errors") {
 			continue
 		}
 
@@ -621,14 +619,6 @@ func detectCategory(err error, component string) ErrorCategory {
 		return CategoryDatabase
 	case "http-controller":
 		return CategoryHTTP
-	case "imageprovider":
-		if strings.Contains(errorMsg, "cache") {
-			return CategoryImageCache
-		}
-		if strings.Contains(errorMsg, "fetch") || strings.Contains(errorMsg, "download") || strings.Contains(errorMsg, "url") {
-			return CategoryImageFetch
-		}
-		return CategoryImageProvider
 	}
 
 	return CategoryGeneric

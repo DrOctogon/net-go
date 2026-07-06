@@ -2,29 +2,28 @@
 
 ## ⚠️ Important Notice: Volunteer-Maintained Project
 
-BirdNET-Go is a hobby project maintained by volunteers in their spare time. While we are committed to protecting your privacy and following best practices, our capacity to respond to requests and provide support is limited by volunteer availability. This privacy statement reflects our sincere efforts to be transparent about data practices, but please understand that responses may be delayed during busy periods or personal circumstances.
+VoiceWatch is a hobby project maintained by volunteers in their spare time. While we are committed to protecting your privacy and following best practices, our capacity to respond to requests and provide support is limited by volunteer availability. This privacy statement reflects our sincere efforts to be transparent about data practices, but please understand that responses may be delayed during busy periods or personal circumstances.
 
-BirdNET-Go is committed to protecting your privacy while providing reliable bird sound identification software. This privacy statement explains what data we collect, how we protect it, and your rights regarding data collection.
+VoiceWatch is committed to protecting your privacy while providing reliable human-voice detection software. This privacy statement explains what data we collect, how we protect it, and your rights regarding data collection.
 
 ## 🔒 Important: Completely Opt-In Data Collection
 
-**BirdNET-Go collects ZERO data by default.** All telemetry and support data collection is:
+**VoiceWatch collects ZERO data by default.** All telemetry and support data collection is:
 
 - ✅ **Completely Optional** - Never enabled without your explicit consent
 - ✅ **Opt-In Only** - You must actively choose to enable telemetry
 - ✅ **No Hidden Collection** - Nothing is transmitted without your knowledge
 - ✅ **User Controlled** - Enable or disable anytime with immediate effect
 
-**By default, BirdNET-Go operates locally with minimal external data transmission.** The only default external connections are:
+**By default, VoiceWatch operates locally with minimal external data transmission.** The only default external connections are:
 
 - **Weather data**: Read-only requests to YR.no (Norway's meteorological service) for weather information
-- **Bird images**: Read-only requests to Wikimedia Commons and AviCommons for bird photos
 
 **All other external integrations require explicit user configuration and are disabled by default.**
 
 ## Privacy Principles
 
-BirdNET-Go follows **Privacy by Design** principles:
+VoiceWatch follows **Privacy by Design** principles:
 
 - **Data Minimization**: Only essential technical data is collected for debugging
 - **Explicit Consent**: All telemetry requires explicit opt-in activation
@@ -40,29 +39,15 @@ BirdNET-Go follows **Privacy by Design** principles:
 
 - **YR.no API**: Read-only requests for weather data using your configured coordinates
 - **Data sent**: Only HTTP requests with latitude/longitude parameters
-- **Purpose**: Correlate weather patterns with bird detection for better insights
+- **Purpose**: Correlate weather patterns with voice detection for better insights
 - **Privacy**: No registration required, no personal data, no tracking
-
-**Image Services** (enabled by default):
-
-- **Wikimedia Commons & AviCommons**: Download bird photos for web interface
-- **Data sent**: Only HTTP GET requests for public images
-- **Purpose**: Display bird photos in the web dashboard
-- **Privacy**: Read-only requests, no personal data transmitted
 
 ### Optional External Integrations (Require User Configuration)
 
-**BirdWeather Integration** (disabled by default):
-
-- **Purpose**: Share bird detections with the citizen science platform
-- **Data sent**: 3-second audio clips, species data, randomized location coordinates
-- **Requires**: User account registration and station ID configuration
-- **Privacy protection**: Location randomized within user-defined accuracy radius
-
 **MQTT Broker Integration** (disabled by default):
 
-- **Purpose**: Publish bird detection events to external MQTT brokers
-- **Data sent**: Bird detection information (species, confidence, timestamp, optional audio)
+- **Purpose**: Publish voice detection events to external MQTT brokers
+- **Data sent**: Voice detection information (confidence, timestamp, optional audio)
 - **Requires**: User-configured broker URL, credentials, and topics
 
 **Backup Services** (disabled by default):
@@ -123,28 +108,28 @@ BirdNET-Go follows **Privacy by Design** principles:
 
 ### ❌ Data We NEVER Collect (Telemetry)
 
-**Note**: The following applies to telemetry data collection. Optional integrations like BirdWeather may transmit some of this data when explicitly configured by users.
+**Note**: The following applies to telemetry data collection. Optional integrations (e.g. MQTT) may transmit some of this data when explicitly configured by users.
 
-- **Personal audio recordings** (except 3-second clips for BirdWeather when configured)
-- **Continuous bird detection results** (except when shared via configured integrations)
+- **Personal audio recordings** (except optional clips sent via a user-configured integration)
+- **Continuous voice detection results** (except when shared via configured integrations)
 - **Actual RTSP URLs, IP addresses, or hostnames** (anonymized in telemetry)
 - **Usernames, passwords, or authentication credentials**
 - **File paths** or directory structures
 - **Personal configuration settings** (except when included in support packages)
-- **Precise location data** (coordinates used only for weather/BirdWeather when configured)
+- **Precise location data** (coordinates used only for weather when configured)
 - **Device identifiers** or hardware serial numbers
 - **Network topology** or internal IP addresses
 
 ### ❌ Data Never Transmitted by Default
 
-- **No bird detection data** shared without explicit integration setup
-- **No audio recordings** transmitted without BirdWeather configuration
-- **No location information** sent without weather service or BirdWeather setup
+- **No voice detection data** shared without explicit integration setup
+- **No audio recordings** transmitted without a user-configured integration (e.g. MQTT)
+- **No location information** sent without weather service setup
 - **No personal information** of any kind
 
 ## System Identification
 
-BirdNET-Go uses a **unique System ID** for correlating error reports:
+VoiceWatch uses a **unique System ID** for correlating error reports:
 
 - **Format**: Random 12-character identifier (e.g., "A1B2-C3D4-E5F6")
 - **Generation**: Created locally using cryptographically secure random numbers
@@ -184,27 +169,13 @@ BirdNET-Go uses a **unique System ID** for correlating error reports:
 - **Data flow**: Inbound only (weather information)
 - **Encryption**: HTTPS
 
-**Image Services**:
-
-- **Wikimedia Commons**: Wikimedia Foundation servers
-- **AviCommons**: University of Arizona servers
-- **Data flow**: Inbound only (bird photos)
-- **Encryption**: HTTPS
-
 ### User-Configured Integrations
-
-**BirdWeather** (when enabled):
-
-- **Service**: BirdWeather citizen science platform
-- **Purpose**: Community bird detection sharing
-- **Data**: 3-second audio clips, species data, randomized coordinates
-- **User control**: Requires explicit registration and configuration
 
 **MQTT Brokers** (when configured):
 
 - **Service**: User-specified MQTT brokers
-- **Purpose**: Real-time bird detection publishing
-- **Data**: Bird detection events, optional audio clips
+- **Purpose**: Real-time voice detection publishing
+- **Data**: Voice detection events, optional audio clips
 - **User control**: Complete control over broker and data format
 
 **Backup Services** (when configured):
@@ -271,6 +242,28 @@ All telemetry passes through multiple privacy protection layers:
 - Configuration data scrubbing for support packages
 - Memory safety to prevent credential exposure
 
+### Speaker Attribute Estimation (Opt-In, Default Off)
+
+VoiceWatch can optionally estimate **speaker gender**, a **relative age band**, and
+a **voice-print embedding** for each human-voice detection. This is privacy-sensitive
+and is **disabled by default**; it must be explicitly enabled, and each attribute
+(gender / age / voice-print) is toggled independently.
+
+- **Estimates, not identity recognition.** These are demographic _inferences_ from
+  acoustic features — not biometric identification of a specific person. Accuracy
+  varies with accent, language, age, and recording quality, and the models carry
+  known demographic bias. Treat the labels as approximate.
+- **Runs locally; nothing leaves the device.** Estimation is on-device inference;
+  no audio or attribute is transmitted to any external service by this feature.
+- **No model is bundled.** VoiceWatch ships with no gender/age/voice-print model.
+  The operator supplies an ONNX model file per attribute; if none is configured the
+  feature produces nothing.
+- **Stored alongside clips.** When enabled, estimates and the voice-print embedding
+  are saved with the detection and inherit the same store-all-clips retention and
+  the privacy-filter / quiet-hours controls described above.
+- **Opt-out remains the default.** Leaving the feature off (the default) means no
+  demographic inference is performed or stored.
+
 ### Security Measures
 
 - **Encryption**: TLS 1.3 for data transmission
@@ -282,7 +275,7 @@ All telemetry passes through multiple privacy protection layers:
 
 ### Enable Telemetry
 
-1. Open BirdNET-Go web interface
+1. Open VoiceWatch web interface
 2. Go to Settings → Support
 3. Toggle "Enable Telemetry" to ON
 4. Your System ID will be displayed for reference
@@ -303,7 +296,7 @@ All telemetry passes through multiple privacy protection layers:
 
 ### Project Nature
 
-BirdNET-Go is provided as free, open-source software maintained by volunteers. While we implement strong privacy protections by design, users should understand:
+VoiceWatch is provided as free, open-source software maintained by volunteers. While we implement strong privacy protections by design, users should understand:
 
 - **Volunteer Capacity**: Support and response times depend on volunteer availability
 - **Best Effort Basis**: All privacy commitments are made on a best-effort basis within volunteer constraints
@@ -333,7 +326,7 @@ For other privacy questions, please report them through GitHub Issues:
 
 **📋 How to Report Privacy Issues:**
 
-1. **Go to**: [BirdNET-Go Issues](https://github.com/tphakala/birdnet-go/issues)
+1. **Go to**: [VoiceWatch Issues](https://github.com/tphakala/voicewatch/issues)
 2. **Click**: "New Issue"
 3. **Title Format**: Use one of these prefixes:
    - `[PRIVACY]` - General privacy questions or concerns
@@ -370,7 +363,7 @@ For other privacy questions, please report them through GitHub Issues:
 For sensitive security or privacy issues that shouldn't be public, contact the project maintainers through GitHub Issues marked as confidential or use GitHub's private vulnerability reporting if available.
 
 **📝 Note for Users:**
-BirdNET-Go is a hobby project maintained by volunteers. We are genuinely committed to privacy protection, but our response capacity is limited by volunteer availability. Most privacy concerns can be immediately addressed by disabling telemetry in Settings → Support. For complex requests, please be patient as responses depend on volunteer schedules and may take longer than commercial services.
+VoiceWatch is a hobby project maintained by volunteers. We are genuinely committed to privacy protection, but our response capacity is limited by volunteer availability. Most privacy concerns can be immediately addressed by disabling telemetry in Settings → Support. For complex requests, please be patient as responses depend on volunteer schedules and may take longer than commercial services.
 
 ### Data Subject Rights (GDPR)
 
@@ -395,4 +388,4 @@ This privacy statement may be updated to reflect changes in our data practices o
 **Last Updated**: June 2025  
 **Effective Date**: June 2025
 
-_This privacy statement covers BirdNET-Go software as maintained by volunteers. For questions about the privacy practices of third-party services (Sentry, BirdWeather, etc.), please consult their respective privacy policies. BirdNET-Go is provided "AS IS" without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose and non-infringement. In no event shall the authors or copyright holders be liable for any claim, damages or other liability arising from the use of this software._
+_This privacy statement covers VoiceWatch software as maintained by volunteers. For questions about the privacy practices of third-party services (Sentry, your configured MQTT broker, etc.), please consult their respective privacy policies. VoiceWatch is provided "AS IS" without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose and non-infringement. In no event shall the authors or copyright holders be liable for any claim, damages or other liability arising from the use of this software._

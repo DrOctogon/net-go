@@ -15,7 +15,7 @@ var licenseFile embed.FS
 func Command() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "license",
-		Short: "Print the license of BirdNET-Go",
+		Short: "Print the license of VoiceWatch",
 		Long:  "",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			data, err := fs.ReadFile(licenseFile, "LICENSE")

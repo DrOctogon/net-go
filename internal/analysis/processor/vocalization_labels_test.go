@@ -5,10 +5,10 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/tphakala/birdnet-go/internal/classifier"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	"github.com/tphakala/birdnet-go/internal/labels/nonbird"
+	"github.com/tphakala/voicewatch/internal/classifier"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/labels/nonbird"
 )
 
 func TestIsHumanVocalization(t *testing.T) {
@@ -20,14 +20,14 @@ func TestIsHumanVocalization(t *testing.T) {
 		want     bool
 	}{
 		// BirdNET v2.4 classes, English (matched via the locale-stable prefix).
-		{"BirdNET human vocal", "Human vocal_Human vocal", true},
-		{"BirdNET human non-vocal", "Human non-vocal_Human non-vocal", true},
-		{"BirdNET human whistle", "Human whistle_Human whistle", true},
+		{"speech model human vocal", "Human vocal_Human vocal", true},
+		{"speech model human non-vocal", "Human non-vocal_Human non-vocal", true},
+		{"speech model human whistle", "Human whistle_Human whistle", true},
 		// BirdNET v2.4 classes, non-English locale. The common name is localized
 		// ("Mensch Stimme"), so only raw-label matching catches these.
-		{"BirdNET human vocal (de)", "Human vocal_Mensch Stimme", true},
-		{"BirdNET human non-vocal (de)", "Human non-vocal_Mensch Geräusch", true},
-		{"BirdNET human whistle (de)", "Human whistle_Mensch Pfeifen", true},
+		{"speech model human vocal (de)", "Human vocal_Mensch Stimme", true},
+		{"speech model human non-vocal (de)", "Human non-vocal_Mensch Geräusch", true},
+		{"speech model human whistle (de)", "Human whistle_Mensch Pfeifen", true},
 		// Perch v2 speech/voice classes (exact raw-label match).
 		{"Perch Speech", "Speech", true},
 		{"Perch Human_voice", "Human_voice", true},
@@ -60,11 +60,11 @@ func TestIsHumanVocalization(t *testing.T) {
 		// Case-insensitive matching (custom/future label files may vary casing).
 		{"Perch speech lowercase", "speech", true},
 		{"Perch HUMAN_VOICE uppercase", "HUMAN_VOICE", true},
-		{"BirdNET human prefix lowercase", "human vocal_human vocal", true},
+		{"speech model human prefix lowercase", "human vocal_human vocal", true},
 		// Negatives: bird binomials that merely contain the substring "human".
 		{"cicada Pacarina schumanni", "Pacarina schumanni", false},
 		{"warbler Phylloscopus humei", "Phylloscopus humei", false},
-		{"BirdNET American Robin", "Turdus migratorius_American Robin", false},
+		{"speech model American Robin", "Turdus migratorius_American Robin", false},
 		// Negatives: non-human FSD50K classes that co-occur with people.
 		{"Perch Thump_and_thud", "Thump_and_thud", false},
 		{"Perch Car_passing_by", "Car_passing_by", false},
@@ -81,55 +81,10 @@ func TestIsHumanVocalization(t *testing.T) {
 	}
 }
 
-func TestIsDogDetection(t *testing.T) {
-	t.Parallel()
-
-	tests := []struct {
-		name     string
-		rawLabel string
-		want     bool
-	}{
-		// BirdNET v2.4 dog class, English and a non-English locale.
-		{"BirdNET Dog (en)", "Dog_Dog", true},
-		{"BirdNET Dog (de)", "Dog_Hund", true},
-		// Perch v2 dog sound classes and the domestic dog taxon.
-		{"Perch Dog", "Dog", true},
-		{"Perch Bark", "Bark", true},
-		{"Perch Growling", "Growling", true},
-		{"Perch Canis familiaris", "Canis familiaris", true},
-		// Case-insensitive matching.
-		{"Perch bark lowercase", "bark", true},
-		{"BirdNET DOG_DOG uppercase", "DOG_DOG", true},
-		// Negatives: bird/insect binomials that merely contain the substring "dog".
-		// Tachyspiza rhodogaster is a real bird (Vinous-breasted Sparrowhawk); the
-		// old "dog" substring match would have wrongly filtered it.
-		{"hawk Tachyspiza rhodogaster", "Tachyspiza rhodogaster", false},
-		{"katydid Poecilimon doga", "Poecilimon doga", false},
-		{"cicada Cicada mordoganensis", "Cicada mordoganensis", false},
-		{"cricket Lepidogryllus comparatus", "Lepidogryllus comparatus", false},
-		{"cricket Lepidogryllus parvulus", "Lepidogryllus parvulus", false},
-		// Negatives: wild canids stay detectable as wildlife.
-		{"wolf Canis lupus", "Canis lupus", false},
-		{"coyote Canis latrans", "Canis latrans", false},
-		{"jackal Canis aureus", "Canis aureus", false},
-		// Negatives: humans and birds are not dogs.
-		{"Perch Speech is not dog", "Speech", false},
-		{"bird Turdus merula", "Turdus merula", false},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			t.Parallel()
-			assert.Equal(t, tt.want, isDogDetection(tt.rawLabel))
-		})
-	}
-}
-
-// TestDetectionHandlers_RecordTimestamp proves both recording handlers store a
+// TestDetectionHandlers_RecordTimestamp proves the human detection handler stores a
 // detection timestamp for the labels the old substring match missed (Perch v2
-// FSD50K classes and localized non-English BirdNET classes), and do NOT record
-// when the filter is disabled or the confidence is below the threshold. It also
-// confirms each handler writes only its own map, never the other filter's.
+// FSD50K classes and localized non-English BirdNET classes), and does NOT record
+// when the filter is disabled or the confidence is below the threshold.
 func TestDetectionHandlers_RecordTimestamp(t *testing.T) {
 	t.Parallel()
 
@@ -140,10 +95,6 @@ func TestDetectionHandlers_RecordTimestamp(t *testing.T) {
 		s.Realtime.PrivacyFilter.Enabled = true
 		s.Realtime.PrivacyFilter.Confidence = 0.05
 	}
-	enableDog := func(s *conf.Settings) {
-		s.Realtime.DogBarkFilter.Enabled = true
-		s.Realtime.DogBarkFilter.Confidence = 0.05
-	}
 
 	tests := []struct {
 		name       string
@@ -151,17 +102,12 @@ func TestDetectionHandlers_RecordTimestamp(t *testing.T) {
 		confidence float32
 		enable     func(s *conf.Settings)
 		record     func(p *Processor, s *conf.Settings, item classifier.Results, r datastore.Results)
-		isHuman    bool // true: should write LastHumanDetection; false: LastDogDetection
 		wantStored bool
 	}{
-		{"privacy records Perch speech", "Speech", 0.9, enablePrivacy, (*Processor).handleHumanDetection, true, true},
-		{"privacy records localized BirdNET human", "Human vocal_Mensch Stimme", 0.9, enablePrivacy, (*Processor).handleHumanDetection, true, true},
-		{"privacy disabled does not record", "Speech", 0.9, func(_ *conf.Settings) {}, (*Processor).handleHumanDetection, true, false},
-		{"privacy below threshold does not record", "Speech", 0.01, enablePrivacy, (*Processor).handleHumanDetection, true, false},
-		{"dog records Perch bark", "Bark", 0.9, enableDog, (*Processor).handleDogDetection, false, true},
-		{"dog records localized BirdNET dog", "Dog_Hund", 0.9, enableDog, (*Processor).handleDogDetection, false, true},
-		{"dog disabled does not record", "Bark", 0.9, func(_ *conf.Settings) {}, (*Processor).handleDogDetection, false, false},
-		{"dog below threshold does not record", "Bark", 0.01, enableDog, (*Processor).handleDogDetection, false, false},
+		{"privacy records Perch speech", "Speech", 0.9, enablePrivacy, (*Processor).handleHumanDetection, true},
+		{"privacy records localized speech model human", "Human vocal_Mensch Stimme", 0.9, enablePrivacy, (*Processor).handleHumanDetection, true},
+		{"privacy disabled does not record", "Speech", 0.9, func(_ *conf.Settings) {}, (*Processor).handleHumanDetection, false},
+		{"privacy below threshold does not record", "Speech", 0.01, enablePrivacy, (*Processor).handleHumanDetection, false},
 	}
 
 	for _, tt := range tests {
@@ -173,7 +119,6 @@ func TestDetectionHandlers_RecordTimestamp(t *testing.T) {
 
 			p := &Processor{
 				LastHumanDetection: make(map[string]time.Time),
-				LastDogDetection:   make(map[string]time.Time),
 			}
 			item := classifier.Results{StartTime: start}
 			item.Source.ID = source
@@ -181,17 +126,11 @@ func TestDetectionHandlers_RecordTimestamp(t *testing.T) {
 
 			tt.record(p, settings, item, result)
 
-			target, other := p.LastHumanDetection, p.LastDogDetection
-			if !tt.isHuman {
-				target, other = p.LastDogDetection, p.LastHumanDetection
-			}
-
-			got, ok := target[source]
-			assert.Equal(t, tt.wantStored, ok, "unexpected record state in target map")
+			got, ok := p.LastHumanDetection[source]
+			assert.Equal(t, tt.wantStored, ok, "unexpected record state in LastHumanDetection")
 			if tt.wantStored {
 				assert.Equal(t, start, got)
 			}
-			assert.Empty(t, other, "handler must not write the other filter's map")
 		})
 	}
 }
@@ -258,49 +197,54 @@ func TestPerchHumanLabelsParityWithNonbird(t *testing.T) {
 	}
 }
 
-// TestShouldFilterDetection_DropsHumanLabels covers the third changed call site:
-// shouldFilterDetection must drop a human-labeled detection from being saved
-// (Perch v2 class and a localized BirdNET class), while letting a normal bird
-// through.
-func TestShouldFilterDetection_DropsHumanLabels(t *testing.T) {
+// TestShouldFilterDetection_HumanPrivacyGate verifies the opt-in human-voice
+// privacy gate. With the privacy filter OFF (the VoiceWatch default), human-voice
+// detections pass through so their clips are saved. With it ON, human-voice
+// detections are dropped. A non-human label is never dropped by this gate.
+func TestShouldFilterDetection_HumanPrivacyGate(t *testing.T) {
 	t.Parallel()
 
-	tests := []struct {
-		name       string
-		species    string
-		wantFilter bool
+	cases := []struct {
+		name    string
+		species string
+		isHuman bool
 	}{
-		{"Perch speech is dropped", "Speech", true},
-		{"localized BirdNET human is dropped", "Human vocal_Mensch Stimme", true},
-		{"normal bird is not dropped by the human filter", "Turdus merula", false},
+		{"speech label", "Speech", true},
+		{"localized human label", "Human vocal_Mensch Stimme", true},
+		{"non-human label", "Turdus merula", false},
 	}
 
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			t.Parallel()
-
-			p := &Processor{}
-			settings := &conf.Settings{}
-			result := datastore.Results{Species: tt.species, Confidence: 0.9}
-
-			shouldFilter, _ := p.shouldFilterDetection(
-				settings,
-				result,
-				tt.species, // commonName (unused by the human branch)
-				tt.species, // scientificName
-				tt.species, // speciesLowercase
-				0.7,        // baseThreshold (Confidence 0.9 > 0.7 triggers the human branch)
-				"Backyard",
-				"Perch_V2",
-			)
-
-			if tt.wantFilter {
-				assert.True(t, shouldFilter, "human-labeled detection must be filtered out")
+	for _, privacyOn := range []bool{false, true} {
+		for _, tc := range cases {
+			name := tc.name
+			if privacyOn {
+				name += "/privacy_on"
 			} else {
-				// A normal bird is not dropped by the human privacy branch. Other
-				// branches may still pass it through; the human check must not fire.
-				assert.False(t, shouldFilter, "non-human detection must not hit the human privacy filter")
+				name += "/privacy_off"
 			}
-		})
+			t.Run(name, func(t *testing.T) {
+				t.Parallel()
+
+				p := &Processor{}
+				settings := &conf.Settings{}
+				settings.Realtime.PrivacyFilter.Enabled = privacyOn
+				result := datastore.Results{Species: tc.species, Confidence: 0.9}
+
+				shouldFilter, _ := p.shouldFilterDetection(
+					settings,
+					result,
+					tc.species, // commonName
+					tc.species, // scientificName
+					tc.species, // speciesLowercase
+					0.7,        // baseThreshold (Confidence 0.9 > 0.7)
+					"src",
+					"voicewatch",
+				)
+
+				// Dropped only when the privacy filter is enabled AND the label is human.
+				assert.Equal(t, privacyOn && tc.isHuman, shouldFilter,
+					"human voice should be dropped only when the privacy filter is on")
+			})
+		}
 	}
 }

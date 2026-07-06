@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/audiocore/ffmpeg"
+	"github.com/tphakala/voicewatch/internal/audiocore/ffmpeg"
 )
 
 // TestBuildProcessingFilterChain verifies that the FFmpeg -af filter chain is built

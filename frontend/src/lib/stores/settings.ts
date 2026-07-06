@@ -1,8 +1,8 @@
 /**
  * settings.ts
  *
- * Comprehensive settings management store for BirdNET-Go application configuration.
- * Handles all application settings including BirdNET AI parameters, integrations, and system config.
+ * Comprehensive settings management store for VoiceWatch application configuration.
+ * Handles all application settings including VoiceWatch AI parameters, integrations, and system config.
  *
  * Usage:
  * - Settings pages for configuration management
@@ -20,7 +20,7 @@
  *
  * Settings Categories:
  * - Node: Basic node identification and location
- * - BirdNET: AI model parameters and thresholds
+ * - VoiceWatch: AI model parameters and thresholds
  * - Audio: Recording and processing settings
  * - Integrations: External service configurations
  * - Output: Data export and notification settings
@@ -63,7 +63,7 @@ export interface MainSettings {
   };
 }
 
-export interface BirdNetSettings {
+export interface VoiceWatchSettings {
   modelPath: string | null;
   labelPath: string | null;
   sensitivity: number; // 0.0-1.5
@@ -74,7 +74,6 @@ export interface BirdNetSettings {
   latitude: number;
   longitude: number;
   locationConfigured: boolean; // true when location has been explicitly configured
-  rangeFilter: RangeFilterSettings;
 }
 
 export interface DynamicThresholdSettings {
@@ -87,27 +86,6 @@ export interface DynamicThresholdSettings {
 
 export interface FalsePositiveFilterSettings {
   level: number; // 0=Off, 1=Lenient, 2=Moderate, 3=Balanced, 4=Strict, 5=Maximum
-}
-
-export interface RangeFilterSettings {
-  threshold: number;
-  passUnmappedSpecies: boolean;
-  speciesCount: number | null;
-  species: string[];
-}
-
-/** Species entry returned by the range filter test endpoint */
-export interface RangeFilterSpeciesEntry {
-  commonName?: string;
-  scientificName?: string;
-  label?: string;
-  score?: number;
-}
-
-/** Result from loadRangeFilterSpecies */
-export interface RangeFilterSpeciesResult {
-  count: number;
-  species: RangeFilterSpeciesEntry[];
 }
 
 export interface BatSettings {
@@ -165,11 +143,37 @@ export interface AudioSettings {
   useAudioCore?: boolean;
   equalizer: EqualizerSettings;
   quietHours?: QuietHoursConfig;
+  speakerAttributes?: SpeakerAttributesSettings; // opt-in speaker attribute estimation
 }
 
 export interface SoundLevelSettings {
   enabled: boolean;
   interval: number;
+}
+
+// SpeakerAttributeModel holds per-attribute enablement and minimum confidence.
+// `modelPath` mirrors the backend field so a round-trip save does not drop it.
+export interface SpeakerAttributeModel {
+  enabled: boolean;
+  modelPath?: string;
+  threshold: number; // minimum confidence to keep an estimate (0..1)
+}
+
+// VoicePrintSettings mirrors the backend voice-print embedding config so saving
+// speaker-attribute settings does not strip it. Not edited by the Audio page.
+export interface VoicePrintSettings {
+  enabled: boolean;
+  modelPath?: string;
+}
+
+// SpeakerAttributesSettings configures opt-in speaker-attribute estimation
+// (estimated gender + relative age band). Disabled by default for privacy;
+// these are demographic estimates, not identity recognition.
+export interface SpeakerAttributesSettings {
+  enabled: boolean; // master switch for all speaker-attribute analysis
+  gender: SpeakerAttributeModel;
+  age: SpeakerAttributeModel;
+  voicePrint?: VoicePrintSettings;
 }
 
 // Stream type constants
@@ -305,7 +309,6 @@ export interface RetentionSettings {
 
 export interface FilterSettings {
   privacy: PrivacyFilterSettings;
-  dogBark: DogBarkFilterSettings;
 }
 
 export interface PrivacyFilterSettings {
@@ -323,50 +326,22 @@ export interface PrivacyFilter {
   conditions: Record<string, unknown>;
 }
 
-export interface DogBarkFilterSettings {
-  enabled: boolean;
-  confidence: number;
-  remember: number;
-  debug: boolean;
-  species: string[];
-}
-
 export interface DaylightFilterSettings {
   enabled: boolean;
   debug: boolean;
   offset: number;
-  species: string[];
-}
-
-export interface EBirdSettings {
-  enabled: boolean;
-  apiKey: string;
-  cacheTTL: number; // cache time-to-live in hours (default: 24)
-  locale: string; // locale for eBird data (e.g., "en", "es")
 }
 
 export interface IntegrationSettings {
-  birdweather: BirdWeatherSettings;
   mqtt: MQTTSettings;
   observability: ObservabilitySettings;
   weather: WeatherSettings;
-  ebird: EBirdSettings;
-}
-
-export interface BirdWeatherSettings {
-  enabled: boolean;
-  id: string;
-  latitude: number;
-  longitude: number;
-  locationAccuracy: number;
-  threshold: number;
-  debug: boolean;
 }
 
 export interface HomeAssistantSettings {
   enabled: boolean;
   discoveryPrefix: string; // Topic prefix (default: "homeassistant")
-  deviceName: string; // Base device name (default: "BirdNET-Go")
+  deviceName: string; // Base device name (default: "VoiceWatch")
 }
 
 export interface MQTTSettings {
@@ -520,7 +495,6 @@ export interface ExtendedCaptureSettings {
   enabled: boolean;
   maxDuration: number;
   captureBufferSeconds: number;
-  species: string[];
 }
 
 export interface SupportSettings {
@@ -530,6 +504,16 @@ export interface SupportSettings {
     environment: string;
     includePrivateInfo: boolean;
   };
+}
+
+// Transcription and keyword-flagging settings (matches backend conf.TranscriptionSettings)
+export interface TranscriptionSettings {
+  enabled: boolean;
+  model: string;
+  binary: string;
+  language: string;
+  keywords: string[];
+  keywordCaseSensitive: boolean;
 }
 
 // Realtime settings matching backend structure
@@ -544,9 +528,7 @@ export interface RealtimeSettings {
     enabled: boolean;
     path: string;
   };
-  birdweather?: BirdWeatherSettings;
   privacyFilter?: PrivacyFilterSettings;
-  dogBarkFilter?: DogBarkFilterSettings;
   daylightFilter?: DaylightFilterSettings;
   rtsp?: RTSPSettings;
   mqtt?: MQTTSettings;
@@ -556,7 +538,7 @@ export interface RealtimeSettings {
   weather?: WeatherSettings;
   speciesTracking?: SpeciesTrackingSettings;
   extendedCapture?: ExtendedCaptureSettings;
-  ebird?: EBirdSettings;
+  transcription?: TranscriptionSettings;
 }
 
 // WebServer settings
@@ -590,11 +572,11 @@ export interface DashboardLayout {
 export type DashboardElementType =
   | 'banner'
   | 'daily-summary'
-  | 'new-species-highlights'
   | 'currently-hearing'
   | 'detections-grid'
   | 'live-spectrogram'
-  | 'video-embed';
+  | 'video-embed'
+  | 'voice-activity';
 
 // A single configurable element on the dashboard
 export interface DashboardElement {
@@ -640,7 +622,6 @@ export interface Thumbnails {
   debug?: boolean;
   summary: boolean;
   recent: boolean;
-  imageProvider: string;
   fallbackPolicy: string;
 }
 
@@ -808,7 +789,7 @@ export interface SettingsFormData {
   buildDate?: string;
   systemId?: string;
   main: MainSettings;
-  birdnet: BirdNetSettings;
+  voicewatch: VoiceWatchSettings;
   bat?: BatSettings;
   input?: unknown; // Not exposed via JSON
   realtime?: RealtimeSettings;
@@ -852,7 +833,7 @@ function createEmptySettings(): SettingsFormData {
     main: {
       name: '',
     },
-    birdnet: {
+    voicewatch: {
       modelPath: '',
       labelPath: '',
       sensitivity: 1.0,
@@ -863,12 +844,6 @@ function createEmptySettings(): SettingsFormData {
       latitude: 0,
       longitude: 0,
       locationConfigured: false,
-      rangeFilter: {
-        threshold: 0.03,
-        passUnmappedSpecies: false,
-        speciesCount: null,
-        species: [],
-      },
     },
     bat: {
       enabled: false,
@@ -929,39 +904,27 @@ function createEmptySettings(): SettingsFormData {
           enabled: false,
           filters: [],
         },
+        speakerAttributes: {
+          enabled: false,
+          gender: { enabled: false, modelPath: '', threshold: 0.5 },
+          age: { enabled: false, modelPath: '', threshold: 0.5 },
+          voicePrint: { enabled: false, modelPath: '' },
+        },
       },
       privacyFilter: {
         enabled: false,
         confidence: 0.5,
         debug: false,
       },
-      dogBarkFilter: {
-        enabled: false,
-        confidence: 0.5,
-        remember: 30,
-        debug: false,
-        species: [],
-      },
       daylightFilter: {
         enabled: false,
         debug: false,
         offset: 0,
-        species: [],
       },
       extendedCapture: {
         enabled: false,
         maxDuration: 120,
         captureBufferSeconds: 0,
-        species: [],
-      },
-      birdweather: {
-        enabled: false,
-        id: '',
-        latitude: 0,
-        longitude: 0,
-        locationAccuracy: 1000,
-        threshold: 0.7,
-        debug: false,
       },
       mqtt: {
         enabled: false,
@@ -976,26 +939,27 @@ function createEmptySettings(): SettingsFormData {
         homeAssistant: {
           enabled: false,
           discoveryPrefix: 'homeassistant',
-          deviceName: 'BirdNET-Go',
+          deviceName: 'VoiceWatch',
         },
-      },
-      ebird: {
-        enabled: false,
-        apiKey: '',
-        cacheTTL: 24,
-        locale: 'en',
       },
       species: {
         include: [],
         exclude: [],
         config: {},
       },
+      transcription: {
+        enabled: false,
+        model: '',
+        binary: 'whisper-cli',
+        language: 'en',
+        keywords: [],
+        keywordCaseSensitive: false,
+      },
       weather: weatherDefaults,
       dashboard: {
         thumbnails: {
           summary: true,
           recent: true,
-          imageProvider: 'avicommons',
           fallbackPolicy: 'none',
         },
         summaryLimit: 30,
@@ -1107,7 +1071,7 @@ export const settingsDataLoaded = derived(settingsStore, $store => $store.dataLo
 // Section-specific derived stores matching backend structure
 export const mainSettings = derived(settingsStore, $store => $store.formData.main);
 
-export const birdnetSettings = derived(settingsStore, $store => $store.formData.birdnet);
+export const voicewatchSettings = derived(settingsStore, $store => $store.formData.voicewatch);
 
 export const batSettings = derived(settingsStore, $store => $store.formData.bat);
 
@@ -1115,24 +1079,19 @@ export const realtimeSettings = derived(settingsStore, $store => $store.formData
 
 export const audioSettings = derived(settingsStore, $store => $store.formData.realtime?.audio);
 
+export const speakerAttributesSettings = derived(
+  settingsStore,
+  $store => $store.formData.realtime?.audio?.speakerAttributes
+);
+
 export const privacyFilterSettings = derived(
   settingsStore,
   $store => $store.formData.realtime?.privacyFilter
 );
 
-export const dogBarkFilterSettings = derived(
-  settingsStore,
-  $store => $store.formData.realtime?.dogBarkFilter
-);
-
 export const daylightFilterSettings = derived(
   settingsStore,
   $store => $store.formData.realtime?.daylightFilter
-);
-
-export const birdweatherSettings = derived(
-  settingsStore,
-  $store => $store.formData.realtime?.birdweather
 );
 
 export const mqttSettings = derived(settingsStore, $store => $store.formData.realtime?.mqtt);
@@ -1165,7 +1124,6 @@ export const outputSettings = derived(settingsStore, $store => $store.formData.o
 export const notificationSettings = derived(settingsStore, $store => $store.formData.notification);
 
 export const integrationSettings = derived(settingsStore, $store => ({
-  birdweather: $store.formData.realtime?.birdweather,
   mqtt: $store.formData.realtime?.mqtt,
   observability: {
     prometheus: {
@@ -1177,12 +1135,6 @@ export const integrationSettings = derived(settingsStore, $store => ({
     },
   },
   weather: $store.formData.realtime?.weather,
-  ebird: $store.formData.realtime?.ebird ?? {
-    enabled: false,
-    apiKey: '',
-    cacheTTL: 24,
-    locale: 'en',
-  },
 }));
 
 export const supportSettings = derived(settingsStore, $store => ({
@@ -1205,6 +1157,12 @@ export const speciesTrackingSettings = derived(
 export const extendedCaptureSettings = derived(
   settingsStore,
   $store => $store.formData.realtime?.extendedCapture
+);
+
+// Transcription settings derived store
+export const transcriptionSettings = derived(
+  settingsStore,
+  $store => $store.formData.realtime?.transcription
 );
 
 // Settings actions
@@ -1328,11 +1286,11 @@ export const settingsActions = {
       // Convert empty strings to null for modelPath and labelPath to signal "revert to default"
       // This ensures the config file is properly cleaned when users clear these fields
       // Trim whitespace to handle cases like "   " which should also be treated as empty
-      if (coercedFormData.birdnet.modelPath?.trim() === '') {
-        coercedFormData.birdnet.modelPath = null;
+      if (coercedFormData.voicewatch.modelPath?.trim() === '') {
+        coercedFormData.voicewatch.modelPath = null;
       }
-      if (coercedFormData.birdnet.labelPath?.trim() === '') {
-        coercedFormData.birdnet.labelPath = null;
+      if (coercedFormData.voicewatch.labelPath?.trim() === '') {
+        coercedFormData.voicewatch.labelPath = null;
       }
 
       await settingsAPI.save(coercedFormData);
@@ -1424,29 +1382,5 @@ export const settingsActions = {
       ...state,
       error: null,
     }));
-  },
-
-  /**
-   * Load range filter species using the test endpoint that respects the
-   * current threshold. Returns the filtered species list and count.
-   *
-   * This uses POST /api/v2/range/species/test (not GET /api/v2/range/species/list)
-   * because the list endpoint ignores query parameters and returns all species,
-   * which would reset the displayed count. See #2393.
-   */
-  async loadRangeFilterSpecies(): Promise<RangeFilterSpeciesResult> {
-    const state = get(settingsStore);
-    const birdnet = state.formData.birdnet;
-
-    const data = await settingsAPI.rangeFilter.testSpecies(
-      birdnet.latitude,
-      birdnet.longitude,
-      birdnet.rangeFilter.threshold
-    );
-
-    return {
-      count: data.count,
-      species: data.species ?? [],
-    };
   },
 };

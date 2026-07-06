@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/datastore"
 )
 
 func TestCreateDetectionResult_ModelInfo(t *testing.T) {
@@ -20,23 +20,16 @@ func TestCreateDetectionResult_ModelInfo(t *testing.T) {
 		expectedVariant string
 	}{
 		{
-			name:            "Perch_V2 resolves to Perch model",
-			modelID:         "Perch_V2",
-			expectedName:    "Perch",
-			expectedVersion: "V2",
-			expectedVariant: "default",
-		},
-		{
-			name:            "empty modelID defaults to BirdNET",
+			name:            "empty modelID defaults to VoiceWatch",
 			modelID:         "",
-			expectedName:    "BirdNET",
+			expectedName:    "VoiceWatch",
 			expectedVersion: "2.4",
 			expectedVariant: "default",
 		},
 		{
 			name:            "BirdNET_V2.4 resolves to BirdNET model",
 			modelID:         "BirdNET_V2.4",
-			expectedName:    "BirdNET",
+			expectedName:    "VoiceWatch",
 			expectedVersion: "2.4",
 			expectedVariant: "default",
 		},

@@ -1,4 +1,4 @@
-// Command release-manifest generates the BirdNET-Go release manifest
+// Command release-manifest generates the VoiceWatch release manifest
 // (manifest.json) by querying the GitHub Releases API for the latest release on
 // each distribution channel (stable, nightly, beta). It is run in CI as the
 // final step of the release and nightly build pipelines, and on a daily
@@ -21,7 +21,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/update/manifest"
+	"github.com/tphakala/voicewatch/internal/update/manifest"
 )
 
 // repoRe validates the owner/name form of -repo before it is interpolated into

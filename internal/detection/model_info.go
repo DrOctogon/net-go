@@ -1,17 +1,17 @@
 package detection
 
-import "github.com/tphakala/birdnet-go/internal/datastore/v2/entities"
+import "github.com/tphakala/voicewatch/internal/datastore/v2/entities"
 
 // Default model constants.
 const (
-	DefaultModelName    = "BirdNET"
+	DefaultModelName    = "VoiceWatch"
 	DefaultModelVersion = "2.4"
 	DefaultModelVariant = "default"
 )
 
 // ModelInfo describes the AI model used for detection.
 type ModelInfo struct {
-	Name           string  // e.g., "BirdNET"
+	Name           string  // e.g., "VoiceWatch"
 	Version        string  // e.g., "2.4"
 	Variant        string  // e.g., "default", "finland_birds"
 	ClassifierPath *string // path to custom classifier file, nil for default
@@ -31,7 +31,7 @@ func (m ModelInfo) WithDefaults() ModelInfo {
 	return m
 }
 
-// DefaultModelInfo returns the default BirdNET model info.
+// DefaultModelInfo returns the default VoiceWatch model info.
 func DefaultModelInfo() ModelInfo {
 	return ModelInfo{
 		Name:           DefaultModelName,
@@ -50,7 +50,7 @@ func ResolveModelType(name, version string) entities.ModelType {
 		return entities.ModelTypeBat
 	case name == "Perch":
 		return entities.ModelTypeMulti
-	case name == "BirdNET" && version != "" && version != "2.4":
+	case name == "VoiceWatch" && version != "" && version != "2.4":
 		return entities.ModelTypeMulti
 	default:
 		return entities.ModelTypeBird

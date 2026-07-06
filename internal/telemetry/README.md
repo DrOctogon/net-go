@@ -1,6 +1,6 @@
 # Telemetry Package
 
-The `telemetry` package provides comprehensive error tracking and telemetry for BirdNET-Go using Sentry integration with asynchronous event processing. This package implements a privacy-first, resilient telemetry system with support for error reporting, support dumps, and system health monitoring.
+The `telemetry` package provides comprehensive error tracking and telemetry for VoiceWatch using Sentry integration with asynchronous event processing. This package implements a privacy-first, resilient telemetry system with support for error reporting, support dumps, and system health monitoring.
 
 ## Overview
 
@@ -421,7 +421,7 @@ The telemetry package depends on `internal/privacy` for all privacy-related oper
 - **URL Anonymization**: `privacy.AnonymizeURL()` - Consistent URL hashing for telemetry
 - **System ID**: `privacy.GenerateSystemID()` and `privacy.IsValidSystemID()` - Secure ID generation
 
-This integration eliminates code duplication and ensures consistent privacy handling across BirdNET-Go.
+This integration eliminates code duplication and ensures consistent privacy handling across VoiceWatch.
 
 ## File Structure
 

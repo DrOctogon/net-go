@@ -35,11 +35,9 @@
   {#each detections as detection (detection.id)}
     <DetectionCard
       {detection}
-      isExcluded={isSpeciesExcluded(detection.commonName)}
       onMarkCorrect={() => actions.handleMarkCorrect(detection)}
       onMarkFalsePositive={() => actions.handleMarkFalsePositive(detection)}
       onReview={() => actions.handleReview(detection)}
-      onToggleSpecies={() => actions.handleToggleSpecies(detection)}
       onToggleLock={() => actions.handleToggleLock(detection)}
       onDelete={() => actions.handleDelete(detection)}
     />

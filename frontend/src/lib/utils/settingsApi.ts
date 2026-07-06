@@ -1,11 +1,5 @@
 import { api } from './api.js';
-import type {
-  SettingsFormData,
-  TestResult,
-  BirdWeatherSettings,
-  MQTTSettings,
-  RangeFilterSpeciesEntry,
-} from '$lib/stores/settings.js';
+import type { SettingsFormData, TestResult, MQTTSettings } from '$lib/stores/settings.js';
 
 export interface TLSCertificateInfo {
   installed: boolean;
@@ -65,13 +59,6 @@ export const settingsAPI = {
    */
   test: {
     /**
-     * Test BirdWeather integration
-     */
-    birdweather: (config: BirdWeatherSettings): Promise<TestResult> => {
-      return api.post<TestResult>('/api/v2/test/birdweather', config);
-    },
-
-    /**
      * Test MQTT connection
      */
     mqtt: (config: MQTTSettings): Promise<TestResult> => {
@@ -90,29 +77,6 @@ export const settingsAPI = {
      */
     audio: (config: Record<string, unknown>): Promise<TestResult> => {
       return api.post<TestResult>('/api/v2/test/audio', config);
-    },
-  },
-
-  /**
-   * Range filter API calls
-   */
-  rangeFilter: {
-    /**
-     * Load species using the test endpoint that respects the current threshold.
-     * Uses POST /api/v2/range/species/test (not GET /api/v2/range/species/list)
-     * because the list endpoint ignores query parameters and returns all species.
-     * See #2393.
-     */
-    testSpecies: (
-      latitude: number,
-      longitude: number,
-      threshold: number
-    ): Promise<{ count: number; species?: RangeFilterSpeciesEntry[] | null }> => {
-      return api.post('/api/v2/range/species/test', {
-        latitude,
-        longitude,
-        threshold,
-      });
     },
   },
 
@@ -190,29 +154,5 @@ export const settingsAPI = {
 
     deleteCertificates: (): Promise<unknown> =>
       api.delete('/api/v2/integrations/mqtt/tls/certificate'),
-  },
-
-  /**
-   * Configuration validation
-   */
-  validate: {
-    /**
-     * Validate entire settings configuration
-     */
-    all: (
-      data: SettingsFormData
-    ): Promise<{ valid: boolean; errors?: Record<string, string[]> }> => {
-      return api.post('/api/v2/settings/validate', data);
-    },
-
-    /**
-     * Validate specific section
-     */
-    section: (
-      section: string,
-      data: Record<string, unknown>
-    ): Promise<{ valid: boolean; errors?: Record<string, string[]> }> => {
-      return api.post(`/api/v2/settings/validate/${section}`, data);
-    },
   },
 };

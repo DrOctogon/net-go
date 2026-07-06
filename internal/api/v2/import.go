@@ -1,4 +1,4 @@
-// Package api provides the HTTP API for BirdNET-Go.
+// Package api provides the HTTP API for VoiceWatch.
 package api
 
 import (
@@ -12,11 +12,11 @@ import (
 	"time"
 
 	"github.com/labstack/echo/v4"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/imports"
-	"github.com/tphakala/birdnet-go/internal/imports/birdnetpi"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/sysinfo"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/imports"
+	"github.com/tphakala/voicewatch/internal/imports/birdnetpi"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/sysinfo"
 )
 
 // Import mode constants.

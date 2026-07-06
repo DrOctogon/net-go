@@ -21,11 +21,11 @@ The enhanced error system automatically reports errors to Sentry with privacy-sa
 // ❌ WRONG - Do not import both
 import (
     "errors"  // Don't do this
-    "github.com/tphakala/birdnet-go/internal/errors"
+    "github.com/tphakala/voicewatch/internal/errors"
 )
 
 // ✅ CORRECT - Import only the custom errors package
-import "github.com/tphakala/birdnet-go/internal/errors"
+import "github.com/tphakala/voicewatch/internal/errors"
 
 // The custom package provides passthrough functions:
 // errors.Is(), errors.As(), errors.Unwrap() are all available
@@ -34,7 +34,7 @@ import "github.com/tphakala/birdnet-go/internal/errors"
 ### Basic Usage
 
 ```go
-import "github.com/tphakala/birdnet-go/internal/errors"
+import "github.com/tphakala/voicewatch/internal/errors"
 
 // Simple error with automatic categorization
 err := errors.New(fmt.Errorf("failed to connect to database")).
@@ -518,11 +518,11 @@ This package provides all necessary error handling functions as passthrough meth
 // ❌ WRONG - Creates import conflicts and confusion
 import (
     stderrors "errors"  // Don't alias the standard package
-    "github.com/tphakala/birdnet-go/internal/errors"
+    "github.com/tphakala/voicewatch/internal/errors"
 )
 
 // ✅ CORRECT - Use only the custom errors package
-import "github.com/tphakala/birdnet-go/internal/errors"
+import "github.com/tphakala/voicewatch/internal/errors"
 
 // Available passthrough functions:
 errors.Is(err, target)     // Standard error checking
@@ -544,7 +544,7 @@ The custom errors package provides:
 When updating existing code:
 
 1. ✅ Remove any `import "errors"` or `import stderrors "errors"`
-2. ✅ Ensure `import "github.com/tphakala/birdnet-go/internal/errors"` is present
+2. ✅ Ensure `import "github.com/tphakala/voicewatch/internal/errors"` is present
 3. ✅ Replace `fmt.Errorf()` with `errors.Newf()` where enhanced telemetry is needed
 4. ✅ Add `.Component()`, `.Category()`, and `.Context()` calls
 5. ✅ End with `.Build()` to create the enhanced error

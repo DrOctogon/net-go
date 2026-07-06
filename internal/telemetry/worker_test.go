@@ -7,7 +7,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/events"
+	"github.com/tphakala/voicewatch/internal/events"
 )
 
 //nolint:gocognit // test requires multiple scenarios for comprehensive coverage

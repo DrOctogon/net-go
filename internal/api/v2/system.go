@@ -26,13 +26,13 @@ import (
 	"github.com/shirou/gopsutil/v3/host"
 	"github.com/shirou/gopsutil/v3/mem"
 	"github.com/shirou/gopsutil/v3/process"
-	"github.com/tphakala/birdnet-go/internal/audiocore"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/restart"
-	"github.com/tphakala/birdnet-go/internal/sysinfo"
+	"github.com/tphakala/voicewatch/internal/audiocore"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/restart"
+	"github.com/tphakala/voicewatch/internal/sysinfo"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 	"gorm.io/gorm"
@@ -1736,8 +1736,8 @@ func (c *Controller) DownloadDatabaseBackup(ctx echo.Context) error {
 		return c.HandleError(ctx, randErr, "Failed to generate secure backup filename", http.StatusInternalServerError)
 	}
 	randomSuffix := "-" + hex.EncodeToString(randomBytes)
-	tempPath := filepath.Join(os.TempDir(), fmt.Sprintf("birdnet-%s-backup-%s%s.db", dbType, timestamp, randomSuffix))
-	filename := fmt.Sprintf("birdnet-%s-backup-%s.db", dbType, timestamp)
+	tempPath := filepath.Join(os.TempDir(), fmt.Sprintf("voicewatch-%s-backup-%s%s.db", dbType, timestamp, randomSuffix))
+	filename := fmt.Sprintf("voicewatch-%s-backup-%s.db", dbType, timestamp)
 
 	// Set response headers BEFORE starting VACUUM to establish the connection.
 	// This prevents connection timeout during the long VACUUM operation.

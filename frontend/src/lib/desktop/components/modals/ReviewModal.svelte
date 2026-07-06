@@ -4,7 +4,6 @@
   import ConfidenceCircle from '$lib/desktop/components/data/ConfidenceCircle.svelte';
   import WeatherDetails from '$lib/desktop/components/data/WeatherDetails.svelte';
   import VerificationBadges from '$lib/desktop/components/ui/VerificationBadges.svelte';
-  import SpeciesThumbnail from './SpeciesThumbnail.svelte';
   import type { Detection } from '$lib/types/detection.types';
   import { fetchWithCSRF } from '$lib/utils/api';
   import { buildAppUrl } from '$lib/utils/urlHelpers';
@@ -135,13 +134,8 @@
           <div class="bg-[var(--color-base-200)]/50 rounded-lg p-4">
             <!-- Single Row Layout: All 4 segments in one row using flex -->
             <div class="flex gap-4 items-start">
-              <!-- Section 1: Thumbnail + Species Names (flex-grow for more space) -->
+              <!-- Section 1: Species Names (flex-grow for more space) -->
               <div class="flex gap-4 items-center flex-1 min-w-0">
-                <SpeciesThumbnail
-                  scientificName={detection.scientificName}
-                  commonName={detection.commonName}
-                  size="lg"
-                />
                 <div class="flex-1 min-w-0">
                   <h3 class="text-2xl font-semibold text-[var(--color-base-content)] mb-1 truncate">
                     {localizeSpeciesName(detection.scientificName, detection.commonName)}

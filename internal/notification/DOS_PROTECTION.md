@@ -2,7 +2,7 @@
 
 ## Overview
 
-BirdNET-Go's push notification system is designed to be a **well-behaved internet citizen** that will never overwhelm external messaging APIs, even in the event of application malfunctions, configuration errors, or unexpected behavior.
+VoiceWatch's push notification system is designed to be a **well-behaved internet citizen** that will never overwhelm external messaging APIs, even in the event of application malfunctions, configuration errors, or unexpected behavior.
 
 ## Multi-Layer Protection Strategy
 
@@ -142,7 +142,7 @@ App generates 1000 detections/hour
 → Telegram rate limiter sees flood, blocks your IP
 ```
 
-**With BirdNET-Go Protection**:
+**With VoiceWatch Protection**:
 
 ```text
 App generates 1000 detections/hour
@@ -167,7 +167,7 @@ App generates 1000 detections/hour
 → Instant ban or IP block
 ```
 
-**With BirdNET-Go Protection**:
+**With VoiceWatch Protection**:
 
 ```text
 Rate limiter allows 10 burst requests
@@ -190,7 +190,7 @@ Every notification fails during outage
 → Delays other notifications
 ```
 
-**With BirdNET-Go Protection**:
+**With VoiceWatch Protection**:
 
 ```text
 First 5 failures during outage
@@ -227,11 +227,11 @@ All defaults are chosen to be **extremely safe** for external APIs:
 
 **Common API Rate Limits**:
 
-- Telegram Bot API: 30 messages/second (BirdNET-Go: 1/second)
-- Discord: 50 requests/second (BirdNET-Go: 1/second)
-- Pushover: 10,000/month (BirdNET-Go: ~43,000/month worst case @ 1/sec)
+- Telegram Bot API: 30 messages/second (VoiceWatch: 1/second)
+- Discord: 50 requests/second (VoiceWatch: 1/second)
+- Pushover: 10,000/month (VoiceWatch: ~43,000/month worst case @ 1/sec)
 
-**BirdNET-Go is 30-50x more conservative than API limits**.
+**VoiceWatch is 30-50x more conservative than API limits**.
 
 ## Monitoring and Observability
 
@@ -334,9 +334,9 @@ grep "circuit breaker" /var/log/birdnet-go.log    # Check circuit breaker activi
 
 ## Conclusion
 
-**BirdNET-Go is designed to be a respectful internet citizen**. The multi-layer DoS protection ensures that:
+**VoiceWatch is designed to be a respectful internet citizen**. The multi-layer DoS protection ensures that:
 
-✅ **External APIs are never overwhelmed**, even if BirdNET-Go has a bug
+✅ **External APIs are never overwhelmed**, even if VoiceWatch has a bug
 ✅ **Your IP address stays in good standing** with messaging services
 ✅ **Network resources are not wasted** on failed attempts
 ✅ **Other system functions continue** even if notifications fail

@@ -11,7 +11,7 @@ ships no Go code for lookups; that lives here.
 ## Consuming the package
 
 ```go
-import "github.com/tphakala/birdnet-go/internal/openfauna"
+import "github.com/tphakala/voicewatch/internal/openfauna"
 
 // Build a sparse index for only the species you care about, in one locale.
 // Memory stays proportional to your species set, not the whole dataset.

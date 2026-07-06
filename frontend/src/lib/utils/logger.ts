@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 /**
- * Lightweight logger utility for BirdNET-Go frontend
+ * Lightweight logger utility for VoiceWatch frontend
  *
  * Features:
  * - Environment-aware (logs only in development by default)

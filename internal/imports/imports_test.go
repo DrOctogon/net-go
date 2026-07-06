@@ -13,11 +13,11 @@ import (
 	"gorm.io/gorm"
 	gormlogger "gorm.io/gorm/logger"
 
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	"github.com/tphakala/birdnet-go/internal/detection"
-	"github.com/tphakala/birdnet-go/internal/imports"
-	"github.com/tphakala/birdnet-go/internal/imports/birdnetpi"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/detection"
+	"github.com/tphakala/voicewatch/internal/imports"
+	"github.com/tphakala/voicewatch/internal/imports/birdnetpi"
 )
 
 // --- fixture helpers ---
@@ -151,7 +151,7 @@ func TestSimpleSave(t *testing.T) {
 		Threshold:   0.7,
 		Sensitivity: 1.25,
 		Model: detection.ModelInfo{
-			Name:    "BirdNET",
+			Name:    "VoiceWatch",
 			Version: "birdnet-pi",
 			Variant: "import",
 		},
@@ -216,7 +216,7 @@ func TestImport_FieldMapping(t *testing.T) {
 	// The synthetic Model marker (Version "birdnet-pi", Variant "import") is set at mapping
 	// time, but the legacy datastore stores Note.Model as gorm:"-" (runtime-only), so only
 	// Name survives the save+read round trip on this path. Assert just the Name here.
-	assert.Equal(t, "BirdNET", r.Model.Name)
+	assert.Equal(t, "VoiceWatch", r.Model.Name)
 	assert.Empty(t, r.ClipName, "ClipName must be empty in DB-only mode")
 
 	expectedTS := time.Date(2025, 3, 25, 14, 27, 32, 0, time.UTC)

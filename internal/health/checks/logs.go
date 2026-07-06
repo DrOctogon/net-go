@@ -7,7 +7,7 @@ import (
 	"slices"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/health"
+	"github.com/tphakala/voicewatch/internal/health"
 )
 
 // maxTopErrors is the maximum number of grouped error patterns returned in details.

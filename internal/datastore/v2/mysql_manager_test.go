@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/datastore/v2/entities"
+	"github.com/tphakala/voicewatch/internal/datastore/v2/entities"
 )
 
 // getMySQLConfig returns MySQL config from environment variables.
@@ -114,9 +114,9 @@ func TestMySQLManager_Initialize_SeedsBirdNETModel(t *testing.T) {
 
 	// Verify BirdNET model was seeded
 	var model entities.AIModel
-	err = mgr.DB().Where("name = ? AND version = ?", "BirdNET", "2.4").First(&model).Error
+	err = mgr.DB().Where("name = ? AND version = ?", "VoiceWatch", "2.4").First(&model).Error
 	require.NoError(t, err)
-	assert.Equal(t, "BirdNET", model.Name)
+	assert.Equal(t, "VoiceWatch", model.Name)
 	assert.Equal(t, entities.ModelTypeBird, model.ModelType)
 }
 

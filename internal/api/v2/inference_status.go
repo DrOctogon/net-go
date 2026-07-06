@@ -9,14 +9,14 @@ import (
 	"time"
 
 	"github.com/labstack/echo/v4"
-	"github.com/tphakala/birdnet-go/internal/audiocore"
-	"github.com/tphakala/birdnet-go/internal/classifier"
-	"github.com/tphakala/birdnet-go/internal/classifier/inferencestats"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/cpuspec"
-	"github.com/tphakala/birdnet-go/internal/inference"
-	"github.com/tphakala/birdnet-go/internal/observability"
-	"github.com/tphakala/birdnet-go/internal/sysinfo"
+	"github.com/tphakala/voicewatch/internal/audiocore"
+	"github.com/tphakala/voicewatch/internal/classifier"
+	"github.com/tphakala/voicewatch/internal/classifier/inferencestats"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/cpuspec"
+	"github.com/tphakala/voicewatch/internal/inference"
+	"github.com/tphakala/voicewatch/internal/observability"
+	"github.com/tphakala/voicewatch/internal/sysinfo"
 )
 
 // sourceTypeSoundCard is the source type label for local ALSA/sound card captures.
@@ -336,7 +336,7 @@ func (c *Controller) GetInferenceStatus(ctx echo.Context) error {
 
 	// Backends: TFLite is always compiled in; ORT and OpenVINO are probed.
 	resp.Backends.TFLite = BackendStatus{Available: true}
-	ort := inference.CheckORTAvailability(settings.BirdNET.ONNXRuntimePath)
+	ort := inference.CheckORTAvailability(settings.VoiceWatch.ONNXRuntimePath)
 	resp.Backends.ONNX = BackendStatus{Available: ort.Available, Initialized: ort.Initialized, Version: ort.Version}
 	ov := inference.CheckOpenVINOAvailability()
 	resp.Backends.OpenVINO = OpenVINOBackendStatus{Supported: ov.Supported, Active: ov.Active}
@@ -348,50 +348,31 @@ func (c *Controller) GetInferenceStatus(ctx echo.Context) error {
 		}
 	}
 
-	// Models: fetch loaded model list, RSS, and inference counters.
-	var infos []classifier.ModelInfo
-	if c.ModelManager != nil {
-		infos = c.ModelManager.ModelInfos()
-	}
-	// Fetch the orchestrator once: it is the live source for RSS, primary ID,
-	// load failures, per-model device, and per-model schedule status. The
-	// Processor guard mirrors the GetLastDetection guard below.
+	// Models: the single-model host exposes one loaded model via the orchestrator.
+	// Per-model RSS, load failures, live runtime device/precision, schedule status,
+	// and inference counters are not tracked in the human-voice facade (Phase 2c-3);
+	// they are left empty so buildModelStatus falls back to static model metadata.
 	var orch *classifier.Orchestrator
 	if c.Processor != nil {
-		orch = c.Processor.GetBirdNET()
+		orch = c.Processor.GetOrchestrator()
+	}
+	var infos []classifier.ModelInfo
+	primaryID := ""
+	if orch != nil {
+		infos = orch.ModelInfos()
+		primaryID = orch.ModelID()
 	}
 	var rss map[string]int64
-	primaryID := ""
 	var loadFailures map[string]int64
-	if orch != nil {
-		rss, resp.RuntimeBaselineBytes = orch.ModelRSS()
-		primaryID = orch.PrimaryModelID()
-		loadFailures = orch.LoadFailures()
-	}
-	counters := classifier.GetInferenceCounters().PeekAll()
+	counters := map[string]inferencestats.PeekSnapshot{}
 	attachments := buildSourceAttachments(settings, infos, primaryID)
 
-	// Compute per-model device, backend, precision, and schedule status from the
-	// live orchestrator. The device/backend/precision triplet is read in one
-	// GetModelRuntimeInfo call so a reload completing mid-read cannot yield a mixed
-	// triplet (e.g. old device + new backend). Backend and precision come from the
-	// loaded instance (the real execution provider and runtime precision) rather
-	// than the static ModelInfo file metadata, so an ONNX model executed on
-	// OpenVINO reports "OpenVINO" and its effective precision. Empty values fall
-	// back to the static metadata in the assembly loop below.
+	// Live runtime device/precision and schedule status are not available in the
+	// single-model facade; leave these empty so the assembly loop below uses the
+	// static ModelInfo metadata.
 	runtimes := make(map[string]modelRuntime, len(infos))
 	paused := make(map[string]bool, len(infos))
 	scheduleLabels := make(map[string]string, len(infos))
-	if orch != nil {
-		for i := range infos {
-			id := infos[i].ID
-			device, backend, precision := orch.GetModelRuntimeInfo(id)
-			runtimes[id] = modelRuntime{device: device, backend: backend, precision: precision}
-			active, reason := orch.ModelScheduleStatus(id)
-			paused[id] = !active
-			scheduleLabels[id] = reason
-		}
-	}
 
 	// Compute per-model last detection and the recent-detections list (newest
 	// first), converting from processor.LastDetection to the API-local

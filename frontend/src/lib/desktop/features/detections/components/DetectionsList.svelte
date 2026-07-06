@@ -637,14 +637,12 @@
                   <DetectionRow
                     {detection}
                     {onDetailsClick}
-                    isExcluded={isSpeciesExcluded(detection.commonName)}
                     selectionActive={selection.selectionActive}
                     selected={selection.isSelected(String(detection.id))}
                     onToggleSelect={handleToggleSelect}
                     onReview={() => detectionActions.handleReview(detection)}
                     onMarkCorrect={() => detectionActions.handleMarkCorrect(detection)}
                     onMarkFalsePositive={() => detectionActions.handleMarkFalsePositive(detection)}
-                    onToggleSpecies={() => detectionActions.handleToggleSpecies(detection)}
                     onToggleLock={() => detectionActions.handleToggleLock(detection)}
                     onDelete={() => detectionActions.handleDelete(detection)}
                   />
@@ -663,11 +661,9 @@
           <DetectionCardMobile
             {detection}
             {onDetailsClick}
-            isExcluded={isSpeciesExcluded(detection.commonName)}
             onReview={() => detectionActions.handleReview(detection)}
             onMarkCorrect={() => detectionActions.handleMarkCorrect(detection)}
             onMarkFalsePositive={() => detectionActions.handleMarkFalsePositive(detection)}
-            onToggleSpecies={() => detectionActions.handleToggleSpecies(detection)}
             onToggleLock={() => detectionActions.handleToggleLock(detection)}
             onDelete={() => detectionActions.handleDelete(detection)}
           />

@@ -1,4 +1,4 @@
-# BirdNET-Go - Windows Installation
+# VoiceWatch - Windows Installation
 
 ## Tarball Contents
 
@@ -8,7 +8,7 @@
 
 ## Quick Install
 
-1. Extract the tarball to a folder of your choice (e.g., `C:\BirdNET-Go\`)
+1. Extract the tarball to a folder of your choice (e.g., `C:\VoiceWatch\`)
 2. Keep the `.dll` files in the **same folder** as `birdnet-go.exe`
 3. Double-click `birdnet-go.exe` or run it from a terminal
 
@@ -28,7 +28,7 @@ Windows searches the application directory first when loading DLLs, so no
 system-wide installation is needed.
 
 ```
-C:\BirdNET-Go\
+C:\VoiceWatch\
   birdnet-go.exe
   onnxruntime.dll
   tensorflowlite_c.dll
@@ -39,11 +39,11 @@ C:\BirdNET-Go\
 Open a terminal (Command Prompt or PowerShell) in the extraction folder:
 
 ```powershell
-cd C:\BirdNET-Go
+cd C:\VoiceWatch
 .\birdnet-go.exe
 ```
 
-On first launch BirdNET-Go will:
+On first launch VoiceWatch will:
 
 - Create a default `config.yaml` in the current directory
 - Download the BirdNET v2.4 model (~45 MB)
@@ -70,12 +70,12 @@ This requires Administrator privileges.
 
 ## Running as a Windows Service
 
-Use a tool like [NSSM](https://nssm.cc/) to install BirdNET-Go as a service:
+Use a tool like [NSSM](https://nssm.cc/) to install VoiceWatch as a service:
 
 ```powershell
-nssm install BirdNET-Go C:\BirdNET-Go\birdnet-go.exe
-nssm set BirdNET-Go AppDirectory C:\BirdNET-Go
-nssm start BirdNET-Go
+nssm install VoiceWatch C:\VoiceWatch\birdnet-go.exe
+nssm set VoiceWatch AppDirectory C:\VoiceWatch
+nssm start VoiceWatch
 ```
 
 ## Troubleshooting
@@ -97,5 +97,5 @@ code-signed. Click "More info" then "Run anyway".
 ## More Information
 
 - Documentation: https://birdnet-go.dev
-- GitHub: https://github.com/tphakala/birdnet-go
-- Discussions: https://github.com/tphakala/birdnet-go/discussions
+- GitHub: https://github.com/tphakala/voicewatch
+- Discussions: https://github.com/tphakala/voicewatch/discussions

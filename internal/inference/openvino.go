@@ -5,8 +5,8 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/tphakala/birdnet-go/internal/errors"
-	ov "github.com/tphakala/birdnet-go/internal/inference/openvino"
+	"github.com/tphakala/voicewatch/internal/errors"
+	ov "github.com/tphakala/voicewatch/internal/inference/openvino"
 )
 
 var (

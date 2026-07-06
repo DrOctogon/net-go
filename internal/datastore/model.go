@@ -4,7 +4,7 @@ package datastore
 import (
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/detection"
+	"github.com/tphakala/voicewatch/internal/detection"
 )
 
 // AudioSource represents a structured audio source with ID, safe string, and display name
@@ -42,7 +42,32 @@ type Note struct {
 	Threshold      float64
 	Sensitivity    float64
 	ClipName       string
-	ProcessingTime time.Duration
+	// Transcript holds the speech-to-text transcription of the saved clip, when
+	// transcription is enabled. Additive nullable column; empty when transcription
+	// is disabled or the clip contained no recognizable speech.
+	Transcript string
+	// TranscriptLang is the language the transcript was produced in (e.g. "en").
+	// Additive nullable column; empty when no transcript was produced.
+	TranscriptLang string
+	// Flagged marks detections whose transcript matched a configured keyword.
+	// Additive column defaulting to false.
+	Flagged bool `gorm:"default:false"`
+	// KeywordsHit is the comma-joined list of keywords matched in the transcript.
+	// Additive nullable column; empty when no keyword matched.
+	KeywordsHit string
+	// Speaker attributes (Wave 5). Additive nullable columns populated only when
+	// the opt-in speaker-attributes analysis is enabled and a model is available.
+	// These are demographic *estimates*, not biometric identity. Empty/zero when
+	// the feature is disabled (the default).
+	Gender           string  // estimated gender: "male"/"female"/"unknown"/""
+	GenderConfidence float64 `gorm:"default:0"` // 0..1 confidence for Gender
+	AgeBand          string  // estimated relative age band: child/teen/adult/senior/""
+	AgeConfidence    float64 `gorm:"default:0"` // 0..1 confidence for AgeBand
+	SpeakerID        string  // voice-print cluster/speaker id; empty until assigned
+	// VoicePrintEmbedding is the serialized speaker-embedding vector used for
+	// "similar voices" lookups. JSON-serialized; null when no embedding computed.
+	VoicePrintEmbedding []float32 `gorm:"serializer:json"`
+	ProcessingTime      time.Duration
 	Unlikely       bool    `gorm:"default:false"`                 // Tagged by ultrasonic validation filter
 	Occurrence     float64 `gorm:"-" json:"occurrence,omitempty"` // Runtime only, occurrence probability (0-1) based on location/time
 	// RawLabel is the full un-truncated classifier label (e.g. "power_tool"); runtime-only,
@@ -195,7 +220,7 @@ type DetectionRecord struct {
 type DynamicThreshold struct {
 	ID             uint      `gorm:"primaryKey"`
 	SpeciesName    string    `gorm:"uniqueIndex:idx_dt_species_model;not null;size:200"`                   // Common name (lowercase)
-	ModelName      string    `gorm:"uniqueIndex:idx_dt_species_model;not null;size:100;default:'BirdNET'"` // Model that produced this threshold
+	ModelName      string    `gorm:"uniqueIndex:idx_dt_species_model;not null;size:100;default:'VoiceWatch'"` // Model that produced this threshold
 	ScientificName string    `gorm:"size:200"`                                                             // Scientific name for thumbnails
 	Level          int       `gorm:"not null;default:0"`                                                   // Adjustment level (0-3)
 	CurrentValue   float64   `gorm:"not null"`                                                             // Current threshold value
@@ -214,7 +239,7 @@ type DynamicThreshold struct {
 type ThresholdEvent struct {
 	ID            uint      `gorm:"primaryKey"`
 	SpeciesName   string    `gorm:"index;not null;size:200"`             // Common name (lowercase)
-	ModelName     string    `gorm:"not null;size:100;default:'BirdNET'"` // Model that produced this event
+	ModelName     string    `gorm:"not null;size:100;default:'VoiceWatch'"` // Model that produced this event
 	PreviousLevel int       `gorm:"not null"`                            // Level before change
 	NewLevel      int       `gorm:"not null"`                            // Level after change
 	PreviousValue float64   `gorm:"not null"`                            // Threshold value before change

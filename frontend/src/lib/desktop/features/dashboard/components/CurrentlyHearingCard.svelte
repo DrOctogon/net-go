@@ -2,7 +2,7 @@
 CurrentlyHearingCard.svelte - Real-time pending detection display
 
 Purpose:
-- Shows species currently being detected by BirdNET in real-time
+- Shows species currently being detected by VoiceWatch in real-time
 - Provides visual feedback when detections are approved or rejected
 - Retains terminal (approved/rejected) states for a few seconds before fading out
 - Hidden entirely when no pending detections exist

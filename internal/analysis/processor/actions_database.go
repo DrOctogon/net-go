@@ -7,21 +7,20 @@ import (
 	"context"
 	"os"
 	"path/filepath"
-	"strconv"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/analysis/species"
-	"github.com/tphakala/birdnet-go/internal/audiocore/convert"
-	"github.com/tphakala/birdnet-go/internal/audiocore/ffmpeg"
-	"github.com/tphakala/birdnet-go/internal/audiocore/flac"
-	"github.com/tphakala/birdnet-go/internal/audiocore/resample"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	"github.com/tphakala/birdnet-go/internal/datastore/v2/entities"
-	"github.com/tphakala/birdnet-go/internal/detection"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/events"
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/analysis/species"
+	"github.com/tphakala/voicewatch/internal/audiocore/convert"
+	"github.com/tphakala/voicewatch/internal/audiocore/ffmpeg"
+	"github.com/tphakala/voicewatch/internal/audiocore/flac"
+	"github.com/tphakala/voicewatch/internal/audiocore/resample"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/datastore/v2/entities"
+	"github.com/tphakala/voicewatch/internal/detection"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/events"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 // errAudioExportDeferred signals that SaveAudioAction cannot yet read the
@@ -163,20 +162,10 @@ func (a *DatabaseAction) ExecuteContext(ctx context.Context, _ any) error {
 		a.DetectionCtx.NoteID.Store(uint64(a.Result.ID))
 	}
 
-	// Add an explanatory comment when the ultrasonic validation filter tagged this detection as unlikely.
-	if a.Result.Unlikely && a.Result.ID != 0 && a.Repo != nil {
-		locale := a.Settings.Realtime.Dashboard.Locale
-		comment := formatUnlikelyComment(locale, a.Result.UltrasonicCV, a.Result.UltrasonicCVThreshold)
-		noteID := strconv.FormatUint(uint64(a.Result.ID), 10)
-		if err := a.Repo.AddComment(ctx, noteID, comment); err != nil {
-			GetLogger().Warn("failed to add unlikely comment to detection",
-				logger.String("detection_id", a.CorrelationID),
-				logger.Uint64("note_id", uint64(a.Result.ID)),
-				logger.String("species", a.Result.Species.CommonName),
-				logger.Error(err),
-				logger.String("operation", "unlikely_comment"))
-		}
-	}
+	// Emit the speaker-attribute alert now that the row is persisted and
+	// a.Result.ID is valid (estimates were attached pre-save at the approval
+	// seam). No-op unless the opt-in feature is on and attributes are present.
+	emitSpeakerAttributeAlert(a.Settings, &a.Result)
 
 	// After successful save, publish detection event to the event bus.
 	a.publishDetectionEvent(isNewSpecies, daysSinceFirstSeen, novelty)
@@ -275,11 +264,6 @@ func (a *DatabaseAction) populateEventMetadata(detectionEvent events.DetectionEv
 		}
 	}
 
-	if a.processor != nil && a.processor.BirdImageCache != nil {
-		if birdImage, err := a.processor.BirdImageCache.Get(a.Result.Species.ScientificName); err == nil && birdImage.URL != "" {
-			metadata["image_url"] = birdImage.URL
-		}
-	}
 }
 
 func hasNoveltyStatus(novelty species.NoveltyStatus) bool {

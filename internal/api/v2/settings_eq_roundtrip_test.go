@@ -10,7 +10,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/conf"
+	"github.com/tphakala/voicewatch/internal/conf"
 )
 
 // putTestSettingsJSON marshals a full Settings struct to JSON, then patches
@@ -160,7 +160,7 @@ func TestEQFilterRoundTrip_PUT_PerSource(t *testing.T) {
 	initial.Realtime.Audio.Sources = []conf.AudioSourceConfig{{
 		Name:   "Test Sound Card",
 		Device: "default",
-		Models: []string{"birdnet"},
+		Models: []string{"voicewatch"},
 	}}
 
 	e := echo.New()

@@ -7,8 +7,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/restart"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/restart"
 )
 
 // TestRestartDetectors verifies the pure change-detector functions that decide
@@ -152,14 +152,16 @@ func TestHotReloadRestartFieldsCovered(t *testing.T) {
 	// registry restart-category field path -> the settingsChangeChecks entry
 	// (by name) that marks restart when it changes.
 	restartCovered := map[string]string{
-		"Logging": "Logging",
-		"Output":  "Database",
+		"Logging":                   "Logging",
+		"Output":                    "Database",
+		"Realtime.Audio.Continuous":        "Continuous recording",
+		"Realtime.Audio.SpeakerAttributes": "Speaker attributes",
 	}
 	// registry restart-category field paths intentionally NOT wired to a restart
 	// marker yet, with the reason. See docs/superpowers/specs/2026-06-16-restart-required-tracking.md.
 	restartExempt := map[string]string{
-		"BirdNET.ONNXRuntimePath": "model/runtime path; model changes already route through reload_birdnet",
-		"BirdNET.OpenVINOPath":    "OpenVINO library path; loaded once at init and not safely unloadable, so it takes effect on restart (mirrors ONNXRuntimePath)",
+		"VoiceWatch.ONNXRuntimePath": "model/runtime path; model changes already route through reload_voicewatch",
+		"VoiceWatch.OpenVINOPath":    "OpenVINO library path; loaded once at init and not safely unloadable, so it takes effect on restart (mirrors ONNXRuntimePath)",
 		"Models":                  "model registry path; restart-vs-reload undecided",
 		"Perch":                   "perch model path; not wired",
 		"BSG":                     "BSG model path; not wired",

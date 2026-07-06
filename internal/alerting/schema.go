@@ -68,8 +68,7 @@ func GetSchema() Schema {
 				Name:  ObjectTypeDetection,
 				Label: "Detection",
 				Events: []EventSchema{
-					{Name: EventDetectionNewSpecies, Label: "New Species Detected", Description: "Fires when a species is seen for the first time within the tracking window", Properties: detectionProperties()},
-					{Name: EventDetectionOccurred, Label: "Detection Occurred", Description: "Fires for every detection, including new species", Properties: detectionProperties()},
+					{Name: EventDetectionOccurred, Label: "Detection Occurred", Description: "Fires for every detection", Properties: detectionProperties()},
 				},
 			},
 			{
@@ -84,7 +83,6 @@ func GetSchema() Schema {
 				Name:  ObjectTypeIntegration,
 				Label: "Integration",
 				Events: []EventSchema{
-					{Name: EventBirdWeatherFailed, Label: "BirdWeather Upload Failed", Properties: errorProperties()},
 					{Name: EventMQTTConnected, Label: "MQTT Connected", Properties: mqttProperties()},
 					{Name: EventMQTTDisconnected, Label: "MQTT Disconnected", Properties: mqttProperties()},
 					{Name: EventMQTTPublishFailed, Label: "MQTT Publish Failed", Properties: mqttPublishProperties()},
@@ -106,6 +104,30 @@ func GetSchema() Schema {
 					{Name: MetricCPUUsage, Label: "CPU Usage", Unit: "%", Properties: numericValueProperties()},
 					{Name: MetricMemoryUsage, Label: "Memory Usage", Unit: "%", Properties: numericValueProperties()},
 					{Name: MetricDiskUsage, Label: "Disk Usage", Unit: "%", Properties: numericValueProperties()},
+				},
+			},
+			{
+				Name:  ObjectTypeKeywordFlag,
+				Label: "Keyword Flag",
+				Events: []EventSchema{
+					{
+						Name:        EventKeywordMatched,
+						Label:       "Keyword Matched",
+						Description: "Fires when a detection transcript contains a configured keyword",
+						Properties:  keywordFlagProperties(),
+					},
+				},
+			},
+			{
+				Name:  ObjectTypeSpeakerAttr,
+				Label: "Speaker Attribute",
+				Events: []EventSchema{
+					{
+						Name:        EventSpeakerAttributeMatched,
+						Label:       "Speaker Attribute Matched",
+						Description: "Fires when a detection's estimated speaker attributes (gender, age band) match the rule conditions",
+						Properties:  speakerAttrProperties(),
+					},
 				},
 			},
 		},
@@ -148,12 +170,6 @@ func detectionProperties() []PropertySchema {
 	}
 }
 
-func errorProperties() []PropertySchema {
-	return []PropertySchema{
-		{Name: PropertyError, Label: "Error Message", Type: "string", Operators: stringOperators},
-	}
-}
-
 func mqttProperties() []PropertySchema {
 	return []PropertySchema{
 		{Name: PropertyBroker, Label: "Broker", Type: "string", Operators: stringOperators},
@@ -182,5 +198,23 @@ func deviceErrorProperties() []PropertySchema {
 func numericValueProperties() []PropertySchema {
 	return []PropertySchema{
 		{Name: PropertyValue, Label: "Value", Type: "number", Operators: numericOperators},
+	}
+}
+
+func keywordFlagProperties() []PropertySchema {
+	return []PropertySchema{
+		{Name: PropertyKeywords, Label: "Keywords", Type: "string", Operators: stringOperators},
+		{Name: PropertyTranscript, Label: "Transcript", Type: "string", Operators: stringOperators},
+		{Name: PropertySpeciesName, Label: "Species Name", Type: "string", Operators: stringOperators},
+		{Name: PropertyDetectionID, Label: "Detection ID", Type: "string", Operators: stringOperators},
+	}
+}
+
+func speakerAttrProperties() []PropertySchema {
+	return []PropertySchema{
+		{Name: PropertySpeakerGender, Label: "Gender", Type: "string", Operators: stringOperators},
+		{Name: PropertySpeakerAgeBand, Label: "Age Band", Type: "string", Operators: stringOperators},
+		{Name: PropertyConfidence, Label: "Confidence", Type: "number", Operators: numericOperators},
+		{Name: PropertyDetectionID, Label: "Detection ID", Type: "string", Operators: stringOperators},
 	}
 }

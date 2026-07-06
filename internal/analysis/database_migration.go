@@ -5,18 +5,17 @@ import (
 	"os"
 	"time"
 
-	apiv2 "github.com/tphakala/birdnet-go/internal/api/v2"
-	"github.com/tphakala/birdnet-go/internal/classifier"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	datastoreV2 "github.com/tphakala/birdnet-go/internal/datastore/v2"
-	"github.com/tphakala/birdnet-go/internal/datastore/v2/entities"
-	"github.com/tphakala/birdnet-go/internal/datastore/v2/migration"
-	"github.com/tphakala/birdnet-go/internal/datastore/v2/repository"
-	"github.com/tphakala/birdnet-go/internal/datastore/v2only"
-	"github.com/tphakala/birdnet-go/internal/detection"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/logger"
+	apiv2 "github.com/tphakala/voicewatch/internal/api/v2"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	datastoreV2 "github.com/tphakala/voicewatch/internal/datastore/v2"
+	"github.com/tphakala/voicewatch/internal/datastore/v2/entities"
+	"github.com/tphakala/voicewatch/internal/datastore/v2/migration"
+	"github.com/tphakala/voicewatch/internal/datastore/v2/repository"
+	"github.com/tphakala/voicewatch/internal/datastore/v2only"
+	"github.com/tphakala/voicewatch/internal/detection"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 // migrationSetupConfig holds configuration for migration infrastructure setup.
@@ -504,12 +503,8 @@ func initializeV2OnlyMode(settings *conf.Settings) (*v2only.Datastore, error) {
 	notificationRepo := repository.NewNotificationHistoryRepository(v2DB, nil, labelRepo, useV2Prefix, isMySQL)
 	appEventRepo := repository.NewAppEventRepository(v2DB, nil, useV2Prefix, isMySQL)
 
-	// Load eBird taxonomy for species code lookups in analytics endpoints.
-	_, scientificIndex, taxonomyErr := classifier.LoadTaxonomyData("")
-	if taxonomyErr != nil {
-		log.Warn("failed to load taxonomy data for species codes",
-			logger.Error(taxonomyErr))
-	}
+	// Taxonomy-backed species-code lookups were removed in the human-voice pivot.
+	var scientificIndex map[string]string
 
 	// Create V2OnlyDatastore
 	ds, err := v2only.New(&v2only.Config{
@@ -525,7 +520,7 @@ func initializeV2OnlyMode(settings *conf.Settings) (*v2only.Datastore, error) {
 		AppEvent:       appEventRepo,
 		Logger:         log,
 		Timezone:       time.Local,
-		Labels:         settings.BirdNET.Labels, // For GetThresholdEvents workaround (#1907)
+		Labels:         settings.VoiceWatch.Labels, // For GetThresholdEvents workaround (#1907)
 		SpeciesCodeMap: scientificIndex,
 	})
 	if err != nil {

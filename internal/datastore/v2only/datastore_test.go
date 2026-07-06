@@ -9,12 +9,12 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	v2 "github.com/tphakala/birdnet-go/internal/datastore/v2"
-	"github.com/tphakala/birdnet-go/internal/datastore/v2/entities"
-	"github.com/tphakala/birdnet-go/internal/datastore/v2/repository"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	v2 "github.com/tphakala/voicewatch/internal/datastore/v2"
+	"github.com/tphakala/voicewatch/internal/datastore/v2/entities"
+	"github.com/tphakala/voicewatch/internal/datastore/v2/repository"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 // buildTestConfig constructs the shared repositories and Config for in-memory test datastores.
@@ -71,7 +71,7 @@ func buildConfigForManager(t *testing.T, manager v2.Manager, testLogger logger.L
 	require.NoError(t, err, "Failed to create Aves taxonomic class")
 
 	// Get the default model (seeded by Initialize)
-	defaultModel, err := modelRepo.GetByNameVersionVariant(ctx, "BirdNET", "2.4", "default")
+	defaultModel, err := modelRepo.GetByNameVersionVariant(ctx, "VoiceWatch", "2.4", "default")
 	require.NoError(t, err, "Failed to get default model")
 
 	avesClassID := avesClass.ID
@@ -489,7 +489,7 @@ func TestV2OnlyDatastore_DynamicThreshold_CommonNameDisplay(t *testing.T) {
 
 // TestV2OnlyDatastore_DynamicThreshold_ModelName verifies that
 // GetAllDynamicThresholds and GetDynamicThreshold return ModelName
-// constructed from the Label's AIModel (e.g., "BirdNET_V2.4").
+// constructed from the Label's AIModel (e.g., "VoiceWatch_V2.4").
 // Regression test for GitHub issue #2902.
 func TestV2OnlyDatastore_DynamicThreshold_ModelName(t *testing.T) {
 	labels := []string{
@@ -501,7 +501,7 @@ func TestV2OnlyDatastore_DynamicThreshold_ModelName(t *testing.T) {
 	threshold := &datastore.DynamicThreshold{
 		SpeciesName:    "Parus major",
 		ScientificName: "Parus major",
-		ModelName:      "BirdNET_V2.4",
+		ModelName:      "VoiceWatch_V2.4",
 		Level:          2,
 		CurrentValue:   0.5,
 		BaseThreshold:  0.8,
@@ -520,7 +520,7 @@ func TestV2OnlyDatastore_DynamicThreshold_ModelName(t *testing.T) {
 	all, err := ds.GetAllDynamicThresholds()
 	require.NoError(t, err)
 	require.Len(t, all, 1)
-	assert.Equal(t, "BirdNET_V2.4", all[0].ModelName,
+	assert.Equal(t, "VoiceWatch_V2.4", all[0].ModelName,
 		"ModelName must be constructed from Label's Model (Name_VVersion)")
 	assert.Equal(t, "great tit", all[0].SpeciesName,
 		"SpeciesName must be lowercase to match processor convention")
@@ -528,7 +528,7 @@ func TestV2OnlyDatastore_DynamicThreshold_ModelName(t *testing.T) {
 	// GetDynamicThreshold (single lookup) must also return ModelName
 	single, err := ds.GetDynamicThreshold("Parus major", "")
 	require.NoError(t, err)
-	assert.Equal(t, "BirdNET_V2.4", single.ModelName,
+	assert.Equal(t, "VoiceWatch_V2.4", single.ModelName,
 		"Single lookup must also return ModelName")
 	assert.Equal(t, "great tit", single.SpeciesName,
 		"Single lookup SpeciesName must be lowercase")
@@ -955,7 +955,7 @@ func TestV2OnlyDatastore_ThresholdReads_ErrorTelemetry(t *testing.T) {
 
 // TestV2OnlyDatastore_ThresholdEvent_ModelName verifies that GetThresholdEvents and
 // GetRecentThresholdEvents return ModelName constructed from the event Label's AIModel
-// (e.g., "BirdNET_V2.4"), the event-side parallel of the GitHub #2902 record fix.
+// (e.g., "VoiceWatch_V2.4"), the event-side parallel of the GitHub #2902 record fix.
 // Regression test for #1025: events previously returned an empty ModelName because the
 // repository only preloaded Label (not Label.Model) and the converter never set it.
 func TestV2OnlyDatastore_ThresholdEvent_ModelName(t *testing.T) {
@@ -977,13 +977,13 @@ func TestV2OnlyDatastore_ThresholdEvent_ModelName(t *testing.T) {
 	events, err := ds.GetThresholdEvents("Parus major", 10)
 	require.NoError(t, err)
 	require.Len(t, events, 1)
-	assert.Equal(t, "BirdNET_V2.4", events[0].ModelName,
+	assert.Equal(t, "VoiceWatch_V2.4", events[0].ModelName,
 		"event ModelName must be constructed from the Label's Model (Name_VVersion)")
 
 	recent, err := ds.GetRecentThresholdEvents(10)
 	require.NoError(t, err)
 	require.Len(t, recent, 1)
-	assert.Equal(t, "BirdNET_V2.4", recent[0].ModelName,
+	assert.Equal(t, "VoiceWatch_V2.4", recent[0].ModelName,
 		"recent event ModelName must be constructed from the Label's Model")
 }
 

@@ -9,7 +9,7 @@ import (
 	"maps"
 	"slices"
 
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 // CloneSettings returns a deep copy of src that shares no slice or map backing
@@ -48,9 +48,7 @@ func CloneSettings(src *Settings) *Settings {
 	}
 
 	// BirdNET.
-	dst.BirdNET.Labels = slices.Clone(src.BirdNET.Labels)
-	dst.BirdNET.RangeFilter.Species = slices.Clone(src.BirdNET.RangeFilter.Species)
-	dst.BirdNET.RangeFilter.IncludedScientificNames = maps.Clone(src.BirdNET.RangeFilter.IncludedScientificNames)
+	dst.VoiceWatch.Labels = slices.Clone(src.VoiceWatch.Labels)
 
 	// Models.
 	dst.Models.Enabled = slices.Clone(src.Models.Enabled)
@@ -68,12 +66,6 @@ func CloneSettings(src *Settings) *Settings {
 	}
 	dst.Realtime.Dashboard.Layout.Elements = cloneDashboardElements(src.Realtime.Dashboard.Layout.Elements)
 
-	// Realtime.DogBarkFilter.
-	dst.Realtime.DogBarkFilter.Species = slices.Clone(src.Realtime.DogBarkFilter.Species)
-
-	// Realtime.DaylightFilter.
-	dst.Realtime.DaylightFilter.Species = slices.Clone(src.Realtime.DaylightFilter.Species)
-
 	// Realtime.RTSP.
 	dst.Realtime.RTSP.Streams = cloneStreamConfigs(src.Realtime.RTSP.Streams)
 	dst.Realtime.RTSP.URLs = slices.Clone(src.Realtime.RTSP.URLs)
@@ -81,9 +73,6 @@ func CloneSettings(src *Settings) *Settings {
 
 	// Realtime.Monitoring.Disk.
 	dst.Realtime.Monitoring.Disk.Paths = slices.Clone(src.Realtime.Monitoring.Disk.Paths)
-
-	// Realtime.ExtendedCapture.
-	dst.Realtime.ExtendedCapture.Species = slices.Clone(src.Realtime.ExtendedCapture.Species)
 
 	// Realtime.Species.
 	dst.Realtime.Species.Include = slices.Clone(src.Realtime.Species.Include)

@@ -1,17 +1,17 @@
 # Installation
 
-This document provides instructions for installing BirdNET-Go.
+This document provides instructions for installing VoiceWatch.
 
-There are four main ways to install BirdNET-Go:
+There are four main ways to install VoiceWatch:
 
-1.  **Using `install.sh` (Recommended for Linux):** This script automates the setup of BirdNET-Go within a Docker container, including dependencies, configuration prompts, performance optimization, and systemd service creation. This is the easiest and recommended method for supported Linux distributions (Debian 11+, Ubuntu 20.04+, Raspberry Pi OS Bullseye+).
-2.  **Using Docker Compose (Linux only):** Set up BirdNET-Go using Docker Compose for a more flexible containerized approach. This offers better configurability and easier management than manual Docker installation. See the [Docker Compose Guide](docker_compose_guide.md) for detailed instructions.
-3.  **Manual Docker Installation (Advanced, Linux only):** Manually run the BirdNET-Go Docker container. This offers more control but requires managing the container lifecycle yourself.
+1.  **Using `install.sh` (Recommended for Linux):** This script automates the setup of VoiceWatch within a Docker container, including dependencies, configuration prompts, performance optimization, and systemd service creation. This is the easiest and recommended method for supported Linux distributions (Debian 11+, Ubuntu 20.04+, Raspberry Pi OS Bullseye+).
+2.  **Using Docker Compose (Linux only):** Set up VoiceWatch using Docker Compose for a more flexible containerized approach. This offers better configurability and easier management than manual Docker installation. See the [Docker Compose Guide](docker_compose_guide.md) for detailed instructions.
+3.  **Manual Docker Installation (Advanced, Linux only):** Manually run the VoiceWatch Docker container. This offers more control but requires managing the container lifecycle yourself.
 4.  **Manual Binary Installation (All platforms):** Download pre-compiled binaries. This is currently the only supported method for Windows and macOS users. This approach avoids Docker but requires manually installing dependencies (TensorFlow Lite C library, FFmpeg, SoX) and managing the application process.
 
 ## Container Registry Options
 
-BirdNET-Go Docker images are available from two registries:
+VoiceWatch Docker images are available from two registries:
 
 ### GitHub Container Registry (Primary)
 
@@ -35,7 +35,7 @@ This script streamlines the installation process on compatible Linux systems (De
 
 - Checks system prerequisites (OS version, 64-bit architecture, Docker installation, user groups).
 - Installs Docker and necessary dependencies (`alsa-utils`, `curl`, `jq`, etc.) if they are missing.
-- Pulls the latest `nightly` BirdNET-Go Docker image (defaults to `ghcr.io/tphakala/birdnet-go:nightly`).
+- Pulls the latest `nightly` VoiceWatch Docker image (defaults to `ghcr.io/tphakala/birdnet-go:nightly`).
 - Creates necessary directories (`~/birdnet-go-app/config` and `~/birdnet-go-app/data`) for persistent configuration and data storage.
 - Downloads a base `config.yaml` file.
 - Guides you through initial configuration (web port, audio input source, audio export format, locale, location, optional password protection).
@@ -48,7 +48,7 @@ This script streamlines the installation process on compatible Linux systems (De
 2.  Download and execute the script:
 
     ```bash
-    curl -fsSL https://github.com/tphakala/birdnet-go/raw/main/install.sh -o install.sh
+    curl -fsSL https://github.com/tphakala/voicewatch/raw/main/install.sh -o install.sh
     bash ./install.sh
     ```
 
@@ -57,7 +57,7 @@ This script streamlines the installation process on compatible Linux systems (De
 
 **After Installation:**
 
-- BirdNET-Go will be running as a systemd service.
+- VoiceWatch will be running as a systemd service.
 - Configuration is stored in `~/birdnet-go-app/config/config.yaml`.
 - Data (database, clips) is stored in `~/birdnet-go-app/data`.
 - You can access the web interface via `http://<your-ip-address>:<port>` (the script will display the correct URL, typically using port 8080 unless changed during setup).
@@ -72,11 +72,11 @@ _(See [Systemd Service Details](#systemd-service-details) below for more informa
 
 **Updating an `install.sh` Installation:**
 
-If you installed BirdNET-Go using the `install.sh` script, updating is straightforward:
+If you installed VoiceWatch using the `install.sh` script, updating is straightforward:
 
 1.  It is **recommended to download a fresh copy** of the script each time, as it may contain improvements:
     ```bash
-    curl -fsSL https://github.com/tphakala/birdnet-go/raw/main/install.sh -o install.sh
+    curl -fsSL https://github.com/tphakala/voicewatch/raw/main/install.sh -o install.sh
     ```
 2.  Run the downloaded script:
     ```bash
@@ -84,26 +84,26 @@ If you installed BirdNET-Go using the `install.sh` script, updating is straightf
     ```
 3.  The script will detect your existing installation and offer an option to "Check for updates".
 4.  Selecting this option will:
-    - Stop the running BirdNET-Go service and container.
+    - Stop the running VoiceWatch service and container.
     - Pull the latest `nightly` Docker image.
     - Update the systemd service file if necessary.
-    - Restart the BirdNET-Go service with the new image.
+    - Restart the VoiceWatch service with the new image.
     - Your existing configuration and data in `~/birdnet-go-app/` will be preserved.
 
 ## Using Docker Compose (Linux only)
 
 For a more flexible containerized approach than the manual Docker installation, you can use Docker Compose which offers better configurability and easier management.
 
-A [premade docker-compose.yml](https://github.com/tphakala/birdnet-go/blob/main/Docker/docker-compose.yml) file is available in the repository. This file includes:
+A [premade docker-compose.yml](https://github.com/tphakala/voicewatch/blob/main/Docker/docker-compose.yml) file is available in the repository. This file includes:
 
-- The BirdNET-Go container configuration with the latest nightly image
+- The VoiceWatch container configuration with the latest nightly image
 - Environment variables for customization (timezone, user permissions, etc.)
 - Volume mounts for persistent configuration and data storage
 - RAM disk (tmpfs) for HLS streaming segments to improve performance
 - Device mounts for sound card access
 - An optional Cloudflared service (commented out) for secure internet access
 
-Please refer to the [Docker Compose Guide](docker_compose_guide.md) for detailed instructions on setting up BirdNET-Go with Docker Compose.
+Please refer to the [Docker Compose Guide](docker_compose_guide.md) for detailed instructions on setting up VoiceWatch with Docker Compose.
 
 ## Manual Docker Installation (Advanced, Linux only)
 
@@ -149,9 +149,9 @@ docker run -ti --rm \\
 | `--env BIRDNET_GID=$(id -g)`                                           | Runs the container process with your host user's group ID.                                                                                                                                     | _Keep as is_                 |
 | `--device /dev/snd`                                                    | Mounts host audio devices into the container. Required for sound card input.                                                                                                                   | _Keep as is_                 |
 | `--add-host="host.docker.internal:host-gateway"`                       | Allows the container to potentially reach services running on the host machine itself.                                                                                                         | _Keep as is_                 |
-| `-v </path/on/host/to/config>:/config`                                 | Mounts a directory from your host for persistent configuration. BirdNET-Go will read/write `config.yaml` here.                                                                                 | `-v $HOME/bn-config:/config` |
+| `-v </path/on/host/to/config>:/config`                                 | Mounts a directory from your host for persistent configuration. VoiceWatch will read/write `config.yaml` here.                                                                                 | `-v $HOME/bn-config:/config` |
 | `-v </path/on/host/to/data>:/data`                                     | Mounts a directory from your host for persistent data (database, audio clips, logs).                                                                                                           | `-v $HOME/bn-data:/data`     |
-| `ghcr.io/tphakala/birdnet-go:nightly` or `tphakala/birdnet-go:nightly` | The BirdNET-Go Docker image to use. Available from GitHub Container Registry or Docker Hub. `:nightly` is recommended for latest features. `:latest` points to the most recent stable release. |                              |
+| `ghcr.io/tphakala/birdnet-go:nightly` or `tphakala/birdnet-go:nightly` | The VoiceWatch Docker image to use. Available from GitHub Container Registry or Docker Hub. `:nightly` is recommended for latest features. `:latest` points to the most recent stable release. |                              |
 
 **Notes:**
 
@@ -164,17 +164,17 @@ docker run -ti --rm \\
 
 This method does not use Docker but requires manual dependency installation.
 
-1.  **Download Binary:** Go to the [BirdNET-Go Releases page](https://github.com/tphakala/birdnet-go/releases) and download the pre-compiled binary suitable for your operating system (Linux, macOS, Windows) and architecture.
-2.  **Download TFLite Library:** Download the corresponding TensorFlow Lite C library from [tphakala/tflite_c Releases](https://github.com/tphakala/tflite_c/releases). Follow the installation instructions there (copying the `.so`, `.dylib`, or `.dll` file to the correct system path or the BirdNET-Go executable directory). Version `v2.17.1` or newer is recommended for best performance (XNNPACK support).
+1.  **Download Binary:** Go to the [VoiceWatch Releases page](https://github.com/tphakala/voicewatch/releases) and download the pre-compiled binary suitable for your operating system (Linux, macOS, Windows) and architecture.
+2.  **Download TFLite Library:** Download the corresponding TensorFlow Lite C library from [tphakala/tflite_c Releases](https://github.com/tphakala/tflite_c/releases). Follow the installation instructions there (copying the `.so`, `.dylib`, or `.dll` file to the correct system path or the VoiceWatch executable directory). Version `v2.17.1` or newer is recommended for best performance (XNNPACK support).
 3.  **(Optional) Install ONNX Runtime:** Required for BirdNET v3.0 models (currently in development preview). The release tarballs bundle the library. See the [ONNX Runtime Installation Guide](../ONNX-Runtime-Installation.md) for platform-specific instructions.
 4.  **Install Dependencies:**
     - **FFmpeg:** Required for RTSP stream capture, audio export to formats other than WAV (MP3, AAC, FLAC, Opus), and the [Live Audio Streaming](guide.md#live-audio-streaming) feature. Install using your system's package manager (e.g., `sudo apt install ffmpeg` on Debian/Ubuntu, `brew install ffmpeg` on macOS).
     - **SoX:** Required for rendering spectrograms in the web interface. Install using your system's package manager (e.g., `sudo apt install sox` on Debian/Ubuntu, `brew install sox` on macOS).
     - **libasound2 (Linux only):** Required for microphone audio capture. Install with `sudo apt install libasound2-dev` on Debian/Ubuntu.
-5.  **Place Executable:** Extract the downloaded BirdNET-Go binary and place it in your desired directory.
-6.  **Run BirdNET-Go:** Open a terminal or command prompt, navigate to the directory containing the `birdnet-go` executable, and run it (e.g., `./birdnet-go`).
-7.  **Configuration:** On the first run, BirdNET-Go will create a default `config.yaml` file. Edit this file according to your needs. See the [Configuration](guide.md#configuration) section in the Wiki for details and default file locations per OS.
-8.  **Process Management:** You are responsible for managing the BirdNET-Go process (running it in the background, ensuring it restarts on boot, etc.) using tools like `systemd`, `supervisor`, `screen`, or Task Scheduler (Windows).
+5.  **Place Executable:** Extract the downloaded VoiceWatch binary and place it in your desired directory.
+6.  **Run VoiceWatch:** Open a terminal or command prompt, navigate to the directory containing the `birdnet-go` executable, and run it (e.g., `./birdnet-go`).
+7.  **Configuration:** On the first run, VoiceWatch will create a default `config.yaml` file. Edit this file according to your needs. See the [Configuration](guide.md#configuration) section in the Wiki for details and default file locations per OS.
+8.  **Process Management:** You are responsible for managing the VoiceWatch process (running it in the background, ensuring it restarts on boot, etc.) using tools like `systemd`, `supervisor`, `screen`, or Task Scheduler (Windows).
 
 ## Systemd Service Details (`install.sh` Method)
 
@@ -182,7 +182,7 @@ The `install.sh` script creates a systemd unit file at `/etc/systemd/system/bird
 
 ```ini
 [Unit]
-Description=BirdNET-Go
+Description=VoiceWatch
 After=docker.service
 Requires=docker.service
 

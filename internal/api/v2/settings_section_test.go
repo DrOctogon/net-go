@@ -10,7 +10,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/conf"
+	"github.com/tphakala/voicewatch/internal/conf"
 )
 
 // TestPatchMissingSections verifies that PATCH requests to the logging,
@@ -73,25 +73,14 @@ func TestPatchMissingSections(t *testing.T) {
 			},
 		},
 		{
-			name:    "perch section accepts valid update",
-			section: "perch",
-			body: map[string]any{
-				"threshold": 0.8,
-			},
-			verify: func(t *testing.T, settings *conf.Settings) {
-				t.Helper()
-				assert.InDelta(t, 0.8, settings.Perch.Threshold, 1e-9)
-			},
-		},
-		{
 			name:    "models section accepts valid update",
 			section: "models",
 			body: map[string]any{
-				"enabled": []string{"birdnet", "perch_v2"},
+				"enabled": []string{"voicewatch", "perch_v2"},
 			},
 			verify: func(t *testing.T, settings *conf.Settings) {
 				t.Helper()
-				assert.Equal(t, []string{"birdnet", "perch_v2"}, settings.Models.Enabled)
+				assert.Equal(t, []string{"voicewatch", "perch_v2"}, settings.Models.Enabled)
 			},
 		},
 		{

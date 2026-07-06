@@ -2,7 +2,7 @@
 package spectrogram
 
 import (
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 // GetLogger returns the spectrogram package logger scoped to the spectrogram module.

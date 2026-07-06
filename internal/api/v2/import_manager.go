@@ -1,11 +1,11 @@
-// Package api provides the HTTP API for BirdNET-Go.
+// Package api provides the HTTP API for VoiceWatch.
 package api
 
 import (
 	"context"
 	"sync"
 
-	"github.com/tphakala/birdnet-go/internal/imports"
+	"github.com/tphakala/voicewatch/internal/imports"
 )
 
 // importManager ensures only one import runs at a time and retains the most

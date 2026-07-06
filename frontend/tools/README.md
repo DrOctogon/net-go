@@ -1,6 +1,6 @@
 # Frontend Tools
 
-This directory contains debugging and testing tools for the BirdNET-Go frontend.
+This directory contains debugging and testing tools for the VoiceWatch frontend.
 
 ## Screenshot Tool
 

@@ -1,4 +1,4 @@
-// Package checks provides concrete health check implementations for BirdNET-Go.
+// Package checks provides concrete health check implementations for VoiceWatch.
 package checks
 
 import (
@@ -8,7 +8,7 @@ import (
 
 	"github.com/shirou/gopsutil/v3/disk"
 	"github.com/shirou/gopsutil/v3/mem"
-	"github.com/tphakala/birdnet-go/internal/health"
+	"github.com/tphakala/voicewatch/internal/health"
 )
 
 // DiskSpaceCheck verifies that monitored filesystem paths have sufficient free space.

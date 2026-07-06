@@ -7,7 +7,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/errors"
+	"github.com/tphakala/voicewatch/internal/errors"
 )
 
 // GetDiskUsage returns the disk usage percentage for the given path

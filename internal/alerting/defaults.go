@@ -1,28 +1,13 @@
 package alerting
 
 import (
-	"github.com/tphakala/birdnet-go/internal/datastore/v2/entities"
+	"github.com/tphakala/voicewatch/internal/datastore/v2/entities"
 )
 
-// DefaultRules returns the built-in alert rules that ship with BirdNET-Go.
+// DefaultRules returns the built-in alert rules that ship with VoiceWatch.
 // These are seeded on first v2 activation and can be restored via reset-defaults.
 func DefaultRules() []entities.AlertRule {
 	return []entities.AlertRule{
-		{
-			Name:           "New species detected",
-			Description:    "Notifies when a species is detected for the first time",
-			NameKey:        RuleKeyNewSpeciesName,
-			DescriptionKey: RuleKeyNewSpeciesDesc,
-			Enabled:        true,
-			BuiltIn:        true,
-			ObjectType:     ObjectTypeDetection,
-			TriggerType:    TriggerTypeEvent,
-			EventName:      EventDetectionNewSpecies,
-			CooldownSec:    60,
-			Actions: []entities.AlertAction{
-				{Target: TargetBell, SortOrder: 0},
-			},
-		},
 		{
 			Name:           "Audio stream disconnected",
 			Description:    "Notifies when an RTSP or audio stream loses connection",
@@ -154,16 +139,35 @@ func DefaultRules() []entities.AlertRule {
 			},
 		},
 		{
-			Name:           "BirdWeather upload failed",
-			Description:    "Notifies when a BirdWeather upload fails",
-			NameKey:        RuleKeyBirdWeatherName,
-			DescriptionKey: RuleKeyBirdWeatherDesc,
+			Name:           "Keyword flagged",
+			Description:    "Notifies when a detection transcript matches a configured keyword",
+			NameKey:        RuleKeyKeywordFlagName,
+			DescriptionKey: RuleKeyKeywordFlagDesc,
 			Enabled:        true,
 			BuiltIn:        true,
-			ObjectType:     ObjectTypeIntegration,
+			ObjectType:     ObjectTypeKeywordFlag,
 			TriggerType:    TriggerTypeEvent,
-			EventName:      EventBirdWeatherFailed,
-			CooldownSec:    600,
+			EventName:      EventKeywordMatched,
+			CooldownSec:    60,
+			Actions: []entities.AlertAction{
+				{Target: TargetBell, SortOrder: 0},
+			},
+		},
+		{
+			// Enabled like the other built-ins, but it only fires when the opt-in
+			// speaker-attribute analysis is enabled and producing estimates (the
+			// feature is off by default, and no model is bundled yet). Users add
+			// conditions (e.g. gender=female AND age_band=child).
+			Name:           "Speaker attribute matched",
+			Description:    "Notifies when a detection's estimated speaker attributes match a rule",
+			NameKey:        RuleKeySpeakerAttrName,
+			DescriptionKey: RuleKeySpeakerAttrDesc,
+			Enabled:        true,
+			BuiltIn:        true,
+			ObjectType:     ObjectTypeSpeakerAttr,
+			TriggerType:    TriggerTypeEvent,
+			EventName:      EventSpeakerAttributeMatched,
+			CooldownSec:    60,
 			Actions: []entities.AlertAction{
 				{Target: TargetBell, SortOrder: 0},
 			},

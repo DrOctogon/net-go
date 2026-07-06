@@ -162,7 +162,7 @@
     });
 
     const loginPayload = {
-      username: 'birdnet-client', // Must match Security.BasicAuth.ClientID in config
+      username: 'voicewatch-client', // Must match Security.BasicAuth.ClientID in config
       password: trimmedPassword, // Use the already trimmed password
       redirectUrl: finalRedirectUrl, // Pass the relative redirect URL to avoid duplication
       basePath: currentBasePath, // Send the detected base path
@@ -170,7 +170,7 @@
 
     try {
       // SECURITY: Don't update auth state until server confirms success
-      // NOTE: Backend expects username to match Security.BasicAuth.ClientID (default: "birdnet-client")
+      // NOTE: Backend expects username to match Security.BasicAuth.ClientID (default: "voicewatch-client")
       const response = await api.post<{
         success: boolean;
         message: string;

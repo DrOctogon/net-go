@@ -15,11 +15,11 @@ import (
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/notification"
-	"github.com/tphakala/birdnet-go/internal/observability/metrics"
-	"github.com/tphakala/birdnet-go/internal/privacy"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/notification"
+	"github.com/tphakala/voicewatch/internal/observability/metrics"
+	"github.com/tphakala/voicewatch/internal/privacy"
 	"golang.org/x/time/rate"
 )
 
@@ -43,14 +43,6 @@ const (
 	// Rate limits
 	rateLimitRequestsPerWindow = 10 // Maximum requests per rate limit window for notifications (increased from 1 to match other SSE endpoints)
 	rateLimitBurst             = 15 // Rate limit burst allowance (increased to handle quick navigation)
-)
-
-// Test notification constants
-const (
-	testNotificationConfidence   = 0.99     // Test confidence value for new species notification
-	testNotificationLatitude     = 42.3601  // Test latitude (Boston, MA) for new species notification
-	testNotificationLongitude    = -71.0589 // Test longitude (Boston, MA) for new species notification
-	newSpeciesNotificationExpiry = 24       // Hours until new species notification expires
 )
 
 // renderTemplateWithDefault renders a template, returning the default value if template is empty
@@ -94,7 +86,7 @@ type NotificationClient struct {
 	SubscriberCh <-chan *notification.Notification
 	Context      context.Context
 	// Guest is true when the SSE connection was opened by an unauthenticated
-	// request. Guests receive only bird-detection events; operational/admin
+	// request. Guests receive only detection events; operational/admin
 	// notifications are filtered out before being sent to the wire.
 	Guest bool
 }
@@ -213,7 +205,7 @@ func (c *Controller) SetupNotificationRoutes() {
 	notifServiceGroup.PUT("/:id/read", c.MarkNotificationRead)
 	notifServiceGroup.PUT("/:id/acknowledge", c.MarkNotificationAcknowledged)
 	notifServiceGroup.DELETE("/:id", c.DeleteNotification)
-	notifServiceGroup.POST("/test/new-species", c.CreateTestNewSpeciesNotification)
+	notifServiceGroup.POST("/test", c.CreateTestDetectionNotification)
 
 	notificationsGroup.GET("/check-ntfy-server", c.CheckNtfyServer)
 }
@@ -914,8 +906,19 @@ func (c *Controller) GetUnreadCount(ctx echo.Context) error {
 	})
 }
 
-// CreateTestNewSpeciesNotification creates a test new species detection notification
-func (c *Controller) CreateTestNewSpeciesNotification(ctx echo.Context) error {
+// Test detection notification constants.
+const (
+	testNotificationConfidence = 0.99 // Sample confidence for the test detection notification
+	testNotificationExpiryHrs  = 24   // Hours until the test notification expires
+)
+
+// CreateTestDetectionNotification creates a test human-voice detection
+// notification. It exists so the notification pipeline (persistence, unread
+// count, SSE broadcast, and CRUD) can be exercised end-to-end from the UI and
+// integration tests without waiting for a live voice detection. The emitted
+// notification mirrors a real detection: type=detection, priority=high,
+// status=unread.
+func (c *Controller) CreateTestDetectionNotification(ctx echo.Context) error {
 	settings := c.currentSettings()
 	if settings == nil {
 		return c.HandleError(ctx, nil, "Settings not initialized", http.StatusServiceUnavailable)
@@ -923,75 +926,34 @@ func (c *Controller) CreateTestNewSpeciesNotification(ctx echo.Context) error {
 
 	service := c.getNotificationService()
 
-	// Build base URL for links
-	baseURL := settings.Security.GetBaseURL(settings.WebServer.Port)
-
-	// Format detection time according to user's time format preference
+	// Format detection time according to the user's time format preference.
 	now := time.Now()
-	var detectionTime string
+	detectionTime := now.Format("3:04:05 PM")
 	if settings.Main.TimeAs24h {
 		detectionTime = now.Format(time.TimeOnly)
-	} else {
-		detectionTime = now.Format("3:04:05 PM")
 	}
 
-	// Create test template data with realistic values
-	testTemplateData := &notification.TemplateData{
-		CommonName:         "Test Bird Species",
-		ScientificName:     "Testus birdicus",
-		Confidence:         testNotificationConfidence,
-		ConfidencePercent:  "99",
-		DetectionTime:      detectionTime,
-		DetectionDate:      now.Format(time.DateOnly),
-		Latitude:           testNotificationLatitude,
-		Longitude:          testNotificationLongitude,
-		Location:           "Test Location (Sample Data)",
-		DetectionID:        "test",
-		DetectionPath:      "/ui/detections/test",
-		DetectionURL:       baseURL + "/ui/detections/test",
-		ImageURL:           "https://static.avicommons.org/houfin-DzFZcHoKwyx9JOmg-320.jpg",
-		DaysSinceFirstSeen: 0,
-	}
-
-	// Render notification using templates with defaults
-	title := renderTemplateWithDefault("title",
-		settings.Notification.Templates.NewSpecies.Title,
-		"New Species: Test Bird Species",
-		testTemplateData, nil)
-
-	message := renderTemplateWithDefault("message",
-		settings.Notification.Templates.NewSpecies.Message,
-		"First detection of Test Bird Species (Testus birdicus) at Fake Test Location",
-		testTemplateData, nil)
+	title := "Human voice detected"
+	message := "Test human-voice detection at " + detectionTime + " (sample data)"
 
 	testNotification := notification.NewNotification(notification.TypeDetection, notification.PriorityHigh, title, message).
 		WithComponent("detection").
-		WithMetadata("species", testTemplateData.CommonName).
-		WithMetadata("scientific_name", testTemplateData.ScientificName).
-		WithMetadata("confidence", testTemplateData.Confidence).
-		WithMetadata("location", testTemplateData.Location).
-		WithMetadata("is_new_species", true).
-		WithMetadata("days_since_first_seen", testTemplateData.DaysSinceFirstSeen).
+		WithMetadata("confidence", testNotificationConfidence).
+		WithMetadata("detection_time", detectionTime).
+		WithMetadata("is_test", true).
 		WithMetadata("note_id", 1).
-		WithExpiry(newSpeciesNotificationExpiry * time.Hour) // New species notifications expire after 24 hours
+		WithExpiry(testNotificationExpiryHrs * time.Hour)
 
-	// Expose all TemplateData fields with bg_ prefix for use in provider templates
-	// This ensures test notifications have the same metadata as real detections
-	// See: https://github.com/tphakala/birdnet-go/issues/1457
-	testNotification = notification.EnrichWithTemplateData(testNotification, testTemplateData)
-
-	// Use CreateWithMetadata to persist and broadcast
+	// Use CreateWithMetadata to persist and broadcast.
 	if err := service.CreateWithMetadata(testNotification); err != nil {
 		c.logErrorIfEnabled("failed to create test notification", logger.Error(err))
 		return c.HandleError(ctx, err, "Failed to create test notification", http.StatusInternalServerError)
 	}
 
 	if settings.WebServer.Debug {
-		c.logDebugIfEnabled("test new species notification created",
+		c.logDebugIfEnabled("test detection notification created",
 			logger.String("notification_id", testNotification.ID),
-			logger.String("species", testTemplateData.CommonName),
-			logger.String("rendered_title", title),
-			logger.String("rendered_message", message))
+			logger.String("rendered_title", title))
 	}
 
 	return ctx.JSON(http.StatusOK, testNotification)

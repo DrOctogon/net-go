@@ -1,7 +1,7 @@
 <!--
   User Interface Settings Page
 
-  Purpose: Global appearance and display settings for BirdNET-Go.
+  Purpose: Global appearance and display settings for VoiceWatch.
   Contains settings moved from MainSettingsPage: color scheme, language,
   thumbnails, spectrograms, temperature unit.
 
@@ -37,8 +37,6 @@
   import { t, getLocale } from '$lib/i18n';
   import { LOCALES } from '$lib/i18n/config';
   import { Palette, Globe, Image, Volume2 } from '@lucide/svelte';
-  import { api, ApiError } from '$lib/utils/api';
-  import { toastActions } from '$lib/stores/toast';
 
   let activeTab = $state('appearance');
   let store = $derived($settingsStore);
@@ -97,50 +95,6 @@
     return DYNAMIC_RANGE_PRESETS.find(p => p.value === value)?.labelKey ?? 'standard';
   }
 
-  // --- Image provider options (async loaded) ---
-  interface ApiState<T> {
-    loading: boolean;
-    error: string | null;
-    data: T;
-  }
-
-  let providerOptions = $state<ApiState<Array<{ value: string; label: string }>>>({
-    loading: true,
-    error: null,
-    data: [],
-  });
-  let multipleProvidersAvailable = $derived(providerOptions.data.length > 1);
-
-  async function loadImageProviders() {
-    providerOptions.loading = true;
-    providerOptions.error = null;
-
-    try {
-      const providersData = await api.get<{
-        providers?: Array<{ value: string; display: string }>;
-      }>('/api/v2/settings/imageproviders');
-
-      providerOptions.data = (providersData?.providers || []).map(
-        (provider: { value: string; display: string }) => ({
-          value: provider.value,
-          label: provider.display,
-        })
-      );
-    } catch (error) {
-      if (error instanceof ApiError) {
-        toastActions.warning(t('settings.main.errors.providersLoadFailed'));
-      }
-      providerOptions.error = t('settings.main.errors.providersLoadFailed');
-      providerOptions.data = [{ value: 'wikipedia', label: 'Wikipedia' }];
-    } finally {
-      providerOptions.loading = false;
-    }
-  }
-
-  $effect(() => {
-    loadImageProviders();
-  });
-
   // --- Derived settings ---
   let settings = $derived({
     dashboard: {
@@ -148,7 +102,6 @@
         thumbnails: {
           summary: true,
           recent: true,
-          imageProvider: 'avicommons',
           fallbackPolicy: 'none',
         },
         summaryLimit: 30,
@@ -446,60 +399,6 @@
             disabled={store.isLoading || store.isSaving}
             onchange={value => updateThumbnailSetting('recent', value)}
           />
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6">
-            <div class:opacity-50={!multipleProvidersAvailable}>
-              <SelectDropdown
-                options={providerOptions.data}
-                value={settings.dashboard.thumbnails.imageProvider}
-                label={t(
-                  'settings.main.sections.userInterface.dashboard.thumbnails.imageProvider.label'
-                )}
-                helpText={t(
-                  'settings.main.sections.userInterface.dashboard.thumbnails.imageProvider.helpText'
-                )}
-                disabled={store.isLoading ||
-                  store.isSaving ||
-                  !multipleProvidersAvailable ||
-                  providerOptions.loading}
-                variant="select"
-                groupBy={false}
-                menuSize="sm"
-                onChange={value => updateThumbnailSetting('imageProvider', value as string)}
-              />
-            </div>
-
-            {#if multipleProvidersAvailable}
-              <SelectDropdown
-                options={[
-                  {
-                    value: 'all',
-                    label: t(
-                      'settings.main.sections.userInterface.dashboard.thumbnails.fallbackPolicy.options.all'
-                    ),
-                  },
-                  {
-                    value: 'none',
-                    label: t(
-                      'settings.main.sections.userInterface.dashboard.thumbnails.fallbackPolicy.options.none'
-                    ),
-                  },
-                ]}
-                value={settings.dashboard.thumbnails.fallbackPolicy}
-                label={t(
-                  'settings.main.sections.userInterface.dashboard.thumbnails.fallbackPolicy.label'
-                )}
-                helpText={t(
-                  'settings.main.sections.userInterface.dashboard.thumbnails.fallbackPolicy.helpText'
-                )}
-                disabled={store.isLoading || store.isSaving}
-                variant="select"
-                groupBy={false}
-                menuSize="sm"
-                onChange={value => updateThumbnailSetting('fallbackPolicy', value as string)}
-              />
-            {/if}
-          </div>
         </div>
 
         <!-- Divider -->

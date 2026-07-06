@@ -1,4 +1,4 @@
-// Package audiocore provides the core audio infrastructure for BirdNET-Go.
+// Package audiocore provides the core audio infrastructure for VoiceWatch.
 // device.go — DeviceManager for local audio capture device lifecycle management.
 package audiocore
 
@@ -8,9 +8,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/audiocore/buffer"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/audiocore/buffer"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 // deviceShutdownTimeout is the maximum time to wait for a capture goroutine

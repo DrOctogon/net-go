@@ -1,5 +1,5 @@
 /**
- * Comprehensive accessibility test suite for BirdNET-Go frontend components
+ * Comprehensive accessibility test suite for VoiceWatch frontend components
  * Tests WCAG 2.1 Level AA compliance using axe-core
  */
 import { describe, it, beforeEach, afterEach } from 'vitest';

@@ -48,18 +48,39 @@ type Result struct {
 	Unlikely bool // Tagged by the ultrasonic validation filter when source audio lacks bat echolocation characteristics
 
 	// Runtime-only data (not persisted)
-	Occurrence            float64                       // Probability 0-1 based on location/time/season
-	ModelContributions    map[string]ResultModelContrib // Per-model detection data from cross-model consensus, keyed by model ID
-	UltrasonicCV          float64                       // US frame CV value from validation filter (for comment generation)
-	UltrasonicCVThreshold float64                       // CV threshold used by validation filter (for comment generation)
+	Occurrence         float64                       // Probability 0-1 based on location/time/season
+	ModelContributions map[string]ResultModelContrib // Per-model detection data from cross-model consensus, keyed by model ID
 	// RawLabel is the full un-truncated classifier label (e.g. "power_tool"); runtime-only,
 	// used by the datastore to classify non-bird sound classes correctly.
 	RawLabel string
+
+	// Speaker attributes (Wave 5). Estimated demographic attributes and a
+	// voice-print embedding attached after detection when the opt-in
+	// speaker-attributes analysis is enabled. Zero-valued otherwise. These are
+	// estimates, not biometric identity recognition.
+	Gender              string
+	GenderConfidence    float64
+	AgeBand             string
+	AgeConfidence       float64
+	SpeakerID           string
+	VoicePrintEmbedding []float32
 
 	// Review status (populated from DB relations when loaded)
 	Verified string
 	Locked   bool
 	Comments []Comment
+}
+
+// HasSpeakerAttributes reports whether any estimated demographic speaker
+// attribute (gender or age band) is present on the result. Mirrors
+// speaker.Attributes.HasAttributes so callers in other packages can gate
+// behavior without importing speaker.
+//
+// SpeakerID and VoicePrintEmbedding are intentionally excluded: this gate drives
+// the demographic-attribute alert, which carries gender/age. A voice-print-only
+// detection (clustering/identity) is not a "speaker attribute matched" event.
+func (r *Result) HasSpeakerAttributes() bool {
+	return r.Gender != "" || r.AgeBand != ""
 }
 
 // ResultModelContrib records a single AI model's contribution to a detection.

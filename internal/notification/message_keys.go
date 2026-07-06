@@ -30,11 +30,9 @@ const (
 	MsgErrorCategory       = "notifications.content.error.categoryError"
 
 	// Settings change toasts
-	MsgSettingsReloadingBirdnet               = "notifications.content.settings.reloadingBirdnet"
-	MsgSettingsRebuildingRangeFilter          = "notifications.content.settings.rebuildingRangeFilter"
+	MsgSettingsReloadingVoiceWatch               = "notifications.content.settings.reloadingBirdnet"
 	MsgSettingsUpdatingIntervals              = "notifications.content.settings.updatingIntervals"
 	MsgSettingsReconfiguringMqtt              = "notifications.content.settings.reconfiguringMqtt"
-	MsgSettingsReconfiguringBirdweather       = "notifications.content.settings.reconfiguringBirdweather"
 	MsgSettingsReconfiguringStreams           = "notifications.content.settings.reconfiguringStreams"
 	MsgSettingsReconfiguringTelemetry         = "notifications.content.settings.reconfiguringTelemetry"
 	MsgSettingsReconfiguringSpeciesTracking   = "notifications.content.settings.reconfiguringSpeciesTracking"
@@ -136,9 +134,6 @@ const (
 	MsgErrIntegMQTTNotConfigured = "errors.integration.mqttNotConfigured"
 	MsgErrIntegMQTTMetrics       = "errors.integration.mqttMetricsUnavailable"
 	MsgErrIntegMQTTClientFailed  = "errors.integration.mqttClientFailed"
-	MsgErrIntegBWDisabled        = "errors.integration.birdweatherDisabled"
-	MsgErrIntegBWNotConfigured   = "errors.integration.birdweatherNotConfigured"
-	MsgErrIntegBWClientFailed    = "errors.integration.birdweatherClientFailed"
 	MsgErrIntegNoWeatherProvider = "errors.integration.noWeatherProvider"
 	MsgErrIntegOWKeyRequired     = "errors.integration.openWeatherKeyRequired"
 	MsgErrIntegProcessorUnavail  = "errors.integration.processorUnavailable"

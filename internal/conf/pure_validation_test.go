@@ -7,56 +7,33 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// TestValidateBirdNETSettings_Valid verifies valid BirdNET configurations pass.
-func TestValidateBirdNETSettings_Valid(t *testing.T) {
+// TestValidateVoiceWatchSettings_Valid verifies valid VoiceWatch configurations pass.
+func TestValidateVoiceWatchSettings_Valid(t *testing.T) {
 	t.Parallel()
 	tests := []struct {
 		name   string
-		config BirdNETConfig
+		config VoiceWatchConfig
 	}{
 		{
 			name: "all valid values",
-			config: BirdNETConfig{
+			config: VoiceWatchConfig{
 				Sensitivity: 1.0,
 				Threshold:   0.7,
 				Overlap:     1.5,
 				Latitude:    45.0,
 				Longitude:   -122.0,
 				Threads:     4,
-				RangeFilter: RangeFilterSettings{
-					Model:     "",
-					Threshold: 0.03,
-				},
-			},
-		},
-		{
-			name: "legacy range filter",
-			config: BirdNETConfig{
-				Sensitivity: 0.5,
-				Threshold:   0.5,
-				Overlap:     0.0,
-				Latitude:    0.0,
-				Longitude:   0.0,
-				Threads:     0,
-				RangeFilter: RangeFilterSettings{
-					Model:     "legacy",
-					Threshold: 0.5,
-				},
 			},
 		},
 		{
 			name: "maximum values",
-			config: BirdNETConfig{
+			config: VoiceWatchConfig{
 				Sensitivity: 1.5,
 				Threshold:   1.0,
 				Overlap:     2.99,
 				Latitude:    90.0,
 				Longitude:   180.0,
 				Threads:     16,
-				RangeFilter: RangeFilterSettings{
-					Model:     "",
-					Threshold: 1.0,
-				},
 			},
 		},
 	}
@@ -64,269 +41,104 @@ func TestValidateBirdNETSettings_Valid(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			result := ValidateBirdNETSettings(&tt.config)
+			result := ValidateVoiceWatchSettings(&tt.config)
 			assert.True(t, result.Valid, "expected valid config, got errors: %v", result.Errors)
 			assert.Empty(t, result.Errors, "expected no errors")
 		})
 	}
 }
 
-// TestValidateBirdNETSettings_Invalid verifies invalid configurations are rejected.
-func TestValidateBirdNETSettings_Invalid(t *testing.T) {
+// TestValidateVoiceWatchSettings_Invalid verifies invalid configurations are rejected.
+func TestValidateVoiceWatchSettings_Invalid(t *testing.T) {
 	t.Parallel()
 	tests := []struct {
 		name        string
-		config      BirdNETConfig
+		config      VoiceWatchConfig
 		expectError string
 	}{
 		{
 			name: "sensitivity too low",
-			config: BirdNETConfig{
+			config: VoiceWatchConfig{
 				Sensitivity: -0.1,
 			},
 			expectError: "sensitivity must be between 0 and 1.5",
 		},
 		{
 			name: "sensitivity too high",
-			config: BirdNETConfig{
+			config: VoiceWatchConfig{
 				Sensitivity: 1.6,
 			},
 			expectError: "sensitivity must be between 0 and 1.5",
 		},
 		{
 			name: "threshold too low",
-			config: BirdNETConfig{
+			config: VoiceWatchConfig{
 				Threshold: -0.1,
 			},
 			expectError: "threshold must be between 0 and 1",
 		},
 		{
 			name: "threshold too high",
-			config: BirdNETConfig{
+			config: VoiceWatchConfig{
 				Threshold: 1.1,
 			},
 			expectError: "threshold must be between 0 and 1",
 		},
 		{
 			name: "overlap too low",
-			config: BirdNETConfig{
+			config: VoiceWatchConfig{
 				Overlap: -0.1,
 			},
 			expectError: "overlap value must be between 0 and 2.99 seconds",
 		},
 		{
 			name: "overlap too high",
-			config: BirdNETConfig{
+			config: VoiceWatchConfig{
 				Overlap: 3.0,
 			},
 			expectError: "overlap value must be between 0 and 2.99 seconds",
 		},
 		{
 			name: "latitude too low",
-			config: BirdNETConfig{
+			config: VoiceWatchConfig{
 				Latitude: -91.0,
 			},
 			expectError: "latitude must be between -90 and 90",
 		},
 		{
 			name: "latitude too high",
-			config: BirdNETConfig{
+			config: VoiceWatchConfig{
 				Latitude: 91.0,
 			},
 			expectError: "latitude must be between -90 and 90",
 		},
 		{
 			name: "longitude too low",
-			config: BirdNETConfig{
+			config: VoiceWatchConfig{
 				Longitude: -181.0,
 			},
 			expectError: "longitude must be between -180 and 180",
 		},
 		{
 			name: "longitude too high",
-			config: BirdNETConfig{
+			config: VoiceWatchConfig{
 				Longitude: 181.0,
 			},
 			expectError: "longitude must be between -180 and 180",
 		},
 		{
 			name: "negative threads",
-			config: BirdNETConfig{
+			config: VoiceWatchConfig{
 				Threads: -1,
 			},
 			expectError: "threads must be at least 0",
 		},
-		{
-			name: "invalid range filter model",
-			config: BirdNETConfig{
-				RangeFilter: RangeFilterSettings{
-					Model: "invalid",
-				},
-			},
-			expectError: "RangeFilter model must be either empty (v2 default), 'latest', 'legacy', or 'v3'",
-		},
-		{
-			name: "range filter threshold too low",
-			config: BirdNETConfig{
-				RangeFilter: RangeFilterSettings{
-					Threshold: -0.1,
-				},
-			},
-			expectError: "RangeFilter threshold must be between 0 and 1",
-		},
-		{
-			name: "range filter threshold too high",
-			config: BirdNETConfig{
-				RangeFilter: RangeFilterSettings{
-					Threshold: 1.1,
-				},
-			},
-			expectError: "RangeFilter threshold must be between 0 and 1",
-		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			result := ValidateBirdNETSettings(&tt.config)
-			assert.False(t, result.Valid, "expected invalid config to fail validation")
-			assert.NotEmpty(t, result.Errors, "expected validation errors but got none")
-
-			found := false
-			for _, err := range result.Errors {
-				if strings.Contains(err, tt.expectError) {
-					found = true
-					break
-				}
-			}
-			assert.True(t, found, "expected error containing %q, got errors: %v", tt.expectError, result.Errors)
-		})
-	}
-}
-
-// TestValidateBirdweatherSettings_Valid verifies valid Birdweather configurations.
-func TestValidateBirdweatherSettings_Valid(t *testing.T) {
-	t.Parallel()
-	tests := []struct {
-		name     string
-		settings BirdweatherSettings
-	}{
-		{
-			name: "disabled",
-			settings: BirdweatherSettings{
-				Enabled: false,
-			},
-		},
-		{
-			name: "enabled with valid ID",
-			settings: BirdweatherSettings{
-				Enabled:          true,
-				ID:               "abcdef123456789012345678",
-				Threshold:        0.7,
-				LocationAccuracy: 100,
-			},
-		},
-		{
-			name: "minimum threshold",
-			settings: BirdweatherSettings{
-				Enabled:   true,
-				ID:        "ABCDEF123456789012345678",
-				Threshold: 0.0,
-			},
-		},
-		{
-			name: "maximum threshold",
-			settings: BirdweatherSettings{
-				Enabled:   true,
-				ID:        "1234567890abcdefABCDEF12",
-				Threshold: 1.0,
-			},
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			t.Parallel()
-			result := ValidateBirdweatherSettings(&tt.settings)
-			assert.True(t, result.Valid, "expected valid config, got errors: %v", result.Errors)
-			assert.Empty(t, result.Errors, "expected no errors")
-		})
-	}
-}
-
-// TestValidateBirdweatherSettings_Invalid verifies invalid Birdweather configurations.
-func TestValidateBirdweatherSettings_Invalid(t *testing.T) {
-	t.Parallel()
-	tests := []struct {
-		name        string
-		settings    BirdweatherSettings
-		expectError string
-	}{
-		{
-			name: "enabled without ID",
-			settings: BirdweatherSettings{
-				Enabled: true,
-				ID:      "",
-			},
-			expectError: "Birdweather ID is required",
-		},
-		{
-			name: "invalid ID too short",
-			settings: BirdweatherSettings{
-				Enabled: true,
-				ID:      "short",
-			},
-			expectError: "Invalid Birdweather ID format",
-		},
-		{
-			name: "invalid ID too long",
-			settings: BirdweatherSettings{
-				Enabled: true,
-				ID:      "abcdef123456789012345678extra",
-			},
-			expectError: "Invalid Birdweather ID format",
-		},
-		{
-			name: "invalid ID with special characters",
-			settings: BirdweatherSettings{
-				Enabled: true,
-				ID:      "abcdef12345678901234567!",
-			},
-			expectError: "Invalid Birdweather ID format",
-		},
-		{
-			name: "threshold too low",
-			settings: BirdweatherSettings{
-				Enabled:   true,
-				ID:        "abcdef123456789012345678",
-				Threshold: -0.1,
-			},
-			expectError: "threshold must be between 0 and 1",
-		},
-		{
-			name: "threshold too high",
-			settings: BirdweatherSettings{
-				Enabled:   true,
-				ID:        "abcdef123456789012345678",
-				Threshold: 1.1,
-			},
-			expectError: "threshold must be between 0 and 1",
-		},
-		{
-			name: "negative location accuracy",
-			settings: BirdweatherSettings{
-				Enabled:          true,
-				ID:               "abcdef123456789012345678",
-				LocationAccuracy: -10,
-			},
-			expectError: "location accuracy must be non-negative",
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			t.Parallel()
-			result := ValidateBirdweatherSettings(&tt.settings)
+			result := ValidateVoiceWatchSettings(&tt.config)
 			assert.False(t, result.Valid, "expected invalid config to fail validation")
 			assert.NotEmpty(t, result.Errors, "expected validation errors but got none")
 
@@ -967,7 +779,7 @@ func TestValidateWebServerSettings_Invalid(t *testing.T) {
 				Port:    "8080",
 				// Missing leading "/" is a common typo. Reject loudly so users notice before the
 				// server silently routes nothing through the subpath middleware.
-				BasePath: "birdnet",
+				BasePath: "voicewatch",
 				LiveStream: LiveStreamSettings{
 					BitRate:       128,
 					SegmentLength: 5,
@@ -1089,40 +901,21 @@ func TestValidateWebServerSettings_Invalid(t *testing.T) {
 	}
 }
 
-// BenchmarkValidateBirdNETSettings benchmarks BirdNET validation.
-func BenchmarkValidateBirdNETSettings(b *testing.B) {
-	cfg := &BirdNETConfig{
+// BenchmarkValidateVoiceWatchSettings benchmarks VoiceWatch validation.
+func BenchmarkValidateVoiceWatchSettings(b *testing.B) {
+	cfg := &VoiceWatchConfig{
 		Sensitivity: 1.0,
 		Threshold:   0.7,
 		Overlap:     1.5,
 		Latitude:    45.0,
 		Longitude:   -122.0,
 		Threads:     4,
-		RangeFilter: RangeFilterSettings{
-			Model:     "",
-			Threshold: 0.03,
-		},
 	}
 
 	b.ReportAllocs()
 
 	for b.Loop() {
-		_ = ValidateBirdNETSettings(cfg)
-	}
-}
-
-// BenchmarkValidateBirdweatherSettings benchmarks Birdweather validation.
-func BenchmarkValidateBirdweatherSettings(b *testing.B) {
-	settings := &BirdweatherSettings{
-		Enabled:   true,
-		ID:        "abcdef123456789012345678",
-		Threshold: 0.7,
-	}
-
-	b.ReportAllocs()
-
-	for b.Loop() {
-		_ = ValidateBirdweatherSettings(settings)
+		_ = ValidateVoiceWatchSettings(cfg)
 	}
 }
 

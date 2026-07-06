@@ -1,6 +1,6 @@
-# BirdNET-Go Logging Standards
+# VoiceWatch Logging Standards
 
-This document defines the logging standards, field naming conventions, and message formats used throughout the BirdNET-Go codebase.
+This document defines the logging standards, field naming conventions, and message formats used throughout the VoiceWatch codebase.
 
 ## Table of Contents
 
@@ -24,7 +24,7 @@ Every package should define a `GetLogger()` function:
 ```go
 package mypackage
 
-import "github.com/tphakala/birdnet-go/internal/logger"
+import "github.com/tphakala/voicewatch/internal/logger"
 
 // GetLogger returns the logger for this package.
 // Fetched dynamically to ensure it uses the current centralized logger.

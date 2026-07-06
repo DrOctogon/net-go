@@ -31,9 +31,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/datastore/mocks"
-	"github.com/tphakala/birdnet-go/internal/observability"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/datastore/mocks"
+	"github.com/tphakala/voicewatch/internal/observability"
 )
 
 // SSETestConfig holds configuration for SSE connection tests
@@ -419,7 +419,7 @@ func setupSSETestServer(t *testing.T) (*httptest.Server, *Controller) {
 	require.NoError(t, err, "Failed to initialize metrics")
 
 	// Create controller WITH route initialization
-	controller, err := NewWithOptions(e, mockDS, settings, nil, nil, controlChan, mockMetrics, true)
+	controller, err := NewWithOptions(e, mockDS, settings, nil, controlChan, mockMetrics, true)
 	require.NoError(t, err)
 
 	// Wait for goroutines to start
@@ -494,7 +494,7 @@ func setupSSETestServerForBench(b *testing.B) (*httptest.Server, *Controller) {
 	controlChan := make(chan string, 10)
 	mockMetrics, _ := observability.NewMetrics()
 
-	controller, err := NewWithOptions(e, mockDS, settings, nil, nil, controlChan, mockMetrics, true)
+	controller, err := NewWithOptions(e, mockDS, settings, nil, controlChan, mockMetrics, true)
 	if err != nil {
 		b.Fatal(err)
 	}

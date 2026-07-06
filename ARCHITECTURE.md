@@ -1,10 +1,10 @@
-# BirdNET-Go Architecture
+# VoiceWatch Architecture
 
-This document provides a comprehensive overview of BirdNET-Go's architecture, tech stack, and design decisions.
+This document provides a comprehensive overview of VoiceWatch's architecture, tech stack, and design decisions.
 
 ## Table of Contents
 
-- [BirdNET-Go Architecture](#birdnet-go-architecture)
+- [VoiceWatch Architecture](#voicewatch-architecture)
   - [Table of Contents](#table-of-contents)
   - [System Overview](#system-overview)
     - [High-Level Architecture](#high-level-architecture)
@@ -60,7 +60,7 @@ This document provides a comprehensive overview of BirdNET-Go's architecture, te
 
 ## System Overview
 
-BirdNET-Go is a self-contained application for real-time bird sound identification using the BirdNET AI model. The architecture follows these key principles:
+VoiceWatch is a self-contained application for real-time human-voice detection. The architecture follows these key principles:
 
 - **Single Binary Deployment**: Frontend assets are embedded into the Go binary
 - **Privacy-First**: No data collection without explicit user opt-in
@@ -102,10 +102,10 @@ BirdNET-Go is a self-contained application for real-time bird sound identificati
                  ┌────────────┼────────────┐
                  ▼            ▼            ▼
 ┌──────────────────┐ ┌─────────────┐ ┌──────────────┐
-│  BirdNET Model   │ │  Database   │ │ External     │
-│  (TensorFlow     │ │  (GORM)     │ │ Services     │
-│   Lite + CGO)    │ │  SQLite/    │ │ MQTT/Webhook │
-│                  │ │  MySQL      │ │ BirdWeather  │
+│  Silero VAD      │ │  Database   │ │ External     │
+│  Model (ONNX)    │ │  (GORM)     │ │ Services     │
+│  single "Human   │ │  SQLite/    │ │ MQTT/Webhook │
+│  Voice" class    │ │  MySQL      │ │              │
 └──────────────────┘ └─────────────┘ └──────────────┘
 ```
 
@@ -125,8 +125,8 @@ BirdNET-Go is a self-contained application for real-time bird sound identificati
 
 **CGO (C Interoperability)**
 
-- Used exclusively for interfacing with TensorFlow Lite C API
-- Enables BirdNET AI model inference
+- Used for interfacing with the TensorFlow Lite C API (via go-tflite)
+- Retained inference backend; the shipped Silero VAD model runs on ONNX Runtime
 
 **Key Dependencies:**
 
@@ -153,92 +153,65 @@ github.com/stretchr/testify
 
 ### AI Model Integration
 
-**Dual TensorFlow Lite Model Architecture**
+**Embedded Silero VAD (Human-Voice Detection)**
 
-BirdNET-Go uses **TWO** TensorFlow Lite models from the BirdNET Analyzer project:
+VoiceWatch ships a single embedded model: **Silero VAD** (ONNX), which emits one
+class — "Human Voice". The model file is embedded in the binary and written to
+disk at runtime.
 
-1. **Analysis Model** - Species identification from audio
-2. **Range Filter Model** - Geographic/regional filtering of species
-
-Both models work together to provide accurate, location-aware bird identification.
+VoiceWatch retains a generic, multi-model classifier orchestrator and model
+registry inherited from BirdNET-Go. These can co-run multiple models, but the
+only model shipped in the binary is the Silero VAD human-voice detector, so at
+runtime it operates as a single-class human-voice detector. (The bundled BirdNET
+bird-classification models are no longer distributed.)
 
 **Package Structure:**
 
 ```
 internal/classifier/
-├── birdnet.go              # Main BirdNET struct and initialization
-├── analyze.go              # Audio analysis and species detection
-├── range_filter.go         # Geographic range filtering
-├── model_registry.go       # Model metadata and registry
-├── models_embedded.go      # Embedded model data
-├── models_external.go      # External model loading
-├── label_files.go          # Label file management
-├── taxonomy.go             # Taxonomy mapping
-├── tracing.go              # Tracing and telemetry helpers
-└── queue.go                # Analysis queue management
+├── orchestrator.go     # Loads and serializes inference against the active model
+├── model_registry.go   # Model metadata and registry (currently: Silero VAD)
+├── model.go            # Model interfaces and types
+├── queue.go            # Analysis queue management
+├── logger.go           # Classifier logging
+├── inferencestats/     # Inference timing/telemetry helpers
+└── humanvoice/         # Embedded Silero VAD model
+    ├── humanvoice.go   # Model implementation (single "Human Voice" class)
+    ├── embed.go        # Embeds and writes out silero_vad.onnx at runtime
+    ├── aggregate.go    # Aggregates per-window scores into a clip result
+    └── data/
+        └── silero_vad.onnx  # Embedded Silero VAD v5 model
 ```
 
 **Inference Backend (`internal/inference/`):**
 
-The inference package defines `Classifier` and `RangeFilter` interfaces with backend-specific implementations in sub-packages:
+The inference package defines a `Classifier` interface (plus embedding and custom
+classifier variants) with backend-specific implementations in sub-packages:
 
 ```text
 internal/inference/
-├── backend.go              # Classifier and RangeFilter interfaces
+├── backend.go              # Classifier interface (and variants)
+├── onnx/                   # ONNX Runtime backend (runs the Silero VAD model)
 ├── tflite/                 # TFLite backend (via go-tflite)
-│   ├── classifier.go       # Species classification
-│   ├── rangefilter.go      # Geographic range filtering
-│   └── threads.go          # Thread count auto-detection
-└── onnx/                   # ONNX backend (build tag: onnx)
-    ├── classifier.go       # ONNX species classification
-    └── rangefilter.go      # ONNX range filtering
+└── openvino/               # OpenVINO backend (build tag: openvino)
 ```
 
-**TensorFlow Lite Integration via go-tflite:**
-
-BirdNET-Go uses the `github.com/tphakala/go-tflite` library for TensorFlow Lite integration:
-
-```go
-// internal/inference/tflite/classifier.go
-import (
-    tflitelib "github.com/tphakala/go-tflite"
-    "github.com/tphakala/go-tflite/delegates/xnnpack"
-)
-
-// The BirdNET struct holds inference.Classifier and inference.RangeFilter interfaces
-type BirdNET struct {
-    classifier       inference.Classifier   // Species identification backend
-    rangeFilter      inference.RangeFilter  // Geographic filtering backend
-    // ...
-}
-```
-
-The `go-tflite` library handles CGO/C API bindings to TensorFlow Lite internally, providing a clean Go interface to the BirdNET package.
-
-**Model Files:**
-
-| Model Type             | Filename                                            | Precision | Purpose                                               |
-| ---------------------- | --------------------------------------------------- | --------- | ----------------------------------------------------- |
-| Analysis               | `BirdNET_GLOBAL_6K_V2.4_Model_FP32.tflite`          | FP32      | Species identification (default, embedded)            |
-| Range Filter (Legacy)  | `BirdNET_GLOBAL_6K_V2.4_MData_Model_FP16.tflite`    | FP16      | Geographic filtering (embedded)                       |
-| Range Filter (Updated) | `BirdNET_GLOBAL_6K_V2.4_MData_Model_V2_FP16.tflite` | FP16      | Geographic filtering (embedded)                       |
-| Labels                 | `BirdNET_GLOBAL_6K_V2.4_Labels_<locale>.txt`        | N/A       | Species labels in multiple languages (6,000+ species) |
+The Silero VAD model runs on the ONNX Runtime backend
+(`github.com/yalue/onnxruntime_go`). The TFLite backend
+(`github.com/tphakala/go-tflite`) is retained but no TFLite model ships.
 
 **Model Workflow:**
 
 ```
-Audio PCM → Analysis Model → Species Predictions → Range Filter Model → Filtered Results
-    ↓              ↓                    ↓                     ↓                 ↓
-  48kHz        TFLite FP32         Confidence scores    Location-based      Final
-  Mono         Inference           (all species)        probability         detections
+Audio PCM → Silero VAD (ONNX) → "Human Voice" detections
+    ↓              ↓                       ↓
+  48kHz        Inference             Confidence-scored
+  Mono                               human-voice events
 ```
 
 **Performance Characteristics:**
 
-- **Analysis Model Inference**: ~100-500ms per 3-second audio chunk (hardware dependent)
-- **Range Filter**: Negligible overhead (<10ms)
-- **Memory**: ~50-200MB total footprint (both models loaded)
-- **Hardware Acceleration**: XNNPACK delegate for CPU optimization
+- **Inference**: lightweight per 3-second audio chunk (Silero VAD is a small model)
 - **Supported Platforms**: CPU inference (ARM64, AMD64)
 
 ### Web Framework
@@ -265,7 +238,6 @@ internal/api/
 │   ├── dashboard.go    # Dashboard endpoints
 │   ├── media.go        # Media endpoints (audio, spectrograms)
 │   ├── weather.go      # Weather integration
-│   ├── birdweather.go  # BirdWeather integration
 │   ├── mqtt.go         # MQTT endpoints
 │   ├── audio_stream_hls.go # HLS audio streaming
 │   └── audio_level_sse.go  # Audio level SSE
@@ -324,7 +296,7 @@ cmd/
 ```yaml
 # config.yaml
 main:
-  name: BirdNET-Go
+  name: VoiceWatch
   timeAs24h: true
   log:
     level: info
@@ -509,7 +481,7 @@ stats, err := db.GetTopBirdsDetected(limit)
 
 **Multi-Source Audio Capture**
 
-BirdNET-Go supports various audio input sources:
+VoiceWatch supports various audio input sources:
 
 1. **Local Audio Devices** (ALSA, CoreAudio, WASAPI)
 2. **RTSP Streams** (IP cameras, network audio sources)
@@ -527,7 +499,7 @@ internal/analysis/
 ├── processor/
 │   ├── processor.go    # Main audio analysis processor
 │   ├── workers.go      # Task queue management and job enqueueing
-│   ├── actions.go      # Action types (Database, MQTT, BirdWeather, SSE, etc.)
+│   ├── actions.go      # Action types (Database, MQTT, SSE, etc.)
 │   ├── execute.go      # Action execution logic
 │   ├── eventtracker.go # Event frequency tracking
 │   ├── jobqueue_adapter.go  # Adapter between processor and job queue
@@ -561,7 +533,7 @@ internal/myaudio/
 
 **Audio Device Interface (malgo/miniaudio):**
 
-BirdNET-Go uses **malgo** (Go wrapper for miniaudio.h) for cross-platform audio device access:
+VoiceWatch uses **malgo** (Go wrapper for miniaudio.h) for cross-platform audio device access:
 
 - **Linux**: ALSA backend
 - **macOS**: CoreAudio backend
@@ -570,7 +542,7 @@ BirdNET-Go uses **malgo** (Go wrapper for miniaudio.h) for cross-platform audio 
 **Audio Format Requirements:**
 
 - **Realtime Mode**: Expects 48kHz, 16-bit mono PCM from audio source
-  - No explicit resampling in BirdNET-Go code
+  - No explicit resampling in VoiceWatch code
   - malgo/miniaudio may handle format conversion internally
 - **File Analysis Mode**: Uses `resample.go` for format conversion to 48kHz mono
 
@@ -579,10 +551,8 @@ BirdNET-Go uses **malgo** (Go wrapper for miniaudio.h) for cross-platform audio 
 ```
 Audio Source → Capture → Buffer → Analyze → Detect → Store → Notify
      ↓           ↓         ↓        ↓         ↓       ↓       ↓
-  RTSP/Mic    malgo/    3-sec    BirdNET  Threshold Database MQTT/
-              FFmpeg    chunks   Analysis  + Range           Webhook
-                                + Range   Filter
-                                Filter
+  RTSP/Mic    malgo/    3-sec    Silero   Threshold Database MQTT/
+              FFmpeg    chunks   VAD                         Webhook
 ```
 
 **FFmpeg Integration:**
@@ -614,7 +584,7 @@ Spectrograms are generated on-demand or pre-rendered for dashboard display using
 
 **Async Task Processing System:**
 
-BirdNET-Go uses an asynchronous job queue system for handling detection actions (database saves, MQTT publishes, BirdWeather uploads, etc.):
+VoiceWatch uses an asynchronous job queue system for handling detection actions (database saves, MQTT publishes, audio-clip exports, etc.):
 
 ```
 internal/analysis/jobqueue/
@@ -634,16 +604,14 @@ internal/analysis/jobqueue/
 
 **Action Types** (internal/analysis/processor/actions.go):
 
-| Action Type             | Purpose                                    | Retry | Timeout    |
-| ----------------------- | ------------------------------------------ | ----- | ---------- |
-| LogAction               | Write detection to log file                | No    | N/A        |
-| DatabaseAction          | Save detection to database + audio clip    | No    | 30s        |
-| SaveAudioAction         | Export audio clip to disk (WAV/FLAC/MP3)   | No    | 30s        |
-| BirdWeatherAction       | Upload detection to BirdWeather API        | Yes   | 30s        |
-| MqttAction              | Publish detection to MQTT broker           | Yes   | 10s        |
-| SSEAction               | Broadcast detection via Server-Sent Events | Yes   | 30s        |
-| UpdateRangeFilterAction | Update BirdNET species filter daily        | No    | 30s        |
-| CompositeAction         | Execute multiple actions sequentially      | N/A   | 30s/action |
+| Action Type     | Purpose                                    | Retry | Timeout    |
+| --------------- | ------------------------------------------ | ----- | ---------- |
+| LogAction       | Write detection to log file                | No    | N/A        |
+| DatabaseAction  | Save detection to database + audio clip    | No    | 30s        |
+| SaveAudioAction | Export audio clip to disk (WAV/FLAC/MP3)   | No    | 30s        |
+| MqttAction      | Publish detection to MQTT broker           | Yes   | 10s        |
+| SSEAction       | Broadcast detection via Server-Sent Events | Yes   | 30s        |
+| CompositeAction | Execute multiple actions sequentially      | N/A   | 30s/action |
 
 **Task Processing Flow:**
 
@@ -677,12 +645,12 @@ type RetryConfig struct {
 }
 ```
 
-**Example: BirdWeather Upload with Retry**
+**Example: MQTT Publish with Retry**
 
-1. Detection arrives → BirdWeatherAction created with retry enabled
+1. Detection arrives → MqttAction created with retry enabled
 2. EnqueueTask() adds job to queue (non-blocking)
 3. Job executes in background goroutine
-4. If upload fails (network error): retry after 5s, then 10s, then 20s
+4. If publish fails (network error): retry after 5s, then 10s, then 20s
 5. If max retries exceeded: mark as failed, log error, drop job
 6. Success: drop job with success status
 
@@ -732,7 +700,7 @@ internal/analysis/
 └── processor/
     ├── processor.go    # Main audio analysis processor
     ├── workers.go      # Task queue management and job enqueueing
-    ├── actions.go      # Action types (Database, MQTT, BirdWeather, SSE, etc.)
+    ├── actions.go      # Action types (Database, MQTT, SSE, etc.)
     ├── execute.go      # Action execution logic
     └── jobqueue_adapter.go  # Adapter between processor and job queue
 ```
@@ -750,7 +718,7 @@ internal/analysis/jobqueue/
 **Processing Flow:**
 
 1. **Initialization**
-   - Load BirdNET TensorFlow Lite model
+   - Load the embedded Silero VAD model
    - Initialize audio sources (devices/RTSP streams)
    - Initialize buffers:
      - Analysis buffer: 6x buffer size to avoid underruns
@@ -768,15 +736,9 @@ internal/analysis/jobqueue/
 3. **Analysis Loop** (continuous)
    - Buffer monitor reads 3-second audio chunks from analysis buffer
    - Chunks overlap by configurable amount (default: 0.0s, range: 0.0-2.9s)
-   - Queue audio chunks to BirdNET analysis queue (default size: 5)
-   - BirdNET predicts species using TensorFlow Lite model
+   - Queue audio chunks to the classifier analysis queue (default size: 5)
+   - The Silero VAD model scores each chunk for human voice
    - Filter results by confidence threshold
-   - Apply species filters (location, time-based, custom lists)
-   - Apply privacy filter (if enabled):
-     - BirdNET model detects "human" vocalizations
-     - Not traditional VAD - uses BirdNET's species detection
-     - Filters bird detections when human speech detected
-     - Protects privacy by preventing audio clip export during conversations
 
 4. **Detection Handling** (async via job queue)
    - Create actions based on configuration
@@ -785,13 +747,12 @@ internal/analysis/jobqueue/
      - DatabaseAction: Save detection to database with audio clip
      - SSEAction: Broadcast detection via Server-Sent Events
      - MqttAction: Publish to MQTT broker (with retry)
-     - BirdWeatherAction: Upload to BirdWeather API (with retry)
      - SaveAudioAction: Export audio clip to disk
    - Failed actions retry with exponential backoff
 
 **Concurrency Model:**
 
-BirdNET-Go uses a job queue system for concurrent action processing:
+VoiceWatch uses a job queue system for concurrent action processing:
 
 ```go
 // Initialize job queue with capacity and options
@@ -865,42 +826,6 @@ internal/notification/
 └── templates.go        # Customizable payload templates
 ```
 
-**BirdWeather Integration:**
-
-```
-internal/birdweather/
-├── birdweather_client.go  # BirdWeather API client and upload logic
-├── audio.go               # Audio processing and normalization (LUFS)
-└── connection_probe.go    # "Test Connection" feature: connectivity/auth/upload probing
-```
-
-**Features:**
-
-- **Soundscape Upload**: Uploads 15-second audio clips to BirdWeather
-- **Audio Normalization**: Uses FFmpeg loudnorm filter to achieve -23 LUFS (EBU R128 standard)
-- **Detection Metadata**: Sends species, confidence, location, and timestamp
-- **Error Handling**: Retry logic via job queue for network failures
-- **Logging**: Dedicated file logger (`logs/birdweather.log`) for debugging uploads
-- **API Compliance**: Follows BirdWeather API v2 specification
-
-Optional integration with [BirdWeather.com](https://birdweather.com) for global bird activity tracking.
-
-**eBird Integration:**
-
-```
-internal/ebird/
-├── client.go           # eBird API v2 client
-└── types.go            # Taxonomy data structures
-```
-
-Integration with Cornell Lab's eBird API for:
-
-- Species taxonomy data (scientific names, common names, family classifications)
-- Building species family trees for UI visualization (Kingdom → Phylum → Class → Order → Family → Genus → Species → Subspecies)
-- Additional species metadata (banding codes, extinction status, taxonomic ordering)
-
-**Note:** Regional species filtering is handled by BirdNET's range filter, not by the eBird module.
-
 ### Testing Framework
 
 **Testify + Assert:**
@@ -931,13 +856,13 @@ internal/package/
     └── expected/       # Expected results
 ```
 
-**Note:** The `testdata/` directory is used only in packages that require external test data (e.g., `internal/ebird`). Most packages use inline test data or mocks.
+**Note:** The `testdata/` directory is used only in packages that require external test data. Most packages use inline test data or mocks.
 
 **Mock Framework:**
 
 **Automated Mock Generation with Mockery v2**
 
-BirdNET-Go uses [Mockery v2](https://vektra.github.io/mockery/) for automated mock generation, eliminating manual mock maintenance:
+VoiceWatch uses [Mockery v2](https://vektra.github.io/mockery/) for automated mock generation, eliminating manual mock maintenance:
 
 ```
 internal/datastore/mocks/
@@ -991,7 +916,7 @@ internal/datastore/mocks/
 import (
     "testing"
     "github.com/stretchr/testify/mock"
-    "github.com/tphakala/birdnet-go/internal/datastore/mocks"
+    "github.com/tphakala/voicewatch/internal/datastore/mocks"
 )
 
 func TestDetectionSave(t *testing.T) {
@@ -1077,7 +1002,7 @@ go test -race ./...
 
 ### UI Technology Stack
 
-BirdNET-Go uses a modern Svelte 5 frontend:
+VoiceWatch uses a modern Svelte 5 frontend:
 
 | Feature              | Technology            |
 | -------------------- | --------------------- |
@@ -1746,10 +1671,9 @@ internal/api/v2/
 ├── system.go           # System info and control endpoints
 ├── weather.go          # Weather integration endpoints
 ├── species.go          # Species information endpoints
-├── range.go            # Geographic range filter endpoints
 ├── search.go           # Search endpoints
 ├── notifications.go    # Notification management
-├── integrations.go     # External integrations (MQTT, BirdWeather)
+├── integrations.go     # External integrations (MQTT)
 ├── control.go          # System control endpoints
 ├── debug.go            # Debug endpoints
 ├── filesystem.go       # Filesystem operations
@@ -1932,7 +1856,7 @@ const (
 
 **Binary Authentication Model:**
 
-BirdNET-Go uses a **binary authentication model** (authenticated or not) rather than role-based access control. There are no user roles or permission levels.
+VoiceWatch uses a **binary authentication model** (authenticated or not) rather than role-based access control. There are no user roles or permission levels.
 
 **Protected Routes:**
 

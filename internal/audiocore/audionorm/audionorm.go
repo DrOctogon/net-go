@@ -63,7 +63,7 @@ type Options struct {
 	TruePeakDBTP float64 // maximum allowed true peak in dBTP, must be <= 0
 }
 
-// DefaultOptions returns the EBU R 128 defaults for the BirdNET-Go signal:
+// DefaultOptions returns the EBU R 128 defaults for the VoiceWatch signal:
 // 48 kHz mono, target -23 LUFS, ceiling -1.0 dBTP.
 func DefaultOptions() Options {
 	return Options{

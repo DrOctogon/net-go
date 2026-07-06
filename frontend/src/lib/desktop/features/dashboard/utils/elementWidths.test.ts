@@ -18,6 +18,7 @@ const TYPE_DAILY_SUMMARY: DashboardElement['type'] = 'daily-summary';
 const TYPE_LIVE_SPECTROGRAM: DashboardElement['type'] = 'live-spectrogram';
 const TYPE_CURRENTLY_HEARING: DashboardElement['type'] = 'currently-hearing';
 const TYPE_DETECTIONS_GRID: DashboardElement['type'] = 'detections-grid';
+const TYPE_VOICE_ACTIVITY: DashboardElement['type'] = 'voice-activity';
 const WIDTH_HALF: DashboardElement['width'] = 'half';
 const EFFECTIVE_WIDTH_FULL: ReturnType<typeof getEffectiveWidth> = 'full';
 const SPAN_HALF = 'col-span-1';
@@ -29,6 +30,7 @@ describe('dashboard element widths', () => {
     expect(getEffectiveWidth(element(TYPE_LIVE_SPECTROGRAM, WIDTH_HALF))).toBe(
       EFFECTIVE_WIDTH_FULL
     );
+    expect(getEffectiveWidth(element(TYPE_VOICE_ACTIVITY, WIDTH_HALF))).toBe(EFFECTIVE_WIDTH_FULL);
   });
 
   it('returns responsive span classes for mobile and wider dashboard grids', () => {

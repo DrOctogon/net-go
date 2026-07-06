@@ -15,15 +15,14 @@ import (
 	"time"
 
 	"github.com/labstack/echo/v4"
-	"github.com/tphakala/birdnet-go/internal/analysis/species"
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	"github.com/tphakala/birdnet-go/internal/datastore/v2/entities"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/imageprovider"
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/analysis/species"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/datastore/v2/entities"
+	"github.com/tphakala/voicewatch/internal/errors"
+
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
-const placeholderImageURL = "/ui/assets/bird-placeholder.svg"
 const maxSpeciesBatch = 10
 
 // Analytics constants (file-local)
@@ -45,12 +44,6 @@ const (
 	// cap; the max keeps the ridgeline readable (more than ~8 overlapping ridges are unreadable).
 	defaultSpeciesRidgelineLimit = 5
 	maxSpeciesRidgelineLimit     = 8
-
-	// Arrival/departure phenology top-N bounds. The default matches the chart's maxSpecies cap; the
-	// max keeps the Gantt's residency bars legible within the card's fixed height (one bar per species,
-	// so beyond ~20 rows the bars and labels crowd).
-	defaultSpeciesPhenologyLimit = 12
-	maxSpeciesPhenologyLimit     = 20
 
 	// Acoustic succession streamgraph top-N bounds. The default matches the chart's maxSpecies cap;
 	// the max keeps the stacked streamgraph readable (beyond ~10 bands the wiggle layers crowd within
@@ -121,7 +114,6 @@ type SpeciesDailySummary struct {
 	MaxConfidence      float64 `json:"max_confidence,omitempty"` // Highest detection confidence on this day (0..1)
 	FirstHeard         string  `json:"first_heard,omitempty"`
 	LatestHeard        string  `json:"latest_heard,omitempty"`
-	ThumbnailURL       string  `json:"thumbnail_url,omitempty"`
 	IsNewSpecies       bool    `json:"is_new_species,omitempty"`        // First seen within tracking window
 	DaysSinceFirstSeen int     `json:"days_since_first_seen,omitempty"` // Days since species was first detected
 	DaysSinceLastSeen  int     `json:"days_since_last_seen,omitempty"`  // Days since the previous detection before this return; omitted unless > 0 (first-ever and same-day re-detections are not emitted)
@@ -143,7 +135,6 @@ type SpeciesSummary struct {
 	LastHeard      string  `json:"last_heard,omitempty"`
 	AvgConfidence  float64 `json:"avg_confidence,omitempty"`
 	MaxConfidence  float64 `json:"max_confidence,omitempty"`
-	ThumbnailURL   string  `json:"thumbnail_url,omitempty"`
 }
 
 // HourlyDistribution represents detections aggregated by hour
@@ -158,7 +149,6 @@ type NewSpeciesResponse struct {
 	ScientificName string `json:"scientific_name"`
 	CommonName     string `json:"common_name"`
 	FirstHeardDate string `json:"first_heard_date"`
-	ThumbnailURL   string `json:"thumbnail_url,omitempty"`
 	CountInPeriod  int    `json:"count_in_period"` // How many times seen in the query period
 }
 
@@ -200,23 +190,19 @@ func (c *Controller) initAnalyticsRoutes() {
 	speciesGroup.GET("/daily/batch", c.GetBatchDailySpeciesSummary) // Batch daily summaries endpoint
 	speciesGroup.GET("/summary", c.GetSpeciesSummary)
 	speciesGroup.GET("/detections/new", c.GetNewSpeciesDetections) // Renamed endpoint
-	speciesGroup.GET("/thumbnails", c.GetSpeciesThumbnails)        // Batch thumbnail endpoint
 	speciesGroup.GET("/diversity", c.GetSpeciesDiversity)          // Species diversity over time
-	speciesGroup.GET("/accumulation", c.GetSpeciesAccumulation)    // Species accumulation curve (biodiversity collector's curve)
-	speciesGroup.GET("/phenology", c.GetSpeciesPhenology)          // Arrival/departure phenology (residency-bar Gantt)
 
 	// Time analytics routes (can be implemented later)
 	timeGroup := analyticsGroup.Group("/time")
 	timeGroup.GET("/hourly", c.GetHourlyAnalytics)
 	timeGroup.GET("/hourly/batch", c.GetBatchHourlySpeciesData) // Batch hourly data for multiple species
 	timeGroup.GET("/daily", c.GetDailyAnalytics)
-	timeGroup.GET("/daily/batch", c.GetBatchDailySpeciesData)              // Batch daily trends for multiple species
-	timeGroup.GET("/distribution/hourly", c.GetTimeOfDayDistribution)      // Renamed endpoint for time-of-day distribution
-	timeGroup.GET("/distribution/species", c.GetSpeciesHourlyDistribution) // Who-sings-when ridgeline (top-N species hour-of-day)
-	timeGroup.GET("/heatmap", c.GetActivityHeatmap)                        // Seasonal density heatmap (date x intra-day slot)
-	timeGroup.GET("/dawn-onset", c.GetDawnChorusOnset)                     // Dawn-chorus onset tracker (daily onset vs civil dawn)
-	timeGroup.GET("/succession", c.GetAcousticSuccession)                  // Acoustic succession streamgraph (top-N species hour-of-day, stacked)
-	timeGroup.GET("/year-over-year", c.GetYearOverYear)                    // Year-over-year tracker (this year-to-date vs same span last year, cumulative)
+	timeGroup.GET("/daily/batch", c.GetBatchDailySpeciesData)         // Batch daily trends for multiple species
+	timeGroup.GET("/distribution/hourly", c.GetTimeOfDayDistribution) // Renamed endpoint for time-of-day distribution
+	timeGroup.GET("/heatmap", c.GetActivityHeatmap)                   // Seasonal density heatmap (date x intra-day slot)
+	timeGroup.GET("/dawn-onset", c.GetDawnChorusOnset)                // Dawn-chorus onset tracker (daily onset vs civil dawn)
+	timeGroup.GET("/succession", c.GetAcousticSuccession)             // Acoustic succession streamgraph (top-N species hour-of-day, stacked)
+	timeGroup.GET("/year-over-year", c.GetYearOverYear)               // Year-over-year tracker (this year-to-date vs same span last year, cumulative)
 
 	// Confidence analytics routes
 	confidenceGroup := analyticsGroup.Group("/confidence")
@@ -279,7 +265,7 @@ func (c *Controller) GetDailySpeciesSummary(ctx echo.Context) error {
 		)
 	}
 
-	// 4. Build Response (including fetching thumbnails)
+	// 4. Build Response
 	result, err := c.buildDailySpeciesSummaryResponse(aggregatedData, selectedDate)
 	if err != nil {
 		// Error logged in helper
@@ -544,9 +530,6 @@ func (c *Controller) buildDailySpeciesSummaryResponse(aggregatedData map[string]
 	// Collect species names with detections
 	scientificNames := collectSpeciesWithDetections(aggregatedData)
 
-	// Batch fetch thumbnail URLs (cached only for fast response)
-	thumbnailURLs := c.batchFetchCachedThumbnails(scientificNames)
-
 	// Parse selected date for status computation
 	statusTime := parseStatusTimeFromDate(selectedDate)
 
@@ -557,8 +540,7 @@ func (c *Controller) buildDailySpeciesSummaryResponse(aggregatedData map[string]
 	result := make([]SpeciesDailySummary, 0, len(scientificNames))
 	for _, scientificName := range scientificNames {
 		data := aggregatedData[scientificName]
-		thumbnailURL := getThumbnailWithFallback(thumbnailURLs, scientificName)
-		summary := buildSpeciesSummaryFromData(&data, thumbnailURL)
+		summary := buildSpeciesSummaryFromData(&data)
 		if status, exists := batchSpeciesStatus[scientificName]; exists {
 			applySpeciesStatusToSummary(&summary, &status)
 		}
@@ -577,23 +559,6 @@ func collectSpeciesWithDetections(aggregatedData map[string]aggregatedBirdInfo) 
 		}
 	}
 	return names
-}
-
-// batchFetchCachedThumbnails fetches thumbnail URLs from cache only
-func (c *Controller) batchFetchCachedThumbnails(scientificNames []string) map[string]string {
-	thumbnailURLs := make(map[string]string)
-	cache := c.BirdImageCache
-	if cache == nil || len(scientificNames) == 0 {
-		return thumbnailURLs
-	}
-
-	batchResults := cache.GetBatchCachedOnly(scientificNames)
-	for name := range batchResults {
-		if img := batchResults[name]; img.URL != "" && !img.IsNegativeEntry() {
-			thumbnailURLs[name] = imageprovider.ProxyImageURL(name)
-		}
-	}
-	return thumbnailURLs
 }
 
 // parseStatusTimeFromDate parses selected date for species status computation
@@ -623,16 +588,8 @@ func (c *Controller) batchFetchSpeciesStatus(scientificNames []string, statusTim
 	return tracker.GetBatchSpeciesStatus(scientificNames, statusTime)
 }
 
-// getThumbnailWithFallback returns thumbnail URL or placeholder
-func getThumbnailWithFallback(thumbnailURLs map[string]string, scientificName string) string {
-	if url, ok := thumbnailURLs[scientificName]; ok && url != "" {
-		return url
-	}
-	return placeholderImageURL
-}
-
 // buildSpeciesSummaryFromData creates a SpeciesDailySummary from aggregated data
-func buildSpeciesSummaryFromData(data *aggregatedBirdInfo, thumbnailURL string) SpeciesDailySummary {
+func buildSpeciesSummaryFromData(data *aggregatedBirdInfo) SpeciesDailySummary {
 	hourlyCountsSlice := make([]int, HoursPerDay)
 	copy(hourlyCountsSlice, data.HourlyCounts[:])
 
@@ -646,7 +603,6 @@ func buildSpeciesSummaryFromData(data *aggregatedBirdInfo, thumbnailURL string) 
 		MaxConfidence:  data.MaxConfidence,
 		FirstHeard:     data.First,
 		LatestHeard:    data.Latest,
-		ThumbnailURL:   thumbnailURL,
 	}
 }
 
@@ -716,10 +672,8 @@ func (c *Controller) GetSpeciesSummary(ctx echo.Context) error {
 		)
 	}
 
-	// Build response with thumbnails
-	scientificNames := extractScientificNames(summaryData)
-	thumbnailURLs := c.batchFetchThumbnailsWithLogging(scientificNames, ip, path)
-	response := c.convertSummaryDataToResponse(summaryData, thumbnailURLs)
+	// Build response
+	response := c.convertSummaryDataToResponse(summaryData)
 
 	// Apply limit
 	response, limit := c.applyOptionalLimit(ctx, response, ip, path)
@@ -745,43 +699,8 @@ func (c *Controller) fetchSpeciesSummaryData(ctx echo.Context, startDate, endDat
 	return summaryData, time.Since(dbStart), err
 }
 
-// extractScientificNames extracts scientific names from summary data
-func extractScientificNames(summaryData []datastore.SpeciesSummaryData) []string {
-	names := make([]string, 0, len(summaryData))
-	for i := range summaryData {
-		names = append(names, summaryData[i].ScientificName)
-	}
-	return names
-}
-
-// batchFetchThumbnailsWithLogging fetches thumbnails with debug logging
-func (c *Controller) batchFetchThumbnailsWithLogging(scientificNames []string, ip, path string) map[string]imageprovider.BirdImage {
-	cache := c.BirdImageCache
-	if cache == nil || len(scientificNames) == 0 {
-		return nil
-	}
-
-	c.logDebugIfEnabled("Fetching cached thumbnails only",
-		logger.Int("count", len(scientificNames)),
-		logger.String("ip", ip),
-		logger.String("path", path),
-	)
-	thumbStart := time.Now()
-	thumbnailURLs := cache.GetBatchCachedOnly(scientificNames)
-	thumbDuration := time.Since(thumbStart)
-	c.logInfoIfEnabled("Cached thumbnail fetch completed",
-		logger.Int64("duration_ms", thumbDuration.Milliseconds()),
-		logger.Int("cached_count", len(thumbnailURLs)),
-		logger.Int("requested_count", len(scientificNames)),
-		logger.String("ip", ip),
-		logger.String("path", path),
-	)
-
-	return thumbnailURLs
-}
-
 // convertSummaryDataToResponse converts datastore models to API response
-func (c *Controller) convertSummaryDataToResponse(summaryData []datastore.SpeciesSummaryData, thumbnailURLs map[string]imageprovider.BirdImage) []SpeciesSummary {
+func (c *Controller) convertSummaryDataToResponse(summaryData []datastore.SpeciesSummaryData) []SpeciesSummary {
 	response := make([]SpeciesSummary, 0, len(summaryData))
 
 	for i := range summaryData {
@@ -795,7 +714,6 @@ func (c *Controller) convertSummaryDataToResponse(summaryData []datastore.Specie
 			LastHeard:      formatTimeIfNotZero(data.LastSeen),
 			AvgConfidence:  data.AvgConfidence,
 			MaxConfidence:  data.MaxConfidence,
-			ThumbnailURL:   getThumbnailURLFromBirdImage(thumbnailURLs, data.ScientificName),
 		})
 	}
 
@@ -808,17 +726,6 @@ func formatTimeIfNotZero(t time.Time) string {
 		return ""
 	}
 	return t.Format(time.DateTime)
-}
-
-// getThumbnailURLFromBirdImage extracts URL from BirdImage map
-func getThumbnailURLFromBirdImage(thumbnailURLs map[string]imageprovider.BirdImage, scientificName string) string {
-	if thumbnailURLs == nil {
-		return ""
-	}
-	if img, ok := thumbnailURLs[scientificName]; ok && img.URL != "" && !img.IsNegativeEntry() {
-		return imageprovider.ProxyImageURL(scientificName)
-	}
-	return ""
 }
 
 // applyOptionalLimit parses and applies limit parameter
@@ -1292,30 +1199,6 @@ func (c *Controller) writeActivityHeatmapCSV(ctx echo.Context, data *datastore.A
 	return w.Error()
 }
 
-// speciesHourlyDistributionItem is one species' row in the ridgeline wire payload: the stable
-// scientific-name key, its 24 normalized hour-of-day buckets (index = station-local hour 0..23,
-// summing to 1.0), and the raw detection count. The localized common name is resolved client-side
-// (the v2 label schema stores no common name), matching the sibling species charts.
-type speciesHourlyDistributionItem struct {
-	ScientificName string      `json:"scientificName"`
-	Buckets        [24]float64 `json:"buckets"`
-	Total          int         `json:"total"`
-}
-
-// newSpeciesHourlyDistributionResponse maps the datastore aggregation onto the wire payload as a
-// JSON array (never null), preserving the descending-volume order.
-func newSpeciesHourlyDistributionResponse(data []datastore.SpeciesHourlyDistribution) []speciesHourlyDistributionItem {
-	items := make([]speciesHourlyDistributionItem, 0, len(data))
-	for i := range data {
-		items = append(items, speciesHourlyDistributionItem{
-			ScientificName: data[i].ScientificName,
-			Buckets:        data[i].Buckets,
-			Total:          data[i].Total,
-		})
-	}
-	return items
-}
-
 // dawnChorusOnsetItem is one calendar day's row in the dawn-chorus onset wire payload (design spec
 // section 6.3). OnsetRelMinutes is the onset minute-of-day minus civil dawn's minute-of-day
 // (negative = before civil dawn); it is null when the day had too few detections or civil dawn is
@@ -1663,19 +1546,6 @@ func serveTopNHourlyChart[T any](
 	return ctx.JSON(http.StatusOK, respond(data))
 }
 
-// GetSpeciesHourlyDistribution handles GET /api/v2/analytics/time/distribution/species
-// Returns the normalized hour-of-day activity distribution for the top N species by detection
-// volume over the date range, powering the who-sings-when ridgeline (design spec section 6.2).
-func (c *Controller) GetSpeciesHourlyDistribution(ctx echo.Context) error {
-	return serveTopNHourlyChart(c, ctx, "species hourly distribution",
-		defaultSpeciesRidgelineLimit, maxSpeciesRidgelineLimit,
-		c.DS.GetHourlyDistributionBySpecies,
-		func(data []datastore.SpeciesHourlyDistribution) any {
-			return newSpeciesHourlyDistributionResponse(data)
-		},
-	)
-}
-
 // acousticSuccessionItem is one species' row in the acoustic-succession wire payload: the stable
 // scientific-name key, its 24 raw hour-of-day detection counts (index = station-local hour 0..23),
 // and the total detection count. The localized common name is resolved client-side (the v2 label
@@ -1840,95 +1710,6 @@ func (c *Controller) GetConfidenceDistribution(ctx echo.Context) error {
 	)
 
 	return ctx.JSON(http.StatusOK, newConfidenceDistributionResponse(data))
-}
-
-// speciesAccumulationItem is one day on the wire payload for the species accumulation curve.
-// scientificName is intentionally absent: the curve is an all-species count, not a per-species series.
-type speciesAccumulationItem struct {
-	Date              string `json:"date"`
-	CumulativeSpecies int    `json:"cumulativeSpecies"`
-	NewSpecies        int    `json:"newSpecies"`
-}
-
-// newSpeciesAccumulationResponse maps the datastore aggregation onto the wire payload as a JSON array
-// (never null), one entry per calendar day in ascending date order.
-func newSpeciesAccumulationResponse(data []datastore.SpeciesAccumulationPoint) []speciesAccumulationItem {
-	items := make([]speciesAccumulationItem, 0, len(data))
-	for i := range data {
-		items = append(items, speciesAccumulationItem{
-			Date:              data[i].Date,
-			CumulativeSpecies: data[i].CumulativeSpecies,
-			NewSpecies:        data[i].NewSpecies,
-		})
-	}
-	return items
-}
-
-// GetSpeciesAccumulation handles GET /api/v2/analytics/species/accumulation
-// Returns the species accumulation curve (the biodiversity collector's curve): per calendar day, the
-// cumulative count of distinct species first detected within the selected range, powering the
-// accumulation chart in the Biodiversity tab. The metric is inherently all-species, so there is no
-// species filter; "first seen" is bounded to the queried window, not lifetime.
-func (c *Controller) GetSpeciesAccumulation(ctx echo.Context) error {
-	const operation = "species accumulation"
-
-	// Validate required parameter
-	if err := c.requireQueryParam(ctx, "start_date", operation); err != nil {
-		return err
-	}
-
-	startDate := ctx.QueryParam("start_date")
-	endDate := ctx.QueryParam("end_date")
-
-	// Validate date formats strictly using regex
-	if err := c.validateDateFormatStrictWithResponse(ctx, startDate, "start_date", operation); err != nil {
-		return err
-	}
-	if err := c.validateDateFormatStrictWithResponse(ctx, endDate, "end_date", operation); err != nil {
-		return err
-	}
-
-	// Validate date values and chronological order
-	if err := c.validateDateRangeWithResponse(ctx, startDate, endDate, operation); err != nil {
-		return err
-	}
-
-	// Default the end date to a 30-day window when omitted, matching the other range endpoints.
-	if endDate == "" {
-		startTime, _ := time.Parse(time.DateOnly, startDate) // Regex ensures this parse succeeds
-		endDate = startTime.AddDate(0, 0, defaultAnalyticsDays).Format(time.DateOnly)
-	}
-
-	c.logInfoIfEnabled("Retrieving species accumulation",
-		logger.String("start_date", startDate),
-		logger.String("end_date", endDate),
-		logger.String("ip", ctx.RealIP()),
-		logger.String("path", ctx.Request().URL.Path),
-	)
-
-	// Add timeout to prevent resource exhaustion
-	ctxWithTimeout, cancel := withAnalyticsTimeout(ctx)
-	defer cancel()
-
-	data, err := c.DS.GetSpeciesAccumulation(ctxWithTimeout, startDate, endDate)
-	if err != nil {
-		return c.handleAnalyticsQueryError(ctx, err, "Species accumulation", "Failed to get species accumulation",
-			logger.String("start_date", startDate),
-			logger.String("end_date", endDate),
-			logger.String("ip", ctx.RealIP()),
-			logger.String("path", ctx.Request().URL.Path),
-		)
-	}
-
-	c.logInfoIfEnabled("Species accumulation retrieved",
-		logger.String("start_date", startDate),
-		logger.String("end_date", endDate),
-		logger.Int("days", len(data)),
-		logger.String("ip", ctx.RealIP()),
-		logger.String("path", ctx.Request().URL.Path),
-	)
-
-	return ctx.JSON(http.StatusOK, newSpeciesAccumulationResponse(data))
 }
 
 // analyticsSourceItem is one audio source on the analytics source/mic filter wire payload: a stable
@@ -2146,102 +1927,6 @@ func (c *Controller) GetYearOverYear(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, newYearOverYearResponse(data))
 }
 
-// speciesPhenologyItem is one species' residency row in the phenology wire payload: its
-// scientific-name key, its first and last station-local detection dates (YYYY-MM-DD), and the
-// in-range detection count. The localized common name is resolved client-side (the v2 label schema
-// stores no common name), matching the sibling species charts.
-type speciesPhenologyItem struct {
-	ScientificName string `json:"scientificName"`
-	FirstSeen      string `json:"firstSeen"`
-	LastSeen       string `json:"lastSeen"`
-	Count          int    `json:"count"`
-}
-
-// newSpeciesPhenologyResponse maps the datastore aggregation onto the wire payload as a JSON array
-// (never null), one entry per species in arrival order.
-func newSpeciesPhenologyResponse(data []datastore.SpeciesPhenologyPoint) []speciesPhenologyItem {
-	items := make([]speciesPhenologyItem, 0, len(data))
-	for i := range data {
-		items = append(items, speciesPhenologyItem{
-			ScientificName: data[i].ScientificName,
-			FirstSeen:      data[i].FirstSeen,
-			LastSeen:       data[i].LastSeen,
-			Count:          data[i].Count,
-		})
-	}
-	return items
-}
-
-// GetSpeciesPhenology handles GET /api/v2/analytics/species/phenology
-// Returns the arrival/departure phenology (residency spans) for the top-N species by detection
-// volume within the selected range: per species, the first and last detection date plus the in-range
-// detection count, powering the residency-bar Gantt in the Biodiversity tab. The metric is inherently
-// all-species top-N, so there is no species filter; spans are bounded to the queried window.
-func (c *Controller) GetSpeciesPhenology(ctx echo.Context) error {
-	const operation = "species phenology"
-
-	// Validate required parameter
-	if err := c.requireQueryParam(ctx, "start_date", operation); err != nil {
-		return err
-	}
-
-	startDate := ctx.QueryParam("start_date")
-	endDate := ctx.QueryParam("end_date")
-
-	// Validate date formats strictly using regex
-	if err := c.validateDateFormatStrictWithResponse(ctx, startDate, "start_date", operation); err != nil {
-		return err
-	}
-	if err := c.validateDateFormatStrictWithResponse(ctx, endDate, "end_date", operation); err != nil {
-		return err
-	}
-
-	// Validate date values and chronological order
-	if err := c.validateDateRangeWithResponse(ctx, startDate, endDate, operation); err != nil {
-		return err
-	}
-
-	// Default the end date to a 30-day window when omitted, matching the other range endpoints.
-	if endDate == "" {
-		startTime, _ := time.Parse(time.DateOnly, startDate) // Regex ensures this parse succeeds
-		endDate = startTime.AddDate(0, 0, defaultAnalyticsDays).Format(time.DateOnly)
-	}
-
-	limit := c.parsePaginationLimit(ctx.QueryParam("limit"), defaultSpeciesPhenologyLimit, maxSpeciesPhenologyLimit)
-
-	c.logInfoIfEnabled("Retrieving species phenology",
-		logger.String("start_date", startDate),
-		logger.String("end_date", endDate),
-		logger.Int("limit", limit),
-		logger.String("ip", ctx.RealIP()),
-		logger.String("path", ctx.Request().URL.Path),
-	)
-
-	// Add timeout to prevent resource exhaustion
-	ctxWithTimeout, cancel := withAnalyticsTimeout(ctx)
-	defer cancel()
-
-	data, err := c.DS.GetSpeciesPhenology(ctxWithTimeout, startDate, endDate, limit)
-	if err != nil {
-		return c.handleAnalyticsQueryError(ctx, err, "Species phenology", "Failed to get species phenology",
-			logger.String("start_date", startDate),
-			logger.String("end_date", endDate),
-			logger.String("ip", ctx.RealIP()),
-			logger.String("path", ctx.Request().URL.Path),
-		)
-	}
-
-	c.logInfoIfEnabled("Species phenology retrieved",
-		logger.String("start_date", startDate),
-		logger.String("end_date", endDate),
-		logger.Int("species_count", len(data)),
-		logger.String("ip", ctx.RealIP()),
-		logger.String("path", ctx.Request().URL.Path),
-	)
-
-	return ctx.JSON(http.StatusOK, newSpeciesPhenologyResponse(data))
-}
-
 // GetTimeOfDayDistribution handles GET /api/v2/analytics/time/distribution/hourly
 // Returns an aggregated count of detections by hour of day across the given date range
 func (c *Controller) GetTimeOfDayDistribution(ctx echo.Context) error {
@@ -2338,7 +2023,7 @@ func (c *Controller) GetNewSpeciesDetections(ctx echo.Context) error {
 		)
 	}
 
-	// Build response with thumbnails
+	// Build response
 	response := c.convertNewSpeciesToResponse(newSpeciesData)
 
 	c.logInfoIfEnabled("New species detections retrieved",
@@ -2367,46 +2052,16 @@ func (c *Controller) validateNewSpeciesDateParams(ctx echo.Context, startDate, e
 
 // convertNewSpeciesToResponse converts new species data to API response format
 func (c *Controller) convertNewSpeciesToResponse(newSpeciesData []datastore.NewSpeciesData) []NewSpeciesResponse {
-	scientificNames := extractNewSpeciesNames(newSpeciesData)
-	thumbnailURLs := c.batchFetchThumbnailURLs(scientificNames)
-
 	response := make([]NewSpeciesResponse, 0, len(newSpeciesData))
 	for _, data := range newSpeciesData {
 		response = append(response, NewSpeciesResponse{
 			ScientificName: data.ScientificName,
 			CommonName:     data.CommonName,
 			FirstHeardDate: data.FirstSeenDate,
-			ThumbnailURL:   getThumbnailWithFallback(thumbnailURLs, data.ScientificName),
 			CountInPeriod:  data.CountInPeriod,
 		})
 	}
 	return response
-}
-
-// extractNewSpeciesNames extracts scientific names from new species data
-func extractNewSpeciesNames(data []datastore.NewSpeciesData) []string {
-	names := make([]string, 0, len(data))
-	for _, d := range data {
-		names = append(names, d.ScientificName)
-	}
-	return names
-}
-
-// batchFetchThumbnailURLs fetches thumbnail URLs from cache
-func (c *Controller) batchFetchThumbnailURLs(scientificNames []string) map[string]string {
-	thumbnailURLs := make(map[string]string)
-	cache := c.BirdImageCache
-	if cache == nil {
-		return thumbnailURLs
-	}
-
-	batchResults := cache.GetBatch(scientificNames)
-	for name := range batchResults {
-		if img := batchResults[name]; img.URL != "" && !img.IsNegativeEntry() {
-			thumbnailURLs[name] = imageprovider.ProxyImageURL(name)
-		}
-	}
-	return thumbnailURLs
 }
 
 // Helper function to sum array values
@@ -2489,51 +2144,6 @@ func sortAndLimitSpeciesSummary(result []SpeciesDailySummary, limit int) []Speci
 	if limit > 0 && limit < len(result) {
 		return result[:limit]
 	}
-	return result
-}
-
-// GetSpeciesThumbnails handles GET /api/v2/analytics/species/thumbnails
-// Returns thumbnail URLs for multiple species in a single request
-func (c *Controller) GetSpeciesThumbnails(ctx echo.Context) error {
-	speciesParams := ctx.QueryParams()["species"]
-	if len(speciesParams) == 0 {
-		return echo.NewHTTPError(http.StatusBadRequest, "No species provided")
-	}
-
-	result := c.buildThumbnailMap(speciesParams)
-	return ctx.JSON(http.StatusOK, result)
-}
-
-// buildThumbnailMap creates a map of species names to thumbnail URLs.
-func (c *Controller) buildThumbnailMap(speciesParams []string) map[string]string {
-	result := make(map[string]string)
-
-	cache := c.BirdImageCache
-	if cache == nil {
-		for _, name := range speciesParams {
-			result[name] = placeholderImageURL
-		}
-		return result
-	}
-
-	images := cache.GetBatch(speciesParams)
-
-	// Convert to simple map of scientific name -> proxy URL
-	for name := range images {
-		if img := images[name]; img.URL != "" && !img.IsNegativeEntry() {
-			result[name] = imageprovider.ProxyImageURL(name)
-		} else {
-			result[name] = placeholderImageURL
-		}
-	}
-
-	// Add placeholder for any missing species
-	for _, name := range speciesParams {
-		if _, exists := result[name]; !exists {
-			result[name] = placeholderImageURL
-		}
-	}
-
 	return result
 }
 

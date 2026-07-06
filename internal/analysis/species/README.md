@@ -5,7 +5,7 @@
 
 ## Overview
 
-This package provides comprehensive species tracking functionality for BirdNET-Go. It maintains historical detection data and calculates species status across different time periods, enabling "new species" notifications and temporal analysis.
+This package provides comprehensive species tracking functionality for VoiceWatch. It maintains historical detection data and calculates species status across different time periods, enabling "new species" notifications and temporal analysis.
 
 **Key Stats**:
 
@@ -288,8 +288,8 @@ All public methods use read-write mutex for safe concurrent access:
 
 ```go
 import (
-    "github.com/tphakala/birdnet-go/internal/analysis/species"
-    "github.com/tphakala/birdnet-go/internal/conf"
+    "github.com/tphakala/voicewatch/internal/analysis/species"
+    "github.com/tphakala/voicewatch/internal/conf"
 )
 
 // Create settings
@@ -1423,4 +1423,4 @@ func TestNewFeature(t *testing.T) {
 
 ## License
 
-Part of BirdNET-Go - See project LICENSE file
+Part of VoiceWatch - See project LICENSE file

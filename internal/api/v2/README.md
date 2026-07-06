@@ -1,8 +1,8 @@
-# BirdNET-Go API v2 Documentation
+# VoiceWatch API v2 Documentation
 
 ## Overview
 
-The API v2 provides comprehensive access to BirdNET-Go's bird detection and monitoring capabilities through REST endpoints and real-time streams. All endpoints are prefixed with `/api/v2`.
+The API v2 provides comprehensive access to VoiceWatch's human-voice detection and monitoring capabilities through REST endpoints and real-time streams. All endpoints are prefixed with `/api/v2`.
 
 ## Endpoint Registration Pattern
 
@@ -88,12 +88,9 @@ Lightweight connectivity check. Returns a minimal response with no database quer
 | GET    | `/analytics/species/summary`          | `GetSpeciesSummary`        | ❌   | Overall species statistics         |
 | GET    | `/analytics/species/detections/new`   | `GetNewSpeciesDetections`  | ❌   | Recently detected new species      |
 | GET    | `/analytics/species/thumbnails`       | `GetSpeciesThumbnails`     | ❌   | Species thumbnail images           |
-| GET    | `/analytics/species/accumulation`     | `GetSpeciesAccumulation`   | ❌   | Species accumulation curve (biodiversity collector's curve): per calendar day, the cumulative count of distinct species first detected within the range (false positives excluded; "first seen" is bounded to the window, not lifetime). All-species (no species filter). `start_date` required; `end_date` optional (defaults to `start_date` + 30 days) |
-| GET    | `/analytics/species/phenology`        | `GetSpeciesPhenology`      | ❌   | Arrival/departure phenology (residency-bar Gantt): per species, the first and last detection date (station-local, false positives excluded) plus the in-range detection count, for the top-N species by volume. All-species top-N (no species filter). `start_date` required; `end_date` optional (defaults to `start_date` + 30 days); `limit` optional (default 12, max 20) |
 | GET    | `/analytics/time/hourly`              | `GetHourlyAnalytics`       | ❌   | Hourly detection patterns          |
 | GET    | `/analytics/time/daily`               | `GetDailyAnalytics`        | ❌   | Daily detection patterns           |
 | GET    | `/analytics/time/distribution/hourly` | `GetTimeOfDayDistribution` | ❌   | Time-of-day detection distribution |
-| GET    | `/analytics/time/distribution/species` | `GetSpeciesHourlyDistribution` | ❌ | Who-sings-when ridgeline: per-species hour-of-day distribution for the top N species by volume. `start_date` required; `end_date` optional (defaults to `start_date` + 30 days); `limit` optional (default 5, max 8) |
 | GET    | `/analytics/time/heatmap`             | `GetActivityHeatmap`       | ❌   | Seasonal density heatmap (date x intra-day slot; `?format=csv`) |
 | GET    | `/analytics/time/dawn-onset`          | `GetDawnChorusOnset`       | ❌   | Dawn-chorus onset tracker: per-day onset relative to civil dawn (minutes; negative = before civil dawn). `start_date` required; `end_date` optional (defaults to `start_date` + 30 days); `species` optional |
 | GET    | `/analytics/time/succession`          | `GetAcousticSuccession`    | ❌   | Acoustic succession streamgraph: per species, the raw hour-of-day detection counts (24 buckets, false positives excluded) for the top-N species by volume, stacked into a streamgraph showing the diel acoustic handover. All-species top-N (no species filter). `start_date` required; `end_date` optional (defaults to `start_date` + 30 days); `limit` optional (default 6, max 10) |
@@ -150,10 +147,7 @@ Lightweight connectivity check. Returns a minimal response with no database quer
 | GET    | `/integrations/mqtt/tls/certificate`         | `GetMQTTTLSCertificate`         | ✅   | Get MQTT TLS certificate status                |
 | POST   | `/integrations/mqtt/tls/certificate`         | `UploadMQTTTLSCertificate`      | ✅   | Upload MQTT TLS certificates                   |
 | DELETE | `/integrations/mqtt/tls/certificate`         | `DeleteMQTTTLSCertificate`      | ✅   | Remove MQTT TLS certificates                   |
-| GET    | `/integrations/birdweather/status`           | `GetBirdWeatherStatus`          | ✅   | BirdWeather integration status                 |
-| POST   | `/integrations/birdweather/test`             | `TestBirdWeatherConnection`     | ✅   | Test BirdWeather connection                    |
 | POST   | `/integrations/weather/test`                 | `TestWeatherConnection`         | ✅   | Test weather provider connection               |
-| POST   | `/integrations/ebird/test`                   | `TestEBirdConnection`           | ✅   | Test eBird API connectivity and authentication |
 
 ### Media (`media.go`)
 
@@ -162,10 +156,6 @@ Lightweight connectivity check. Returns a minimal response with no database quer
 | GET    | `/media/audio/:filename`             | `ServeAudioClip`         | ❌   | Serve audio file                   |
 | GET    | `/media/spectrogram/:filename`       | `ServeSpectrogram`       | ❌   | Serve spectrogram image            |
 | GET    | `/media/audio`                       | `ServeAudioByQueryID`    | ❌   | Serve audio by detection ID        |
-| GET    | `/media/species-image`               | `GetSpeciesImage`        | ❌   | Get species thumbnail image        |
-| GET    | `/media/species-image/info`          | `GetSpeciesImageInfo`    | ❌   | Get species image attribution      |
-| GET    | `/media/image/:scientific_name`      | `ServeSpeciesImageProxy` | ❌   | Serve cached bird image (proxy)    |
-| GET    | `/media/bird-image/:scientific_name` | `ServeSpeciesImageProxy` | ❌   | Alias for image proxy endpoint     |
 | GET    | `/spectrogram/:id/status`            | `GetSpectrogramStatus`   | ❌   | Get spectrogram generation status  |
 | POST   | `/audio/:id/clip`                    | `ExtractAudioClipByID`   | ✅   | Extract audio clip from time range |
 
@@ -180,21 +170,9 @@ Lightweight connectivity check. Returns a minimal response with no database quer
 | PUT    | `/notifications/:id/read`          | `MarkNotificationRead`             | ✅   | Mark notification as read                                                                                           |
 | PUT    | `/notifications/:id/acknowledge`   | `MarkNotificationAcknowledged`     | ✅   | Acknowledge notification                                                                                            |
 | DELETE | `/notifications/:id`               | `DeleteNotification`               | ✅   | Delete notification                                                                                                 |
+| POST   | `/notifications/test`              | `CreateTestDetectionNotification`  | ✅   | Create a sample human-voice detection notification (test/QA seed). Returns the created notification.                |
 | GET    | `/notifications/unread/count`      | `GetUnreadCount`                   | ❌   | Count unread notifications (public read-only). Used by dashboard NotificationBell.                                  |
-| POST   | `/notifications/test/new-species`  | `CreateTestNewSpeciesNotification` | ✅   | Create test new-species notification                                                                                |
 | GET    | `/notifications/check-ntfy-server` | `CheckNtfyServer`                  | ✅   | Probe NTFY host for HTTPS/HTTP connectivity (authenticated to prevent SSRF relay). Query: `host=<hostname[:port]>`. |
-
-### Range Filter (`range.go`)
-
-| Method | Route                   | Handler                       | Auth | Description                                                 |
-| ------ | ----------------------- | ----------------------------- | ---- | ----------------------------------------------------------- |
-| GET    | `/range/status`         | `GetRangeFilterStatus`        | ❌   | Per-classifier geomodel coverage, auto-selection, threshold |
-| GET    | `/range/species/scores` | `GetRangeFilterSpeciesScores` | ❌   | Raw geomodel scores, primary model only; excludes always-active secondary models (e.g. bats) by design |
-| GET    | `/range/species/count`  | `GetRangeFilterSpeciesCount`  | ❌   | Species count with range filter                             |
-| GET    | `/range/species/list`   | `GetRangeFilterSpeciesList`   | ❌   | Species list with taxonomy groups                           |
-| GET    | `/range/species/csv`    | `GetRangeFilterSpeciesCSV`    | ❌   | Export species as CSV; with custom params includes always-active secondary models (matches the test endpoint); no-param export returns the persisted filter |
-| POST   | `/range/species/test`   | `TestRangeFilter`             | ❌   | Test range filter; returns the active set (range-filtered birds plus always-active secondary models) |
-| POST   | `/range/rebuild`        | `RebuildRangeFilter`          | ❌   | Rebuild range filter data                                   |
 
 ### Search (`search.go`)
 
@@ -208,7 +186,6 @@ Lightweight connectivity check. Returns a minimal response with no database quer
 | ------ | -------------------------- | ----------------------- | ---- | ------------------------------------------------------------------- |
 | GET    | `/settings`                | `GetAllSettings`        | ✅   | Get all configuration settings                                      |
 | GET    | `/settings/locales`        | `GetLocales`            | ✅   | Get available locales                                               |
-| GET    | `/settings/imageproviders` | `GetImageProviders`     | ✅   | Get image provider options                                          |
 | GET    | `/settings/systemid`       | `GetSystemID`           | ✅   | Get system identifier                                               |
 | GET    | `/settings/dashboard`      | `GetDashboardSettings`  | ❌   | Get dashboard display preferences (public, non-sensitive)           |
 | GET    | `/settings/:section`       | `GetSectionSettings`    | ✅   | Get specific settings section (other sections remain protected)     |
@@ -232,16 +209,6 @@ The `GET /settings/dashboard` endpoint is intentionally public so that unauthent
 | Method | Route                | Handler            | Auth | Description                                              |
 | ------ | -------------------- | ------------------ | ---- | -------------------------------------------------------- |
 | GET    | `/filesystem/browse` | `BrowseFileSystem` | ✅   | Browse files and directories with secure path validation |
-
-### Species (`species.go`)
-
-| Method | Route                      | Handler               | Auth | Description                                                       |
-| ------ | -------------------------- | --------------------- | ---- | ----------------------------------------------------------------- |
-| GET    | `/species`                          | `GetSpeciesInfo`          | ❌   | Get extended species information including rarity status          |
-| GET    | `/species/all`                      | `GetAllSpecies`           | ❌   | Get all BirdNET species labels (not filtered by location)         |
-| GET    | `/species/taxonomy`                 | `GetSpeciesTaxonomy`      | ❌   | Get detailed taxonomy data with subspecies and hierarchy          |
-| GET    | `/species/:code/thumbnail`          | `GetSpeciesThumbnail`     | ❌   | Get bird thumbnail image by species code (redirects to image URL) |
-| GET    | `/species/dictionary/:locale`       | `ServeSpeciesDictionary`  | ❌   | Precompressed per-locale species name dictionary (gzip JSON)      |
 
 ### Server-Sent Events (`sse.go`)
 
@@ -491,7 +458,7 @@ Requires enhanced (v2) database. Returns 409 Conflict if not available.
 | Method | Route                               | Handler                    | Auth | Description                              |
 | ------ | ----------------------------------- | -------------------------- | ---- | ---------------------------------------- |
 | GET    | `/insights/expected-today`          | `getExpectedToday`         | ❌   | Species expected today based on history  |
-| GET    | `/insights/expected-today/regional` | `getExpectedTodayRegional` | ❌   | Regional eBird observations near station |
+| GET    | `/insights/expected-today/regional` | `getExpectedTodayRegional` | ❌   | Retained stub (eBird integration removed): always reports unavailable |
 | GET    | `/insights/phantom-species`         | `getPhantomSpecies`        | ❌   | Frequent but low-confidence detections   |
 | GET    | `/insights/dawn-chorus`             | `getDawnChorus`            | ❌   | Dawn chorus timing analysis              |
 | GET    | `/insights/migration`               | `getMigration`             | ❌   | New arrivals and gone-quiet species      |
@@ -500,29 +467,6 @@ Requires enhanced (v2) database. Returns 409 Conflict if not available.
 **Query Parameters:**
 
 - All insights endpoints accept optional `model_id` query parameter to filter by BirdNET model
-
-### Models (`models.go`)
-
-| Method | Route                          | Handler                 | Auth | Description                                           |
-| ------ | ------------------------------ | ----------------------- | ---- | ----------------------------------------------------- |
-| GET    | `/models`                      | `ListModels`            | ❌   | List available classifier models                      |
-| GET    | `/models/catalog`              | `GetModelCatalog`       | ❌   | Model gallery catalog with install status             |
-| GET    | `/models/installed`            | `GetInstalledModels`    | ❌   | List downloaded models                                |
-| POST   | `/models/install/:id`          | `InstallModel`          | ✅   | Download and install a catalog model                  |
-| POST   | `/models/reinstall/:id`        | `ReinstallModel`        | ✅   | Re-download missing/corrupt files for installed model |
-| DELETE | `/models/installed/:id`        | `UninstallModel`        | ✅   | Remove an installed model from disk                   |
-| GET    | `/models/install/:id/progress` | `StreamInstallProgress` | ❌   | SSE stream for install/reinstall progress             |
-
-**GET /api/v2/models** — Returns all classifier models registered in the model registry. Each entry includes a config alias (used in audio source configuration) and a human-readable display name.
-
-**Response:**
-
-```json
-[
-  { "id": "birdnet", "name": "BirdNET GLOBAL 6K V2.4" },
-  { "id": "perch_v2", "name": "Google Perch V2" }
-]
-```
 
 ### TLS Certificate Management (`tls.go`)
 
@@ -1056,7 +1000,7 @@ export function startStreamMonitoring() {
 ### Troubleshooting Common Issues
 
 **Q: Stream shows `circuit_open` state and won't reconnect**
-A: Check `last_error_context` for the permanent failure reason. Fix the underlying issue (e.g., correct URL, fix authentication) and either restart BirdNET-Go or wait for the circuit breaker cooldown period (30 seconds).
+A: Check `last_error_context` for the permanent failure reason. Fix the underlying issue (e.g., correct URL, fix authentication) and either restart VoiceWatch or wait for the circuit breaker cooldown period (30 seconds).
 
 **Q: `time_since_data_seconds` is increasing but stream shows healthy**
 A: This indicates the stream may be stalled. The health check will automatically trigger a restart when it exceeds the configured threshold (default: 60 seconds).

@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/datastore/entities"
-	"github.com/tphakala/birdnet-go/internal/detection"
+	"github.com/tphakala/voicewatch/internal/datastore/entities"
+	"github.com/tphakala/voicewatch/internal/detection"
 )
 
 // DateFormat is the date layout used for database storage (YYYY-MM-DD).

@@ -15,7 +15,7 @@ func TestAudioSourceConfig_Validate_Valid(t *testing.T) {
 		Name:   "Front Yard Mic",
 		Device: "hw:0,0",
 		Gain:   3.5,
-		Model:  "birdnet",
+		Model:  "voicewatch",
 	}
 	assert.NoError(t, src.Validate())
 }
@@ -34,7 +34,7 @@ func TestAudioSourceConfig_Validate_DefaultModel(t *testing.T) {
 func TestAudioSourceConfig_Validate_FutureModels(t *testing.T) {
 	t.Parallel()
 
-	for _, model := range []string{"perch_v2", "bat"} {
+	for _, model := range []string{"human_voice"} {
 		src := &AudioSourceConfig{
 			Name:   "Mic",
 			Device: "sysdefault",
@@ -285,8 +285,8 @@ func TestAudioSettings_ValidateSources_MultipleSources(t *testing.T) {
 	audio := &AudioSettings{
 		Sources: []AudioSourceConfig{
 			{Name: "Front Yard", Device: "hw:0,0"},
-			{Name: "Back Yard", Device: "hw:1,0", Gain: 6.0, Model: "birdnet"},
-			{Name: "Bat Detector", Device: "hw:2,0", Model: "bat"},
+			{Name: "Back Yard", Device: "hw:1,0", Gain: 6.0, Model:  "voicewatch"},
+			{Name: "Voice Detector", Device: "hw:2,0", Model: "human_voice"},
 		},
 	}
 	assert.NoError(t, audio.ValidateSources())

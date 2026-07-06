@@ -1,4 +1,4 @@
-// Package observability provides tools for monitoring and debugging the BirdNET-Go application.
+// Package observability provides tools for monitoring and debugging the VoiceWatch application.
 package observability
 
 import (

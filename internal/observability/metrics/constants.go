@@ -6,7 +6,7 @@ import "time"
 // Operation type constants used in switch statements across metrics.
 // These constants define the categories of operations that can be recorded.
 const (
-	// OpPrediction represents BirdNET prediction operations.
+	// OpPrediction represents VoiceWatch prediction operations.
 	OpPrediction = "prediction"
 	// OpModelLoad represents model loading operations.
 	OpModelLoad = "model_load"
@@ -16,8 +16,6 @@ const (
 	OpChunkProcess = "chunk_process"
 	// OpModelInvoke represents TensorFlow model invocation operations.
 	OpModelInvoke = "model_invoke"
-	// OpRangeFilter represents range filter operations.
-	OpRangeFilter = "range_filter"
 	// OpProcessTimeMs represents process time in milliseconds.
 	OpProcessTimeMs = "process_time_ms"
 	// OpNoteCreate represents note creation operations.
@@ -66,8 +64,8 @@ const (
 
 // Label value constants used for metric labels.
 const (
-	// LabelBirdnet is the model label value for BirdNET.
-	LabelBirdnet = "birdnet"
+	// LabelVoiceWatch is the model label value for VoiceWatch.
+	LabelVoiceWatch = "voicewatch"
 	// LabelQuery is the operation label for query operations.
 	LabelQuery = "query"
 	// LabelFetch is the operation label for fetch operations.
@@ -145,9 +143,9 @@ const (
 	PercentageFactor = 100.0
 )
 
-// BirdNET processing overrun ratio histogram buckets.
+// VoiceWatch processing overrun ratio histogram buckets.
 // Values represent elapsed/buffer ratios where >1.0 means overrun.
-var BirdNETOverrunRatioBuckets = []float64{1.0, 1.25, 1.5, 2.0, 3.0, 5.0, 10.0}
+var VoiceWatchOverrunRatioBuckets = []float64{1.0, 1.25, 1.5, 2.0, 3.0, 5.0, 10.0}
 
 // String parsing constants.
 const (

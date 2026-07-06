@@ -109,7 +109,7 @@
     }
 
     const defaultDashboard: Dashboard = {
-      thumbnails: { summary: true, recent: true, imageProvider: '', fallbackPolicy: '' },
+      thumbnails: { summary: true, recent: true, fallbackPolicy: '' },
       summaryLimit: 30,
     };
 

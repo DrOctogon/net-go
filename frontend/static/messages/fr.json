@@ -156,7 +156,8 @@
         "falsePositive": "Faux positif",
         "notReviewed": "Non examiné",
         "locked": "Verrouillé",
-        "unlikely": "Improbable"
+        "unlikely": "Improbable",
+        "flagged": "Flagged"
       },
       "form": {
         "correctDetection": "Détection correcte",
@@ -200,7 +201,7 @@
     "hoursShort": "h"
   },
   "pageTitle": {
-    "settings": "Paramètres - BirdNET-Go",
+    "settings": "Paramètres - VoiceWatch",
     "pageNotFound": "404 - Page non trouvée",
     "serverError": "500 - Erreur interne du serveur",
     "componentError": "Erreur de chargement du composant",
@@ -236,26 +237,26 @@
     "askQuestion": "Poser une question",
     "reportBugAriaLabel": "Signaler un bug sur GitHub (ouvre dans une nouvelle fenêtre)",
     "askQuestionAriaLabel": "Poser une question sur GitHub Discussions (ouvre dans une nouvelle fenêtre)",
-    "viewOnGithubAriaLabel": "Voir BirdNET-Go sur GitHub (ouvre dans une nouvelle fenêtre)",
+    "viewOnGithubAriaLabel": "Voir VoiceWatch sur GitHub (ouvre dans une nouvelle fenêtre)",
     "health": "Health"
   },
   "about": {
-    "title": "BirdNET-Go",
+    "title": "VoiceWatch",
     "subtitle": "Une interface moderne pour la détection et la classification des sons d'oiseaux en temps réel",
-    "logoAlt": "Logo BirdNET-Go",
+    "logoAlt": "Logo VoiceWatch",
     "overview": "Aperçu",
-    "overviewText": "BirdNET-Go est une implémentation basée sur Go pour la détection et la classification des sons d'oiseaux en temps réel, construite sur les fondations du projet BirdNET. Cette application fournit une interface conviviale pour la surveillance et l'analyse continue des sons d'oiseaux.",
-    "birdnetProject": "Projet BirdNET",
-    "birdnetDescription": "BirdNET-Go ne serait pas possible sans le travail révolutionnaire du projet BirdNET. Le modèle d'intelligence artificielle qui alimente les capacités de détection de BirdNET-Go est le résultat de la recherche et du développement innovants du projet BirdNET.",
+    "overviewText": "VoiceWatch est une implémentation basée sur Go pour la détection et la classification des sons d'oiseaux en temps réel, construite sur les fondations du projet VoiceWatch. Cette application fournit une interface conviviale pour la surveillance et l'analyse continue des sons d'oiseaux.",
+    "birdnetProject": "Projet VoiceWatch",
+    "birdnetDescription": "VoiceWatch ne serait pas possible sans le travail révolutionnaire du projet VoiceWatch. Le modèle d'intelligence artificielle qui alimente les capacités de détection de VoiceWatch est le résultat de la recherche et du développement innovants du projet VoiceWatch.",
     "developedBy": "Développé par",
     "developersText": "Le K. Lisa Yang Center for Conservation Bioacoustics au Cornell Lab of Ornithology en collaboration avec l'Université de Technologie de Chemnitz :",
     "visitBirdnetAnalyzer": "Visiter le projet BirdNET-Analyzer",
     "visitBirdnetAnalyzerAriaLabel": "Visiter le dépôt GitHub de BirdNET-Analyzer",
     "contributors": "Contributeurs",
-    "contributorsText": "BirdNET-Go s'est développé et amélioré grâce aux efforts collaboratifs de nombreuses personnes. Leurs contributions, allant des améliorations du code aux suggestions de fonctionnalités, ont été inestimables pour améliorer ce projet.",
+    "contributorsText": "VoiceWatch s'est développé et amélioré grâce aux efforts collaboratifs de nombreuses personnes. Leurs contributions, allant des améliorations du code aux suggestions de fonctionnalités, ont été inestimables pour améliorer ce projet.",
     "mainDeveloper": "Développeur principal",
     "githubContributors": "Contributeurs GitHub",
-    "contributorsNote": "Remerciements particuliers à ces contributeurs pour leur travail précieux sur l'amélioration de BirdNET-Go :",
+    "contributorsNote": "Remerciements particuliers à ces contributeurs pour leur travail précieux sur l'amélioration de VoiceWatch :",
     "communityAcknowledgment": "Reconnaissance de la communauté",
     "communityText": "Nous tenons également à exprimer notre gratitude à tous les utilisateurs qui ont contribué par :",
     "bugReports": "Rapports de bogues et suivi des problèmes",
@@ -264,9 +265,9 @@
     "documentation": "Améliorations de la documentation",
     "additionalCredits": "Crédits supplémentaires",
     "birdnetPiProject": "Projet BirdNET-Pi",
-    "birdnetPiDescription": "Remerciements particuliers à Patrick McGuire pour son travail inspirant sur BirdNET-Pi, qui a influencé le développement de BirdNET-Go. BirdNET-Pi démontre le potentiel de la détection des sons d'oiseaux sur des appareils embarqués et a établi une norme élevée pour le développement piloté par la communauté.",
+    "birdnetPiDescription": "Remerciements particuliers à Patrick McGuire pour son travail inspirant sur BirdNET-Pi, qui a influencé le développement de VoiceWatch. BirdNET-Pi démontre le potentiel de la détection des sons d'oiseaux sur des appareils embarqués et a établi une norme élevée pour le développement piloté par la communauté.",
     "visitBirdnetPi": "Visiter le projet BirdNET-Pi",
-    "labelTranslations": "Traductions des étiquettes BirdNET",
+    "labelTranslations": "Traductions des étiquettes VoiceWatch",
     "labelTranslationsBy": "Fournies par Patrick Levin pour le projet BirdNET-Pi par Patrick McGuire",
     "patrickLevinGithub": "GitHub de Patrick Levin",
     "versionInformation": "Informations sur la version",
@@ -275,12 +276,12 @@
     "developmentBuild": "Version de développement",
     "unknown": "Inconnue",
     "licenseInformation": "Informations sur la licence",
-    "licenseText": "Le modèle IA BirdNET et BirdNET-Go sont sous licence",
+    "licenseText": "Le modèle IA VoiceWatch et VoiceWatch sont sous licence",
     "ccLicense": "Creative Commons CC BY-NC-SA 4.0 (Attribution - Utilisation non commerciale - Partage dans les mêmes conditions 4.0 International)",
     "licenseDescription": "Cette licence permet à d'autres de remixer, adapter et développer ce travail à des fins non commerciales, tant qu'un crédit approprié est donné et que les nouvelles créations sont sous licence selon des termes identiques.",
     "dependencyLicenses": "Licences des dépendances",
     "taxonomyDataTitle": "Données taxonomiques",
-    "taxonomyDataIntro": "BirdNET-Go inclut des données taxonomiques d'oiseaux intégrées dérivées de la liste eBird/Clements, permettant des recherches locales rapides par genre et famille.",
+    "taxonomyDataIntro": "VoiceWatch inclut des données taxonomiques d'oiseaux intégrées dérivées de la liste eBird/Clements, permettant des recherches locales rapides par genre et famille.",
     "source": "Source",
     "ebirdApiV2": "API eBird v2",
     "copyright": "Droits d'auteur",
@@ -290,10 +291,10 @@
     "ebirdOrg": "eBird.org",
     "learnEbirdTaxonomy": "En savoir plus sur la taxonomie eBird",
     "avicommonsTitle": "Vignettes d'oiseaux",
-    "avicommonsDescription": "BirdNET-Go utilise des images d'oiseaux sélectionnées provenant d'Avicommons, une bibliothèque de photos d'oiseaux triées sur le volet, recadrées et orientées sous licences Creative Commons.",
-    "githubStarPrompt": "Si vous trouvez BirdNET-Go utile, pensez à mettre une étoile au projet sur GitHub. Les étoiles aident les autres à découvrir ce projet et soutiennent son développement.",
+    "avicommonsDescription": "VoiceWatch utilise des images d'oiseaux sélectionnées provenant d'Avicommons, une bibliothèque de photos d'oiseaux triées sur le volet, recadrées et orientées sous licences Creative Commons.",
+    "githubStarPrompt": "Si vous trouvez VoiceWatch utile, pensez à mettre une étoile au projet sur GitHub. Les étoiles aident les autres à découvrir ce projet et soutiennent son développement.",
     "viewOnGithub": "Voir le projet sur GitHub",
-    "visitGithubAriaLabel": "Visiter le dépôt GitHub de BirdNET-Go",
+    "visitGithubAriaLabel": "Visiter le dépôt GitHub de VoiceWatch",
     "visitAvicommonsGithub": "Visiter le dépôt GitHub d'Avicommons"
   },
   "notifications": {
@@ -362,11 +363,11 @@
     },
     "content": {
       "startup": {
-        "title": "BirdNET-Go démarré",
+        "title": "VoiceWatch démarré",
         "message": "Application démarrée avec succès (v{version})"
       },
       "shutdown": {
-        "title": "Arrêt de BirdNET-Go",
+        "title": "Arrêt de VoiceWatch",
         "message": "L'application s'arrête proprement"
       },
       "detection": {
@@ -396,7 +397,6 @@
         "rebuildingRangeFilter": "Reconstruction du filtre de répartition des espèces...",
         "updatingIntervals": "Mise à jour des intervalles de détection...",
         "reconfiguringMqtt": "Mise à jour de la connexion MQTT...",
-        "reconfiguringBirdweather": "Mise à jour de l'intégration BirdWeather...",
         "reconfiguringStreams": "Mise à jour des flux audio...",
         "reconfiguringTelemetry": "Mise à jour des paramètres de télémétrie...",
         "reconfiguringPushNotifications": "Reconfiguration des fournisseurs de notifications push...",
@@ -423,7 +423,7 @@
         "cancelledTitle": "Migration de la base de données annulée",
         "cancelledMessage": "La migration de la base de données a été annulée. Vous pouvez démarrer une nouvelle migration à tout moment depuis les paramètres de la base de données.",
         "completedTitle": "Migration de la base de données terminée",
-        "completedMessage": "Migration terminée. Veuillez redémarrer BirdNET-Go pour basculer vers la nouvelle base de données.",
+        "completedMessage": "Migration terminée. Veuillez redémarrer VoiceWatch pour basculer vers la nouvelle base de données.",
         "errorTitle": "Erreur de migration de la base de données",
         "errorMessage": "Migration mise en pause suite à des erreurs. Vérifiez les journaux et réessayez."
       },
@@ -435,7 +435,7 @@
       },
       "buffer": {
         "overloadTitle": "Analyse audio surchargée",
-        "overloadMessage": "Votre système perd {dropRate} % des échantillons audio de la source ''{sourceName}'' car il ne peut pas suivre le rythme de l'analyse. Réduisez la valeur de chevauchement BirdNET dans les paramètres de détection ou envisagez de passer à un processeur plus rapide."
+        "overloadMessage": "Votre système perd {dropRate} % des échantillons audio de la source ''{sourceName}'' car il ne peut pas suivre le rythme de l'analyse. Réduisez la valeur de chevauchement VoiceWatch dans les paramètres de détection ou envisagez de passer à un processeur plus rapide."
       },
       "ort": {
         "unavailableTitle": "ONNX Runtime non disponible",
@@ -476,9 +476,6 @@
     "noResultsFound": "Aucun résultat trouvé",
     "noResultsHint": "Essayez d'ajuster vos filtres de recherche",
     "fields": {
-      "species": "Espèce",
-      "speciesPlaceholder": "Entrez le nom de l'espèce",
-      "speciesHelp": "Entrez le nom complet ou partiel de l'espèce (insensible à la casse)",
       "dateRange": "Plage de dates",
       "dateRangeHelp": "Filtrer les détections par plage de dates (laisser vide pour toutes les dates)",
       "from": "Du",
@@ -489,7 +486,14 @@
       "verifiedStatus": "Statut vérifié",
       "lockedStatus": "Statut verrouillé",
       "timeOfDay": "Moment de la journée",
-      "source": "Source audio"
+      "source": "Source audio",
+      "transcript": "Transcript",
+      "transcriptHelp": "Search for spoken words in the voice clip transcript (case-insensitive substring match)",
+      "transcriptPlaceholder": "Search transcript...",
+      "flaggedOnly": "Flagged only",
+      "flaggedOnlyHelp": "Limit results to detections whose transcript matched a configured keyword",
+      "gender": "Speaker gender",
+      "ageBand": "Speaker age"
     },
     "advancedFilters": "Filtres avancés",
     "showAdvancedFilters": "Afficher les filtres avancés",
@@ -563,6 +567,9 @@
       "page": "Page {current} sur {total}",
       "goToPrevious": "Aller à la page précédente",
       "goToNext": "Aller à la page suivante"
+    },
+    "speakerOptions": {
+      "any": "Any"
     }
   },
   "error": {
@@ -599,18 +606,6 @@
       "empty": "Tout est calme — aucun oiseau détecté pour le moment"
     },
     "rejected": "Rejeté",
-    "newSpeciesHighlights": {
-      "title": "Espèces nouvelles et de retour",
-      "subtitle": "Premières observations et retours récents",
-      "trackingDisabled": "Veuillez activer « Activer le suivi des espèces » pour utiliser cette fonctionnalité.",
-      "categoryLifetime": "Nouvelle espèce",
-      "categoryYear": "Nouvelle cette année",
-      "categorySeason": "Nouvelle cette saison",
-      "categorySeasonNamed": "Nouvelle ce {season}",
-      "maxConfidenceShort": "Max {confidence} %",
-      "detections": "{count, plural, one {# détection} other {# détections}}",
-      "lastSeen": "Dernier : {days, plural, =0 {aujourd'hui} one {il y a # jour} other {il y a # jours}}"
-    },
     "dailySummary": {
       "title": "Activité Quotidienne",
       "subtitle": "Détections par heure",
@@ -666,7 +661,6 @@
         "species": "Espèce",
         "weather": "Météo",
         "confidence": "Confiance",
-        "thumbnail": "Miniature",
         "status": "Statut",
         "recording": "Enregistrement",
         "actions": "Actions"
@@ -695,8 +689,6 @@
         "markCorrect": "Correcte",
         "markFalsePositive": "Incorrecte",
         "review": "Examiner la détection",
-        "showSpecies": "Afficher l'espèce",
-        "ignoreSpecies": "Ignorer l'espèce",
         "lockDetection": "Verrouiller la détection",
         "unlockDetection": "Déverrouiller la détection",
         "deleteDetection": "Supprimer la détection"
@@ -777,15 +769,30 @@
     "elements": {
       "banner": "Bannière du tableau de bord",
       "dailySummary": "Résumé quotidien",
-      "newSpeciesHighlights": "Nouvelles espèces marquantes",
       "currentlyHearing": "En écoute actuellement",
       "detectionsGrid": "Détections récentes",
       "liveSpectrogram": "Spectrogramme en direct",
-      "videoEmbed": "Vidéo intégrée"
+      "videoEmbed": "Vidéo intégrée",
+      "voiceActivity": "Voice Activity"
+    },
+    "voiceActivity": {
+      "title": "Voice Activity",
+      "subtitle": "Detections by hour — today",
+      "chartAriaLabel": "Bar chart of voice detections per hour for today",
+      "loading": "Loading voice activity...",
+      "empty": "No voice detections today",
+      "errors": {
+        "load": "Failed to load voice activity data"
+      },
+      "bar": {
+        "tooltip": "{count} detection(s) at {hour}:00"
+      }
     }
   },
   "detections": {
     "title": "Détections",
+    "humanVoice": "Human Voice",
+    "flaggedByKeywords": "Flagged by keywords: {keywords}",
     "titles": {
       "hourly": "Résultats horaires pour {hour}h00 le {date}",
       "hourlyRange": "Résultats horaires de {startHour}h00 à {endHour}h00 le {date}",
@@ -794,12 +801,16 @@
       "allDetections": "Toutes les détections du {date}"
     },
     "detail": {
-      "species": "Espèce",
       "observation": "Observation",
+      "transcript": {
+        "title": "Transcript",
+        "matchedKeywords": "Matched keywords",
+        "flaggedNotice": "Flagged by keyword",
+        "empty": "No transcript available"
+      },
       "aria": {
         "downloadAudioClip": "Download audio clip for {name} detection",
         "audioRecordingFor": "Audio recording and spectrogram for {name}",
-        "scientificName": "Nom scientifique",
         "classificationBadges": "Badges de classification de l'espèce",
         "confidence": "Confiance de détection {confidence}%",
         "metadata": "Métadonnées de détection",
@@ -809,8 +820,7 @@
         "commentTimestamp": "Horodatage du commentaire",
         "mainRegion": "Détails de détection",
         "tabsHeading": "Onglets d'informations de détection",
-        "tabList": "Onglets des détails de détection",
-        "speciesHeadingSuffix": "détails de détection"
+        "tabList": "Onglets des détails de détection"
       }
     },
     "headers": {
@@ -819,7 +829,6 @@
       "source": "Source",
       "species": "Espèce",
       "confidence": "Confiance",
-      "thumbnail": "Miniature",
       "status": "Statut",
       "recording": "Enregistrement",
       "actions": "Actions"
@@ -936,6 +945,7 @@
         "unknown": "Inconnu"
       }
     },
+    "noTranscript": "(no transcript)",
     "row": {
       "viewDetails": "Voir les détails pour {species}",
       "play": "Lire",
@@ -974,9 +984,7 @@
       "loading": "Chargement des détails de détection...",
       "loaded": "Détails de détection chargés pour {species}",
       "error": "Erreur lors du chargement de la détection : {error}",
-      "loadingResults": "Chargement de {count} résultats...",
-      "thumbnailLoading": "Chargement de la miniature de {species}...",
-      "thumbnailLoaded": "Miniature de {species} chargée"
+      "loadingResults": "Chargement de {count} résultats..."
     },
     "errors": {
       "notFound": "Détection introuvable. Elle a peut-être été supprimée ou l'identifiant est incorrect.",
@@ -986,45 +994,34 @@
       "loadFailed": "Échec du chargement de la détection (Erreur {status}). Veuillez actualiser la page.",
       "noIdProvided": "Aucun identifiant de détection fourni.",
       "fetchFailed": "Échec de la récupération des détections"
+    },
+    "speaker": {
+      "sectionLabel": "Estimated speaker",
+      "genderAria": "Estimated speaker gender",
+      "ageAria": "Estimated speaker age",
+      "gender": {
+        "male": "Male",
+        "female": "Female",
+        "unknown": "Unknown"
+      },
+      "age": {
+        "child": "Child",
+        "teen": "Teen",
+        "adult": "Adult",
+        "senior": "Senior"
+      }
     }
   },
   "species": {
-    "rarity": {
-      "title": "Rareté de l'espèce",
-      "score": "Score",
-      "basedOnLocation": "Basé sur l'emplacement : {latitude}, {longitude}",
-      "statuses": {
-        "very_common": "Très commun",
-        "common": "Commun",
-        "uncommon": "Peu commun",
-        "rare": "Rare",
-        "very_rare": "Très rare",
-        "unknown": "Inconnu"
-      }
-    },
-    "taxonomy": {
-      "hierarchy": "Classification taxonomique",
-      "subspecies": "Sous-espèces",
-      "noData": "Aucune donnée taxonomique disponible.",
-      "labels": {
-        "kingdom": "Règne",
-        "phylum": "Embranchement",
-        "class": "Classe",
-        "order": "Ordre",
-        "family": "Famille",
-        "genus": "Genre",
-        "species": "Espèce"
-      }
-    },
     "synonyms": {
       "tabLabel": "Synonymes taxonomiques",
-      "description": "Remplacer les correspondances de noms scientifiques utilisées pour la recherche d'images d'oiseaux. BirdNET utilise la taxonomie 2021E, mais les sources d'images peuvent utiliser des noms mis à jour. Les correspondances intégrées sont toujours chargées ; vos remplacements s'ajoutent ou les remplacent.",
-      "birdnetName": "Nom BirdNET",
+      "description": "Remplacer les correspondances de noms scientifiques utilisées pour la recherche d'images d'oiseaux. VoiceWatch utilise la taxonomie 2021E, mais les sources d'images peuvent utiliser des noms mis à jour. Les correspondances intégrées sont toujours chargées ; vos remplacements s'ajoutent ou les remplacent.",
+      "birdnetName": "Nom VoiceWatch",
       "updatedName": "Nom mis à jour",
       "addButton": "Ajouter un synonyme",
       "emptyState": "Aucun synonyme taxonomique personnalisé configuré.",
       "errors": {
-        "unknownSpecies": "Espèce introuvable dans les étiquettes BirdNET",
+        "unknownSpecies": "Espèce introuvable dans les étiquettes VoiceWatch",
         "duplicateKey": "Un synonyme pour cette espèce existe déjà",
         "emptyUpdatedName": "Le nom mis à jour est requis"
       }
@@ -1133,7 +1130,7 @@
         "process": "Processus"
       },
       "showAll": "Afficher tous les processus",
-      "showBirdnetOnly": "Afficher BirdNET uniquement",
+      "showBirdnetOnly": "Afficher VoiceWatch uniquement",
       "table": {
         "process": "Processus",
         "status": "Statut",
@@ -1311,9 +1308,9 @@
       "migration": {
         "title": "Migration de la base de données",
         "description": "Migrer de l'ancien schéma vers le schéma v2 normalisé",
-        "requiredNote": "La migration de la base de données est requise pour les prochaines fonctionnalités de BirdNET-Go qui reposent sur le nouveau schéma de base de données normalisé. Les nouvelles fonctionnalités ne seront pas disponibles tant que la migration ne sera pas terminée.",
+        "requiredNote": "La migration de la base de données est requise pour les prochaines fonctionnalités de VoiceWatch qui reposent sur le nouveau schéma de base de données normalisé. Les nouvelles fonctionnalités ne seront pas disponibles tant que la migration ne sera pas terminée.",
         "completedTitle": "Migration terminée",
-        "completedNote": "Votre base de données a été migrée avec succès vers le nouveau schéma. Veuillez redémarrer BirdNET-Go pour basculer vers la nouvelle base de données. Note : La nouvelle base de données est plus petite car elle stocke les données plus efficacement - c'est normal et toutes vos données sont préservées.",
+        "completedNote": "Votre base de données a été migrée avec succès vers le nouveau schéma. Veuillez redémarrer VoiceWatch pour basculer vers la nouvelle base de données. Note : La nouvelle base de données est plus petite car elle stocke les données plus efficacement - c'est normal et toutes vos données sont préservées.",
         "starting": "Démarrage de la migration...",
         "status": {
           "idle": "Prêt à démarrer",
@@ -1394,7 +1391,7 @@
         },
         "notes": {
           "in_progress": "Vous pouvez continuer à utiliser le système normalement pendant que la migration s'exécute en arrière-plan.",
-          "dual_write": "Migration en cours. Vos données sont en sécurité - toutes les nouvelles détections sont enregistrées dans les deux bases de données. Vous pouvez continuer à utiliser BirdNET-Go normalement.",
+          "dual_write": "Migration en cours. Vos données sont en sécurité - toutes les nouvelles détections sont enregistrées dans les deux bases de données. Vous pouvez continuer à utiliser VoiceWatch normalement.",
           "migrating": "Copie de vos détections existantes vers la nouvelle base de données. Cela peut prendre un certain temps selon le nombre de détections. Vous pouvez mettre en pause et reprendre à tout moment.",
           "validating": "Vérification que tous les enregistrements ont été copiés correctement. Presque terminé !",
           "cutover": "Passage à la nouvelle base de données. Cela ne prend qu'un instant.",
@@ -1834,19 +1831,6 @@
           "axisDate": "Date",
           "axisUniqueSpecies": "Espèces uniques"
         },
-        "accumulation": {
-          "title": "Species Accumulation Curve",
-          "description": "Cumulative number of distinct species detected within the selected period. The curve climbs as new species appear and flattens toward an asymptote once the common ones have been recorded; a still-rising tail means more species are likely waiting to be found.",
-          "noData": "No species accumulation data available",
-          "noDataHint": "Select a wider date range to watch the species list build up over time",
-          "ariaLabel": "Species accumulation curve: cumulative distinct species detected over the period",
-          "axisDate": "Date",
-          "axisSpecies": "Cumulative species",
-          "totalSpecies": "{species} species",
-          "tooltipCumulative": "Cumulative species",
-          "tooltipNew": "New in period",
-          "summary": "Cumulative species accumulation across {days} days, reaching {species} distinct species by the end of the period."
-        },
         "yearOverYear": {
           "title": "Year-over-Year Tracker",
           "description": "Cumulative detections so far this year versus the same calendar dates last year. The shaded band is the running gap between the two; this year's line sitting above last year's means you are ahead of last year's pace.",
@@ -1859,20 +1843,6 @@
           "legendLast": "{year} (last year)",
           "tooltipDelta": "Difference",
           "summary": "Year over year: by {monthDay}, {currentYear} has {thisYear} cumulative detections versus {lastYear} for {previousYear} (a difference of {delta})."
-        },
-        "phenology": {
-          "title": "Arrival & Departure Phenology",
-          "description": "First and last detection of each species within the selected period, drawn as residency bars for the most-detected species. Read it top to bottom in arrival order to see who shows up first and who lingers latest across the season.",
-          "noData": "No phenology data available",
-          "noDataHint": "Select a wider date range to see when species arrive and depart",
-          "ariaLabel": "Arrival and departure phenology: residency bars showing each species' first-to-last detection span",
-          "axisDate": "Date",
-          "summary": "Arrival and departure residency spans for {species} species across the selected period.",
-          "tooltipFirst": "First detected",
-          "tooltipLast": "Last detected",
-          "tooltipResidency": "Residency",
-          "tooltipCount": "Detections",
-          "residencyDays": "{days} days"
         },
         "heatmap": {
           "title": "Seasonal Activity Heatmap",
@@ -1889,13 +1859,8 @@
           "summary": "{total} detections across {days} days. Busiest around {time} on {date}."
         },
         "ridgeline": {
-          "title": "Who Sings When",
-          "description": "Hour-of-day activity for the most-detected species, sorting dawn singers from all-day and nocturnal birds",
-          "noData": "No species activity data available",
-          "noDataHint": "Select a wider date range to compare species activity patterns",
           "ariaLabel": "Who-sings-when ridgeline: hour-of-day activity distribution per species",
           "axisTime": "Time of Day",
-          "note": "Showing the top {count} species by detection volume",
           "tooltipDetections": "Detections",
           "tooltipPeak": "Peak",
           "summary": "Hour-of-day activity for {count} species. Most active: {species} around {time}."
@@ -1990,7 +1955,7 @@
     }
   },
   "settings": {
-    "title": "Paramètres - BirdNET-Go",
+    "title": "Paramètres - VoiceWatch",
     "loading": "Chargement des paramètres...",
     "sections": {
       "analysis": "Analyse",
@@ -2047,20 +2012,20 @@
           "description": "Configurer les paramètres principaux de l'application"
         },
         "birdnet": {
-          "title": "Paramètres BirdNET",
-          "description": "Configurer les paramètres spécifiques au modèle IA BirdNET"
+          "title": "Paramètres VoiceWatch",
+          "description": "Configurer les paramètres spécifiques au modèle IA VoiceWatch"
         },
         "ui": {
           "title": "Paramètres de l'interface utilisateur",
           "description": "Personnaliser l'interface utilisateur"
         },
         "customClassifier": {
-          "title": "Classificateur BirdNET personnalisé",
-          "description": "Configurer un modèle BirdNET personnalisé et des fichiers d'étiquettes pour une détection spécialisée",
+          "title": "Classificateur VoiceWatch personnalisé",
+          "description": "Configurer un modèle VoiceWatch personnalisé et des fichiers d'étiquettes pour une détection spécialisée",
           "modelPath": {
             "label": "Chemin du modèle (nécessite un redémarrage)",
             "placeholder": "Chemin vers le fichier du modèle",
-            "helpText": "Chemin vers le fichier de modèle BirdNET externe. Entrez le chemin absolu ou relatif au binaire birdnet-go. Laissez vide pour utiliser le modèle intégré par défaut."
+            "helpText": "Chemin vers le fichier de modèle VoiceWatch externe. Entrez le chemin absolu ou relatif au binaire birdnet-go. Laissez vide pour utiliser le modèle intégré par défaut."
           },
           "labelPath": {
             "label": "Chemin des étiquettes (nécessite un redémarrage)",
@@ -2072,7 +2037,7 @@
           "title": "Seuil dynamique",
           "description": "Ajuster automatiquement la sensibilité de détection en fonction des observations précédentes",
           "enable": {
-            "label": "Activer le seuil dynamique (fonctionnalité spécifique à BirdNET-Go)",
+            "label": "Activer le seuil dynamique (fonctionnalité spécifique à VoiceWatch)",
             "helpText": "Active la fonctionnalité de seuil de confiance dynamique pour une détection des chants d'oiseaux plus adaptative."
           },
           "trigger": {
@@ -2118,8 +2083,6 @@
           "warningOff": "Sans filtrage, toute détection au-dessus du seuil de confiance est acceptée immédiatement. Cela produit typiquement plusieurs faux positifs par jour. Même un filtrage faible améliore considérablement la qualité des résultats."
         },
         "rangeFilter": {
-          "title": "Filtre de portée",
-          "description": "Limiter la détection aux espèces probables dans votre région géographique",
           "stationLocation": {
             "label": "Emplacement de la station",
             "helpText": "Emplacement de la station, utilisé pour les données météorologiques et pour limiter les espèces d'oiseaux à celles probables dans la région."
@@ -2131,33 +2094,6 @@
           "longitude": {
             "label": "Longitude",
             "helpText": "Longitude de la station, utilisée pour les données météorologiques et le filtrage de la portée des espèces."
-          },
-          "model": {
-            "label": "Modèle de filtre de portée",
-            "helpText": "Version du modèle de filtre de portée BirdNET : latest ou legacy."
-          },
-          "threshold": {
-            "label": "Seuil",
-            "helpText": "Contrôle quelles espèces sont incluses en fonction de leur probabilité d'occurrence pour votre emplacement et période de l'année. Par défaut (0,01) est recommandé pour la plupart des utilisateurs. Des valeurs plus élevées (0,05-0,3) incluent moins d'espèces avec une probabilité d'occurrence plus élevée. Des valeurs très élevées (0,5+) n'incluent que les espèces les plus communes."
-          },
-          "speciesCount": {
-            "label": "Nombre d'espèces actuel",
-            "helpText": "Nombre d'espèces incluses dans le filtre de portée. Se met à jour automatiquement lorsque le seuil, la latitude ou la longitude change.",
-            "loading": "Chargement...",
-            "viewSpecies": "Voir les espèces"
-          },
-          "downloadTitle": "Télécharger la liste des espèces au format CSV",
-          "csvDownloaded": "Liste des espèces téléchargée avec succès",
-          "csvDownloadFailed": "Échec du téléchargement de la liste des espèces. Veuillez réessayer.",
-          "modal": {
-            "title": "Espèces du filtre de portée",
-            "speciesCount": "Nombre d'espèces :",
-            "threshold": "Seuil :",
-            "latitude": "Latitude :",
-            "longitude": "Longitude :",
-            "loadingSpecies": "Chargement des espèces...",
-            "noSpeciesFound": "Aucune espèce trouvée avec les paramètres actuels",
-            "close": "Fermer"
           }
         },
         "database": {
@@ -2285,18 +2221,6 @@
               "recent": {
                 "label": "Afficher les miniatures dans la liste des détections récentes",
                 "helpText": "Activer pour afficher les miniatures des espèces détectées dans la liste des détections récentes"
-              },
-              "imageProvider": {
-                "label": "Fournisseur d'images",
-                "helpText": "Sélectionnez le fournisseur d'images préféré pour les miniatures d'oiseaux"
-              },
-              "fallbackPolicy": {
-                "label": "Politique de repli",
-                "helpText": "Sélectionnez ce qui se passe lorsque le fournisseur préféré ne trouve pas d'image",
-                "options": {
-                  "all": "Essayer tous les fournisseurs en séquence",
-                  "none": "Utiliser uniquement le fournisseur sélectionné"
-                }
               }
             },
             "spectrogram": {
@@ -2385,10 +2309,6 @@
       },
       "errors": {
         "localesLoadFailed": "Impossible de charger les options de langue. Utilisation des valeurs par défaut.",
-        "providersLoadFailed": "Impossible de charger les fournisseurs d'images. Utilisation des valeurs par défaut.",
-        "rangeFilterTestFailed": "Échec du test des paramètres du filtre de portée",
-        "rangeFilterLoadFailed": "Échec du chargement de la liste des espèces",
-        "rangeFilterCountFailed": "Échec du chargement du nombre d'espèces",
         "mapLibraryLoadFailed": "Échec du chargement de la bibliothèque cartographique. Veuillez actualiser la page.",
         "mapLoadFailed": "Échec du chargement de la carte. Veuillez essayer d'actualiser la page.",
         "modalMapLoadFailed": "Échec du chargement de la carte modale. Veuillez fermer et rouvrir la fenêtre.",
@@ -2399,7 +2319,7 @@
       "sections": {
         "telemetry": {
           "title": "Suivi des erreurs et télémétrie",
-          "description": "Suivi optionnel des erreurs pour aider à améliorer la fiabilité et les performances de BirdNET-Go"
+          "description": "Suivi optionnel des erreurs pour aider à améliorer la fiabilité et les performances de VoiceWatch"
         },
         "diagnostics": {
           "title": "Support et diagnostics",
@@ -2411,7 +2331,7 @@
         "privacyPoints": {
           "noPersonalData": "Aucune donnée personnelle n'est collectée",
           "anonymousData": "Toutes les données de télémétrie sont anonymes",
-          "helpImprove": "Les données de télémétrie aident les développeurs à identifier et corriger les problèmes dans BirdNET-Go"
+          "helpImprove": "Les données de télémétrie aident les développeurs à identifier et corriger les problèmes dans VoiceWatch"
         },
         "enableTracking": "Activer le suivi des erreurs (Opt-in)"
       },
@@ -2568,7 +2488,7 @@
       },
       "systemInfo": {
         "howToView": "Comment voir les notifications :",
-        "technicalDetails": "Détails techniques sur les notifications dans BirdNET-Go :"
+        "technicalDetails": "Détails techniques sur les notifications dans VoiceWatch :"
       },
       "privacy": {
         "title": "Avis de confidentialité pour les webhooks externes",
@@ -2862,63 +2782,16 @@
         "confidenceLabel": "Seuil de confiance pour la détection humaine",
         "confidenceHelp": "Définir le niveau de confiance pour la détection de voix humaine, une valeur plus faible rend le filtre plus sensible"
       },
-      "falsePositivePrevention": {
-        "title": "Prévention des faux positifs",
-        "description": "Configurer les filtres de détection erronée",
-        "enableDogBark": "Activer le filtre d'aboiement de chien",
-        "disabled": "Le filtre d'aboiement de chien est désactivé",
-        "confidenceLabel": "Seuil de confiance",
-        "confidenceHelp": "Définir le niveau de confiance pour la détection d'aboiement de chien, une valeur plus faible rend le filtre plus sensible",
-        "expireTimeLabel": "Temps d'expiration des aboiements de chien (minutes)",
-        "expireTimeHelp": "Définissez pendant combien de temps garder en mémoire la détection d'aboiement de chien",
-        "addDogBarkSpeciesLabel": "Ajouter une espèce similaire à un aboiement de chien",
-        "addDogBarkSpeciesHelp": "Rechercher et ajouter des espèces qui pourraient être confondues avec des aboiements de chien",
-        "addSpeciesButton": "Ajouter"
-      },
-      "speciesNamePlaceholder": "Nom de l'espèce",
-      "typeSpeciesName": "Tapez le nom de l'espèce...",
-      "dogBarkSpeciesList": "Liste des espèces d'aboiement de chien",
       "daylightFilter": {
         "title": "Filtre de lumière du jour",
         "description": "Filtrer les détections d'espèces nocturnes pendant les heures de jour. Utilise les limites de l'aube/crépuscule civil de votre emplacement configuré.",
         "enable": "Activer le filtre de lumière du jour",
         "disabled": "Le filtre de lumière du jour est désactivé",
         "offsetLabel": "Décalage de la fenêtre de lumière du jour (Heures)",
-        "offsetHelp": "Ajuster la fenêtre de lumière du jour. Les valeurs positives la réduisent (plus permissif, ex. +1 = commence 1h après l'aube). Les valeurs négatives l'élargissent (plus strict, ex. -1 = commence 1h avant l'aube).",
-        "speciesListLabel": "Liste des espèces nocturnes",
-        "addSpeciesLabel": "Ajouter une espèce nocturne",
-        "addSpeciesHelp": "Rechercher et ajouter des espèces, genres, familles ou ordres à filtrer pendant la journée. Par défaut : Strigiformes (tous les hiboux). Remarque : une liste vide ne filtre aucune espèce pendant la journée."
-      },
-      "errors": {
-        "speciesLoadFailed": "Échec du chargement de la liste des espèces. Veuillez réessayer."
+        "offsetHelp": "Ajuster la fenêtre de lumière du jour. Les valeurs positives la réduisent (plus permissif, ex. +1 = commence 1h après l'aube). Les valeurs négatives l'élargissent (plus strict, ex. -1 = commence 1h avant l'aube)."
       }
     },
     "integration": {
-      "birdweather": {
-        "title": "BirdWeather",
-        "description": "Téléverser les détections vers BirdWeather",
-        "ffmpegWarning": {
-          "title": "FFmpeg non détecté",
-          "message": "Veuillez installer FFmpeg pour activer la prise en charge de l'encodage FLAC, BirdWeather déprécie les téléchargements WAV au profit des fichiers audio FLAC compressés."
-        },
-        "enable": "Activer les téléchargements BirdWeather",
-        "token": {
-          "label": "Jeton BirdWeather",
-          "helpText": "Votre jeton BirdWeather unique."
-        },
-        "threshold": {
-          "label": "Seuil de téléchargement",
-          "helpText": "Seuil de confiance minimum pour télécharger les prédictions vers BirdWeather."
-        },
-        "test": {
-          "button": "Tester la connexion BirdWeather",
-          "loading": "Test en cours...",
-          "enabledRequired": "BirdWeather doit être activé pour tester",
-          "tokenRequired": "Le jeton BirdWeather doit être spécifié",
-          "inProgress": "Test en cours...",
-          "description": "Tester la connexion BirdWeather"
-        }
-      },
       "mqtt": {
         "title": "MQTT",
         "description": "Configurer la connexion au courtier MQTT",
@@ -2971,14 +2844,14 @@
         "homeAssistant": {
           "title": "Découverte automatique Home Assistant",
           "enable": "Activer Home Assistant MQTT Discovery",
-          "description": "Lorsqu'elle est activée, BirdNET-Go enregistre automatiquement les appareils et capteurs auprès de Home Assistant via le protocole de découverte MQTT. Les appareils apparaîtront dans le registre des appareils de Home Assistant sans configuration YAML manuelle.",
+          "description": "Lorsqu'elle est activée, VoiceWatch enregistre automatiquement les appareils et capteurs auprès de Home Assistant via le protocole de découverte MQTT. Les appareils apparaîtront dans le registre des appareils de Home Assistant sans configuration YAML manuelle.",
           "discoveryPrefix": {
             "label": "Préfixe de découverte",
             "helpText": "Le préfixe de sujet MQTT pour les messages de découverte Home Assistant. La valeur par défaut est 'homeassistant'. Ne modifiez ceci que si vous avez configuré un préfixe de découverte personnalisé dans Home Assistant."
           },
           "deviceName": {
             "label": "Nom de l'appareil",
-            "helpText": "Le nom de base des appareils tels qu'ils apparaissent dans Home Assistant. Chaque source audio aura son propre appareil lié à cet appareil principal BirdNET-Go."
+            "helpText": "Le nom de base des appareils tels qu'ils apparaissent dans Home Assistant. Chaque source audio aura son propre appareil lié à cet appareil principal VoiceWatch."
           },
           "sensorsNote": "<strong>Capteurs créés :</strong> Pour chaque source audio, Home Assistant recevra : Dernière espèce, Confiance, Nom scientifique et Niveau sonore (si activé). L'appareil pont inclut l'état de disponibilité en ligne/hors ligne.",
           "discovery": {
@@ -3003,7 +2876,7 @@
       },
       "observability": {
         "title": "Observabilité",
-        "description": "Surveiller les performances de BirdNET-Go et les métriques de détection d'oiseaux via un point de terminaison compatible Prometheus",
+        "description": "Surveiller les performances de VoiceWatch et les métriques de détection d'oiseaux via un point de terminaison compatible Prometheus",
         "enable": "Activer l'intégration d'observabilité",
         "disabled": "L'intégration d'observabilité n'est pas activée",
         "listenAddress": {
@@ -3091,33 +2964,6 @@
         "responseStreamFailed": "Échec de la lecture du flux de réponse",
         "configurationCheck": "Vérification de la configuration",
         "testStageFallback": "Étape de test"
-      },
-      "ebird": {
-        "title": "eBird",
-        "description": "Connexion à la base de données taxonomique d'eBird pour des données enrichies sur les espèces, y compris la classification taxonomique et les informations sur les sous-espèces.",
-        "enable": "Activer l'intégration eBird",
-        "enabledRequired": "L'intégration eBird n'est pas activée",
-        "apiKey": {
-          "label": "Clé API eBird",
-          "helpText": "Votre clé API eBird. Obtenez-en une sur le portail API d'eBird."
-        },
-        "locale": {
-          "label": "Langue des noms d'espèces"
-        },
-        "cacheTTL": {
-          "label": "Durée du cache (heures)",
-          "helpText": "Durée de mise en cache des données taxonomiques d'eBird. La taxonomie change rarement, donc des durées plus longues réduisent les appels API."
-        },
-        "note": "eBird fournit des données taxonomiques utilisées pour la classification des espèces et les analyses. La clé API est gratuite et disponible auprès du Cornell Lab of Ornithology.",
-        "apiKeyInfo": "Une clé API eBird personnelle est requise pour utiliser cette intégration. Vous pouvez demander une clé gratuite sur <a href=\"https://ebird.org/api/keygen\" class=\"link link-primary\" target=\"_blank\" rel=\"noopener noreferrer\">ebird.org/api/keygen</a>.",
-        "test": {
-          "button": "Tester la connexion eBird",
-          "loading": "Test en cours...",
-          "enabledRequired": "Activez d'abord l'intégration eBird",
-          "apiKeyRequired": "La clé API est requise",
-          "inProgress": "Test en cours...",
-          "description": "Tester la connectivité et l'authentification de l'API eBird"
-        }
       }
     },
     "audio": {
@@ -3172,7 +3018,7 @@
       },
       "noSources": {
         "warning": "Aucune source audio configurée",
-        "description": "BirdNET-Go a besoin d'une entrée audio pour détecter les oiseaux. Veuillez configurer au moins une source dans l'onglet Carte Son ou Flux."
+        "description": "VoiceWatch a besoin d'une entrée audio pour détecter les oiseaux. Veuillez configurer au moins une source dans l'onglet Carte Son ou Flux."
       },
       "soundCards": {
         "summary": "{count} source(s) de carte son",
@@ -3198,12 +3044,12 @@
           "hints": {
             "device": "Sélectionnez parmi les périphériques d'entrée audio disponibles sur votre système",
             "multiple": "Vous pouvez configurer plusieurs cartes son pour différents emplacements",
-            "model": "Chaque source peut utiliser un modèle de détection différent (BirdNET, Perch, Bat)"
+            "model": "Chaque source peut utiliser un modèle de détection différent (VoiceWatch, Perch, Bat)"
           }
         },
         "models": {
-          "birdnetDefault": "BirdNET (Par défaut)",
-          "birdnet": "BirdNET",
+          "birdnetDefault": "VoiceWatch (Par défaut)",
+          "birdnet": "VoiceWatch",
           "perchV2": "Google Perch v2",
           "bat": "Détection de chauves-souris"
         },
@@ -3470,10 +3316,6 @@
         "enableHelp": "Lorsqu'elle est activée, les détections répétées des espèces configurées sont fusionnées en un seul enregistrement plus long.",
         "maxDurationLabel": "Durée maximale",
         "maxDurationHelp": "Longueur maximale d'un clip de capture étendue. L'enregistrement s'allonge au fil des détections, jusqu'à cette limite.",
-        "speciesListLabel": "Espèces en capture étendue",
-        "addSpeciesLabel": "Ajouter une espèce",
-        "addSpeciesHelp": "Espèces déclenchant la capture étendue. Prend en charge les noms communs, les noms scientifiques et la correspondance au niveau du genre (par ex. « Strix » inclut toutes les chouettes Strix).",
-        "addSpeciesButton": "Ajouter",
         "disabled": "La capture étendue est désactivée"
       },
       "fileSettings": {
@@ -3551,8 +3393,28 @@
         "invalidRetentionPolicy": "Politique de rétention invalide"
       },
       "models": {
-        "recommendBoth": "Pour une meilleure couverture de détection des espèces, il est recommandé d'exécuter BirdNET et Perch ensemble.",
-        "perchOnlyWarning": "Perch seul produit moins de détections. Abaissez le seuil de confiance à 0.50 pour des résultats significatifs, ou activez BirdNET en parallèle pour une meilleure couverture."
+        "recommendBoth": "Pour une meilleure couverture de détection des espèces, il est recommandé d'exécuter VoiceWatch et Perch ensemble.",
+        "perchOnlyWarning": "Perch seul produit moins de détections. Abaissez le seuil de confiance à 0.50 pour des résultats significatifs, ou activez VoiceWatch en parallèle pour une meilleure couverture."
+      },
+      "speakerAttributes": {
+        "title": "Speaker Attributes",
+        "description": "Estimate the speaker's gender and relative age band for human-voice detections. Opt-in and off by default.",
+        "caveat": "These are demographic estimates, not identity recognition. Accuracy varies by accent and recording quality.",
+        "enable": "Enable speaker attributes",
+        "enableHelp": "Master switch for all speaker-attribute estimation.",
+        "disabled": "Speaker attributes are disabled",
+        "gender": {
+          "enable": "Estimate speaker gender",
+          "enableHelp": "Estimate whether the speaker sounds male, female, or unknown.",
+          "thresholdLabel": "Gender confidence threshold",
+          "thresholdHelp": "Discard gender estimates below this confidence."
+        },
+        "age": {
+          "enable": "Estimate speaker age band",
+          "enableHelp": "Estimate a relative age band (child, teen, adult, senior).",
+          "thresholdLabel": "Age confidence threshold",
+          "thresholdHelp": "Discard age estimates below this confidence."
+        }
       }
     },
     "security": {
@@ -3795,342 +3657,6 @@
         "fileReadError": "Échec de la lecture du fichier sélectionné"
       }
     },
-    "species": {
-      "pageLabel": "Paramètres des espèces",
-      "saveError": "Échec de l'enregistrement de la configuration pour \"{species}\". Veuillez réessayer.",
-      "configUpdated": "Configuration de \"{species}\" mise à jour",
-      "configAdded": "Configuration de \"{species}\" ajoutée",
-      "duplicateConfigError": "L'espèce \"{species}\" a déjà une configuration. Veuillez choisir un autre nom.",
-      "activeSpecies": {
-        "title": "Espèces Actives",
-        "tabLabel": "Actives",
-        "description": "Espèces qui seront détectées en fonction de votre emplacement actuel et des paramètres de filtre",
-        "stats": {
-          "species": "Espèces",
-          "location": "Emplacement",
-          "threshold": "Seuil",
-          "updated": "Mis à jour",
-          "justNow": "À l'instant",
-          "minutesAgo": "il y a {count}m",
-          "hoursAgo": "il y a {count}h"
-        },
-        "search": {
-          "placeholder": "Rechercher des espèces..."
-        },
-        "badges": {
-          "included": "Incluse",
-          "configured": "Configurée"
-        },
-        "empty": {
-          "title": "Aucune espèce trouvée",
-          "description": "Configurez votre emplacement dans les Paramètres Principaux pour voir les espèces disponibles"
-        },
-        "noResults": "Aucune espèce ne correspond à votre recherche",
-        "infoNote": "Cette liste est basée sur votre emplacement et le seuil du filtre de portée. Les espèces ajoutées manuellement sont toujours incluses.",
-        "retry": "Réessayer",
-        "expand": "Développer la liste",
-        "collapse": "Réduire la liste",
-        "downloadCsv": "Télécharger le CSV",
-        "errors": {
-          "loadFailed": "Échec du chargement de la liste des espèces actives"
-        },
-        "locationNotConfigured": {
-          "title": "Emplacement non configuré",
-          "description": "Définissez votre emplacement dans les Paramètres Principaux pour voir les espèces disponibles dans votre région. Le filtre de portée utilise votre emplacement pour déterminer quelles espèces sont susceptibles d'être présentes à proximité.",
-          "action": "Configurer l'emplacement"
-        },
-        "rangeFilterHealth": {
-          "inactive": {
-            "title": "Filtre de portée inactif",
-            "description": "Les détections ne sont pas filtrées selon votre emplacement pour le moment, des espèces extérieures à votre région peuvent donc être signalées. Vérifiez la configuration du modèle de filtre de portée dans les Paramètres."
-          },
-          "fellBack": {
-            "title": "Utilisation du filtre de portée intégré",
-            "description": "Le filtre de portée du géomodèle configuré n'a pas pu être chargé, BirdNET-Go s'est donc rabattu sur le filtre de portée intégré. Le filtrage fonctionne toujours, mais vérifiez les Paramètres pour restaurer le géomodèle."
-          },
-          "mappedZero": {
-            "title": "Le filtre de portée n'a correspondu à aucune espèce",
-            "description": "Le filtre de portée du géomodèle ne correspond à aucune des espèces du modèle actif, toutes les détections seraient donc filtrées. Vérifiez que le fichier d'étiquettes du filtre de portée correspond au modèle actif."
-          }
-        },
-        "columns": {
-          "commonName": "Nom commun",
-          "scientificName": "Nom scientifique",
-          "score": "Score",
-          "status": "Statut"
-        }
-      },
-      "alwaysInclude": {
-        "title": "Toujours inclure les espèces",
-        "tabLabel": "Inclure",
-        "description": "Les espèces de cette liste seront toujours incluses dans la gamme des espèces détectées",
-        "noSpeciesMessage": "Aucune espèce ajoutée à la liste d'inclusion"
-      },
-      "alwaysExclude": {
-        "title": "Toujours exclure les espèces",
-        "tabLabel": "Exclure",
-        "description": "Les espèces de cette liste seront toujours exclues de la détection",
-        "noSpeciesMessage": "Aucune espèce ajoutée à la liste d'exclusion"
-      },
-      "customConfiguration": {
-        "title": "Configuration personnalisée des espèces",
-        "tabLabel": "Personnel.",
-        "description": "Valeurs de seuil spécifiques aux espèces, intervalles de détection et actions",
-        "helpText": {
-          "intro": "Configurez des paramètres spécifiques aux espèces :",
-          "threshold": "Seuil : Score de confiance minimum (0-1) requis pour la détection",
-          "interval": "Intervalle : Temps minimum en secondes entre les détections de la même espèce (0 = utiliser la valeur par défaut globale)",
-          "actions": "Actions : Commandes personnalisées à exécuter lorsque cette espèce est détectée"
-        },
-        "columnHeaders": {
-          "species": "Espèce",
-          "settings": "Paramètres",
-          "actions": "Actions"
-        },
-        "badges": {
-          "threshold": "Seuil : {value}",
-          "interval": "Intervalle : {value}s",
-          "customAction": "Action personnalisée",
-          "executeDefaults": "+Défauts"
-        },
-        "dropdown": {
-          "editConfig": "Modifier la config",
-          "addAction": "Ajouter une action",
-          "remove": "Supprimer"
-        },
-        "labels": {
-          "threshold": "Seuil",
-          "interval": "Intervalle",
-          "intervalSeconds": "Intervalle (sec)",
-          "addButton": "Ajouter"
-        },
-        "noConfigurationsMessage": "Aucune configuration d'espèce personnalisée ajoutée",
-        "addForm": {
-          "speciesPlaceholder": "Nom de l'espèce",
-          "thresholdPlaceholder": "0.5",
-          "intervalPlaceholder": "0"
-        },
-        "addConfiguration": "Ajouter une configuration",
-        "newConfiguration": "Nouvelle configuration",
-        "editing": "Modification : {species}",
-        "configuredCount": "{count} configurées",
-        "searchPlaceholder": "Type to search...",
-        "saving": "Enregistrement...",
-        "save": "Enregistrer",
-        "cancel": "Annuler",
-        "configureActions": "Configurer les actions",
-        "actionsConfigured": "Configurées",
-        "list": {
-          "editTitle": "Modifier la configuration",
-          "removeTitle": "Supprimer la configuration"
-        },
-        "emptyState": {
-          "title": "Aucune configuration pour le moment.",
-          "description": "Cliquez sur « Ajouter une configuration » pour personnaliser les paramètres de détection des espèces."
-        },
-        "table": {
-          "columnScientificName": "Nom scientifique",
-          "intervalDefault": "Par défaut",
-          "intervalDefaultTooltip": "0 = utiliser l'intervalle par défaut global",
-          "noActions": "Aucun",
-          "searchPlaceholder": "Rechercher des espèces...",
-          "noResults": "Aucune configuration correspondante",
-          "editDisabledReason": "Enregistrez ou fermez l'éditeur actuel avant de modifier une autre espèce",
-          "actionsDisabledBusy": "Veuillez patienter jusqu'à la fin de l'opération en cours"
-        }
-      },
-      "synonyms": {
-        "tabLabel": "Synonymes",
-        "description": "Associez les noms scientifiques BirdNET à leurs équivalents mis à jour dans une taxonomie récente. Utilisé uniquement comme solution de secours lors de la recherche de photos d'oiseaux sur Wikipedia et AviCommons ; ne renomme pas les espèces dans les détections ni sur le tableau de bord.",
-        "helpText": "Pour modifier le nom affiché d'une espèce dans l'interface, modifiez votre fichier d'étiquettes BirdNET (paramètre « Chemin des étiquettes » dans les paramètres principaux).",
-        "birdnetName": "Nom BirdNET",
-        "updatedName": "Nom scientifique mis à jour",
-        "addButton": "Ajouter un synonyme",
-        "emptyState": "Aucun synonyme de taxonomie configuré",
-        "errors": {
-          "unknownSpecies": "Espèce introuvable dans les labels BirdNET",
-          "duplicateKey": "Un synonyme pour cette espèce existe déjà",
-          "emptyUpdatedName": "Le nom mis à jour est requis"
-        }
-      },
-      "actionsModal": {
-        "title": "Actions pour {species}",
-        "actionType": {
-          "label": "Type d'action",
-          "executeCommand": "Exécuter une commande",
-          "onlySupported": "Actuellement, seules les actions Exécuter une commande sont prises en charge"
-        },
-        "command": {
-          "label": "Commande",
-          "helpText": "Fournissez le chemin complet vers la commande ou le script que vous souhaitez exécuter"
-        },
-        "parameters": {
-          "label": "Paramètres",
-          "helpText": "Ces valeurs seront transmises à votre commande dans l'ordre indiqué",
-          "placeholder": "Cliquez sur les boutons ci-dessous pour ajouter des paramètres ou saisissez manuellement",
-          "tooltip": "Utilisez les boutons ci-dessous ou saisissez directement (séparés par des virgules)",
-          "availableTitle": "Paramètres disponibles",
-          "buttons": {
-            "commonName": "NomCommun",
-            "scientificName": "NomScientifique",
-            "confidence": "Confiance",
-            "time": "Temps",
-            "source": "Source",
-            "clearParameters": "Effacer les paramètres"
-          }
-        },
-        "executeDefaults": {
-          "label": "Exécuter également les actions par défaut (stockage en base de données, notifications, etc.)",
-          "helpText": "Lorsqu'activé, votre action personnalisée et les actions par défaut du système s'exécuteront. Lorsque désactivé, seule votre action personnalisée s'exécutera."
-        }
-      },
-      "add": "Ajouter",
-      "remove": "Supprimer",
-      "suggestions": "Suggestions d'espèces",
-      "addSpeciesToInclude": "Ajouter des espèces à inclure",
-      "addSpeciesToIncludeLabel": "Ajouter de nouvelles espèces à inclure",
-      "addSpeciesToExclude": "Ajouter des espèces à exclure",
-      "addSpeciesToExcludeLabel": "Ajouter de nouvelles espèces à exclure",
-      "commandPathPlaceholder": "/chemin/vers/votre/commande",
-      "parametersPlaceholder": "Les paramètres apparaîtront ici",
-      "errors": {
-        "speciesLoadFailed": "Échec du chargement de la liste des espèces. Veuillez réessayer."
-      },
-      "tracking": {
-        "title": "Suivi",
-        "tabLabel": "Suivi",
-        "description": "Configurer le suivi des nouvelles détections d'espèces basé sur les périodes",
-        "enabled": {
-          "label": "Activer le suivi des espèces",
-          "helpText": "Lorsqu'il est activé, le système suit les nouvelles détections d'espèces et peut envoyer des notifications"
-        },
-        "newSpeciesWindowDays": {
-          "label": "Fenêtre nouvelle espèce (jours)",
-          "helpText": "Nombre de jours pendant lesquels une espèce est considérée comme 'nouvelle' après la première détection (1-365)"
-        },
-        "syncIntervalMinutes": {
-          "label": "Intervalle de synchronisation (minutes)",
-          "helpText": "Fréquence de synchronisation des données de suivi avec la base de données (1-1440)"
-        },
-        "notificationSuppressionHours": {
-          "label": "Suppression des notifications (heures)",
-          "helpText": "Heures pour supprimer les notifications en double pour la même espèce (0-8760)"
-        },
-        "yearly": {
-          "title": "Suivi annuel",
-          "description": "Suivre les premières arrivées d'espèces chaque année",
-          "enabled": {
-            "label": "Activer le suivi annuel",
-            "helpText": "Suivre et notifier quand une espèce est détectée pour la première fois chaque année"
-          },
-          "resetMonth": {
-            "label": "Mois de réinitialisation",
-            "helpText": "Mois de réinitialisation du suivi annuel (1-12)"
-          },
-          "resetDay": {
-            "label": "Jour de réinitialisation",
-            "helpText": "Jour du mois de réinitialisation du suivi annuel"
-          },
-          "windowDays": {
-            "label": "Fenêtre (jours)",
-            "helpText": "Jours pour afficher l'indicateur 'nouveau cette année' (1-365)"
-          }
-        },
-        "seasonal": {
-          "title": "Suivi saisonnier",
-          "description": "Suivre les premières arrivées d'espèces chaque saison",
-          "enabled": {
-            "label": "Activer le suivi saisonnier",
-            "helpText": "Suivre et notifier quand une espèce est détectée pour la première fois chaque saison"
-          },
-          "windowDays": {
-            "label": "Fenêtre (jours)",
-            "helpText": "Jours pour afficher l'indicateur 'nouveau cette saison' (1-365)"
-          },
-          "seasons": {
-            "title": "Définitions des saisons",
-            "description": "Définir quand chaque saison commence. Les saisons sont automatiquement ajustées en fonction de la latitude de votre emplacement.",
-            "spring": "Printemps",
-            "summer": "Été",
-            "fall": "Automne",
-            "winter": "Hiver",
-            "wet1": "Saison humide 1",
-            "dry1": "Saison sèche 1",
-            "wet2": "Saison humide 2",
-            "dry2": "Saison sèche 2",
-            "startMonth": "Mois de début",
-            "startDay": "Jour de début",
-            "hemisphereNote": "Les dates des saisons sont automatiquement configurées en fonction de votre latitude. L'hémisphère nord utilise les saisons standard, l'hémisphère sud a des dates décalées, et les régions équatoriales utilisent les saisons humides/sèches."
-          }
-        },
-        "months": {
-          "january": "Janvier",
-          "february": "Février",
-          "march": "Mars",
-          "april": "Avril",
-          "may": "Mai",
-          "june": "Juin",
-          "july": "Juillet",
-          "august": "Août",
-          "september": "Septembre",
-          "october": "Octobre",
-          "november": "Novembre",
-          "december": "Décembre"
-        },
-        "units": {
-          "days": "jours",
-          "min": "min",
-          "hours": "h"
-        }
-      },
-      "dynamicThreshold": {
-        "tabLabel": "Appris",
-        "title": "Seuils appris",
-        "description": "Cette page affiche les données d'exécution des seuils dynamiques. Lorsque activés dans Paramètres principaux → Détection, les seuils sont automatiquement ajustés par plusieurs détections à haute confiance. Les espèces affichées ici sont supposées exister à cet emplacement.",
-        "stats": {
-          "active": "Actifs",
-          "atMinimum": "Au minimum",
-          "minThreshold": "Seuil min.",
-          "validityPeriod": "Période de validité"
-        },
-        "header": {
-          "species": "Espèce",
-          "threshold": "Seuil",
-          "expires": "Expire"
-        },
-        "searchPlaceholder": "Rechercher des espèces...",
-        "threshold": "Seuil",
-        "level": "Niveau",
-        "expires": "Expire",
-        "expired": "Expiré",
-        "confidence": "Confiance",
-        "requiredConfidence": "Confiance requise",
-        "resetAll": "Tout réinitialiser",
-        "resetSpecies": "Réinitialiser le seuil pour cette espèce",
-        "noEvents": "Aucun historique de changement de seuil",
-        "changeReason": {
-          "highConfidence": "Détection à haute confiance",
-          "expiry": "Seuil expiré",
-          "manualReset": "Réinitialisation manuelle"
-        },
-        "note": "Les détections à haute confiance confirment quelles espèces existent à cet emplacement. Après plusieurs correspondances à haute confiance, le seuil de détection est abaissé en toute sécurité pour capturer plus d'appels sans risque significatif de faux positifs. Les seuils se réinitialisent automatiquement après la période de validité configurée.",
-        "empty": {
-          "title": "Aucun seuil appris",
-          "description": "Les détections à haute confiance créeront automatiquement des seuils appris pour les espèces"
-        },
-        "resetAllConfirm": {
-          "title": "Réinitialiser tous les seuils",
-          "message": "Cela réinitialisera les {count} seuils appris. Les espèces devront être détectées à nouveau avec une haute confiance pour abaisser leurs seuils."
-        },
-        "loadError": "Échec du chargement des seuils dynamiques",
-        "resetSuccess": "Seuil réinitialisé pour {species}",
-        "resetError": "Échec de la réinitialisation du seuil",
-        "resetAllSuccess": "{count} seuils réinitialisés",
-        "resetAllError": "Échec de la réinitialisation des seuils",
-        "expand": "Afficher l'historique des événements",
-        "collapse": "Masquer l'historique des événements"
-      }
-    },
     "database": {
       "sqlitePlaceholder": "Entrez le chemin de la base de données SQLite",
       "mysqlHostPlaceholder": "Entrez l'hôte MySQL",
@@ -4263,7 +3789,6 @@
           "detection_occurred": "Détection effectuée",
           "application_started": "Application démarrée",
           "application_stopped": "Application arrêtée",
-          "integration_birdweather_failed": "Envoi BirdWeather échoué",
           "integration_mqtt_connected": "MQTT connecté",
           "integration_mqtt_disconnected": "MQTT déconnecté",
           "integration_mqtt_publish_failed": "Publication MQTT échouée",
@@ -4306,9 +3831,13 @@
       "v2Required": "Les règles d'alerte nécessitent un schéma de base de données mis à jour. Vous pouvez mettre à jour votre base de données depuis la",
       "v2RequiredLink": "page Base de données du Système.",
       "builtInRules": {
-        "newSpecies": {
-          "name": "Nouvelle espèce détectée",
-          "description": "Notifie lorsqu'une espèce est détectée pour la première fois"
+        "keywordFlag": {
+          "name": "Keyword flagged",
+          "description": "Notifies when a detection transcript matches a configured keyword"
+        },
+        "speakerAttribute": {
+          "name": "Speaker attribute matched",
+          "description": "Notifies when a detection's estimated speaker attributes (gender, age band) match a rule"
         },
         "streamDisconnected": {
           "name": "Flux audio déconnecté",
@@ -4341,10 +3870,6 @@
         "mqttPublishFailed": {
           "name": "Publication MQTT échouée",
           "description": "Notifie lorsque la publication d'un message MQTT échoue"
-        },
-        "birdWeatherFailed": {
-          "name": "Envoi BirdWeather échoué",
-          "description": "Notifie lorsqu'un envoi BirdWeather échoue"
         }
       }
     },
@@ -4371,7 +3896,7 @@
       },
       "appearance": {
         "title": "Apparence",
-        "description": "Personnalisez l'apparence de votre interface BirdNET-Go"
+        "description": "Personnalisez l'apparence de votre interface VoiceWatch"
       },
       "language": {
         "title": "Langue et régional",
@@ -4389,14 +3914,14 @@
         "defaultGainUnit": "dB"
       }
     },
-    "restartRequired": "Certaines modifications nécessitent un redémarrage du serveur pour prendre effet. Veuillez redémarrer BirdNET-Go."
+    "restartRequired": "Certaines modifications nécessitent un redémarrage du serveur pour prendre effet. Veuillez redémarrer VoiceWatch."
   },
   "auth": {
     "login": "Connexion",
     "logout": "Déconnexion",
     "openLoginModal": "Ouvrir la fenêtre de connexion",
     "loginTitle": "Connexion",
-    "loginSubtitle": "Accédez à votre tableau de bord BirdNET-Go",
+    "loginSubtitle": "Accédez à votre tableau de bord VoiceWatch",
     "password": "Mot de passe",
     "passwordPlaceholder": "Entrez votre mot de passe",
     "enterPassword": "Saisissez votre mot de passe",
@@ -4581,7 +4106,7 @@
       "streamError": "Erreur lors du démarrage du flux",
       "streamTitle": "Flux audio d'oiseaux - {source}",
       "streamTitleDefault": "Flux audio d'oiseaux",
-      "streamArtist": "BirdNET-Go",
+      "streamArtist": "VoiceWatch",
       "streamAlbum": "Diffusion en direct",
       "playbackError": "Erreur de lecture : {details}"
     },
@@ -4606,7 +4131,8 @@
       "generating": "Génération...",
       "waiting": "Waiting...",
       "queuePosition": "File d'attente: {position}",
-      "loadError": "Échec du chargement audio"
+      "loadError": "Échec du chargement audio",
+      "spectrogramForDetection": "Spectrogram for detection"
     },
     "forms": {
       "numberField": {
@@ -4715,11 +4241,6 @@
       "removeCertificate": "Supprimer le certificat",
       "fileReadError": "Échec de la lecture du fichier",
       "loading": "Chargement des informations du certificat..."
-    },
-    "birdThumbnail": {
-      "viewDetections": "View {name} detections",
-      "largeView": "Large view of {name}",
-      "clickToView": "Click to view detections"
     }
   },
   "connectivity": {
@@ -4800,9 +4321,6 @@
       "mqttNotConfigured": "Broker MQTT non configuré",
       "mqttMetricsUnavailable": "Instance de métriques non disponible pour le test MQTT",
       "mqttClientFailed": "Impossible de créer le client MQTT",
-      "birdweatherDisabled": "L'intégration BirdWeather n'est pas activée",
-      "birdweatherNotConfigured": "ID de station BirdWeather non configuré",
-      "birdweatherClientFailed": "Impossible de créer le client BirdWeather",
       "noWeatherProvider": "Aucun fournisseur météo sélectionné",
       "openWeatherKeyRequired": "La clé API OpenWeather est requise",
       "processorUnavailable": "Processeur non disponible",
@@ -4880,10 +4398,10 @@
     "steps": {
       "welcome": {
         "title": "Bienvenue",
-        "heading": "Bienvenue dans BirdNET-Go !",
-        "description": "BirdNET-Go est un système open source d'identification des chants d'oiseaux qui écoute l'audio de votre microphone ou flux et identifie les espèces d'oiseaux en temps réel.",
-        "credit": "BirdNET-Go utilise le modèle d'IA BirdNET développé par le K. Lisa Yang Center for Conservation Bioacoustics au Cornell Lab of Ornithology et l'Université technique de Chemnitz. BirdNET-Go est un projet communautaire indépendant et n'est pas affilié ni approuvé par l'équipe BirdNET.",
-        "learnMore": "En savoir plus sur BirdNET",
+        "heading": "Bienvenue dans VoiceWatch !",
+        "description": "VoiceWatch est un système open source d'identification des chants d'oiseaux qui écoute l'audio de votre microphone ou flux et identifie les espèces d'oiseaux en temps réel.",
+        "credit": "VoiceWatch utilise le modèle d'IA VoiceWatch développé par le K. Lisa Yang Center for Conservation Bioacoustics au Cornell Lab of Ornithology et l'Université technique de Chemnitz. VoiceWatch est un projet communautaire indépendant et n'est pas affilié ni approuvé par l'équipe VoiceWatch.",
+        "learnMore": "En savoir plus sur VoiceWatch",
         "cta": "Configurons votre station de surveillance d'oiseaux."
       },
       "locationLanguage": {
@@ -4937,16 +4455,12 @@
         "title": "Confidentialité et intégration",
         "privacyFilterLabel": "Activer le filtre de confidentialité",
         "privacyFilterHelp": "Filtre les détections lorsque des voix humaines sont détectées à proximité du microphone",
-        "birdweatherLabel": "Partager les détections avec BirdWeather",
-        "birdweatherHelp": "Contribuez vos détections d'oiseaux au réseau communautaire BirdWeather",
-        "birdweatherIdLabel": "ID de station BirdWeather",
-        "birdweatherIdPlaceholder": "Entrez votre ID de station BirdWeather",
         "errorReportingLabel": "Envoyer des rapports d'erreurs anonymes",
-        "errorReportingHelp": "Aidez à améliorer BirdNET-Go en envoyant des rapports d'erreurs anonymes lorsque quelque chose ne fonctionne pas"
+        "errorReportingHelp": "Aidez à améliorer VoiceWatch en envoyant des rapports d'erreurs anonymes lorsque quelque chose ne fonctionne pas"
       },
       "responsibleUse": {
-        "title": "Utilisation responsable de BirdNET-Go",
-        "intro": "BirdNET-Go est un outil puissant qui enrichit votre expérience ornithologique grâce à l'identification assistée par IA. Pour garantir les meilleurs résultats tant pour l'observation que pour la conservation :",
+        "title": "Utilisation responsable de VoiceWatch",
+        "intro": "VoiceWatch est un outil puissant qui enrichit votre expérience ornithologique grâce à l'identification assistée par IA. Pour garantir les meilleurs résultats tant pour l'observation que pour la conservation :",
         "point1": "Vérifiez et validez les détections avant de partager des observations",
         "point2": "Utilisez les scores de confiance comme guide, pas comme vérité absolue",
         "point3": "Recoupez avec les guides de terrain et l'expertise locale",
@@ -5005,26 +4519,6 @@
         "helpText": "Langue utilisée pour les noms communs des espèces dans l'interface."
       }
     },
-    "rangeFilter": {
-      "birdOnlyNote": "Le filtre de zone s'applique uniquement aux classificateurs d'oiseaux. Les modèles de chauves-souris utilisent leurs propres listes d'espèces.",
-      "status": {
-        "title": "Aperçu du filtre de zone",
-        "geomodelInfo": "BirdNET Géomodèle {version} - {species} espèces connues",
-        "autoSelected": "Sélectionné automatiquement",
-        "manual": "Manuel",
-        "classifier": "Classificateur",
-        "totalSpecies": "Total des espèces",
-        "withRangeData": "Avec données de zone",
-        "withoutRangeData": "Sans données de zone",
-        "withRangeDataTooltip": "Espèces que le géomodèle peut évaluer par probabilité géographique à votre emplacement",
-        "withoutRangeDataTooltip": "Espèces sans données géographiques dans le géomodèle, gérées par le paramètre des espèces non cartographiées ci-dessous",
-        "noFilter": "Aucun filtre de zone actif",
-        "passUnmapped": {
-          "label": "Autoriser les espèces sans données de zone",
-          "helpText": "Autoriser les détections d'espèces pour lesquelles le géomodèle n'a pas de données géographiques. Lorsque désactivé, ces espèces sont toujours filtrées."
-        }
-      }
-    },
     "advanced": {
       "title": "Avancé",
       "description": "Configuration du traitement et des modèles personnalisés."
@@ -5039,7 +4533,7 @@
       "loading": "Chargement des modèles...",
       "retry": "Réessayer",
       "builtIn": "Intégré",
-      "builtInDescription": "Classificateur d'espèces d'oiseaux intégré par l'équipe BirdNET.",
+      "builtInDescription": "Classificateur d'espèces d'oiseaux intégré par l'équipe VoiceWatch.",
       "species": "{count} espèces",
       "install": "Installer",
       "installing": "Installation...",
@@ -5091,7 +4585,7 @@
       "reinstall": "Réinstaller",
       "reinstalling": "Réinstallation...",
       "reinstallComplete": "Fichiers vérifiés avec succès",
-      "geomodelBadge": "Inclut le BirdNET v3.0 geomodel",
+      "geomodelBadge": "Inclut le VoiceWatch v3.0 geomodel",
       "onnxRuntimeRequired": "Nécessite ONNX Runtime qui n'est pas disponible sur ce système.",
       "onnxRuntimeMissing": "ONNX Runtime n'est pas disponible. Ce modèle ne peut pas fonctionner.",
       "unavailable": "Indisponible"
@@ -5106,6 +4600,45 @@
     },
     "dynamicThreshold": {
       "birdOnlyNote": "Le seuil dynamique s'applique uniquement aux classificateurs d'oiseaux."
+    },
+    "transcription": {
+      "title": "Transcription & Keyword Flagging",
+      "description": "Transcribe audio clips offline with Whisper and flag detections whose transcription contains defined keywords.",
+      "enable": {
+        "label": "Enable Transcription",
+        "helpText": "Enables offline speech-to-text transcription for detected audio clips using whisper.cpp."
+      },
+      "modelPath": {
+        "label": "Whisper Model Path",
+        "placeholder": "ggml-tiny.en.bin",
+        "helpText": "Path to the GGML model file used for transcription. Required when transcription is enabled.",
+        "required": "A model path is required when transcription is enabled. Enter the path to a GGML model file (e.g. ggml-tiny.en.bin)."
+      },
+      "language": {
+        "label": "Language",
+        "placeholder": "en",
+        "helpText": "BCP-47 language code for transcription (e.g. en, de, fr). Leave as en for English-only models."
+      },
+      "advanced": {
+        "title": "Advanced",
+        "binary": {
+          "label": "Whisper Binary",
+          "placeholder": "whisper-cli",
+          "helpText": "Name or absolute path of the whisper-cli executable. Defaults to whisper-cli on PATH."
+        }
+      },
+      "keywords": {
+        "label": "Flag Keywords",
+        "inputPlaceholder": "Add a keyword...",
+        "helpText": "Detections whose transcription contains any of these words will be flagged for review.",
+        "addButton": "Add",
+        "emptyState": "No keywords added yet. Enter a word above and click Add.",
+        "removeAriaLabel": "Remove keyword \"{keyword}\""
+      },
+      "caseSensitive": {
+        "label": "Case-Sensitive Matching",
+        "helpText": "When enabled, keyword matching distinguishes uppercase from lowercase letters (e.g. \"Fire\" will not match \"fire\")."
+      }
     }
   },
   "restart": {
@@ -5123,7 +4656,9 @@
       "webserver": "Web server / network settings",
       "database": "Database settings",
       "logging": "Logging settings",
-      "tlsCertificate": "TLS certificate"
+      "tlsCertificate": "TLS certificate",
+      "continuousRecording": "Continuous recording settings",
+      "speakerAttributes": "Speaker attribute settings"
     }
   },
   "help": {
@@ -5167,7 +4702,7 @@
       },
       "step2": {
         "title": "Votre méthode d'installation",
-        "description": "Comment vous avez installé BirdNET-Go : script install.sh, Docker Compose, compilation manuelle ou autre."
+        "description": "Comment vous avez installé VoiceWatch : script install.sh, Docker Compose, compilation manuelle ou autre."
       },
       "step3": {
         "title": "Informations système",
@@ -5236,7 +4771,7 @@
       "fetchFailed": "Failed to load diagnostics"
     },
     "export": {
-      "reportTitle": "BirdNET-Go System Health Report",
+      "reportTitle": "VoiceWatch System Health Report",
       "statusLabel": "Status",
       "timeLabel": "Time",
       "durationLabel": "Duration",

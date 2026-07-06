@@ -1,10 +1,10 @@
-// Package middleware provides HTTP middleware components for the BirdNET-Go server.
+// Package middleware provides HTTP middleware components for the VoiceWatch server.
 package middleware
 
 import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 // NewRequestLogger creates a request logging middleware using Echo 4.14.0+ RequestLoggerWithConfig.

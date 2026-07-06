@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/update/manifest"
+	"github.com/tphakala/voicewatch/internal/update/manifest"
 )
 
 // checksumsFilename is the name of the aggregated checksum asset attached to

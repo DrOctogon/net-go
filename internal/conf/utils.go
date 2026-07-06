@@ -19,8 +19,8 @@ import (
 	"time"
 
 	"github.com/spf13/viper"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 // OS name constants for runtime.GOOS comparisons.

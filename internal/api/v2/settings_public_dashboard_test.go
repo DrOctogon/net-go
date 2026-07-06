@@ -25,14 +25,13 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/api/auth"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/datastore/mocks"
-	"github.com/tphakala/birdnet-go/internal/imageprovider"
-	"github.com/tphakala/birdnet-go/internal/notification"
-	"github.com/tphakala/birdnet-go/internal/observability"
-	"github.com/tphakala/birdnet-go/internal/security/securitytest"
-	"github.com/tphakala/birdnet-go/internal/suncalc"
+	"github.com/tphakala/voicewatch/internal/api/auth"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/datastore/mocks"
+	"github.com/tphakala/voicewatch/internal/notification"
+	"github.com/tphakala/voicewatch/internal/observability"
+	"github.com/tphakala/voicewatch/internal/security/securitytest"
+	"github.com/tphakala/voicewatch/internal/suncalc"
 )
 
 // newSettingsAuthTestEnv creates a controller with fully registered routes,
@@ -93,26 +92,18 @@ func newSettingsAuthTestEnvWithNotifier(t *testing.T) (*echo.Echo, *notification
 			Dashboard: conf.Dashboard{
 				SummaryLimit: 42,
 				Thumbnails: conf.Thumbnails{
-					ImageProvider: "avicommons",
-					Summary:       true,
-					Recent:        true,
+					Summary: true,
+					Recent:  true,
 				},
 				Locale: "en",
 			},
 		},
 		Security: securityConfig,
-		BirdNET: conf.BirdNETConfig{
+		VoiceWatch: conf.VoiceWatchConfig{
 			Latitude:  60.1699,
 			Longitude: 24.9384,
 		},
 	}
-
-	mockImageProvider := &MockImageProvider{}
-	mockImageProvider.On("Fetch", mock.Anything).
-		Return(imageprovider.BirdImage{}, nil).Maybe()
-
-	birdImageCache := &imageprovider.BirdImageCache{}
-	birdImageCache.SetImageProvider(mockImageProvider)
 
 	sunCalc := suncalc.NewSunCalc(testHelsinkiLatitude, testHelsinkiLongitude)
 	controlChan := make(chan string, testControlChannelBuf)
@@ -137,7 +128,7 @@ func newSettingsAuthTestEnvWithNotifier(t *testing.T) (*echo.Echo, *notification
 	t.Cleanup(notifService.Stop)
 
 	controller, err := NewWithOptions(
-		e, mockDS, settings, birdImageCache, sunCalc, controlChan, mockMetrics,
+		e, mockDS, settings, sunCalc, controlChan, mockMetrics,
 		true, // initializeRoutes - register full /api/v2 route tree
 		WithAuthMiddleware(authMw.Authenticate),
 		WithAuthService(authService),
@@ -221,17 +212,17 @@ func TestPatchDashboardSettings_RequiresAuth(t *testing.T) {
 
 // TestGetBirdnetSettings_StillRequiresAuth is a regression guard ensuring that
 // exposing /settings/dashboard publicly did not accidentally expose other
-// settings sections. /settings/birdnet remains auth-protected.
+// settings sections. /settings/voicewatch remains auth-protected.
 func TestGetBirdnetSettings_StillRequiresAuth(t *testing.T) {
 	e := newSettingsAuthTestEnv(t)
 
-	req := httptest.NewRequest(http.MethodGet, "/api/v2/settings/birdnet", http.NoBody)
+	req := httptest.NewRequest(http.MethodGet, "/api/v2/settings/voicewatch", http.NoBody)
 	rec := httptest.NewRecorder()
 
 	e.ServeHTTP(rec, req)
 
 	assert.Equal(t, http.StatusUnauthorized, rec.Code,
-		"GET /settings/birdnet must still require auth")
+		"GET /settings/voicewatch must still require auth")
 }
 
 // TestGetAllSettings_StillRequiresAuth guards that the full /settings endpoint

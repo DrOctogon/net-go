@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/tphakala/birdnet-go/internal/conf"
+	"github.com/tphakala/voicewatch/internal/conf"
 )
 
 func TestCurrentSettings_FallsBackToInjected(t *testing.T) {
@@ -13,21 +13,21 @@ func TestCurrentSettings_FallsBackToInjected(t *testing.T) {
 	t.Cleanup(func() { conf.StoreSettings(nil) })
 
 	injected := &conf.Settings{
-		BirdNET: conf.BirdNETConfig{Threshold: 0.42},
+		VoiceWatch: conf.VoiceWatchConfig{Threshold: 0.42},
 	}
 	p := &Processor{Settings: injected}
 
 	got := p.currentSettings()
 	assert.Same(t, injected, got, "should fall back to injected settings when no global settings published")
-	assert.InDelta(t, 0.42, got.BirdNET.Threshold, 0.001)
+	assert.InDelta(t, 0.42, got.VoiceWatch.Threshold, 0.001)
 }
 
 func TestCurrentSettings_ReturnsGlobalWhenPublished(t *testing.T) {
 	injected := &conf.Settings{
-		BirdNET: conf.BirdNETConfig{Threshold: 0.42},
+		VoiceWatch: conf.VoiceWatchConfig{Threshold: 0.42},
 	}
 	global := &conf.Settings{
-		BirdNET: conf.BirdNETConfig{Threshold: 0.99},
+		VoiceWatch: conf.VoiceWatchConfig{Threshold: 0.99},
 	}
 
 	conf.StoreSettings(global)
@@ -37,13 +37,13 @@ func TestCurrentSettings_ReturnsGlobalWhenPublished(t *testing.T) {
 
 	got := p.currentSettings()
 	assert.Same(t, global, got, "should return global settings when published")
-	assert.InDelta(t, 0.99, got.BirdNET.Threshold, 0.001)
+	assert.InDelta(t, 0.99, got.VoiceWatch.Threshold, 0.001)
 }
 
 func TestRecalculateDynamicThresholds_ReadsGlobalSettings(t *testing.T) {
 	// Start with base threshold 0.80
 	initial := &conf.Settings{
-		BirdNET: conf.BirdNETConfig{Threshold: 0.80},
+		VoiceWatch: conf.VoiceWatchConfig{Threshold: 0.80},
 		Realtime: conf.RealtimeSettings{
 			Audio: conf.AudioSettings{
 				Export: conf.ExportSettings{Length: 15, PreCapture: 3},
@@ -70,7 +70,7 @@ func TestRecalculateDynamicThresholds_ReadsGlobalSettings(t *testing.T) {
 
 	// Simulate UI changing threshold to 0.40 via global settings
 	updated := &conf.Settings{
-		BirdNET:  conf.BirdNETConfig{Threshold: 0.40},
+		VoiceWatch:  conf.VoiceWatchConfig{Threshold: 0.40},
 		Realtime: initial.Realtime,
 	}
 	conf.StoreSettings(updated)
@@ -92,7 +92,7 @@ func TestCalculateMinDetections_ReadsGlobalSettings(t *testing.T) {
 		Realtime: conf.RealtimeSettings{
 			FalsePositiveFilter: conf.FalsePositiveFilterSettings{Level: 3},
 		},
-		BirdNET: conf.BirdNETConfig{Overlap: 2.0},
+		VoiceWatch: conf.VoiceWatchConfig{Overlap: 2.0},
 	}
 	p := &Processor{Settings: initial}
 
@@ -103,7 +103,7 @@ func TestCalculateMinDetections_ReadsGlobalSettings(t *testing.T) {
 		Realtime: conf.RealtimeSettings{
 			FalsePositiveFilter: conf.FalsePositiveFilterSettings{Level: 0},
 		},
-		BirdNET: conf.BirdNETConfig{Overlap: 2.0},
+		VoiceWatch: conf.VoiceWatchConfig{Overlap: 2.0},
 	}
 	conf.StoreSettings(updated)
 	t.Cleanup(func() { conf.StoreSettings(nil) })

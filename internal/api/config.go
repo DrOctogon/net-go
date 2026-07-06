@@ -1,4 +1,4 @@
-// Package api provides the HTTP server infrastructure for BirdNET-Go.
+// Package api provides the HTTP server infrastructure for VoiceWatch.
 // This package contains the main server implementation while the JSON API
 // endpoints are organized in the v2 subpackage.
 package api
@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 // GetLogger returns the api package logger.

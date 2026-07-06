@@ -1,4 +1,4 @@
-// Package testutil provides shared test utilities for the BirdNET-Go project.
+// Package testutil provides shared test utilities for the VoiceWatch project.
 // These helpers reduce duplication across test files and ensure consistent test patterns.
 package testutil
 

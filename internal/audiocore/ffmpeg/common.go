@@ -13,7 +13,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/errors"
+	"github.com/tphakala/voicewatch/internal/errors"
 )
 
 // rePathContamination matches URL-like path segments that indicate the FFmpeg

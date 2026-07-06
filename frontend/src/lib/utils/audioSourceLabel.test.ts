@@ -4,8 +4,8 @@ import type { AudioSourceConfig, StreamConfig } from '$lib/stores/settings';
 import type { SourceInfo } from '$lib/types/detection.types';
 
 const soundCards: AudioSourceConfig[] = [
-  { name: 'Front Yard Mic', device: 'hw:CARD=USB,DEV=0', gain: 0, models: ['birdnet'] },
-  { name: '', device: 'hw:CARD=Unnamed,DEV=0', gain: 0, models: ['birdnet'] },
+  { name: 'Front Yard Mic', device: 'hw:CARD=USB,DEV=0', gain: 0, models: ['human_voice'] },
+  { name: '', device: 'hw:CARD=Unnamed,DEV=0', gain: 0, models: ['human_voice'] },
 ];
 
 const rtspStreams: StreamConfig[] = [

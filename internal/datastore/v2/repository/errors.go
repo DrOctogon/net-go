@@ -2,7 +2,7 @@
 // for the normalized database schema.
 package repository
 
-import "github.com/tphakala/birdnet-go/internal/errors"
+import "github.com/tphakala/voicewatch/internal/errors"
 
 // Sentinel errors for repository operations.
 // These typed errors enable callers to distinguish between different

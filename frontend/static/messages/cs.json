@@ -156,7 +156,8 @@
         "falsePositive": "Falešně pozitivní",
         "notReviewed": "Nezkontrolováno",
         "locked": "Uzamčeno",
-        "unlikely": "Nepravděpodobné"
+        "unlikely": "Nepravděpodobné",
+        "flagged": "Flagged"
       },
       "form": {
         "correctDetection": "Správná detekce",
@@ -200,7 +201,7 @@
     "hoursShort": "h"
   },
   "pageTitle": {
-    "settings": "Nastavení – BirdNET-Go",
+    "settings": "Nastavení – VoiceWatch",
     "pageNotFound": "404 – Stránka nenalezena",
     "serverError": "500 – Interní chyba serveru",
     "componentError": "Chyba načítání komponenty",
@@ -236,26 +237,26 @@
     "askQuestion": "Položit dotaz",
     "reportBugAriaLabel": "Nahlásit chybu na GitHubu (otevře se v novém okně)",
     "askQuestionAriaLabel": "Položit dotaz na GitHub Discussions (otevře se v novém okně)",
-    "viewOnGithubAriaLabel": "Zobrazit BirdNET-Go na GitHubu (otevře se v novém okně)",
+    "viewOnGithubAriaLabel": "Zobrazit VoiceWatch na GitHubu (otevře se v novém okně)",
     "health": "Health"
   },
   "about": {
-    "title": "BirdNET-Go",
+    "title": "VoiceWatch",
     "subtitle": "Moderní rozhraní pro detekci a klasifikaci ptačího zpěvu v reálném čase",
-    "logoAlt": "Logo BirdNET-Go",
+    "logoAlt": "Logo VoiceWatch",
     "overview": "Přehled",
-    "overviewText": "BirdNET-Go je implementace v jazyce Go pro detekci a klasifikaci ptačího zpěvu v reálném čase, postavená na základech projektu BirdNET. Aplikace nabízí uživatelsky přívětivé rozhraní pro nepřetržité monitorování a analýzu ptačího zpěvu.",
-    "birdnetProject": "Projekt BirdNET",
-    "birdnetDescription": "BirdNET-Go by nebyl možný bez průkopnické práce projektu BirdNET. Model umělé inteligence, který pohání detekční schopnosti BirdNET-Go, je výsledkem inovativního výzkumu a vývoje projektu BirdNET.",
+    "overviewText": "VoiceWatch je implementace v jazyce Go pro detekci a klasifikaci ptačího zpěvu v reálném čase, postavená na základech projektu VoiceWatch. Aplikace nabízí uživatelsky přívětivé rozhraní pro nepřetržité monitorování a analýzu ptačího zpěvu.",
+    "birdnetProject": "Projekt VoiceWatch",
+    "birdnetDescription": "VoiceWatch by nebyl možný bez průkopnické práce projektu VoiceWatch. Model umělé inteligence, který pohání detekční schopnosti VoiceWatch, je výsledkem inovativního výzkumu a vývoje projektu VoiceWatch.",
     "developedBy": "Vyvinuto",
     "developersText": "K. Lisa Yang Center for Conservation Bioacoustics na Cornell Lab of Ornithology ve spolupráci s Chemnitz University of Technology:",
     "visitBirdnetAnalyzer": "Navštívit projekt BirdNET-Analyzer",
     "visitBirdnetAnalyzerAriaLabel": "Navštívit GitHub repozitář BirdNET-Analyzer",
     "contributors": "Přispěvatelé",
-    "contributorsText": "BirdNET-Go rostl a zlepšoval se díky společnému úsilí mnoha jednotlivců. Jejich příspěvky, od vylepšení kódu až po návrhy funkcí, byly neocenitelné při zlepšování tohoto projektu.",
+    "contributorsText": "VoiceWatch rostl a zlepšoval se díky společnému úsilí mnoha jednotlivců. Jejich příspěvky, od vylepšení kódu až po návrhy funkcí, byly neocenitelné při zlepšování tohoto projektu.",
     "mainDeveloper": "Hlavní vývojář",
     "githubContributors": "Přispěvatelé na GitHubu",
-    "contributorsNote": "Zvláštní poděkování patří těmto přispěvatelům za jejich cennou práci na zlepšování BirdNET-Go:",
+    "contributorsNote": "Zvláštní poděkování patří těmto přispěvatelům za jejich cennou práci na zlepšování VoiceWatch:",
     "communityAcknowledgment": "Poděkování komunitě",
     "communityText": "Rádi bychom také vyjádřili vděčnost všem uživatelům, kteří přispěli prostřednictvím:",
     "bugReports": "Hlášení chyb a sledování problémů",
@@ -264,9 +265,9 @@
     "documentation": "Vylepšení dokumentace",
     "additionalCredits": "Další poděkování",
     "birdnetPiProject": "Projekt BirdNET-Pi",
-    "birdnetPiDescription": "Zvláštní poděkování patří Patricku McGuireovi za jeho inspirativní práci na BirdNET-Pi, která ovlivnila vývoj BirdNET-Go. BirdNET-Pi ukazuje potenciál detekce ptačího zpěvu na vestavěných zařízeních a nastavil vysoký standard pro vývoj řízený komunitou.",
+    "birdnetPiDescription": "Zvláštní poděkování patří Patricku McGuireovi za jeho inspirativní práci na BirdNET-Pi, která ovlivnila vývoj VoiceWatch. BirdNET-Pi ukazuje potenciál detekce ptačího zpěvu na vestavěných zařízeních a nastavil vysoký standard pro vývoj řízený komunitou.",
     "visitBirdnetPi": "Navštívit projekt BirdNET-Pi",
-    "labelTranslations": "Překlady štítků BirdNET",
+    "labelTranslations": "Překlady štítků VoiceWatch",
     "labelTranslationsBy": "Poskytl Patrick Levin pro projekt BirdNET-Pi od Patricka McGuirea",
     "patrickLevinGithub": "GitHub Patricka Levina",
     "versionInformation": "Informace o verzi",
@@ -275,12 +276,12 @@
     "developmentBuild": "Vývojové sestavení",
     "unknown": "Neznámé",
     "licenseInformation": "Informace o licenci",
-    "licenseText": "Model BirdNET AI i BirdNET-Go jsou licencovány pod",
+    "licenseText": "Model VoiceWatch AI i VoiceWatch jsou licencovány pod",
     "ccLicense": "Creative Commons Uveďte původ-Neužívejte komerčně-Zachovejte licenci 4.0 Mezinárodní licence",
     "licenseDescription": "Tato licence umožňuje ostatním upravovat, přizpůsobovat a stavět na tomto díle nekomerčně, pokud je uveden patřičný kredit a nová díla jsou licencována pod stejnými podmínkami.",
     "dependencyLicenses": "Licence závislostí",
     "taxonomyDataTitle": "Taxonomická data",
-    "taxonomyDataIntro": "BirdNET-Go obsahuje vestavěná data o taxonomii ptáků odvozená z eBird/Clements Checklist, což umožňuje rychlé lokální vyhledávání rodů a čeledí.",
+    "taxonomyDataIntro": "VoiceWatch obsahuje vestavěná data o taxonomii ptáků odvozená z eBird/Clements Checklist, což umožňuje rychlé lokální vyhledávání rodů a čeledí.",
     "source": "Zdroj",
     "ebirdApiV2": "eBird API v2",
     "copyright": "Autorská práva",
@@ -290,10 +291,10 @@
     "ebirdOrg": "eBird.org",
     "learnEbirdTaxonomy": "Dozvědět se o taxonomii eBird",
     "avicommonsTitle": "Náhledy ptáků",
-    "avicommonsDescription": "BirdNET-Go používá vybrané obrázky ptáků z Avicommons, knihovny ručně vybraných, oříznutých a orientovaných fotografií ptáků licencovaných pod licencemi Creative Commons.",
-    "githubStarPrompt": "Pokud považujete BirdNET-Go za užitečný, zvažte přidání hvězdičky projektu na GitHubu. Hvězdičky pomáhají ostatním objevit tento projekt a podporují jeho další vývoj.",
+    "avicommonsDescription": "VoiceWatch používá vybrané obrázky ptáků z Avicommons, knihovny ručně vybraných, oříznutých a orientovaných fotografií ptáků licencovaných pod licencemi Creative Commons.",
+    "githubStarPrompt": "Pokud považujete VoiceWatch za užitečný, zvažte přidání hvězdičky projektu na GitHubu. Hvězdičky pomáhají ostatním objevit tento projekt a podporují jeho další vývoj.",
     "viewOnGithub": "Zobrazit projekt na GitHubu",
-    "visitGithubAriaLabel": "Navštívit GitHub repozitář BirdNET-Go",
+    "visitGithubAriaLabel": "Navštívit GitHub repozitář VoiceWatch",
     "visitAvicommonsGithub": "Navštívit GitHub repozitář Avicommons"
   },
   "notifications": {
@@ -362,11 +363,11 @@
     },
     "content": {
       "startup": {
-        "title": "BirdNET-Go spuštěn",
+        "title": "VoiceWatch spuštěn",
         "message": "Aplikace úspěšně spuštěna (v{version})"
       },
       "shutdown": {
-        "title": "BirdNET-Go se vypíná",
+        "title": "VoiceWatch se vypíná",
         "message": "Aplikace se řádně vypíná"
       },
       "detection": {
@@ -396,7 +397,6 @@
         "rebuildingRangeFilter": "Přestavuji filtr výskytu druhů…",
         "updatingIntervals": "Aktualizuji intervaly detekce…",
         "reconfiguringMqtt": "Aktualizuji připojení MQTT…",
-        "reconfiguringBirdweather": "Aktualizuji integraci BirdWeather…",
         "reconfiguringStreams": "Aktualizuji audio streamy…",
         "reconfiguringTelemetry": "Aktualizuji nastavení telemetrie…",
         "reconfiguringPushNotifications": "Překonfiguruji poskytovatele push oznámení…",
@@ -423,7 +423,7 @@
         "cancelledTitle": "Migrace databáze zrušena",
         "cancelledMessage": "Migrace databáze byla zrušena. Novou migraci můžete kdykoli spustit v nastavení databáze.",
         "completedTitle": "Migrace databáze dokončena",
-        "completedMessage": "Migrace dokončena. Pro přepnutí na novou databázi restartujte BirdNET-Go.",
+        "completedMessage": "Migrace dokončena. Pro přepnutí na novou databázi restartujte VoiceWatch.",
         "errorTitle": "Chyba migrace databáze",
         "errorMessage": "Migrace pozastavena kvůli chybám. Zkontrolujte logy a zkuste pokračovat."
       },
@@ -435,7 +435,7 @@
       },
       "buffer": {
         "overloadTitle": "Analýza zvuku přetížena",
-        "overloadMessage": "Váš systém zahazuje {dropRate} % zvukových vzorků ze zdroje ''{sourceName}'', protože nestíhá analýzu. Snižte hodnotu překryvu BirdNET v nastavení detekce nebo zvažte výkonnější procesor."
+        "overloadMessage": "Váš systém zahazuje {dropRate} % zvukových vzorků ze zdroje ''{sourceName}'', protože nestíhá analýzu. Snižte hodnotu překryvu VoiceWatch v nastavení detekce nebo zvažte výkonnější procesor."
       },
       "ort": {
         "unavailableTitle": "ONNX Runtime není k dispozici",
@@ -476,9 +476,6 @@
     "noResultsFound": "Nebyly nalezeny žádné výsledky",
     "noResultsHint": "Zkuste upravit filtry vyhledávání",
     "fields": {
-      "species": "Druh",
-      "speciesPlaceholder": "Zadejte název druhu",
-      "speciesHelp": "Zadejte celý nebo částečný název druhu (nerozlišují se malá a velká písmena)",
       "dateRange": "Rozsah dat",
       "dateRangeHelp": "Filtrovat detekce podle rozsahu dat (ponechte prázdné pro všechna data)",
       "from": "Od",
@@ -489,7 +486,14 @@
       "verifiedStatus": "Stav ověření",
       "lockedStatus": "Stav uzamčení",
       "timeOfDay": "Denní doba",
-      "source": "Zdroj zvuku"
+      "source": "Zdroj zvuku",
+      "transcript": "Transcript",
+      "transcriptHelp": "Search for spoken words in the voice clip transcript (case-insensitive substring match)",
+      "transcriptPlaceholder": "Search transcript...",
+      "flaggedOnly": "Flagged only",
+      "flaggedOnlyHelp": "Limit results to detections whose transcript matched a configured keyword",
+      "gender": "Speaker gender",
+      "ageBand": "Speaker age"
     },
     "advancedFilters": "Pokročilé filtry",
     "showAdvancedFilters": "Zobrazit pokročilé filtry",
@@ -563,6 +567,9 @@
       "page": "Stránka {current} z {total}",
       "goToPrevious": "Přejít na předchozí stránku",
       "goToNext": "Přejít na další stránku"
+    },
+    "speakerOptions": {
+      "any": "Any"
     }
   },
   "error": {
@@ -599,18 +606,6 @@
       "empty": "Vše je v klidu — momentálně nejsou detekováni žádní ptáci"
     },
     "rejected": "Zamítnuto",
-    "newSpeciesHighlights": {
-      "title": "Nové a vracející se druhy",
-      "subtitle": "První pozorování a nedávné návraty",
-      "trackingDisabled": "Chcete-li tuto funkci používat, aktivujte „Povolit sledování druhů“.",
-      "categoryLifetime": "Nový druh",
-      "categoryYear": "Nový letos",
-      "categorySeason": "Nový tuto sezónu",
-      "categorySeasonNamed": "Nový toto {season}",
-      "maxConfidenceShort": "Max {confidence} %",
-      "detections": "{count, plural, one {# detekce} few {# detekce} other {# detekcí}}",
-      "lastSeen": "Naposledy: {days, plural, =0 {dnes} one {před # dnem} few {před # dny} other {před # dny}}"
-    },
     "dailySummary": {
       "title": "Denní aktivita",
       "subtitle": "Detekce druhů podle hodin",
@@ -666,7 +661,6 @@
         "species": "Druh",
         "weather": "Počasí",
         "confidence": "Spolehlivost",
-        "thumbnail": "Náhled",
         "status": "Stav",
         "recording": "Nahrávka",
         "actions": "Akce"
@@ -695,8 +689,6 @@
         "markCorrect": "Správně",
         "markFalsePositive": "Nesprávně",
         "review": "Zkontrolovat detekci",
-        "showSpecies": "Zobrazovat druh",
-        "ignoreSpecies": "Ignorovat druh",
         "lockDetection": "Uzamknout detekci",
         "unlockDetection": "Odemknout detekci",
         "deleteDetection": "Odstranit detekci"
@@ -777,15 +769,30 @@
     "elements": {
       "banner": "Banner Dashboardu",
       "dailySummary": "Denní souhrn",
-      "newSpeciesHighlights": "Nové druhy – přehled",
       "currentlyHearing": "Právě slyšíme",
       "detectionsGrid": "Nedávné detekce",
       "liveSpectrogram": "Živý spektrogram",
-      "videoEmbed": "Vložené video"
+      "videoEmbed": "Vložené video",
+      "voiceActivity": "Voice Activity"
+    },
+    "voiceActivity": {
+      "title": "Voice Activity",
+      "subtitle": "Detections by hour — today",
+      "chartAriaLabel": "Bar chart of voice detections per hour for today",
+      "loading": "Loading voice activity...",
+      "empty": "No voice detections today",
+      "errors": {
+        "load": "Failed to load voice activity data"
+      },
+      "bar": {
+        "tooltip": "{count} detection(s) at {hour}:00"
+      }
     }
   },
   "detections": {
     "title": "Detekce",
+    "humanVoice": "Human Voice",
+    "flaggedByKeywords": "Flagged by keywords: {keywords}",
     "titles": {
       "hourly": "Hodinové výsledky pro {hour}:00 dne {date}",
       "hourlyRange": "Hodinové výsledky od {startHour}:00 do {endHour}:00 dne {date}",
@@ -794,12 +801,16 @@
       "allDetections": "Všechny detekce ze dne {date}"
     },
     "detail": {
-      "species": "Druh",
       "observation": "Pozorování",
+      "transcript": {
+        "title": "Transcript",
+        "matchedKeywords": "Matched keywords",
+        "flaggedNotice": "Flagged by keyword",
+        "empty": "No transcript available"
+      },
       "aria": {
         "downloadAudioClip": "Download audio clip for {name} detection",
         "audioRecordingFor": "Audio recording and spectrogram for {name}",
-        "scientificName": "Vědecký název",
         "classificationBadges": "Odznaky klasifikace druhu",
         "confidence": "Spolehlivost detekce {confidence}%",
         "metadata": "Metadata detekce",
@@ -809,8 +820,7 @@
         "commentTimestamp": "Časové razítko komentáře",
         "mainRegion": "Podrobnosti detekce",
         "tabsHeading": "Karty s informacemi o detekci",
-        "tabList": "Karty podrobností detekce",
-        "speciesHeadingSuffix": "podrobnosti detekce"
+        "tabList": "Karty podrobností detekce"
       }
     },
     "headers": {
@@ -819,7 +829,6 @@
       "source": "Zdroj",
       "species": "Druh",
       "confidence": "Spolehlivost",
-      "thumbnail": "Náhled",
       "status": "Stav",
       "recording": "Nahrávka",
       "actions": "Akce"
@@ -936,6 +945,7 @@
         "unknown": "Neznámé"
       }
     },
+    "noTranscript": "(no transcript)",
     "row": {
       "viewDetails": "Zobrazit podrobnosti pro {species}",
       "play": "Přehrát",
@@ -974,9 +984,7 @@
       "loading": "Načítání podrobností detekce…",
       "loaded": "Podrobnosti detekce načteny pro {species}",
       "error": "Chyba při načítání detekce: {error}",
-      "loadingResults": "Načítání {count} výsledků...",
-      "thumbnailLoading": "Načítání náhledu {species}...",
-      "thumbnailLoaded": "Náhled {species} načten"
+      "loadingResults": "Načítání {count} výsledků..."
     },
     "errors": {
       "notFound": "Detekce nebyla nalezena. Možná byla odstraněna nebo je ID nesprávné.",
@@ -986,45 +994,34 @@
       "loadFailed": "Nepodařilo se načíst detekci (chyba {status}). Zkuste stránku obnovit.",
       "noIdProvided": "Nebylo poskytnuto žádné ID detekce.",
       "fetchFailed": "Nepodařilo se načíst detekce"
+    },
+    "speaker": {
+      "sectionLabel": "Estimated speaker",
+      "genderAria": "Estimated speaker gender",
+      "ageAria": "Estimated speaker age",
+      "gender": {
+        "male": "Male",
+        "female": "Female",
+        "unknown": "Unknown"
+      },
+      "age": {
+        "child": "Child",
+        "teen": "Teen",
+        "adult": "Adult",
+        "senior": "Senior"
+      }
     }
   },
   "species": {
-    "rarity": {
-      "title": "Vzácnost druhu",
-      "score": "Skóre",
-      "basedOnLocation": "Na základě polohy: {latitude}, {longitude}",
-      "statuses": {
-        "very_common": "Velmi běžný",
-        "common": "Běžný",
-        "uncommon": "Méně častý",
-        "rare": "Vzácný",
-        "very_rare": "Velmi vzácný",
-        "unknown": "Neznámý"
-      }
-    },
-    "taxonomy": {
-      "hierarchy": "Taxonomická klasifikace",
-      "subspecies": "Poddruh",
-      "noData": "Taxonomická data nejsou k dispozici.",
-      "labels": {
-        "kingdom": "Říše",
-        "phylum": "Kmen",
-        "class": "Třída",
-        "order": "Řád",
-        "family": "Čeleď",
-        "genus": "Rod",
-        "species": "Druh"
-      }
-    },
     "synonyms": {
       "tabLabel": "Taxonomická synonyma",
-      "description": "Přepsat mapování vědeckých názvů používaných pro vyhledávání obrázků ptáků. BirdNET používá taxonomii 2021E, ale zdroje obrázků mohou používat aktualizované názvy. Vestavěná mapování jsou vždy načtena; vaše přepisy je doplňují nebo nahrazují.",
-      "birdnetName": "Název BirdNET",
+      "description": "Přepsat mapování vědeckých názvů používaných pro vyhledávání obrázků ptáků. VoiceWatch používá taxonomii 2021E, ale zdroje obrázků mohou používat aktualizované názvy. Vestavěná mapování jsou vždy načtena; vaše přepisy je doplňují nebo nahrazují.",
+      "birdnetName": "Název VoiceWatch",
       "updatedName": "Aktualizovaný název",
       "addButton": "Přidat synonymum",
       "emptyState": "Nejsou nakonfigurována žádná vlastní taxonomická synonyma.",
       "errors": {
-        "unknownSpecies": "Druh nebyl nalezen ve štítcích BirdNET",
+        "unknownSpecies": "Druh nebyl nalezen ve štítcích VoiceWatch",
         "duplicateKey": "Synonymum pro tento druh již existuje",
         "emptyUpdatedName": "Aktualizovaný název je povinný"
       }
@@ -1133,7 +1130,7 @@
         "process": "Proces"
       },
       "showAll": "Zobrazit všechny procesy",
-      "showBirdnetOnly": "Zobrazit pouze BirdNET",
+      "showBirdnetOnly": "Zobrazit pouze VoiceWatch",
       "table": {
         "process": "Proces",
         "status": "Stav",
@@ -1311,9 +1308,9 @@
       "migration": {
         "title": "Migrace databáze",
         "description": "Migrovat z původního schématu na normalizované schéma v2",
-        "requiredNote": "Migrace databáze je nutná pro nadcházející funkce BirdNET-Go, které se spoléhají na nové normalizované schéma databáze. Nové funkce nebudou k dispozici, dokud migrace neproběhne.",
+        "requiredNote": "Migrace databáze je nutná pro nadcházející funkce VoiceWatch, které se spoléhají na nové normalizované schéma databáze. Nové funkce nebudou k dispozici, dokud migrace neproběhne.",
         "completedTitle": "Migrace dokončena",
-        "completedNote": "Vaše databáze byla úspěšně migrována na nové schéma. Restartujte BirdNET-Go pro přepnutí na novou databázi. Poznámka: Nová databáze je menší, protože ukládá data efektivněji – to je očekávané a všechna vaše data jsou zachována.",
+        "completedNote": "Vaše databáze byla úspěšně migrována na nové schéma. Restartujte VoiceWatch pro přepnutí na novou databázi. Poznámka: Nová databáze je menší, protože ukládá data efektivněji – to je očekávané a všechna vaše data jsou zachována.",
         "starting": "Zahajuje se migrace...",
         "status": {
           "idle": "Připraveno ke spuštění",
@@ -1834,19 +1831,6 @@
           "axisDate": "Datum",
           "axisUniqueSpecies": "Unikátní druhy"
         },
-        "accumulation": {
-          "title": "Species Accumulation Curve",
-          "description": "Cumulative number of distinct species detected within the selected period. The curve climbs as new species appear and flattens toward an asymptote once the common ones have been recorded; a still-rising tail means more species are likely waiting to be found.",
-          "noData": "No species accumulation data available",
-          "noDataHint": "Select a wider date range to watch the species list build up over time",
-          "ariaLabel": "Species accumulation curve: cumulative distinct species detected over the period",
-          "axisDate": "Date",
-          "axisSpecies": "Cumulative species",
-          "totalSpecies": "{species} species",
-          "tooltipCumulative": "Cumulative species",
-          "tooltipNew": "New in period",
-          "summary": "Cumulative species accumulation across {days} days, reaching {species} distinct species by the end of the period."
-        },
         "yearOverYear": {
           "title": "Year-over-Year Tracker",
           "description": "Cumulative detections so far this year versus the same calendar dates last year. The shaded band is the running gap between the two; this year's line sitting above last year's means you are ahead of last year's pace.",
@@ -1859,20 +1843,6 @@
           "legendLast": "{year} (last year)",
           "tooltipDelta": "Difference",
           "summary": "Year over year: by {monthDay}, {currentYear} has {thisYear} cumulative detections versus {lastYear} for {previousYear} (a difference of {delta})."
-        },
-        "phenology": {
-          "title": "Arrival & Departure Phenology",
-          "description": "First and last detection of each species within the selected period, drawn as residency bars for the most-detected species. Read it top to bottom in arrival order to see who shows up first and who lingers latest across the season.",
-          "noData": "No phenology data available",
-          "noDataHint": "Select a wider date range to see when species arrive and depart",
-          "ariaLabel": "Arrival and departure phenology: residency bars showing each species' first-to-last detection span",
-          "axisDate": "Date",
-          "summary": "Arrival and departure residency spans for {species} species across the selected period.",
-          "tooltipFirst": "First detected",
-          "tooltipLast": "Last detected",
-          "tooltipResidency": "Residency",
-          "tooltipCount": "Detections",
-          "residencyDays": "{days} days"
         },
         "heatmap": {
           "title": "Seasonal Activity Heatmap",
@@ -1889,13 +1859,8 @@
           "summary": "{total} detections across {days} days. Busiest around {time} on {date}."
         },
         "ridgeline": {
-          "title": "Who Sings When",
-          "description": "Hour-of-day activity for the most-detected species, sorting dawn singers from all-day and nocturnal birds",
-          "noData": "No species activity data available",
-          "noDataHint": "Select a wider date range to compare species activity patterns",
           "ariaLabel": "Who-sings-when ridgeline: hour-of-day activity distribution per species",
           "axisTime": "Time of Day",
-          "note": "Showing the top {count} species by detection volume",
           "tooltipDetections": "Detections",
           "tooltipPeak": "Peak",
           "summary": "Hour-of-day activity for {count} species. Most active: {species} around {time}."
@@ -1990,7 +1955,7 @@
     }
   },
   "settings": {
-    "title": "Nastavení – BirdNET-Go",
+    "title": "Nastavení – VoiceWatch",
     "loading": "Načítají se nastavení...",
     "sections": {
       "analysis": "Analýza",
@@ -2047,20 +2012,20 @@
           "description": "Konfigurace hlavních nastavení aplikace"
         },
         "birdnet": {
-          "title": "Nastavení BirdNET",
-          "description": "Konfigurace nastavení specifických pro model BirdNET AI"
+          "title": "Nastavení VoiceWatch",
+          "description": "Konfigurace nastavení specifických pro model VoiceWatch AI"
         },
         "ui": {
           "title": "Nastavení uživatelského rozhraní",
           "description": "Přizpůsobení uživatelského rozhraní"
         },
         "customClassifier": {
-          "title": "Vlastní klasifikátor BirdNET",
-          "description": "Konfigurace vlastního modelu BirdNET a souborů štítků pro specializovanou detekci",
+          "title": "Vlastní klasifikátor VoiceWatch",
+          "description": "Konfigurace vlastního modelu VoiceWatch a souborů štítků pro specializovanou detekci",
           "modelPath": {
             "label": "Cesta k modelu (vyžaduje restart pro aplikaci změn)",
             "placeholder": "Cesta k souboru modelu",
-            "helpText": "Cesta k externímu souboru modelu BirdNET. Zadejte absolutní nebo relativní cestu k binárce birdnet-go. Ponechte prázdné pro použití výchozího vestavěného modelu."
+            "helpText": "Cesta k externímu souboru modelu VoiceWatch. Zadejte absolutní nebo relativní cestu k binárce birdnet-go. Ponechte prázdné pro použití výchozího vestavěného modelu."
           },
           "labelPath": {
             "label": "Cesta ke štítkům (vyžaduje restart pro aplikaci změn)",
@@ -2072,7 +2037,7 @@
           "title": "Dynamický práh",
           "description": "Automaticky upravovat citlivost detekce na základě předchozích pozorování",
           "enable": {
-            "label": "Povolit dynamický práh (funkce specifická pro BirdNET-Go)",
+            "label": "Povolit dynamický práh (funkce specifická pro VoiceWatch)",
             "helpText": "Povolí funkci dynamického prahu spolehlivosti pro adaptivnější detekci ptačího zpěvu."
           },
           "trigger": {
@@ -2118,8 +2083,6 @@
           "warningOff": "Při vypnutém filtrování je každá detekce nad prahem spolehlivosti okamžitě přijata. To obvykle vede k několika falešným detekcím denně. I mírné filtrování výrazně zlepšuje kvalitu výsledků."
         },
         "rangeFilter": {
-          "title": "Filtr výskytu",
-          "description": "Omezit detekci na druhy pravděpodobné ve vašem geografickém regionu",
           "stationLocation": {
             "label": "Poloha stanice",
             "helpText": "Poloha stanice, používaná pro data o počasí a k omezení druhů ptáků na ty, které jsou v regionu pravděpodobné."
@@ -2131,33 +2094,6 @@
           "longitude": {
             "label": "Zeměpisná délka",
             "helpText": "Zeměpisná délka stanice, používaná pro data o počasí a filtrování výskytu druhů."
-          },
-          "model": {
-            "label": "Model filtru výskytu",
-            "helpText": "Verze modelu filtru výskytu BirdNET: nejnovější (latest) nebo původní (legacy)."
-          },
-          "threshold": {
-            "label": "Práh",
-            "helpText": "Řídí, které druhy jsou zahrnuty na základě pravděpodobnosti jejich výskytu pro vaši polohu a roční období. Pro většinu uživatelů se doporučuje výchozí hodnota (0.01). Vyšší hodnoty (0.05–0.3) zahrnují méně druhů s vyšší pravděpodobností výskytu. Velmi vysoké hodnoty (0.5+) zahrnují pouze nejběžnější druhy."
-          },
-          "speciesCount": {
-            "label": "Aktuální počet druhů",
-            "helpText": "Počet druhů zahrnutých ve filtru výskytu. Aktualizuje se automaticky při změně prahu, zeměpisné šířky nebo délky.",
-            "loading": "Načítání...",
-            "viewSpecies": "Zobrazit druhy"
-          },
-          "downloadTitle": "Stáhnout seznam druhů jako CSV",
-          "csvDownloaded": "Seznam druhů byl úspěšně stažen",
-          "csvDownloadFailed": "Nepodařilo se stáhnout seznam druhů. Zkuste to znovu.",
-          "modal": {
-            "title": "Druhy filtru výskytu",
-            "speciesCount": "Počet druhů:",
-            "threshold": "Práh:",
-            "latitude": "Zeměpisná šířka:",
-            "longitude": "Zeměpisná délka:",
-            "loadingSpecies": "Načítají se druhy...",
-            "noSpeciesFound": "S aktuálním nastavením nebyly nalezeny žádné druhy",
-            "close": "Zavřít"
           }
         },
         "database": {
@@ -2285,18 +2221,6 @@
               "recent": {
                 "label": "Zobrazit náhledy v seznamu nedávných detekcí",
                 "helpText": "Povolte zobrazení náhledů detekovaných druhů v seznamu nedávných detekcí"
-              },
-              "imageProvider": {
-                "label": "Poskytovatel obrázků",
-                "helpText": "Vyberte preferovaného poskytovatele obrázků pro náhledy ptáků"
-              },
-              "fallbackPolicy": {
-                "label": "Záložní politika",
-                "helpText": "Vyberte, co se stane, když preferovaný poskytovatel obrázek nenajde",
-                "options": {
-                  "all": "Vyzkoušet všechny poskytovatele postupně",
-                  "none": "Použít pouze vybraného poskytovatele"
-                }
               }
             },
             "spectrogram": {
@@ -2385,10 +2309,6 @@
       },
       "errors": {
         "localesLoadFailed": "Nepodařilo se načíst možnosti jazyka. Používají se výchozí nastavení.",
-        "providersLoadFailed": "Nepodařilo se načíst poskytovatele obrázků. Používají se výchozí nastavení.",
-        "rangeFilterTestFailed": "Nepodařilo se otestovat nastavení filtru výskytu",
-        "rangeFilterLoadFailed": "Nepodařilo se načíst seznam druhů",
-        "rangeFilterCountFailed": "Nepodařilo se načíst počet druhů",
         "mapLibraryLoadFailed": "Nepodařilo se načíst knihovnu map. Obnovte stránku.",
         "mapLoadFailed": "Nepodařilo se načíst mapu. Zkuste obnovit stránku.",
         "modalMapLoadFailed": "Nepodařilo se načíst modální mapu. Zkuste okno zavřít a znovu otevřít.",
@@ -2399,7 +2319,7 @@
       "sections": {
         "telemetry": {
           "title": "Sledování chyb a telemetrie",
-          "description": "Volitelné sledování chyb, které pomáhá zlepšovat spolehlivost a výkon BirdNET-Go"
+          "description": "Volitelné sledování chyb, které pomáhá zlepšovat spolehlivost a výkon VoiceWatch"
         },
         "diagnostics": {
           "title": "Podpora a diagnostika",
@@ -2411,7 +2331,7 @@
         "privacyPoints": {
           "noPersonalData": "Neshromažďují se žádná osobní data",
           "anonymousData": "Všechna telemetrická data jsou anonymní",
-          "helpImprove": "Telemetrická data pomáhají vývojářům identifikovat a opravovat problémy v BirdNET-Go"
+          "helpImprove": "Telemetrická data pomáhají vývojářům identifikovat a opravovat problémy v VoiceWatch"
         },
         "enableTracking": "Povolit sledování chyb (opt-in)"
       },
@@ -2568,7 +2488,7 @@
       },
       "systemInfo": {
         "howToView": "Jak zobrazit oznámení:",
-        "technicalDetails": "Technické podrobnosti o oznámeních v BirdNET-Go:"
+        "technicalDetails": "Technické podrobnosti o oznámeních v VoiceWatch:"
       },
       "privacy": {
         "title": "Upozornění o ochraně osobních údajů pro externí webhooky",
@@ -2862,63 +2782,16 @@
         "confidenceLabel": "Práh spolehlivosti pro detekci lidí",
         "confidenceHelp": "Nastavte úroveň spolehlivosti pro detekci lidského hlasu, nižší hodnota dělá filtr citlivějším"
       },
-      "falsePositivePrevention": {
-        "title": "Prevence falešně pozitivních detekcí",
-        "description": "Konfigurace filtrů falešných detekcí",
-        "enableDogBark": "Povolit filtr psího štěkání",
-        "disabled": "Filtr psího štěkání je vypnutý",
-        "confidenceLabel": "Práh spolehlivosti",
-        "confidenceHelp": "Nastavte úroveň spolehlivosti pro detekci psího štěkání, nižší hodnota dělá filtr citlivějším",
-        "expireTimeLabel": "Doba platnosti psího štěkání (minuty)",
-        "expireTimeHelp": "Nastavte, jak dlouho si má systém pamatovat detekované psí štěkání",
-        "addDogBarkSpeciesLabel": "Přidat druhy zaměnitelné se štěkáním",
-        "addDogBarkSpeciesHelp": "Vyhledejte a přidejte druhy, které by mohly být zaměněny s psím štěkáním",
-        "addSpeciesButton": "Přidat"
-      },
-      "speciesNamePlaceholder": "Název druhu",
-      "typeSpeciesName": "Zadejte název druhu...",
-      "dogBarkSpeciesList": "Seznam druhů zaměnitelných se štěkáním",
       "daylightFilter": {
         "title": "Filtr denního světla",
         "description": "Odfiltrovat detekce nočních druhů během denního světla. Používá hranice občanského úsvitu/soumraku z vaší nakonfigurované polohy.",
         "enable": "Povolit filtr denního světla",
         "disabled": "Filtr denního světla je vypnutý",
         "offsetLabel": "Posun okna denního světla (hodiny)",
-        "offsetHelp": "Upraví okno denního světla. Kladné hodnoty jej zmenšují (tolerantnější, např. +1 = začíná 1 h po úsvitu). Záporné hodnoty jej rozšiřují (přísnější, např. -1 = začíná 1 h před úsvitem).",
-        "speciesListLabel": "Seznam nočních druhů",
-        "addSpeciesLabel": "Přidat noční druh",
-        "addSpeciesHelp": "Vyhledejte a přidejte druhy, rody, čeledi nebo řády k filtrování během dne. Výchozí: Strigiformes (všechny sovy). Poznámka: prázdný seznam vypne filtrování nočních druhů během dne."
-      },
-      "errors": {
-        "speciesLoadFailed": "Nepodařilo se načíst seznam druhů. Zkuste to znovu."
+        "offsetHelp": "Upraví okno denního světla. Kladné hodnoty jej zmenšují (tolerantnější, např. +1 = začíná 1 h po úsvitu). Záporné hodnoty jej rozšiřují (přísnější, např. -1 = začíná 1 h před úsvitem)."
       }
     },
     "integration": {
-      "birdweather": {
-        "title": "BirdWeather",
-        "description": "Nahrávat detekce do BirdWeather",
-        "ffmpegWarning": {
-          "title": "FFmpeg nebyl nalezen",
-          "message": "Nainstalujte prosím FFmpeg pro povolení podpory kódování FLAC. BirdWeather ukončuje podporu nahrávání WAV ve prospěch komprimovaných zvukových souborů FLAC."
-        },
-        "enable": "Povolit nahrávání do BirdWeather",
-        "token": {
-          "label": "Token BirdWeather",
-          "helpText": "Váš jedinečný token BirdWeather."
-        },
-        "threshold": {
-          "label": "Práh nahrávání",
-          "helpText": "Minimální práh jistoty pro nahrávání predikcí do BirdWeather."
-        },
-        "test": {
-          "button": "Otestovat připojení k BirdWeather",
-          "loading": "Testuje se...",
-          "enabledRequired": "Pro testování musí být BirdWeather povolen",
-          "tokenRequired": "Musí být zadán token BirdWeather",
-          "inProgress": "Test probíhá...",
-          "description": "Otestovat připojení k BirdWeather"
-        }
-      },
       "mqtt": {
         "title": "MQTT",
         "description": "Konfigurace připojení k MQTT brokeru",
@@ -2971,14 +2844,14 @@
         "homeAssistant": {
           "title": "Automatické zjišťování Home Assistant",
           "enable": "Povolit zjišťování MQTT pro Home Assistant",
-          "description": "Když je povoleno, BirdNET-Go automaticky registruje zařízení a senzory v Home Assistant prostřednictvím protokolu zjišťování MQTT. Zařízení se objeví v registru zařízení Home Assistant bez nutnosti ruční konfigurace YAML.",
+          "description": "Když je povoleno, VoiceWatch automaticky registruje zařízení a senzory v Home Assistant prostřednictvím protokolu zjišťování MQTT. Zařízení se objeví v registru zařízení Home Assistant bez nutnosti ruční konfigurace YAML.",
           "discoveryPrefix": {
             "label": "Prefix zjišťování",
             "helpText": "Prefix MQTT tématu pro zprávy o zjišťování Home Assistant. Výchozí hodnota je 'homeassistant'. Toto změňte pouze tehdy, pokud jste v Home Assistant nakonfigurovali vlastní prefix zjišťování."
           },
           "deviceName": {
             "label": "Název zařízení",
-            "helpText": "Základní název zařízení, jak se zobrazují v Home Assistant. Každý zdroj zvuku bude mít své vlastní zařízení propojené s tímto hlavním zařízením BirdNET-Go."
+            "helpText": "Základní název zařízení, jak se zobrazují v Home Assistant. Každý zdroj zvuku bude mít své vlastní zařízení propojené s tímto hlavním zařízením VoiceWatch."
           },
           "sensorsNote": "<strong>Vytvořené senzory:</strong> Pro každý zdroj zvuku Home Assistant obdrží: Poslední druh, Jistotu, Vědecký název a Úroveň zvuku (pokud je povolena). Můstkové zařízení obsahuje stav dostupnosti online/offline.",
           "discovery": {
@@ -3003,7 +2876,7 @@
       },
       "observability": {
         "title": "Pozorovatelnost (Observability)",
-        "description": "Sledujte výkon BirdNET-Go a metriky detekce ptáků prostřednictvím endpointu kompatibilního s Prometheus",
+        "description": "Sledujte výkon VoiceWatch a metriky detekce ptáků prostřednictvím endpointu kompatibilního s Prometheus",
         "enable": "Povolit integraci pozorovatelnosti",
         "disabled": "Integrace pozorovatelnosti není povolena",
         "listenAddress": {
@@ -3091,33 +2964,6 @@
         "responseStreamFailed": "Nepodařilo se přečíst stream odpovědi",
         "configurationCheck": "Kontrola konfigurace",
         "testStageFallback": "Fáze testu"
-      },
-      "ebird": {
-        "title": "eBird",
-        "description": "Připojení k taxonomické databázi eBird pro obohacená data o druzích včetně taxonomické klasifikace a informací o poddruzích.",
-        "enable": "Povolit integraci eBird",
-        "enabledRequired": "Integrace eBird není povolena",
-        "apiKey": {
-          "label": "API klíč eBird",
-          "helpText": "Váš API klíč eBird. Získejte ho na portálu API eBird."
-        },
-        "locale": {
-          "label": "Jazyk názvů druhů"
-        },
-        "cacheTTL": {
-          "label": "Doba platnosti cache (hodiny)",
-          "helpText": "Jak dlouho uchovávat taxonomická data z eBird ve vyrovnávací paměti. Taxonomie se mění zřídka, proto delší doby cache snižují počet volání API."
-        },
-        "note": "eBird poskytuje taxonomická data používaná pro klasifikaci druhů a analýzy. API klíč je zdarma a dostupný z Cornell Lab of Ornithology.",
-        "apiKeyInfo": "Pro použití této integrace je potřeba osobní API klíč eBird. Bezplatný klíč si můžete vyžádat na <a href=\"https://ebird.org/api/keygen\" class=\"link link-primary\" target=\"_blank\" rel=\"noopener noreferrer\">ebird.org/api/keygen</a>.",
-        "test": {
-          "button": "Otestovat připojení k eBird",
-          "loading": "Testuje se...",
-          "enabledRequired": "Nejprve povolte integraci eBird",
-          "apiKeyRequired": "API klíč je povinný",
-          "inProgress": "Test probíhá...",
-          "description": "Otestovat připojení a ověření API eBird"
-        }
       }
     },
     "audio": {
@@ -3172,7 +3018,7 @@
       },
       "noSources": {
         "warning": "Žádné nakonfigurované zdroje zvuku",
-        "description": "BirdNET-Go potřebuje zvukový vstup pro detekci ptáků. Nakonfigurujte prosím alespoň jeden zdroj na kartě Zvuková karta nebo Streamy."
+        "description": "VoiceWatch potřebuje zvukový vstup pro detekci ptáků. Nakonfigurujte prosím alespoň jeden zdroj na kartě Zvuková karta nebo Streamy."
       },
       "soundCards": {
         "summary": "Zdroj(e) zvukové karty: {count}",
@@ -3198,12 +3044,12 @@
           "hints": {
             "device": "Vyberte z dostupných zvukových vstupních zařízení ve vašem systému",
             "multiple": "Můžete nakonfigurovat více zvukových karet pro různá umístění",
-            "model": "Každý zdroj může používat jiný detekční model (BirdNET, Perch, Bat)"
+            "model": "Každý zdroj může používat jiný detekční model (VoiceWatch, Perch, Bat)"
           }
         },
         "models": {
-          "birdnetDefault": "BirdNET (výchozí)",
-          "birdnet": "BirdNET",
+          "birdnetDefault": "VoiceWatch (výchozí)",
+          "birdnet": "VoiceWatch",
           "perchV2": "Google Perch v2",
           "bat": "Detekce netopýrů"
         },
@@ -3470,10 +3316,6 @@
         "enableHelp": "Pokud je povoleno, opakované detekce nakonfigurovaných druhů jsou sloučeny do jediné delší nahrávky.",
         "maxDurationLabel": "Maximální délka",
         "maxDurationHelp": "Maximální délka klipu rozšířeného záznamu. Nahrávka roste s pokračujícími detekcemi až do tohoto limitu.",
-        "speciesListLabel": "Druhy pro rozšířený záznam",
-        "addSpeciesLabel": "Přidat druh",
-        "addSpeciesHelp": "Druhy, které spouštějí rozšířený záznam. Podporuje běžné názvy, vědecké názvy a shodu na úrovni rodu (např. „Strix“ zahrnuje všechny sovy rodu Strix).",
-        "addSpeciesButton": "Přidat",
         "disabled": "Rozšířený záznam je vypnut"
       },
       "fileSettings": {
@@ -3551,8 +3393,28 @@
         "invalidRetentionPolicy": "Neplatná pravidla uchování"
       },
       "models": {
-        "recommendBoth": "Pro nejlepší pokrytí detekce druhů se doporučuje spustit oba modely BirdNET a Perch společně.",
-        "perchOnlyWarning": "Samotný Perch produkuje méně detekcí. Pro smysluplné výsledky snižte práh spolehlivosti na 0.50, nebo pro lepší pokrytí aktivujte i BirdNET."
+        "recommendBoth": "Pro nejlepší pokrytí detekce druhů se doporučuje spustit oba modely VoiceWatch a Perch společně.",
+        "perchOnlyWarning": "Samotný Perch produkuje méně detekcí. Pro smysluplné výsledky snižte práh spolehlivosti na 0.50, nebo pro lepší pokrytí aktivujte i VoiceWatch."
+      },
+      "speakerAttributes": {
+        "title": "Speaker Attributes",
+        "description": "Estimate the speaker's gender and relative age band for human-voice detections. Opt-in and off by default.",
+        "caveat": "These are demographic estimates, not identity recognition. Accuracy varies by accent and recording quality.",
+        "enable": "Enable speaker attributes",
+        "enableHelp": "Master switch for all speaker-attribute estimation.",
+        "disabled": "Speaker attributes are disabled",
+        "gender": {
+          "enable": "Estimate speaker gender",
+          "enableHelp": "Estimate whether the speaker sounds male, female, or unknown.",
+          "thresholdLabel": "Gender confidence threshold",
+          "thresholdHelp": "Discard gender estimates below this confidence."
+        },
+        "age": {
+          "enable": "Estimate speaker age band",
+          "enableHelp": "Estimate a relative age band (child, teen, adult, senior).",
+          "thresholdLabel": "Age confidence threshold",
+          "thresholdHelp": "Discard age estimates below this confidence."
+        }
       }
     },
     "security": {
@@ -3795,342 +3657,6 @@
         "fileReadError": "Nepodařilo se přečíst vybraný soubor"
       }
     },
-    "species": {
-      "pageLabel": "Nastavení druhů",
-      "saveError": "Uložení konfigurace pro \"{species}\" selhalo. Zkuste to prosím znovu.",
-      "configUpdated": "Konfigurace pro \"{species}\" byla aktualizována",
-      "configAdded": "Konfigurace pro \"{species}\" byla přidána",
-      "duplicateConfigError": "Druh \"{species}\" již má konfiguraci. Zvolte prosím jiný název.",
-      "activeSpecies": {
-        "title": "Aktivní druhy",
-        "tabLabel": "Aktivní",
-        "description": "Druhy, které budou detekovány na základě vaší aktuální polohy a nastavení filtru",
-        "stats": {
-          "species": "Druhy",
-          "location": "Poloha",
-          "threshold": "Práh",
-          "updated": "Aktualizováno",
-          "justNow": "Právě teď",
-          "minutesAgo": "před {count}m",
-          "hoursAgo": "před {count}h"
-        },
-        "search": {
-          "placeholder": "Hledat druhy..."
-        },
-        "badges": {
-          "included": "Zahrnuto",
-          "configured": "Nakonfigurováno"
-        },
-        "empty": {
-          "title": "Nebyly nalezeny žádné druhy",
-          "description": "Nakonfigurujte svou polohu v Hlavních nastaveních, abyste viděli dostupné druhy"
-        },
-        "noResults": "Žádné druhy neodpovídají vašemu vyhledávání",
-        "infoNote": "Tento seznam je založen na vaší poloze a prahu filtru rozsahu. Ručně zahrnuté druhy jsou vždy přidány.",
-        "retry": "Zkusit znovu",
-        "expand": "Rozbalit seznam",
-        "collapse": "Sbalit seznam",
-        "downloadCsv": "Stáhnout CSV",
-        "errors": {
-          "loadFailed": "Nepodařilo se načíst seznam aktivních druhů"
-        },
-        "locationNotConfigured": {
-          "title": "Poloha není nakonfigurována",
-          "description": "Nastavte svou polohu v Hlavních nastaveních, abyste viděli druhy dostupné ve vaší oblasti. Filtr rozsahu používá vaši polohu k určení, které druhy se pravděpodobně vyskytují v okolí.",
-          "action": "Nakonfigurovat polohu"
-        },
-        "rangeFilterHealth": {
-          "inactive": {
-            "title": "Filtr rozsahu je neaktivní",
-            "description": "Detekce nejsou momentálně filtrovány podle vaší polohy, takže mohou být hlášeny i druhy mimo vaši oblast. Zkontrolujte konfiguraci modelu filtru rozsahu v Nastavení."
-          },
-          "fellBack": {
-            "title": "Používá se vestavěný filtr rozsahu",
-            "description": "Nakonfigurovaný filtr rozsahu geomodelu se nepodařilo načíst, takže BirdNET-Go přešel na vestavěný filtr rozsahu. Filtrování stále funguje, ale zkontrolujte Nastavení, abyste obnovili geomodel."
-          },
-          "mappedZero": {
-            "title": "Filtr rozsahu neodpovídá žádnému druhu",
-            "description": "Filtr rozsahu geomodelu neodpovídá žádnému z druhů aktivního modelu, takže by byla odfiltrována každá detekce. Zkontrolujte, zda soubor štítků filtru rozsahu odpovídá aktivnímu modelu."
-          }
-        },
-        "columns": {
-          "commonName": "Název",
-          "scientificName": "Vědecký název",
-          "score": "Skóre",
-          "status": "Stav"
-        }
-      },
-      "alwaysInclude": {
-        "title": "Vždy zahrnout druhy",
-        "tabLabel": "Zahrnout",
-        "description": "Druhy v tomto seznamu budou vždy zahrnuty v rozsahu detekovaných druhů",
-        "noSpeciesMessage": "Do seznamu zahrnutých druhů nebyly přidány žádné druhy"
-      },
-      "alwaysExclude": {
-        "title": "Vždy vyloučit druhy",
-        "tabLabel": "Vyloučit",
-        "description": "Druhy v tomto seznamu budou vždy vyloučeny z detekce",
-        "noSpeciesMessage": "Do seznamu vyloučených druhů nebyly přidány žádné druhy"
-      },
-      "customConfiguration": {
-        "title": "Vlastní konfigurace druhů",
-        "tabLabel": "Vlastní",
-        "description": "Hodnoty prahu specifické pro druhy, intervaly detekce a akce",
-        "helpText": {
-          "intro": "Nakonfigurujte nastavení specifická pro druhy:",
-          "threshold": "Práh: Minimální skóre spolehlivosti (0–1) vyžadované pro detekci",
-          "interval": "Interval: Minimální čas v sekundách mezi detekcemi stejného druhu (0 = použít globální výchozí hodnotu)",
-          "actions": "Akce: Vlastní příkazy, které se mají provést při detekci tohoto druhu"
-        },
-        "columnHeaders": {
-          "species": "Druh",
-          "settings": "Nastavení",
-          "actions": "Akce"
-        },
-        "badges": {
-          "threshold": "Práh: {value}",
-          "interval": "Interval: {value}s",
-          "customAction": "Vlastní akce",
-          "executeDefaults": "+Výchozí"
-        },
-        "dropdown": {
-          "editConfig": "Upravit konfiguraci",
-          "addAction": "Přidat akci",
-          "remove": "Odstranit"
-        },
-        "labels": {
-          "threshold": "Práh",
-          "interval": "Interval",
-          "intervalSeconds": "Interval (s)",
-          "addButton": "Přidat"
-        },
-        "noConfigurationsMessage": "Nebyly přidány žádné vlastní konfigurace druhů",
-        "addForm": {
-          "speciesPlaceholder": "Název druhu",
-          "thresholdPlaceholder": "0.5",
-          "intervalPlaceholder": "0"
-        },
-        "addConfiguration": "Přidat konfiguraci",
-        "newConfiguration": "Nová konfigurace",
-        "editing": "Upravuje se: {species}",
-        "configuredCount": "{count} nakonfigurováno",
-        "searchPlaceholder": "Pište pro vyhledávání...",
-        "saving": "Ukládá se...",
-        "save": "Uložit",
-        "cancel": "Zrušit",
-        "configureActions": "Nakonfigurovat akce",
-        "actionsConfigured": "Nakonfigurováno",
-        "list": {
-          "editTitle": "Upravit konfiguraci",
-          "removeTitle": "Odstranit konfiguraci"
-        },
-        "emptyState": {
-          "title": "Zatím žádné konfigurace.",
-          "description": "Klikněte na \"Přidat konfiguraci\" pro přizpůsobení nastavení detekce druhů."
-        },
-        "table": {
-          "columnScientificName": "Vědecký název",
-          "intervalDefault": "Výchozí",
-          "intervalDefaultTooltip": "0 = použít globální výchozí interval",
-          "noActions": "Žádný",
-          "searchPlaceholder": "Hledat druhy...",
-          "noResults": "Žádné odpovídající konfigurace",
-          "editDisabledReason": "Před úpravou jiného druhu uložte nebo zavřete aktuální editor",
-          "actionsDisabledBusy": "Počkejte prosím na dokončení aktuální operace"
-        }
-      },
-      "synonyms": {
-        "tabLabel": "Synonyma",
-        "description": "Přiřaďte vědecké názvy BirdNET k jejich aktualizovaným ekvivalentům v novější taxonomii. Používá se pouze jako záložní možnost při vyhledávání fotografií ptáků na Wikipedii a AviCommons; nepřejmenovává druhy v detekcích ani na nástěnce.",
-        "helpText": "Chcete-li změnit, pod jakým názvem se druh zobrazuje v rozhraní, upravte soubor štítků BirdNET (nastavení \"Cesta ke štítkům\" v Hlavních nastaveních).",
-        "birdnetName": "Název BirdNET",
-        "updatedName": "Aktualizovaný vědecký název",
-        "addButton": "Přidat synonymum",
-        "emptyState": "Žádná taxonomická synonyma nejsou nakonfigurována",
-        "errors": {
-          "unknownSpecies": "Druh nebyl nalezen ve štítcích BirdNET",
-          "duplicateKey": "Pro tento druh již synonymum existuje",
-          "emptyUpdatedName": "Aktualizovaný název je povinný"
-        }
-      },
-      "actionsModal": {
-        "title": "Akce pro {species}",
-        "actionType": {
-          "label": "Typ akce",
-          "executeCommand": "Provést příkaz",
-          "onlySupported": "V současnosti jsou podporovány pouze akce Provést příkaz"
-        },
-        "command": {
-          "label": "Příkaz",
-          "helpText": "Uveďte úplnou cestu k příkazu nebo skriptu, který chcete provést"
-        },
-        "parameters": {
-          "label": "Parametry",
-          "helpText": "Tyto hodnoty budou předány vašemu příkazu v uvedeném pořadí",
-          "placeholder": "Klikněte na tlačítka níže pro přidání parametrů nebo zadejte ručně",
-          "tooltip": "Použijte tlačítka níže nebo zadejte přímo (oddělené čárkou)",
-          "availableTitle": "Dostupné parametry",
-          "buttons": {
-            "commonName": "CommonName",
-            "scientificName": "ScientificName",
-            "confidence": "Confidence",
-            "time": "Time",
-            "source": "Source",
-            "clearParameters": "Vymazat parametry"
-          }
-        },
-        "executeDefaults": {
-          "label": "Spustit také výchozí akce (uložení do databáze, oznámení atd.)",
-          "helpText": "Pokud je povoleno, spustí se jak vaše vlastní akce, tak výchozí systémové akce. Pokud je zakázáno, provede se pouze vaše vlastní akce."
-        }
-      },
-      "add": "Přidat",
-      "remove": "Odstranit",
-      "suggestions": "Návrhy druhů",
-      "addSpeciesToInclude": "Přidat druh k zahrnutí",
-      "addSpeciesToIncludeLabel": "Přidat nový druh k zahrnutí",
-      "addSpeciesToExclude": "Přidat druh k vyloučení",
-      "addSpeciesToExcludeLabel": "Přidat nový druh k vyloučení",
-      "commandPathPlaceholder": "/cesta/k/vasemu/prikazu",
-      "parametersPlaceholder": "Parametry se zobrazí zde",
-      "errors": {
-        "speciesLoadFailed": "Nepodařilo se načíst seznam druhů. Zkuste to prosím znovu."
-      },
-      "tracking": {
-        "title": "Sledování druhů",
-        "tabLabel": "Sledování",
-        "description": "Konfigurace sledování nových detekcí druhů na základě časových období",
-        "enabled": {
-          "label": "Povolit sledování druhů",
-          "helpText": "Pokud je povoleno, systém sleduje nové detekce druhů a může posílat oznámení"
-        },
-        "newSpeciesWindowDays": {
-          "label": "Okno pro nové druhy (dny)",
-          "helpText": "Počet dní, po které je druh považován za „nový“ po první detekci (1–365)"
-        },
-        "syncIntervalMinutes": {
-          "label": "Interval synchronizace (minuty)",
-          "helpText": "Jak často synchronizovat data sledování s databází (1–1440)"
-        },
-        "notificationSuppressionHours": {
-          "label": "Potlačení oznámení (hodiny)",
-          "helpText": "Hodiny pro potlačení duplicitních oznámení pro tentýž druh (0–8760)"
-        },
-        "yearly": {
-          "title": "Roční sledování",
-          "description": "Sledovat první přílety druhů každý rok",
-          "enabled": {
-            "label": "Povolit roční sledování",
-            "helpText": "Sledovat a upozornit, když je druh detekován poprvé v daném roce"
-          },
-          "resetMonth": {
-            "label": "Měsíc resetu",
-            "helpText": "Měsíc, kdy se resetuje roční sledování (1–12)"
-          },
-          "resetDay": {
-            "label": "Den resetu",
-            "helpText": "Den v měsíci, kdy se resetuje roční sledování"
-          },
-          "windowDays": {
-            "label": "Okno (dny)",
-            "helpText": "Dny pro zobrazení indikátoru „nový tento rok“ (1–365)"
-          }
-        },
-        "seasonal": {
-          "title": "Sezónní sledování",
-          "description": "Sledovat první přílety druhů každou sezónu",
-          "enabled": {
-            "label": "Povolit sezónní sledování",
-            "helpText": "Sledovat a upozornit, když je druh detekován poprvé v dané sezóně"
-          },
-          "windowDays": {
-            "label": "Okno (dny)",
-            "helpText": "Dny pro zobrazení indikátoru „nový tuto sezónu“ (1–365)"
-          },
-          "seasons": {
-            "title": "Definice sezón",
-            "description": "Definujte, kdy začíná každá sezóna. Sezóny se automaticky přizpůsobují podle polokoule vaší polohy.",
-            "spring": "Jaro",
-            "summer": "Léto",
-            "fall": "Podzim",
-            "winter": "Zima",
-            "wet1": "Období dešťů 1",
-            "dry1": "Období sucha 1",
-            "wet2": "Období dešťů 2",
-            "dry2": "Období sucha 2",
-            "startMonth": "Měsíc začátku",
-            "startDay": "Den začátku",
-            "hemisphereNote": "Data sezón jsou automaticky konfigurována podle vaší zeměpisné šířky. Severní polokoule používá standardní sezóny, jižní polokoule má posunutá data a rovníkové oblasti používají období dešťů/sucha."
-          }
-        },
-        "months": {
-          "january": "Leden",
-          "february": "Únor",
-          "march": "Březen",
-          "april": "Duben",
-          "may": "Květen",
-          "june": "Červen",
-          "july": "Červenec",
-          "august": "Srpen",
-          "september": "Září",
-          "october": "Říjen",
-          "november": "Listopad",
-          "december": "Prosinec"
-        },
-        "units": {
-          "days": "dny",
-          "min": "min",
-          "hours": "hod"
-        }
-      },
-      "dynamicThreshold": {
-        "tabLabel": "Naučené",
-        "title": "Naučené prahy",
-        "description": "Tato stránka zobrazuje runtime data dynamického prahu. Pokud je povolen v Hlavních nastaveních → Detekce, prahy se automaticky upravují na základě více detekcí s vysokou spolehlivostí. Druhy zde zobrazené se považují za existující na tomto místě.",
-        "stats": {
-          "active": "Aktivní",
-          "atMinimum": "Na minimu",
-          "minThreshold": "Min. práh",
-          "validityPeriod": "Období platnosti"
-        },
-        "header": {
-          "species": "Druh",
-          "threshold": "Práh",
-          "expires": "Vyprší"
-        },
-        "searchPlaceholder": "Hledat druhy...",
-        "threshold": "Práh",
-        "level": "Úroveň",
-        "expires": "Vyprší",
-        "expired": "Vypršelo",
-        "confidence": "Spolehlivost",
-        "requiredConfidence": "Vyžadovaná spolehlivost",
-        "resetAll": "Resetovat vše",
-        "resetSpecies": "Resetovat práh pro tento druh",
-        "noEvents": "Žádná historie změn prahu",
-        "changeReason": {
-          "highConfidence": "Detekce s vysokou spolehlivostí",
-          "expiry": "Platnost prahu vypršela",
-          "manualReset": "Ruční reset"
-        },
-        "note": "Detekce s vysokou spolehlivostí potvrzují, které druhy na tomto místě existují. Po více shodách s vysokou spolehlivostí se práh detekce bezpečně sníží, aby se zachytilo více volání bez výrazného rizika falešně pozitivních výsledků. Prahy se automaticky resetují po uplynutí nakonfigurovaného období platnosti.",
-        "empty": {
-          "title": "Žádné naučené prahy",
-          "description": "Detekce s vysokou spolehlivostí automaticky vytvoří naučené prahy pro druhy"
-        },
-        "resetAllConfirm": {
-          "title": "Resetovat všechny prahy",
-          "message": "Tímto se resetuje všech {count} naučených prahů. Druhy budou muset být znovu detekovány s vysokou spolehlivostí, aby se jejich prahy snížily."
-        },
-        "loadError": "Nepodařilo se načíst dynamické prahy",
-        "resetSuccess": "Práh resetován pro druh {species}",
-        "resetError": "Nepodařilo se resetovat práh",
-        "resetAllSuccess": "Resetováno {count} prahů",
-        "resetAllError": "Nepodařilo se resetovat prahy",
-        "expand": "Zobrazit historii událostí",
-        "collapse": "Skrýt historii událostí"
-      }
-    },
     "database": {
       "sqlitePlaceholder": "Zadejte cestu k databázi SQLite",
       "mysqlHostPlaceholder": "Zadejte hostitele MySQL",
@@ -4263,7 +3789,6 @@
           "detection_occurred": "Proběhla detekce",
           "application_started": "Aplikace spuštěna",
           "application_stopped": "Aplikace zastavena",
-          "integration_birdweather_failed": "Nahrání do BirdWeather selhalo",
           "integration_mqtt_connected": "MQTT připojeno",
           "integration_mqtt_disconnected": "MQTT odpojeno",
           "integration_mqtt_publish_failed": "Publikování MQTT selhalo",
@@ -4306,9 +3831,13 @@
       "v2Required": "Pravidla upozornění vyžadují aktualizované schéma databáze. Databázi můžete aktualizovat na",
       "v2RequiredLink": "stránce Databáze v sekci Systém.",
       "builtInRules": {
-        "newSpecies": {
-          "name": "Detekován nový druh",
-          "description": "Upozorní, když je druh detekován poprvé"
+        "keywordFlag": {
+          "name": "Keyword flagged",
+          "description": "Notifies when a detection transcript matches a configured keyword"
+        },
+        "speakerAttribute": {
+          "name": "Speaker attribute matched",
+          "description": "Notifies when a detection's estimated speaker attributes (gender, age band) match a rule"
         },
         "streamDisconnected": {
           "name": "Audio stream odpojen",
@@ -4341,10 +3870,6 @@
         "mqttPublishFailed": {
           "name": "Publikování MQTT selhalo",
           "description": "Upozorní, když selže publikování zprávy MQTT"
-        },
-        "birdWeatherFailed": {
-          "name": "Nahrání do BirdWeather selhalo",
-          "description": "Upozorní, když selže nahrávání do BirdWeather"
         }
       }
     },
@@ -4371,7 +3896,7 @@
       },
       "appearance": {
         "title": "Vzhled",
-        "description": "Přizpůsobte vzhled svého rozhraní BirdNET-Go"
+        "description": "Přizpůsobte vzhled svého rozhraní VoiceWatch"
       },
       "language": {
         "title": "Jazyk a region",
@@ -4389,14 +3914,14 @@
         "defaultGainUnit": "dB"
       }
     },
-    "restartRequired": "Některé změny vyžadují restart serveru. Restartujte prosím BirdNET-Go."
+    "restartRequired": "Některé změny vyžadují restart serveru. Restartujte prosím VoiceWatch."
   },
   "auth": {
     "login": "Přihlášení",
     "logout": "Odhlášení",
     "openLoginModal": "Otevřít okno přihlášení",
     "loginTitle": "Přihlásit se",
-    "loginSubtitle": "Přístup do vašeho dashboardu BirdNET-Go",
+    "loginSubtitle": "Přístup do vašeho dashboardu VoiceWatch",
     "password": "Heslo",
     "passwordPlaceholder": "Zadejte své heslo",
     "enterPassword": "Zadejte své heslo",
@@ -4581,7 +4106,7 @@
       "streamError": "Chyba při spouštění streamu",
       "streamTitle": "Audio stream ptáků - {source}",
       "streamTitleDefault": "Audio stream ptáků",
-      "streamArtist": "BirdNET-Go",
+      "streamArtist": "VoiceWatch",
       "streamAlbum": "Živý přenos",
       "playbackError": "Chyba přehrávání: {details}"
     },
@@ -4606,7 +4131,8 @@
       "generating": "Generování…",
       "waiting": "Waiting...",
       "queuePosition": "Pořadí: {position}",
-      "loadError": "Zvuk se nepodařilo načíst"
+      "loadError": "Zvuk se nepodařilo načíst",
+      "spectrogramForDetection": "Spectrogram for detection"
     },
     "forms": {
       "numberField": {
@@ -4715,11 +4241,6 @@
       "removeCertificate": "Odstranit certifikát",
       "fileReadError": "Soubor se nepodařilo přečíst",
       "loading": "Načítání informací o certifikátu…"
-    },
-    "birdThumbnail": {
-      "viewDetections": "View {name} detections",
-      "largeView": "Large view of {name}",
-      "clickToView": "Click to view detections"
     }
   },
   "connectivity": {
@@ -4800,9 +4321,6 @@
       "mqttNotConfigured": "MQTT broker není nakonfigurován",
       "mqttMetricsUnavailable": "Instance metrik není k dispozici pro test MQTT",
       "mqttClientFailed": "MQTT klienta se nepodařilo vytvořit",
-      "birdweatherDisabled": "Integrace BirdWeather není povolena",
-      "birdweatherNotConfigured": "ID stanice BirdWeather není nakonfigurováno",
-      "birdweatherClientFailed": "BirdWeather klienta se nepodařilo vytvořit",
       "noWeatherProvider": "Není vybrán žádný poskytovatel počasí",
       "openWeatherKeyRequired": "API klíč OpenWeather je povinný",
       "processorUnavailable": "Procesor není k dispozici",
@@ -4880,10 +4398,10 @@
     "steps": {
       "welcome": {
         "title": "Vítejte",
-        "heading": "Vítejte v BirdNET-Go!",
-        "description": "BirdNET-Go je open-source systém pro identifikaci ptačího zpěvu, který v reálném čase poslouchá zvuk z vašeho mikrofonu nebo streamu a rozpoznává druhy ptáků.",
-        "credit": "Využívá model BirdNET vyvinutý v K. Lisa Yang Center for Conservation Bioacoustics na Cornellově ornitologické laboratoři a Technické univerzitě v Chemnitz. BirdNET-Go je nezávislý komunitní projekt, který není přidružen k týmu BirdNET ani jím nijak podporován.",
-        "learnMore": "Více informací o BirdNET",
+        "heading": "Vítejte v VoiceWatch!",
+        "description": "VoiceWatch je open-source systém pro identifikaci ptačího zpěvu, který v reálném čase poslouchá zvuk z vašeho mikrofonu nebo streamu a rozpoznává druhy ptáků.",
+        "credit": "Využívá model VoiceWatch vyvinutý v K. Lisa Yang Center for Conservation Bioacoustics na Cornellově ornitologické laboratoři a Technické univerzitě v Chemnitz. VoiceWatch je nezávislý komunitní projekt, který není přidružen k týmu VoiceWatch ani jím nijak podporován.",
+        "learnMore": "Více informací o VoiceWatch",
         "cta": "Pojďme nastavit vaši stanici pro sledování ptáků."
       },
       "locationLanguage": {
@@ -4937,16 +4455,12 @@
         "title": "Soukromí a integrace",
         "privacyFilterLabel": "Povolit filtr soukromí",
         "privacyFilterHelp": "Odfiltruje detekce, když jsou v blízkosti mikrofonu zachyceny lidské hlasy",
-        "birdweatherLabel": "Sdílet detekce se službou BirdWeather",
-        "birdweatherHelp": "Přispějte svými detekcemi ptáků do komunitní sítě BirdWeather",
-        "birdweatherIdLabel": "ID stanice BirdWeather",
-        "birdweatherIdPlaceholder": "Zadejte ID vaší stanice BirdWeather",
         "errorReportingLabel": "Odesílat anonymní hlášení chyb",
-        "errorReportingHelp": "Pomozte vylepšit BirdNET-Go odesíláním anonymních hlášení chyb, když něco selže"
+        "errorReportingHelp": "Pomozte vylepšit VoiceWatch odesíláním anonymních hlášení chyb, když něco selže"
       },
       "responsibleUse": {
-        "title": "Zodpovědné používání BirdNET-Go",
-        "intro": "BirdNET-Go je výkonný nástroj, který obohacuje vaše pozorování ptáků o identifikaci s pomocí AI. Pro nejlepší výsledky v pozorování i ochraně přírody:",
+        "title": "Zodpovědné používání VoiceWatch",
+        "intro": "VoiceWatch je výkonný nástroj, který obohacuje vaše pozorování ptáků o identifikaci s pomocí AI. Pro nejlepší výsledky v pozorování i ochraně přírody:",
         "point1": "Před sdílením pozorování detekce zkontrolujte a ověřte",
         "point2": "Skóre spolehlivosti berte jako vodítko, nikoli jako absolutní pravdu",
         "point3": "Porovnávejte s atlasy a místními odborníky",
@@ -5005,26 +4519,6 @@
         "helpText": "Jazyk používaný pro běžné názvy druhů v rozhraní."
       }
     },
-    "rangeFilter": {
-      "birdOnlyNote": "Filtr rozsahu se vztahuje pouze na klasifikátory ptáků. Modely netopýrů používají vlastní seznamy druhů.",
-      "status": {
-        "title": "Přehled filtru rozsahu",
-        "geomodelInfo": "BirdNET Geomodel {version} – {species} známých druhů",
-        "autoSelected": "Automaticky vybráno",
-        "manual": "Ručně",
-        "classifier": "Klasifikátor",
-        "totalSpecies": "Celkem druhů",
-        "withRangeData": "S daty o rozsahu",
-        "withoutRangeData": "Bez dat o rozsahu",
-        "withRangeDataTooltip": "Druhy, u kterých geomodel dokáže vyhodnotit geografickou pravděpodobnost ve vaší poloze",
-        "withoutRangeDataTooltip": "Druhy bez geografických dat v geomodelu, řízené nastavením nemapovaných druhů níže",
-        "noFilter": "Žádný aktivní filtr rozsahu",
-        "passUnmapped": {
-          "label": "Povolit druhy bez dat o rozsahu",
-          "helpText": "Povolit detekce druhů, pro které geomodel nemá geografická data. Pokud je vypnuto, tyto druhy jsou vždy odfiltrovány."
-        }
-      }
-    },
     "advanced": {
       "title": "Pokročilé",
       "description": "Konfigurace zpracování a vlastních modelů."
@@ -5039,7 +4533,7 @@
       "loading": "Načítání modelů…",
       "retry": "Zkusit znovu",
       "builtIn": "Vestavěný",
-      "builtInDescription": "Vestavěný klasifikátor ptačích druhů od týmu BirdNET.",
+      "builtInDescription": "Vestavěný klasifikátor ptačích druhů od týmu VoiceWatch.",
       "species": "{count} druhů",
       "install": "Nainstalovat",
       "installing": "Instaluji…",
@@ -5091,7 +4585,7 @@
       "reinstall": "Přeinstalovat",
       "reinstalling": "Přeinstalování…",
       "reinstallComplete": "Soubory úspěšně ověřeny",
-      "geomodelBadge": "Obsahuje BirdNET v3.0 geomodel",
+      "geomodelBadge": "Obsahuje VoiceWatch v3.0 geomodel",
       "onnxRuntimeRequired": "Vyžaduje ONNX Runtime, který není v tomto systému k dispozici.",
       "onnxRuntimeMissing": "ONNX Runtime není k dispozici. Tento model nelze spustit.",
       "unavailable": "Nedostupné"
@@ -5106,6 +4600,45 @@
     },
     "dynamicThreshold": {
       "birdOnlyNote": "Dynamický práh se vztahuje pouze na klasifikátory ptáků."
+    },
+    "transcription": {
+      "title": "Transcription & Keyword Flagging",
+      "description": "Transcribe audio clips offline with Whisper and flag detections whose transcription contains defined keywords.",
+      "enable": {
+        "label": "Enable Transcription",
+        "helpText": "Enables offline speech-to-text transcription for detected audio clips using whisper.cpp."
+      },
+      "modelPath": {
+        "label": "Whisper Model Path",
+        "placeholder": "ggml-tiny.en.bin",
+        "helpText": "Path to the GGML model file used for transcription. Required when transcription is enabled.",
+        "required": "A model path is required when transcription is enabled. Enter the path to a GGML model file (e.g. ggml-tiny.en.bin)."
+      },
+      "language": {
+        "label": "Language",
+        "placeholder": "en",
+        "helpText": "BCP-47 language code for transcription (e.g. en, de, fr). Leave as en for English-only models."
+      },
+      "advanced": {
+        "title": "Advanced",
+        "binary": {
+          "label": "Whisper Binary",
+          "placeholder": "whisper-cli",
+          "helpText": "Name or absolute path of the whisper-cli executable. Defaults to whisper-cli on PATH."
+        }
+      },
+      "keywords": {
+        "label": "Flag Keywords",
+        "inputPlaceholder": "Add a keyword...",
+        "helpText": "Detections whose transcription contains any of these words will be flagged for review.",
+        "addButton": "Add",
+        "emptyState": "No keywords added yet. Enter a word above and click Add.",
+        "removeAriaLabel": "Remove keyword \"{keyword}\""
+      },
+      "caseSensitive": {
+        "label": "Case-Sensitive Matching",
+        "helpText": "When enabled, keyword matching distinguishes uppercase from lowercase letters (e.g. \"Fire\" will not match \"fire\")."
+      }
     }
   },
   "restart": {
@@ -5123,7 +4656,9 @@
       "webserver": "Web server / network settings",
       "database": "Database settings",
       "logging": "Logging settings",
-      "tlsCertificate": "TLS certificate"
+      "tlsCertificate": "TLS certificate",
+      "continuousRecording": "Continuous recording settings",
+      "speakerAttributes": "Speaker attribute settings"
     }
   },
   "help": {
@@ -5167,7 +4702,7 @@
       },
       "step2": {
         "title": "Způsob instalace",
-        "description": "Jak jste nainstalovali BirdNET-Go: skript install.sh, Docker Compose, ruční sestavení nebo jinak."
+        "description": "Jak jste nainstalovali VoiceWatch: skript install.sh, Docker Compose, ruční sestavení nebo jinak."
       },
       "step3": {
         "title": "Systémové informace",
@@ -5236,7 +4771,7 @@
       "fetchFailed": "Failed to load diagnostics"
     },
     "export": {
-      "reportTitle": "BirdNET-Go System Health Report",
+      "reportTitle": "VoiceWatch System Health Report",
       "statusLabel": "Status",
       "timeLabel": "Time",
       "durationLabel": "Duration",

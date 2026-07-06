@@ -14,12 +14,12 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"github.com/tphakala/birdnet-go/internal/audiocore/soundlevel"
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/imageprovider"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/observability/metrics"
+	"github.com/tphakala/voicewatch/internal/audiocore/soundlevel"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/errors"
+
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/observability/metrics"
 )
 
 // SSE connection configuration
@@ -94,9 +94,6 @@ type SSEDetectionData struct {
 	Locked   bool   `json:"locked"`
 	Unlikely bool   `json:"unlikely,omitempty"`
 
-	// Bird image with attribution
-	BirdImage SSEBirdImage `json:"birdImage"`
-
 	// SSE event metadata
 	Timestamp time.Time `json:"timestamp"`
 	EventType string    `json:"eventType"`
@@ -114,17 +111,6 @@ type SSESourceInfo struct {
 	DisplayName string `json:"displayName,omitempty"`
 }
 
-// SSEBirdImage represents bird image data in SSE events with proper JSON tags.
-type SSEBirdImage struct {
-	URL            string `json:"url"`
-	ScientificName string `json:"scientificName,omitempty"`
-	LicenseName    string `json:"licenseName,omitempty"`
-	LicenseURL     string `json:"licenseURL,omitempty"`
-	AuthorName     string `json:"authorName,omitempty"`
-	AuthorURL      string `json:"authorURL,omitempty"`
-	SourceProvider string `json:"sourceProvider,omitempty"`
-}
-
 // safeBaseName returns the filename component of a path, or empty string if the path is empty.
 // Unlike filepath.Base("") which returns ".", this returns "" for empty inputs.
 func safeBaseName(path string) string {
@@ -134,10 +120,10 @@ func safeBaseName(path string) string {
 	return filepath.Base(path)
 }
 
-// newSSEDetectionData creates an SSEDetectionData from a datastore.Note and BirdImage.
+// newSSEDetectionData creates an SSEDetectionData from a datastore.Note.
 // It sanitizes sensitive data: ClipName is stripped to filename only, and Source
 // only includes safe display fields (no raw connection strings or credentials).
-func newSSEDetectionData(note *datastore.Note, birdImage *imageprovider.BirdImage) SSEDetectionData {
+func newSSEDetectionData(note *datastore.Note) SSEDetectionData {
 	det := SSEDetectionData{
 		ID:             note.ID,
 		Date:           note.Date,
@@ -169,19 +155,6 @@ func newSSEDetectionData(note *datastore.Note, birdImage *imageprovider.BirdImag
 		det.Source = &SSESourceInfo{
 			ID:          note.Source.ID,
 			DisplayName: note.Source.DisplayName,
-		}
-	}
-
-	// Map bird image with proper camelCase tags
-	if birdImage != nil {
-		det.BirdImage = SSEBirdImage{
-			URL:            birdImage.URL,
-			ScientificName: birdImage.ScientificName,
-			LicenseName:    birdImage.LicenseName,
-			LicenseURL:     birdImage.LicenseURL,
-			AuthorName:     birdImage.AuthorName,
-			AuthorURL:      birdImage.AuthorURL,
-			SourceProvider: birdImage.SourceProvider,
 		}
 	}
 
@@ -859,7 +832,7 @@ func (c *Controller) GetSSEStatus(ctx echo.Context) error {
 // BroadcastDetection is a helper method to broadcast detection from the controller.
 // It maps the internal datastore.Note to a sanitized SSEDetectionData struct that
 // only exposes safe fields with proper camelCase JSON tags.
-func (c *Controller) BroadcastDetection(note *datastore.Note, birdImage *imageprovider.BirdImage) error {
+func (c *Controller) BroadcastDetection(note *datastore.Note) error {
 	if c.sseManager == nil {
 		return fmt.Errorf("SSE manager not initialized")
 	}
@@ -869,12 +842,8 @@ func (c *Controller) BroadcastDetection(note *datastore.Note, birdImage *imagepr
 		c.logErrorIfEnabled("SSE broadcast skipped: note is nil")
 		return fmt.Errorf("note is nil")
 	}
-	if birdImage == nil {
-		c.logErrorIfEnabled("SSE broadcast skipped: birdImage is nil")
-		return fmt.Errorf("birdImage is nil")
-	}
 
-	detection := newSSEDetectionData(note, birdImage)
+	detection := newSSEDetectionData(note)
 
 	// Add species tracking metadata if processor has tracker.
 	// Compare the detection date with the species' first-seen date so the flag

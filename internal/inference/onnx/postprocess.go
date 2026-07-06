@@ -17,28 +17,6 @@ func sigmoidSlice(logits []float32) []float32 {
 	return result
 }
 
-func softmax(logits []float32) []float32 {
-	if len(logits) == 0 {
-		return logits
-	}
-	result := make([]float32, len(logits))
-	maxVal := logits[0]
-	for _, v := range logits[1:] {
-		if v > maxVal {
-			maxVal = v
-		}
-	}
-	var sum float32
-	for i, v := range logits {
-		result[i] = float32(math.Exp(float64(v - maxVal)))
-		sum += result[i]
-	}
-	for i := range result {
-		result[i] /= sum
-	}
-	return result
-}
-
 func topK(scores []float32, labels []string, k int, minConf float32) []Prediction {
 	var preds []Prediction
 	n := min(len(scores), len(labels))

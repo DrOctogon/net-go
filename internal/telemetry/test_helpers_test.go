@@ -7,9 +7,9 @@ import (
 	"time"
 
 	"github.com/getsentry/sentry-go"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/events"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/events"
 )
 
 // testFlushTimeout is the timeout for flushing events during test cleanup
@@ -77,7 +77,7 @@ func InitForTesting(t TestingTB) (config *TestConfig, cleanup func()) {
 		scope.SetTag("system_id", testSettings.SystemID)
 		scope.SetTag("test_mode", "true")
 		scope.SetContext("application", map[string]any{
-			"name":      "BirdNET-Go",
+			"name":      "VoiceWatch",
 			"version":   testSettings.Version,
 			"system_id": testSettings.SystemID,
 			"test_mode": true,

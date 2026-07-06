@@ -6,26 +6,21 @@ package processor
 import (
 	"context"
 	"encoding/json"
-	"time"
 
-	"github.com/tphakala/birdnet-go/internal/alerting"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/events"
-	"github.com/tphakala/birdnet-go/internal/imageprovider"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/mqtt"
-	"github.com/tphakala/birdnet-go/internal/notification"
-	"github.com/tphakala/birdnet-go/internal/privacy"
+	"github.com/tphakala/voicewatch/internal/alerting"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/mqtt"
+	"github.com/tphakala/voicewatch/internal/privacy"
 )
 
-// NoteWithBirdImage wraps a Note with bird image data for MQTT publishing.
+// NoteWithBirdImage wraps a Note with source metadata for MQTT publishing.
 // The SourceID field enables Home Assistant to filter detections by source.
 //
 // IMPORTANT: JSON field names are part of the public MQTT API contract.
 // Changing them breaks existing Home Assistant and other MQTT integrations.
-// See: https://github.com/tphakala/birdnet-go/discussions/1759
+// See: https://github.com/tphakala/voicewatch/discussions/1759
 type NoteWithBirdImage struct {
 	datastore.Note
 
@@ -37,163 +32,9 @@ type NoteWithBirdImage struct {
 	ID     *struct{} `json:"ID,omitempty"`     // Suppressed: use detectionId instead
 	Source *struct{} `json:"Source,omitempty"` // Suppressed: use sourceId instead
 
-	DetectionID uint                    `json:"detectionId"`          // Database ID for URL construction (e.g., /api/v2/audio/{id})
-	SourceID    string                  `json:"sourceId"`             // Audio source ID for HA filtering (added for HA discovery)
-	SourceName  string                  `json:"sourceName,omitempty"` // Display name for stable source mapping (#2799)
-	BirdImage   imageprovider.BirdImage `json:"BirdImage"`            // PascalCase for backward compatibility - DO NOT CHANGE
-}
-
-// Execute sends the note to the BirdWeather API
-func (a *BirdWeatherAction) Execute(_ context.Context, data any) error {
-	a.mu.Lock()
-	defer a.mu.Unlock()
-
-	// Check event frequency (supports scientific name lookup)
-	if !a.EventTracker.TrackEventWithNames(a.Result.Species.CommonName, a.Result.Species.ScientificName, BirdWeatherSubmit) {
-		return nil
-	}
-
-	// Early check if BirdWeather is still enabled in settings
-	if !a.Settings.Realtime.Birdweather.Enabled {
-		return nil // Silently exit if BirdWeather was disabled after this action was created
-	}
-
-	// Add threshold check here
-	if a.Result.Confidence < float64(a.Settings.Realtime.Birdweather.Threshold) {
-		if a.Settings.Debug {
-			// Add structured logging
-			GetLogger().Debug("Skipping BirdWeather upload due to low confidence",
-				logger.String("component", "analysis.processor.actions"),
-				logger.String("detection_id", a.CorrelationID),
-				logger.String("species", a.Result.Species.CommonName),
-				logger.Float64("confidence", a.Result.Confidence),
-				logger.Float64("threshold", float64(a.Settings.Realtime.Birdweather.Threshold)),
-				logger.String("operation", "birdweather_threshold_check"))
-		}
-		return nil
-	}
-
-	// Safe check for nil BwClient
-	if a.BwClient == nil {
-		// Client initialization failures indicate configuration issues that require
-		// manual intervention (e.g., missing API keys, disabled service)
-		// Retrying won't fix these problems, so mark as non-retryable
-		return errors.Newf("BirdWeather client is not initialized").
-			Component("analysis.processor").
-			Category(errors.CategoryIntegration).
-			Context("operation", "birdweather_upload").
-			Context("integration", "birdweather").
-			Context("retryable", false). // Configuration error - not retryable
-			Context("config_section", "realtime.birdweather").
-			Build()
-	}
-
-	// Convert Result to Note for BirdWeather API (backward compatible)
-	note := datastore.NoteFromResult(&a.Result)
-	pcmData := a.pcmData
-
-	// Try to publish with appropriate error handling
-	if err := a.BwClient.Publish(&note, pcmData); err != nil {
-		// Check if this is a CategoryNotFound error (e.g., species not recognized by Birdweather)
-		// These are expected for non-bird species and should not be logged at error level
-		if errors.IsNotFound(err) {
-			// Log at debug level for expected validation failures (unknown species)
-			GetLogger().Debug("BirdWeather upload skipped: species not recognized",
-				logger.String("component", "analysis.processor.actions"),
-				logger.String("detection_id", a.CorrelationID),
-				logger.String("species", a.Result.Species.CommonName),
-				logger.String("scientific_name", a.Result.Species.ScientificName),
-				logger.String("operation", "birdweather_upload"))
-			// Return nil - this is not an error condition worth retrying
-			return nil
-		}
-
-		// Circuit breaker open/half-open: the BirdWeather client's breaker
-		// has short-circuited this upload because the upstream service is
-		// currently flapping. This is an operational throttle state, not a
-		// code bug. Return the sentinel unchanged so the job queue still
-		// retries (any non-nil error triggers retry with backoff) while
-		// shouldReportToSentry suppresses it via the notification-component
-		// filter — wrapping here would hide the sentinel from that filter.
-		if errors.Is(err, notification.ErrCircuitBreakerOpen) || errors.Is(err, notification.ErrTooManyRequests) {
-			GetLogger().Debug("BirdWeather upload short-circuited: circuit breaker open",
-				logger.String("component", "analysis.processor.actions"),
-				logger.String("detection_id", a.CorrelationID),
-				logger.String("species", a.Result.Species.CommonName),
-				logger.String("scientific_name", a.Result.Species.ScientificName),
-				logger.String("operation", "birdweather_upload_breaker_open"))
-			return err
-		}
-
-		// Transient network errors (DNS, timeout, connection issues) are expected
-		// external failures. Log at warn level and return a retryable error without
-		// generating Sentry noise. The job queue handles retry with backoff.
-		if errors.IsTransientNetworkError(err) {
-			sanitizedErr := privacy.WrapError(err)
-			GetLogger().Warn("BirdWeather upload failed due to transient network issue",
-				logger.String("component", "analysis.processor.actions"),
-				logger.String("detection_id", a.CorrelationID),
-				logger.Error(sanitizedErr),
-				logger.String("species", a.Result.Species.CommonName),
-				logger.String("scientific_name", a.Result.Species.ScientificName),
-				logger.Float64("confidence", a.Result.Confidence),
-				logger.Bool("retry_enabled", a.RetryConfig.Enabled),
-				logger.String("operation", "birdweather_upload_transient"))
-			// Return error to trigger retry, but use CategoryNetwork to avoid Sentry reporting
-			return errors.New(err).
-				Component("analysis.processor").
-				Category(errors.CategoryNetwork).
-				Context("operation", "birdweather_upload").
-				Context("species", a.Result.Species.CommonName).
-				Context("confidence", a.Result.Confidence).
-				Context("integration", "birdweather").
-				Context("retryable", true).
-				Build()
-		}
-
-		// Sanitize error before logging (only for actual errors, not expected conditions)
-		sanitizedErr := privacy.WrapError(err)
-
-		// Add structured logging for actual errors (non-transient failures)
-		GetLogger().Error("Failed to upload to BirdWeather",
-			logger.String("component", "analysis.processor.actions"),
-			logger.String("detection_id", a.CorrelationID),
-			logger.Error(sanitizedErr),
-			logger.String("species", a.Result.Species.CommonName),
-			logger.String("scientific_name", a.Result.Species.ScientificName),
-			logger.Float64("confidence", a.Result.Confidence),
-			logger.String("clip_name", a.Result.ClipName),
-			logger.Bool("retry_enabled", a.RetryConfig.Enabled),
-			logger.String("operation", "birdweather_upload"))
-		// BirdWeather failures are handled by the alerting rule engine
-		// (integration.birdweather_failed), so no explicit notification here.
-		// Non-transient API errors may succeed on retry:
-		// - API rate limiting
-		// - Server-side temporary failures
-		// The job queue will handle exponential backoff for these retryable errors
-		return errors.New(err).
-			Component("analysis.processor").
-			Category(errors.CategoryIntegration).
-			Context("operation", "birdweather_upload").
-			Context("species", a.Result.Species.CommonName).
-			Context("confidence", a.Result.Confidence).
-			Context("clip_name", a.Result.ClipName).
-			Context("integration", "birdweather").
-			Context("retryable", true). // API errors are typically retryable
-			Build()
-	}
-
-	if a.Settings.Debug {
-		GetLogger().Debug("Successfully uploaded to BirdWeather",
-			logger.String("component", "analysis.processor.actions"),
-			logger.String("detection_id", a.CorrelationID),
-			logger.String("species", a.Result.Species.CommonName),
-			logger.String("scientific_name", a.Result.Species.ScientificName),
-			logger.Float64("confidence", a.Result.Confidence),
-			logger.String("clip_name", a.Result.ClipName),
-			logger.String("operation", "birdweather_upload_success"))
-	}
-	return nil
+	DetectionID uint   `json:"detectionId"`          // Database ID for URL construction (e.g., /api/v2/audio/{id})
+	SourceID    string `json:"sourceId"`             // Audio source ID for HA filtering (added for HA discovery)
+	SourceName  string `json:"sourceName,omitempty"` // Display name for stable source mapping (#2799)
 }
 
 // Execute sends the note to the MQTT broker.
@@ -233,9 +74,6 @@ func (a *MqttAction) Execute(_ context.Context, data any) error {
 			Build()
 	}
 
-	// Get bird image of detected bird using the shared helper
-	birdImage := getBirdImageFromCache(a.BirdImageCache, a.Result.Species.ScientificName, a.Result.Species.CommonName, a.CorrelationID)
-
 	// Get detection ID from shared context (set by DatabaseAction in CompositeAction sequence)
 	var detectionID uint
 	if a.DetectionCtx != nil {
@@ -257,13 +95,12 @@ func (a *MqttAction) Execute(_ context.Context, data any) error {
 	// gracefully, or use the detection ID-based audio endpoint which has
 	// built-in wait-for-encoding support.
 
-	// Wrap note with bird image and include detection ID, SourceID, and SourceName
+	// Wrap note with source metadata and detection ID for URL construction.
 	noteWithBirdImage := NoteWithBirdImage{
 		Note:        note,
 		DetectionID: detectionID, // Explicit field for URL construction (e.g., /api/v2/audio/{id})
 		SourceID:    note.Source.ID,
 		SourceName:  note.Source.DisplayName,
-		BirdImage:   birdImage,
 	}
 
 	// Create a JSON representation of the note
@@ -356,64 +193,6 @@ func (a *MqttAction) Execute(_ context.Context, data any) error {
 	return nil
 }
 
-// Execute updates the range filter species list, this is run every day
-// Note: The ShouldUpdateRangeFilterToday() check in processor.go ensures this action
-// is only created once per day, preventing duplicate concurrent updates (GitHub issue #1357)
-func (a *UpdateRangeFilterAction) Execute(ctx context.Context, data any) error {
-	a.mu.Lock()
-	defer a.mu.Unlock()
-
-	// Get current date for the range filter calculation
-	today := time.Now().Truncate(24 * time.Hour)
-
-	// Update location based species list
-	speciesScores, err := a.Bn.GetProbableSpecies(today, 0.0)
-	if err != nil {
-		// Reset the update flag to allow retry on next detection
-		// This prevents the issue where a failed update would block retries until tomorrow
-		conf.ResetRangeFilterUpdateFlag()
-
-		GetLogger().Error("Failed to get probable species for range filter",
-			logger.Error(err),
-			logger.String("date", today.Format(time.DateOnly)),
-			logger.String("operation", "update_range_filter"))
-		return err
-	}
-
-	// Convert the speciesScores slice to a slice of species labels
-	includedSpecies := make([]string, 0, len(speciesScores))
-	for _, speciesScore := range speciesScores {
-		includedSpecies = append(includedSpecies, speciesScore.Label)
-	}
-
-	// Update the species list (this also updates LastUpdated timestamp atomically)
-	conf.UpdateIncludedSpecies(includedSpecies)
-
-	// The daily rebuild bypasses classifier.BuildRangeFilter, so refresh the
-	// OpenFauna name-resolver working set here too. Non-fatal: on-demand Lookup
-	// still resolves names if this fails.
-	if a.Bn != nil {
-		if err := a.Bn.RebuildNameResolver(includedSpecies); err != nil {
-			GetLogger().Warn("Failed to rebuild OpenFauna name resolver after daily range filter update",
-				logger.Error(err))
-		}
-	}
-
-	events.Emit(ctx, "detection", "filter_reconfigured", "Range filter updated", map[string]any{
-		"species_count": len(includedSpecies),
-		"date":          today.Format(time.DateOnly),
-	})
-
-	if a.Settings.Debug {
-		GetLogger().Info("Range filter updated successfully",
-			logger.Int("species_count", len(includedSpecies)),
-			logger.String("date", today.Format(time.DateOnly)),
-			logger.String("operation", "update_range_filter_success"))
-	}
-
-	return nil
-}
-
 // Execute broadcasts the detection via Server-Sent Events
 func (a *SSEAction) Execute(_ context.Context, data any) error {
 	a.mu.Lock()
@@ -439,9 +218,6 @@ func (a *SSEAction) Execute(_ context.Context, data any) error {
 		}
 	}
 
-	// Get bird image of detected bird using the shared helper
-	birdImage := getBirdImageFromCache(a.BirdImageCache, a.Result.Species.ScientificName, a.Result.Species.CommonName, a.CorrelationID)
-
 	// Convert Result to Note for SSEBroadcaster (backward compatible SSE payload)
 	note := datastore.NoteFromResult(&a.Result)
 
@@ -454,7 +230,7 @@ func (a *SSEAction) Execute(_ context.Context, data any) error {
 	// from ever showing the audio player for the detection.
 
 	// Broadcast the detection with error handling
-	if err := a.SSEBroadcaster(&note, &birdImage); err != nil {
+	if err := a.SSEBroadcaster(&note); err != nil {
 		// Log the error with retry information if retries are enabled
 		// Sanitize error before logging
 		sanitizedErr := privacy.WrapError(err)

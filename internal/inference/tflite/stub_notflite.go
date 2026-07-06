@@ -11,7 +11,7 @@ package tflite
 import (
 	"fmt"
 
-	"github.com/tphakala/birdnet-go/internal/inference"
+	"github.com/tphakala/voicewatch/internal/inference"
 )
 
 // LogFunc is a callback for logging messages from the inference backend.
@@ -34,9 +34,4 @@ func errTFLiteUnavailable() error {
 // NewTFLiteClassifier always returns an error in notflite builds.
 func NewTFLiteClassifier(_ []byte, _ TFLiteClassifierOptions) (inference.Classifier, int, error) {
 	return nil, 0, errTFLiteUnavailable()
-}
-
-// NewTFLiteRangeFilter always returns an error in notflite builds.
-func NewTFLiteRangeFilter(_ []byte, _ LogFunc) (inference.RangeFilter, error) {
-	return nil, errTFLiteUnavailable()
 }

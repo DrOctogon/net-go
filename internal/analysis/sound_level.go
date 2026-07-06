@@ -11,14 +11,14 @@ import (
 	"sync"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/analysis/processor"
-	apiv2 "github.com/tphakala/birdnet-go/internal/api/v2"
-	"github.com/tphakala/birdnet-go/internal/audiocore/soundlevel"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/observability"
-	"github.com/tphakala/birdnet-go/internal/privacy"
+	"github.com/tphakala/voicewatch/internal/analysis/processor"
+	apiv2 "github.com/tphakala/voicewatch/internal/api/v2"
+	"github.com/tphakala/voicewatch/internal/audiocore/soundlevel"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/observability"
+	"github.com/tphakala/voicewatch/internal/privacy"
 )
 
 // Constants for sound level monitoring
@@ -266,7 +266,7 @@ func validateSoundLevelData(data *soundlevel.SoundLevelData) error {
 // CompactSoundLevelData is a space-efficient version for MQTT publishing
 type CompactSoundLevelData struct {
 	TS    string                     `json:"ts"`   // ISO8601 timestamp
-	Node  string                     `json:"node"` // Node name (BirdNET-Go instance)
+	Node  string                     `json:"node"` // Node name (VoiceWatch instance)
 	Src   string                     `json:"src"`  // Source
 	Name  string                     `json:"nm"`   // Name
 	Dur   int                        `json:"dur"`  // Duration in seconds

@@ -15,7 +15,7 @@ import (
 
 	audioresampler "github.com/tphakala/go-audio-resampler"
 
-	"github.com/tphakala/birdnet-go/internal/errors"
+	"github.com/tphakala/voicewatch/internal/errors"
 )
 
 // Byte-level constants for 16-bit PCM encoding.

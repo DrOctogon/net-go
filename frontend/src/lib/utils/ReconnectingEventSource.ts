@@ -14,7 +14,7 @@
  * longer than the upstream package would.
  *
  * The upstream package also tracked `lastEventId` and appended it as a query
- * parameter on reconnect. BirdNET-Go's SSE endpoints emit no `id:` field (the
+ * parameter on reconnect. VoiceWatch's SSE endpoints emit no `id:` field (the
  * server writes only `event:`/`data:`; see internal/api/v2/sse.go) and the server
  * reads no `lastEventId` parameter, so that path was dead and is omitted.
  */

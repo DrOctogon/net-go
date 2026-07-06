@@ -1,4 +1,4 @@
-# BirdNET-Go - macOS Installation
+# VoiceWatch - macOS Installation
 
 ## Tarball Contents
 
@@ -18,7 +18,7 @@ sudo cp libonnxruntime.dylib libtensorflowlite_c.dylib /usr/local/lib/
 # Install the binary
 sudo cp birdnet-go /usr/local/bin/
 
-# Run BirdNET-Go
+# Run VoiceWatch
 birdnet-go
 ```
 
@@ -72,7 +72,7 @@ the first blocked launch attempt.
 
 ### 4. First run
 
-BirdNET-Go creates its configuration and data directory in the current working
+VoiceWatch creates its configuration and data directory in the current working
 directory. On first launch it will:
 
 - Create a default `config.yaml`
@@ -152,5 +152,5 @@ xattr -d com.apple.quarantine birdnet-go
 ## More Information
 
 - Documentation: https://birdnet-go.dev
-- GitHub: https://github.com/tphakala/birdnet-go
-- Discussions: https://github.com/tphakala/birdnet-go/discussions
+- GitHub: https://github.com/tphakala/voicewatch
+- Discussions: https://github.com/tphakala/voicewatch/discussions

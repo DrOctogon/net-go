@@ -18,8 +18,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	"github.com/tphakala/birdnet-go/internal/imageprovider"
+	"github.com/tphakala/voicewatch/internal/datastore"
 )
 
 // =============================================================================
@@ -50,20 +49,10 @@ var sseContractFields = struct {
 	Source         string
 
 	// SSE-specific fields (camelCase)
-	BirdImage          string
 	Timestamp          string
 	EventType          string
 	IsNewSpecies       string
 	DaysSinceFirstSeen string
-
-	// BirdImage nested fields (camelCase via explicit json tags)
-	BirdImageURL            string
-	BirdImageScientificName string
-	BirdImageLicenseName    string
-	BirdImageLicenseURL     string
-	BirdImageAuthorName     string
-	BirdImageAuthorURL      string
-	BirdImageSourceProvider string
 
 	// Source nested fields (camelCase)
 	SourceID          string
@@ -88,20 +77,10 @@ var sseContractFields = struct {
 	Source:         "source",
 
 	// SSE-specific fields (camelCase)
-	BirdImage:          "birdImage",
 	Timestamp:          "timestamp",
 	EventType:          "eventType",
 	IsNewSpecies:       "isNewSpecies",
 	DaysSinceFirstSeen: "daysSinceFirstSeen",
-
-	// BirdImage nested fields (camelCase)
-	BirdImageURL:            "url",
-	BirdImageScientificName: "scientificName",
-	BirdImageLicenseName:    "licenseName",
-	BirdImageLicenseURL:     "licenseURL",
-	BirdImageAuthorName:     "authorName",
-	BirdImageAuthorURL:      "authorURL",
-	BirdImageSourceProvider: "sourceProvider",
 
 	// Source nested fields (camelCase)
 	SourceID:          "id",
@@ -131,24 +110,10 @@ func createTestNoteWithAllFields() datastore.Note {
 		Longitude:      24.9384,
 		Threshold:      0.7,
 		Sensitivity:    1.0,
-		ClipName:       "/home/user/birdnet-go/clips/clip_001.wav",
+		ClipName:       "/home/user/voicewatch/clips/clip_001.wav",
 		ProcessingTime: 150 * time.Millisecond,
 		Verified:       "correct",
 		Locked:         true,
-	}
-}
-
-// createTestBirdImage creates a BirdImage with all fields populated.
-func createTestBirdImage() imageprovider.BirdImage {
-	return imageprovider.BirdImage{
-		URL:            "https://example.com/bird.jpg",
-		ScientificName: "Parus major",
-		LicenseName:    "CC BY-SA 4.0",
-		LicenseURL:     "https://creativecommons.org/licenses/by-sa/4.0/",
-		AuthorName:     "Test Author",
-		AuthorURL:      "https://example.com/author",
-		CachedAt:       time.Date(2024, 1, 15, 12, 0, 0, 0, time.UTC),
-		SourceProvider: "wikimedia",
 	}
 }
 
@@ -156,8 +121,7 @@ func createTestBirdImage() imageprovider.BirdImage {
 // using the newSSEDetectionData constructor (same code path as production).
 func createTestSSEDetectionData() SSEDetectionData {
 	note := createTestNoteWithAllFields()
-	birdImage := createTestBirdImage()
-	det := newSSEDetectionData(&note, &birdImage)
+	det := newSSEDetectionData(&note)
 	det.IsNewSpecies = true
 	det.DaysSinceFirstSeen = 14
 	return det
@@ -208,33 +172,10 @@ func TestSSEContract_DetectionPayload_FieldNames(t *testing.T) {
 	})
 
 	t.Run("SSE-specific fields use camelCase", func(t *testing.T) {
-		assert.Contains(t, payload, sseContractFields.BirdImage,
-			"SSE API CONTRACT VIOLATION: birdImage field must be present")
 		assert.Contains(t, payload, sseContractFields.Timestamp,
 			"SSE API CONTRACT VIOLATION: timestamp field must be present")
 		assert.Contains(t, payload, sseContractFields.EventType,
 			"SSE API CONTRACT VIOLATION: eventType field must be present")
-	})
-
-	t.Run("BirdImage nested structure is correct", func(t *testing.T) {
-		birdImageRaw, exists := payload[sseContractFields.BirdImage]
-		require.True(t, exists, "birdImage field must be present")
-
-		birdImage, ok := birdImageRaw.(map[string]any)
-		require.True(t, ok, "birdImage must be an object")
-
-		expectedBirdImageFields := []string{
-			sseContractFields.BirdImageURL,
-			sseContractFields.BirdImageScientificName,
-			sseContractFields.BirdImageLicenseName,
-			sseContractFields.BirdImageAuthorName,
-			sseContractFields.BirdImageSourceProvider,
-		}
-
-		for _, field := range expectedBirdImageFields {
-			assert.Contains(t, birdImage, field,
-				"SSE API CONTRACT VIOLATION: BirdImage.%s field must be present", field)
-		}
 	})
 
 	t.Run("Source nested structure is correct", func(t *testing.T) {
@@ -304,19 +245,6 @@ func TestSSEContract_DetectionPayload_FieldNames(t *testing.T) {
 			"SSE API CONTRACT: clipName must be filename only, no directory path")
 	})
 
-	t.Run("BirdImage nested fields have correct values", func(t *testing.T) {
-		birdImage, ok := payload[sseContractFields.BirdImage].(map[string]any)
-		require.True(t, ok, "birdImage must be an object")
-
-		assert.Equal(t, "https://example.com/bird.jpg", birdImage[sseContractFields.BirdImageURL],
-			"SSE API CONTRACT: birdImage.url value mismatch")
-		assert.Equal(t, "CC BY-SA 4.0", birdImage[sseContractFields.BirdImageLicenseName],
-			"SSE API CONTRACT: birdImage.licenseName value mismatch")
-		assert.Equal(t, "Test Author", birdImage[sseContractFields.BirdImageAuthorName],
-			"SSE API CONTRACT: birdImage.authorName value mismatch")
-		assert.Equal(t, "wikimedia", birdImage[sseContractFields.BirdImageSourceProvider],
-			"SSE API CONTRACT: birdImage.sourceProvider value mismatch")
-	})
 }
 
 // TestSSEContract_DetectionPayload_DateTimeFormat validates date/time string formats.
@@ -369,19 +297,6 @@ func TestSSEContract_FrontendAccessPaths(t *testing.T) {
 		assert.InDelta(t, 0.85, confidence, 0.001)
 	})
 
-	t.Run("Frontend can access bird image URL", func(t *testing.T) {
-		// Frontend accesses: data.birdImage.url
-		birdImageRaw, exists := payload["birdImage"]
-		require.True(t, exists, "FRONTEND BROKEN: Cannot access data.birdImage")
-
-		birdImage, ok := birdImageRaw.(map[string]any)
-		require.True(t, ok, "FRONTEND BROKEN: data.birdImage is not an object")
-
-		url, exists := birdImage["url"]
-		require.True(t, exists, "FRONTEND BROKEN: Cannot access data.birdImage.url")
-		assert.Equal(t, "https://example.com/bird.jpg", url)
-	})
-
 	t.Run("Frontend can access detection ID", func(t *testing.T) {
 		// Frontend accesses: data.id for navigation/links
 		id, exists := payload["id"]
@@ -402,8 +317,7 @@ func TestSSEContract_IsNewSpeciesOmittedWhenFalse(t *testing.T) {
 	t.Parallel()
 
 	note := createTestNoteWithAllFields()
-	birdImage := createTestBirdImage()
-	detection := newSSEDetectionData(&note, &birdImage)
+	detection := newSSEDetectionData(&note)
 	detection.IsNewSpecies = false   // Should be omitted
 	detection.DaysSinceFirstSeen = 0 // Should be omitted
 
@@ -448,7 +362,7 @@ func TestSSEContract_AllExpectedFieldsPresent(t *testing.T) {
 		"latitude", "longitude",
 		"clipName",
 		// SSE-specific (camelCase)
-		"birdImage", "timestamp", "eventType",
+		"timestamp", "eventType",
 	}
 
 	for _, field := range expectedRootFields {
@@ -499,7 +413,7 @@ func TestSSEContract_SensitiveDataExcluded(t *testing.T) {
 
 	note := createTestNoteWithAllFields()
 	// Set a full filesystem path to verify it gets stripped to filename
-	note.ClipName = "/var/lib/birdnet-go/clips/2024/01/15/clip_001.wav"
+	note.ClipName = "/var/lib/voicewatch/clips/2024/01/15/clip_001.wav"
 	// Set source with credentials in SafeString
 	note.Source = datastore.AudioSource{
 		ID:          "rtsp_abc123",
@@ -507,8 +421,7 @@ func TestSSEContract_SensitiveDataExcluded(t *testing.T) {
 		DisplayName: "Backyard Camera",
 	}
 
-	birdImage := createTestBirdImage()
-	detection := newSSEDetectionData(&note, &birdImage)
+	detection := newSSEDetectionData(&note)
 
 	jsonBytes, err := json.Marshal(detection)
 	require.NoError(t, err)
@@ -516,7 +429,7 @@ func TestSSEContract_SensitiveDataExcluded(t *testing.T) {
 	jsonStr := string(jsonBytes)
 
 	// ClipName should be just the filename, not the full path
-	assert.NotContains(t, jsonStr, "/var/lib/birdnet-go",
+	assert.NotContains(t, jsonStr, "/var/lib/voicewatch",
 		"SSE payload must not contain filesystem paths")
 	assert.Contains(t, jsonStr, "clip_001.wav",
 		"SSE payload should contain the clip filename")
@@ -600,8 +513,7 @@ func TestSSEContract_VerifiedAndLocked_Serialization(t *testing.T) {
 
 		note := createTestNoteWithAllFields()
 		note.Verified = "correct"
-		birdImage := createTestBirdImage()
-		detection := newSSEDetectionData(&note, &birdImage)
+		detection := newSSEDetectionData(&note)
 
 		jsonBytes, err := json.Marshal(detection)
 		require.NoError(t, err)
@@ -621,8 +533,7 @@ func TestSSEContract_VerifiedAndLocked_Serialization(t *testing.T) {
 
 		note := createTestNoteWithAllFields()
 		note.Verified = "" // empty string, omitempty should omit
-		birdImage := createTestBirdImage()
-		detection := newSSEDetectionData(&note, &birdImage)
+		detection := newSSEDetectionData(&note)
 
 		jsonBytes, err := json.Marshal(detection)
 		require.NoError(t, err)
@@ -641,8 +552,7 @@ func TestSSEContract_VerifiedAndLocked_Serialization(t *testing.T) {
 
 		note := createTestNoteWithAllFields()
 		note.Locked = true
-		birdImage := createTestBirdImage()
-		detection := newSSEDetectionData(&note, &birdImage)
+		detection := newSSEDetectionData(&note)
 
 		jsonBytes, err := json.Marshal(detection)
 		require.NoError(t, err)
@@ -662,8 +572,7 @@ func TestSSEContract_VerifiedAndLocked_Serialization(t *testing.T) {
 
 		note := createTestNoteWithAllFields()
 		note.Locked = false
-		birdImage := createTestBirdImage()
-		detection := newSSEDetectionData(&note, &birdImage)
+		detection := newSSEDetectionData(&note)
 
 		jsonBytes, err := json.Marshal(detection)
 		require.NoError(t, err)
@@ -689,8 +598,7 @@ func TestSSEContract_Source_NestedFields(t *testing.T) {
 		t.Parallel()
 
 		note := createTestNoteWithAllFields()
-		birdImage := createTestBirdImage()
-		detection := newSSEDetectionData(&note, &birdImage)
+		detection := newSSEDetectionData(&note)
 
 		jsonBytes, err := json.Marshal(detection)
 		require.NoError(t, err)
@@ -717,8 +625,7 @@ func TestSSEContract_Source_NestedFields(t *testing.T) {
 		// newSSEDetectionData does not set Type from the Note source,
 		// so it should be omitted due to omitempty
 		note := createTestNoteWithAllFields()
-		birdImage := createTestBirdImage()
-		detection := newSSEDetectionData(&note, &birdImage)
+		detection := newSSEDetectionData(&note)
 
 		jsonBytes, err := json.Marshal(detection)
 		require.NoError(t, err)
@@ -740,8 +647,7 @@ func TestSSEContract_Source_NestedFields(t *testing.T) {
 
 		note := createTestNoteWithAllFields()
 		note.Source = datastore.AudioSource{} // empty source
-		birdImage := createTestBirdImage()
-		detection := newSSEDetectionData(&note, &birdImage)
+		detection := newSSEDetectionData(&note)
 
 		jsonBytes, err := json.Marshal(detection)
 		require.NoError(t, err)
@@ -765,8 +671,7 @@ func TestSSEContract_BeginTimeEndTime_RFC3339(t *testing.T) {
 		t.Parallel()
 
 		note := createTestNoteWithAllFields()
-		birdImage := createTestBirdImage()
-		detection := newSSEDetectionData(&note, &birdImage)
+		detection := newSSEDetectionData(&note)
 
 		jsonBytes, err := json.Marshal(detection)
 		require.NoError(t, err)
@@ -812,8 +717,7 @@ func TestSSEContract_BeginTimeEndTime_RFC3339(t *testing.T) {
 		note := createTestNoteWithAllFields()
 		note.BeginTime = time.Time{} // zero value
 		note.EndTime = time.Time{}   // zero value
-		birdImage := createTestBirdImage()
-		detection := newSSEDetectionData(&note, &birdImage)
+		detection := newSSEDetectionData(&note)
 
 		jsonBytes, err := json.Marshal(detection)
 		require.NoError(t, err)
@@ -841,8 +745,7 @@ func TestSSEContract_IsNewSpecies_DaysSinceFirstSeen(t *testing.T) {
 		t.Parallel()
 
 		note := createTestNoteWithAllFields()
-		birdImage := createTestBirdImage()
-		detection := newSSEDetectionData(&note, &birdImage)
+		detection := newSSEDetectionData(&note)
 		detection.IsNewSpecies = true
 		detection.DaysSinceFirstSeen = 0
 
@@ -868,8 +771,7 @@ func TestSSEContract_IsNewSpecies_DaysSinceFirstSeen(t *testing.T) {
 		t.Parallel()
 
 		note := createTestNoteWithAllFields()
-		birdImage := createTestBirdImage()
-		detection := newSSEDetectionData(&note, &birdImage)
+		detection := newSSEDetectionData(&note)
 		detection.IsNewSpecies = false
 		detection.DaysSinceFirstSeen = 42
 
@@ -896,8 +798,7 @@ func TestSSEContract_IsNewSpecies_DaysSinceFirstSeen(t *testing.T) {
 		t.Parallel()
 
 		note := createTestNoteWithAllFields()
-		birdImage := createTestBirdImage()
-		detection := newSSEDetectionData(&note, &birdImage)
+		detection := newSSEDetectionData(&note)
 		detection.IsNewSpecies = true
 		detection.DaysSinceFirstSeen = 7
 
@@ -919,102 +820,6 @@ func TestSSEContract_IsNewSpecies_DaysSinceFirstSeen(t *testing.T) {
 	})
 }
 
-// TestSSEContract_BirdImage_AllSubFields validates that all birdImage sub-fields
-// are present with correct camelCase names and expected values.
-func TestSSEContract_BirdImage_AllSubFields(t *testing.T) {
-	t.Parallel()
-
-	t.Run("all birdImage fields present with values", func(t *testing.T) {
-		t.Parallel()
-
-		detection := createTestSSEDetectionData()
-
-		jsonBytes, err := json.Marshal(detection)
-		require.NoError(t, err)
-
-		var payload map[string]any
-		err = json.Unmarshal(jsonBytes, &payload)
-		require.NoError(t, err)
-
-		birdImageRaw, exists := payload["birdImage"]
-		require.True(t, exists, "SSE API CONTRACT: birdImage must be present")
-
-		birdImage, ok := birdImageRaw.(map[string]any)
-		require.True(t, ok, "SSE API CONTRACT: birdImage must be an object")
-
-		// Verify all fields are present and have correct values
-		assert.Equal(t, "https://example.com/bird.jpg", birdImage["url"],
-			"SSE API CONTRACT: birdImage.url value must match")
-		assert.Equal(t, "Parus major", birdImage["scientificName"],
-			"SSE API CONTRACT: birdImage.scientificName value must match")
-		assert.Equal(t, "CC BY-SA 4.0", birdImage["licenseName"],
-			"SSE API CONTRACT: birdImage.licenseName value must match")
-		assert.Equal(t, "https://creativecommons.org/licenses/by-sa/4.0/", birdImage["licenseURL"],
-			"SSE API CONTRACT: birdImage.licenseURL value must match")
-		assert.Equal(t, "Test Author", birdImage["authorName"],
-			"SSE API CONTRACT: birdImage.authorName value must match")
-		assert.Equal(t, "https://example.com/author", birdImage["authorURL"],
-			"SSE API CONTRACT: birdImage.authorURL value must match")
-		assert.Equal(t, "wikimedia", birdImage["sourceProvider"],
-			"SSE API CONTRACT: birdImage.sourceProvider value must match")
-	})
-
-	t.Run("birdImage fields use camelCase not PascalCase", func(t *testing.T) {
-		t.Parallel()
-
-		detection := createTestSSEDetectionData()
-
-		jsonBytes, err := json.Marshal(detection)
-		require.NoError(t, err)
-
-		jsonStr := string(jsonBytes)
-
-		// These PascalCase versions must never appear inside the birdImage object
-		forbiddenBirdImageFields := []string{
-			`"URL"`,
-			`"ScientificName"`,
-			`"LicenseName"`,
-			`"LicenseURL"`,
-			`"AuthorName"`,
-			`"AuthorURL"`,
-			`"SourceProvider"`,
-			`"CachedAt"`,
-		}
-
-		for _, field := range forbiddenBirdImageFields {
-			assert.NotContains(t, jsonStr, field+`:`,
-				"SSE API CONTRACT VIOLATION: PascalCase %s must not appear in birdImage", field)
-		}
-	})
-
-	t.Run("birdImage present as empty object when nil image provided", func(t *testing.T) {
-		t.Parallel()
-
-		note := createTestNoteWithAllFields()
-		detection := newSSEDetectionData(&note, nil)
-
-		jsonBytes, err := json.Marshal(detection)
-		require.NoError(t, err)
-
-		var payload map[string]any
-		err = json.Unmarshal(jsonBytes, &payload)
-		require.NoError(t, err)
-
-		// birdImage is not a pointer and has no omitempty, so it must always be present
-		birdImageRaw, exists := payload["birdImage"]
-		require.True(t, exists,
-			"SSE API CONTRACT: birdImage must always be present (no omitempty)")
-
-		birdImage, ok := birdImageRaw.(map[string]any)
-		require.True(t, ok, "SSE API CONTRACT: birdImage must be an object")
-
-		// url field should be present but empty (no omitempty on url)
-		urlVal, urlExists := birdImage["url"]
-		assert.True(t, urlExists, "SSE API CONTRACT: birdImage.url key must exist even when empty")
-		assert.Empty(t, urlVal,
-			"SSE API CONTRACT: birdImage.url must be empty when no image provided")
-	})
-}
 
 // TestSSEContract_ZeroConfidence_NotOmitted verifies that a confidence value of 0.0
 // is still present in the JSON payload (not omitted by omitempty).
@@ -1023,8 +828,7 @@ func TestSSEContract_ZeroConfidence_NotOmitted(t *testing.T) {
 
 	note := createTestNoteWithAllFields()
 	note.Confidence = 0.0 // Zero confidence is valid — must not be omitted
-	birdImage := createTestBirdImage()
-	detection := newSSEDetectionData(&note, &birdImage)
+	detection := newSSEDetectionData(&note)
 
 	jsonBytes, err := json.Marshal(detection)
 	require.NoError(t, err)
@@ -1046,8 +850,7 @@ func TestSSEContract_AllFieldValues_RoundTrip(t *testing.T) {
 	t.Parallel()
 
 	note := createTestNoteWithAllFields()
-	birdImage := createTestBirdImage()
-	detection := newSSEDetectionData(&note, &birdImage)
+	detection := newSSEDetectionData(&note)
 	detection.IsNewSpecies = true
 	detection.DaysSinceFirstSeen = 5
 
@@ -1145,24 +948,6 @@ func TestSSEContract_AllFieldValues_RoundTrip(t *testing.T) {
 			"endTime RFC3339 value mismatch")
 	})
 
-	// ==========================================================================
-	// BIRDIMAGE FIELD VALUES
-	// ==========================================================================
-
-	t.Run("birdImage field values", func(t *testing.T) {
-		t.Parallel()
-
-		bi, ok := payload["birdImage"].(map[string]any)
-		require.True(t, ok, "birdImage must be an object")
-
-		assert.Equal(t, "https://example.com/bird.jpg", bi["url"])
-		assert.Equal(t, "Parus major", bi["scientificName"])
-		assert.Equal(t, "CC BY-SA 4.0", bi["licenseName"])
-		assert.Equal(t, "https://creativecommons.org/licenses/by-sa/4.0/", bi["licenseURL"])
-		assert.Equal(t, "Test Author", bi["authorName"])
-		assert.Equal(t, "https://example.com/author", bi["authorURL"])
-		assert.Equal(t, "wikimedia", bi["sourceProvider"])
-	})
 }
 
 // TestSSEContract_OmitemptyFields_Comprehensive tests the omitempty behavior of
@@ -1189,7 +974,7 @@ func TestSSEContract_OmitemptyFields_Comprehensive(t *testing.T) {
 		// Source.ID: ""       (omitempty on Source pointer)
 	}
 
-	detection := newSSEDetectionData(&note, nil)
+	detection := newSSEDetectionData(&note)
 	// IsNewSpecies: false    (omitempty)
 	// DaysSinceFirstSeen: 0  (omitempty)
 
@@ -1212,7 +997,6 @@ func TestSSEContract_OmitemptyFields_Comprehensive(t *testing.T) {
 			"commonName",     // string, no omitempty
 			"confidence",     // float64, no omitempty — 0.0 is valid
 			"locked",         // bool, no omitempty
-			"birdImage",      // struct, no omitempty
 			"timestamp",      // time.Time, no omitempty
 			"eventType",      // string, no omitempty
 		}
@@ -1279,7 +1063,6 @@ func TestSSEContract_NoUnexpectedFields(t *testing.T) {
 		"endTime":            true,
 		"verified":           true,
 		"locked":             true,
-		"birdImage":          true,
 		"timestamp":          true,
 		"eventType":          true,
 		"isNewSpecies":       true,
@@ -1289,25 +1072,6 @@ func TestSSEContract_NoUnexpectedFields(t *testing.T) {
 	for field := range payload {
 		assert.True(t, allowedRootFields[field],
 			"SSE API CONTRACT: unexpected field '%s' found in payload — add to allowlist or remove from struct", field)
-	}
-
-	// Check birdImage sub-fields
-	allowedBirdImageFields := map[string]bool{
-		"url":            true,
-		"scientificName": true,
-		"licenseName":    true,
-		"licenseURL":     true,
-		"authorName":     true,
-		"authorURL":      true,
-		"sourceProvider": true,
-	}
-
-	birdImage, ok := payload["birdImage"].(map[string]any)
-	require.True(t, ok, "birdImage must be an object")
-
-	for field := range birdImage {
-		assert.True(t, allowedBirdImageFields[field],
-			"SSE API CONTRACT: unexpected birdImage field '%s' found — add to allowlist or remove from struct", field)
 	}
 
 	// Check source sub-fields
@@ -1338,8 +1102,7 @@ func TestSSEContract_NewSSEDetectionData_Constructor(t *testing.T) {
 
 		note := createTestNoteWithAllFields()
 		note.ClipName = "/deeply/nested/path/to/recordings/2024/clip.wav"
-		birdImage := createTestBirdImage()
-		detection := newSSEDetectionData(&note, &birdImage)
+		detection := newSSEDetectionData(&note)
 
 		assert.Equal(t, "clip.wav", detection.ClipName,
 			"ClipName must be stripped to filename only")
@@ -1350,8 +1113,7 @@ func TestSSEContract_NewSSEDetectionData_Constructor(t *testing.T) {
 
 		note := createTestNoteWithAllFields()
 		note.ClipName = ""
-		birdImage := createTestBirdImage()
-		detection := newSSEDetectionData(&note, &birdImage)
+		detection := newSSEDetectionData(&note)
 
 		assert.Empty(t, detection.ClipName,
 			"Empty ClipName must remain empty, not '.'")
@@ -1361,8 +1123,7 @@ func TestSSEContract_NewSSEDetectionData_Constructor(t *testing.T) {
 		t.Parallel()
 
 		note := createTestNoteWithAllFields()
-		birdImage := createTestBirdImage()
-		detection := newSSEDetectionData(&note, &birdImage)
+		detection := newSSEDetectionData(&note)
 
 		assert.Equal(t, "new_detection", detection.EventType,
 			"EventType must always be 'new_detection'")
@@ -1373,8 +1134,7 @@ func TestSSEContract_NewSSEDetectionData_Constructor(t *testing.T) {
 
 		before := time.Now()
 		note := createTestNoteWithAllFields()
-		birdImage := createTestBirdImage()
-		detection := newSSEDetectionData(&note, &birdImage)
+		detection := newSSEDetectionData(&note)
 		after := time.Now()
 
 		assert.False(t, detection.Timestamp.Before(before),

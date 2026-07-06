@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/datastore/v2/entities"
+	"github.com/tphakala/voicewatch/internal/datastore/v2/entities"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	gorm_logger "gorm.io/gorm/logger"
@@ -54,7 +54,7 @@ func TestUpdateLabelType_ChangesLabelTypeID(t *testing.T) {
 	require.NotZero(t, ltB.ID)
 
 	// Seed a model (required FK for labels).
-	model := entities.AIModel{Name: "BirdNET", Version: "2.4", Variant: "default", ModelType: entities.ModelTypeBird}
+	model := entities.AIModel{Name: "VoiceWatch", Version: "2.4", Variant: "default", ModelType: entities.ModelTypeBird}
 	require.NoError(t, db.Create(&model).Error)
 
 	// Create a label with type A.

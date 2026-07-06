@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/tphakala/birdnet-go/internal/conf"
+	"github.com/tphakala/voicewatch/internal/conf"
 )
 
 // testModelID is the default model identifier used in threshold tests.
@@ -22,7 +22,7 @@ func testThresholdKey(species string) string {
 func newTestProcessor() *Processor {
 	return &Processor{
 		Settings: &conf.Settings{
-			BirdNET: conf.BirdNETConfig{
+			VoiceWatch: conf.VoiceWatchConfig{
 				Threshold: 0.80, // Default base threshold for testing
 			},
 			Realtime: conf.RealtimeSettings{
@@ -385,27 +385,27 @@ func TestApprovedDetectionTriggersLearning(t *testing.T) {
 func TestDynamicThresholds_CrossModelIsolation(t *testing.T) {
 	p := newTestProcessor()
 
-	// Add threshold for BirdNET
+	// Add threshold for VoiceWatch
 	p.addSpeciesToDynamicThresholds("BirdNET_V2.4", "robin", "Turdus migratorius", 0.6)
 
 	// Add threshold for Perch
 	p.addSpeciesToDynamicThresholds("Perch_V2", "robin", "Turdus migratorius", 0.4)
 
 	// Verify they're independent
-	birdnetThreshold := p.getAdjustedConfidenceThreshold("BirdNET_V2.4", "robin", 0.6, false)
+	voicewatchThreshold := p.getAdjustedConfidenceThreshold("BirdNET_V2.4", "robin", 0.6, false)
 	perchThreshold := p.getAdjustedConfidenceThreshold("Perch_V2", "robin", 0.4, false)
 
-	assert.InDelta(t, 0.6, float64(birdnetThreshold), 0.01, "BirdNET threshold should be independent")
+	assert.InDelta(t, 0.6, float64(voicewatchThreshold), 0.01, "VoiceWatch threshold should be independent")
 	assert.InDelta(t, 0.4, float64(perchThreshold), 0.01, "Perch threshold should be independent")
 
-	// Learn from BirdNET model only
+	// Learn from VoiceWatch model only
 	p.LearnFromApprovedDetection("BirdNET_V2.4", "robin", "Turdus migratorius", 0.95)
 
-	birdnetKey := dynamicThresholdKey("BirdNET_V2.4", "robin")
+	voicewatchKey := dynamicThresholdKey("BirdNET_V2.4", "robin")
 	perchKey := dynamicThresholdKey("Perch_V2", "robin")
 
-	// BirdNET should have leveled up
-	assert.Equal(t, 1, p.DynamicThresholds[birdnetKey].Level, "BirdNET level should increase")
+	// VoiceWatch should have leveled up
+	assert.Equal(t, 1, p.DynamicThresholds[voicewatchKey].Level, "VoiceWatch level should increase")
 
 	// Perch should be unaffected
 	assert.Equal(t, 0, p.DynamicThresholds[perchKey].Level, "Perch level should remain 0")
@@ -420,7 +420,7 @@ func TestDynamicThresholdKey(t *testing.T) {
 
 	t.Run("DefaultsEmptyModel", func(t *testing.T) {
 		key := dynamicThresholdKey("", "robin")
-		assert.Equal(t, "BirdNET:robin", key)
+		assert.Equal(t, "VoiceWatch:robin", key)
 	})
 
 	t.Run("SplitsKey", func(t *testing.T) {
@@ -489,7 +489,7 @@ func TestRecalculateDynamicThresholds(t *testing.T) {
 		}
 
 		// Change the base threshold from 0.80 to 0.60
-		p.Settings.BirdNET.Threshold = 0.60
+		p.Settings.VoiceWatch.Threshold = 0.60
 
 		p.RecalculateDynamicThresholds()
 
@@ -524,7 +524,7 @@ func TestRecalculateDynamicThresholds(t *testing.T) {
 		}
 
 		// Lower the base threshold
-		p.Settings.BirdNET.Threshold = 0.60
+		p.Settings.VoiceWatch.Threshold = 0.60
 
 		p.RecalculateDynamicThresholds()
 
@@ -535,7 +535,7 @@ func TestRecalculateDynamicThresholds(t *testing.T) {
 
 	t.Run("EmptyMapIsNoOp", func(t *testing.T) {
 		p := newTestProcessor()
-		p.Settings.BirdNET.Threshold = 0.60
+		p.Settings.VoiceWatch.Threshold = 0.60
 
 		// Should not panic or error with empty map
 		p.RecalculateDynamicThresholds()
@@ -576,7 +576,7 @@ func TestRecalculateDynamicThresholds(t *testing.T) {
 		}
 
 		// Increase the base threshold from 0.80 to 1.00
-		p.Settings.BirdNET.Threshold = 1.00
+		p.Settings.VoiceWatch.Threshold = 1.00
 
 		p.RecalculateDynamicThresholds()
 

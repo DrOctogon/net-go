@@ -19,7 +19,7 @@ function uniqueTestId(): string {
 
 // Helper to create a test notification and return its ID
 async function createTestNotification(): Promise<string> {
-  const response = await apiCall('/notifications/test/new-species', {
+  const response = await apiCall('/notifications/test', {
     method: 'POST',
   });
 
@@ -68,7 +68,7 @@ describe('Notifications CRUD API', () => {
   });
 
   it('can create test notification', async () => {
-    const response = await apiCall('/notifications/test/new-species', {
+    const response = await apiCall('/notifications/test', {
       method: 'POST',
     });
 
@@ -637,11 +637,11 @@ describe('Notification Structure', () => {
     const response = await getNotification(notificationId);
     const notification = await response.json();
 
-    // Test notification should have species metadata
+    // Test notification should carry human-voice detection metadata
     expect(notification).toHaveProperty('metadata');
-    expect(notification.metadata).toHaveProperty('species');
-    expect(notification.metadata).toHaveProperty('is_new_species');
-    expect(notification.metadata.is_new_species).toBe(true);
+    expect(notification.metadata).toHaveProperty('confidence');
+    expect(notification.metadata).toHaveProperty('is_test');
+    expect(notification.metadata.is_test).toBe(true);
 
     // Clean up
     await deleteNotification(notificationId);

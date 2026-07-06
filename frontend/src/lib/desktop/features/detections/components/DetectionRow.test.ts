@@ -39,6 +39,36 @@ async function openMenuAndClick(itemName: RegExp) {
   await fireEvent.click(item);
 }
 
+describe('DetectionRow transcript presentation', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('renders the transcript text when detection.transcript is set', () => {
+    const detection = createMockDetection({ transcript: 'package at the door' });
+    render(DetectionRow, { props: { detection } });
+    expect(screen.getByText('package at the door')).toBeInTheDocument();
+  });
+
+  it('shows the noTranscript fallback when transcript is absent', () => {
+    const detection = createMockDetection({ transcript: undefined });
+    render(DetectionRow, { props: { detection } });
+    // t() is mocked to return its key
+    expect(screen.getByText('detections.noTranscript')).toBeInTheDocument();
+  });
+
+  it('does not render a species thumbnail image element', () => {
+    const detection = createMockDetection({ transcript: 'hello world' });
+    render(DetectionRow, { props: { detection } });
+    // After the human-voice pivot, species have no avatar/thumbnail image.
+    // The species name renders as text; no <img> is labeled with the species name.
+    const speciesAvatar = Array.from(document.querySelectorAll('img')).find(
+      img => img.getAttribute('alt') === detection.commonName
+    );
+    expect(speciesAvatar).toBeUndefined();
+  });
+});
+
 describe('DetectionRow action callbacks', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -71,17 +101,6 @@ describe('DetectionRow action callbacks', () => {
     await openMenuAndClick(/lock detection/i);
 
     expect(onToggleLock).toHaveBeenCalledTimes(1);
-  });
-
-  it('invokes onToggleSpecies when the ignore-species menu item is clicked', async () => {
-    const onToggleSpecies = vi.fn();
-    render(DetectionRow, {
-      props: { detection: createMockDetection({ id: 300 }), onToggleSpecies },
-    });
-
-    await openMenuAndClick(/ignore species/i);
-
-    expect(onToggleSpecies).toHaveBeenCalledTimes(1);
   });
 
   it('invokes onMarkCorrect when the mark-correct menu item is clicked', async () => {

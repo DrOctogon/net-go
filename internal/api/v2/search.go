@@ -10,8 +10,8 @@ import (
 	"time"
 
 	"github.com/labstack/echo/v4"
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 const defaultSearchTimeout = 60 * time.Second
@@ -49,8 +49,19 @@ type SearchRequest struct {
 	LockedStatus      string   `json:"lockedStatus"`
 	DeviceFilter      string   `json:"deviceFilter"`
 	TimeOfDay         string   `json:"timeOfDay"`
-	Page              int      `json:"page"`
-	SortBy            string   `json:"sortBy"`
+	// Transcript is a free-text substring to match against the speech-to-text
+	// transcript of each detection. Empty string means no transcript filter.
+	Transcript string `json:"transcript"`
+	// FlaggedOnly, when true, restricts results to detections whose transcript
+	// matched a configured keyword (notes.flagged = true). The frontend sends
+	// { flagged: true } — absent or false means no flag filter.
+	FlaggedOnly bool   `json:"flagged"`
+	// Gender / AgeBand restrict results to detections with the given estimated
+	// speaker attribute. Unrecognized values are ignored (treated as no filter).
+	Gender  string `json:"gender"`
+	AgeBand string `json:"ageBand"`
+	Page    int    `json:"page"`
+	SortBy  string `json:"sortBy"`
 }
 
 // SearchResponse defines the structure of the search API response
@@ -170,6 +181,11 @@ func (c *Controller) logValidatedRequest(path, ip string, req *SearchRequest) {
 
 // buildSearchFilters creates the datastore search filters from the request.
 func (c *Controller) buildSearchFilters(req *SearchRequest, ctxTimeout context.Context) datastore.SearchFilters {
+	var flagged *bool
+	if req.FlaggedOnly {
+		b := true
+		flagged = &b
+	}
 	return datastore.SearchFilters{
 		Species:           req.Species,
 		SpeciesScientific: req.SpeciesScientific,
@@ -184,6 +200,10 @@ func (c *Controller) buildSearchFilters(req *SearchRequest, ctxTimeout context.C
 		UnlockedOnly:      req.LockedStatus == "unlocked",
 		Device:            req.DeviceFilter,
 		TimeOfDay:         req.TimeOfDay,
+		Transcript:        req.Transcript,
+		Flagged:           flagged,
+		Gender:            validSpeakerGenderFilter(req.Gender),
+		AgeBand:           validSpeakerAgeBandFilter(req.AgeBand),
 		Page:              req.Page,
 		PerPage:           defaultPerPage,
 		SortBy:            req.SortBy,
@@ -253,6 +273,9 @@ func (c *Controller) validateAndNormalizeSearchRequest(ctx echo.Context, req *Se
 		c.logWarnIfEnabled("Invalid page number requested, defaulting to 1", logger.Int("requested_page", req.Page), logger.String("path", path), logger.String("ip", ip))
 		req.Page = 1
 	}
+
+	// Trim free-text fields that could arrive with leading/trailing whitespace.
+	req.Transcript = strings.TrimSpace(req.Transcript)
 
 	var err error
 	err = c.validateSearchDates(path, ip, req)

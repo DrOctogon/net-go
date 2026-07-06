@@ -8,23 +8,23 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/tphakala/birdnet-go/internal/analysis"
-	"github.com/tphakala/birdnet-go/internal/app"
-	"github.com/tphakala/birdnet-go/internal/audiocore/engine"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	"github.com/tphakala/birdnet-go/internal/events"
+	"github.com/tphakala/voicewatch/internal/analysis"
+	"github.com/tphakala/voicewatch/internal/app"
+	"github.com/tphakala/voicewatch/internal/audiocore/engine"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/events"
 )
 
-// Command creates the serve command which starts the BirdNET-Go server.
+// Command creates the serve command which starts the VoiceWatch server.
 // The "realtime" command is registered as an alias for backward compatibility.
 func Command(settings *conf.Settings) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "serve",
 		Aliases: []string{"realtime"},
-		Short:   "Start the BirdNET-Go server",
-		Long: `Start the BirdNET-Go server for real-time bird sound identification.
-This command initializes all subsystems (audio capture, BirdNET model,
+		Short:   "Start the VoiceWatch server",
+		Long: `Start the VoiceWatch server for real-time human voice detection.
+This command initializes all subsystems (audio capture, VoiceWatch model,
 web interface, database) and runs until interrupted.
 
 The "realtime" command is an alias for backward compatibility.`,
@@ -58,7 +58,7 @@ The "realtime" command is an alias for backward compatibility.`,
 
 			// Create services. Registration order determines start order;
 			// shutdown happens in reverse within each tier.
-			bnAnalyzer := analysis.NewBirdNETAnalyzer(settings)
+			bnAnalyzer := analysis.NewVoiceWatchAnalyzer(settings)
 			dbService := analysis.NewDatabaseService(settings, metrics)
 			apiService := analysis.NewAPIServerService(settings, bnAnalyzer, dbService, metrics, audioEngine)
 			audioService := analysis.NewAudioPipelineService(settings, bnAnalyzer, dbService, apiService, audioEngine)

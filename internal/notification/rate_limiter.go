@@ -5,7 +5,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/errors"
+	"github.com/tphakala/voicewatch/internal/errors"
 )
 
 // RateLimiter implements a token bucket rate limiter to prevent overwhelming external services.

@@ -1,22 +1,21 @@
-# BirdNET-Go
+# VoiceWatch
 
-BirdNET-Go is an application inspired by BirdNET-Pi and BirdNET Analyzer. It aims to be a high-performance and easy-to-deploy alternative to both of these.
+VoiceWatch is an application inspired by BirdNET-Pi and BirdNET Analyzer. It aims to be a high-performance and easy-to-deploy alternative to both of these.
 
-## BirdNET-Go Features
+## VoiceWatch Features
 
-- Audio analysis based on the BirdNET 2.4 tflite model
-- 24/7 real-time analysis of soundcard capture
-- Real-time analysis output compatible with OBS chat log input for wildlife streams
-- BirdWeather API support for real-time analysis
+- Real-time human voice detection using the Silero VAD model (ONNX)
+- 24/7 real-time analysis of soundcard capture and RTSP streams
+- Optional speech-to-text transcription via whisper.cpp
+- Keyword flagging: mark detections where a configurable keyword appears in the transcript
+- Continuous full-audio rolling capture alongside per-detection clips
 - Analysis output options: SQLite or MySQL database
-- Localized species labels, with extensive language support (over 30 languages)
 - Runs on Windows, Linux (including Raspberry Pi), and macOS
-- Minimal runtime dependencies; the BirdNET TensorFlow Lite model and other supporting files are embedded in the executable
-- Web dashboard with visualization capabilities
+- Minimal runtime dependencies; the Silero VAD model and supporting files are embedded in the executable
+- Web dashboard with detection list, transcripts, and keyword-flag indicators
 - Weather integration through OpenWeather or Yr.no
 - MQTT support for IoT integration
 - Advanced audio processing with equalizer filters
-- Privacy and dog bark filtering capabilities
 - Dynamic threshold adjustment for better detection
 - OAuth2 authentication options for security
 - Optional privacy-first error tracking and telemetry with Prometheus-compatible endpoint
@@ -24,7 +23,7 @@ BirdNET-Go is an application inspired by BirdNET-Pi and BirdNET Analyzer. It aim
 
 ## Supported Platforms
 
-BirdNET-Go has been successfully tested on:
+VoiceWatch has been successfully tested on:
 
 - Raspberry Pi 3B+ with 512MB RAM
 - Raspberry Pi 4B with 4GB RAM
@@ -37,16 +36,16 @@ For 24/7 real-time detection, the Raspberry Pi 3B+ is more than sufficient. It c
 
 See the [Recommended Hardware](hardware.md) document for detailed recommendations on hardware for optimal performance, especially regarding the web interface and advanced features.
 
-Note: TPU accelerators such as Coral.AI are not supported due to incompatibility with the BirdNET tflite model.
+Note: TPU accelerators such as Coral.AI are not supported.
 
 ## Installation
 
 ### Docker Installation (Recommended for Linux)
 
-The easiest way to install BirdNET-Go on Debian, Ubuntu, or Raspberry Pi OS is using the provided installation script which sets up BirdNET-Go as a Docker container:
+The easiest way to install VoiceWatch on Debian, Ubuntu, or Raspberry Pi OS is using the provided installation script which sets up VoiceWatch as a Docker container:
 
 ```bash
-curl -fsSL https://github.com/tphakala/birdnet-go/raw/main/install.sh -o install.sh
+curl -fsSL https://github.com/tphakala/voicewatch/raw/main/install.sh -o install.sh
 bash ./install.sh
 ```
 
@@ -60,11 +59,11 @@ Both registries contain identical images. The installation script uses GitHub Co
 The script will:
 
 - Check system prerequisites and install required packages
-- Pull the latest BirdNET-Go Docker image from the primary registry
+- Pull the latest VoiceWatch Docker image from the primary registry
 - Guide you through configuration (audio input, location, language, etc.)
 - Create a systemd service for automatic start on boot
 - Set up directories for configuration and data persistence
-- Optionally configure privacy-first error tracking to help improve BirdNET-Go
+- Optionally configure privacy-first error tracking to help improve VoiceWatch
 
 The installation script includes several features:
 
@@ -72,30 +71,30 @@ The installation script includes several features:
 - Multiple audio export formats (WAV, FLAC, AAC, MP3, Opus)
 - Automatic performance optimization based on detected hardware
 - Configuration of web interface security
-- Support for over 40 languages for species labels
+- Support for over 40 languages for the web interface
 
 ### Docker Compose Installation
 
-For users who prefer Docker Compose for container management, BirdNET-Go can also be set up using this approach. Docker Compose offers more flexibility and makes it easier to manage container configurations.
+For users who prefer Docker Compose for container management, VoiceWatch can also be set up using this approach. Docker Compose offers more flexibility and makes it easier to manage container configurations.
 
-A [premade docker-compose.yml](https://github.com/tphakala/birdnet-go/blob/main/Docker/docker-compose.yml) file is available in the repository. This file includes:
+A [premade docker-compose.yml](https://github.com/tphakala/voicewatch/blob/main/Docker/docker-compose.yml) file is available in the repository. This file includes:
 
-- The BirdNET-Go container configuration with the latest nightly image
+- The VoiceWatch container configuration with the latest nightly image
 - Environment variables for customization (timezone, user permissions, etc.)
 - Volume mounts for persistent configuration and data storage
 - RAM disk (tmpfs) for HLS streaming segments to improve performance
 - Device mounts for sound card access
 - An optional Cloudflared service (commented out) for secure internet access
 
-See the [Docker Compose Guide](docker_compose_guide.md) for detailed instructions on setting up BirdNET-Go with Docker Compose, including internet access configuration using Cloudflare Tunnel and security options.
+See the [Docker Compose Guide](docker_compose_guide.md) for detailed instructions on setting up VoiceWatch with Docker Compose, including internet access configuration using Cloudflare Tunnel and security options.
 
 ### Manual Installation
 
-Pre-compiled BirdNET-Go executables are also available at https://github.com/tphakala/birdnet-go/releases/. To install manually, download and unzip birdnet-go in any directory you wish to run it in, on Windows for example c:\users\username\birdnet-go.
+Pre-compiled VoiceWatch executables are also available at https://github.com/tphakala/voicewatch/releases/. To install manually, download and unzip birdnet-go in any directory you wish to run it in, on Windows for example c:\users\username\birdnet-go.
 
 #### External Dependencies
 
-BirdNET-Go has minimal external dependencies, but requires a few specific tools for certain features:
+VoiceWatch has minimal external dependencies, but requires a few specific tools for certain features:
 
 - **TensorFlow Lite C library**: Required for the core audio analysis functionality
 - **FFmpeg**: Required for RTSP stream capture, audio export to formats other than WAV (MP3, AAC, FLAC, Opus), and for the HLS live stream feature in the web interface
@@ -107,17 +106,17 @@ For manual installations, you'll need to install these dependencies separately o
 
 #### TensorFlow Lite C library
 
-In addition to BirdNET-Go executable you also need TensorFlow Lite C library which is available for download at https://github.com/tphakala/tflite_c/releases. Download library for your target platform and install it in proper library path for your system:
+In addition to VoiceWatch executable you also need TensorFlow Lite C library which is available for download at https://github.com/tphakala/tflite_c/releases. Download library for your target platform and install it in proper library path for your system:
 
 - On Linux copy **libtensorflowlite_c.so** to **/usr/local/lib** and run "**sudo ldconfig**"
 - On macOS **libtensorflowlite_c.dylib** to **/usr/local/lib**
-- On Windows copy **libtensorflowlite_c.so** to BirdNET-Go executable directory or any other directory in system PATH
+- On Windows copy **libtensorflowlite_c.so** to VoiceWatch executable directory or any other directory in system PATH
 
-> **Note**: For optimal performance using the XNNPACK delegate (enabled by default via `usexnnpack: true` in config), ensure you have downloaded version `v2.17.1` or newer of the TensorFlow Lite C library. If a compatible library is not found, BirdNET-Go will fall back to standard CPU processing.
+> **Note**: For optimal performance using the XNNPACK delegate (enabled by default via `usexnnpack: true` in config), ensure you have downloaded version `v2.17.1` or newer of the TensorFlow Lite C library. If a compatible library is not found, VoiceWatch will fall back to standard CPU processing.
 
 ## Configuration
 
-BirdNET-Go accepts several settings from command line but main configuration method is through configuration file which is created when birdnet-go is first run.
+VoiceWatch accepts several settings from command line but main configuration method is through configuration file which is created when birdnet-go is first run.
 
 ### Configuration File Locations
 
@@ -138,14 +137,14 @@ On Windows:
 The configuration file uses the YAML format, which does not recognize tabs as indentation. Below is a comprehensive breakdown of the available configuration options based on the code analysis:
 
 ```yaml
-# BirdNET-Go configuration
+# VoiceWatch configuration
 # Paths support environment variables such as $HOME and %appdata%
 
 debug: false # Enable debug messages for troubleshooting
 
 # Main application settings
 main:
-  name: BirdNET-Go # Name of this node, used to identify the source of notes
+  name: VoiceWatch # Name of this node, used to identify the source of notes
   timeas24h: true # true for 24-hour time format, false for 12-hour time format
   log:
     enabled: false # Enable main application logging
@@ -154,28 +153,19 @@ main:
     maxsize: 10485760 # Maximum log size in bytes for size rotation (10MB)
     rotationday: Sunday # Day of the week for weekly rotation
 
-# BirdNET model specific settings
+# Voice detection model and inference settings
 birdnet:
-  debug: false # Enable debug mode for BirdNET functionality
+  debug: false # Enable debug mode for VAD inference
   sensitivity: 1.0 # Sigmoid sensitivity, 0.1 to 1.5
   threshold: 0.8 # Threshold for prediction confidence to report, 0.0 to 1.0
   overlap: 0.0 # Overlap between chunks, 0.0 to 2.9
-  latitude: 60.1699 # Latitude of recording location for prediction filtering
-  longitude: 24.9384 # Longitude of recording location for prediction filtering
+  latitude: 60.1699 # Latitude of recording location (used for weather integration and detection metadata)
+  longitude: 24.9384 # Longitude of recording location (used for weather integration and detection metadata)
   threads: 0 # Number of CPU threads to use (0 = use all available, automatically optimized for P-cores if detected)
-  locale: en-uk # Language to use for labels
+  locale: en-uk # Language for the web interface
   modelpath: "" # Path to external model file (empty for embedded)
   labelpath: "" # Path to external label file (empty for embedded)
   usexnnpack: true # Use XNNPACK delegate for inference acceleration
-  rangefilter:
-    debug: false # Enable debug mode for range filter
-    model: "" # Range filter model to use. "" (default) uses V2, "legacy" uses V1.
-    threshold:
-      0.01 # Range filter species occurrence threshold (0.0-1.0)
-      # Default (0.01) is recommended for most users
-      # Conservative values (0.05-0.1): Fewer species, higher occurrence probability
-      # Strict values (0.1-0.3): Only species with strong occurrence probability
-      # Very strict values (0.5+): Only the most common species for your area
 
 # Realtime processing settings
 realtime:
@@ -193,7 +183,7 @@ realtime:
       interval: 10 # Measurement interval in seconds (default: 10)
     export:
       debug: false # Enable audio export debug
-      enabled: false # Export audio clips containing identified bird calls
+      enabled: false # Export audio clips containing confirmed voice detections
       path: clips/ # Path to audio clip export directory
       type: wav # Audio file type: wav, mp3, or flac
       bitrate: 192k # Bitrate for audio export
@@ -202,7 +192,7 @@ realtime:
         policy: none # Retention policy: none, age, or usage
         maxage: 30d # Maximum age of audio clips to keep
         maxusage: 85% # Maximum disk usage percentage before cleanup
-        minclips: 5 # Minimum number of clips per species to keep
+        minclips: 5 # Minimum number of clips to keep during cleanup
         checkInterval: 15 # Cleanup check interval in minutes (default: 15)
     equalizer:
       enabled: false # Enable equalizer filters
@@ -220,7 +210,7 @@ realtime:
       debug: false # Enable debug mode for thumbnails
       summary: true # Show thumbnails on summary table
       recent: true # Show thumbnails on recent table
-    summarylimit: 20 # Limit for the number of species shown in the summary table
+    summarylimit: 20 # Limit for the number of detections shown in the summary table
 
   # Dynamic threshold adjustment
   dynamicthreshold:
@@ -234,20 +224,6 @@ realtime:
   log:
     enabled: false # Enable OBS chat log
     path: birdnet.txt # Path to OBS chat log
-
-  # BirdWeather API integration
-  birdweather:
-    enabled: false # Enable BirdWeather uploads
-    debug: false # Enable debug mode for BirdWeather API
-    id: "00000" # BirdWeather ID / Token
-    threshold: 0.9 # Threshold of prediction confidence for uploads
-    locationaccuracy: 10 # Accuracy of location in meters
-    retrysettings:
-      enabled: true # Enable retry mechanism
-      maxretries: 5 # Maximum number of retry attempts
-      initialdelay: 5 # Initial delay before first retry in seconds
-      maxdelay: 300 # Maximum delay between retries in seconds
-      backoffmultiplier: 2.0 # Multiplier for exponential backoff
 
   # Weather integration settings
   weather:
@@ -264,15 +240,8 @@ realtime:
   # Privacy and filtering settings
   privacyfilter:
     debug: false # Enable debug mode for privacy filter
-    enabled: false # Enable privacy filter
-    confidence: 0.8 # Confidence threshold for human detection
-
-  dogbarkfilter:
-    debug: false # Enable debug mode for dog bark filter
-    enabled: false # Enable dog bark filter to prevent misdetections during dog barking
-    confidence: 0.8 # Confidence threshold for dog bark detection
-    remember: 60 # How long to remember barks for filtering (in seconds)
-    species: ["Eurasian Eagle-Owl", "Hooded Crow"] # Species prone to dog bark confusion
+    enabled: false # Enable privacy filter (blocks clip recording when voice is detected during a non-target event)
+    confidence: 0.8 # Confidence threshold for voice detection
 
   # RTSP streaming settings
   rtsp:
@@ -298,51 +267,6 @@ realtime:
   telemetry:
     enabled: false # Enable Prometheus compatible telemetry endpoint
     listen: "localhost:9090" # IP address and port to listen on (e.g., 0.0.0.0:9090)
-
-  # Species-specific settings
-  species:
-    include: [] # Always include these species, bypassing range/occurrence filters
-    exclude: [] # Always exclude these species, regardless of confidence
-    config: # Per-species configuration overrides
-      "European Robin": # Use the exact species name from BirdNET labels
-        threshold: 0.75 # Custom confidence threshold for this species
-        actions: # List of actions to execute on detection (currently only one action per species supported)
-          - type: ExecuteCommand # Action type (only ExecuteCommand supported currently)
-            command: "/path/to/notify_script.sh" # Full path to the script/command
-            parameters: ["CommonName", "Confidence"] # Parameters to pass to the command
-            executedefaults: true # true: run default actions (DB, MQTT, etc.) AND this command. false: run ONLY this command.
-
-  # Species tracking settings (NEW)
-  speciesTracking:
-    enabled: true # Enable tracking of new species discoveries (default: true)
-    newSpeciesWindowDays: 7 # Days to show "New Species" badge after first detection (default: 7)
-    syncIntervalMinutes: 60 # How often to sync tracking data with database in minutes (default: 60)
-
-    # Yearly tracking - tracks first arrivals each calendar year
-    yearlyTracking:
-      enabled: true # Enable yearly "New This Year" tracking (default: true)
-      resetMonth: 1 # Month when yearly tracking resets (1-12, default: 1 for January)
-      resetDay: 1 # Day of month when yearly tracking resets (1-31, default: 1)
-      windowDays: 7 # Days to show "New This Year" badge after first yearly detection (default: 7)
-
-    # Seasonal tracking - tracks first arrivals each season
-    seasonalTracking:
-      enabled: true # Enable seasonal "New This Season" tracking (default: true)
-      windowDays: 7 # Days to show "New This Season" badge after first seasonal detection (default: 7)
-      # Custom season definitions (optional - auto-adjusts for hemisphere if not specified)
-      seasons:
-        spring:
-          startMonth: 3 # March (Northern Hemisphere default)
-          startDay: 20 # Spring equinox
-        summer:
-          startMonth: 6 # June
-          startDay: 21 # Summer solstice
-        fall:
-          startMonth: 9 # September
-          startDay: 22 # Fall equinox
-        winter:
-          startMonth: 12 # December
-          startDay: 21 # Winter solstice
 
 # Web server settings
 webserver:
@@ -414,7 +338,7 @@ output:
 
 ### Command Line Interface
 
-While the primary configuration is done via `config.yaml`, BirdNET-Go also offers several command-line operations:
+While the primary configuration is done via `config.yaml`, VoiceWatch also offers several command-line operations:
 
 ```bash
 birdnet [command] [flags]
@@ -424,10 +348,6 @@ birdnet [command] [flags]
 
 - `realtime`: (Default) Starts the real-time analysis using the configuration file.
 - `benchmark`: Runs a performance benchmark on the current system.
-- `range`: Manages the range filter database (used for location-based species filtering).
-  - `range update`: Downloads or updates the range filter database.
-  - `range info`: Displays information about the current range filter database.
-  - `range print`: Shows all species that pass the current threshold for your location and date, with their probability scores.
 - `support`: Generates a support bundle containing logs and configuration (with sensitive data masked) for troubleshooting.
 - `authors`: Displays author information.
 - `license`: Displays software license information.
@@ -442,13 +362,11 @@ Many configuration options can be overridden via command-line flags (e.g., `--th
 - `-s, --sensitivity`: Set sigmoid sensitivity (0.0 to 1.5).
 - `-t, --threshold`: Set confidence threshold (0.1 to 1.0).
 - `-j, --threads`: Set number of CPU threads (0 for auto).
-- `--locale`: Set language for labels (e.g., `en-us`, `de`).
-- `--latitude`, `--longitude`: Set location coordinates.
-- `--overlap`: Set analysis overlap (0.0 to 2.9).
+- `--overlap`: Set analysis overlap (affects hold-and-count window size).
 
 #### Using a Custom Configuration File
 
-By default, BirdNET-Go looks for `config.yaml` in the [default configuration locations](#configuration-file-locations) for your operating system. You can override this with the `--config` or `-c` flag to use a configuration file at any path:
+By default, VoiceWatch looks for `config.yaml` in the [default configuration locations](#configuration-file-locations) for your operating system. You can override this with the `--config` or `-c` flag to use a configuration file at any path:
 
 ```bash
 # Use a specific config file
@@ -467,59 +385,13 @@ This is useful for:
 - **Container deployments** where the config file is mounted at a non-standard path.
 - **Testing** with scenario-specific configurations.
 
-> **Note:** If the specified config file does not exist, BirdNET-Go will exit with an error rather than creating a default configuration at that path.
-
-### Supported Languages for Species Labels
-
-BirdNET-Go supports an extensive list of languages for species labels. This is significantly expanded from what was shown in the original wiki page:
-
-- Afrikaans (af)
-- Arabic (ar)
-- Bulgarian (bg)
-- Catalan (ca)
-- Chinese (zh)
-- Croatian (hr)
-- Czech (cs)
-- Danish (da)
-- Dutch (nl)
-- English (UK) (en-uk)
-- English (US) (en-us)
-- Estonian (et)
-- Finnish (fi)
-- French (fr)
-- German (de)
-- Greek (el)
-- Hebrew (he)
-- Hungarian (hu)
-- Icelandic (is)
-- Indonesian (id)
-- Italian (it)
-- Japanese (ja)
-- Korean (ko)
-- Latvian (lv)
-- Lithuanian (lt)
-- Malayalam (ml)
-- Norwegian (no)
-- Polish (pl)
-- Portuguese (pt)
-- Portuguese (Brazil) (pt-br)
-- Portuguese (Portugal) (pt-pt)
-- Romanian (ro)
-- Russian (ru)
-- Serbian (sr)
-- Slovak (sk)
-- Slovenian (sl)
-- Spanish (es)
-- Swedish (sv)
-- Thai (th)
-- Turkish (tr)
-- Ukrainian (uk)
+> **Note:** If the specified config file does not exist, VoiceWatch will exit with an error rather than creating a default configuration at that path.
 
 ## Troubleshooting
 
 ### Docker Installation Troubleshooting
 
-If you're having issues with your Docker-based BirdNET-Go installation, here are some common commands and solutions:
+If you're having issues with your Docker-based VoiceWatch installation, here are some common commands and solutions:
 
 #### Service Management
 
@@ -565,34 +437,34 @@ sudo journalctl -fu birdnet-go
    - Check if audio device is working properly: `arecord -d 5 -f S16_LE -r 48000 test.wav`
    - Adjust sensitivity and threshold settings in the configuration file
 
-5. **Constant 'WARNING: BirdNET processing time exceeded buffer length' messages:**
-   - If you have enabled Deep Detection (by setting a high `birdnet.overlap` value, e.g., 2.7), your system might not be powerful enough to keep up with the increased analysis rate. Consider reducing the `birdnet.overlap` value or using more powerful hardware (RPi 4/5 or better recommended for Deep Detection).
+5. **Constant 'WARNING: processing time exceeded buffer length' messages:**
+   - Your system may not be powerful enough to keep up with the configured overlap/analysis rate. Consider reducing `birdnet.overlap` or using more powerful hardware (RPi 4/5 or better recommended).
 
 #### Updating a Docker Installation (`install.sh` method)
 
-If you installed BirdNET-Go using the recommended `install.sh` script, you can update to the latest version by simply re-running the script:
+If you installed VoiceWatch using the recommended `install.sh` script, you can update to the latest version by simply re-running the script:
 
 1.  It is **recommended to download a fresh copy** of the script each time, as it may contain improvements:
     ```bash
-    curl -fsSL https://github.com/tphakala/birdnet-go/raw/main/install.sh -o install.sh
+    curl -fsSL https://github.com/tphakala/voicewatch/raw/main/install.sh -o install.sh
     ```
 2.  Run the downloaded script:
     ```bash
     bash ./install.sh
     ```
-3.  The script will detect your installation and offer an "Update" option. Selecting it will stop the service, pull the newest `nightly` image, update the service configuration if needed, and restart BirdNET-Go. Your configuration and data will be preserved.
+3.  The script will detect your installation and offer an "Update" option. Selecting it will stop the service, pull the newest `nightly` image, update the service configuration if needed, and restart VoiceWatch. Your configuration and data will be preserved.
 
 ### Timezone Configuration
 
-BirdNET-Go uses timezone settings to ensure accurate timestamps for bird detections and proper scheduling of features. If you notice timestamp mismatches or scheduling issues, you may need to adjust the timezone configuration.
+VoiceWatch uses timezone settings to ensure accurate timestamps for voice detections and proper scheduling of features. If you notice timestamp mismatches or scheduling issues, you may need to adjust the timezone configuration.
 
 #### For install.sh Deployments
 
-If you installed BirdNET-Go using the recommended `install.sh` script, the timezone is configured during installation and stored in the systemd service file.
+If you installed VoiceWatch using the recommended `install.sh` script, the timezone is configured during installation and stored in the systemd service file.
 
 ##### Checking Current Timezone
 
-To see what timezone BirdNET-Go is currently using:
+To see what timezone VoiceWatch is currently using:
 
 ```bash
 # Check the timezone setting in the systemd service
@@ -674,7 +546,7 @@ docker-compose up -d
 
 #### For Binary Installations
 
-If you're running BirdNET-Go directly as a binary (not using Docker), it uses the system timezone by default. To override it:
+If you're running VoiceWatch directly as a binary (not using Docker), it uses the system timezone by default. To override it:
 
 ```bash
 # Set timezone environment variable before running
@@ -687,13 +559,13 @@ Or add it to your startup script or systemd service file if you've created one m
 
 > **⚠️ Custom Deployments:** The instructions above apply specifically to installations done via the official `install.sh` script. Custom Docker Compose setups or manual binary deployments may handle timezone configuration differently.
 
-> **💡 System vs Application Timezone:** BirdNET-Go can use a different timezone than your system. This is useful if you want your system in one timezone but want BirdNET-Go to record detections in another (e.g., UTC for standardized scientific data).
+> **💡 System vs Application Timezone:** VoiceWatch can use a different timezone than your system. This is useful if you want your system in one timezone but want VoiceWatch to record detections in another (e.g., UTC for standardized scientific data).
 
-> **🔄 After Updates:** When updating BirdNET-Go using the `install.sh` script, your timezone settings are preserved automatically as of recent versions.
+> **🔄 After Updates:** When updating VoiceWatch using the `install.sh` script, your timezone settings are preserved automatically as of recent versions.
 
 #### Troubleshooting Timezone Issues
 
-**Problem:** Bird detections show wrong timestamps
+**Problem:** Voice detections show wrong timestamps
 
 **Solution:** Check that the timezone in the systemd service matches your actual location. The timezone affects both the displayed time and any time-based features.
 
@@ -707,10 +579,10 @@ Or add it to your startup script or systemd service file if you've created one m
 
 ### Support Script
 
-For more comprehensive troubleshooting, BirdNET-Go provides a support script that collects diagnostic information while protecting your privacy:
+For more comprehensive troubleshooting, VoiceWatch provides a support script that collects diagnostic information while protecting your privacy:
 
 ```bash
-curl -fsSL https://github.com/tphakala/birdnet-go/raw/main/support.sh -o support.sh
+curl -fsSL https://github.com/tphakala/voicewatch/raw/main/support.sh -o support.sh
 sudo bash ./support.sh
 ```
 
@@ -718,7 +590,7 @@ The script will:
 
 - Collect system information (hardware, OS, etc.)
 - Gather Docker configuration and logs
-- Retrieve BirdNET-Go configuration (with sensitive data masked)
+- Retrieve VoiceWatch configuration (with sensitive data masked)
 - Capture systemd service information
 - Collect audio device information
 - Create a support bundle for sharing with developers
@@ -727,7 +599,7 @@ The script will:
 
 If you encounter problems that you can't resolve, please open an issue on the GitHub repository:
 
-1. Go to https://github.com/tphakala/birdnet-go/issues
+1. Go to https://github.com/tphakala/voicewatch/issues
 2. Click "New Issue"
 3. Fill out the issue template carefully, including:
    - What you expected to happen
@@ -738,140 +610,40 @@ If you encounter problems that you can't resolve, please open an issue on the Gi
 
 Providing detailed information in your issue report will help the developers understand and resolve your problem more quickly.
 
-## BirdNET Detection Pipeline
+## VoiceWatch Detection Pipeline
 
-Understanding how BirdNET-Go processes audio and applies various filters is crucial for optimizing your detection accuracy. The detection process follows a multi-stage pipeline where settings are applied in a specific order of precedence.
+Understanding how VoiceWatch processes audio and applies filters is important for optimizing detection accuracy. See also the [Detection Pipeline Architecture](detection-pipeline.md) document for a full diagram.
 
 ### Detection Flow Overview
 
-The detection process follows a multi-stage pipeline where settings are applied in a specific order of precedence:
-
 ```mermaid
 graph TD
-    A[Audio Input] --> B[BirdNET AI Analysis]
-    B --> C{Range Filter Check}
-    C -->|Species Not Allowed| D[🚫 Discard Detection]
-    C -->|Species Allowed| E{Confidence Threshold}
-    E -->|Below Threshold| D
-    E -->|Above Threshold| F{Deep Detection Check}
-    F -->|Insufficient Matches| G[⏳ Hold in Memory]
-    F -->|Sufficient Matches| H{Privacy Filter}
-    H -->|Human Detected| D
-    H -->|No Human| I{Dog Bark Filter}
-    I -->|Recent Bark| D
-    I -->|No Recent Bark| J[✅ Accept Detection]
-    G --> K{Timeout Reached?}
-    K -->|No| G
-    K -->|Yes| L{Min Detections Met?}
-    L -->|No| D
-    L -->|Yes| H
+    A[Audio Input] --> B[Silero VAD Inference]
+    B --> C{Confidence Threshold}
+    C -->|Below Threshold| D[Discard Frame]
+    C -->|Above Threshold| E{Hold-and-Count Window}
+    E -->|Insufficient hits| F[Discard as noise burst]
+    E -->|Min hits reached| G[Approved Detection]
+    G --> H{Transcription enabled?}
+    H -->|No| I[Save to Database]
+    H -->|Yes| J[whisper.cpp transcript]
+    J --> K{Keyword match?}
+    K -->|Yes| L[Save — keyword_flagged = true]
+    K -->|No| M[Save — no flag]
 ```
 
-### Stage 1: Range Filter (Highest Precedence)
+### Stage 1: VAD Confidence Threshold
 
-The **Range Filter** acts as the primary gatekeeper, determining which species are even possible to detect based on location and time. This stage has the highest precedence and cannot be overridden by confidence settings.
-
-#### Components (in order of precedence):
-
-1. **Always Exclude Species** (Absolute Override)
-   - Species in this list are **never** detected, regardless of any other settings
-   - Useful for filtering out non-bird sounds (Dog, Siren, Gun) or problematic species
-   - Configured via: Settings → Species → "Always Exclude Species"
-
-2. **Always Include Species** (Absolute Override)
-   - Species in this list are **always** allowed, bypassing location-based filtering
-   - Automatically assigned maximum probability score (1.0)
-   - Configured via: Settings → Species → "Always Include Species"
-
-3. **Custom Action Species** (Automatic Include)
-   - Species with configured custom actions are automatically included
-   - Also assigned maximum probability score (1.0)
-
-4. **Location-Based Filtering**
-   - Uses AI model trained on eBird data to determine species probability
-   - Considers latitude, longitude, and week of year
-   - Filtered by `birdnet.rangefilter.threshold` (default: 0.01)
+Every 100 ms, Silero VAD produces a probability score (0.0–1.0) for the current audio frame. Frames below `birdnet.threshold` are discarded immediately.
 
 ```yaml
-# Range filter configuration
 birdnet:
-  latitude: 60.1699
-  longitude: 24.9384
-  rangefilter:
-    threshold: 0.01 # Lower = more permissive, higher = more strict
+  threshold: 0.8 # Default VAD confidence requirement
 ```
-
-### Stage 2: Confidence Threshold
-
-After the range filter allows a species, individual detections must meet confidence requirements.
-
-#### Confidence Sources (in order of precedence):
-
-1. **Custom Species Threshold** (Highest)
-
-   ```yaml
-   realtime:
-     species:
-       config:
-         "European Robin":
-           threshold: 0.75 # Overrides global threshold
-   ```
-
-2. **Dynamic Threshold** (If enabled)
-   - Automatically adjusts thresholds based on detection patterns
-   - Can lower thresholds for frequently detected species
-3. **Global BirdNET Threshold** (Default)
-   ```yaml
-   birdnet:
-     threshold: 0.8 # Default confidence requirement
-   ```
 
 ### Dynamic Threshold System
 
-The Dynamic Threshold feature intelligently adapts detection sensitivity for individual species based on recent high-confidence detections. This system helps improve detection rates for species that are actively present in your area while maintaining accuracy.
-
-#### How Dynamic Thresholds Work
-
-```mermaid
-graph TD
-    A[Bird Detection] --> B{Dynamic Threshold<br/>Enabled?}
-    B -->|No| C[Use Base Threshold]
-    B -->|Yes| D{Species Has<br/>Dynamic Threshold?}
-
-    D -->|No| E[Initialize Dynamic<br/>Threshold for Species]
-    D -->|Yes| F{Confidence ><br/>Trigger Value?}
-
-    E --> F
-
-    F -->|Yes| G[High Confidence<br/>Detection!]
-    F -->|No| H{Timer Expired?}
-
-    G --> I[Increment<br/>High Conf Count]
-    I --> J[Reset Timer<br/>+ValidHours]
-    J --> K{Check High<br/>Conf Count}
-
-    K -->|Count = 1| L[Level 1:<br/>Threshold × 0.75]
-    K -->|Count = 2| M[Level 2:<br/>Threshold × 0.5]
-    K -->|Count ≥ 3| N[Level 3:<br/>Threshold × 0.25]
-
-    H -->|Yes| O[Reset to<br/>Base Threshold]
-    H -->|No| P[Keep Current<br/>Threshold]
-
-    L --> Q{Below Min<br/>Threshold?}
-    M --> Q
-    N --> Q
-    O --> R[Apply Threshold]
-    P --> R
-
-    Q -->|Yes| S[Use Min<br/>Threshold]
-    Q -->|No| T[Use Calculated<br/>Threshold]
-
-    S --> R
-    T --> R
-    C --> R
-
-    R --> U[Detection Processed<br/>with Final Threshold]
-```
+The Dynamic Threshold feature adapts the effective threshold over time based on recent high-confidence detections. When a source has been reliably producing high-confidence voice events, the threshold is temporarily lowered to catch softer or more distant speech.
 
 #### Configuration
 
@@ -889,113 +661,39 @@ realtime:
 
 1. **`trigger`** (default: 0.90)
    - The confidence level that activates dynamic threshold adjustment
-   - When a detection exceeds this value, the system starts lowering the threshold for that species
-   - Example: With trigger=0.90, only very high-confidence detections (90%+) will activate the dynamic adjustment
+   - Only very high-confidence frames (above this value) lower the threshold
 
 2. **`min`** (default: 0.20)
    - The absolute minimum threshold value
-   - Prevents the threshold from dropping too low, maintaining detection quality
    - Acts as a safety floor to prevent excessive false positives
 
 3. **`validhours`** (default: 24)
    - Duration (in hours) that the lowered threshold remains active
-   - Timer resets with each new high-confidence detection
-   - After this period without high-confidence detections, the threshold returns to base value
+   - Resets to base threshold after this period without high-confidence detections
 
 #### Threshold Adjustment Levels
 
-The system uses a progressive adjustment based on the number of high-confidence detections:
-
-| High Conf Count | Level | Threshold Multiplier | Example (Base: 0.8) |
-| --------------- | ----- | -------------------- | ------------------- |
-| 0               | 0     | 1.0× (base)          | 0.80                |
-| 1               | 1     | 0.75×                | 0.60                |
-| 2               | 2     | 0.50×                | 0.40                |
-| 3+              | 3     | 0.25×                | 0.20 (min limit)    |
-
-#### Practical Example
-
-Let's walk through a scenario with these settings:
-
-```yaml
-birdnet:
-  threshold: 0.8 # Base threshold
-realtime:
-  dynamicthreshold:
-    enabled: true
-    trigger: 0.9 # High trigger for quality
-    min: 0.2 # Safety floor
-    validhours: 24 # 24-hour window
-```
-
-**Scenario: Great Horned Owl Detection**
-
-1. **Initial State**: Great Horned Owl has no dynamic threshold, uses base 0.8
-2. **First Detection**:
-   - 19:30 (dusk) - Great Horned Owl detected with 0.93 confidence (exceeds 0.9 trigger)
-   - High confidence count: 1
-   - New threshold: 0.8 × 0.75 = 0.6
-   - Timer set to expire at 19:30 tomorrow
-3. **Night Activity**:
-   - 21:45 - Great Horned Owl detected with 0.65 confidence (now passes lowered threshold)
-   - 23:15 - Another detection with 0.94 confidence
-   - High confidence count: 2
-   - New threshold: 0.8 × 0.5 = 0.4
-   - Timer reset to 23:15 tomorrow
-4. **Pre-dawn Activity**:
-   - 04:30 - Detection with 0.91 confidence
-   - High confidence count: 3
-   - Calculated threshold: 0.8 × 0.25 = 0.2
-   - Applied threshold: 0.2 (exactly at min limit)
-5. **Daytime Silence**:
-   - Owls typically inactive during day
-   - No detections from 05:00 to 19:00
-6. **Reset Scenario**:
-   - If no high-confidence detections occur for 24 hours after 04:30
-   - Threshold returns to base 0.8
-   - Next evening's first call would need 0.8+ confidence again
-
-#### Benefits and Use Cases
-
-1. **Adaptive Sensitivity**: Automatically becomes more sensitive to species that are actively vocalizing in your area
-2. **Quality Maintenance**: High trigger values ensure only quality detections influence the system
-3. **Temporal Awareness**: Accounts for daily activity patterns with the time-based reset
-4. **Species-Specific**: Each species maintains its own dynamic threshold independently
-5. **Safety Limits**: Minimum threshold prevents excessive false positives
+| High-Conf Hit Count | Level | Threshold Multiplier | Example (Base: 0.8) |
+| ------------------- | ----- | -------------------- | ------------------- |
+| 0                   | 0     | 1.0× (base)          | 0.80                |
+| 1                   | 1     | 0.75×                | 0.60                |
+| 2                   | 2     | 0.50×                | 0.40                |
+| 3+                  | 3     | 0.25×                | 0.20 (min limit)    |
 
 #### Best Practices
 
-1. **Conservative Trigger**: Set trigger high (0.8-0.95) to ensure only clear detections adjust thresholds
-2. **Reasonable Minimum**: Keep min at or above 0.2 to maintain detection quality
-3. **Monitor with Debug**: Enable debug mode initially to understand how thresholds change:
-   ```yaml
-   dynamicthreshold:
-     debug: true # Logs threshold changes
-   ```
-4. **Combine with Deep Detection**: For best results, use with deep detection to filter false positives:
-   ```yaml
-   birdnet:
-     overlap: 2.7 # Deep detection
-   realtime:
-     dynamicthreshold:
-       enabled: true # Adaptive thresholds
-   ```
+1. Set `trigger` high (0.8–0.95) so only confident detections influence the system.
+2. Keep `min` at or above 0.2 to maintain detection quality.
+3. Enable `debug: true` initially to observe threshold changes in the log.
 
-#### Important Notes
+### Stage 2: Hold-and-Count Window (Deep Detection)
 
-- Dynamic thresholds work **after** the range filter - species must pass location filtering first
-- Each species threshold is independent - one species' activity doesn't affect others
-- The system automatically cleans up stale thresholds to prevent memory bloat
-- Custom species thresholds (if configured) take precedence over dynamic adjustments
-
-### Stage 3: Deep Detection Filter
-
-[Deep Detection](BirdNET‐Go-Guide#deep-detection) uses the `overlap` setting to require multiple detections of the same species within a configurable detection window before accepting it, significantly reducing false positives.
+The hold-and-count window requires multiple VAD hits within a configurable window before accepting a detection, significantly reducing false positives from brief noise bursts.
 
 #### How It Works:
 
 1. **Detection Holding**: All detections are held in a pending state for `captureLength - preCaptureLength` seconds from first detection (defaults to 12 seconds with 15s clip length and 3s pre-capture buffer)
-2. **Counting Mechanism**: During this window, if the same species is detected again, a counter increments
+2. **Counting Mechanism**: During this window, each additional VAD frame above threshold increments a counter
 3. **Threshold Calculation**: The minimum required detections scales with both overlap and detection window duration:
 
 ```yaml
@@ -1031,7 +729,7 @@ With longer detection window (30s clip, 0s pre-capture = 30s window):
 
 #### Processing Timeline:
 
-1. **0 seconds**: Species detected for first time, detection window timer starts
+1. **0 seconds**: Voice detected for first time, detection window timer starts
 2. **0 to detectionWindow seconds**: Additional detections increment the counter
 3. **detectionWindow seconds**: Decision point reached:
    - **If count ≥ minDetections**: Detection approved and processed
@@ -1042,285 +740,60 @@ With longer detection window (30s clip, 0s pre-capture = 30s window):
 - **Configurable timeout**: Detection window duration is `captureLength - preCaptureLength` (prevents audio clip gaps)
 - **No early approval**: Even if minimum detections are met early, the system waits for the full window
 - **Quality improvement**: Higher confidence detections within the window replace lower ones
-- **Memory efficient**: Only one pending detection per species is held at a time
+- **Memory efficient**: Only one pending detection per source is held at a time
 - **Runtime adaptable**: Changes to overlap, clip length, or pre-capture settings take effect within 1 second
-
-### Stage 4: Privacy and Behavioral Filters
-
-Final stage filters that can discard detections based on environmental conditions:
-
-#### Privacy Filter
-
-```yaml
-realtime:
-  privacyfilter:
-    enabled: true
-    confidence: 0.05 # Sensitivity to human voices
-```
-
-- Discards bird detections if human speech is detected after the initial detection
-- Protects privacy by preventing recordings during conversations
-
-#### Dog Bark Filter
-
-```yaml
-realtime:
-  dogbarkfilter:
-    enabled: true
-    confidence: 0.8
-    remember: 60 # Seconds to remember bark
-    species: ["Eurasian Eagle-Owl", "Hooded Crow"] # Species prone to confusion with barks
-```
-
-- **Problem Solved**: The BirdNET AI model frequently confuses dog barks with certain bird calls, especially owl vocalizations (very common: dog bark → Eurasian Eagle-Owl)
-- **How It Works**: When BirdNET detects dog barking above the confidence threshold, it temporarily disables detection of species listed in the filter for the specified duration
-- **Use Cases**: Prevents false detections during periods of constant dog barking, particularly for species that have acoustic similarities to canine vocalizations
-- **Species Selection**: Focus on owl species (especially larger owls) and corvids (crows/ravens) which are most commonly confused with dog barks
 
 ### Setting Precedence Summary
 
 **Highest to Lowest Precedence:**
 
-1. **Always Exclude Species** - Absolute veto power
-2. **Always Include Species** - Bypasses all location filtering
-3. **Custom Action Species** - Automatically included
-4. **Range Filter Threshold** - Location-based species filtering
-5. **Custom Species Confidence** - Overrides global threshold
-6. **Dynamic Threshold** - Automatic adjustment (if enabled)
-7. **Global Confidence Threshold** - Default requirement
-8. **Deep Detection Filter** - Requires multiple matches
-9. **Privacy Filter** - Environmental safety
-10. **Dog Bark Filter** - Behavioral filtering
+1. **VAD Confidence Threshold** — frames below threshold are discarded immediately
+2. **Dynamic Threshold** — automatic adjustment (if enabled)
+3. **Hold-and-Count Window** — requires multiple hits within the detection window
+4. **Transcription + Keyword Flagging** — optional post-approval enrichment
 
 ### Optimization Tips
 
 #### For Higher Accuracy (Fewer False Positives):
 
 - Increase `birdnet.threshold` (e.g., 0.9)
-- Enable deep detection with `overlap: 2.7`
-- Use stricter range filter threshold (e.g., 0.05)
-- Enable privacy and dog bark filters (especially for owl/crow confusion)
+- Enable deep detection with `overlap: 2.7` (requires more CPU)
 
-#### For Higher Sensitivity (Catch More Species):
+#### For Higher Sensitivity (Catch More Events):
 
 - Lower `birdnet.threshold` (e.g., 0.6)
-- Use permissive range filter threshold (0.01)
-- Add rare species to "Always Include" list
-- Disable behavioral filters in quiet environments
-
-#### For Specific Species:
-
-- Use custom thresholds for problematic species
-- Add reliable local species to "Always Include"
-- Add problematic non-bird sounds to "Always Exclude"
+- Combine with a longer hold-and-count window to compensate
 
 ### Viewing Your Current Configuration
 
-Use these commands to inspect your current detection settings:
-
 ```bash
-# View species included by range filter
-./birdnet-go range print
-
 # View all CLI options
 ./birdnet-go help
-
-# View range filter specific options
-./birdnet-go help range
 ```
-
-## BirdNET Range Filter
-
-The BirdNET Range Filter is an intelligent location and time-based filtering system that helps improve detection accuracy by limiting species predictions to those likely to occur in your specific location during the current time of year.
-
-### How It Works
-
-#### Model Overview
-
-The range filter uses a secondary AI model trained on [eBird checklist frequency data](https://support.ebird.org/en/support/solutions/articles/48000948655-ebird-glossary#:~:text=frequency%3A%20as%20of%20a%20species,purple%20grid%20on%20species%20maps) to estimate the probability of bird species occurrence based on three factors:
-
-1. **Latitude** - Your geographic latitude coordinate
-2. **Longitude** - Your geographic longitude coordinate
-3. **Week of Year** - The current week (1-52) to account for seasonal migration patterns
-
-The model analyzes these inputs and assigns each species a probability score from 0.0 to 1.0, representing how likely that species is to occur in your location during that time period.
-
-#### eBird Data Coverage
-
-The range filter model is built using citizen science data from [eBird](https://ebird.org), which means coverage varies by region:
-
-- **Well-represented regions**: North America, South America, Europe, India, Australia
-- **Underrepresented regions**: Large parts of Africa and Asia
-
-In areas with limited eBird data, the model uses expert-curated filter data to provide basic species occurrence information.
-
-### Configuration
-
-#### Basic Setup
-
-The range filter is configured in the `birdnet.rangefilter` section of your configuration file:
-
-```yaml
-birdnet:
-  latitude: 60.1699 # Your location latitude
-  longitude: 24.9384 # Your location longitude
-  rangefilter:
-    debug: false # Enable debug logging
-    model: "" # "" for V2 (default), "legacy" for V1
-    threshold: 0.01 # Species occurrence threshold (0.0-1.0)
-```
-
-> **Note**: The configuration uses `birdnet.rangefilter` in YAML, while CLI commands use the `range` group (e.g., `birdnet-go range print`). These refer to the same functionality.
-
-#### Understanding the Threshold Parameter
-
-The `threshold` parameter controls which species are included in analysis based on their occurrence probability. **The default value of 0.01 is recommended for most users and rarely needs to be changed** unless you have very specific requirements.
-
-- **Default (0.01)**: Permissive filtering that works well for most locations and use cases
-- **Conservative values (0.05-0.1)**: Include fewer species, only those with higher occurrence probability
-- **Strict values (0.1-0.3)**: Include only species with strong occurrence probability
-- **Very strict values (0.5+)**: Include only the most common species for your area
-
-**Tip**: If the range filter results don't match your expectations for specific species, you can override them using the **Species Settings** in the web interface (Settings → Species) rather than adjusting the global threshold.
-
-### Configuration Examples
-
-#### Example 1: Default Permissive Filtering
-
-```yaml
-rangefilter:
-  threshold: 0.01 # Default - good for most users
-```
-
-- Includes species with ≥1% occurrence probability
-- Captures most potential species including occasional visitors
-- Balanced approach suitable for most locations
-
-#### Example 2: Conservative Filtering
-
-```yaml
-rangefilter:
-  threshold: 0.05
-```
-
-- Includes species with ≥5% occurrence probability
-- Reduces potential false positives from very unlikely species
-- Good balance between coverage and accuracy
-
-#### Example 3: Strict Filtering
-
-```yaml
-rangefilter:
-  threshold: 0.1
-```
-
-- Includes only species with ≥10% occurrence probability
-- Reduces false positives from unlikely species
-- Good for areas with excellent eBird coverage
-- May miss rare but possible species
-
-#### Example 4: Very Strict Filtering
-
-```yaml
-rangefilter:
-  threshold: 0.3
-```
-
-- Includes only species with ≥30% occurrence probability
-- Focuses on common resident and seasonal species
-- Minimizes false positives
-- May miss genuine detections of less common species
-
-### Species Override Management
-
-#### Override Behavior
-
-The range filter works alongside your manual species configuration:
-
-1. **Always Include Species**: Species in this list are **always** included regardless of range filter scores
-2. **Always Exclude Species**: Species in this list are **always** excluded regardless of range filter scores
-3. **Custom Actions**: Species with configured actions are automatically included with maximum score
-
-#### Managing Species Lists via Web Interface
-
-You can easily manage species overrides through the web dashboard:
-
-- Navigate to **Settings → Species** in the web interface
-- **"Always Include Species"** section: Add species that should never be filtered out
-- **"Always Exclude Species"** section: Add species that should never be detected
-  - Useful for non-bird sounds like "Dog", "Siren", "Gun", "Fireworks"
-  - Helpful for consistently problematic species in your area
-- Changes are applied immediately without restarting the application
-
-### Inspection and Debugging
-
-#### Viewing Current Filter Results
-
-You can inspect what species are included for your location using the CLI command (run `birdnet-go help range` for more options):
-
-```bash
-./birdnet-go range print
-```
-
-This displays all species that pass the threshold for your current location and date, showing their probability scores.
-
-#### Range Filter Models
-
-BirdNET-Go supports two range filter model versions:
-
-- **V2 (Default)**: Latest model with improved accuracy
-- **V1 (Legacy)**: Original model, use `model: "legacy"` if needed for compatibility
-
-The V2 model generally provides better predictions and should be used unless you have specific compatibility requirements.
-
-### Troubleshooting
-
-#### Common Issues and Solutions
-
-**Problem**: Too many false positives
-
-- **Solution**: Increase the `threshold` value (try 0.05 or 0.1)
-
-**Problem**: Missing obvious local species
-
-- **Solution**: Add the species to the "Always Include Species" list via **Settings → Species** in the web interface, or lower the `threshold` value if many species are missing
-
-**Problem**: No location-based filtering occurring
-
-- **Solution**: Verify `latitude` and `longitude` are set correctly (non-zero values)
-
-**Problem**: Seasonal migrants not detected during migration
-
-- **Solution**: Lower the `threshold` temporarily during migration periods, or add specific migrants to the "Always Include Species" list
-
-**Problem**: Non-bird sounds being detected (dogs, sirens, etc.)
-
-- **Solution**: Add these to the "Always Exclude Species" list via **Settings → Species**
 
 ## Advanced Features
 
 ### Web Dashboard
 
-BirdNET-Go includes a web dashboard that provides visualization and management capabilities. The dashboard features:
+VoiceWatch includes a web dashboard that provides visualization and management capabilities. The dashboard features:
 
-- Summary views of detected species
-- Recent detections display
-- Optional thumbnails for visual identification
+- Detection list with transcript text and keyword-flag indicators
+- Recent detections display with confidence scores
 - Configurable display limits
-- Images are automatically cached in the background to improve loading performance.
+- Audio clip playback and spectrogram view
 
 ### Remote Internet Access
 
-BirdNET-Go can be securely exposed to the internet, allowing you to monitor your birds from anywhere. The **recommended method** is using Cloudflare Tunnel (cloudflared), which provides:
+VoiceWatch can be securely exposed to the internet, allowing you to monitor detections from anywhere. The **recommended method** is using Cloudflare Tunnel (cloudflared), which provides:
 
 - **Enhanced Security**: No need to open ports on your router/firewall
 - **End-to-End Encryption**: All traffic is securely encrypted
 - **Performance Benefits**: Static content like spectrograms and audio clips are cached on Cloudflare's global network
-- **Simple Setup**: Works with any BirdNET-Go installation method (Docker, Docker Compose, or binary)
+- **Simple Setup**: Works with any VoiceWatch installation method (Docker, Docker Compose, or binary)
 
 For detailed setup instructions and security best practices, see the dedicated [Cloudflare Tunnel Guide](cloudflare_tunnel_guide.md).
 
-> **IMPORTANT SECURITY WARNING**: When exposing BirdNET-Go to the internet, always enable authentication through one of the available methods (Basic Auth, Google OAuth, or GitHub OAuth). Without authentication, anyone with your URL can access your system, delete your data, change settings, and view your location. See the [Authentication section](cloudflare_tunnel_guide.md#enabling-authentication) of the guide for details.
+> **IMPORTANT SECURITY WARNING**: When exposing VoiceWatch to the internet, always enable authentication through one of the available methods (Basic Auth, Google OAuth, or GitHub OAuth). Without authentication, anyone with your URL can access your system, delete your data, change settings, and view your location. See the [Authentication section](cloudflare_tunnel_guide.md#enabling-authentication) of the guide for details.
 
 ### Weather Integration
 
@@ -1333,7 +806,7 @@ Weather data can be used to correlate bird activity with environmental condition
 
 ### Audio Processing
 
-BirdNET-Go offers advanced audio processing capabilities:
+VoiceWatch offers advanced audio processing capabilities:
 
 - Support for various audio sources including direct soundcard capture and RTSP streams
 - Configurable equalizer with multiple filter types (LowPass, HighPass, BandPass, etc.)
@@ -1342,7 +815,7 @@ BirdNET-Go offers advanced audio processing capabilities:
 
 ### Audio Clip Retention
 
-If you enable audio clip exporting (`realtime.audio.export.enabled: true`), BirdNET-Go can automatically manage disk space by deleting older recordings based on configured retention policies. This prevents your disk from filling up over time.
+If you enable audio clip exporting (`realtime.audio.export.enabled: true`), VoiceWatch can automatically manage disk space by deleting older recordings based on configured retention policies. This prevents your disk from filling up over time.
 
 The cleanup task runs periodically to check if clips need to be deleted based on the selected policy. The check interval is configurable to balance between timely cleanup and system resource usage.
 
@@ -1368,7 +841,7 @@ The application includes several security options:
 
 #### Setting Up OAuth Authentication
 
-BirdNET-Go supports OAuth2 authentication with Google and GitHub for secure access to your web interface. This is the recommended authentication method when exposing your instance to the internet.
+VoiceWatch supports OAuth2 authentication with Google and GitHub for secure access to your web interface. This is the recommended authentication method when exposing your instance to the internet.
 
 ##### Google OAuth Setup
 
@@ -1381,7 +854,7 @@ BirdNET-Go supports OAuth2 authentication with Google and GitHub for secure acce
    - Navigate to "APIs & Services" → "OAuth consent screen"
    - Choose "External" user type (unless you have a Google Workspace)
    - Fill in the required application information:
-     - Application name: `BirdNET-Go`
+     - Application name: `VoiceWatch`
      - User support email: Your email address
      - Developer contact information: Your email address
    - Add your domain to authorized domains if applicable
@@ -1391,15 +864,15 @@ BirdNET-Go supports OAuth2 authentication with Google and GitHub for secure acce
    - Navigate to "APIs & Services" → "Credentials"
    - Click "Create Credentials" → "OAuth client ID"
    - Select "Web application" as the application type
-   - Set the name: `BirdNET-Go Web Client`
+   - Set the name: `VoiceWatch Web Client`
    - **Authorized redirect URIs**: Add your callback URL:
      - Format: `http://YOUR_HOST:PORT/auth/google/callback`
      - Example: `http://192.168.1.100:8080/auth/google/callback`
      - For internet access: `https://yourdomain.com/auth/google/callback`
 
-4. **Configure BirdNET-Go**:
+4. **Configure VoiceWatch**:
    - Copy the Client ID and Client Secret from Google
-   - In your BirdNET-Go web interface, go to Settings → Security
+   - In your VoiceWatch web interface, go to Settings → Security
    - Enable Google OAuth and enter:
      - **Client ID**: Your Google OAuth Client ID
      - **Client Secret**: Your Google OAuth Client Secret
@@ -1411,8 +884,8 @@ BirdNET-Go supports OAuth2 authentication with Google and GitHub for secure acce
    - Go to GitHub Settings → Developer settings → OAuth Apps
    - Click "New OAuth App"
    - Fill in the application details:
-     - **Application name**: `BirdNET-Go`
-     - **Homepage URL**: `http://YOUR_HOST:PORT` (your BirdNET-Go URL)
+     - **Application name**: `VoiceWatch`
+     - **Homepage URL**: `http://YOUR_HOST:PORT` (your VoiceWatch URL)
      - **Authorization callback URL**: `http://YOUR_HOST:PORT/auth/github/callback`
        - Example: `http://192.168.1.100:8080/auth/github/callback`
        - For internet access: `https://yourdomain.com/auth/github/callback`
@@ -1422,8 +895,8 @@ BirdNET-Go supports OAuth2 authentication with Google and GitHub for secure acce
    - After creating the app, click "Generate a new client secret"
    - Copy both the Client ID and Client Secret immediately
 
-3. **Configure BirdNET-Go**:
-   - In your BirdNET-Go web interface, go to Settings → Security
+3. **Configure VoiceWatch**:
+   - In your VoiceWatch web interface, go to Settings → Security
    - Enable GitHub OAuth and enter:
      - **Client ID**: Your GitHub OAuth Client ID
      - **Client Secret**: Your GitHub OAuth Client Secret
@@ -1467,7 +940,7 @@ BIRDNET_SECURITY_GITHUBAUTH_USERID=yourusername
 
 ##### Important OAuth Notes
 
-- **Callback URLs**: Always use the format `/auth/provider/callback` (e.g., `/auth/google/callback`, `/auth/github/callback`) as shown in the BirdNET-Go settings page
+- **Callback URLs**: Always use the format `/auth/provider/callback` (e.g., `/auth/google/callback`, `/auth/github/callback`) as shown in the VoiceWatch settings page
 - **HTTPS Requirement**: OAuth providers typically require HTTPS for production use. Enable `autotls: true` or use a reverse proxy with SSL certificates
 - **User ID Restrictions**: The optional `userid` field allows you to restrict access to a specific account for enhanced security
 - **Local Network**: OAuth authentication works on local networks, but you can also enable subnet bypass for local access without OAuth
@@ -1477,7 +950,7 @@ BIRDNET_SECURITY_GITHUBAUTH_USERID=yourusername
 
 **"Invalid redirect URI" errors**:
 
-- Ensure your callback URL in the OAuth app configuration exactly matches the format shown in BirdNET-Go settings
+- Ensure your callback URL in the OAuth app configuration exactly matches the format shown in VoiceWatch settings
 - Check that the protocol (http/https) and port number are correct
 - The callback URL should end with `/auth/google/callback` or `/auth/github/callback`
 
@@ -1488,88 +961,76 @@ BIRDNET_SECURITY_GITHUBAUTH_USERID=yourusername
 
 **Login button not appearing**:
 
-- Check that OAuth is enabled in BirdNET-Go settings
+- Check that OAuth is enabled in VoiceWatch settings
 - Verify your client ID and client secret are correctly configured
 - Check the browser console for JavaScript errors
 
 ### Filtering Capabilities
 
-BirdNET-Go includes intelligent filtering mechanisms:
-
-- Privacy filter to ignore human voices
-- Dog bark filter to prevent misdetections when BirdNET confuses barking with owl/crow calls
-- Species-specific inclusion and exclusion lists
-- Dynamic threshold adjustment based on detection patterns
+VoiceWatch uses the Silero VAD confidence threshold and a hold-and-count window to reduce false positives. Dynamic threshold adjustment can automatically lower the effective threshold when reliable voice activity has recently been confirmed.
 
 ### Deep Detection
 
-BirdNET-Go includes a "Deep Detection" feature designed to improve detection reliability and reduce false positives by requiring multiple detections of the same species within a time window.
+VoiceWatch includes a "Deep Detection" feature designed to improve detection reliability and reduce false positives by requiring multiple VAD hits within a time window.
 
 #### Deep Detection Flow Chart
 
 ```mermaid
 graph TD
-    A[Species Detected<br/>by BirdNET] --> B{First Detection<br/>of This Species?}
+    A[VAD Hit above threshold] --> B{First hit<br/>in this window?}
 
-    B -->|Yes| C[⏱️ Start 15-Second<br/>Counting Window<br/>Count = 1]
-    B -->|No| D[📈 Increment Counter<br/>Count = Count + 1]
+    B -->|Yes| C[Start Counting Window<br/>Count = 1]
+    B -->|No| D[Increment Counter<br/>Count = Count + 1]
 
-    C --> E[🎧 Continue Listening<br/>for More Audio]
+    C --> E[Continue Listening<br/>for More Audio]
     D --> E
 
-    E --> F{Same Species<br/>Detected Again?}
-    F -->|Yes| G[⬆️ Add to Count]
-    F -->|No| H{15 Seconds<br/>Elapsed?}
+    E --> F{Another hit above threshold?}
+    F -->|Yes| G[Add to Count]
+    F -->|No| H{Window elapsed?}
 
     G --> H
     H -->|No| E
     H -->|Yes| I{Count ≥ Required<br/>Minimum?}
 
-    I -->|No| J[❌ Rejected<br/>False Positive]
-    I -->|Yes| K{Final Safety<br/>Checks Pass?}
-
-    K -->|No| L[❌ Blocked by<br/>Privacy/Dog Filter]
-    K -->|Yes| M[✅ Detection Approved<br/>Saved to Database]
-
-    J --> N[🗂️ Log: Not enough matches]
-    L --> O[🗂️ Log: Blocked by filter]
-    M --> P[🗂️ Log: Species confirmed]
+    I -->|No| J[Rejected — noise burst]
+    I -->|Yes| K[Detection Approved<br/>Saved to Database]
 ```
 
 #### How Deep Detection Works
 
-1. **Increased Analysis Frequency**: Higher `overlap` values reduce the step size between audio analysis windows (e.g., from 1.5 seconds to 300ms), causing the BirdNET AI model to run more frequently
+1. **Increased Analysis Frequency**: Higher `overlap` values reduce the step size between audio analysis windows (e.g., from 1.5 seconds to 300 ms), causing the VAD model to run more frequently.
 
-2. **Pending Detection System**: All detections are held in memory for exactly **15 seconds** from the first detection
+2. **Pending Detection System**: All detections are held in memory for `captureLength - preCaptureLength` seconds from the first detection (defaults to 12 seconds).
 
-3. **Counting Mechanism**: During the 15-second window, each additional detection of the same species increments a counter
+3. **Counting Mechanism**: During the window, each additional VAD frame above threshold increments a counter.
 
-4. **Variable Threshold**: The number of required detections scales with the overlap setting:
+4. **Variable Threshold**: The number of required hits scales with the overlap setting:
 
    ```
-   Required Detections = max(1, 3 / max(0.1, 3.0 - overlap))
+   Required Hits = max(1, 3 / max(0.1, 3.0 - overlap))
 
    Examples:
-   - overlap: 0.0 → 1 detection required (standard mode)
-   - overlap: 2.4 → 5 detections required
-   - overlap: 2.7 → 10 detections required (typical deep detection)
-   - overlap: 2.9 → 30 detections required (very strict)
+   - overlap: 0.0 → 1 hit required (standard mode)
+   - overlap: 2.4 → 5 hits required
+   - overlap: 2.7 → 10 hits required (typical deep detection)
+   - overlap: 2.9 → 30 hits required (very strict)
    ```
 
-5. **Decision Point**: After exactly 15 seconds, the detection is either approved (if minimum count reached) or discarded as a false positive
+5. **Decision Point**: At the flush deadline, the detection is either approved (if minimum count reached) or discarded as a noise burst.
 
 #### Benefits and Use Cases
 
-- **False Positive Reduction**: Eliminates single spurious detections that don't repeat
-- **Lower Threshold Tolerance**: Allows using lower `birdnet.threshold` values (e.g., 0.3-0.6) while maintaining accuracy
-- **Quality Selection**: Keeps the highest confidence detection from the 15-second window
-- **Consistent Behavior**: All detections are held for exactly 15 seconds, providing predictable timing
+- **False Positive Reduction**: Eliminates single spurious VAD hits that don't repeat
+- **Lower Threshold Tolerance**: Allows using lower `birdnet.threshold` values (e.g., 0.3–0.6) while maintaining accuracy
+- **Quality Selection**: Keeps the highest-confidence frame from the window
+- **Consistent Behavior**: Predictable flush timing based on clip length and pre-capture settings
 
 #### System Requirements
 
 - **CPU Load**: Significantly increases processing requirements due to higher analysis frequency
 - **Recommended Hardware**: Raspberry Pi 4/5 or more powerful systems
-- **Performance Monitoring**: Watch for `WARNING: BirdNET processing time exceeded buffer length` messages indicating the system cannot keep up
+- **Performance Monitoring**: Watch for `WARNING: processing time exceeded buffer length` messages indicating the system cannot keep up
 
 #### Configuration
 
@@ -1584,11 +1045,11 @@ graph TD
 
 #### Reference
 
-[[GitHub Discussion #302](https://github.com/tphakala/birdnet-go/discussions/302)]
+[[GitHub Discussion #302](https://github.com/tphakala/voicewatch/discussions/302)]
 
 ### Live Audio Streaming
 
-BirdNET-Go allows you to listen to the live audio feed directly from the web interface. This is useful for monitoring the audio quality, checking microphone placement, or simply listening to the ambient sounds.
+VoiceWatch allows you to listen to the live audio feed directly from the web interface. This is useful for monitoring the audio quality, checking microphone placement, or simply listening to the ambient sounds.
 
 - **How to Use:**
   1.  Locate the microphone icon / audio level indicator in the web interface header.
@@ -1598,12 +1059,12 @@ BirdNET-Go allows you to listen to the live audio feed directly from the web int
   5.  Audio playback will begin using your browser's audio capabilities.
   6.  Click the stop icon (⏹️) to end the stream.
 - **Technology:** The live stream uses HLS (HTTP Live Streaming) for broad browser compatibility and efficient delivery.
-- **Dependency:** This feature requires **FFmpeg** to be installed and accessible by BirdNET-Go. If FFmpeg is not found, the play button may not appear or function.
+- **Dependency:** This feature requires **FFmpeg** to be installed and accessible by VoiceWatch. If FFmpeg is not found, the play button may not appear or function.
 - **Server Interaction:** Starting the live stream initiates audio encoding on the server. The stream uses a heartbeat mechanism to stay active while you are listening. Stopping the stream or closing the browser tab/window signals the server to stop the encoding process, conserving server resources.
 
 ### Sound Level Monitoring
 
-BirdNET-Go includes an advanced sound level monitoring feature that provides detailed acoustic measurements of your environment in 1/3rd octave bands. This feature is particularly useful for:
+VoiceWatch includes an advanced sound level monitoring feature that provides detailed acoustic measurements of your environment in 1/3rd octave bands. This feature is particularly useful for:
 
 - **Environmental noise monitoring**: Track ambient noise levels over time
 - **Acoustic habitat assessment**: Understand the soundscape characteristics of your monitoring location
@@ -1891,7 +1352,7 @@ Example Home Assistant configuration:
 ```yaml
 sensor:
   - platform: mqtt
-    name: "Bird Station Sound Level 1kHz"
+    name: "VoiceWatch Sound Level 1kHz"
     state_topic: "birdnet/soundlevel"
     value_template: "{{ value_json.b['1.0_kHz'].m }}"
     unit_of_measurement: "dB"
@@ -1923,9 +1384,9 @@ Sound level data is exposed as Prometheus metrics:
 
 #### Use Cases
 
-1. **Environmental Monitoring**: Track noise pollution levels, identify quiet periods for optimal bird detection
+1. **Environmental Monitoring**: Track noise pollution levels, identify quiet periods for optimal voice detection
 2. **Smart Home Integration**: Trigger actions based on ambient noise levels
-3. **Research Applications**: Collect standardized acoustic measurements alongside bird detection data
+3. **Research Applications**: Collect standardized acoustic measurements alongside voice detection data
 4. **System Diagnostics**: Monitor microphone performance and environmental conditions
 
 #### Technical Details for Advanced Users
@@ -2017,7 +1478,7 @@ The implementation provides a solid foundation for environmental sound monitorin
 
 ### Push Notifications
 
-BirdNET-Go includes a comprehensive push notification system that can send real-time alerts about bird detections, system errors, and important events to your preferred notification services. This feature enables you to stay informed about what's happening at your monitoring station even when you're away from the web interface.
+VoiceWatch includes a comprehensive push notification system that can send real-time alerts about voice detections, system errors, and important events to your preferred notification services. This feature enables you to stay informed about what's happening at your monitoring station even when you're away from the web interface.
 
 #### Overview
 
@@ -2025,7 +1486,7 @@ The push notification system supports multiple delivery methods (providers) and 
 
 #### Configuring Notification URLs
 
-Push notifications for new bird detections include clickable links to view the detection details in the web interface. To ensure these URLs work correctly when accessing BirdNET-Go through a reverse proxy or from remote locations, you need to configure the hostname:
+Push notifications for voice detections include clickable links to view the detection details in the web interface. To ensure these URLs work correctly when accessing VoiceWatch through a reverse proxy or from remote locations, you need to configure the hostname:
 
 **Configuration Methods (in priority order):**
 
@@ -2062,11 +1523,11 @@ services:
 
 Without proper hostname configuration, notification URLs will show as `http://localhost:8080/ui/detections/12345`, which won't work when clicked from a phone or remote device. With the hostname configured, URLs will correctly show as `http://birdnet.home.arpa/ui/detections/12345`.
 
-> **Note**: A warning will be logged if BirdNET-Go falls back to using localhost for notification URLs. Configure the hostname using either method above to resolve this warning.
+> **Note**: A warning will be logged if VoiceWatch falls back to using localhost for notification URLs. Configure the hostname using either method above to resolve this warning.
 
 #### Supported Providers
 
-BirdNET-Go supports three types of push notification providers:
+VoiceWatch supports three types of push notification providers:
 
 ##### 1. Shoutrrr (Multi-Service)
 
@@ -2140,7 +1601,7 @@ https://discord.com/api/webhooks/1234567890/abcDEFghiJKLmnoPQRstu
 → discord://abcDEFghiJKLmnoPQRstu@1234567890
 ```
 
-**Step 3: Configure in BirdNET-Go**
+**Step 3: Configure in VoiceWatch**
 
 Via the web UI:
 1. Go to **Settings** → **Notifications** → **Channels**
@@ -2166,9 +1627,9 @@ notification:
           types: ["detection", "warning"]
 ```
 
-**Discord Rich Embeds with Thumbnails**
+**Discord Rich Embeds**
 
-For rich notifications with bird images, species fields, and color-coded embeds, use the **webhook provider** instead of Shoutrrr. This sends Discord's native embed format directly:
+For rich notifications with confidence, transcript, and keyword-flag fields, use the **webhook provider** instead of Shoutrrr. This sends Discord's native embed format directly:
 
 ```yaml
 notification:
@@ -2190,27 +1651,23 @@ notification:
           {"embeds":[{"title":"{{.Title}}",
           "description":"{{.Message}}",
           "color":3066993,
-          "thumbnail":{"url":"{{index .Metadata `bg_image_url`}}"},
           "fields":[
-          {"name":"Species","value":"{{index .Metadata `species`}}","inline":true},
           {"name":"Confidence","value":"{{index .Metadata `bg_confidence_percent`}}%","inline":true},
           {"name":"Location","value":"{{index .Metadata `bg_location`}}","inline":true}],
-          "footer":{"text":"BirdNET-Go"}}]}
+          "footer":{"text":"VoiceWatch"}}]}
 ```
 
 This produces Discord messages with:
-- Bird species thumbnail image
 - Green color bar (color code `3066993` = green; use `15158332` for red, `3447003` for blue)
-- Species name, confidence, and location as inline fields
+- Confidence and location as inline fields
 
-> **Note**: The `bg_*` metadata fields (bird image URL, confidence, location, etc.) are populated for detection notifications. See [template variables](#available-template-fields) below for the full list.
+> **Note**: The `bg_*` metadata fields (confidence, location, etc.) are populated for detection notifications. See [template variables](#available-template-fields) below for the full list.
 
 **Troubleshooting Discord**
 
-- **Notifications not arriving?** Make sure push notifications are enabled and the filter types include `detection`. New species detections use notification type `detection`.
-- **"Test Provider" works but real detections don't?** Check that the daylight filter isn't blocking detections for nocturnal species during daytime (Settings → Detection Filters).
+- **Notifications not arriving?** Make sure push notifications are enabled and the filter types include `detection`.
+- **"Test Provider" works but real detections don't?** Check that the detection filter isn't blocking events (Settings → Detection Filters).
 - **Settings lost after restart?** Ensure the config file is writable and the settings were saved (check for a success toast in the web UI).
-- **Empty thumbnail in rich embeds?** The `bg_image_url` field requires the image provider cache to have fetched the species image. The first detection of a species may not have an image immediately.
 
 ##### 2. Webhook (Custom HTTP)
 
@@ -2305,14 +1762,11 @@ Available template fields:
 - `{{.Timestamp}}` - ISO 8601 timestamp
 - `{{index .Metadata "key"}}` - Any metadata field (use backticks inside YAML: `` `key` ``)
 
-**Detection metadata fields** (available for bird detection notifications):
+**Detection metadata fields** (available for voice detection notifications):
 
 | Template Syntax | Description |
 |-----------------|-------------|
-| `{{index .Metadata "species"}}` | Bird common name |
-| `{{index .Metadata "scientific_name"}}` | Scientific name |
 | `{{index .Metadata "confidence"}}` | Confidence (0.0-1.0) |
-| `{{index .Metadata "bg_image_url"}}` | Bird species thumbnail URL |
 | `{{index .Metadata "bg_confidence_percent"}}` | Confidence as percentage (e.g., "99") |
 | `{{index .Metadata "bg_detection_time"}}` | Detection time (e.g., "14:30:45") |
 | `{{index .Metadata "bg_detection_date"}}` | Detection date (e.g., "2026-03-21") |
@@ -2386,7 +1840,7 @@ fi
 # Custom logic based on notification type
 case "$TYPE" in
     detection)
-        echo "[$(date)] Bird detected: $TITLE (confidence: $CONFIDENCE)" >> /var/log/birds.log
+        echo "[$(date)] Voice detected: $TITLE (confidence: $CONFIDENCE)" >> /var/log/voicewatch.log
         # Send to custom service
         curl -X POST "$SLACK_WEBHOOK" -d "{\"text\":\"$TITLE detected!\"}"
         ;;
@@ -2417,7 +1871,7 @@ Available types:
 - `error` - System errors and failures
 - `warning` - Warnings and potential issues
 - `info` - Informational messages
-- `detection` - Bird detection events
+- `detection` - Voice detection events
 - `system` - System status changes
 
 ##### Filter by Priority
@@ -2447,7 +1901,7 @@ filter:
 
 ##### Filter by Metadata
 
-Filter based on notification metadata, including confidence thresholds for bird detections:
+Filter based on notification metadata, including confidence thresholds for voice detections:
 
 ```yaml
 filter:
@@ -2571,7 +2025,7 @@ notification:
         enabled: true
         name: "analysis-api"
         endpoints:
-          - url: "https://api.example.com/birds"
+          - url: "https://api.example.com/voicewatch"
             auth:
               type: bearer
               token: "${API_TOKEN}"
@@ -2619,7 +2073,7 @@ token_file: "/run/secrets/telegram_token"
 
 **2. Environment Variables**
 
-Set environment variables when running BirdNET-Go:
+Set environment variables when running VoiceWatch:
 
 ```bash
 # Docker
@@ -2727,14 +2181,14 @@ Debug logs will show:
 
 #### Use Case Examples
 
-##### 1. Rare Species Alerts to Phone
+##### 1. Voice Detection Alerts to Phone
 
-Send immediate alerts for rare species with high confidence:
+Send immediate alerts for high-confidence voice detections:
 
 ```yaml
 - type: shoutrrr
   enabled: true
-  name: "rare-bird-phone"
+  name: "voice-detection-phone"
   urls:
     - "pushover://shoutrrr:${PUSHOVER_TOKEN}@${PUSHOVER_USER}"
   filter:
@@ -2792,220 +2246,26 @@ Trigger custom actions via script (turn on lights, play sounds, etc.):
       confidence: ">0.75"
 ```
 
-### Species Tracking System
-
-BirdNET-Go includes an intelligent species tracking system that helps you discover and monitor bird activity patterns at your location. This feature automatically tracks when new bird species appear and highlights them with special badges to make discoveries easy to spot.
-
-#### How Species Tracking Works
-
-The species tracking system runs automatically in the background, analyzing each bird detection and comparing it against your historical data. When BirdNET-Go detects a bird species that hasn't been seen recently (or ever), it adds special badges to help you notice these exciting discoveries.
-
-#### Types of Species Tracking
-
-The system tracks three different types of "new" species appearances:
-
-##### 🌟 **New Species** (Lifetime First)
-
-- **What it means**: A bird species detected for the very first time at your location
-- **Visual indicator**: Animated golden star that gently wiggles to catch your attention
-- **When shown**: For 7 days after the first detection (configurable via `newSpeciesWindowDays`)
-- **Perfect for**: Discovering birds that have never visited your area before, tracking range expansions, or celebrating truly rare visitors
-
-##### 📅 **New This Year** (Annual First)
-
-- **What it means**: A bird species detected for the first time this calendar year
-- **Visual indicator**: Blue calendar icon
-- **When shown**: For 7 days after the first detection of the year (configurable via `yearlyTracking.windowDays`)
-- **Resets**: January 1st each year (configurable via `yearlyTracking.resetMonth` and `resetDay`)
-- **Perfect for**: Tracking yearly visitors, seasonal patterns, and migration timing
-
-##### 🌿 **New This Season** (Seasonal First)
-
-- **What it means**: A bird species detected for the first time this season
-- **Visual indicator**: Green leaf icon
-- **When shown**: For 7 days after the first seasonal detection (configurable via `seasonalTracking.windowDays`)
-- **Seasons**: Spring (March 20), Summer (June 21), Fall (September 22), Winter (December 21) - automatically adjusted for hemisphere
-- **Perfect for**: Monitoring seasonal migrations, breeding arrivals, and wintering species
-
-> **Smart Hemisphere Detection**: The system automatically adjusts seasonal definitions based on your latitude - if you're in the Southern Hemisphere, the seasons are flipped appropriately.
-
-#### Where You'll See the Badges
-
-**Dashboard Summary**: The badges appear next to species names in your daily detection summary on the main dashboard. Simply look for the animated star, calendar, or leaf icons.
-
-**Real-time Updates**: New badges appear immediately when species are detected - no need to refresh the page.
-
-**Tooltips**: Hover over any badge to see detailed information like "New species (first seen 2 days ago)" or "First time this spring (3 days ago)".
-
-#### Badge Priority System
-
-When a species qualifies for multiple badges (for example, a bird that's both new this year AND new this season), the system shows only the most significant badge:
-
-1. **🌟 New Species** (highest priority - truly first-time visitors)
-2. **📅 New This Year** (medium priority - annual firsts)
-3. **🌿 New This Season** (lowest priority - seasonal appearances)
-
-#### Configuration Options
-
-The species tracking system is enabled by default with sensible settings. You can customize it through the web interface settings or directly in your `config.yaml` file under `realtime.speciesTracking`:
-
-##### Main Tracking Settings
-
-- **Enable/Disable** (`enabled`): Turn the entire tracking system on or off (default: `true`)
-- **New Species Window** (`newSpeciesWindowDays`): How many days to display the 🌟 "New Species" badge after a bird is detected for the first time ever at your location (default: `7` days)
-- **Database Sync Interval** (`syncIntervalMinutes`): How often the system checks the database for historical data and updates tracking information (default: `60` minutes)
-
-##### Yearly Tracking Settings
-
-Configure how the system tracks first arrivals each calendar year:
-
-- **Enable Yearly Tracking** (`yearlyTracking.enabled`): Turn yearly tracking on/off (default: `true`)
-- **Reset Date** (`yearlyTracking.resetMonth` and `resetDay`): When to reset the yearly list
-  - Default: January 1st (`resetMonth: 1`, `resetDay: 1`)
-  - Example: For a June-to-May year, set `resetMonth: 6`, `resetDay: 1`
-- **Badge Display Window** (`yearlyTracking.windowDays`): How many days to show the 📅 "New This Year" badge (default: `7` days)
-
-##### Seasonal Tracking Settings
-
-Configure how the system tracks first arrivals each season:
-
-- **Enable Seasonal Tracking** (`seasonalTracking.enabled`): Turn seasonal tracking on/off (default: `true`)
-- **Badge Display Window** (`seasonalTracking.windowDays`): How many days to show the 🌿 "New This Season" badge (default: `7` days)
-- **Season Definitions** (`seasonalTracking.seasons`): Customize when each season begins
-  - **Automatic Hemisphere Detection**: If you don't specify custom seasons, the system automatically adjusts based on your latitude:
-    - Northern Hemisphere (latitude > 10°): Spring starts March 20, Summer June 21, etc.
-    - Southern Hemisphere (latitude < -10°): Seasons are shifted by 6 months
-    - Equatorial regions (latitude -10° to 10°): Uses wet/dry season patterns
-  - **Custom Seasons**: You can define your own seasonal boundaries to match local conditions:
-    ```yaml
-    seasons:
-      spring:
-        startMonth: 3 # March
-        startDay: 20 # Day 20
-      # Add more seasons as needed
-    ```
-
-##### Time Period Examples
-
-Here are some common configuration scenarios:
-
-**Default settings** (balanced for most users):
-
-```yaml
-speciesTracking:
-  newSpeciesWindowDays: 7 # Show new species badges for a week
-  yearlyTracking:
-    windowDays: 7 # Show yearly badges for a week
-  seasonalTracking:
-    windowDays: 7 # Show seasonal badges for a week
-```
-
-**Extended visibility** (for users who check less frequently):
-
-```yaml
-speciesTracking:
-  newSpeciesWindowDays: 14 # Show new species badges for 2 weeks
-  yearlyTracking:
-    windowDays: 14 # Show yearly badges for 2 weeks
-  seasonalTracking:
-    windowDays: 14 # Show seasonal badges for 2 weeks
-  syncIntervalMinutes: 30 # Check database more frequently
-```
-
-**Research/documentation focus** (longer retention for rare events):
-
-```yaml
-speciesTracking:
-  newSpeciesWindowDays: 30 # Show lifetime firsts for a month
-  yearlyTracking:
-    windowDays: 21 # Show yearly firsts for 3 weeks
-  seasonalTracking:
-    windowDays: 14 # Show seasonal firsts for 2 weeks
-```
-
-**Custom birding year** (October to September for fall migration focus):
-
-```yaml
-speciesTracking:
-  yearlyTracking:
-    resetMonth: 10 # Reset on October 1st
-    resetDay: 1
-    windowDays: 14 # Extended visibility during migration
-```
-
-**Tropical/equatorial regions** (custom wet/dry seasons):
-
-```yaml
-speciesTracking:
-  seasonalTracking:
-    seasons:
-      wet:
-        startMonth: 4 # April - start of wet season
-        startDay: 1
-      dry:
-        startMonth: 10 # October - start of dry season
-        startDay: 1
-```
-
-#### Practical Benefits
-
-**For Casual Birdwatchers**:
-
-- Never miss when a new species visits your yard
-- Easily spot seasonal patterns in bird activity
-- Get excited about first-of-the-year sightings
-
-**For Serious Birders**:
-
-- Track migration timing and patterns
-- Monitor range expansions and climate-related shifts
-- Document seasonal abundance changes
-- Build comprehensive species lists for your location
-
-**For Researchers**:
-
-- Collect systematic data on species occurrence patterns
-- Monitor long-term changes in bird communities
-- Track phenological shifts in migration and breeding timing
-
-#### Tips for Best Results
-
-1. **Give it Time**: The system becomes more useful after running for several weeks or months to build up historical data
-2. **Stable Location**: Best results come from monitoring a consistent location over time
-3. **Check Regularly**: Visit your dashboard daily during migration seasons to catch the most exciting discoveries
-4. **Seasonal Awareness**: Pay extra attention during spring and fall migrations when new species are most likely to appear
-
-The species tracking system transforms your BirdNET-Go installation from a simple detector into an intelligent monitoring system that helps you understand the changing patterns of bird life at your location throughout the year.
-
 ### Integration Options
 
 The application offers several integration points:
 
 - **Server-Sent Events (SSE) API** for real-time detection streaming.
-  - Provides live bird detection data as it happens
+  - Provides live voice detection data as it happens
   - Compatible with any programming language or platform that supports SSE
-  - Includes species metadata, confidence scores, and thumbnail images
+  - Includes confidence scores and transcript metadata
   - No authentication required for read-only access
   - Perfect for building custom dashboards, mobile apps, or integration with other systems
 
 * MQTT support for IoT ecosystems.
   - The `retain` flag in MQTT settings is recommended for Home Assistant integration to ensure sensor states are preserved across restarts.
 * Telemetry endpoint compatible with Prometheus.
-* BirdWeather API integration for community data sharing.
-  - **About BirdWeather:** [BirdWeather.com](https://www.birdweather.com/) is a citizen science platform that collects bird vocalizations from stations around the world. It uses the BirdNET model (developed by Cornell Lab of Ornithology and Chemnitz University of Technology) for identification. Uploading data helps contribute to this global library.
-  - **Getting a BirdWeather ID/Token:** To upload data, you need an ID (also referred to as a Token). This process is now automated:
-    1. Create an account at [app.birdweather.com/login](https://app.birdweather.com/login).
-    2. Go to your account's station page: [app.birdweather.com/account/stations](https://app.birdweather.com/account/stations).
-    3. Create a new station, ensuring the Latitude and Longitude match your BirdNET-Go configuration (`birdnet.latitude` and `birdnet.longitude`).
-    4. Copy the generated station ID/Token into the `realtime.birdweather.id` field in your BirdNET-Go configuration.
-  - **Data Sharing Consent:** By configuring and enabling BirdWeather uploads with your ID/Token, you consent to sharing your soundscape snippets and detection data with BirdWeather.
-* Custom actions that can be triggered on species detection.
-* Built-in connection testers (via Web UI) for BirdWeather and MQTT to verify configuration.
-  - The testers perform multi-stage checks (connectivity, authentication, test uploads/publishes) and provide feedback, including troubleshooting hints and rate limit information (for BirdWeather).
+* Custom actions that can be triggered on detection.
+* Built-in connection tester (via Web UI) for MQTT to verify configuration.
 
 ## Real-time Detection API (Server-Sent Events)
 
-BirdNET-Go provides a Server-Sent Events (SSE) API that streams bird detections in real-time as they happen. This allows you to build custom applications, dashboards, or integrations that react immediately to new bird detections.
+VoiceWatch provides a Server-Sent Events (SSE) API that streams voice detections in real-time as they happen. This allows you to build custom applications, dashboards, or integrations that react immediately to new detections.
 
 ### Authentication Policy
 
@@ -3018,7 +2278,7 @@ BirdNET-Go provides a Server-Sent Events (SSE) API that streams bird detections 
 
 The endpoints include built-in rate limiting (10 requests per minute per IP) to prevent abuse while maintaining open access.
 
-> **🔒 Need Authentication?** If you require password protection for the detection stream API, please file a feature request by creating a GitHub issue at [https://github.com/tphakala/birdnet-go/issues](https://github.com/tphakala/birdnet-go/issues). Include your specific use case and security requirements to help guide the implementation.
+> **🔒 Need Authentication?** If you require password protection for the detection stream API, please file a feature request by creating a GitHub issue at [https://github.com/tphakala/voicewatch/issues](https://github.com/tphakala/voicewatch/issues). Include your specific use case and security requirements to help guide the implementation.
 
 ### API Endpoints
 
@@ -3043,7 +2303,7 @@ Sent immediately when a client connects to confirm the connection is established
 
 #### 2. Detection Event
 
-Sent when a new bird detection occurs and passes all filters.
+Sent when a new voice detection occurs and passes all filters.
 
 ```json
 {
@@ -3053,21 +2313,13 @@ Sent when a new bird detection occurs and passes all filters.
   "source": "USB Audio Device",
   "beginTime": "2024-01-15T08:30:45Z",
   "endTime": "2024-01-15T08:31:00Z",
-  "speciesCode": "EABL1",
-  "scientificName": "Turdus merula",
-  "commonName": "Eurasian Blackbird",
+  "commonName": "Human Voice",
   "confidence": 0.87,
   "verified": "unverified",
   "locked": false,
   "latitude": 60.1699,
   "longitude": 24.9384,
-  "clipName": "eurasian_blackbird_87p_20240115T083045Z.wav",
-  "birdImage": {
-    "url": "https://example.com/bird-image.jpg",
-    "attribution": "Image by Photographer Name",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
-  },
+  "clipName": "human_voice_87p_20240115T083045Z.wav",
   "timestamp": "2024-01-15T08:30:45.123Z",
   "eventType": "new_detection"
 }
@@ -3109,7 +2361,7 @@ Perfect for web dashboards or browser-based applications:
 <!DOCTYPE html>
 <html>
   <head>
-    <title>BirdNET-Go Live Detections</title>
+    <title>VoiceWatch Live Detections</title>
   </head>
   <body>
     <div id="detections"></div>
@@ -3133,11 +2385,9 @@ Perfect for web dashboards or browser-based applications:
         detectionElement.className = "detection";
         detectionElement.innerHTML = `
                  <h3>${detection.commonName}</h3>
-                 <p><em>${detection.scientificName}</em></p>
                  <p>Confidence: ${(detection.confidence * 100).toFixed(1)}%</p>
                  <p>Time: ${detection.time}</p>
                  <p>Source: ${detection.source}</p>
-                 ${detection.birdImage?.url ? `<img src="${detection.birdImage.url}" alt="${detection.commonName}" style="max-width: 200px;">` : ""}
              `;
 
         // Add to top of list
@@ -3174,7 +2424,7 @@ import requests
 
 def listen_to_detections(base_url="http://localhost:8080"):
     """
-    Listen to BirdNET-Go detection stream and process detections.
+    Listen to VoiceWatch detection stream and process detections.
 
     Requires: pip install sseclient-py requests
     """
@@ -3184,7 +2434,7 @@ def listen_to_detections(base_url="http://localhost:8080"):
         response = requests.get(url, stream=True, headers={'Accept': 'text/event-stream'})
         client = sseclient.SSEClient(response)
 
-        print("Connected to BirdNET-Go detection stream...")
+        print("Connected to VoiceWatch detection stream...")
 
         for event in client.events():
             if event.event == 'connected':
@@ -3195,8 +2445,7 @@ def listen_to_detections(base_url="http://localhost:8080"):
                 detection = json.loads(event.data)
 
                 # Process the detection
-                print(f"🐦 {detection['commonName']} detected!")
-                print(f"   Scientific: {detection['scientificName']}")
+                print(f"Voice detected!")
                 print(f"   Confidence: {detection['confidence']:.2f}")
                 print(f"   Time: {detection['time']}")
                 print(f"   Source: {detection['source']}")
@@ -3220,11 +2469,11 @@ def process_detection(detection):
     """
     # Example: Save to file
     with open('detections.log', 'a') as f:
-        f.write(f"{detection['time']},{detection['commonName']},{detection['confidence']}\n")
+        f.write(f"{detection['time']},{detection['confidence']}\n")
 
     # Example: Send notification for high confidence detections
     if detection['confidence'] > 0.9:
-        send_notification(f"High confidence detection: {detection['commonName']}")
+        send_notification(f"High confidence voice detection at {detection['time']}")
 
     # Example: Store in database
     # store_in_database(detection)
@@ -3239,7 +2488,7 @@ if __name__ == "__main__":
 
 #### Node.js
 
-Ideal for server-side applications or building APIs on top of BirdNET-Go:
+Ideal for server-side applications or building APIs on top of VoiceWatch:
 
 ```javascript
 const EventSource = require("eventsource");
@@ -3273,11 +2522,11 @@ class BirdNetGoClient {
       console.error("❌ SSE Error:", error);
     };
 
-    console.log("🔗 Connecting to BirdNET-Go detection stream...");
+    console.log("🔗 Connecting to VoiceWatch detection stream...");
   }
 
   onDetection(detection) {
-    console.log(`🐦 ${detection.commonName} detected!`);
+    console.log(`Voice detected!`);
     console.log(`   Confidence: ${(detection.confidence * 100).toFixed(1)}%`);
     console.log(`   Time: ${detection.time}`);
 
@@ -3331,18 +2580,17 @@ while IFS= read -r line; do
         # Parse with jq if available
         if command -v jq &> /dev/null; then
             # Check if it's a detection event
-            if echo "$json_data" | jq -e '.commonName' &> /dev/null; then
-                species=$(echo "$json_data" | jq -r '.commonName')
+            if echo "$json_data" | jq -e '.confidence' &> /dev/null; then
                 confidence=$(echo "$json_data" | jq -r '.confidence')
                 time=$(echo "$json_data" | jq -r '.time')
 
-                echo "🐦 $time: $species (${confidence})"
+                echo "Voice detected: $time (${confidence})"
 
                 # Example: Log to file
-                echo "$time,$species,$confidence" >> detections.csv
+                echo "$time,$confidence" >> detections.csv
 
                 # Example: Send desktop notification (Linux)
-                # notify-send "Bird Detected" "$species detected with ${confidence} confidence"
+                # notify-send "Voice Detected" "Confidence: ${confidence}"
             fi
         else
             echo "Raw data: $json_data"
@@ -3404,11 +2652,11 @@ function connectWithRetry(baseUrl, maxRetries = 5) {
 
 #### Real-time Dashboards
 
-Create web-based dashboards that display live bird activity, species counts, and detection trends in real-time.
+Create web-based dashboards that display live voice activity and detection trends in real-time.
 
 #### Mobile Applications
 
-Build mobile apps that notify users immediately when interesting species are detected in their area.
+Build mobile apps that notify users immediately when voice is detected.
 
 #### Data Integration
 
@@ -3416,59 +2664,15 @@ Stream detection data into time-series databases, data lakes, or analytics platf
 
 #### Automation Systems
 
-Trigger actions in home automation systems, cameras, or other IoT devices based on specific bird detections.
+Trigger actions in home automation systems, cameras, or other IoT devices based on voice detections.
 
 #### Research Applications
 
-Collect real-time data for ornithological research, citizen science projects, or ecological monitoring.
+Collect real-time data for acoustic research, security monitoring, or environmental assessment.
 
 #### Alert Systems
 
-Send notifications via email, SMS, push notifications, or other channels when rare or specific species are detected.
-
-## Species-Specific Settings
-
-BirdNET-Go allows for fine-grained control over how individual species are handled through the `realtime.species` configuration section:
-
-- **Include List (`include`):** A list of species names (matching the labels used by your BirdNET model/locale) that should _always_ be processed and trigger actions if their confidence meets the required threshold. These species bypass any location-based range filtering.
-- **Exclude List (`exclude`):** A list of species names that should _always_ be ignored, regardless of their detection confidence. This is useful for filtering out consistently problematic species or non-bird sounds that might be misidentified.
-- **Custom Configuration (`config`):** This section allows you to define specific settings for individual species:
-  - **Custom Threshold:** You can set a unique `threshold` for a species, overriding the global `birdnet.threshold`. This is useful if you want to be more or less strict for specific birds.
-  - **Custom Interval:** You can set a species-specific `interval` (in seconds) to control how frequently detections for that particular species are allowed. Useful for limiting overly vocal species without affecting detection rates for other birds. When set to 0 or omitted, the global `realtime.interval` value is used.
-  - **Custom Actions (`actions`):** You can define a custom action to be triggered when a specific species is detected above its threshold. Currently, only one action per species is supported.
-    - **Type:** The only supported type is `ExecuteCommand`.
-    - **Command:** The full path to the script or executable to run.
-    - **Parameters:** A list of values to pass as arguments to the command. Available values are:
-      - `CommonName`: The common name of the detected species.
-      - `ScientificName`: The scientific name of the detected species.
-      - `Confidence`: The detection confidence score (0.0 to 1.0). Note: This is passed as a float; multiply by 100 in your script if you need a percentage.
-      - `Time`: The time of the detection (format: HH:MM:SS).
-      - `Source`: The audio source identifier (e.g., sound card name or RTSP stream URL).
-    - **ExecuteDefaults:** A boolean value (`true` or `false`).
-      - If `true` (default), BirdNET-Go will execute **both** your custom command **and** all other configured default actions (like saving to the database, uploading to BirdWeather, sending MQTT messages, etc.).
-      - If `false`, BirdNET-Go will **only** execute your custom command for this specific species detection and will _skip_ all default actions.
-
-Example `config` entry:
-
-```yaml
-realtime:
-  interval: 15 # Default interval for most birds (15 seconds)
-  species:
-    config:
-      "Great Tit":
-        threshold: 0.65
-        interval: 30 # 30 seconds between detections for this species
-      "California Towhee":
-        interval: 300 # Limit detections to once every 5 minutes
-      "Eurasian Magpie":
-        threshold: 0.80
-        interval: 120 # 2 minutes between detections
-        actions:
-          - type: ExecuteCommand
-            command: "/home/user/scripts/magpie_alert.sh"
-            parameters: ["CommonName", "Time"]
-            executedefaults: false # Only run the script, don't save to DB etc.
-```
+Send notifications via email, SMS, push notifications, or other channels when voice is detected.
 
 ## Log Rotation
 

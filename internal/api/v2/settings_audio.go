@@ -5,10 +5,10 @@ import (
 	"reflect"
 	"slices"
 
-	"github.com/tphakala/birdnet-go/internal/audiocore"
-	"github.com/tphakala/birdnet-go/internal/audiocore/equalizer"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/notification"
+	"github.com/tphakala/voicewatch/internal/audiocore"
+	"github.com/tphakala/voicewatch/internal/audiocore/equalizer"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/notification"
 )
 
 // sourceNameUpdater is the subset of SourceRegistry used by the name-sync
@@ -190,8 +190,8 @@ func getAudioBlockedFields() map[string]any {
 }
 
 // extendedCaptureFilterChanged checks if extended capture settings that affect
-// the species filter have changed (Enabled, Species, MaxDuration). These changes
-// can be applied at runtime without a restart by rebuilding the filter map.
+// runtime behavior have changed (Enabled, MaxDuration). These changes can be
+// applied at runtime without a restart by re-applying the extended capture state.
 func extendedCaptureFilterChanged(oldSettings, currentSettings *conf.Settings) bool {
 	old := oldSettings.Realtime.ExtendedCapture
 	cur := currentSettings.Realtime.ExtendedCapture
@@ -205,15 +205,7 @@ func extendedCaptureFilterChanged(oldSettings, currentSettings *conf.Settings) b
 		return false
 	}
 
-	if old.MaxDuration != cur.MaxDuration {
-		return true
-	}
-
-	if !reflect.DeepEqual(old.Species, cur.Species) {
-		return true
-	}
-
-	return false
+	return old.MaxDuration != cur.MaxDuration
 }
 
 // extendedCaptureBufferChanged checks if capture buffer settings have changed,
@@ -246,11 +238,11 @@ func (c *Controller) handleAudioSettingsChanges(oldSettings, currentSettings *co
 			notification.MsgSettingsReconfiguringAudioSources, nil)
 	}
 
-	// Check extended capture filter settings (hot-reloadable: Enabled, Species, MaxDuration)
+	// Check extended capture settings (hot-reloadable: Enabled, MaxDuration)
 	if extendedCaptureFilterChanged(oldSettings, currentSettings) {
-		c.Debug("Extended capture filter settings changed, triggering rebuild")
+		c.Debug("Extended capture settings changed, triggering rebuild")
 		reconfigActions = append(reconfigActions, actionRebuildExtendedCapture)
-		_ = c.SendToastWithKey("Rebuilding extended capture species filter...", "info", toastDurationShort,
+		_ = c.SendToastWithKey("Rebuilding extended capture...", "info", toastDurationShort,
 			notification.MsgSettingsRebuildingExtendedCapture, nil)
 	}
 

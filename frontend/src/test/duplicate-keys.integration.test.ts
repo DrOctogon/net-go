@@ -1,7 +1,7 @@
 /**
  * Integration Tests: Duplicate Key Validation with Real Database Data
  *
- * These tests run in a real browser against a real BirdNET-Go backend
+ * These tests run in a real browser against a real VoiceWatch backend
  * to validate that API responses won't cause duplicate key errors when
  * rendered by Svelte components.
  *
@@ -213,76 +213,6 @@ describe('Duplicate Keys: Detections', () => {
 });
 
 // ============================================================================
-// Species List — SpeciesSettingsPage uses (species) string as key
-// ============================================================================
-
-describe('Duplicate Keys: Species Configuration', () => {
-  it('settings include/exclude species lists have unique entries', async () => {
-    // SpeciesSettingsPage.svelte:1286 — {#each settings.include as species (species)}
-    // SpeciesSettingsPage.svelte:1338 — {#each settings.exclude as species (species)}
-    // These iterate string arrays using the string value as key
-    const response = await apiCall('/settings');
-
-    if (!response.ok) {
-      console.log(`Settings not available (status ${response.status}), skipping`);
-      return;
-    }
-
-    const settings = await response.json();
-
-    // Check include list (empty lists trivially pass: Set([]).size === 0)
-    const includeList: string[] = settings?.realtime?.species?.include ?? [];
-    const includeSet = new Set(includeList);
-    expect(
-      includeList.length,
-      `Duplicate species in include list: ${JSON.stringify(includeList.filter((s: string, i: number) => includeList.indexOf(s) !== i))}`
-    ).toBe(includeSet.size);
-
-    // Check exclude list
-    const excludeList: string[] = settings?.realtime?.species?.exclude ?? [];
-    const excludeSet = new Set(excludeList);
-    expect(
-      excludeList.length,
-      `Duplicate species in exclude list: ${JSON.stringify(excludeList.filter((s: string, i: number) => excludeList.indexOf(s) !== i))}`
-    ).toBe(excludeSet.size);
-  });
-
-  it('range filter species have unique scientificName keys', async () => {
-    // MainSettingsPage.svelte:2977 — {#each rangeFilterState.species as species (species.scientificName)}
-    const response = await apiCall('/range/species/list');
-
-    if (!response.ok) {
-      // Range filter may not be configured
-      console.log(`Range filter species not available (status ${response.status}), skipping`);
-      return;
-    }
-
-    const data = await response.json();
-    const species: Array<{ scientificName?: string; scientific_name?: string }> = Array.isArray(
-      data
-    )
-      ? data
-      : (data.species ?? data.data ?? []);
-
-    if (species.length === 0) {
-      console.log('No range filter species data, skipping');
-      return;
-    }
-
-    // The key field could be scientificName or scientific_name depending on the API
-    const duplicates = findDuplicateKeys(
-      species,
-      item => item.scientificName ?? item.scientific_name
-    );
-
-    expect(
-      duplicates,
-      `Duplicate scientificName in range filter species: ${JSON.stringify(duplicates)}`
-    ).toEqual([]);
-  });
-});
-
-// ============================================================================
 // Audio Devices — AudioSettingsPage uses device values in SelectDropdown
 // ============================================================================
 
@@ -313,80 +243,6 @@ describe('Duplicate Keys: Audio Devices', () => {
     expect(duplicates, `Audio devices with duplicate IDs: ${JSON.stringify(duplicates)}`).toEqual(
       []
     );
-  });
-});
-
-// ============================================================================
-// Dynamic Thresholds — DynamicThresholdTab uses (threshold.speciesName)
-// ============================================================================
-
-describe('Duplicate Keys: Dynamic Thresholds', () => {
-  it('active species have unique scientificName keys', async () => {
-    // SpeciesSettingsPage.svelte:1188 — {#each filteredActiveSpecies as species (species.scientificName)}
-    // DynamicThresholdTab.svelte:374 — {#each filteredThresholds as threshold (threshold.speciesName)}
-    const response = await apiCall('/species');
-
-    if (!response.ok) {
-      console.log(`Species endpoint not available (status ${response.status}), skipping`);
-      return;
-    }
-
-    const data = await response.json();
-    const species: Array<{ scientific_name?: string; scientificName?: string }> = Array.isArray(
-      data
-    )
-      ? data
-      : (data.species ?? data.data ?? []);
-
-    if (species.length === 0) {
-      console.log('No species data, skipping');
-      return;
-    }
-
-    const duplicates = findDuplicateKeys(
-      species,
-      item => item.scientific_name ?? item.scientificName
-    );
-
-    expect(
-      duplicates,
-      `Duplicate species in species list: ${JSON.stringify(duplicates.slice(0, 5))}${duplicates.length > 5 ? `... and ${duplicates.length - 5} more` : ''}`
-    ).toEqual([]);
-  });
-});
-
-// ============================================================================
-// All Species Labels: used by the species autocomplete pickers
-// ============================================================================
-
-describe('Duplicate Keys: All Species Labels', () => {
-  it('species label list has no duplicates', async () => {
-    // Species picker predictions come from species/all. If the label list itself
-    // has duplicates, the predictions dropdown could return duplicate values.
-    const response = await apiCall('/species/all');
-
-    if (!response.ok) {
-      console.log(`Species/all not available (status ${response.status}), skipping`);
-      return;
-    }
-
-    const data = await response.json();
-    const labels: string[] = Array.isArray(data)
-      ? data
-      : (data.labels ?? data.species ?? data.data ?? []);
-
-    if (labels.length === 0) {
-      console.log('No species labels, skipping');
-      return;
-    }
-
-    const labelSet = new Set(labels);
-    const duplicateCount = labels.length - labelSet.size;
-
-    expect(
-      duplicateCount,
-      `Found ${duplicateCount} duplicate labels in species/all (total: ${labels.length})`
-    ).toBe(0);
   });
 });
 

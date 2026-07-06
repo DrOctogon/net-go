@@ -4,8 +4,7 @@ import (
 	"slices"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/imageprovider"
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 // Pending broadcast constants.
@@ -155,17 +154,10 @@ func (p *Processor) SnapshotVisiblePending() []SSEPendingDetection {
 	return result
 }
 
-// getThumbnailURL returns the thumbnail URL for a species from the bird image cache.
-// Returns empty string if the cache is unavailable or the species has no image.
-func (p *Processor) getThumbnailURL(scientificName string) string {
-	if p.BirdImageCache == nil {
-		return ""
-	}
-	img, err := p.BirdImageCache.Get(scientificName)
-	if err != nil || img.IsNegativeEntry() || img.URL == "" {
-		return ""
-	}
-	return imageprovider.ProxyImageURL(scientificName)
+// getThumbnailURL returns the thumbnail URL for a species.
+// Image providers have been removed as part of the human-voice pivot.
+func (p *Processor) getThumbnailURL(_ string) string {
+	return ""
 }
 
 // broadcastPendingSnapshot broadcasts a pending detection snapshot via the

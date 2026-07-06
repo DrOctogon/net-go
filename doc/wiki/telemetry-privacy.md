@@ -1,10 +1,10 @@
 # Privacy & Data Collection
 
-This document provides detailed information about BirdNET-Go's privacy-compliant telemetry system, explaining exactly what data is collected, how it's protected, and where it's sent.
+This document provides detailed information about VoiceWatch's privacy-compliant telemetry system, explaining exactly what data is collected, how it's protected, and where it's sent.
 
 ## Privacy Principles
 
-BirdNET-Go's telemetry system is built on these core privacy principles:
+VoiceWatch's telemetry system is built on these core privacy principles:
 
 ### 🛡️ Privacy by Design
 
@@ -65,7 +65,7 @@ The system meets privacy requirements for:
 ### Personal Data ❌ NEVER COLLECTED
 
 - **Audio recordings** or any sound files
-- **Bird detection results** or species information
+- **Voice detection results** or transcript content
 - **RTSP URLs, IP addresses, hostnames** (anonymized before transmission)
 - **Usernames, passwords** or authentication credentials
 - **File paths** or directory structures
@@ -76,7 +76,7 @@ The system meets privacy requirements for:
 
 ### System Identification 🔑
 
-BirdNET-Go uses a **unique system ID** for telemetry purposes:
+VoiceWatch uses a **unique system ID** for telemetry purposes:
 
 **What**: A randomly generated identifier (format: XXXX-XXXX-XXXX)
 **Why**: Allows tracking errors from the same system without revealing identity
@@ -92,7 +92,7 @@ BirdNET-Go uses a **unique system ID** for telemetry purposes:
 
 ### URL Anonymization Algorithm
 
-BirdNET-Go uses a sophisticated anonymization process that protects privacy while preserving debugging value:
+VoiceWatch uses a sophisticated anonymization process that protects privacy while preserving debugging value:
 
 #### Step 1: URL Detection
 
@@ -155,7 +155,7 @@ Error reports are transmitted to:
 
 - **Service**: Sentry (industry-standard error tracking)
 - **Region**: Europe (Frankfurt, Germany data center)
-- **Operator**: BirdNET-Go development team
+- **Operator**: VoiceWatch development team
 - **Purpose**: Software debugging and improvement only
 
 ### Transmission Security
@@ -191,7 +191,7 @@ anonymizedID := anonymizeURL(originalURL)
 
 ### Error Processing Pipeline
 
-1. **Error occurs** in BirdNET-Go
+1. **Error occurs** in VoiceWatch
 2. **Privacy filters applied** automatically
 3. **URLs anonymized** using consistent hashing
 4. **Context sanitized** to remove sensitive data
@@ -200,7 +200,7 @@ anonymizedID := anonymizeURL(originalURL)
 
 ### Local Privacy Protection
 
-Even before transmission, BirdNET-Go protects your privacy:
+Even before transmission, VoiceWatch protects your privacy:
 
 - **No logging** of sensitive URLs in local log files
 - **Memory safety**: Credentials never stored in memory longer than necessary
@@ -250,7 +250,7 @@ This allows developers to:
 
 ### Regular Reviews
 
-The BirdNET-Go development team regularly reviews:
+The VoiceWatch development team regularly reviews:
 
 - **Data collection practices** to ensure minimal necessary collection
 - **Privacy filter effectiveness** to prevent sensitive data leakage
@@ -269,7 +269,7 @@ The BirdNET-Go development team regularly reviews:
 
 For questions about privacy and data collection:
 
-- **GitHub Issues**: [BirdNET-Go Privacy Issues](https://github.com/tphakala/birdnet-go/issues)
+- **GitHub Issues**: [VoiceWatch Privacy Issues](https://github.com/tphakala/voicewatch/issues)
 - **Email**: Include "Privacy" in the subject line for faster routing
 
 ### Data Protection Officer

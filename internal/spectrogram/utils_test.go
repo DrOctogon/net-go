@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	apperrors "github.com/tphakala/birdnet-go/internal/errors"
+	apperrors "github.com/tphakala/voicewatch/internal/errors"
 )
 
 func TestSizeToPixels(t *testing.T) {

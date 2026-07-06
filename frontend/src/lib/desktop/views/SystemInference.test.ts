@@ -62,7 +62,7 @@ const HISTORY_FRAGMENT = '/metrics/history';
 function makeModel(overrides: Partial<InferenceModel> = {}): InferenceModel {
   return {
     id: 'model-1',
-    name: 'BirdNET GLOBAL 6K',
+    name: 'VoiceWatch GLOBAL 6K',
     backend: 'ONNX',
     quantization: 'INT8',
     isStock: true,
@@ -331,7 +331,7 @@ describe('SystemInference', () => {
     // Start with a single model. A non-empty history seed makes the component
     // connect the SSE stream (and register the topology listener), rather than
     // falling back to polling.
-    const firstModel = makeModel({ id: 'model-1', name: 'BirdNET GLOBAL 6K' });
+    const firstModel = makeModel({ id: 'model-1', name: 'VoiceWatch GLOBAL 6K' });
     const firstHistory = {
       metrics: {
         'inference.model-1.avg_ms': [{ timestamp: '2026-06-18T00:00:00Z', value: 47.2 }],
@@ -507,8 +507,8 @@ describe('SystemInference', () => {
     const now = Math.floor(Date.now() / 1000);
     const birdnet = makeModel({
       id: 'model-1',
-      name: 'BirdNET GLOBAL 6K',
-      detectionName: 'BirdNET',
+      name: 'VoiceWatch GLOBAL 6K',
+      detectionName: 'VoiceWatch',
       recentDetections: [
         {
           species: 'European Robin',
@@ -536,7 +536,7 @@ describe('SystemInference', () => {
         throughput: 'inference.model-2.throughput',
         errorRate: 'inference.model-2.error_rate',
       },
-      // Robin 1s from BirdNET's Robin (within tolerance); no Blackbird.
+      // Robin 1s from VoiceWatch's Robin (within tolerance); no Blackbird.
       recentDetections: [
         {
           species: 'European Robin',
@@ -551,15 +551,15 @@ describe('SystemInference', () => {
 
     const { container } = inferenceTest.render({});
     await waitFor(() => {
-      expect(container.textContent).toContain('BirdNET GLOBAL 6K');
+      expect(container.textContent).toContain('VoiceWatch GLOBAL 6K');
     });
 
     // The "Also" column is the 4th cell of each detection row.
     const alsoCells = Array.from(container.querySelectorAll('tbody tr td:nth-child(4)')).map(c =>
       c.textContent.trim()
     );
-    expect(alsoCells).toContain('Perch'); // BirdNET's Robin co-detected by Perch
-    expect(alsoCells).toContain('BirdNET'); // Perch's Robin co-detected by BirdNET
+    expect(alsoCells).toContain('Perch'); // VoiceWatch's Robin co-detected by Perch
+    expect(alsoCells).toContain('VoiceWatch'); // Perch's Robin co-detected by VoiceWatch
     expect(alsoCells).toContain('-'); // Blackbird had no co-detection
   });
 

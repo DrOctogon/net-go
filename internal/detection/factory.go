@@ -4,7 +4,7 @@ import (
 	"math"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/conf"
+	"github.com/tphakala/voicewatch/internal/conf"
 )
 
 // DetectionTimeOffset is subtracted from the current time when creating detections.
@@ -48,10 +48,10 @@ func NewResult(settings *conf.Settings, p *ResultParams) *Result {
 		EndTime:        p.End,
 		Species:        species,
 		Confidence:     roundedConfidence,
-		Latitude:       settings.BirdNET.Latitude,
-		Longitude:      settings.BirdNET.Longitude,
-		Threshold:      settings.BirdNET.Threshold,
-		Sensitivity:    settings.BirdNET.Sensitivity,
+		Latitude:       settings.VoiceWatch.Latitude,
+		Longitude:      settings.VoiceWatch.Longitude,
+		Threshold:      settings.VoiceWatch.Threshold,
+		Sensitivity:    settings.VoiceWatch.Sensitivity,
 		ClipName:       p.ClipName,
 		ProcessingTime: p.Elapsed,
 		Occurrence:     occurrence,

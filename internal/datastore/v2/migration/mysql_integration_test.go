@@ -17,8 +17,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
-	v2 "github.com/tphakala/birdnet-go/internal/datastore/v2"
-	"github.com/tphakala/birdnet-go/internal/datastore/v2/entities"
+	v2 "github.com/tphakala/voicewatch/internal/datastore/v2"
+	"github.com/tphakala/voicewatch/internal/datastore/v2/entities"
 )
 
 func getEnvOrDefault(key, defaultValue string) string {

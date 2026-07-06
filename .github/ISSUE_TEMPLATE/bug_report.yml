@@ -11,7 +11,7 @@ body:
         Tip: the dashboard has a guided **Help -> Report a Bug** page (in the sidebar) that gathers your version, build date, OS and hardware with a one-click **Copy** button, and can generate a support dump. Using it makes filling out this form much easier.
 
         Before submitting, please make sure:
-        1. You are running the **latest release**. Check your version against the releases page and upgrade if you are behind: https://github.com/tphakala/birdnet-go/releases
+        1. You are running the **latest release**. Check your version against the releases page and upgrade if you are behind: https://github.com/tphakala/voicewatch/releases
         2. You have searched existing issues (open and closed) for duplicates.
 
         **Bug reports with missing required information will be closed without investigation**, without the details below it is not possible to debug the issue.
@@ -183,7 +183,7 @@ body:
     attributes:
       label: Pre-submission checks
       options:
-        - label: I am running the [latest release](https://github.com/tphakala/birdnet-go/releases) or have tested with the `:dev` container image.
+        - label: I am running the [latest release](https://github.com/tphakala/voicewatch/releases) or have tested with the `:dev` container image.
           required: true
         - label: I have searched existing open and closed issues and this does not appear to be a duplicate.
           required: true

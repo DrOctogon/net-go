@@ -1,6 +1,6 @@
-# BirdNET-Go Testing Guidelines
+# VoiceWatch Testing Guidelines
 
-This document describes how to write consistent, maintainable tests for BirdNET-Go. It serves both human developers and LLM assistants working on the codebase.
+This document describes how to write consistent, maintainable tests for VoiceWatch. It serves both human developers and LLM assistants working on the codebase.
 
 ## Critical Rules
 

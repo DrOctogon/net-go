@@ -5,21 +5,18 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
-	neturl "net/url"
 	"strings"
 	"sync"
 	"time"
 
 	"github.com/labstack/echo/v4"
-	"github.com/tphakala/birdnet-go/internal/birdweather"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/mqtt"
-	"github.com/tphakala/birdnet-go/internal/notification"
-	"github.com/tphakala/birdnet-go/internal/privacy"
-	"github.com/tphakala/birdnet-go/internal/weather"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/mqtt"
+	"github.com/tphakala/voicewatch/internal/notification"
+	"github.com/tphakala/voicewatch/internal/privacy"
+	"github.com/tphakala/voicewatch/internal/weather"
 )
 
 // Integration constants (file-local)
@@ -52,22 +49,6 @@ func (a *mqttTestAdapter) TestConnection(ctx context.Context, resultChan chan<- 
 
 func (a *mqttTestAdapter) Cleanup() {
 	a.client.Disconnect()
-}
-
-// birdweatherTestAdapter wraps birdweather.BwClient to implement IntegrationTestClient
-type birdweatherTestAdapter struct {
-	client interface {
-		TestConnection(ctx context.Context, resultChan chan<- birdweather.TestResult)
-		Close()
-	}
-}
-
-func (a *birdweatherTestAdapter) TestConnection(ctx context.Context, resultChan chan<- birdweather.TestResult) {
-	a.client.TestConnection(ctx, resultChan)
-}
-
-func (a *birdweatherTestAdapter) Cleanup() {
-	a.client.Close()
 }
 
 // runStreamingIntegrationTest runs an integration test with streaming results.
@@ -231,18 +212,9 @@ func (c *Controller) initIntegrationsRoutes() {
 	mqttTLSGroup.POST("/certificate", c.UploadMQTTTLSCertificate)
 	mqttTLSGroup.DELETE("/certificate", c.DeleteMQTTTLSCertificate)
 
-	// BirdWeather routes
-	bwGroup := integrationsGroup.Group("/birdweather")
-	bwGroup.GET("/status", c.GetBirdWeatherStatus)
-	bwGroup.POST("/test", c.TestBirdWeatherConnection)
-
 	// Weather routes
 	weatherGroup := integrationsGroup.Group("/weather")
 	weatherGroup.POST("/test", c.TestWeatherConnection)
-
-	// eBird routes
-	ebirdGroup := integrationsGroup.Group("/ebird")
-	ebirdGroup.POST("/test", c.TestEBirdConnection)
 
 	c.logInfoIfEnabled("Integrations routes initialized successfully")
 }
@@ -339,38 +311,6 @@ func (c *Controller) checkMQTTConnectionStatus(parentCtx context.Context, settin
 	return true, "" // Connected successfully
 }
 
-// GetBirdWeatherStatus handles GET /api/v2/integrations/birdweather/status
-func (c *Controller) GetBirdWeatherStatus(ctx echo.Context) error {
-	ip := ctx.RealIP()
-	path := ctx.Request().URL.Path
-	c.logInfoIfEnabled("Getting BirdWeather status",
-		logger.String("path", path),
-		logger.String("ip", ip))
-
-	// Get BirdWeather configuration from fresh settings
-	bwConfig := c.currentSettings().Realtime.Birdweather
-
-	// Prepare status response
-	status := BirdWeatherStatus{
-		Enabled:          bwConfig.Enabled,
-		StationID:        bwConfig.ID,
-		Threshold:        bwConfig.Threshold,
-		LocationAccuracy: bwConfig.LocationAccuracy,
-	}
-
-	// For now, we just return the configuration status
-	// In the future, we could add checks for client status here
-	c.logInfoIfEnabled("Retrieved BirdWeather status successfully",
-		logger.Bool("enabled", status.Enabled),
-		logger.String("station_id", status.StationID),
-		logger.Float64("threshold", status.Threshold),
-		logger.String("path", path),
-		logger.String("ip", ip),
-	)
-
-	return ctx.JSON(http.StatusOK, status)
-}
-
 // TestMQTTConnection handles POST /api/v2/integrations/mqtt/test
 func (c *Controller) TestMQTTConnection(ctx echo.Context) error {
 	// Get MQTT configuration from fresh settings
@@ -419,79 +359,6 @@ func (c *Controller) TestMQTTConnection(ctx echo.Context) error {
 	// Create adapter and run streaming test
 	adapter := &mqttTestAdapter{client: client}
 	return runStreamingIntegrationTest(c, ctx, resultChan, adapter, integrationMediumTimeout*time.Second, "MQTT")
-}
-
-// TestBirdWeatherConnection handles POST /api/v2/integrations/birdweather/test
-func (c *Controller) TestBirdWeatherConnection(ctx echo.Context) error {
-	var request BirdWeatherTestRequest
-	if err := ctx.Bind(&request); err != nil {
-		return c.HandleError(ctx, err, "Invalid BirdWeather test request", http.StatusBadRequest)
-	}
-
-	// Validate BirdWeather configuration from the request
-	if !request.Enabled {
-		return ctx.JSON(http.StatusOK, map[string]any{
-			"success": false,
-			"message": "BirdWeather integration is not enabled",
-			"state":   "failed",
-		})
-	}
-
-	// Validate BirdWeather configuration
-	if request.ID == "" {
-		return ctx.JSON(http.StatusBadRequest, map[string]any{
-			"success": false,
-			"message": "BirdWeather station ID not configured",
-			"state":   "failed",
-		})
-	}
-
-	// Clone current settings and override only BirdWeather fields from the request
-	testSettings := conf.CloneSettings(c.currentSettings())
-	testSettings.Realtime.Birdweather = conf.BirdweatherSettings{
-		Enabled:          request.Enabled,
-		ID:               request.ID,
-		Threshold:        request.Threshold,
-		LocationAccuracy: request.LocationAccuracy,
-		Debug:            request.Debug,
-	}
-
-	// Create test BirdWeather client with the test configuration
-	client, err := birdweather.New(testSettings)
-	if err != nil {
-		return ctx.JSON(http.StatusInternalServerError, map[string]any{
-			"success": false,
-			"message": formatClientError("Failed to create BirdWeather client", err, testSettings),
-			"state":   "failed",
-		})
-	}
-
-	// Prepare for testing
-	ctx.Response().Header().Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	ctx.Response().WriteHeader(http.StatusOK)
-
-	// Channel for test results
-	resultChan := make(chan birdweather.TestResult)
-
-	// Create adapter and run streaming test
-	adapter := &birdweatherTestAdapter{client: client}
-	return runStreamingIntegrationTest(c, ctx, resultChan, adapter, integrationLongTimeout*time.Second, "BirdWeather")
-}
-
-// BirdWeatherTestRequest represents a request to test BirdWeather connectivity
-type BirdWeatherTestRequest struct {
-	Enabled          bool    `json:"enabled"`
-	ID               string  `json:"id"`
-	Threshold        float64 `json:"threshold"`
-	LocationAccuracy float64 `json:"locationAccuracy"`
-	Debug            bool    `json:"debug"`
-}
-
-// EBirdTestRequest represents a request to test eBird API connectivity
-type EBirdTestRequest struct {
-	Enabled bool   `json:"enabled"`
-	APIKey  string `json:"apiKey"`
-	Locale  string `json:"locale"`
 }
 
 // WeatherTestRequest represents a request to test weather provider connectivity
@@ -647,7 +514,7 @@ func (c *Controller) testWeatherAPIConnectivity(ctx context.Context, settings *c
 		return "", fmt.Errorf("failed to create request: %w", err)
 	}
 
-	req.Header.Set("User-Agent", "BirdNET-Go Weather Test")
+	req.Header.Set("User-Agent", "VoiceWatch Weather Test")
 	resp, err := client.Do(req)
 	if err != nil {
 		return "", fmt.Errorf("failed to connect to %s API: %w", getProviderDisplayName(provider), err)
@@ -683,7 +550,7 @@ func (c *Controller) testWeatherAuthentication(ctx context.Context, settings *co
 			return "", fmt.Errorf("failed to create authentication request: %w", privacy.WrapError(err))
 		}
 
-		req.Header.Set("User-Agent", "BirdNET-Go Weather Test")
+		req.Header.Set("User-Agent", "VoiceWatch Weather Test")
 		resp, err := client.Do(req)
 		if err != nil {
 			// Scrub before wrapping: the transport *url.Error embeds the appid API key.
@@ -806,165 +673,4 @@ func formatClientError(prefix string, err error, settings *conf.Settings) string
 func (c *Controller) writeJSONResponse(ctx echo.Context, data any) error {
 	encoder := json.NewEncoder(ctx.Response())
 	return encoder.Encode(data)
-}
-
-// TestEBirdConnection handles POST /api/v2/integrations/ebird/test
-func (c *Controller) TestEBirdConnection(ctx echo.Context) error {
-	var request EBirdTestRequest
-	if err := ctx.Bind(&request); err != nil {
-		return c.HandleError(ctx, err, "Invalid eBird test request", http.StatusBadRequest)
-	}
-
-	if !request.Enabled {
-		return ctx.JSON(http.StatusOK, map[string]any{
-			"success": false,
-			"message": "eBird integration is not enabled",
-			"state":   "failed",
-		})
-	}
-
-	if request.APIKey == "" {
-		return ctx.JSON(http.StatusBadRequest, map[string]any{
-			"success": false,
-			"message": "eBird API key is required",
-			"state":   "failed",
-		})
-	}
-
-	ctx.Response().Header().Set("Content-Type", "application/x-ndjson")
-	ctx.Response().Header().Set("Cache-Control", "no-cache")
-	ctx.Response().Header().Set("Connection", "keep-alive")
-	ctx.Response().WriteHeader(http.StatusOK)
-
-	testCtx, cancel := context.WithTimeout(ctx.Request().Context(), integrationMediumTimeout*time.Second)
-	defer cancel()
-
-	encoder := json.NewEncoder(ctx.Response())
-
-	sendStage := func(stage WeatherTestStage) error {
-		if err := encoder.Encode(stage); err != nil {
-			return err
-		}
-		ctx.Response().Flush()
-		return nil
-	}
-
-	locale := request.Locale
-	if locale == "" {
-		locale = "en"
-	}
-
-	stages := []struct {
-		id    string
-		title string
-		test  func() (string, error)
-	}{
-		{"connectivity", "API Connectivity", func() (string, error) {
-			return c.testEBirdConnectivity(testCtx)
-		}},
-		{"authentication", "Authentication", func() (string, error) {
-			return c.testEBirdAuthentication(testCtx, request.APIKey, locale)
-		}},
-	}
-
-	for _, stage := range stages {
-		if err := sendStage(WeatherTestStage{
-			ID:     stage.id,
-			Title:  stage.title,
-			Status: "in_progress",
-		}); err != nil {
-			return nil
-		}
-
-		message, err := stage.test()
-		if err != nil {
-			return sendStage(WeatherTestStage{
-				ID:      stage.id,
-				Title:   stage.title,
-				Status:  "error",
-				Message: message,
-				Error:   err.Error(),
-			})
-		}
-
-		if err := sendStage(WeatherTestStage{
-			ID:      stage.id,
-			Title:   stage.title,
-			Status:  "completed",
-			Message: message,
-		}); err != nil {
-			return nil
-		}
-
-		time.Sleep(integrationStageDelay * time.Millisecond)
-	}
-
-	return nil
-}
-
-// testEBirdConnectivity tests basic connectivity to the eBird API
-func (c *Controller) testEBirdConnectivity(ctx context.Context) (string, error) {
-	client := &http.Client{Timeout: integrationShortTimeout * time.Second}
-	req, err := http.NewRequestWithContext(ctx, "HEAD", "https://api.ebird.org/v2/ref/taxonomy/ebird", http.NoBody)
-	if err != nil {
-		return "", fmt.Errorf("failed to create request: %w", err)
-	}
-
-	req.Header.Set("User-Agent", "BirdNET-Go eBird Test")
-
-	resp, err := client.Do(req)
-	if err != nil {
-		return "", fmt.Errorf("failed to connect to eBird API: %w", err)
-	}
-	defer func() {
-		_, _ = io.Copy(io.Discard, resp.Body)
-		if closeErr := resp.Body.Close(); closeErr != nil {
-			GetLogger().Warn("Failed to close response body", logger.Error(closeErr))
-		}
-	}()
-
-	// Any response (even 403) means the API is reachable, but 5xx indicates server issues
-	if resp.StatusCode >= http.StatusInternalServerError {
-		return "", fmt.Errorf("eBird API returned server error (status %d)", resp.StatusCode)
-	}
-
-	return "Successfully connected to eBird API", nil
-}
-
-// testEBirdAuthentication tests authentication with the eBird API using a small taxonomy request
-func (c *Controller) testEBirdAuthentication(ctx context.Context, apiKey, locale string) (string, error) {
-	client := &http.Client{Timeout: integrationShortTimeout * time.Second}
-
-	url := fmt.Sprintf("https://api.ebird.org/v2/ref/taxonomy/ebird?fmt=json&cat=species&maxResults=1&locale=%s", neturl.QueryEscape(locale))
-
-	req, err := http.NewRequestWithContext(ctx, "GET", url, http.NoBody)
-	if err != nil {
-		return "", fmt.Errorf("failed to create authentication request: %w", err)
-	}
-
-	req.Header.Set("X-eBirdApiToken", apiKey)
-	req.Header.Set("Accept", "application/json")
-	req.Header.Set("User-Agent", "BirdNET-Go eBird Test")
-
-	resp, err := client.Do(req)
-	if err != nil {
-		return "", fmt.Errorf("failed to authenticate with eBird API: %w", err)
-	}
-	defer func() {
-		// Drain body to allow connection reuse before closing
-		_, _ = io.Copy(io.Discard, resp.Body)
-		if closeErr := resp.Body.Close(); closeErr != nil {
-			GetLogger().Warn("Failed to close response body", logger.Error(closeErr))
-		}
-	}()
-
-	if resp.StatusCode == http.StatusForbidden || resp.StatusCode == http.StatusUnauthorized {
-		return "", fmt.Errorf("invalid API key - please check your eBird API key")
-	}
-
-	if resp.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("unexpected response from eBird API (status %d)", resp.StatusCode)
-	}
-
-	return fmt.Sprintf("Successfully authenticated with eBird API (locale: %s)", locale), nil
 }

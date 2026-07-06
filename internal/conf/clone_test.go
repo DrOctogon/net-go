@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 // mutated is the sentinel string the clone-independence test writes through
@@ -65,8 +65,7 @@ func newPopulatedSettings() *Settings {
 	s.Logging.Console = &logger.ConsoleOutput{Enabled: true, Level: "info"}
 	s.Logging.FileOutput = &logger.FileOutput{Enabled: true, Path: "logs/app.log"}
 
-	s.BirdNET.Labels = []string{"alpha", "beta"}
-	s.BirdNET.RangeFilter.Species = []string{"Turdus merula", "Parus major"}
+	s.VoiceWatch.Labels = []string{"alpha", "beta"}
 
 	s.Models.Enabled = []string{"birdnet", "perch_v2"}
 	s.Models.Installed = []string{"birdnet", "perch_v3"}
@@ -97,9 +96,6 @@ func newPopulatedSettings() *Settings {
 		},
 	}
 
-	s.Realtime.DogBarkFilter.Species = []string{"Canis familiaris"}
-	s.Realtime.DaylightFilter.Species = []string{"Strix aluco"}
-
 	s.Realtime.RTSP.Streams = []StreamConfig{
 		{
 			Name: "front", URL: "rtsp://x", Enabled: true, Models: []string{"birdnet"},
@@ -113,8 +109,6 @@ func newPopulatedSettings() *Settings {
 	s.Realtime.RTSP.FFmpegParameters = []string{"-rtsp_transport", "tcp"}
 
 	s.Realtime.Monitoring.Disk.Paths = []string{"/", "/data"}
-
-	s.Realtime.ExtendedCapture.Species = []string{"Tyto alba"}
 
 	s.Realtime.Species.Include = []string{"Corvus corax"}
 	s.Realtime.Species.Exclude = []string{"Passer domesticus"}
@@ -203,8 +197,7 @@ func mutateCloneEverywhere(dst *Settings) {
 	dst.Logging.Console.Level = mutated
 	dst.Logging.FileOutput.Path = mutated
 
-	dst.BirdNET.Labels[0] = mutated
-	dst.BirdNET.RangeFilter.Species = append(dst.BirdNET.RangeFilter.Species, "Corvus corax")
+	dst.VoiceWatch.Labels[0] = mutated
 
 	dst.Models.Enabled[0] = mutated
 	dst.Models.Installed[0] = mutated
@@ -225,9 +218,6 @@ func mutateCloneEverywhere(dst *Settings) {
 	dst.Realtime.Dashboard.Layout.Elements = append(dst.Realtime.Dashboard.Layout.Elements,
 		DashboardElement{ID: "added"})
 
-	dst.Realtime.DogBarkFilter.Species[0] = mutated
-	dst.Realtime.DaylightFilter.Species[0] = mutated
-
 	dst.Realtime.RTSP.Streams[0].Models[0] = mutated
 	dst.Realtime.RTSP.Streams[0].Enabled = false
 	dst.Realtime.RTSP.Streams[0].Equalizer.Enabled = false
@@ -236,8 +226,6 @@ func mutateCloneEverywhere(dst *Settings) {
 	dst.Realtime.RTSP.FFmpegParameters[0] = mutated
 
 	dst.Realtime.Monitoring.Disk.Paths[0] = mutated
-
-	dst.Realtime.ExtendedCapture.Species[0] = mutated
 
 	dst.Realtime.Species.Include[0] = mutated
 	dst.Realtime.Species.Exclude[0] = mutated
@@ -285,27 +273,6 @@ func mutateCloneEverywhere(dst *Settings) {
 	dst.Notification.Push.Providers[0] = pp
 }
 
-// TestCloneSettings_IncludedScientificNamesIndependence verifies that
-// IncludedScientificNames is deep-cloned so mutations on the copy do not
-// affect the original.
-func TestCloneSettings_IncludedScientificNamesIndependence(t *testing.T) {
-	t.Parallel()
-
-	src := &Settings{}
-	src.BirdNET.RangeFilter.IncludedScientificNames = map[string]struct{}{
-		"turdus merula": {},
-		"parus major":   {},
-	}
-
-	dst := CloneSettings(src)
-
-	dst.BirdNET.RangeFilter.IncludedScientificNames["corvus corax"] = struct{}{}
-
-	assert.Len(t, src.BirdNET.RangeFilter.IncludedScientificNames, 2,
-		"source map must not be modified by mutation of clone")
-	assert.Len(t, dst.BirdNET.RangeFilter.IncludedScientificNames, 3)
-}
-
 // assertSourceUnchanged verifies that every field touched by
 // mutateCloneEverywhere still holds its original value on src.
 func assertSourceUnchanged(t *testing.T, src *Settings) {
@@ -326,8 +293,7 @@ func assertSourceUnchanged(t *testing.T, src *Settings) {
 	require.NotNil(t, src.Logging.FileOutput)
 	assert.Equal(t, "logs/app.log", src.Logging.FileOutput.Path)
 
-	assert.Equal(t, []string{"alpha", "beta"}, src.BirdNET.Labels)
-	assert.Equal(t, []string{"Turdus merula", "Parus major"}, src.BirdNET.RangeFilter.Species)
+	assert.Equal(t, []string{"alpha", "beta"}, src.VoiceWatch.Labels)
 
 	assert.Equal(t, []string{"birdnet", "perch_v2"}, src.Models.Enabled)
 	assert.Equal(t, []string{"birdnet", "perch_v3"}, src.Models.Installed)
@@ -355,9 +321,6 @@ func assertSourceUnchanged(t *testing.T, src *Settings) {
 	require.NotNil(t, elem.Summary)
 	assert.Equal(t, 30, elem.Summary.SummaryLimit)
 
-	assert.Equal(t, []string{"Canis familiaris"}, src.Realtime.DogBarkFilter.Species)
-	assert.Equal(t, []string{"Strix aluco"}, src.Realtime.DaylightFilter.Species)
-
 	require.Len(t, src.Realtime.RTSP.Streams, 1)
 	assert.True(t, src.Realtime.RTSP.Streams[0].Enabled)
 	assert.Equal(t, []string{"birdnet"}, src.Realtime.RTSP.Streams[0].Models)
@@ -369,8 +332,6 @@ func assertSourceUnchanged(t *testing.T, src *Settings) {
 	assert.Equal(t, []string{"-rtsp_transport", "tcp"}, src.Realtime.RTSP.FFmpegParameters)
 
 	assert.Equal(t, []string{"/", "/data"}, src.Realtime.Monitoring.Disk.Paths)
-
-	assert.Equal(t, []string{"Tyto alba"}, src.Realtime.ExtendedCapture.Species)
 
 	assert.Equal(t, []string{"Corvus corax"}, src.Realtime.Species.Include)
 	assert.Equal(t, []string{"Passer domesticus"}, src.Realtime.Species.Exclude)

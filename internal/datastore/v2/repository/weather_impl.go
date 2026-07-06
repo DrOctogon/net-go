@@ -5,8 +5,8 @@ import (
 	"errors"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	"github.com/tphakala/birdnet-go/internal/datastore/v2/entities"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/datastore/v2/entities"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )

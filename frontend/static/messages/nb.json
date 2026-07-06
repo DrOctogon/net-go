@@ -156,7 +156,8 @@
         "falsePositive": "Falsk positiv",
         "notReviewed": "Ikke gjennomgått",
         "locked": "Låst",
-        "unlikely": "Usannsynlig"
+        "unlikely": "Usannsynlig",
+        "flagged": "Flagged"
       },
       "form": {
         "correctDetection": "Korrekt registrering",
@@ -200,7 +201,7 @@
     "hoursShort": "t"
   },
   "pageTitle": {
-    "settings": "Innstillinger - BirdNET-Go",
+    "settings": "Innstillinger - VoiceWatch",
     "pageNotFound": "404 - Side ikke funnet",
     "serverError": "500 - Intern serverfeil",
     "componentError": "Feil ved lasting av komponent",
@@ -236,26 +237,26 @@
     "askQuestion": "Still et spørsmål",
     "reportBugAriaLabel": "Rapporter en feil på GitHub (åpnes i nytt vindu)",
     "askQuestionAriaLabel": "Still et spørsmål på GitHub Discussions (åpnes i nytt vindu)",
-    "viewOnGithubAriaLabel": "Vis BirdNET-Go på GitHub (åpnes i nytt vindu)",
+    "viewOnGithubAriaLabel": "Vis VoiceWatch på GitHub (åpnes i nytt vindu)",
     "health": "Helse"
   },
   "about": {
-    "title": "BirdNET-Go",
+    "title": "VoiceWatch",
     "subtitle": "Et moderne grensesnitt for sanntids-deteksjon og klassifisering av fuglelyd",
     "logoAlt": "BirdNET-Go-logo",
     "overview": "Oversikt",
-    "overviewText": "BirdNET-Go er en Go-basert implementasjon for sanntids-deteksjon og klassifisering av fuglelyd, bygget på grunnlag av BirdNET-prosjektet. Applikasjonen tilbyr et brukervennlig grensesnitt for kontinuerlig overvåkning og analyse av fuglelyd.",
-    "birdnetProject": "BirdNET-prosjektet",
-    "birdnetDescription": "BirdNET-Go ville ikke vært mulig uten det banebrytende arbeidet til BirdNET-prosjektet. Den kunstige intelligens-modellen som driver BirdNET-Gos deteksjonsevner er et resultat av BirdNET-prosjektets innovative forskning og utvikling.",
+    "overviewText": "VoiceWatch er en Go-basert implementasjon for sanntids-deteksjon og klassifisering av fuglelyd, bygget på grunnlag av VoiceWatch-prosjektet. Applikasjonen tilbyr et brukervennlig grensesnitt for kontinuerlig overvåkning og analyse av fuglelyd.",
+    "birdnetProject": "VoiceWatch-prosjektet",
+    "birdnetDescription": "VoiceWatch ville ikke vært mulig uten det banebrytende arbeidet til VoiceWatch-prosjektet. Den kunstige intelligens-modellen som driver VoiceWatchs deteksjonsevner er et resultat av VoiceWatch-prosjektets innovative forskning og utvikling.",
     "developedBy": "Utviklet av",
     "developersText": "K. Lisa Yang Center for Conservation Bioacoustics ved Cornell Lab of Ornithology i samarbeid med Chemnitz University of Technology:",
     "visitBirdnetAnalyzer": "Besøk BirdNET-Analyzer-prosjektet",
     "visitBirdnetAnalyzerAriaLabel": "Besøk BirdNET-Analyzer GitHub-repositorium",
     "contributors": "Bidragsytere",
-    "contributorsText": "BirdNET-Go har vokst og blitt forbedret takket være mange enkeltpersoners bidrag. Deres innsats, fra kodeforbedringer til funksjonsforslag, har vært uvurderlig for å gjøre dette prosjektet bedre.",
+    "contributorsText": "VoiceWatch har vokst og blitt forbedret takket være mange enkeltpersoners bidrag. Deres innsats, fra kodeforbedringer til funksjonsforslag, har vært uvurderlig for å gjøre dette prosjektet bedre.",
     "mainDeveloper": "Hovedutvikler",
     "githubContributors": "GitHub-bidragsytere",
-    "contributorsNote": "Spesiell takk til disse bidragsyterne for deres verdifulle arbeid med å forbedre BirdNET-Go:",
+    "contributorsNote": "Spesiell takk til disse bidragsyterne for deres verdifulle arbeid med å forbedre VoiceWatch:",
     "communityAcknowledgment": "Takk til fellesskapet",
     "communityText": "Vi ønsker også å takke alle brukere som har bidratt gjennom:",
     "bugReports": "Feilrapporter og problemsporing",
@@ -264,9 +265,9 @@
     "documentation": "Dokumentasjonsforbedringer",
     "additionalCredits": "Ytterligere kreditering",
     "birdnetPiProject": "BirdNET-Pi-prosjektet",
-    "birdnetPiDescription": "Spesiell takk til Patrick McGuire for hans inspirerende arbeid med BirdNET-Pi, som har påvirket utviklingen av BirdNET-Go. BirdNET-Pi viser potensialet for fuglelyddeteksjon på innebygde enheter og har satt en høy standard for fellesskapsdrevet utvikling.",
+    "birdnetPiDescription": "Spesiell takk til Patrick McGuire for hans inspirerende arbeid med BirdNET-Pi, som har påvirket utviklingen av VoiceWatch. BirdNET-Pi viser potensialet for fuglelyddeteksjon på innebygde enheter og har satt en høy standard for fellesskapsdrevet utvikling.",
     "visitBirdnetPi": "Besøk BirdNET-Pi-prosjektet",
-    "labelTranslations": "BirdNET-etikettoversettelser",
+    "labelTranslations": "VoiceWatch-etikettoversettelser",
     "labelTranslationsBy": "Levert av Patrick Levin for BirdNET-Pi-prosjektet av Patrick McGuire",
     "patrickLevinGithub": "Patrick Levins GitHub",
     "versionInformation": "Versjonsinformasjon",
@@ -275,12 +276,12 @@
     "developmentBuild": "Utviklingsbygg",
     "unknown": "Ukjent",
     "licenseInformation": "Lisensinformasjon",
-    "licenseText": "Både BirdNET AI-modellen og BirdNET-Go er lisensiert under",
+    "licenseText": "Både VoiceWatch AI-modellen og VoiceWatch er lisensiert under",
     "ccLicense": "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 internasjonal lisens",
     "licenseDescription": "Denne lisensen tillater andre å remikse, tilpasse og bygge videre på dette arbeidet for ikke-kommersielle formål, så lenge passende kreditering gis og nye verk lisensieres under identiske vilkår.",
     "dependencyLicenses": "Avhengighetslisenser",
     "taxonomyDataTitle": "Taksonomidata",
-    "taxonomyDataIntro": "BirdNET-Go inkluderer innebygde fugletaksonomidata avledet fra eBird/Clements-sjekklisten, som gir rask lokal oppslagsfunksjon for slekt og familie.",
+    "taxonomyDataIntro": "VoiceWatch inkluderer innebygde fugletaksonomidata avledet fra eBird/Clements-sjekklisten, som gir rask lokal oppslagsfunksjon for slekt og familie.",
     "source": "Kilde",
     "ebirdApiV2": "eBird API v2",
     "copyright": "Opphavsrett",
@@ -290,10 +291,10 @@
     "ebirdOrg": "eBird.org",
     "learnEbirdTaxonomy": "Les om eBird-taksonomi",
     "avicommonsTitle": "Fugleminiaturbilder",
-    "avicommonsDescription": "BirdNET-Go bruker utvalgte fuglebilder fra Avicommons, et bibliotek med håndplukkede, beskårne og orienterte fuglebilder lisensiert under Creative Commons-lisenser.",
-    "githubStarPrompt": "Hvis du finner BirdNET-Go nyttig, vurder å gi prosjektet en stjerne på GitHub. Stjerner hjelper andre med å oppdage prosjektet og støtter videre utvikling.",
+    "avicommonsDescription": "VoiceWatch bruker utvalgte fuglebilder fra Avicommons, et bibliotek med håndplukkede, beskårne og orienterte fuglebilder lisensiert under Creative Commons-lisenser.",
+    "githubStarPrompt": "Hvis du finner VoiceWatch nyttig, vurder å gi prosjektet en stjerne på GitHub. Stjerner hjelper andre med å oppdage prosjektet og støtter videre utvikling.",
     "viewOnGithub": "Se prosjektet på GitHub",
-    "visitGithubAriaLabel": "Besøk BirdNET-Go GitHub-repositorium",
+    "visitGithubAriaLabel": "Besøk VoiceWatch GitHub-repositorium",
     "visitAvicommonsGithub": "Besøk Avicommons GitHub-repositorium"
   },
   "notifications": {
@@ -362,11 +363,11 @@
     },
     "content": {
       "startup": {
-        "title": "BirdNET-Go startet",
+        "title": "VoiceWatch startet",
         "message": "Applikasjon startet (v{version})"
       },
       "shutdown": {
-        "title": "BirdNET-Go avsluttes",
+        "title": "VoiceWatch avsluttes",
         "message": "Applikasjonen avsluttes på en kontrollert måte"
       },
       "detection": {
@@ -396,7 +397,6 @@
         "rebuildingRangeFilter": "Bygger om artsutvalgsfilter...",
         "updatingIntervals": "Oppdaterer registreringsintervaller...",
         "reconfiguringMqtt": "Oppdaterer MQTT-tilkobling...",
-        "reconfiguringBirdweather": "Oppdaterer BirdWeather-integrasjon...",
         "reconfiguringStreams": "Oppdaterer lydstrømmer...",
         "reconfiguringTelemetry": "Oppdaterer telemetriinnstillinger...",
         "reconfiguringPushNotifications": "Konfigurerer push-varselleverandører på nytt...",
@@ -423,7 +423,7 @@
         "cancelledTitle": "Databasemigrering avbrutt",
         "cancelledMessage": "Databasemigrering er avbrutt. Du kan starte en ny migrering når som helst fra Databaseinnstillinger.",
         "completedTitle": "Databasemigrering fullført",
-        "completedMessage": "Migrering fullført. Start BirdNET-Go på nytt for å bytte til den nye databasen.",
+        "completedMessage": "Migrering fullført. Start VoiceWatch på nytt for å bytte til den nye databasen.",
         "errorTitle": "Databasemigrasjonsfeil",
         "errorMessage": "Migrering satt på pause på grunn av feil. Sjekk logger og prøv å fortsette."
       },
@@ -435,7 +435,7 @@
       },
       "buffer": {
         "overloadTitle": "Lydanalyse overbelastet",
-        "overloadMessage": "Systemet dropper {dropRate}% av lydsamplinger for kilden «{sourceName}» fordi det ikke klarer å holde tritt med analysen. Reduser BirdNET-overlappsverdien i registreringsinnstillingene, eller vurder å oppgradere til en raskere CPU."
+        "overloadMessage": "Systemet dropper {dropRate}% av lydsamplinger for kilden «{sourceName}» fordi det ikke klarer å holde tritt med analysen. Reduser VoiceWatch-overlappsverdien i registreringsinnstillingene, eller vurder å oppgradere til en raskere CPU."
       },
       "ort": {
         "unavailableTitle": "ONNX Runtime ikke tilgjengelig",
@@ -476,9 +476,6 @@
     "noResultsFound": "Ingen resultater funnet",
     "noResultsHint": "Prøv å justere søkefiltrene",
     "fields": {
-      "species": "Art",
-      "speciesPlaceholder": "Skriv inn artsnavn",
-      "speciesHelp": "Skriv inn fullt eller delvis artsnavn (skiller ikke mellom store og små bokstaver)",
       "dateRange": "Datoperiode",
       "dateRangeHelp": "Filtrer registreringer etter datoperiode (la stå tomt for alle datoer)",
       "from": "Fra",
@@ -489,7 +486,14 @@
       "verifiedStatus": "Verifiseringsstatus",
       "lockedStatus": "Låsestatus",
       "timeOfDay": "Tidspunkt på døgnet",
-      "source": "Audio Source"
+      "source": "Audio Source",
+      "transcript": "Transcript",
+      "transcriptHelp": "Search for spoken words in the voice clip transcript (case-insensitive substring match)",
+      "transcriptPlaceholder": "Search transcript...",
+      "flaggedOnly": "Flagged only",
+      "flaggedOnlyHelp": "Limit results to detections whose transcript matched a configured keyword",
+      "gender": "Speaker gender",
+      "ageBand": "Speaker age"
     },
     "advancedFilters": "Avanserte filtre",
     "showAdvancedFilters": "Vis avanserte filtre",
@@ -563,6 +567,9 @@
       "page": "Side {current} av {total}",
       "goToPrevious": "Gå til forrige side",
       "goToNext": "Gå til neste side"
+    },
+    "speakerOptions": {
+      "any": "Any"
     }
   },
   "error": {
@@ -599,18 +606,6 @@
       "empty": "Stille — ingen fugler registrert akkurat nå"
     },
     "rejected": "Avvist",
-    "newSpeciesHighlights": {
-      "title": "Nye og tilbakevendende arter",
-      "subtitle": "Førstegangsdeteksjoner og nylig gjenfunne arter",
-      "trackingDisabled": "Aktiver \"Aktiver artssporing\" for å bruke denne funksjonen.",
-      "categoryLifetime": "Nye arter",
-      "categoryYear": "Nye i år",
-      "categorySeason": "Nye denne sesongen",
-      "categorySeasonNamed": "Nye i {season}",
-      "maxConfidenceShort": "Maks {confidence}%",
-      "detections": "{count, plural, one {# deteksjon} other {# deteksjoner}}",
-      "lastSeen": "Sist: {days, plural, =0 {i dag} one {# dag siden} other {# dager siden}}"
-    },
     "dailySummary": {
       "title": "Daglig aktivitet",
       "subtitle": "Artsregistreringer per time",
@@ -666,7 +661,6 @@
         "species": "Art",
         "weather": "Vær",
         "confidence": "Sikkerhet",
-        "thumbnail": "Miniatyrbilde",
         "status": "Status",
         "recording": "Opptak",
         "actions": "Handlinger"
@@ -695,8 +689,6 @@
         "markCorrect": "Korrekt",
         "markFalsePositive": "Feil",
         "review": "Gjennomgå registrering",
-        "showSpecies": "Vis art",
-        "ignoreSpecies": "Ignorer art",
         "lockDetection": "Lås registrering",
         "unlockDetection": "Lås opp registrering",
         "deleteDetection": "Slett registrering"
@@ -777,15 +769,30 @@
     "elements": {
       "banner": "Dashbordbanner",
       "dailySummary": "Daglig sammendrag",
-      "newSpeciesHighlights": "Høydepunkter for nye arter",
       "currentlyHearing": "Hører nå",
       "detectionsGrid": "Siste registreringer",
       "liveSpectrogram": "Direkte spektrogram",
-      "videoEmbed": "Videoinnbygging"
+      "videoEmbed": "Videoinnbygging",
+      "voiceActivity": "Voice Activity"
+    },
+    "voiceActivity": {
+      "title": "Voice Activity",
+      "subtitle": "Detections by hour — today",
+      "chartAriaLabel": "Bar chart of voice detections per hour for today",
+      "loading": "Loading voice activity...",
+      "empty": "No voice detections today",
+      "errors": {
+        "load": "Failed to load voice activity data"
+      },
+      "bar": {
+        "tooltip": "{count} detection(s) at {hour}:00"
+      }
     }
   },
   "detections": {
     "title": "Registreringer",
+    "humanVoice": "Human Voice",
+    "flaggedByKeywords": "Flagged by keywords: {keywords}",
     "titles": {
       "hourly": "Timeresultater for {hour}:00 den {date}",
       "hourlyRange": "Timeresultater fra {startHour}:00 til {endHour}:00 den {date}",
@@ -794,12 +801,16 @@
       "allDetections": "Alle registreringer for {date}"
     },
     "detail": {
-      "species": "Art",
       "observation": "Observasjon",
+      "transcript": {
+        "title": "Transcript",
+        "matchedKeywords": "Matched keywords",
+        "flaggedNotice": "Flagged by keyword",
+        "empty": "No transcript available"
+      },
       "aria": {
         "downloadAudioClip": "Download audio clip for {name} detection",
         "audioRecordingFor": "Audio recording and spectrogram for {name}",
-        "scientificName": "Vitenskapelig navn",
         "classificationBadges": "Merker for artsklassifisering",
         "confidence": "Registreringssikkerhet {confidence}%",
         "metadata": "Registreringsmetadata",
@@ -809,8 +820,7 @@
         "commentTimestamp": "Tidsstempel for kommentar",
         "mainRegion": "Registreringsdetaljer",
         "tabsHeading": "Faner med registreringsinformasjon",
-        "tabList": "Faner for registreringsdetaljer",
-        "speciesHeadingSuffix": "registreringsdetaljer"
+        "tabList": "Faner for registreringsdetaljer"
       }
     },
     "headers": {
@@ -819,7 +829,6 @@
       "source": "Kilde",
       "species": "Art",
       "confidence": "Sikkerhet",
-      "thumbnail": "Miniatyrbilde",
       "status": "Status",
       "recording": "Opptak",
       "actions": "Handlinger"
@@ -936,6 +945,7 @@
         "unknown": "Ukjent"
       }
     },
+    "noTranscript": "(no transcript)",
     "row": {
       "viewDetails": "Vis detaljer for {species}",
       "play": "Spill av",
@@ -974,9 +984,7 @@
       "loading": "Laster registreringsdetaljer...",
       "loaded": "Registreringsdetaljer lastet for {species}",
       "error": "Feil ved lasting av registrering: {error}",
-      "loadingResults": "Laster {count} resultater...",
-      "thumbnailLoading": "Laster miniatyrbilde for {species}...",
-      "thumbnailLoaded": "Miniatyrbilde for {species} lastet"
+      "loadingResults": "Laster {count} resultater..."
     },
     "errors": {
       "notFound": "Registrering ikke funnet. Den kan ha blitt slettet eller ID-en er feil.",
@@ -986,45 +994,34 @@
       "loadFailed": "Innlasting av registrering mislyktes (feil {status}). Prøv å oppdatere siden.",
       "noIdProvided": "Ingen registrerings-ID oppgitt.",
       "fetchFailed": "Henting av registreringer mislyktes"
+    },
+    "speaker": {
+      "sectionLabel": "Estimated speaker",
+      "genderAria": "Estimated speaker gender",
+      "ageAria": "Estimated speaker age",
+      "gender": {
+        "male": "Male",
+        "female": "Female",
+        "unknown": "Unknown"
+      },
+      "age": {
+        "child": "Child",
+        "teen": "Teen",
+        "adult": "Adult",
+        "senior": "Senior"
+      }
     }
   },
   "species": {
-    "rarity": {
-      "title": "Sjeldenhetsgrad",
-      "score": "Score",
-      "basedOnLocation": "Basert på posisjon: {latitude}, {longitude}",
-      "statuses": {
-        "very_common": "Svært vanlig",
-        "common": "Vanlig",
-        "uncommon": "Uvanlig",
-        "rare": "Sjelden",
-        "very_rare": "Svært sjelden",
-        "unknown": "Ukjent"
-      }
-    },
-    "taxonomy": {
-      "hierarchy": "Taksonomisk klassifisering",
-      "subspecies": "Underart",
-      "noData": "Ingen taksonomidata tilgjengelig.",
-      "labels": {
-        "kingdom": "Rike",
-        "phylum": "Rekke",
-        "class": "Klasse",
-        "order": "Orden",
-        "family": "Familie",
-        "genus": "Slekt",
-        "species": "Art"
-      }
-    },
     "synonyms": {
       "tabLabel": "Taksonomiske synonymer",
-      "description": "Overstyr vitenskapelige navnemappinger brukt til fuglebildeoppslag. BirdNET bruker 2021E-taksonomi, men bildekilder kan bruke oppdaterte navn. Innebygde mappinger lastes alltid; dine overstyringer legges til eller erstatter disse.",
-      "birdnetName": "BirdNET-navn",
+      "description": "Overstyr vitenskapelige navnemappinger brukt til fuglebildeoppslag. VoiceWatch bruker 2021E-taksonomi, men bildekilder kan bruke oppdaterte navn. Innebygde mappinger lastes alltid; dine overstyringer legges til eller erstatter disse.",
+      "birdnetName": "VoiceWatch-navn",
       "updatedName": "Oppdatert navn",
       "addButton": "Legg til synonym",
       "emptyState": "Ingen egendefinerte taksonomiske synonymer konfigurert.",
       "errors": {
-        "unknownSpecies": "Art ikke funnet i BirdNET-etiketter",
+        "unknownSpecies": "Art ikke funnet i VoiceWatch-etiketter",
         "duplicateKey": "Et synonym for denne arten finnes allerede",
         "emptyUpdatedName": "Oppdatert navn er obligatorisk"
       }
@@ -1133,7 +1130,7 @@
         "process": "Prosess"
       },
       "showAll": "Vis alle prosesser",
-      "showBirdnetOnly": "Vis kun BirdNET",
+      "showBirdnetOnly": "Vis kun VoiceWatch",
       "table": {
         "process": "Prosess",
         "status": "Status",
@@ -1311,9 +1308,9 @@
       "migration": {
         "title": "Databasemigrering",
         "description": "Migrer fra eldre skjema til normalisert v2-skjema",
-        "requiredNote": "Databasemigrering er nødvendig for kommende BirdNET-Go-funksjoner som baserer seg på det nye normaliserte databaseskjemaet. Nye funksjoner vil ikke være tilgjengelige før migreringen er fullført.",
+        "requiredNote": "Databasemigrering er nødvendig for kommende VoiceWatch-funksjoner som baserer seg på det nye normaliserte databaseskjemaet. Nye funksjoner vil ikke være tilgjengelige før migreringen er fullført.",
         "completedTitle": "Migrering fullført",
-        "completedNote": "Databasen er migrert til det nye skjemaet. Start BirdNET-Go på nytt for å bytte til den nye databasen. Merk: Den nye databasen er mindre fordi den lagrer data mer effektivt – dette er forventet og alle data er bevart.",
+        "completedNote": "Databasen er migrert til det nye skjemaet. Start VoiceWatch på nytt for å bytte til den nye databasen. Merk: Den nye databasen er mindre fordi den lagrer data mer effektivt – dette er forventet og alle data er bevart.",
         "starting": "Starter migrering...",
         "status": {
           "idle": "Klar til start",
@@ -1834,19 +1831,6 @@
           "axisDate": "Dato",
           "axisUniqueSpecies": "Unike arter"
         },
-        "accumulation": {
-          "title": "Species Accumulation Curve",
-          "description": "Cumulative number of distinct species detected within the selected period. The curve climbs as new species appear and flattens toward an asymptote once the common ones have been recorded; a still-rising tail means more species are likely waiting to be found.",
-          "noData": "No species accumulation data available",
-          "noDataHint": "Select a wider date range to watch the species list build up over time",
-          "ariaLabel": "Species accumulation curve: cumulative distinct species detected over the period",
-          "axisDate": "Date",
-          "axisSpecies": "Cumulative species",
-          "totalSpecies": "{species} species",
-          "tooltipCumulative": "Cumulative species",
-          "tooltipNew": "New in period",
-          "summary": "Cumulative species accumulation across {days} days, reaching {species} distinct species by the end of the period."
-        },
         "yearOverYear": {
           "title": "Year-over-Year Tracker",
           "description": "Cumulative detections so far this year versus the same calendar dates last year. The shaded band is the running gap between the two; this year's line sitting above last year's means you are ahead of last year's pace.",
@@ -1859,20 +1843,6 @@
           "legendLast": "{year} (last year)",
           "tooltipDelta": "Difference",
           "summary": "Year over year: by {monthDay}, {currentYear} has {thisYear} cumulative detections versus {lastYear} for {previousYear} (a difference of {delta})."
-        },
-        "phenology": {
-          "title": "Arrival & Departure Phenology",
-          "description": "First and last detection of each species within the selected period, drawn as residency bars for the most-detected species. Read it top to bottom in arrival order to see who shows up first and who lingers latest across the season.",
-          "noData": "No phenology data available",
-          "noDataHint": "Select a wider date range to see when species arrive and depart",
-          "ariaLabel": "Arrival and departure phenology: residency bars showing each species' first-to-last detection span",
-          "axisDate": "Date",
-          "summary": "Arrival and departure residency spans for {species} species across the selected period.",
-          "tooltipFirst": "First detected",
-          "tooltipLast": "Last detected",
-          "tooltipResidency": "Residency",
-          "tooltipCount": "Detections",
-          "residencyDays": "{days} days"
         },
         "heatmap": {
           "title": "Seasonal Activity Heatmap",
@@ -1889,13 +1859,8 @@
           "summary": "{total} detections across {days} days. Busiest around {time} on {date}."
         },
         "ridgeline": {
-          "title": "Who Sings When",
-          "description": "Hour-of-day activity for the most-detected species, sorting dawn singers from all-day and nocturnal birds",
-          "noData": "No species activity data available",
-          "noDataHint": "Select a wider date range to compare species activity patterns",
           "ariaLabel": "Who-sings-when ridgeline: hour-of-day activity distribution per species",
           "axisTime": "Time of Day",
-          "note": "Showing the top {count} species by detection volume",
           "tooltipDetections": "Detections",
           "tooltipPeak": "Peak",
           "summary": "Hour-of-day activity for {count} species. Most active: {species} around {time}."
@@ -1990,7 +1955,7 @@
     }
   },
   "settings": {
-    "title": "Innstillinger - BirdNET-Go",
+    "title": "Innstillinger - VoiceWatch",
     "loading": "Laster innstillinger...",
     "sections": {
       "analysis": "Analyse",
@@ -2047,20 +2012,20 @@
           "description": "Konfigurer generelle applikasjonsinnstillinger"
         },
         "birdnet": {
-          "title": "BirdNET-innstillinger",
-          "description": "Konfigurer BirdNET AI-modellspesifikke innstillinger"
+          "title": "VoiceWatch-innstillinger",
+          "description": "Konfigurer VoiceWatch AI-modellspesifikke innstillinger"
         },
         "ui": {
           "title": "Grensesnittinnstillinger",
           "description": "Tilpass brukergrensesnittet"
         },
         "customClassifier": {
-          "title": "Egendefinert BirdNET-klassifikator",
-          "description": "Konfigurer egendefinert BirdNET-modell og etikettfiler for spesialisert deteksjon",
+          "title": "Egendefinert VoiceWatch-klassifikator",
+          "description": "Konfigurer egendefinert VoiceWatch-modell og etikettfiler for spesialisert deteksjon",
           "modelPath": {
             "label": "Modellsti (krever omstart for å ta effekt)",
             "placeholder": "Sti til modellfil",
-            "helpText": "Sti til ekstern BirdNET-modellfil. Skriv inn absolutt eller relativ sti til birdnet-go-binærfilen. La stå tomt for å bruke standard innebygd modell."
+            "helpText": "Sti til ekstern VoiceWatch-modellfil. Skriv inn absolutt eller relativ sti til birdnet-go-binærfilen. La stå tomt for å bruke standard innebygd modell."
           },
           "labelPath": {
             "label": "Etikettsti (krever omstart for å ta effekt)",
@@ -2072,7 +2037,7 @@
           "title": "Dynamisk terskel",
           "description": "Juster automatisk deteksjonsfølsomhet basert på tidligere observasjoner",
           "enable": {
-            "label": "Aktiver dynamisk terskel (BirdNET-Go-spesifikk funksjon)",
+            "label": "Aktiver dynamisk terskel (VoiceWatch-spesifikk funksjon)",
             "helpText": "Aktiverer dynamisk sikkerhetsterskel for mer adaptiv fuglekalldeteksjon."
           },
           "trigger": {
@@ -2118,8 +2083,6 @@
           "warningOff": "Med filtrering deaktivert godtas enhver registrering over sikkerhetsterskel umiddelbart. Dette gir typisk flere falske positive per dag. Selv mild filtrering forbedrer resultatkvaliteten betydelig."
         },
         "rangeFilter": {
-          "title": "Utvalgsfilter",
-          "description": "Begrens deteksjon til arter som er sannsynlige i ditt geografiske område",
           "stationLocation": {
             "label": "Stasjonsposisjon",
             "helpText": "Stasjonsposisjon, brukes for værdata og for å begrense fuglearter til de som er sannsynlige i regionen."
@@ -2131,33 +2094,6 @@
           "longitude": {
             "label": "Lengdegrad",
             "helpText": "Stasjonens lengdegrad, brukes for værdata og artsutvalgsfiltrering."
-          },
-          "model": {
-            "label": "Utvalgsfiltermodell",
-            "helpText": "BirdNET-utvalgsfiltermodellversjon: nyeste eller eldre."
-          },
-          "threshold": {
-            "label": "Terskel",
-            "helpText": "Kontrollerer hvilke arter som inkluderes basert på forekomstsannsynlighet for din posisjon og årstid. Standard (0,01) anbefales for de fleste brukere. Høyere verdier (0,05–0,3) inkluderer færre arter med høyere forekomstsannsynlighet. Svært høye verdier (0,5+) inkluderer kun de vanligste artene."
-          },
-          "speciesCount": {
-            "label": "Gjeldende artsantall",
-            "helpText": "Antall arter inkludert i utvalgsfilteret. Oppdateres automatisk når terskel, breddegrad eller lengdegrad endres.",
-            "loading": "Laster...",
-            "viewSpecies": "Vis arter"
-          },
-          "downloadTitle": "Last ned artsliste som CSV",
-          "csvDownloaded": "Artsliste lastet ned",
-          "csvDownloadFailed": "Nedlasting av artsliste mislyktes. Prøv igjen.",
-          "modal": {
-            "title": "Utvalgsfilterarter",
-            "speciesCount": "Artsantall:",
-            "threshold": "Terskel:",
-            "latitude": "Breddegrad:",
-            "longitude": "Lengdegrad:",
-            "loadingSpecies": "Laster arter...",
-            "noSpeciesFound": "Ingen arter funnet med gjeldende innstillinger",
-            "close": "Lukk"
           }
         },
         "database": {
@@ -2285,18 +2221,6 @@
               "recent": {
                 "label": "Vis miniatyrbilder i listen over siste registreringer",
                 "helpText": "Aktiver for å vise miniatyrbilder av registrerte arter i listen over siste registreringer"
-              },
-              "imageProvider": {
-                "label": "Bildeleverandør",
-                "helpText": "Velg foretrukket bildeleverandør for fugleminiatyrbilder"
-              },
-              "fallbackPolicy": {
-                "label": "Reservepolicy",
-                "helpText": "Velg hva som skjer når foretrukket leverandør ikke finner et bilde",
-                "options": {
-                  "all": "Prøv alle leverandører i rekkefølge",
-                  "none": "Bruk kun valgt leverandør"
-                }
               }
             },
             "spectrogram": {
@@ -2385,10 +2309,6 @@
       },
       "errors": {
         "localesLoadFailed": "Kan ikke laste språkalternativer. Bruker standardverdier.",
-        "providersLoadFailed": "Kan ikke laste bildeleverandører. Bruker standardverdier.",
-        "rangeFilterTestFailed": "Testing av utvalgsfilterinnstillinger mislyktes",
-        "rangeFilterLoadFailed": "Innlasting av artsliste mislyktes",
-        "rangeFilterCountFailed": "Innlasting av artsantall mislyktes",
         "mapLibraryLoadFailed": "Innlasting av kartbibliotek mislyktes. Oppdater siden.",
         "mapLoadFailed": "Innlasting av kart mislyktes. Prøv å oppdatere siden.",
         "modalMapLoadFailed": "Innlasting av kartdialog mislyktes. Prøv å lukke og åpne dialogboksen på nytt.",
@@ -2399,7 +2319,7 @@
       "sections": {
         "telemetry": {
           "title": "Feilsporing og telemetri",
-          "description": "Valgfri feilsporing for å hjelpe med å forbedre BirdNET-Gos pålitelighet og ytelse"
+          "description": "Valgfri feilsporing for å hjelpe med å forbedre VoiceWatchs pålitelighet og ytelse"
         },
         "diagnostics": {
           "title": "Support og diagnostikk",
@@ -2411,7 +2331,7 @@
         "privacyPoints": {
           "noPersonalData": "Ingen personlige data samles inn",
           "anonymousData": "All telemetridata er anonym",
-          "helpImprove": "Telemetridata hjelper utviklere med å identifisere og fikse problemer i BirdNET-Go"
+          "helpImprove": "Telemetridata hjelper utviklere med å identifisere og fikse problemer i VoiceWatch"
         },
         "enableTracking": "Aktiver feilsporing (frivillig)"
       },
@@ -2568,7 +2488,7 @@
       },
       "systemInfo": {
         "howToView": "Slik ser du varsler:",
-        "technicalDetails": "Tekniske detaljer om varsler i BirdNET-Go:"
+        "technicalDetails": "Tekniske detaljer om varsler i VoiceWatch:"
       },
       "privacy": {
         "title": "Personvernvarsel for eksterne webhook-er",
@@ -2862,63 +2782,16 @@
         "confidenceLabel": "Sikkerhetsterskel for menneskelig stemmedeteksjon",
         "confidenceHelp": "Angi sikkerhetsnivå for menneskelig stemmedeteksjon. Lavere verdi gjør filteret mer følsomt"
       },
-      "falsePositivePrevention": {
-        "title": "Forebygging av falske positive",
-        "description": "Konfigurer filtre for falsk deteksjon",
-        "enableDogBark": "Aktiver hundebjellefilter",
-        "disabled": "Hundebjellefilter er deaktivert",
-        "confidenceLabel": "Sikkerhetsterskel",
-        "confidenceHelp": "Angi sikkerhetsnivå for hundebjelledeteksjon. Lavere verdi gjør filteret mer følsomt",
-        "expireTimeLabel": "Utløpstid for hundebjell (minutter)",
-        "expireTimeHelp": "Angi hvor lenge et oppdaget hundebjell skal huskes",
-        "addDogBarkSpeciesLabel": "Legg til hundebjell-art",
-        "addDogBarkSpeciesHelp": "Søk og legg til arter som kan forveksles med hundebjell",
-        "addSpeciesButton": "Legg til"
-      },
-      "speciesNamePlaceholder": "Artsnavn",
-      "typeSpeciesName": "Skriv artsnavn...",
-      "dogBarkSpeciesList": "Liste over hundebjell-arter",
       "daylightFilter": {
         "title": "Dagslysfilter",
         "description": "Filtrer ut registreringer av nattaktive arter i dagslystimer. Bruker sivil grytid/skumring fra konfigurert posisjon.",
         "enable": "Aktiver dagslysfilter",
         "disabled": "Dagslysfilter er deaktivert",
         "offsetLabel": "Dagslysvindu-forskyvning (timer)",
-        "offsetHelp": "Juster dagslysvinduet. Positive verdier innsnevrer det (mer mild, f.eks. +1 = starter 1t etter grytid). Negative verdier utvider det (strengere, f.eks. -1 = starter 1t før grytid).",
-        "speciesListLabel": "Liste over nattaktive arter",
-        "addSpeciesLabel": "Legg til nattaktiv art",
-        "addSpeciesHelp": "Søk og legg til arter, slekter, familier eller ordener som skal filtreres i dagslys. Standard: Strigiformes (alle ugler). Merk: en tom liste deaktiverer dagslydsartsfiltrering."
-      },
-      "errors": {
-        "speciesLoadFailed": "Innlasting av artsliste mislyktes. Prøv igjen."
+        "offsetHelp": "Juster dagslysvinduet. Positive verdier innsnevrer det (mer mild, f.eks. +1 = starter 1t etter grytid). Negative verdier utvider det (strengere, f.eks. -1 = starter 1t før grytid)."
       }
     },
     "integration": {
-      "birdweather": {
-        "title": "BirdWeather",
-        "description": "Last opp registreringer til BirdWeather",
-        "ffmpegWarning": {
-          "title": "FFmpeg ikke funnet",
-          "message": "Installer FFmpeg for å aktivere FLAC-kodingsstøtte. BirdWeather avvikler WAV-opplastinger til fordel for komprimerte FLAC-lydfiler."
-        },
-        "enable": "Aktiver BirdWeather-opplastinger",
-        "token": {
-          "label": "BirdWeather-token",
-          "helpText": "Din unike BirdWeather-token."
-        },
-        "threshold": {
-          "label": "Opplastingsterskel",
-          "helpText": "Minimum sikkerhetsterskel for opplasting av prediksjoner til BirdWeather."
-        },
-        "test": {
-          "button": "Test BirdWeather-tilkobling",
-          "loading": "Tester...",
-          "enabledRequired": "BirdWeather må være aktivert for å teste",
-          "tokenRequired": "BirdWeather-token må angis",
-          "inProgress": "Test pågår...",
-          "description": "Test BirdWeather-tilkobling"
-        }
-      },
       "mqtt": {
         "title": "MQTT",
         "description": "Konfigurer MQTT-meglertilkobling",
@@ -2971,14 +2844,14 @@
         "homeAssistant": {
           "title": "Home Assistant-autooppdagelse",
           "enable": "Aktiver Home Assistant MQTT-oppdagelse",
-          "description": "Når aktivert, registrerer BirdNET-Go automatisk enheter og sensorer med Home Assistant via MQTT-oppdagelsesprotokollen. Enheter vises i Home Assistants enhetsregister uten manuell YAML-konfigurasjon.",
+          "description": "Når aktivert, registrerer VoiceWatch automatisk enheter og sensorer med Home Assistant via MQTT-oppdagelsesprotokollen. Enheter vises i Home Assistants enhetsregister uten manuell YAML-konfigurasjon.",
           "discoveryPrefix": {
             "label": "Oppdagelsesprefiks",
             "helpText": "MQTT-emneprefikset for Home Assistant-oppdagelsesmeldinger. Standard er «homeassistant». Endre kun dette hvis du har konfigurert et egendefinert oppdagelsesprefiks i Home Assistant."
           },
           "deviceName": {
             "label": "Enhetsnavn",
-            "helpText": "Grunnnavnet for enheter slik de vises i Home Assistant. Hver lydkilde vil ha sin egen enhet koblet til denne hoved-BirdNET-Go-enheten."
+            "helpText": "Grunnnavnet for enheter slik de vises i Home Assistant. Hver lydkilde vil ha sin egen enhet koblet til denne hoved-VoiceWatch-enheten."
           },
           "sensorsNote": "<strong>Sensorer opprettet:</strong> For hver lydkilde vil Home Assistant motta: Siste art, Sikkerhet, Vitenskapelig navn og Lydnivå (hvis aktivert). Bro-enheten inkluderer tilgjengelig/utilgjengelig-status.",
           "discovery": {
@@ -3003,7 +2876,7 @@
       },
       "observability": {
         "title": "Observerbarhet",
-        "description": "Overvåk BirdNET-Gos ytelse og fugleregistreringsmålinger via Prometheus-kompatibelt endepunkt",
+        "description": "Overvåk VoiceWatchs ytelse og fugleregistreringsmålinger via Prometheus-kompatibelt endepunkt",
         "enable": "Aktiver observerbarhetsintegrasjon",
         "disabled": "Observerbarhetsintegrasjon er ikke aktivert",
         "listenAddress": {
@@ -3091,33 +2964,6 @@
         "responseStreamFailed": "Lesing av svarstrøm mislyktes",
         "configurationCheck": "Konfigurasjonssjekk",
         "testStageFallback": "Testfase"
-      },
-      "ebird": {
-        "title": "eBird",
-        "description": "Koble til eBirds taksonomi-database for beriket artsdata inkludert taksonomisk klassifisering og underartsinformasjon.",
-        "enable": "Aktiver eBird-integrasjon",
-        "enabledRequired": "eBird-integrasjon er ikke aktivert",
-        "apiKey": {
-          "label": "eBird API-nøkkel",
-          "helpText": "Din eBird API-nøkkel. Få en fra eBird API-portalen."
-        },
-        "locale": {
-          "label": "Artsnavn-språk"
-        },
-        "cacheTTL": {
-          "label": "Cache-varighet (timer)",
-          "helpText": "Hvor lenge taksonomidata fra eBird caches. Taksonomi endres sjelden, så lengre cache-varigheter reduserer API-kall."
-        },
-        "note": "eBird leverer taksonomiske data brukt for artsklassifisering og innsikt. API-nøkkelen er gratis å hente fra Cornell Lab of Ornithology.",
-        "apiKeyInfo": "En personlig eBird API-nøkkel er nødvendig for å bruke denne integrasjonen. Du kan be om en gratis nøkkel fra <a href=\"https://ebird.org/api/keygen\" class=\"link link-primary\" target=\"_blank\" rel=\"noopener noreferrer\">ebird.org/api/keygen</a>.",
-        "test": {
-          "button": "Test eBird-tilkobling",
-          "loading": "Tester...",
-          "enabledRequired": "Aktiver eBird-integrasjon først",
-          "apiKeyRequired": "API-nøkkel er obligatorisk",
-          "inProgress": "Test pågår...",
-          "description": "Test eBird API-tilkobling og autentisering"
-        }
       }
     },
     "audio": {
@@ -3172,7 +3018,7 @@
       },
       "noSources": {
         "warning": "Ingen lydkilder konfigurert",
-        "description": "BirdNET-Go trenger en lydinngang for å registrere fugler. Konfigurer minst én kilde i Lydkort- eller Strømmer-fanen."
+        "description": "VoiceWatch trenger en lydinngang for å registrere fugler. Konfigurer minst én kilde i Lydkort- eller Strømmer-fanen."
       },
       "soundCards": {
         "summary": "{count} lydkortkilde(r)",
@@ -3198,12 +3044,12 @@
           "hints": {
             "device": "Velg blant tilgjengelige lydinngangsenheter på systemet",
             "multiple": "Du kan konfigurere flere lydkort for forskjellige steder",
-            "model": "Hver kilde kan bruke en annen deteksjonsmodell (BirdNET, Perch, flaggermus)"
+            "model": "Hver kilde kan bruke en annen deteksjonsmodell (VoiceWatch, Perch, flaggermus)"
           }
         },
         "models": {
-          "birdnetDefault": "BirdNET (standard)",
-          "birdnet": "BirdNET",
+          "birdnetDefault": "VoiceWatch (standard)",
+          "birdnet": "VoiceWatch",
           "perchV2": "Google Perch v2",
           "bat": "Flaggermusdeteksjon"
         },
@@ -3470,10 +3316,6 @@
         "enableHelp": "Når aktivert, slås gjentatte registreringer av konfigurerte arter sammen til ett enkelt lengre opptak.",
         "maxDurationLabel": "Maks. varighet",
         "maxDurationHelp": "Maksimal lengde på et utvidet opptaksklipp. Opptaket vokser ettersom registreringer fortsetter, opp til denne grensen.",
-        "speciesListLabel": "Utvidet opptaksarter",
-        "addSpeciesLabel": "Legg til art",
-        "addSpeciesHelp": "Arter som utløser utvidet opptak. Støtter norske navn, vitenskapelige navn og slektsnivåsamsvar (f.eks. «Strix» matcher alle Strix-ugler).",
-        "addSpeciesButton": "Legg til",
         "disabled": "Utvidet opptak er deaktivert"
       },
       "fileSettings": {
@@ -3551,8 +3393,28 @@
         "invalidRetentionPolicy": "Ugyldig oppbevaringspolicy"
       },
       "models": {
-        "recommendBoth": "Det anbefales å kjøre BirdNET og Perch sammen for best artsdeteksjonsdekning.",
-        "perchOnlyWarning": "Perch alene gir færre registreringer. Senk sikkerhetsterskel til 0,50 for meningsfulle resultater, eller aktiver BirdNET i tillegg for best dekning."
+        "recommendBoth": "Det anbefales å kjøre VoiceWatch og Perch sammen for best artsdeteksjonsdekning.",
+        "perchOnlyWarning": "Perch alene gir færre registreringer. Senk sikkerhetsterskel til 0,50 for meningsfulle resultater, eller aktiver VoiceWatch i tillegg for best dekning."
+      },
+      "speakerAttributes": {
+        "title": "Speaker Attributes",
+        "description": "Estimate the speaker's gender and relative age band for human-voice detections. Opt-in and off by default.",
+        "caveat": "These are demographic estimates, not identity recognition. Accuracy varies by accent and recording quality.",
+        "enable": "Enable speaker attributes",
+        "enableHelp": "Master switch for all speaker-attribute estimation.",
+        "disabled": "Speaker attributes are disabled",
+        "gender": {
+          "enable": "Estimate speaker gender",
+          "enableHelp": "Estimate whether the speaker sounds male, female, or unknown.",
+          "thresholdLabel": "Gender confidence threshold",
+          "thresholdHelp": "Discard gender estimates below this confidence."
+        },
+        "age": {
+          "enable": "Estimate speaker age band",
+          "enableHelp": "Estimate a relative age band (child, teen, adult, senior).",
+          "thresholdLabel": "Age confidence threshold",
+          "thresholdHelp": "Discard age estimates below this confidence."
+        }
       }
     },
     "security": {
@@ -3795,342 +3657,6 @@
         "fileReadError": "Lesing av valgt fil mislyktes"
       }
     },
-    "species": {
-      "pageLabel": "Artsinnstillinger",
-      "saveError": "Lagring av konfigurasjon for «{species}» mislyktes. Prøv igjen.",
-      "configUpdated": "Konfigurasjon for «{species}» oppdatert",
-      "configAdded": "Konfigurasjon for «{species}» lagt til",
-      "duplicateConfigError": "Art «{species}» har allerede en konfigurasjon. Velg et annet navn.",
-      "activeSpecies": {
-        "title": "Aktive arter",
-        "tabLabel": "Aktiv",
-        "description": "Arter som vil registreres basert på gjeldende posisjon og filterinnstillinger",
-        "stats": {
-          "species": "Arter",
-          "location": "Posisjon",
-          "threshold": "Terskel",
-          "updated": "Oppdatert",
-          "justNow": "Akkurat nå",
-          "minutesAgo": "{count} min siden",
-          "hoursAgo": "{count} t siden"
-        },
-        "search": {
-          "placeholder": "Søk arter..."
-        },
-        "badges": {
-          "included": "Inkludert",
-          "configured": "Konfigurert"
-        },
-        "empty": {
-          "title": "Ingen arter funnet",
-          "description": "Konfigurer posisjonen din i Hovedinnstillinger for å se tilgjengelige arter"
-        },
-        "noResults": "Ingen arter samsvarer med søket ditt",
-        "infoNote": "Denne listen er basert på posisjon og utvalgsfilterterskel. Manuelt inkluderte arter legges alltid til.",
-        "retry": "Prøv igjen",
-        "expand": "Utvid listen",
-        "collapse": "Skjul listen",
-        "downloadCsv": "Last ned CSV",
-        "errors": {
-          "loadFailed": "Innlasting av aktiv artsliste mislyktes"
-        },
-        "locationNotConfigured": {
-          "title": "Posisjon ikke konfigurert",
-          "description": "Angi posisjonen din i Hovedinnstillinger for å se arter tilgjengelige i ditt område. Utvalgsfilteret bruker posisjonen til å bestemme hvilke arter som sannsynligvis finnes i nærheten.",
-          "action": "Konfigurer posisjon"
-        },
-        "rangeFilterHealth": {
-          "inactive": {
-            "title": "Utvalgsfilter inaktivt",
-            "description": "Registreringer filtreres ikke etter posisjon akkurat nå, så arter utenfor ditt område kan rapporteres. Sjekk utvalgsfiltermodellkonfigurasjonen i Innstillinger."
-          },
-          "fellBack": {
-            "title": "Bruker det innebygde utvalgsfilteret",
-            "description": "Det konfigurerte geomodell-utvalgsfilteret kunne ikke lastes, så BirdNET-Go falt tilbake til det innebygde utvalgsfilteret. Filtrering fungerer fortsatt, men sjekk Innstillinger for å gjenopprette geomodellen."
-          },
-          "mappedZero": {
-            "title": "Utvalgsfilter matchet ingen arter",
-            "description": "Geomodell-utvalgsfilteret matchet ingen av den aktive modellens arter, så enhver registrering ville bli filtrert ut. Sjekk at utvalgsfilteretikettfilen matcher den aktive modellen."
-          }
-        },
-        "columns": {
-          "commonName": "Norsk navn",
-          "scientificName": "Vitenskapelig navn",
-          "score": "Score",
-          "status": "Status"
-        }
-      },
-      "alwaysInclude": {
-        "title": "Alltid inkluder arter",
-        "tabLabel": "Inkluder",
-        "description": "Arter i denne listen inkluderes alltid i utvalget av registrerte arter",
-        "noSpeciesMessage": "Ingen arter lagt til i inkluderingslisten"
-      },
-      "alwaysExclude": {
-        "title": "Alltid ekskluder arter",
-        "tabLabel": "Ekskluder",
-        "description": "Arter i denne listen ekskluderes alltid fra deteksjon",
-        "noSpeciesMessage": "Ingen arter lagt til i ekskluderingslisten"
-      },
-      "customConfiguration": {
-        "title": "Egendefinert artskonfigurasjon",
-        "tabLabel": "Egendefinert",
-        "description": "Artsspecifikke terskeltverdier, registreringsintervaller og handlinger",
-        "helpText": {
-          "intro": "Konfigurer artsspecifikke innstillinger:",
-          "threshold": "Terskel: Minimumssikkerhetsscore (0–1) kreves for registrering",
-          "interval": "Intervall: Minimum tid i sekunder mellom registreringer av samme art (0 = bruk global standard)",
-          "actions": "Handlinger: Egendefinerte kommandoer som kjøres når denne arten registreres"
-        },
-        "columnHeaders": {
-          "species": "Art",
-          "settings": "Innstillinger",
-          "actions": "Handlinger"
-        },
-        "badges": {
-          "threshold": "Terskel: {value}",
-          "interval": "Intervall: {value}s",
-          "customAction": "Egendefinert handling",
-          "executeDefaults": "+Standarder"
-        },
-        "dropdown": {
-          "editConfig": "Rediger konfigurasjon",
-          "addAction": "Legg til handling",
-          "remove": "Fjern"
-        },
-        "labels": {
-          "threshold": "Terskel",
-          "interval": "Intervall",
-          "intervalSeconds": "Intervall (s)",
-          "addButton": "Legg til"
-        },
-        "noConfigurationsMessage": "Ingen egendefinerte artskonfigurasjoner lagt til",
-        "addForm": {
-          "speciesPlaceholder": "Artsnavn",
-          "thresholdPlaceholder": "0,5",
-          "intervalPlaceholder": "0"
-        },
-        "addConfiguration": "Legg til konfigurasjon",
-        "newConfiguration": "Ny konfigurasjon",
-        "editing": "Redigerer: {species}",
-        "configuredCount": "{count} konfigurert",
-        "searchPlaceholder": "Skriv for å søke...",
-        "saving": "Lagrer...",
-        "save": "Lagre",
-        "cancel": "Avbryt",
-        "configureActions": "Konfigurer handlinger",
-        "actionsConfigured": "Konfigurert",
-        "list": {
-          "editTitle": "Rediger konfigurasjon",
-          "removeTitle": "Fjern konfigurasjon"
-        },
-        "emptyState": {
-          "title": "Ingen konfigurasjoner ennå.",
-          "description": "Klikk «Legg til konfigurasjon» for å tilpasse artsregistreringsinnstillinger."
-        },
-        "table": {
-          "columnScientificName": "Vitenskapelig navn",
-          "intervalDefault": "Standard",
-          "intervalDefaultTooltip": "0 = bruk det globale standardintervallet",
-          "noActions": "Ingen",
-          "searchPlaceholder": "Søk arter...",
-          "noResults": "Ingen matchende konfigurasjoner",
-          "editDisabledReason": "Lagre eller lukk gjeldende redigeringsprogram før du redigerer en annen art",
-          "actionsDisabledBusy": "Vennligst vent til den gjeldende operasjonen er ferdig"
-        }
-      },
-      "synonyms": {
-        "tabLabel": "Synonymer",
-        "description": "Kart BirdNET vitenskapelige navn til oppdaterte ekvivalenter i nyere taksonomi. Brukes kun som reserveløsning ved oppslag av fuglebilder fra Wikipedia og AviCommons.",
-        "helpText": "For å endre hvordan en art navngis i grensesnittet, rediger BirdNET-etikettfilen din (innstillingen «Etikettsti» under Hovedinnstillinger).",
-        "birdnetName": "BirdNET-navn",
-        "updatedName": "Oppdatert vitenskapelig navn",
-        "addButton": "Legg til synonym",
-        "emptyState": "Ingen taksonomiske synonymer konfigurert",
-        "errors": {
-          "unknownSpecies": "Art ikke funnet i BirdNET-etiketter",
-          "duplicateKey": "Et synonym for denne arten finnes allerede",
-          "emptyUpdatedName": "Oppdatert navn er obligatorisk"
-        }
-      },
-      "actionsModal": {
-        "title": "Handlinger for {species}",
-        "actionType": {
-          "label": "Handlingstype",
-          "executeCommand": "Kjør kommando",
-          "onlySupported": "For øyeblikket støttes kun «Kjør kommando»-handlinger"
-        },
-        "command": {
-          "label": "Kommando",
-          "helpText": "Oppgi full sti til kommandoen eller skriptet du vil kjøre"
-        },
-        "parameters": {
-          "label": "Parametere",
-          "helpText": "Disse verdiene sendes til kommandoen i den rekkefølgen de er opplistet",
-          "placeholder": "Klikk knapper nedenfor for å legge til parametere eller skriv manuelt",
-          "tooltip": "Bruk knapper nedenfor eller skriv direkte (kommaseparert)",
-          "availableTitle": "Tilgjengelige parametere",
-          "buttons": {
-            "commonName": "NorskNavn",
-            "scientificName": "VitenskapeligNavn",
-            "confidence": "Sikkerhet",
-            "time": "Tid",
-            "source": "Kilde",
-            "clearParameters": "Tøm parametere"
-          }
-        },
-        "executeDefaults": {
-          "label": "Kjør også standardhandlinger (databaselagring, varsler, osv.)",
-          "helpText": "Når aktivert, kjøres både den egendefinerte handlingen og systemets standardhandlinger. Når deaktivert, kjøres kun den egendefinerte handlingen."
-        }
-      },
-      "add": "Legg til",
-      "remove": "Fjern",
-      "suggestions": "Artsforslag",
-      "addSpeciesToInclude": "Legg til art for inkludering",
-      "addSpeciesToIncludeLabel": "Legg til ny art for inkludering",
-      "addSpeciesToExclude": "Legg til art for ekskludering",
-      "addSpeciesToExcludeLabel": "Legg til ny art for ekskludering",
-      "commandPathPlaceholder": "/sti/til/din/kommando",
-      "parametersPlaceholder": "Parametere vil vises her",
-      "errors": {
-        "speciesLoadFailed": "Innlasting av artsliste mislyktes. Prøv igjen."
-      },
-      "tracking": {
-        "title": "Artssporing",
-        "tabLabel": "Sporing",
-        "description": "Konfigurer sporing for nye artsregistreringer basert på tidsperioder",
-        "enabled": {
-          "label": "Aktiver artssporing",
-          "helpText": "Når aktivert, sporer systemet nye artsregistreringer og kan sende varsler"
-        },
-        "newSpeciesWindowDays": {
-          "label": "Ny art-vindu (dager)",
-          "helpText": "Antall dager en art anses som «ny» etter første registrering (1–365)"
-        },
-        "syncIntervalMinutes": {
-          "label": "Synkroniseringsintervall (minutter)",
-          "helpText": "Hvor ofte sporingsdataene synkroniseres med databasen (1–1440)"
-        },
-        "notificationSuppressionHours": {
-          "label": "Varselundertrykkelse (timer)",
-          "helpText": "Timer for å undertrykke dupliserte varsler for samme art (0–8760)"
-        },
-        "yearly": {
-          "title": "Årlig sporing",
-          "description": "Spor første ankomst av arter hvert år",
-          "enabled": {
-            "label": "Aktiver årlig sporing",
-            "helpText": "Spor og varsle når en art registreres for første gang hvert år"
-          },
-          "resetMonth": {
-            "label": "Tilbakestillingsmåned",
-            "helpText": "Måneden da årlig sporing tilbakestilles (1–12)"
-          },
-          "resetDay": {
-            "label": "Tilbakestillingsdag",
-            "helpText": "Dag i måneden da årlig sporing tilbakestilles"
-          },
-          "windowDays": {
-            "label": "Vindu (dager)",
-            "helpText": "Dager for å vise «ny i år»-indikator (1–365)"
-          }
-        },
-        "seasonal": {
-          "title": "Sesongsporing",
-          "description": "Spor første ankomst av arter hver sesong",
-          "enabled": {
-            "label": "Aktiver sesongsporing",
-            "helpText": "Spor og varsle når en art registreres for første gang hver sesong"
-          },
-          "windowDays": {
-            "label": "Vindu (dager)",
-            "helpText": "Dager for å vise «ny denne sesongen»-indikator (1–365)"
-          },
-          "seasons": {
-            "title": "Sesongsdefinisjoner",
-            "description": "Definer når hver sesong starter. Sesonger justeres automatisk basert på lokasjonens halvkule.",
-            "spring": "Vår",
-            "summer": "Sommer",
-            "fall": "Høst",
-            "winter": "Vinter",
-            "wet1": "Regntid 1",
-            "dry1": "Tørketid 1",
-            "wet2": "Regntid 2",
-            "dry2": "Tørketid 2",
-            "startMonth": "Startmåned",
-            "startDay": "Startdag",
-            "hemisphereNote": "Sesongdatoer konfigureres automatisk basert på breddegrad. Den nordlige halvkule bruker standardsesonger, den sørlige halvkule har forskjøvede datoer, og ekvatoriale regioner bruker regn-/tørketider."
-          }
-        },
-        "months": {
-          "january": "Januar",
-          "february": "Februar",
-          "march": "Mars",
-          "april": "April",
-          "may": "Mai",
-          "june": "Juni",
-          "july": "Juli",
-          "august": "August",
-          "september": "September",
-          "october": "Oktober",
-          "november": "November",
-          "december": "Desember"
-        },
-        "units": {
-          "days": "dager",
-          "min": "min",
-          "hours": "t"
-        }
-      },
-      "dynamicThreshold": {
-        "tabLabel": "Lært",
-        "title": "Lærte terskler",
-        "description": "Denne siden viser kjøretidsdata for dynamisk terskel. Når aktivert i Hovedinnstillinger → Deteksjon, justeres terskler automatisk av flere høysikkerhetsregistreringer. Arter som vises her antas å eksistere på dette stedet.",
-        "stats": {
-          "active": "Aktiv",
-          "atMinimum": "På minimum",
-          "minThreshold": "Min. terskel",
-          "validityPeriod": "Gyldighetsperiode"
-        },
-        "header": {
-          "species": "Art",
-          "threshold": "Terskel",
-          "expires": "Utløper"
-        },
-        "searchPlaceholder": "Søk arter...",
-        "threshold": "Terskel",
-        "level": "Nivå",
-        "expires": "Utløper",
-        "expired": "Utløpt",
-        "confidence": "Sikkerhet",
-        "requiredConfidence": "Påkrevd sikkerhet",
-        "resetAll": "Tilbakestill alle",
-        "resetSpecies": "Tilbakestill terskel for denne arten",
-        "noEvents": "Ingen terskelendringer i historikken",
-        "changeReason": {
-          "highConfidence": "Høysikkerhetsregistrering",
-          "expiry": "Terskel utløpt",
-          "manualReset": "Manuell tilbakestilling"
-        },
-        "note": "Høysikkerhetsregistreringer bekrefter hvilke arter som finnes på dette stedet. Etter flere høye sikkerhetstreff senkes registreringsterskelen forsiktig for å fange flere kall uten betydelig risiko for falske positive. Terskler tilbakestilles automatisk etter konfigurert gyldighetsperiode.",
-        "empty": {
-          "title": "Ingen lærte terskler",
-          "description": "Høysikkerhetsregistreringer vil automatisk opprette lærte terskler for arter"
-        },
-        "resetAllConfirm": {
-          "title": "Tilbakestille alle terskler",
-          "message": "Dette vil tilbakestille alle {count} lærte terskler. Arter må registreres med høy sikkerhet igjen for å senke tersklene."
-        },
-        "loadError": "Innlasting av dynamiske terskler mislyktes",
-        "resetSuccess": "Terskel tilbakestilt for {species}",
-        "resetError": "Tilbakestilling av terskel mislyktes",
-        "resetAllSuccess": "{count} terskler tilbakestilt",
-        "resetAllError": "Tilbakestilling av terskler mislyktes",
-        "expand": "Vis hendelseshistorikk",
-        "collapse": "Skjul hendelseshistorikk"
-      }
-    },
     "database": {
       "sqlitePlaceholder": "Skriv inn SQLite-databasesti",
       "mysqlHostPlaceholder": "Skriv inn MySQL-vert",
@@ -4263,7 +3789,6 @@
           "detection_occurred": "Registrering utført",
           "application_started": "Applikasjon startet",
           "application_stopped": "Applikasjon stoppet",
-          "integration_birdweather_failed": "BirdWeather-opplasting mislyktes",
           "integration_mqtt_connected": "MQTT tilkoblet",
           "integration_mqtt_disconnected": "MQTT frakoblet",
           "integration_mqtt_publish_failed": "MQTT-publisering mislyktes",
@@ -4306,9 +3831,13 @@
       "v2Required": "Varselregler krever et oppdatert databaseskjema. Du kan oppdatere databasen fra",
       "v2RequiredLink": "System databaseside.",
       "builtInRules": {
-        "newSpecies": {
-          "name": "Ny art registrert",
-          "description": "Varsler når en art registreres for første gang"
+        "keywordFlag": {
+          "name": "Keyword flagged",
+          "description": "Notifies when a detection transcript matches a configured keyword"
+        },
+        "speakerAttribute": {
+          "name": "Speaker attribute matched",
+          "description": "Notifies when a detection's estimated speaker attributes (gender, age band) match a rule"
         },
         "streamDisconnected": {
           "name": "Lydstrøm frakoblet",
@@ -4341,10 +3870,6 @@
         "mqttPublishFailed": {
           "name": "MQTT-publisering mislyktes",
           "description": "Varsler når publisering av en MQTT-melding mislyktes"
-        },
-        "birdWeatherFailed": {
-          "name": "BirdWeather-opplasting mislyktes",
-          "description": "Varsler når en BirdWeather-opplasting mislyktes"
         }
       }
     },
@@ -4371,7 +3896,7 @@
       },
       "appearance": {
         "title": "Utseende",
-        "description": "Tilpass utseendet på BirdNET-Go-grensesnittet"
+        "description": "Tilpass utseendet på VoiceWatch-grensesnittet"
       },
       "language": {
         "title": "Språk og region",
@@ -4389,14 +3914,14 @@
         "defaultGainUnit": "dB"
       }
     },
-    "restartRequired": "Noen endringer krever en serveromstart for å ta effekt. Start BirdNET-Go på nytt."
+    "restartRequired": "Noen endringer krever en serveromstart for å ta effekt. Start VoiceWatch på nytt."
   },
   "auth": {
     "login": "Logg inn",
     "logout": "Logg ut",
     "openLoginModal": "Åpne innloggingsdialog",
     "loginTitle": "Logg inn",
-    "loginSubtitle": "Tilgang til BirdNET-Go-dashbordet",
+    "loginSubtitle": "Tilgang til VoiceWatch-dashbordet",
     "password": "Passord",
     "passwordPlaceholder": "Skriv inn passordet ditt",
     "enterPassword": "Skriv inn passordet ditt",
@@ -4581,7 +4106,7 @@
       "streamError": "Feil ved oppstart av strøm",
       "streamTitle": "Fuglelydstrøm – {source}",
       "streamTitleDefault": "Fuglelydstrøm",
-      "streamArtist": "BirdNET-Go",
+      "streamArtist": "VoiceWatch",
       "streamAlbum": "Direktestrøm",
       "playbackError": "Avspillingsfeil: {details}"
     },
@@ -4606,7 +4131,8 @@
       "generating": "Genererer...",
       "waiting": "Waiting...",
       "queuePosition": "Kø: {position}",
-      "loadError": "Innlasting av lyd mislyktes"
+      "loadError": "Innlasting av lyd mislyktes",
+      "spectrogramForDetection": "Spectrogram for detection"
     },
     "forms": {
       "numberField": {
@@ -4715,11 +4241,6 @@
       "removeCertificate": "Fjern sertifikat",
       "fileReadError": "Lesing av fil mislyktes",
       "loading": "Laster sertifikatinformasjon..."
-    },
-    "birdThumbnail": {
-      "viewDetections": "View {name} detections",
-      "largeView": "Large view of {name}",
-      "clickToView": "Click to view detections"
     }
   },
   "connectivity": {
@@ -4800,9 +4321,6 @@
       "mqttNotConfigured": "MQTT-megler ikke konfigurert",
       "mqttMetricsUnavailable": "Målingsinstans ikke tilgjengelig for MQTT-test",
       "mqttClientFailed": "Opprettelse av MQTT-klient mislyktes",
-      "birdweatherDisabled": "BirdWeather-integrasjon er ikke aktivert",
-      "birdweatherNotConfigured": "BirdWeather-stasjon-ID ikke konfigurert",
-      "birdweatherClientFailed": "Opprettelse av BirdWeather-klient mislyktes",
       "noWeatherProvider": "Ingen værleverandør valgt",
       "openWeatherKeyRequired": "OpenWeather API-nøkkel er obligatorisk",
       "processorUnavailable": "Prosessor ikke tilgjengelig",
@@ -4880,10 +4398,10 @@
     "steps": {
       "welcome": {
         "title": "Velkommen",
-        "heading": "Velkommen til BirdNET-Go!",
-        "description": "BirdNET-Go er et åpen kildekode-system for fuglelydsidentifikasjon som lytter til lyd fra mikrofonen eller strømmen din og identifiserer fuglearter i sanntid.",
-        "credit": "Drives av BirdNET-modellen utviklet av K. Lisa Yang Center for Conservation Bioacoustics ved Cornell Lab of Ornithology og Chemnitz University of Technology. BirdNET-Go er et uavhengig fellesskapsprosjekt og er ikke tilknyttet eller godkjent av BirdNET-teamet.",
-        "learnMore": "Les mer om BirdNET",
+        "heading": "Velkommen til VoiceWatch!",
+        "description": "VoiceWatch er et åpen kildekode-system for fuglelydsidentifikasjon som lytter til lyd fra mikrofonen eller strømmen din og identifiserer fuglearter i sanntid.",
+        "credit": "Drives av VoiceWatch-modellen utviklet av K. Lisa Yang Center for Conservation Bioacoustics ved Cornell Lab of Ornithology og Chemnitz University of Technology. VoiceWatch er et uavhengig fellesskapsprosjekt og er ikke tilknyttet eller godkjent av VoiceWatch-teamet.",
+        "learnMore": "Les mer om VoiceWatch",
         "cta": "La oss sette opp din fugleovervåkingsstasjon."
       },
       "locationLanguage": {
@@ -4937,16 +4455,12 @@
         "title": "Personvern og integrasjon",
         "privacyFilterLabel": "Aktiver personvernfilter",
         "privacyFilterHelp": "Filtrerer ut registreringer når menneskestemmer oppdages nær mikrofonen",
-        "birdweatherLabel": "Del registreringer med BirdWeather",
-        "birdweatherHelp": "Bidra med fugleregistreringene dine til BirdWeather-fellesskapsnettet",
-        "birdweatherIdLabel": "BirdWeather-stasjon-ID",
-        "birdweatherIdPlaceholder": "Skriv inn din BirdWeather-stasjon-ID",
         "errorReportingLabel": "Send anonyme feilrapporter",
-        "errorReportingHelp": "Hjelp med å forbedre BirdNET-Go ved å sende anonyme feilrapporter når noe går galt"
+        "errorReportingHelp": "Hjelp med å forbedre VoiceWatch ved å sende anonyme feilrapporter når noe går galt"
       },
       "responsibleUse": {
-        "title": "Ansvarlig bruk av BirdNET-Go",
-        "intro": "BirdNET-Go er et kraftig verktøy som forbedrer fuglekikkeropplevelsen din gjennom KI-støttet identifikasjon. For å sikre best mulig resultater for både fuglekikking og naturvern:",
+        "title": "Ansvarlig bruk av VoiceWatch",
+        "intro": "VoiceWatch er et kraftig verktøy som forbedrer fuglekikkeropplevelsen din gjennom KI-støttet identifikasjon. For å sikre best mulig resultater for både fuglekikking og naturvern:",
         "point1": "Gjennomgå og verifiser registreringer før du deler observasjoner",
         "point2": "Bruk sikkerhetsscore som veiledning, ikke absolutt sannhet",
         "point3": "Sjekk mot feltguider og lokal ekspertise",
@@ -5005,26 +4519,6 @@
         "helpText": "Språk brukt for artsnavnene i grensesnittet."
       }
     },
-    "rangeFilter": {
-      "birdOnlyNote": "Utvalgsfilter gjelder kun for fugleklassifikatorer. Flaggermusmodeller bruker egne artslister.",
-      "status": {
-        "title": "Utvalgsfilter-oversikt",
-        "geomodelInfo": "BirdNET Geomodell {version} – {species} kjente arter",
-        "autoSelected": "Automatisk valgt",
-        "manual": "Manuell",
-        "classifier": "Klassifikator",
-        "totalSpecies": "Totalt arter",
-        "withRangeData": "Med utvalgsdata",
-        "withoutRangeData": "Uten utvalgsdata",
-        "withRangeDataTooltip": "Arter som geomodellen kan evaluere for geografisk sannsynlighet ved din posisjon",
-        "withoutRangeDataTooltip": "Arter uten geografiske data i geomodellen, håndtert av innstillingen for umappede arter nedenfor",
-        "noFilter": "Ingen aktivt utvalgsfilter",
-        "passUnmapped": {
-          "label": "Tillat arter uten utvalgsdata",
-          "helpText": "Tillat registreringer av arter geomodellen ikke har geografiske data for. Når deaktivert, filtreres disse artene alltid ut."
-        }
-      }
-    },
     "advanced": {
       "title": "Avansert",
       "description": "Behandling og egendefinert modellkonfigurasjon."
@@ -5039,7 +4533,7 @@
       "loading": "Laster modeller...",
       "retry": "Prøv igjen",
       "builtIn": "Innebygd",
-      "builtInDescription": "Innebygd fuglearts-klassifikator fra BirdNET-teamet.",
+      "builtInDescription": "Innebygd fuglearts-klassifikator fra VoiceWatch-teamet.",
       "species": "{count} arter",
       "install": "Installer",
       "installing": "Installerer...",
@@ -5091,7 +4585,7 @@
       "reinstall": "Reinstaller",
       "reinstalling": "Reinstallerer...",
       "reinstallComplete": "Filer verifisert",
-      "geomodelBadge": "Inkluderer BirdNET v3.0 geomodell",
+      "geomodelBadge": "Inkluderer VoiceWatch v3.0 geomodell",
       "onnxRuntimeRequired": "Krever ONNX Runtime som ikke er tilgjengelig på dette systemet.",
       "onnxRuntimeMissing": "ONNX Runtime er ikke tilgjengelig. Denne modellen kan ikke kjøres.",
       "unavailable": "Ikke tilgjengelig"
@@ -5106,6 +4600,45 @@
     },
     "dynamicThreshold": {
       "birdOnlyNote": "Dynamisk terskel gjelder kun for fugleklassifikatorer."
+    },
+    "transcription": {
+      "title": "Transcription & Keyword Flagging",
+      "description": "Transcribe audio clips offline with Whisper and flag detections whose transcription contains defined keywords.",
+      "enable": {
+        "label": "Enable Transcription",
+        "helpText": "Enables offline speech-to-text transcription for detected audio clips using whisper.cpp."
+      },
+      "modelPath": {
+        "label": "Whisper Model Path",
+        "placeholder": "ggml-tiny.en.bin",
+        "helpText": "Path to the GGML model file used for transcription. Required when transcription is enabled.",
+        "required": "A model path is required when transcription is enabled. Enter the path to a GGML model file (e.g. ggml-tiny.en.bin)."
+      },
+      "language": {
+        "label": "Language",
+        "placeholder": "en",
+        "helpText": "BCP-47 language code for transcription (e.g. en, de, fr). Leave as en for English-only models."
+      },
+      "advanced": {
+        "title": "Advanced",
+        "binary": {
+          "label": "Whisper Binary",
+          "placeholder": "whisper-cli",
+          "helpText": "Name or absolute path of the whisper-cli executable. Defaults to whisper-cli on PATH."
+        }
+      },
+      "keywords": {
+        "label": "Flag Keywords",
+        "inputPlaceholder": "Add a keyword...",
+        "helpText": "Detections whose transcription contains any of these words will be flagged for review.",
+        "addButton": "Add",
+        "emptyState": "No keywords added yet. Enter a word above and click Add.",
+        "removeAriaLabel": "Remove keyword \"{keyword}\""
+      },
+      "caseSensitive": {
+        "label": "Case-Sensitive Matching",
+        "helpText": "When enabled, keyword matching distinguishes uppercase from lowercase letters (e.g. \"Fire\" will not match \"fire\")."
+      }
     }
   },
   "restart": {
@@ -5123,7 +4656,9 @@
       "webserver": "Web server / network settings",
       "database": "Database settings",
       "logging": "Logging settings",
-      "tlsCertificate": "TLS certificate"
+      "tlsCertificate": "TLS certificate",
+      "continuousRecording": "Continuous recording settings",
+      "speakerAttributes": "Speaker attribute settings"
     }
   },
   "help": {
@@ -5167,7 +4702,7 @@
       },
       "step2": {
         "title": "Installasjonsmetode",
-        "description": "Hvordan du installerte BirdNET-Go: install.sh-skript, Docker Compose, manuell bygging eller annet."
+        "description": "Hvordan du installerte VoiceWatch: install.sh-skript, Docker Compose, manuell bygging eller annet."
       },
       "step3": {
         "title": "Systeminformasjon",
@@ -5236,7 +4771,7 @@
       "fetchFailed": "Innlasting av diagnostikk mislyktes"
     },
     "export": {
-      "reportTitle": "BirdNET-Go systemhelserapport",
+      "reportTitle": "VoiceWatch systemhelserapport",
       "statusLabel": "Status",
       "timeLabel": "Tid",
       "durationLabel": "Varighet",

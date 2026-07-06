@@ -61,8 +61,8 @@
 
       switch (sortColumn) {
         case 'name': {
-          const nameA = a.name === 'main' ? 'BirdNET-Go' : a.name;
-          const nameB = b.name === 'main' ? 'BirdNET-Go' : b.name;
+          const nameA = a.name === 'main' ? 'VoiceWatch' : a.name;
+          const nameB = b.name === 'main' ? 'VoiceWatch' : b.name;
           comparison = nameA.localeCompare(nameB);
           break;
         }
@@ -128,11 +128,11 @@
   }
 
   // PERFORMANCE OPTIMIZATION: Cache process display names with $derived
-  // Avoid string processing in template for BirdNET-Go name transformation
+  // Avoid string processing in template for VoiceWatch name transformation
   let processDisplayNames = $derived(
     processes.reduce(
       (acc, process) => {
-        acc[process.pid] = process.name === 'main' ? 'BirdNET-Go' : process.name;
+        acc[process.pid] = process.name === 'main' ? 'VoiceWatch' : process.name;
         return acc;
       },
       {} as Record<number, string>

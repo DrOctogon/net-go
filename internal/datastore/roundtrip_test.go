@@ -15,7 +15,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/conf"
+	"github.com/tphakala/voicewatch/internal/conf"
 )
 
 // createTestSettings creates minimal settings for database tests.
@@ -23,8 +23,8 @@ import (
 func createTestSettings(t *testing.T) *conf.Settings {
 	t.Helper()
 	settings := &conf.Settings{}
-	settings.BirdNET.Latitude = 60.1699
-	settings.BirdNET.Longitude = 24.9384
+	settings.VoiceWatch.Latitude = 60.1699
+	settings.VoiceWatch.Longitude = 24.9384
 	return settings
 }
 

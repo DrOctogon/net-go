@@ -1,6 +1,6 @@
 # Building
 
-This document describes methods for building BirdNET-Go from source.
+This document describes methods for building VoiceWatch from source.
 
 There are two primary approaches:
 
@@ -39,7 +39,7 @@ This project uses [Task](https://taskfile.dev/) (`Taskfile.yml`) as its build sy
 
 - **Go:** Install the Go programming language (version 1.21 or later recommended). Follow the [official Go installation guide](https://golang.org/doc/install).
 - **Task:** Install the `task` executable. Follow the [Task installation guide](https://taskfile.dev/installation/).
-- **Git:** Needed to clone repositories (BirdNET-Go and TensorFlow headers).
+- **Git:** Needed to clone repositories (VoiceWatch and TensorFlow headers).
 - **wget/curl:** Needed by `task` to download TFLite libraries.
 - **Standard Build Tools:** Ensure you have `gcc`, `make`, etc. (`build-essential` on Debian/Ubuntu).
 - **(Optional) `air`:** For live-reloading development server locally (if not using the Devcontainer). Install via `go install github.com/cosmtrek/air@latest`.
@@ -66,9 +66,9 @@ task setup-dev
 
 This handles all prerequisites on Linux (Debian/Ubuntu). On macOS, you will need Homebrew and Xcode command-line tools pre-installed.
 
-### 3. Build BirdNET-Go
+### 3. Build VoiceWatch
 
-Navigate to the cloned BirdNET-Go project directory in your terminal.
+Navigate to the cloned VoiceWatch project directory in your terminal.
 
 - **Build for your native OS/Architecture:**
 

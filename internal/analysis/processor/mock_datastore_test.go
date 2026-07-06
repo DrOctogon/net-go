@@ -13,8 +13,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	"github.com/tphakala/birdnet-go/internal/detection"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/detection"
 	"gorm.io/gorm"
 )
 
@@ -438,6 +438,20 @@ type MockDetectionRepository struct {
 	saveErr                error
 	savedResult            *detection.Result
 	savedAdditionalResults []detection.AdditionalResult // Captures additional results for verification
+
+	// Transcript capture for TranscribeAction verification.
+	transcriptCalls     int
+	transcriptID        string
+	transcriptText      string
+	transcriptLang      string
+	updateTranscriptErr error
+
+	// Keyword-flag capture for TranscribeAction verification.
+	keywordFlagCalls   int
+	keywordFlagID      string
+	keywordFlagFlagged bool
+	keywordFlagHits    string
+	updateKeywordErr   error
 }
 
 // NewMockDetectionRepository creates a new mock repository starting with ID 1.
@@ -537,6 +551,64 @@ func (m *MockDetectionRepository) DeleteComment(_ context.Context, _ uint) error
 func (m *MockDetectionRepository) GetClipPath(_ context.Context, _ string) (string, error) {
 	return "", nil
 }
+
+// UpdateTranscript captures the transcript persistence call for verification.
+func (m *MockDetectionRepository) UpdateTranscript(_ context.Context, id, transcript, language string) error {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	if m.updateTranscriptErr != nil {
+		return m.updateTranscriptErr
+	}
+	m.transcriptCalls++
+	m.transcriptID = id
+	m.transcriptText = transcript
+	m.transcriptLang = language
+	return nil
+}
+
+// GetTranscriptCalls returns how many times UpdateTranscript was invoked.
+func (m *MockDetectionRepository) GetTranscriptCalls() int {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	return m.transcriptCalls
+}
+
+// GetLastTranscript returns the id, text, and language from the last
+// UpdateTranscript call.
+func (m *MockDetectionRepository) GetLastTranscript() (id, text, language string) {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	return m.transcriptID, m.transcriptText, m.transcriptLang
+}
+// UpdateKeywordFlag captures the keyword-flag persistence call for verification.
+func (m *MockDetectionRepository) UpdateKeywordFlag(_ context.Context, id string, flagged bool, keywordsHit string) error {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	if m.updateKeywordErr != nil {
+		return m.updateKeywordErr
+	}
+	m.keywordFlagCalls++
+	m.keywordFlagID = id
+	m.keywordFlagFlagged = flagged
+	m.keywordFlagHits = keywordsHit
+	return nil
+}
+
+// GetKeywordFlagCalls returns how many times UpdateKeywordFlag was invoked.
+func (m *MockDetectionRepository) GetKeywordFlagCalls() int {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	return m.keywordFlagCalls
+}
+
+// GetLastKeywordFlag returns the id, flagged value, and comma-joined keywords
+// from the last UpdateKeywordFlag call.
+func (m *MockDetectionRepository) GetLastKeywordFlag() (id string, flagged bool, keywordsHit string) {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	return m.keywordFlagID, m.keywordFlagFlagged, m.keywordFlagHits
+}
+
 func (m *MockDetectionRepository) GetAdditionalResults(_ context.Context, _ string) ([]detection.AdditionalResult, error) {
 	return nil, nil
 }

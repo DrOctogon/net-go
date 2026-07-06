@@ -4,10 +4,10 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/tphakala/birdnet-go/internal/conf"
+	"github.com/tphakala/voicewatch/internal/conf"
 )
 
-// GetCriticalPaths returns filesystem paths critical to BirdNET-Go operation
+// GetCriticalPaths returns filesystem paths critical to VoiceWatch operation
 // that should be automatically monitored for disk usage.
 // These paths are added at runtime and not persisted to the configuration file.
 func GetCriticalPaths(settings *conf.Settings) []string {

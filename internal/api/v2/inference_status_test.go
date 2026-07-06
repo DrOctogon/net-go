@@ -10,11 +10,11 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/audiocore"
-	"github.com/tphakala/birdnet-go/internal/classifier"
-	"github.com/tphakala/birdnet-go/internal/classifier/inferencestats"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/observability"
+	"github.com/tphakala/voicewatch/internal/audiocore"
+	"github.com/tphakala/voicewatch/internal/classifier"
+	"github.com/tphakala/voicewatch/internal/classifier/inferencestats"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/observability"
 )
 
 // TestBuildSourceAttachments verifies that buildSourceAttachments correctly
@@ -23,20 +23,17 @@ import (
 func TestBuildSourceAttachments(t *testing.T) {
 	t.Parallel()
 
-	// classifier.DefaultModelVersion is the registry key for the primary BirdNET model.
-	const primaryID = classifier.DefaultModelVersion
+	const primaryID = classifier.RegistryIDHumanVoice
 
-	// Two loaded models: the primary BirdNET and Perch.
+	// Single loaded model: HumanVoice.
 	models := []classifier.ModelInfo{
 		{ID: primaryID},
-		{ID: classifier.RegistryIDPerchV2},
 	}
 
 	settings := &conf.Settings{}
-	// Front Yard uses conf.ModelIDPerchV2 ("perch_v2"), which ResolveConfigModelID
-	// maps to classifier.RegistryIDPerchV2 ("Perch_V2"). Fallback must be false.
+	// Front Yard explicitly assigns to HumanVoice; must attach with Fallback=false.
 	settings.Realtime.Audio.Sources = []conf.AudioSourceConfig{
-		{Name: "Front Yard", Models: []string{conf.ModelIDPerchV2}},
+		{Name: "Front Yard", Models: []string{conf.ModelIDHumanVoice}},
 		{Name: "Garage", Models: nil}, // no models: falls back to primary
 	}
 	settings.Realtime.RTSP.Streams = []conf.StreamConfig{
@@ -45,18 +42,20 @@ func TestBuildSourceAttachments(t *testing.T) {
 
 	got := buildSourceAttachments(settings, models, primaryID)
 
-	// Perch_V2 should have exactly Front Yard, attached without fallback.
-	perch := got[classifier.RegistryIDPerchV2]
-	require.Len(t, perch, 1, "Perch_V2 attachments")
-	assert.Equal(t, "Front Yard", perch[0].Name, "Perch_V2 source name")
-	assert.False(t, perch[0].Fallback, "Perch_V2 source must not be a fallback")
-
-	// Primary should have Garage and Cam1, both as fallbacks.
+	// HumanVoice should have all three sources: Front Yard (explicit), Garage and Cam1 as fallbacks.
 	prim := got[primaryID]
-	require.Len(t, prim, 2, "primary attachments must have 2 entries (Garage, Cam1)")
+	require.Len(t, prim, 3, "HumanVoice must have all 3 attachments")
+
+	var foundFrontYard bool
 	for _, s := range prim {
-		assert.True(t, s.Fallback, "primary attachment %q should have Fallback=true", s.Name)
+		if s.Name == "Front Yard" {
+			foundFrontYard = true
+			assert.False(t, s.Fallback, "explicit HumanVoice assignment must not be a fallback")
+		} else {
+			assert.True(t, s.Fallback, "source %q without resolvable model should be a fallback", s.Name)
+		}
 	}
+	assert.True(t, foundFrontYard, "Front Yard must appear in HumanVoice attachments")
 }
 
 // TestBuildSourceAttachments_ResolvesButNotLoaded verifies that a source whose
@@ -66,66 +65,27 @@ func TestBuildSourceAttachments(t *testing.T) {
 func TestBuildSourceAttachments_ResolvesButNotLoaded(t *testing.T) {
 	t.Parallel()
 
-	const primaryID = classifier.DefaultModelVersion
+	const primaryID = classifier.RegistryIDHumanVoice
 
-	// Only BirdNET is loaded; Perch is deliberately NOT loaded.
-	models := []classifier.ModelInfo{
-		{ID: primaryID},
-	}
+	// HumanVoice is deliberately NOT in the loaded models list.
+	models := []classifier.ModelInfo{}
 
 	settings := &conf.Settings{}
-	// Studio uses conf.ModelIDPerchV2, which resolves to classifier.RegistryIDPerchV2,
-	// but Perch is not in the loaded models. Must fall back to primary with Fallback=true.
+	// Studio uses conf.ModelIDHumanVoice, which resolves to classifier.RegistryIDHumanVoice,
+	// but HumanVoice is not in the loaded models. Must fall back to primary with Fallback=true.
 	settings.Realtime.Audio.Sources = []conf.AudioSourceConfig{
-		{Name: "Studio", Models: []string{conf.ModelIDPerchV2}},
+		{Name: "Studio", Models: []string{conf.ModelIDHumanVoice}},
 	}
 
 	got := buildSourceAttachments(settings, models, primaryID)
 
-	// Perch_V2 should have NO attachments (not loaded).
-	perch := got[classifier.RegistryIDPerchV2]
-	assert.Empty(t, perch, "Perch_V2 attachments must be empty (Perch not loaded)")
-
-	// Primary should have Studio as a fallback.
+	// Studio must fall back to primaryID with Fallback=true because HumanVoice is not loaded.
 	prim := got[primaryID]
 	require.Len(t, prim, 1, "primary attachments must have 1 entry (Studio)")
 	assert.Equal(t, "Studio", prim[0].Name, "primary source name")
 	assert.True(t, prim[0].Fallback, "primary source must be a fallback")
 }
 
-// TestBuildSourceAttachments_MultiModelSourceAttachesAll verifies that a single
-// source assigned to several models (the real multi-model setup: one soundcard
-// feeding BirdNET + Perch + Bat) is attached to EVERY loaded model in its Models
-// list, not just the first. This mirrors the runtime fan-out in
-// resolveModelTargets, which routes the source's audio to all assigned models.
-func TestBuildSourceAttachments_MultiModelSourceAttachesAll(t *testing.T) {
-	t.Parallel()
-
-	const primaryID = classifier.DefaultModelVersion
-
-	// All three models loaded.
-	models := []classifier.ModelInfo{
-		{ID: primaryID},
-		{ID: classifier.RegistryIDPerchV2},
-		{ID: classifier.RegistryIDBat},
-	}
-
-	settings := &conf.Settings{}
-	// One soundcard source explicitly assigned to all three models.
-	settings.Realtime.Audio.Sources = []conf.AudioSourceConfig{
-		{Name: "Äänikortti", Models: []string{conf.ModelIDBirdNET, conf.ModelIDPerchV2, conf.ModelIDBat}},
-	}
-
-	got := buildSourceAttachments(settings, models, primaryID)
-
-	// Every assigned, loaded model must show the source, none as a fallback.
-	for _, id := range []string{primaryID, classifier.RegistryIDPerchV2, classifier.RegistryIDBat} {
-		att := got[id]
-		require.Len(t, att, 1, "model %q must have the source attached", id)
-		assert.Equal(t, "Äänikortti", att[0].Name, "source name for %q", id)
-		assert.False(t, att[0].Fallback, "explicit assignment must not be a fallback for %q", id)
-	}
-}
 
 // TestBuildModelStatus verifies that buildModelStatus correctly computes
 // average latency, peak latency, RTF, and memory from a non-zero PeekSnapshot.

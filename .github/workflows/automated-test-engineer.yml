@@ -46,7 +46,7 @@ jobs:
               # Extract package names for labeling
               grep '"Action":"fail"' /tmp/gotest.log | jq -r '
                 select(.Test != null) | .Package
-              ' | sed 's|github.com/tphakala/birdnet-go/||g' | sort -u >> /tmp/affected-packages.txt || true
+              ' | sed 's|github.com/tphakala/voicewatch/||g' | sort -u >> /tmp/affected-packages.txt || true
             else
               grep -E '"Action":"fail"' /tmp/gotest.log | head -10 >> /tmp/failed-tests.md || true
             fi

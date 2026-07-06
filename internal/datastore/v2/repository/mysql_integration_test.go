@@ -11,7 +11,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/testutil/containers"
+	"github.com/tphakala/voicewatch/internal/testutil/containers"
 )
 
 // MySQL test container shared across all tests in this package

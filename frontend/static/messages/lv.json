@@ -156,7 +156,8 @@
         "falsePositive": "Kļūdaini pozitīvs",
         "notReviewed": "Nav pārskatīts",
         "locked": "Bloķēts",
-        "unlikely": "Maz ticams"
+        "unlikely": "Maz ticams",
+        "flagged": "Flagged"
       },
       "form": {
         "correctDetection": "Pareiza noteikšana",
@@ -200,7 +201,7 @@
     "hoursShort": "st"
   },
   "pageTitle": {
-    "settings": "Iestatījumi - BirdNET-Go",
+    "settings": "Iestatījumi - VoiceWatch",
     "pageNotFound": "404 - Lapa nav atrasta",
     "serverError": "500 - Iekšējā servera kļūda",
     "componentError": "Komponentes ielādes kļūda",
@@ -236,26 +237,26 @@
     "askQuestion": "Uzdot jautājumu",
     "reportBugAriaLabel": "Ziņot par kļūdu GitHub (atveras jaunā logā)",
     "askQuestionAriaLabel": "Uzdot jautājumu GitHub Discussions (atveras jaunā logā)",
-    "viewOnGithubAriaLabel": "Skatīt BirdNET-Go GitHub (atveras jaunā logā)",
+    "viewOnGithubAriaLabel": "Skatīt VoiceWatch GitHub (atveras jaunā logā)",
     "health": "Health"
   },
   "about": {
-    "title": "BirdNET-Go",
+    "title": "VoiceWatch",
     "subtitle": "Moderna saskarne reāllaika putnu skaņu noteikšanai un klasifikācijai",
-    "logoAlt": "BirdNET-Go logotips",
+    "logoAlt": "VoiceWatch logotips",
     "overview": "Pārskats",
-    "overviewText": "BirdNET-Go ir uz Go balstīta implementācija reāllaika putnu skaņu noteikšanai un klasifikācijai, kas veidota uz BirdNET projekta pamata. Šī lietotne nodrošina lietotājam draudzīgu saskarni nepārtrauktai putnu skaņu uzraudzībai un analīzei.",
-    "birdnetProject": "BirdNET projekts",
-    "birdnetDescription": "BirdNET-Go nebūtu iespējams bez BirdNET projekta novatoriskā darba. Mākslīgā intelekta modelis, kas nodrošina BirdNET-Go noteikšanas spējas, ir BirdNET projekta inovatīvās pētniecības un izstrādes rezultāts.",
+    "overviewText": "VoiceWatch ir uz Go balstīta implementācija reāllaika putnu skaņu noteikšanai un klasifikācijai, kas veidota uz VoiceWatch projekta pamata. Šī lietotne nodrošina lietotājam draudzīgu saskarni nepārtrauktai putnu skaņu uzraudzībai un analīzei.",
+    "birdnetProject": "VoiceWatch projekts",
+    "birdnetDescription": "VoiceWatch nebūtu iespējams bez VoiceWatch projekta novatoriskā darba. Mākslīgā intelekta modelis, kas nodrošina VoiceWatch noteikšanas spējas, ir VoiceWatch projekta inovatīvās pētniecības un izstrādes rezultāts.",
     "developedBy": "Izstrādāja",
     "developersText": "K. Lisa Yang Saglabāšanas bioakustikas centrs Kornela Ornitoloģijas laboratorijā sadarbībā ar Kemnicas Tehnoloģisko universitāti:",
     "visitBirdnetAnalyzer": "Apmeklēt BirdNET-Analyzer projektu",
     "visitBirdnetAnalyzerAriaLabel": "Apmeklēt BirdNET-Analyzer GitHub repozitoriju",
     "contributors": "Līdzstrādnieki",
-    "contributorsText": "BirdNET-Go ir audzis un uzlabojies, pateicoties daudzu cilvēku sadarbībai. Viņu ieguldījums, sākot no koda uzlabojumiem līdz funkciju ieteikumiem, ir bijis nenovērtējams, lai padarītu šo projektu labāku.",
+    "contributorsText": "VoiceWatch ir audzis un uzlabojies, pateicoties daudzu cilvēku sadarbībai. Viņu ieguldījums, sākot no koda uzlabojumiem līdz funkciju ieteikumiem, ir bijis nenovērtējams, lai padarītu šo projektu labāku.",
     "mainDeveloper": "Galvenais izstrādātājs",
     "githubContributors": "GitHub līdzstrādnieki",
-    "contributorsNote": "Īpaša pateicība šiem līdzstrādniekiem par viņu vērtīgo darbu BirdNET-Go uzlabošanā:",
+    "contributorsNote": "Īpaša pateicība šiem līdzstrādniekiem par viņu vērtīgo darbu VoiceWatch uzlabošanā:",
     "communityAcknowledgment": "Kopienas atzinība",
     "communityText": "Mēs vēlamies izteikt pateicību arī visiem lietotājiem, kuri ir snieguši ieguldījumu ar:",
     "bugReports": "Kļūdu ziņojumi un problēmu izsekošana",
@@ -264,9 +265,9 @@
     "documentation": "Dokumentācijas uzlabojumi",
     "additionalCredits": "Papildu atzinības",
     "birdnetPiProject": "BirdNET-Pi projekts",
-    "birdnetPiDescription": "Īpaša pateicība Patrick McGuire par viņa iedvesmojošo darbu pie BirdNET-Pi, kas ietekmēja BirdNET-Go izstrādi. BirdNET-Pi demonstrē putnu skaņu noteikšanas potenciālu iegultajās ierīcēs un ir noteicis augstu standartu kopienas virzītai izstrādei.",
+    "birdnetPiDescription": "Īpaša pateicība Patrick McGuire par viņa iedvesmojošo darbu pie BirdNET-Pi, kas ietekmēja VoiceWatch izstrādi. BirdNET-Pi demonstrē putnu skaņu noteikšanas potenciālu iegultajās ierīcēs un ir noteicis augstu standartu kopienas virzītai izstrādei.",
     "visitBirdnetPi": "Apmeklēt BirdNET-Pi projektu",
-    "labelTranslations": "BirdNET etiķešu tulkojumi",
+    "labelTranslations": "VoiceWatch etiķešu tulkojumi",
     "labelTranslationsBy": "Nodrošināja Patrick Levin BirdNET-Pi projektam, ko veidoja Patrick McGuire",
     "patrickLevinGithub": "Patrick Levin GitHub",
     "versionInformation": "Versijas informācija",
@@ -275,12 +276,12 @@
     "developmentBuild": "Izstrādes būvējums",
     "unknown": "Nezināms",
     "licenseInformation": "Licences informācija",
-    "licenseText": "Gan BirdNET AI modelis, gan BirdNET-Go ir licencēti saskaņā ar",
+    "licenseText": "Gan VoiceWatch AI modelis, gan VoiceWatch ir licencēti saskaņā ar",
     "ccLicense": "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International licenci",
     "licenseDescription": "Šī licence ļauj citiem pārveidot, pielāgot un veidot uz šī darba bāzes nekomerciālos nolūkos, ja tiek sniegta atbilstoša atsauce un jaunie darbi tiek licencēti ar identiskiem noteikumiem.",
     "dependencyLicenses": "Atkarību licences",
     "taxonomyDataTitle": "Taksonomijas dati",
-    "taxonomyDataIntro": "BirdNET-Go ietver iegultos putnu taksonomijas datus, kas iegūti no eBird/Clements kontrolsaraksta, nodrošinot ātru lokālu ģinšu un dzimtu meklēšanu.",
+    "taxonomyDataIntro": "VoiceWatch ietver iegultos putnu taksonomijas datus, kas iegūti no eBird/Clements kontrolsaraksta, nodrošinot ātru lokālu ģinšu un dzimtu meklēšanu.",
     "source": "Avots",
     "ebirdApiV2": "eBird API v2",
     "copyright": "Autortiesības",
@@ -290,10 +291,10 @@
     "ebirdOrg": "eBird.org",
     "learnEbirdTaxonomy": "Uzzināt par eBird taksonomiju",
     "avicommonsTitle": "Putnu sīktēli",
-    "avicommonsDescription": "BirdNET-Go izmanto rūpīgi atlasītus putnu attēlus no Avicommons — bibliotēkas ar rokām atlasītiem, apgrieztiem un orientētiem putnu fotoattēliem, kas licencēti saskaņā ar Creative Commons licencēm.",
-    "githubStarPrompt": "Ja BirdNET-Go jums šķiet noderīgs, lūdzu, apsveriet iespēju atzīmēt projektu ar zvaigznīti GitHub. Zvaigznītes palīdz citiem atrast šo projektu un atbalsta tā turpmāko izstrādi.",
+    "avicommonsDescription": "VoiceWatch izmanto rūpīgi atlasītus putnu attēlus no Avicommons — bibliotēkas ar rokām atlasītiem, apgrieztiem un orientētiem putnu fotoattēliem, kas licencēti saskaņā ar Creative Commons licencēm.",
+    "githubStarPrompt": "Ja VoiceWatch jums šķiet noderīgs, lūdzu, apsveriet iespēju atzīmēt projektu ar zvaigznīti GitHub. Zvaigznītes palīdz citiem atrast šo projektu un atbalsta tā turpmāko izstrādi.",
     "viewOnGithub": "Skatīt projektu GitHub",
-    "visitGithubAriaLabel": "Apmeklēt BirdNET-Go GitHub repozitoriju",
+    "visitGithubAriaLabel": "Apmeklēt VoiceWatch GitHub repozitoriju",
     "visitAvicommonsGithub": "Apmeklēt Avicommons GitHub repozitoriju"
   },
   "notifications": {
@@ -362,11 +363,11 @@
     },
     "content": {
       "startup": {
-        "title": "BirdNET-Go startēts",
+        "title": "VoiceWatch startēts",
         "message": "Lietotne veiksmīgi startēta (v{version})"
       },
       "shutdown": {
-        "title": "BirdNET-Go izslēdzas",
+        "title": "VoiceWatch izslēdzas",
         "message": "Lietotne tiek izslēgta"
       },
       "detection": {
@@ -396,7 +397,6 @@
         "rebuildingRangeFilter": "Pārbūvē sugu areāla filtru...",
         "updatingIntervals": "Atjaunina noteikšanas intervālus...",
         "reconfiguringMqtt": "Atjaunina MQTT savienojumu...",
-        "reconfiguringBirdweather": "Atjaunina BirdWeather integrāciju...",
         "reconfiguringStreams": "Atjaunina audio straumes...",
         "reconfiguringTelemetry": "Atjaunina telemetrijas iestatījumus...",
         "reconfiguringPushNotifications": "Pārkonfigurē push paziņojumu pakalpojumu sniedzējus...",
@@ -423,7 +423,7 @@
         "cancelledTitle": "Datubāzes migrācija atcelta",
         "cancelledMessage": "Datubāzes migrācija ir atcelta. Jūs varat sākt jaunu migrāciju jebkurā laikā no datubāzes iestatījumiem.",
         "completedTitle": "Datubāzes migrācija pabeigta",
-        "completedMessage": "Migrācija pabeigta. Lūdzu, restartējiet BirdNET-Go, lai pārslēgtos uz jauno datubāzi.",
+        "completedMessage": "Migrācija pabeigta. Lūdzu, restartējiet VoiceWatch, lai pārslēgtos uz jauno datubāzi.",
         "errorTitle": "Datubāzes migrācijas kļūda",
         "errorMessage": "Migrācija apturēta kļūdu dēļ. Pārbaudiet žurnālus un mēģiniet atsākt."
       },
@@ -435,7 +435,7 @@
       },
       "buffer": {
         "overloadTitle": "Audio analīze pārslogota",
-        "overloadMessage": "Jūsu sistēma izlaiž {dropRate}% audio paraugu avotam ''{sourceName}'', jo tā nespēj sekot līdzi analīzei. Samaziniet BirdNET pārklāšanās vērtību noteikšanas iestatījumos vai apsveriet jaudīgāka procesora izmantošanu."
+        "overloadMessage": "Jūsu sistēma izlaiž {dropRate}% audio paraugu avotam ''{sourceName}'', jo tā nespēj sekot līdzi analīzei. Samaziniet VoiceWatch pārklāšanās vērtību noteikšanas iestatījumos vai apsveriet jaudīgāka procesora izmantošanu."
       },
       "ort": {
         "unavailableTitle": "ONNX Runtime nav pieejams",
@@ -476,9 +476,6 @@
     "noResultsFound": "Rezultāti nav atrasti",
     "noResultsHint": "Mēģiniet pielāgot meklēšanas filtrus",
     "fields": {
-      "species": "Suga",
-      "speciesPlaceholder": "Ievadiet sugas nosaukumu",
-      "speciesHelp": "Ievadiet pilnu vai daļēju sugas nosaukumu (nav reģistrjutīgs)",
       "dateRange": "Datumu diapazons",
       "dateRangeHelp": "Filtrēt noteikšanas pēc datumu diapazona (atstājiet tukšu visiem datumiem)",
       "from": "No",
@@ -489,7 +486,14 @@
       "verifiedStatus": "Verifikācijas statuss",
       "lockedStatus": "Bloķēšanas statuss",
       "timeOfDay": "Diennakts laiks",
-      "source": "Audio avots"
+      "source": "Audio avots",
+      "transcript": "Transcript",
+      "transcriptHelp": "Search for spoken words in the voice clip transcript (case-insensitive substring match)",
+      "transcriptPlaceholder": "Search transcript...",
+      "flaggedOnly": "Flagged only",
+      "flaggedOnlyHelp": "Limit results to detections whose transcript matched a configured keyword",
+      "gender": "Speaker gender",
+      "ageBand": "Speaker age"
     },
     "advancedFilters": "Papildu filtri",
     "showAdvancedFilters": "Rādīt papildu filtrus",
@@ -563,6 +567,9 @@
       "page": "Lapa {current} no {total}",
       "goToPrevious": "Doties uz iepriekšējo lapu",
       "goToNext": "Doties uz nākamo lapu"
+    },
+    "speakerOptions": {
+      "any": "Any"
     }
   },
   "error": {
@@ -599,18 +606,6 @@
       "empty": "Viss kluss — pašlaik nav atklāts neviens putns"
     },
     "rejected": "Noraidīts",
-    "newSpeciesHighlights": {
-      "title": "Jaunās un atgriezušās sugas",
-      "subtitle": "Pirmie novērojumi un nesenās atgriešanās",
-      "trackingDisabled": "Lai izmantotu šo funkciju, aktivizējiet \"Iespējot sugu izsekošanu\".",
-      "categoryLifetime": "Jauna suga",
-      "categoryYear": "Jauna šogad",
-      "categorySeason": "Jauna šosezon",
-      "categorySeasonNamed": "Jauna šajā {season}",
-      "maxConfidenceShort": "Maks {confidence} %",
-      "detections": "{count, plural, zero {# noteikšanu} one {# noteikšana} other {# noteikšanas}}",
-      "lastSeen": "Pēdējoreiz: {days, plural, =0 {šodien} one {pirms # dienas} other {pirms # dienām}}"
-    },
     "dailySummary": {
       "title": "Dienas aktivitāte",
       "subtitle": "Sugu atklāšanas pa stundām",
@@ -666,7 +661,6 @@
         "species": "Suga",
         "weather": "Laikapstākļi",
         "confidence": "Ticamība",
-        "thumbnail": "Sīktēls",
         "status": "Statuss",
         "recording": "Ieraksts",
         "actions": "Darbības"
@@ -695,8 +689,6 @@
         "markCorrect": "Pareizs",
         "markFalsePositive": "Nepareizs",
         "review": "Pārskatīt atklāšanu",
-        "showSpecies": "Rādīt sugu",
-        "ignoreSpecies": "Ignorēt sugu",
         "lockDetection": "Bloķēt atklāšanu",
         "unlockDetection": "Atbloķēt atklāšanu",
         "deleteDetection": "Dzēst atklāšanu"
@@ -777,15 +769,30 @@
     "elements": {
       "banner": "Informācijas paneļa baneris",
       "dailySummary": "Dienas kopsavilkums",
-      "newSpeciesHighlights": "Jaunu sugu apskats",
       "currentlyHearing": "Pašlaik dzirdams",
       "detectionsGrid": "Nesenās atklāšanas",
       "liveSpectrogram": "Tiešraides spektrogramma",
-      "videoEmbed": "Video iegultne"
+      "videoEmbed": "Video iegultne",
+      "voiceActivity": "Voice Activity"
+    },
+    "voiceActivity": {
+      "title": "Voice Activity",
+      "subtitle": "Detections by hour — today",
+      "chartAriaLabel": "Bar chart of voice detections per hour for today",
+      "loading": "Loading voice activity...",
+      "empty": "No voice detections today",
+      "errors": {
+        "load": "Failed to load voice activity data"
+      },
+      "bar": {
+        "tooltip": "{count} detection(s) at {hour}:00"
+      }
     }
   },
   "detections": {
     "title": "Atklāšanas",
+    "humanVoice": "Human Voice",
+    "flaggedByKeywords": "Flagged by keywords: {keywords}",
     "titles": {
       "hourly": "Stundu rezultāti plkst. {hour}:00, {date}",
       "hourlyRange": "Stundu rezultāti no {startHour}:00 līdz {endHour}:00, {date}",
@@ -794,12 +801,16 @@
       "allDetections": "Visas atklāšanas datumā {date}"
     },
     "detail": {
-      "species": "Suga",
       "observation": "Novērojums",
+      "transcript": {
+        "title": "Transcript",
+        "matchedKeywords": "Matched keywords",
+        "flaggedNotice": "Flagged by keyword",
+        "empty": "No transcript available"
+      },
       "aria": {
         "downloadAudioClip": "Download audio clip for {name} detection",
         "audioRecordingFor": "Audio recording and spectrogram for {name}",
-        "scientificName": "Zinātniskais nosaukums",
         "classificationBadges": "Sugas klasifikācijas nozīmītes",
         "confidence": "Atklāšanas ticamība {confidence}%",
         "metadata": "Atklāšanas metadati",
@@ -809,8 +820,7 @@
         "commentTimestamp": "Komentāra laika zīmogs",
         "mainRegion": "Atklāšanas informācija",
         "tabsHeading": "Atklāšanas informācijas cilnes",
-        "tabList": "Atklāšanas detaļu cilnes",
-        "speciesHeadingSuffix": "atklāšanas informācija"
+        "tabList": "Atklāšanas detaļu cilnes"
       }
     },
     "headers": {
@@ -819,7 +829,6 @@
       "source": "Avots",
       "species": "Suga",
       "confidence": "Ticamība",
-      "thumbnail": "Sīktēls",
       "status": "Statuss",
       "recording": "Ieraksts",
       "actions": "Darbības"
@@ -936,6 +945,7 @@
         "unknown": "Nezināms"
       }
     },
+    "noTranscript": "(no transcript)",
     "row": {
       "viewDetails": "Skatīt informāciju par sugu {species}",
       "play": "Atskaņot",
@@ -974,9 +984,7 @@
       "loading": "Ielādē atklāšanas informāciju...",
       "loaded": "Atklāšanas informācija ielādēta sugai {species}",
       "error": "Kļūda, ielādējot atklāšanu: {error}",
-      "loadingResults": "Ielādē {count} rezultātus...",
-      "thumbnailLoading": "Ielādē {species} sīktēlu...",
-      "thumbnailLoaded": "Sīktēls {species} ielādēts"
+      "loadingResults": "Ielādē {count} rezultātus..."
     },
     "errors": {
       "notFound": "Atklāšana nav atrasta. Tā, iespējams, ir dzēsta vai ID ir nepareizs.",
@@ -986,45 +994,34 @@
       "loadFailed": "Neizdevās ielādēt atklāšanu (kļūda {status}). Lūdzu, mēģiniet atjaunināt lapu.",
       "noIdProvided": "Nav norādīts atklāšanas ID.",
       "fetchFailed": "Neizdevās ielādēt atklāšanas"
+    },
+    "speaker": {
+      "sectionLabel": "Estimated speaker",
+      "genderAria": "Estimated speaker gender",
+      "ageAria": "Estimated speaker age",
+      "gender": {
+        "male": "Male",
+        "female": "Female",
+        "unknown": "Unknown"
+      },
+      "age": {
+        "child": "Child",
+        "teen": "Teen",
+        "adult": "Adult",
+        "senior": "Senior"
+      }
     }
   },
   "species": {
-    "rarity": {
-      "title": "Sugas retums",
-      "score": "Vērtējums",
-      "basedOnLocation": "Pamatojoties uz atrašanās vietu: {latitude}, {longitude}",
-      "statuses": {
-        "very_common": "Ļoti izplatīta",
-        "common": "Izplatīta",
-        "uncommon": "Neizplatīta",
-        "rare": "Reta",
-        "very_rare": "Ļoti reta",
-        "unknown": "Nezināma"
-      }
-    },
-    "taxonomy": {
-      "hierarchy": "Taksonomiskā klasifikācija",
-      "subspecies": "Pasugas",
-      "noData": "Taksonomijas dati nav pieejami.",
-      "labels": {
-        "kingdom": "Valsts",
-        "phylum": "Tips",
-        "class": "Klase",
-        "order": "Kārta",
-        "family": "Dzimta",
-        "genus": "Ģints",
-        "species": "Suga"
-      }
-    },
     "synonyms": {
       "tabLabel": "Taksonomijas sinonīmi",
-      "description": "Pārrakstīt zinātnisko nosaukumu kartējumus, kas tiek izmantoti putnu attēlu meklēšanai. BirdNET izmanto 2021E taksonomiju, bet attēlu avoti var izmantot atjauninātus nosaukumus. Iebūvētie kartējumi vienmēr tiek ielādēti; jūsu pārrakstījumi papildina vai aizstāj tos.",
-      "birdnetName": "BirdNET nosaukums",
+      "description": "Pārrakstīt zinātnisko nosaukumu kartējumus, kas tiek izmantoti putnu attēlu meklēšanai. VoiceWatch izmanto 2021E taksonomiju, bet attēlu avoti var izmantot atjauninātus nosaukumus. Iebūvētie kartējumi vienmēr tiek ielādēti; jūsu pārrakstījumi papildina vai aizstāj tos.",
+      "birdnetName": "VoiceWatch nosaukums",
       "updatedName": "Atjaunināts nosaukums",
       "addButton": "Pievienot sinonīmu",
       "emptyState": "Nav konfigurēti pielāgoti taksonomijas sinonīmi.",
       "errors": {
-        "unknownSpecies": "Suga nav atrasta BirdNET etiķetēs",
+        "unknownSpecies": "Suga nav atrasta VoiceWatch etiķetēs",
         "duplicateKey": "Sinonīms šai sugai jau pastāv",
         "emptyUpdatedName": "Atjaunināts nosaukums ir obligāts"
       }
@@ -1133,7 +1130,7 @@
         "process": "Process"
       },
       "showAll": "Rādīt visus procesus",
-      "showBirdnetOnly": "Rādīt tikai BirdNET",
+      "showBirdnetOnly": "Rādīt tikai VoiceWatch",
       "table": {
         "process": "Process",
         "status": "Statuss",
@@ -1311,9 +1308,9 @@
       "migration": {
         "title": "Datubāzes migrācija",
         "description": "Migrēt no mantotās shēmas uz normalizēto v2 shēmu",
-        "requiredNote": "Datubāzes migrācija ir nepieciešama gaidāmajām BirdNET-Go funkcijām, kas balstās uz jauno normalizēto datubāzes shēmu. Jaunās funkcijas nebūs pieejamas, kamēr migrācija nav pabeigta.",
+        "requiredNote": "Datubāzes migrācija ir nepieciešama gaidāmajām VoiceWatch funkcijām, kas balstās uz jauno normalizēto datubāzes shēmu. Jaunās funkcijas nebūs pieejamas, kamēr migrācija nav pabeigta.",
         "completedTitle": "Migrācija pabeigta",
-        "completedNote": "Jūsu datubāze ir veiksmīgi migrēta uz jauno shēmu. Lūdzu, restartējiet BirdNET-Go, lai pārslēgtos uz jauno datubāzi. Piezīme: jaunā datubāze ir mazāka, jo tā uzglabā datus efektīvāk — tas ir paredzēts un visi jūsu dati ir saglabāti.",
+        "completedNote": "Jūsu datubāze ir veiksmīgi migrēta uz jauno shēmu. Lūdzu, restartējiet VoiceWatch, lai pārslēgtos uz jauno datubāzi. Piezīme: jaunā datubāze ir mazāka, jo tā uzglabā datus efektīvāk — tas ir paredzēts un visi jūsu dati ir saglabāti.",
         "starting": "Sāk migrāciju...",
         "status": {
           "idle": "Gatavs sākšanai",
@@ -1834,19 +1831,6 @@
           "axisDate": "Datums",
           "axisUniqueSpecies": "Unikālās sugas"
         },
-        "accumulation": {
-          "title": "Species Accumulation Curve",
-          "description": "Cumulative number of distinct species detected within the selected period. The curve climbs as new species appear and flattens toward an asymptote once the common ones have been recorded; a still-rising tail means more species are likely waiting to be found.",
-          "noData": "No species accumulation data available",
-          "noDataHint": "Select a wider date range to watch the species list build up over time",
-          "ariaLabel": "Species accumulation curve: cumulative distinct species detected over the period",
-          "axisDate": "Date",
-          "axisSpecies": "Cumulative species",
-          "totalSpecies": "{species} species",
-          "tooltipCumulative": "Cumulative species",
-          "tooltipNew": "New in period",
-          "summary": "Cumulative species accumulation across {days} days, reaching {species} distinct species by the end of the period."
-        },
         "yearOverYear": {
           "title": "Year-over-Year Tracker",
           "description": "Cumulative detections so far this year versus the same calendar dates last year. The shaded band is the running gap between the two; this year's line sitting above last year's means you are ahead of last year's pace.",
@@ -1859,20 +1843,6 @@
           "legendLast": "{year} (last year)",
           "tooltipDelta": "Difference",
           "summary": "Year over year: by {monthDay}, {currentYear} has {thisYear} cumulative detections versus {lastYear} for {previousYear} (a difference of {delta})."
-        },
-        "phenology": {
-          "title": "Arrival & Departure Phenology",
-          "description": "First and last detection of each species within the selected period, drawn as residency bars for the most-detected species. Read it top to bottom in arrival order to see who shows up first and who lingers latest across the season.",
-          "noData": "No phenology data available",
-          "noDataHint": "Select a wider date range to see when species arrive and depart",
-          "ariaLabel": "Arrival and departure phenology: residency bars showing each species' first-to-last detection span",
-          "axisDate": "Date",
-          "summary": "Arrival and departure residency spans for {species} species across the selected period.",
-          "tooltipFirst": "First detected",
-          "tooltipLast": "Last detected",
-          "tooltipResidency": "Residency",
-          "tooltipCount": "Detections",
-          "residencyDays": "{days} days"
         },
         "heatmap": {
           "title": "Seasonal Activity Heatmap",
@@ -1889,13 +1859,8 @@
           "summary": "{total} detections across {days} days. Busiest around {time} on {date}."
         },
         "ridgeline": {
-          "title": "Who Sings When",
-          "description": "Hour-of-day activity for the most-detected species, sorting dawn singers from all-day and nocturnal birds",
-          "noData": "No species activity data available",
-          "noDataHint": "Select a wider date range to compare species activity patterns",
           "ariaLabel": "Who-sings-when ridgeline: hour-of-day activity distribution per species",
           "axisTime": "Time of Day",
-          "note": "Showing the top {count} species by detection volume",
           "tooltipDetections": "Detections",
           "tooltipPeak": "Peak",
           "summary": "Hour-of-day activity for {count} species. Most active: {species} around {time}."
@@ -1990,7 +1955,7 @@
     }
   },
   "settings": {
-    "title": "Iestatījumi - BirdNET-Go",
+    "title": "Iestatījumi - VoiceWatch",
     "loading": "Ielādē iestatījumus...",
     "sections": {
       "analysis": "Analīze",
@@ -2047,20 +2012,20 @@
           "description": "Konfigurēt galvenos lietojumprogrammas iestatījumus"
         },
         "birdnet": {
-          "title": "BirdNET iestatījumi",
-          "description": "Konfigurēt BirdNET AI modeļa specifiskos iestatījumus"
+          "title": "VoiceWatch iestatījumi",
+          "description": "Konfigurēt VoiceWatch AI modeļa specifiskos iestatījumus"
         },
         "ui": {
           "title": "Lietotāja saskarnes iestatījumi",
           "description": "Pielāgot lietotāja saskarni"
         },
         "customClassifier": {
-          "title": "Pielāgots BirdNET klasifikators",
-          "description": "Konfigurēt pielāgota BirdNET modeļa un etiķešu failus specializētai noteikšanai",
+          "title": "Pielāgots VoiceWatch klasifikators",
+          "description": "Konfigurēt pielāgota VoiceWatch modeļa un etiķešu failus specializētai noteikšanai",
           "modelPath": {
             "label": "Modeļa ceļš (Piemērošanai nepieciešama restartēšana)",
             "placeholder": "Ceļš uz modeļa failu",
-            "helpText": "Ceļš uz ārējo BirdNET modeļa failu. Ievadiet absolūto vai relatīvo ceļu attiecībā pret birdnet-go bināro failu. Atstājiet tukšu, lai izmantotu noklusējuma iegulto modeli."
+            "helpText": "Ceļš uz ārējo VoiceWatch modeļa failu. Ievadiet absolūto vai relatīvo ceļu attiecībā pret birdnet-go bināro failu. Atstājiet tukšu, lai izmantotu noklusējuma iegulto modeli."
           },
           "labelPath": {
             "label": "Etiķešu ceļš (Piemērošanai nepieciešama restartēšana)",
@@ -2072,7 +2037,7 @@
           "title": "Dinamiskais slieksnis",
           "description": "Automātiski pielāgot noteikšanas jutību, pamatojoties uz iepriekšējiem novērojumiem",
           "enable": {
-            "label": "Iespējot dinamisko slieksni (BirdNET-Go specifiska funkcija)",
+            "label": "Iespējot dinamisko slieksni (VoiceWatch specifiska funkcija)",
             "helpText": "Iespējo dinamiskā ticamības sliekšņa funkciju adaptīvākai putnu balsu noteikšanai."
           },
           "trigger": {
@@ -2118,8 +2083,6 @@
           "warningOff": "Bez filtrēšanas jebkura noteikšana virs ticamības sliekšņa tiek pieņemta nekavējoties. Tas parasti rada vairākus viltus pozitīvos dienā. Pat zema filtrēšana ievērojami uzlabo rezultātu kvalitāti."
         },
         "rangeFilter": {
-          "title": "Areāla filtrs",
-          "description": "Ierobežot noteikšanu līdz sugām, kas ir iespējamas jūsu ģeogrāfiskajā reģionā",
           "stationLocation": {
             "label": "Stacijas atrašanās vieta",
             "helpText": "Stacijas atrašanās vieta, ko izmanto laikapstākļu datiem un putnu sugu ierobežošanai līdz reģionā iespējamām."
@@ -2131,33 +2094,6 @@
           "longitude": {
             "label": "Garums",
             "helpText": "Stacijas garums, ko izmanto laikapstākļu datiem un sugu areāla filtrēšanai."
-          },
-          "model": {
-            "label": "Areāla filtra modelis",
-            "helpText": "BirdNET areāla filtra modeļa versija: jaunākā vai mantotā."
-          },
-          "threshold": {
-            "label": "Slieksnis",
-            "helpText": "Kontrolē, kuras sugas tiek iekļautas, pamatojoties uz to sastopamības varbūtību jūsu atrašanās vietai un gada laikam. Noklusējuma vērtība (0,01) ir ieteicama lielākajai daļai lietotāju. Augstākas vērtības (0,05–0,3) iekļauj mazāk sugu ar augstāku sastopamības varbūtību. Ļoti augstas vērtības (0,5+) iekļauj tikai visbiežāk sastopamās sugas."
-          },
-          "speciesCount": {
-            "label": "Pašreizējais sugu skaits",
-            "helpText": "Areāla filtrā iekļauto sugu skaits. Automātiski atjauninājas, kad mainās slieksnis, platums vai garums.",
-            "loading": "Ielādē...",
-            "viewSpecies": "Skatīt sugas"
-          },
-          "downloadTitle": "Lejupielādēt sugu sarakstu kā CSV",
-          "csvDownloaded": "Sugu saraksts veiksmīgi lejupielādēts",
-          "csvDownloadFailed": "Neizdevās lejupielādēt sugu sarakstu. Lūdzu, mēģiniet vēlreiz.",
-          "modal": {
-            "title": "Areāla filtra sugas",
-            "speciesCount": "Sugu skaits:",
-            "threshold": "Slieksnis:",
-            "latitude": "Platums:",
-            "longitude": "Garums:",
-            "loadingSpecies": "Ielādē sugas...",
-            "noSpeciesFound": "Ar pašreizējiem iestatījumiem sugas nav atrastas",
-            "close": "Aizvērt"
           }
         },
         "database": {
@@ -2285,18 +2221,6 @@
               "recent": {
                 "label": "Rādīt sīktēlus pēdējo noteikšanu sarakstā",
                 "helpText": "Iespējojiet, lai rādītu noteikto sugu sīktēlus pēdējo noteikšanu sarakstā"
-              },
-              "imageProvider": {
-                "label": "Attēlu nodrošinātājs",
-                "helpText": "Izvēlieties vēlamo attēlu nodrošinātāju putnu sīktēliem"
-              },
-              "fallbackPolicy": {
-                "label": "Rezerves politika",
-                "helpText": "Izvēlieties, kas notiek, kad vēlamais nodrošinātājs neatrod attēlu",
-                "options": {
-                  "all": "Izmēģināt visus nodrošinātājus secīgi",
-                  "none": "Izmantot tikai izvēlēto nodrošinātāju"
-                }
               }
             },
             "spectrogram": {
@@ -2385,10 +2309,6 @@
       },
       "errors": {
         "localesLoadFailed": "Neizdevās ielādēt valodu opcijas. Izmanto noklusējuma vērtības.",
-        "providersLoadFailed": "Neizdevās ielādēt attēlu nodrošinātājus. Izmanto noklusējuma vērtības.",
-        "rangeFilterTestFailed": "Neizdevās pārbaudīt areāla filtra iestatījumus",
-        "rangeFilterLoadFailed": "Neizdevās ielādēt sugu sarakstu",
-        "rangeFilterCountFailed": "Neizdevās ielādēt sugu skaitu",
         "mapLibraryLoadFailed": "Neizdevās ielādēt kartes bibliotēku. Lūdzu, atsvaidziniet lapu.",
         "mapLoadFailed": "Neizdevās ielādēt karti. Lūdzu, mēģiniet atsvaidzināt lapu.",
         "modalMapLoadFailed": "Neizdevās ielādēt modālā loga karti. Lūdzu, mēģiniet aizvērt un atkārtoti atvērt modālo logu.",
@@ -2399,7 +2319,7 @@
       "sections": {
         "telemetry": {
           "title": "Kļūdu izsekošana un telemetrija",
-          "description": "Neobligāta kļūdu izsekošana, lai palīdzētu uzlabot BirdNET-Go uzticamību un veiktspēju"
+          "description": "Neobligāta kļūdu izsekošana, lai palīdzētu uzlabot VoiceWatch uzticamību un veiktspēju"
         },
         "diagnostics": {
           "title": "Atbalsts un diagnostika",
@@ -2411,7 +2331,7 @@
         "privacyPoints": {
           "noPersonalData": "Personiskie dati netiek vākti",
           "anonymousData": "Visi telemetrijas dati ir anonīmi",
-          "helpImprove": "Telemetrijas dati palīdz izstrādātājiem identificēt un novērst problēmas BirdNET-Go"
+          "helpImprove": "Telemetrijas dati palīdz izstrādātājiem identificēt un novērst problēmas VoiceWatch"
         },
         "enableTracking": "Iespējot kļūdu izsekošanu (piekrist)"
       },
@@ -2568,7 +2488,7 @@
       },
       "systemInfo": {
         "howToView": "Kā skatīt paziņojumus:",
-        "technicalDetails": "Tehniskie detaļas par paziņojumiem BirdNET-Go:"
+        "technicalDetails": "Tehniskie detaļas par paziņojumiem VoiceWatch:"
       },
       "privacy": {
         "title": "Privātuma paziņojums ārējiem tīmekļa āķiem",
@@ -2862,63 +2782,16 @@
         "confidenceLabel": "Ticamības slieksnis cilvēku noteikšanai",
         "confidenceHelp": "Iestatiet ticamības līmeni cilvēku balss noteikšanai, zemāka vērtība padara filtru jutīgāku"
       },
-      "falsePositivePrevention": {
-        "title": "Viltus pozitīvo novēršana",
-        "description": "Konfigurēt viltus noteikšanas filtrus",
-        "enableDogBark": "Iespējot suņa rejas filtru",
-        "disabled": "Suņa rejas filtrs ir atspējots",
-        "confidenceLabel": "Ticamības slieksnis",
-        "confidenceHelp": "Iestatiet ticamības līmeni suņa rejas noteikšanai, zemāka vērtība padara filtru jutīgāku",
-        "expireTimeLabel": "Suņa rejas derīguma laiks (minūtes)",
-        "expireTimeHelp": "Iestatiet, cik ilgi atcerēties noteiktu suņa reju",
-        "addDogBarkSpeciesLabel": "Pievienot suņa rejas sugas",
-        "addDogBarkSpeciesHelp": "Meklēt un pievienot sugas, kuras var sajaukt ar suņa rejām",
-        "addSpeciesButton": "Pievienot"
-      },
-      "speciesNamePlaceholder": "Sugas nosaukums",
-      "typeSpeciesName": "Ievadiet sugas nosaukumu...",
-      "dogBarkSpeciesList": "Suņa rejas sugu saraksts",
       "daylightFilter": {
         "title": "Dienasgaismas filtrs",
         "description": "Filtrēt nakts sugu noteikšanas dienasgaismas stundās. Izmanto pilsoniskā rītausmas/krēslas robežas no jūsu konfigurētās atrašanās vietas.",
         "enable": "Iespējot dienasgaismas filtru",
         "disabled": "Dienasgaismas filtrs ir atspējots",
         "offsetLabel": "Dienasgaismas loga nobīde (stundas)",
-        "offsetHelp": "Pielāgot dienasgaismas logu. Pozitīvas vērtības to sašaurina (pielaidīgāk, piem., +1 = sākas 1 st. pēc rītausmas). Negatīvas vērtības to paplašina (stingrāk, piem., -1 = sākas 1 st. pirms rītausmas).",
-        "speciesListLabel": "Nakts sugu saraksts",
-        "addSpeciesLabel": "Pievienot nakts sugas",
-        "addSpeciesHelp": "Meklēt un pievienot sugas, ģintis, dzimtas vai kārtas filtrēšanai dienasgaismā. Noklusējums: Strigiformes (visas pūces). Piezīme: tukšs saraksts atspējo dienasgaismas sugu filtrēšanu."
-      },
-      "errors": {
-        "speciesLoadFailed": "Neizdevās ielādēt sugu sarakstu. Lūdzu, mēģiniet vēlreiz."
+        "offsetHelp": "Pielāgot dienasgaismas logu. Pozitīvas vērtības to sašaurina (pielaidīgāk, piem., +1 = sākas 1 st. pēc rītausmas). Negatīvas vērtības to paplašina (stingrāk, piem., -1 = sākas 1 st. pirms rītausmas)."
       }
     },
     "integration": {
-      "birdweather": {
-        "title": "BirdWeather",
-        "description": "Augšupielādēt noteikšanas uz BirdWeather",
-        "ffmpegWarning": {
-          "title": "FFmpeg nav atrasts",
-          "message": "Lūdzu, instalējiet FFmpeg, lai iespējotu FLAC kodēšanas atbalstu. BirdWeather pārtrauc WAV augšupielādes par labu saspiestiem FLAC audio failiem."
-        },
-        "enable": "Iespējot BirdWeather augšupielādes",
-        "token": {
-          "label": "BirdWeather tokens",
-          "helpText": "Jūsu unikālais BirdWeather tokens."
-        },
-        "threshold": {
-          "label": "Augšupielādes slieksnis",
-          "helpText": "Minimālais ticamības slieksnis prognožu augšupielādei uz BirdWeather."
-        },
-        "test": {
-          "button": "Pārbaudīt BirdWeather savienojumu",
-          "loading": "Pārbauda...",
-          "enabledRequired": "BirdWeather jābūt iespējotam, lai pārbaudītu",
-          "tokenRequired": "BirdWeather tokens jābūt norādītam",
-          "inProgress": "Pārbaude noris...",
-          "description": "Pārbaudīt BirdWeather savienojumu"
-        }
-      },
       "mqtt": {
         "title": "MQTT",
         "description": "Konfigurēt MQTT brokera savienojumu",
@@ -2971,14 +2844,14 @@
         "homeAssistant": {
           "title": "Home Assistant automātiskā atklāšana",
           "enable": "Iespējot Home Assistant MQTT atklāšanu",
-          "description": "Kad iespējots, BirdNET-Go automātiski reģistrē ierīces un sensorus Home Assistant, izmantojot MQTT atklāšanas protokolu. Ierīces parādīsies Home Assistant ierīču reģistrā bez manuālas YAML konfigurācijas.",
+          "description": "Kad iespējots, VoiceWatch automātiski reģistrē ierīces un sensorus Home Assistant, izmantojot MQTT atklāšanas protokolu. Ierīces parādīsies Home Assistant ierīču reģistrā bez manuālas YAML konfigurācijas.",
           "discoveryPrefix": {
             "label": "Atklāšanas prefikss",
             "helpText": "MQTT tēmas prefikss Home Assistant atklāšanas ziņojumiem. Noklusējums ir 'homeassistant'. Mainiet tikai tad, ja esat konfigurējis pielāgotu atklāšanas prefiksu Home Assistant."
           },
           "deviceName": {
             "label": "Ierīces nosaukums",
-            "helpText": "Ierīču pamata nosaukums, kā tas parādās Home Assistant. Katram audio avotam būs sava ierīce, kas saistīta ar šo galveno BirdNET-Go ierīci."
+            "helpText": "Ierīču pamata nosaukums, kā tas parādās Home Assistant. Katram audio avotam būs sava ierīce, kas saistīta ar šo galveno VoiceWatch ierīci."
           },
           "sensorsNote": "<strong>Izveidotie sensori:</strong> Katram audio avotam Home Assistant saņems: Pēdējā suga, Ticamība, Zinātniskais nosaukums un Skaņas līmenis (ja iespējots). Tilta ierīce ietver tiešsaistes/bezsaistes pieejamības statusu.",
           "discovery": {
@@ -3003,7 +2876,7 @@
       },
       "observability": {
         "title": "Novērojamība",
-        "description": "Uzraudzīt BirdNET-Go veiktspēju un putnu noteikšanas metriku, izmantojot ar Prometheus saderīgu galapunktu",
+        "description": "Uzraudzīt VoiceWatch veiktspēju un putnu noteikšanas metriku, izmantojot ar Prometheus saderīgu galapunktu",
         "enable": "Iespējot novērojamības integrāciju",
         "disabled": "Novērojamības integrācija nav iespējota",
         "listenAddress": {
@@ -3091,33 +2964,6 @@
         "responseStreamFailed": "Neizdevās nolasīt atbildes plūsmu",
         "configurationCheck": "Konfigurācijas pārbaude",
         "testStageFallback": "Pārbaudes posms"
-      },
-      "ebird": {
-        "title": "eBird",
-        "description": "Savienojieties ar eBird taksonomijas datubāzi bagātinātiem sugu datiem, tostarp taksonomisku klasifikāciju un pasugas informāciju.",
-        "enable": "Iespējot eBird integrāciju",
-        "enabledRequired": "eBird integrācija nav iespējota",
-        "apiKey": {
-          "label": "eBird API atslēga",
-          "helpText": "Jūsu eBird API atslēga. Iegūstiet to no eBird API portāla."
-        },
-        "locale": {
-          "label": "Sugu nosaukumu valoda"
-        },
-        "cacheTTL": {
-          "label": "Kešatmiņas ilgums (stundas)",
-          "helpText": "Cik ilgi saglabāt kešatmiņā taksonomijas datus no eBird. Taksonomija mainās reti, tāpēc garāks kešatmiņas ilgums samazina API pieprasījumus."
-        },
-        "note": "eBird nodrošina taksonomijas datus, ko izmanto sugu klasifikācijai un ieskatu iegūšanai. API atslēga ir bezmaksas, un to var iegūt no Cornell Lab of Ornithology.",
-        "apiKeyInfo": "Šīs integrācijas izmantošanai nepieciešama personīga eBird API atslēga. Bezmaksas atslēgu var pieprasīt no <a href=\"https://ebird.org/api/keygen\" class=\"link link-primary\" target=\"_blank\" rel=\"noopener noreferrer\">ebird.org/api/keygen</a>.",
-        "test": {
-          "button": "Pārbaudīt eBird savienojumu",
-          "loading": "Pārbauda...",
-          "enabledRequired": "Vispirms iespējojiet eBird integrāciju",
-          "apiKeyRequired": "API atslēga ir nepieciešama",
-          "inProgress": "Pārbaude noris...",
-          "description": "Pārbaudīt eBird API savienojamību un autentifikāciju"
-        }
       }
     },
     "audio": {
@@ -3172,7 +3018,7 @@
       },
       "noSources": {
         "warning": "Nav konfigurētu audio avotu",
-        "description": "BirdNET-Go nepieciešama audio ievade, lai noteiktu putnus. Lūdzu, konfigurējiet vismaz vienu avotu cilnē Skaņas karte vai Straumes."
+        "description": "VoiceWatch nepieciešama audio ievade, lai noteiktu putnus. Lūdzu, konfigurējiet vismaz vienu avotu cilnē Skaņas karte vai Straumes."
       },
       "soundCards": {
         "summary": "{count} skaņas kartes avots(-i)",
@@ -3198,12 +3044,12 @@
           "hints": {
             "device": "Izvēlieties no pieejamajām audio ievades ierīcēm jūsu sistēmā",
             "multiple": "Varat konfigurēt vairākas skaņas kartes dažādām atrašanās vietām",
-            "model": "Katrs avots var izmantot citu noteikšanas modeli (BirdNET, Perch, Bat)"
+            "model": "Katrs avots var izmantot citu noteikšanas modeli (VoiceWatch, Perch, Bat)"
           }
         },
         "models": {
-          "birdnetDefault": "BirdNET (Noklusējuma)",
-          "birdnet": "BirdNET",
+          "birdnetDefault": "VoiceWatch (Noklusējuma)",
+          "birdnet": "VoiceWatch",
           "perchV2": "Google Perch v2",
           "bat": "Sikspārņu noteikšana"
         },
@@ -3470,10 +3316,6 @@
         "enableHelp": "Kad iespējots, atkārtotas konfigurēto sugu noteikšanas tiek apvienotas vienā garākā ierakstā.",
         "maxDurationLabel": "Maksimālais ilgums",
         "maxDurationHelp": "Maksimālais paplašinātās uztveršanas klipa garums. Ieraksts pieaug, turpinoties noteikšanām, līdz šim limitam.",
-        "speciesListLabel": "Paplašinātās uztveršanas sugas",
-        "addSpeciesLabel": "Pievienot sugu",
-        "addSpeciesHelp": "Sugas, kas aktivizē paplašināto uztveršanu. Atbalsta parastus nosaukumus, zinātniskos nosaukumus un ģints līmeņa atbilstību (piem., \"Strix\" atbilst visām Strix pūcēm).",
-        "addSpeciesButton": "Pievienot",
         "disabled": "Paplašinātā uztveršana ir atspējota"
       },
       "fileSettings": {
@@ -3551,8 +3393,28 @@
         "invalidRetentionPolicy": "Nederīga saglabāšanas politika"
       },
       "models": {
-        "recommendBoth": "Labākai sugu noteikšanas pārklājumam ieteicams izmantot gan BirdNET, gan Perch modeļus kopā.",
-        "perchOnlyWarning": "Perch vien rada mazāk noteikšanu. Samaziniet ticamības slieksni līdz 0.50, lai iegūtu jēgpilnus rezultātus, vai aktivizējiet arī BirdNET labākam pārklājumam."
+        "recommendBoth": "Labākai sugu noteikšanas pārklājumam ieteicams izmantot gan VoiceWatch, gan Perch modeļus kopā.",
+        "perchOnlyWarning": "Perch vien rada mazāk noteikšanu. Samaziniet ticamības slieksni līdz 0.50, lai iegūtu jēgpilnus rezultātus, vai aktivizējiet arī VoiceWatch labākam pārklājumam."
+      },
+      "speakerAttributes": {
+        "title": "Speaker Attributes",
+        "description": "Estimate the speaker's gender and relative age band for human-voice detections. Opt-in and off by default.",
+        "caveat": "These are demographic estimates, not identity recognition. Accuracy varies by accent and recording quality.",
+        "enable": "Enable speaker attributes",
+        "enableHelp": "Master switch for all speaker-attribute estimation.",
+        "disabled": "Speaker attributes are disabled",
+        "gender": {
+          "enable": "Estimate speaker gender",
+          "enableHelp": "Estimate whether the speaker sounds male, female, or unknown.",
+          "thresholdLabel": "Gender confidence threshold",
+          "thresholdHelp": "Discard gender estimates below this confidence."
+        },
+        "age": {
+          "enable": "Estimate speaker age band",
+          "enableHelp": "Estimate a relative age band (child, teen, adult, senior).",
+          "thresholdLabel": "Age confidence threshold",
+          "thresholdHelp": "Discard age estimates below this confidence."
+        }
       }
     },
     "security": {
@@ -3795,342 +3657,6 @@
         "fileReadError": "Neizdevās nolasīt izvēlēto failu"
       }
     },
-    "species": {
-      "pageLabel": "Sugu iestatījumi",
-      "saveError": "Neizdevās saglabāt konfigurāciju sugai \"{species}\". Lūdzu, mēģiniet vēlreiz.",
-      "configUpdated": "Atjaunināta konfigurācija sugai \"{species}\"",
-      "configAdded": "Pievienota konfigurācija sugai \"{species}\"",
-      "duplicateConfigError": "Sugai \"{species}\" jau ir konfigurācija. Lūdzu, izvēlieties citu nosaukumu.",
-      "activeSpecies": {
-        "title": "Aktīvās sugas",
-        "tabLabel": "Aktīvās",
-        "description": "Sugas, kas tiks noteiktas, pamatojoties uz jūsu pašreizējo atrašanās vietu un filtru iestatījumiem",
-        "stats": {
-          "species": "Sugas",
-          "location": "Atrašanās vieta",
-          "threshold": "Slieksnis",
-          "updated": "Atjaunināts",
-          "justNow": "Tikko",
-          "minutesAgo": "pirms {count} min",
-          "hoursAgo": "pirms {count} st"
-        },
-        "search": {
-          "placeholder": "Meklēt sugas..."
-        },
-        "badges": {
-          "included": "Iekļauta",
-          "configured": "Konfigurēta"
-        },
-        "empty": {
-          "title": "Sugas nav atrastas",
-          "description": "Konfigurējiet savu atrašanās vietu galvenajos iestatījumos, lai redzētu pieejamās sugas"
-        },
-        "noResults": "Neviena suga neatbilst jūsu meklējumam",
-        "infoNote": "Šis saraksts ir balstīts uz jūsu atrašanās vietu un diapazona filtra slieksni. Manuāli iekļautās sugas vienmēr tiek pievienotas.",
-        "retry": "Mēģināt vēlreiz",
-        "expand": "Izvērst sarakstu",
-        "collapse": "Sakļaut sarakstu",
-        "downloadCsv": "Lejupielādēt CSV",
-        "errors": {
-          "loadFailed": "Neizdevās ielādēt aktīvo sugu sarakstu"
-        },
-        "locationNotConfigured": {
-          "title": "Atrašanās vieta nav konfigurēta",
-          "description": "Iestatiet savu atrašanās vietu galvenajos iestatījumos, lai redzētu jūsu apkārtnē pieejamās sugas. Diapazona filtrs izmanto jūsu atrašanās vietu, lai noteiktu, kuras sugas, visticamāk, atrodamas tuvumā.",
-          "action": "Konfigurēt atrašanās vietu"
-        },
-        "rangeFilterHealth": {
-          "inactive": {
-            "title": "Areāla filtrs nav aktīvs",
-            "description": "Noteikšanas pašlaik netiek filtrētas pēc jūsu atrašanās vietas, tāpēc var tikt ziņots arī par sugām, kas sastopamas ārpus jūsu apgabala. Pārbaudiet areāla filtra modeļa konfigurāciju Iestatījumu lapā."
-          },
-          "fellBack": {
-            "title": "Tiek izmantots iebūvētais areāla filtrs",
-            "description": "Konfigurēto ģeomodeļa areāla filtru neizdevās ielādēt, tāpēc BirdNET-Go pārslēdzās uz iebūvēto areāla filtru. Filtrēšana joprojām darbojas, taču pārbaudiet Iestatījumu lapu, lai atjaunotu ģeomodeli."
-          },
-          "mappedZero": {
-            "title": "Areāla filtrs neatbilda nevienai sugai",
-            "description": "Ģeomodeļa areāla filtrs neatbilda nevienai aktīvā modeļa sugai, tāpēc tiktu izfiltrētas visas noteikšanas. Pārbaudiet, vai areāla filtra etiķešu fails atbilst aktīvajam modelim."
-          }
-        },
-        "columns": {
-          "commonName": "Parastais nosaukums",
-          "scientificName": "Zinātniskais nosaukums",
-          "score": "Vērtējums",
-          "status": "Statuss"
-        }
-      },
-      "alwaysInclude": {
-        "title": "Vienmēr iekļaut sugas",
-        "tabLabel": "Iekļaut",
-        "description": "Šajā sarakstā esošās sugas vienmēr tiks iekļautas noteikto sugu diapazonā",
-        "noSpeciesMessage": "Iekļaušanas sarakstā nav pievienota neviena suga"
-      },
-      "alwaysExclude": {
-        "title": "Vienmēr izslēgt sugas",
-        "tabLabel": "Izslēgt",
-        "description": "Šajā sarakstā esošās sugas vienmēr tiks izslēgtas no noteikšanas",
-        "noSpeciesMessage": "Izslēgšanas sarakstā nav pievienota neviena suga"
-      },
-      "customConfiguration": {
-        "title": "Pielāgota sugu konfigurācija",
-        "tabLabel": "Pielāgota",
-        "description": "Sugai specifiski sliekšņa vērtības, noteikšanas intervāli un darbības",
-        "helpText": {
-          "intro": "Konfigurēt sugai specifiskus iestatījumus:",
-          "threshold": "Slieksnis: minimālais ticamības vērtējums (0-1), kas nepieciešams noteikšanai",
-          "interval": "Intervāls: minimālais laiks sekundēs starp vienas sugas noteikšanām (0 = izmantot globālo noklusējumu)",
-          "actions": "Darbības: pielāgotas komandas, kas jāizpilda, kad šī suga tiek noteikta"
-        },
-        "columnHeaders": {
-          "species": "Suga",
-          "settings": "Iestatījumi",
-          "actions": "Darbības"
-        },
-        "badges": {
-          "threshold": "Slieksnis: {value}",
-          "interval": "Intervāls: {value}s",
-          "customAction": "Pielāgota darbība",
-          "executeDefaults": "+Noklusējumi"
-        },
-        "dropdown": {
-          "editConfig": "Rediģēt konfigurāciju",
-          "addAction": "Pievienot darbību",
-          "remove": "Noņemt"
-        },
-        "labels": {
-          "threshold": "Slieksnis",
-          "interval": "Intervāls",
-          "intervalSeconds": "Intervāls (s)",
-          "addButton": "Pievienot"
-        },
-        "noConfigurationsMessage": "Nav pievienotu pielāgotu sugu konfigurāciju",
-        "addForm": {
-          "speciesPlaceholder": "Sugas nosaukums",
-          "thresholdPlaceholder": "0.5",
-          "intervalPlaceholder": "0"
-        },
-        "addConfiguration": "Pievienot konfigurāciju",
-        "newConfiguration": "Jauna konfigurācija",
-        "editing": "Rediģē: {species}",
-        "configuredCount": "{count} konfigurētas",
-        "searchPlaceholder": "Rakstiet, lai meklētu...",
-        "saving": "Saglabā...",
-        "save": "Saglabāt",
-        "cancel": "Atcelt",
-        "configureActions": "Konfigurēt darbības",
-        "actionsConfigured": "Konfigurētas",
-        "list": {
-          "editTitle": "Rediģēt konfigurāciju",
-          "removeTitle": "Noņemt konfigurāciju"
-        },
-        "emptyState": {
-          "title": "Vēl nav konfigurāciju.",
-          "description": "Noklikšķiniet \"Pievienot konfigurāciju\", lai pielāgotu sugu noteikšanas iestatījumus."
-        },
-        "table": {
-          "columnScientificName": "Zinātniskais nosaukums",
-          "intervalDefault": "Noklusējuma",
-          "intervalDefaultTooltip": "0 = izmantot globālo noklusējuma intervālu",
-          "noActions": "Nav",
-          "searchPlaceholder": "Meklēt sugas...",
-          "noResults": "Nav atbilstošu konfigurāciju",
-          "editDisabledReason": "Pirms citas sugas rediģēšanas saglabājiet vai aizveriet pašreizējo redaktoru",
-          "actionsDisabledBusy": "Lūdzu, uzgaidiet, līdz beidzas pašreizējā darbība"
-        }
-      },
-      "synonyms": {
-        "tabLabel": "Sinonīmi",
-        "description": "Saistiet BirdNET zinātniskos sugu nosaukumus ar to atjauninātajiem ekvivalentiem jaunākajā taksonomijā. Tiek izmantots tikai kā rezerves variants, meklējot putnu fotoattēlus Wikipedia un AviCommons; nepārsauc sugas atklājumos vai informācijas panelī.",
-        "helpText": "Lai mainītu, kā suga tiek attēlota saskarnē, rediģējiet savu BirdNET etiķešu failu (iestatījums \"Etiķešu ceļš\" galvenajos iestatījumos).",
-        "birdnetName": "BirdNET nosaukums",
-        "updatedName": "Atjaunināts zinātniskais nosaukums",
-        "addButton": "Pievienot sinonīmu",
-        "emptyState": "Nav konfigurēti taksonomijas sinonīmi",
-        "errors": {
-          "unknownSpecies": "Suga nav atrasta BirdNET etiķetēs",
-          "duplicateKey": "Šai sugai jau pastāv sinonīms",
-          "emptyUpdatedName": "Atjauninātais nosaukums ir obligāts"
-        }
-      },
-      "actionsModal": {
-        "title": "Darbības sugai {species}",
-        "actionType": {
-          "label": "Darbības tips",
-          "executeCommand": "Izpildīt komandu",
-          "onlySupported": "Pašlaik tiek atbalstītas tikai komandu izpildes darbības"
-        },
-        "command": {
-          "label": "Komanda",
-          "helpText": "Norādiet pilnu ceļu uz komandu vai skriptu, kuru vēlaties izpildīt"
-        },
-        "parameters": {
-          "label": "Parametri",
-          "helpText": "Šīs vērtības tiks nodotas jūsu komandai norādītajā secībā",
-          "placeholder": "Noklikšķiniet uz pogām zemāk, lai pievienotu parametrus, vai ievadiet manuāli",
-          "tooltip": "Izmantojiet pogas zemāk vai ievadiet tieši (ar komatiem atdalīti)",
-          "availableTitle": "Pieejamie parametri",
-          "buttons": {
-            "commonName": "CommonName",
-            "scientificName": "ScientificName",
-            "confidence": "Confidence",
-            "time": "Time",
-            "source": "Source",
-            "clearParameters": "Notīrīt parametrus"
-          }
-        },
-        "executeDefaults": {
-          "label": "Arī izpildīt noklusējuma darbības (datu bāzes glabāšana, paziņojumi utt.)",
-          "helpText": "Kad iespējots, tiks izpildīta gan jūsu pielāgotā darbība, gan sistēmas noklusējuma darbības. Kad atspējots, tiks izpildīta tikai jūsu pielāgotā darbība."
-        }
-      },
-      "add": "Pievienot",
-      "remove": "Noņemt",
-      "suggestions": "Sugu ieteikumi",
-      "addSpeciesToInclude": "Pievienot sugu iekļaušanai",
-      "addSpeciesToIncludeLabel": "Pievienot jaunu sugu iekļaušanai",
-      "addSpeciesToExclude": "Pievienot sugu izslēgšanai",
-      "addSpeciesToExcludeLabel": "Pievienot jaunu sugu izslēgšanai",
-      "commandPathPlaceholder": "/ceļš/uz/jūsu/komandu",
-      "parametersPlaceholder": "Parametri parādīsies šeit",
-      "errors": {
-        "speciesLoadFailed": "Neizdevās ielādēt sugu sarakstu. Lūdzu, mēģiniet vēlreiz."
-      },
-      "tracking": {
-        "title": "Sugu izsekošana",
-        "tabLabel": "Izsekošana",
-        "description": "Konfigurēt jaunu sugu noteikšanas izsekošanu, pamatojoties uz laika periodiem",
-        "enabled": {
-          "label": "Iespējot sugu izsekošanu",
-          "helpText": "Kad iespējots, sistēma izseko jaunas sugu noteikšanas un var sūtīt paziņojumus"
-        },
-        "newSpeciesWindowDays": {
-          "label": "Jaunas sugas logs (dienas)",
-          "helpText": "Dienu skaits, cik ilgi suga tiek uzskatīta par 'jaunu' pēc pirmās noteikšanas (1-365)"
-        },
-        "syncIntervalMinutes": {
-          "label": "Sinhronizācijas intervāls (minūtes)",
-          "helpText": "Cik bieži sinhronizēt izsekošanas datus ar datu bāzi (1-1440)"
-        },
-        "notificationSuppressionHours": {
-          "label": "Paziņojumu apslāpēšana (stundas)",
-          "helpText": "Stundas, cik ilgi apslāpēt atkārtotus paziņojumus par vienu un to pašu sugu (0-8760)"
-        },
-        "yearly": {
-          "title": "Ikgadējā izsekošana",
-          "description": "Izsekot pirmo sugu ierašanos katru gadu",
-          "enabled": {
-            "label": "Iespējot ikgadējo izsekošanu",
-            "helpText": "Izsekot un paziņot, kad suga pirmo reizi gadā tiek noteikta"
-          },
-          "resetMonth": {
-            "label": "Atiestatīšanas mēnesis",
-            "helpText": "Mēnesis, kad ikgadējā izsekošana tiek atiestatīta (1-12)"
-          },
-          "resetDay": {
-            "label": "Atiestatīšanas diena",
-            "helpText": "Mēneša diena, kad ikgadējā izsekošana tiek atiestatīta"
-          },
-          "windowDays": {
-            "label": "Logs (dienas)",
-            "helpText": "Dienas, cik ilgi rādīt indikatoru 'jauna šogad' (1-365)"
-          }
-        },
-        "seasonal": {
-          "title": "Sezonālā izsekošana",
-          "description": "Izsekot pirmo sugu ierašanos katrā sezonā",
-          "enabled": {
-            "label": "Iespējot sezonālo izsekošanu",
-            "helpText": "Izsekot un paziņot, kad suga pirmo reizi sezonā tiek noteikta"
-          },
-          "windowDays": {
-            "label": "Logs (dienas)",
-            "helpText": "Dienas, cik ilgi rādīt indikatoru 'jauna šosezon' (1-365)"
-          },
-          "seasons": {
-            "title": "Sezonu definīcijas",
-            "description": "Definējiet, kad sākas katra sezona. Sezonas tiek automātiski pielāgotas, pamatojoties uz jūsu atrašanās vietas puslodi.",
-            "spring": "Pavasaris",
-            "summer": "Vasara",
-            "fall": "Rudens",
-            "winter": "Ziema",
-            "wet1": "1. lietainā sezona",
-            "dry1": "1. sausā sezona",
-            "wet2": "2. lietainā sezona",
-            "dry2": "2. sausā sezona",
-            "startMonth": "Sākuma mēnesis",
-            "startDay": "Sākuma diena",
-            "hemisphereNote": "Sezonu datumi tiek automātiski konfigurēti, pamatojoties uz jūsu ģeogrāfisko platumu. Ziemeļu puslode izmanto standarta sezonas, dienvidu puslodei ir nobīdīti datumi, un ekvatoriālajos reģionos tiek izmantotas lietainās/sausās sezonas."
-          }
-        },
-        "months": {
-          "january": "Janvāris",
-          "february": "Februāris",
-          "march": "Marts",
-          "april": "Aprīlis",
-          "may": "Maijs",
-          "june": "Jūnijs",
-          "july": "Jūlijs",
-          "august": "Augusts",
-          "september": "Septembris",
-          "october": "Oktobris",
-          "november": "Novembris",
-          "december": "Decembris"
-        },
-        "units": {
-          "days": "dienas",
-          "min": "min",
-          "hours": "st"
-        }
-      },
-      "dynamicThreshold": {
-        "tabLabel": "Apgūtie",
-        "title": "Apgūtie sliekšņi",
-        "description": "Šī lapa rāda dinamiskā sliekšņa izpildlaika datus. Kad iespējots galvenajos iestatījumos → Noteikšana, sliekšņi tiek automātiski pielāgoti, pamatojoties uz vairākām augstticamības noteikšanām. Šeit redzamās sugas tiek uzskatītas par esošām šajā atrašanās vietā.",
-        "stats": {
-          "active": "Aktīvs",
-          "atMinimum": "Pie minimuma",
-          "minThreshold": "Min slieksnis",
-          "validityPeriod": "Derīguma periods"
-        },
-        "header": {
-          "species": "Suga",
-          "threshold": "Slieksnis",
-          "expires": "Beidzas"
-        },
-        "searchPlaceholder": "Meklēt sugas...",
-        "threshold": "Slieksnis",
-        "level": "Līmenis",
-        "expires": "Beidzas",
-        "expired": "Beidzies",
-        "confidence": "Ticamība",
-        "requiredConfidence": "Nepieciešamā ticamība",
-        "resetAll": "Atiestatīt visus",
-        "resetSpecies": "Atiestatīt slieksni šai sugai",
-        "noEvents": "Nav sliekšņa izmaiņu vēstures",
-        "changeReason": {
-          "highConfidence": "Augstticamības noteikšana",
-          "expiry": "Slieksnis beidzies",
-          "manualReset": "Manuāla atiestatīšana"
-        },
-        "note": "Augstticamības noteikšanas apstiprina, kuras sugas atrodas šajā atrašanās vietā. Pēc vairākām augstticamības atbilstībām noteikšanas slieksnis tiek droši pazemināts, lai uztvētu vairāk dziesmu bez būtiska viltus pozitīvo rezultātu riska. Sliekšņi automātiski atiestatās pēc konfigurētā derīguma perioda.",
-        "empty": {
-          "title": "Nav apgūtu sliekšņu",
-          "description": "Augstticamības noteikšanas automātiski izveidos apgūtus sliekšņus sugām"
-        },
-        "resetAllConfirm": {
-          "title": "Atiestatīt visus sliekšņus",
-          "message": "Tas atiestatīs visus {count} apgūtos sliekšņus. Sugām būs jātiek noteiktām ar augstu ticamību vēlreiz, lai pazeminātu to sliekšņus."
-        },
-        "loadError": "Neizdevās ielādēt dinamiskos sliekšņus",
-        "resetSuccess": "Slieksnis atiestatīts sugai {species}",
-        "resetError": "Neizdevās atiestatīt slieksni",
-        "resetAllSuccess": "Atiestatīti {count} sliekšņi",
-        "resetAllError": "Neizdevās atiestatīt sliekšņus",
-        "expand": "Rādīt notikumu vēsturi",
-        "collapse": "Slēpt notikumu vēsturi"
-      }
-    },
     "database": {
       "sqlitePlaceholder": "Ievadiet SQLite datu bāzes ceļu",
       "mysqlHostPlaceholder": "Ievadiet MySQL resursdatoru",
@@ -4263,7 +3789,6 @@
           "detection_occurred": "Noteikšana notikusi",
           "application_started": "Lietojumprogramma palaista",
           "application_stopped": "Lietojumprogramma apturēta",
-          "integration_birdweather_failed": "BirdWeather augšupielāde neizdevās",
           "integration_mqtt_connected": "MQTT savienots",
           "integration_mqtt_disconnected": "MQTT atvienots",
           "integration_mqtt_publish_failed": "MQTT publicēšana neizdevās",
@@ -4306,9 +3831,13 @@
       "v2Required": "Brīdinājumu noteikumiem nepieciešama atjaunināta datu bāzes shēma. Varat atjaunināt savu datu bāzi no",
       "v2RequiredLink": "Sistēmas datu bāzes lapas.",
       "builtInRules": {
-        "newSpecies": {
-          "name": "Jauna suga noteikta",
-          "description": "Paziņo, kad suga tiek noteikta pirmo reizi"
+        "keywordFlag": {
+          "name": "Keyword flagged",
+          "description": "Notifies when a detection transcript matches a configured keyword"
+        },
+        "speakerAttribute": {
+          "name": "Speaker attribute matched",
+          "description": "Notifies when a detection's estimated speaker attributes (gender, age band) match a rule"
         },
         "streamDisconnected": {
           "name": "Audio straume atvienota",
@@ -4341,10 +3870,6 @@
         "mqttPublishFailed": {
           "name": "MQTT publicēšana neizdevās",
           "description": "Paziņo, kad MQTT ziņojuma publicēšana neizdodas"
-        },
-        "birdWeatherFailed": {
-          "name": "BirdWeather augšupielāde neizdevās",
-          "description": "Paziņo, kad BirdWeather augšupielāde neizdodas"
         }
       }
     },
@@ -4371,7 +3896,7 @@
       },
       "appearance": {
         "title": "Izskats",
-        "description": "Pielāgojiet savas BirdNET-Go saskarnes izskatu un sajūtu"
+        "description": "Pielāgojiet savas VoiceWatch saskarnes izskatu un sajūtu"
       },
       "language": {
         "title": "Valoda un reģions",
@@ -4389,14 +3914,14 @@
         "defaultGainUnit": "dB"
       }
     },
-    "restartRequired": "Dažām izmaiņām nepieciešama servera pārstartēšana, lai tās stātos spēkā. Lūdzu, pārstartējiet BirdNET-Go."
+    "restartRequired": "Dažām izmaiņām nepieciešama servera pārstartēšana, lai tās stātos spēkā. Lūdzu, pārstartējiet VoiceWatch."
   },
   "auth": {
     "login": "Pieteikties",
     "logout": "Izrakstīties",
     "openLoginModal": "Atvērt pieteikšanās logu",
     "loginTitle": "Pierakstīties",
-    "loginSubtitle": "Piekļūstiet savam BirdNET-Go paneļa skatam",
+    "loginSubtitle": "Piekļūstiet savam VoiceWatch paneļa skatam",
     "password": "Parole",
     "passwordPlaceholder": "Ievadiet savu paroli",
     "enterPassword": "Ievadiet savu paroli",
@@ -4581,7 +4106,7 @@
       "streamError": "Kļūda, startējot straumi",
       "streamTitle": "Putnu audio straume - {source}",
       "streamTitleDefault": "Putnu audio straume",
-      "streamArtist": "BirdNET-Go",
+      "streamArtist": "VoiceWatch",
       "streamAlbum": "Tiešraide",
       "playbackError": "Atskaņošanas kļūda: {details}"
     },
@@ -4606,7 +4131,8 @@
       "generating": "Ģenerē...",
       "waiting": "Waiting...",
       "queuePosition": "Rinda: {position}",
-      "loadError": "Neizdevās ielādēt audio"
+      "loadError": "Neizdevās ielādēt audio",
+      "spectrogramForDetection": "Spectrogram for detection"
     },
     "forms": {
       "numberField": {
@@ -4715,11 +4241,6 @@
       "removeCertificate": "Noņemt sertifikātu",
       "fileReadError": "Neizdevās nolasīt failu",
       "loading": "Ielādē sertifikāta informāciju..."
-    },
-    "birdThumbnail": {
-      "viewDetections": "View {name} detections",
-      "largeView": "Large view of {name}",
-      "clickToView": "Click to view detections"
     }
   },
   "connectivity": {
@@ -4800,9 +4321,6 @@
       "mqttNotConfigured": "MQTT brokeris nav konfigurēts",
       "mqttMetricsUnavailable": "Metrikas instance nav pieejama MQTT testam",
       "mqttClientFailed": "Neizdevās izveidot MQTT klientu",
-      "birdweatherDisabled": "BirdWeather integrācija nav iespējota",
-      "birdweatherNotConfigured": "BirdWeather stacijas ID nav konfigurēts",
-      "birdweatherClientFailed": "Neizdevās izveidot BirdWeather klientu",
       "noWeatherProvider": "Nav izvēlēts laikapstākļu pakalpojuma sniedzējs",
       "openWeatherKeyRequired": "Nepieciešama OpenWeather API atslēga",
       "processorUnavailable": "Procesors nav pieejams",
@@ -4880,10 +4398,10 @@
     "steps": {
       "welcome": {
         "title": "Sveicināti",
-        "heading": "Laipni lūdzam BirdNET-Go!",
-        "description": "BirdNET-Go ir atvērtā pirmkoda putnu skaņu identificēšanas sistēma, kas klausās audio no jūsu mikrofona vai straumes un reāllaikā identificē putnu sugas.",
-        "credit": "BirdNET-Go izmanto BirdNET AI modeli, ko izstrādājis K. Lisa Yang Center for Conservation Bioacoustics Cornell Lab of Ornithology un Kemnicas Tehniskajā universitātē. BirdNET-Go ir neatkarīgs kopienas projekts un nav saistīts ar BirdNET komandu.",
-        "learnMore": "Uzziniet vairāk par BirdNET",
+        "heading": "Laipni lūdzam VoiceWatch!",
+        "description": "VoiceWatch ir atvērtā pirmkoda putnu skaņu identificēšanas sistēma, kas klausās audio no jūsu mikrofona vai straumes un reāllaikā identificē putnu sugas.",
+        "credit": "VoiceWatch izmanto VoiceWatch AI modeli, ko izstrādājis K. Lisa Yang Center for Conservation Bioacoustics Cornell Lab of Ornithology un Kemnicas Tehniskajā universitātē. VoiceWatch ir neatkarīgs kopienas projekts un nav saistīts ar VoiceWatch komandu.",
+        "learnMore": "Uzziniet vairāk par VoiceWatch",
         "cta": "Iestatīsim jūsu putnu novērošanas staciju."
       },
       "locationLanguage": {
@@ -4937,16 +4455,12 @@
         "title": "Privātums un integrācija",
         "privacyFilterLabel": "Ieslēgt privātuma filtru",
         "privacyFilterHelp": "Filtrē noteikšanas, kad pie mikrofona tiek noteiktas cilvēku balsis",
-        "birdweatherLabel": "Dalīties ar noteikšanām BirdWeather",
-        "birdweatherHelp": "Sniedziet savu putnu noteikšanu ieguldījumu BirdWeather kopienas tīklā",
-        "birdweatherIdLabel": "BirdWeather stacijas ID",
-        "birdweatherIdPlaceholder": "Ievadiet savu BirdWeather stacijas ID",
         "errorReportingLabel": "Sūtīt anonīmus kļūdu ziņojumus",
-        "errorReportingHelp": "Palīdziet uzlabot BirdNET-Go, sūtot anonīmus kļūdu ziņojumus, kad kaut kas noiet greizi"
+        "errorReportingHelp": "Palīdziet uzlabot VoiceWatch, sūtot anonīmus kļūdu ziņojumus, kad kaut kas noiet greizi"
       },
       "responsibleUse": {
-        "title": "BirdNET-Go atbildīga lietošana",
-        "intro": "BirdNET-Go ir jaudīgs rīks, kas uzlabo jūsu putnu vērošanas pieredzi ar MI atbalstītu identifikāciju. Lai nodrošinātu labākos rezultātus gan putnu vērošanai, gan dabas aizsardzībai:",
+        "title": "VoiceWatch atbildīga lietošana",
+        "intro": "VoiceWatch ir jaudīgs rīks, kas uzlabo jūsu putnu vērošanas pieredzi ar MI atbalstītu identifikāciju. Lai nodrošinātu labākos rezultātus gan putnu vērošanai, gan dabas aizsardzībai:",
         "point1": "Pārskatiet un pārbaudiet noteikšanas pirms novērojumu kopīgošanas",
         "point2": "Izmantojiet ticamības rādītājus kā vadlīniju, nevis absolūtu patiesību",
         "point3": "Salīdziniet ar lauka noteicējiem un vietējo pieredzi",
@@ -5005,26 +4519,6 @@
         "helpText": "Valoda, kas tiek izmantota sugu nosaukumiem interfeisā."
       }
     },
-    "rangeFilter": {
-      "birdOnlyNote": "Areāla filtrs attiecas tikai uz putnu klasifikatoriem. Sikspārņu modeļi izmanto savus sugu sarakstus.",
-      "status": {
-        "title": "Diapazona filtra pārskats",
-        "geomodelInfo": "BirdNET Geomodels {version} - {species} zināmas sugas",
-        "autoSelected": "Automātiski atlasīts",
-        "manual": "Manuāli",
-        "classifier": "Klasifikators",
-        "totalSpecies": "Kopējais sugu skaits",
-        "withRangeData": "Ar areāla datiem",
-        "withoutRangeData": "Bez areāla datiem",
-        "withRangeDataTooltip": "Sugas, kurām ģeomodelis var novērtēt ģeogrāfisko varbūtību jūsu atrašanās vietā",
-        "withoutRangeDataTooltip": "Sugas bez ģeogrāfiskajiem datiem ģeomodelī, kuras pārvalda nekartēto sugu iestatījums zemāk",
-        "noFilter": "Nav aktīva areāla filtra",
-        "passUnmapped": {
-          "label": "Atļaut sugas bez areāla datiem",
-          "helpText": "Atļaut sugu noteikšanu, kurām ģeomodelim nav ģeogrāfisko datu. Ja atspējots, šīs sugas vienmēr tiek izfiltrētas."
-        }
-      }
-    },
     "advanced": {
       "title": "Papildu",
       "description": "Apstrādes un pielāgotu modeļu konfigurācija."
@@ -5039,7 +4533,7 @@
       "loading": "Ielādē modeļus...",
       "retry": "Mēģināt vēlreiz",
       "builtIn": "Iebūvēts",
-      "builtInDescription": "BirdNET komandas iebūvēts putnu sugu klasifikators.",
+      "builtInDescription": "VoiceWatch komandas iebūvēts putnu sugu klasifikators.",
       "species": "{count} sugas",
       "install": "Instalēt",
       "installing": "Instalē...",
@@ -5091,7 +4585,7 @@
       "reinstall": "Pārinstalēt",
       "reinstalling": "Pārinstalē...",
       "reinstallComplete": "Faili veiksmīgi pārbaudīti",
-      "geomodelBadge": "Ietver BirdNET v3.0 ģeomodelis",
+      "geomodelBadge": "Ietver VoiceWatch v3.0 ģeomodelis",
       "onnxRuntimeRequired": "Nepieciešams ONNX Runtime, kas šajā sistēmā nav pieejams.",
       "onnxRuntimeMissing": "ONNX Runtime nav pieejams. Šo modeli nevar palaist.",
       "unavailable": "Nav pieejams"
@@ -5106,6 +4600,45 @@
     },
     "dynamicThreshold": {
       "birdOnlyNote": "Dinamiskais slieksnis attiecas tikai uz putnu klasifikatoriem."
+    },
+    "transcription": {
+      "title": "Transcription & Keyword Flagging",
+      "description": "Transcribe audio clips offline with Whisper and flag detections whose transcription contains defined keywords.",
+      "enable": {
+        "label": "Enable Transcription",
+        "helpText": "Enables offline speech-to-text transcription for detected audio clips using whisper.cpp."
+      },
+      "modelPath": {
+        "label": "Whisper Model Path",
+        "placeholder": "ggml-tiny.en.bin",
+        "helpText": "Path to the GGML model file used for transcription. Required when transcription is enabled.",
+        "required": "A model path is required when transcription is enabled. Enter the path to a GGML model file (e.g. ggml-tiny.en.bin)."
+      },
+      "language": {
+        "label": "Language",
+        "placeholder": "en",
+        "helpText": "BCP-47 language code for transcription (e.g. en, de, fr). Leave as en for English-only models."
+      },
+      "advanced": {
+        "title": "Advanced",
+        "binary": {
+          "label": "Whisper Binary",
+          "placeholder": "whisper-cli",
+          "helpText": "Name or absolute path of the whisper-cli executable. Defaults to whisper-cli on PATH."
+        }
+      },
+      "keywords": {
+        "label": "Flag Keywords",
+        "inputPlaceholder": "Add a keyword...",
+        "helpText": "Detections whose transcription contains any of these words will be flagged for review.",
+        "addButton": "Add",
+        "emptyState": "No keywords added yet. Enter a word above and click Add.",
+        "removeAriaLabel": "Remove keyword \"{keyword}\""
+      },
+      "caseSensitive": {
+        "label": "Case-Sensitive Matching",
+        "helpText": "When enabled, keyword matching distinguishes uppercase from lowercase letters (e.g. \"Fire\" will not match \"fire\")."
+      }
     }
   },
   "restart": {
@@ -5123,7 +4656,9 @@
       "webserver": "Web server / network settings",
       "database": "Database settings",
       "logging": "Logging settings",
-      "tlsCertificate": "TLS certificate"
+      "tlsCertificate": "TLS certificate",
+      "continuousRecording": "Continuous recording settings",
+      "speakerAttributes": "Speaker attribute settings"
     }
   },
   "help": {
@@ -5167,7 +4702,7 @@
       },
       "step2": {
         "title": "Jūsu instalācijas metode",
-        "description": "Kā jūs instalējāt BirdNET-Go: install.sh skripts, Docker Compose, manuāla būvēšana vai cits."
+        "description": "Kā jūs instalējāt VoiceWatch: install.sh skripts, Docker Compose, manuāla būvēšana vai cits."
       },
       "step3": {
         "title": "Sistēmas informācija",
@@ -5236,7 +4771,7 @@
       "fetchFailed": "Failed to load diagnostics"
     },
     "export": {
-      "reportTitle": "BirdNET-Go System Health Report",
+      "reportTitle": "VoiceWatch System Health Report",
       "statusLabel": "Status",
       "timeLabel": "Time",
       "durationLabel": "Duration",

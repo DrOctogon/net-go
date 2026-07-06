@@ -14,7 +14,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/privacy"
+	"github.com/tphakala/voicewatch/internal/privacy"
 	"gopkg.in/yaml.v3"
 )
 
@@ -1300,15 +1300,6 @@ func createComprehensiveMockConfig() map[string]any {
 				"debug":      false,
 				"enabled":    true,
 				"confidence": 0.8,
-			},
-
-			// Dog Bark Filter
-			"dogBarkFilter": map[string]any{
-				"debug":      false,
-				"enabled":    true,
-				"confidence": 0.7,
-				"remember":   15,
-				"species":    []any{"Canis lupus familiaris"},
 			},
 
 			// MQTT (broker, username, password, TLS paths)

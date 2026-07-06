@@ -1,10 +1,10 @@
-// Package onnx provides inference for bird species classification models
-// (BirdNET, Google Perch, and others) using ONNX Runtime.
+// Package onnx provides audio inference using ONNX Runtime, including the
+// Silero VAD human-voice detector.
 //
 // The caller is responsible for initializing the ONNX Runtime environment
-// before creating any Classifier or RangeFilter instances. Use MustInitORT
-// for simple applications, or call ort.SetSharedLibraryPath and
-// ort.InitializeEnvironment directly for full control.
+// before creating any inference session. Use MustInitORT for simple
+// applications, or call ort.SetSharedLibraryPath and ort.InitializeEnvironment
+// directly for full control.
 package onnx
 
 import ort "github.com/yalue/onnxruntime_go"

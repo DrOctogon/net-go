@@ -1,5 +1,5 @@
 // Package notification provides a system for managing and broadcasting notifications
-// throughout the BirdNET-Go application. It handles system alerts, errors, and
+// throughout the VoiceWatch application. It handles system alerts, errors, and
 // important detection events.
 package notification
 
@@ -13,7 +13,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/tphakala/birdnet-go/internal/errors"
+	"github.com/tphakala/voicewatch/internal/errors"
 )
 
 // Type represents the category of a notification

@@ -78,10 +78,9 @@ Responsive Breakpoints:
     resolveNoveltyCategory,
     noveltyCategoryColorVar,
   } from '$lib/desktop/features/dashboard/utils/noveltyCategory';
-  import { ChevronLeft, ChevronRight, Star, XCircle } from '@lucide/svelte';
+  import { ChevronLeft, ChevronRight, Mic, Star, XCircle } from '@lucide/svelte';
   import { untrack } from 'svelte';
   import AnimatedCounter from './AnimatedCounter.svelte';
-  import BirdThumbnailPopup from './BirdThumbnailPopup.svelte';
   import SunTimeTooltip from './SunTimeTooltip.svelte';
 
   const logger = loggers.ui;
@@ -481,41 +480,6 @@ Responsive Breakpoints:
     if (hour >= DEEP_NIGHT_START && hour <= 23) return 'deep-night';
     if (hour === NIGHT_MORNING || hour === NIGHT_EVENING) return 'night';
     return 'evening';
-  };
-
-  // Species badge color palette - 12 distinct, visually appealing colors
-  const BADGE_COLORS = $state.raw([
-    '#10b981', // emerald
-    '#f59e0b', // amber
-    '#ef4444', // red
-    '#8b5cf6', // violet
-    '#06b6d4', // cyan
-    '#ec4899', // pink
-    '#84cc16', // lime
-    '#f97316', // orange
-    '#6366f1', // indigo
-    '#14b8a6', // teal
-    '#a855f7', // purple
-    '#eab308', // yellow
-  ]);
-
-  // Generate a consistent color for a species based on its name
-  const getSpeciesBadgeColor = (speciesName: string): string => {
-    let hash = 0;
-    for (let i = 0; i < speciesName.length; i++) {
-      hash = speciesName.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    return BADGE_COLORS[Math.abs(hash) % BADGE_COLORS.length];
-  };
-
-  // Get initials from species common name (first letter of first two words)
-  const getSpeciesInitials = (commonName: string): string => {
-    const words = commonName.trim().split(/\s+/).filter(Boolean);
-    if (words.length === 0) return '??';
-    if (words.length === 1) {
-      return words[0].substring(0, 2).toUpperCase();
-    }
-    return (words[0][0] + words[1][0]).toUpperCase();
   };
 
   /**
@@ -1051,33 +1015,15 @@ Responsive Breakpoints:
           <div class="flex flex-col" style:gap="var(--grid-gap)">
             {#each sortedData as item, index (`${item.scientific_name}_${index}`)}
               {@const displayName = localizeSpeciesName(item.scientific_name, item.common_name)}
-              <div
-                class="flex items-center species-row"
-                class:new-species={item.isNew && !prefersReducedMotion}
-              >
+              <div class="flex items-center species-row">
                 <!-- Species info column -->
                 <div class="species-label-col shrink-0 flex items-center gap-2 pr-4">
-                  {#if showThumbnails}
-                    <BirdThumbnailPopup
-                      thumbnailUrl={item.thumbnail_url
-                        ? buildAppUrl(item.thumbnail_url)
-                        : buildAppUrl(
-                            `/api/v2/media/species-image?name=${encodeURIComponent(item.scientific_name)}`
-                          )}
-                      commonName={item.common_name}
-                      scientificName={item.scientific_name}
-                      detectionUrl={urlBuilders.species(item)}
-                    />
-                  {:else}
-                    <a
-                      href={urlBuilders.species(item)}
-                      class="species-badge shrink-0"
-                      style:background-color={getSpeciesBadgeColor(item.scientific_name)}
-                      title={item.scientific_name}
-                    >
-                      {getSpeciesInitials(displayName)}
-                    </a>
-                  {/if}
+                  <span
+                    aria-hidden="true"
+                    class="shrink-0 flex items-center justify-center w-8 h-6 text-[var(--color-base-content)]/40"
+                  >
+                    <Mic class="size-4" />
+                  </span>
                   <a
                     href={urlBuilders.species(item)}
                     class="text-sm hover:text-[var(--color-primary)] cursor-pointer font-medium leading-tight flex items-center gap-1 overflow-hidden"
@@ -1256,7 +1202,6 @@ Responsive Breakpoints:
     /* Animation durations */
     --anim-count-pop: 600ms;
     --anim-heart-pulse: 1000ms;
-    --anim-new-species: 800ms;
   }
 
   /* ========================================================================
@@ -1497,25 +1442,6 @@ Responsive Breakpoints:
     animation: countPop var(--anim-count-pop) cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  /* New species row animation */
-  @keyframes newSpeciesSlide {
-    0% {
-      transform: translateY(-30px);
-      opacity: 0;
-      background-color: color-mix(in srgb, var(--color-primary) 15%, transparent);
-    }
-
-    100% {
-      transform: translateY(0);
-      opacity: 1;
-      background-color: color-mix(in srgb, var(--color-primary) 0%, transparent);
-    }
-  }
-
-  .new-species {
-    animation: newSpeciesSlide var(--anim-new-species) cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  }
-
   /* Heatmap cell heart pulse animation */
   @keyframes heartPulse {
     0% {
@@ -1558,7 +1484,6 @@ Responsive Breakpoints:
   /* Respect user's reduced motion preference */
   @media (prefers-reduced-motion: reduce) {
     .count-increased,
-    .new-species,
     .hour-updated {
       animation: none;
       transition: none;
@@ -1574,28 +1499,6 @@ Responsive Breakpoints:
     min-width: 0;
     max-width: var(--species-col-max-width, 18rem);
     padding: 0 0.75rem 0 0.5rem !important;
-  }
-
-  .species-badge {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2rem; /* w-8 - match thumbnail width */
-    height: 1.5rem; /* 4:3 aspect ratio to match avicommons images */
-    border-radius: 0.375rem;
-    font-size: 0.625rem;
-    font-weight: 700;
-    color: white;
-    text-decoration: none;
-    text-shadow: 0 1px 2px rgb(0 0 0 / 0.3);
-    transition:
-      transform 0.15s ease,
-      box-shadow 0.15s ease;
-  }
-
-  .species-badge:hover {
-    transform: scale(1.1);
-    box-shadow: 0 2px 8px rgb(0 0 0 / 0.25);
   }
 
   /* ========================================================================

@@ -12,7 +12,6 @@
     max_confidence: number;
     first_heard: string;
     last_heard: string;
-    thumbnail_url?: string;
   }
 
   interface Props {
@@ -26,27 +25,10 @@
     return (value * 100).toFixed(1) + '%';
   }
 
-  let imageLoadFailed = $state(false);
   let displayName = $derived(localizeSpeciesName(species.scientific_name, species.common_name));
-
-  function handleImageError() {
-    imageLoadFailed = true;
-  }
 </script>
 
 <div class={cn('card bg-[var(--color-base-200)]', className)}>
-  <figure class="px-4 pt-4">
-    <div class="rounded-xl w-full aspect-[4/3] overflow-hidden bg-[var(--color-base-300)]">
-      {#if species.thumbnail_url && !imageLoadFailed}
-        <img
-          src={species.thumbnail_url}
-          alt={displayName}
-          class="h-full w-full object-cover"
-          onerror={handleImageError}
-        />
-      {/if}
-    </div>
-  </figure>
   <div class="card-body p-4">
     <h3 class="card-title text-base">{displayName}</h3>
     <p class="text-sm text-[var(--color-base-content)] opacity-60 italic">

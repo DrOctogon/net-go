@@ -12,7 +12,7 @@
   import type { LatestWeatherResponse } from '$lib/types/detection.types';
   import BannerLocationMap from './BannerLocationMap.svelte';
   import WeatherSvgIcon from '$lib/desktop/components/ui/WeatherSvgIcon.svelte';
-  import { birdnetSettings, dashboardSettings } from '$lib/stores/settings';
+  import { voicewatchSettings, dashboardSettings } from '$lib/stores/settings';
   import {
     getBasmiliusIconName,
     getMoonPhaseI18nKey,
@@ -36,7 +36,7 @@
 
   let { config, editMode = false, onUpdate }: Props = $props();
 
-  let birdnet = $derived($birdnetSettings);
+  let birdnet = $derived($voicewatchSettings);
   let latitude = $derived(birdnet?.latitude ?? 0);
   let longitude = $derived(birdnet?.longitude ?? 0);
   let hasLocation = $derived(birdnet?.locationConfigured ?? false);

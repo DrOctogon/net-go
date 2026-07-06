@@ -22,7 +22,7 @@ All package loggers use `sync.Once` to ensure efficient initialization:
 ```go
 import (
     "sync"
-    "github.com/tphakala/birdnet-go/internal/logger"
+    "github.com/tphakala/voicewatch/internal/logger"
 )
 
 var (
@@ -143,7 +143,7 @@ import (
     "testing"
     "time"
 
-    "github.com/tphakala/birdnet-go/internal/logger"
+    "github.com/tphakala/voicewatch/internal/logger"
 )
 
 func TestWithLogging(t *testing.T) {

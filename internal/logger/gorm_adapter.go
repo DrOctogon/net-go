@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/errors"
+	"github.com/tphakala/voicewatch/internal/errors"
 
 	"gorm.io/gorm"
 	gorm_logger "gorm.io/gorm/logger"

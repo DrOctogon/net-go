@@ -156,7 +156,8 @@
         "falsePositive": "Virheellinen havainto",
         "notReviewed": "Ei tarkistettu",
         "locked": "Lukittu",
-        "unlikely": "Epätodennäköinen"
+        "unlikely": "Epätodennäköinen",
+        "flagged": "Flagged"
       },
       "form": {
         "correctDetection": "Oikea havainto",
@@ -200,7 +201,7 @@
     "hoursShort": "t"
   },
   "pageTitle": {
-    "settings": "Asetukset - BirdNET-Go",
+    "settings": "Asetukset - VoiceWatch",
     "pageNotFound": "404 - Sivua ei löydy",
     "serverError": "500 - Sisäinen palvelinvirhe",
     "componentError": "Komponentin latausvirhe",
@@ -236,26 +237,26 @@
     "askQuestion": "Esitä kysymys",
     "reportBugAriaLabel": "Ilmoita virheestä GitHubissa (avautuu uuteen ikkunaan)",
     "askQuestionAriaLabel": "Esitä kysymys GitHub Discussions -foorumilla (avautuu uuteen ikkunaan)",
-    "viewOnGithubAriaLabel": "Näytä BirdNET-Go GitHubissa (avautuu uuteen ikkunaan)",
+    "viewOnGithubAriaLabel": "Näytä VoiceWatch GitHubissa (avautuu uuteen ikkunaan)",
     "health": "Health"
   },
   "about": {
-    "title": "BirdNET-Go",
+    "title": "VoiceWatch",
     "subtitle": "Moderni käyttöliittymä reaaliaikaiseen lintuäänten tunnistukseen ja luokitteluun",
-    "logoAlt": "BirdNET-Go logo",
+    "logoAlt": "VoiceWatch logo",
     "overview": "Yleiskatsaus",
-    "overviewText": "BirdNET-Go on Go-pohjainen toteutus reaaliaikaiseen lintuäänten tunnistukseen ja luokitteluun, joka perustuu BirdNET-projektiin. Tämä sovellus tarjoaa käyttäjäystävällisen käyttöliittymän jatkuvaan lintuäänten seurantaan ja analysointiin.",
-    "birdnetProject": "BirdNET-projekti",
-    "birdnetDescription": "BirdNET-Go ei olisi mahdollinen ilman BirdNET-projektin uraauurtavaa työtä. BirdNET-Go:n tunnistusominaisuuksia käyttävä tekoälymalli on BirdNET-projektin innovatiivisen tutkimuksen ja kehityksen tulos.",
+    "overviewText": "VoiceWatch on Go-pohjainen toteutus reaaliaikaiseen lintuäänten tunnistukseen ja luokitteluun, joka perustuu VoiceWatch-projektiin. Tämä sovellus tarjoaa käyttäjäystävällisen käyttöliittymän jatkuvaan lintuäänten seurantaan ja analysointiin.",
+    "birdnetProject": "VoiceWatch-projekti",
+    "birdnetDescription": "VoiceWatch ei olisi mahdollinen ilman VoiceWatch-projektin uraauurtavaa työtä. VoiceWatch:n tunnistusominaisuuksia käyttävä tekoälymalli on VoiceWatch-projektin innovatiivisen tutkimuksen ja kehityksen tulos.",
     "developedBy": "Kehittäjät",
     "developersText": "K. Lisa Yang Center for Conservation Bioacoustics Cornell Lab of Ornithologyssa yhteistyössä Chemnitzin teknillisen yliopiston kanssa:",
     "visitBirdnetAnalyzer": "Käy BirdNET-Analyzer projektissa",
     "visitBirdnetAnalyzerAriaLabel": "Vieraile BirdNET-Analyzer GitHub-repositoriossa",
     "contributors": "Avustajat",
-    "contributorsText": "BirdNET-Go on kasvanut ja parantunut monien ihmisten yhteistyön ansiosta. Heidän panoksensa koodin parannuksista ominaisuusehdotuksiin on ollut korvaamatonta tämän projektin parantamisessa.",
+    "contributorsText": "VoiceWatch on kasvanut ja parantunut monien ihmisten yhteistyön ansiosta. Heidän panoksensa koodin parannuksista ominaisuusehdotuksiin on ollut korvaamatonta tämän projektin parantamisessa.",
     "mainDeveloper": "Pääkehittäjä",
     "githubContributors": "GitHub-avustajat",
-    "contributorsNote": "Erityiskiitos näille avustajille heidän arvokkaasta työstään BirdNET-Go:n parantamisessa:",
+    "contributorsNote": "Erityiskiitos näille avustajille heidän arvokkaasta työstään VoiceWatch:n parantamisessa:",
     "communityAcknowledgment": "Yhteisön tunnustus",
     "communityText": "Haluamme myös ilmaista kiitollisuutemme kaikille käyttäjille, jotka ovat osallistuneet:",
     "bugReports": "Vikaraporttien ja ongelmien seurannan kautta",
@@ -264,9 +265,9 @@
     "documentation": "Dokumentaation parannusten kautta",
     "additionalCredits": "Lisäkiitokset",
     "birdnetPiProject": "BirdNET-Pi projekti",
-    "birdnetPiDescription": "Erityiskiitos Patrick McGuirelle hänen inspiroivasta työstään BirdNET-Pi:n parissa, mikä on vaikuttanut BirdNET-Go:n kehitykseen. BirdNET-Pi osoittaa lintuäänten tunnistuksen potentiaalin sulautetuissa laitteissa ja on asettanut korkean standardin yhteisövetoiselle kehitykselle.",
+    "birdnetPiDescription": "Erityiskiitos Patrick McGuirelle hänen inspiroivasta työstään BirdNET-Pi:n parissa, mikä on vaikuttanut VoiceWatch:n kehitykseen. BirdNET-Pi osoittaa lintuäänten tunnistuksen potentiaalin sulautetuissa laitteissa ja on asettanut korkean standardin yhteisövetoiselle kehitykselle.",
     "visitBirdnetPi": "Käy BirdNET-Pi projektissa",
-    "labelTranslations": "BirdNET-nimikkeiden käännökset",
+    "labelTranslations": "VoiceWatch-nimikkeiden käännökset",
     "labelTranslationsBy": "Toimittanut Patrick Levin BirdNET-Pi projektille Patrick McGuiren toimesta",
     "patrickLevinGithub": "Patrick Levinin GitHub",
     "versionInformation": "Versiotiedot",
@@ -275,12 +276,12 @@
     "developmentBuild": "Kehitysversio",
     "unknown": "Tuntematon",
     "licenseInformation": "Lisenssitiedot",
-    "licenseText": "Sekä BirdNET AI-malli että BirdNET-Go on lisensoitu",
+    "licenseText": "Sekä VoiceWatch AI-malli että VoiceWatch on lisensoitu",
     "ccLicense": "Creative Commons Nimeä-EiKaupallinen-JaaSamoin 4.0 Kansainvälinen -lisenssillä",
     "licenseDescription": "Tämä lisenssi sallii muiden remiksata, muokata ja rakentaa tämän työn pohjalta ei-kaupallisiin tarkoituksiin, kunhan asianmukainen tunnustus annetaan ja uudet luomukset lisensoidaan samoin ehdoin.",
     "dependencyLicenses": "Riippuvuuksien lisenssit",
     "taxonomyDataTitle": "Taksonomiatiedot",
-    "taxonomyDataIntro": "BirdNET-Go sisältää upotetut lintutaksonomiatiedot, jotka on johdettu eBird/Clements-tarkistuslistasta, tarjoten nopeat paikalliset suku- ja perhehaut.",
+    "taxonomyDataIntro": "VoiceWatch sisältää upotetut lintutaksonomiatiedot, jotka on johdettu eBird/Clements-tarkistuslistasta, tarjoten nopeat paikalliset suku- ja perhehaut.",
     "source": "Lähde",
     "ebirdApiV2": "eBird API v2",
     "copyright": "Tekijänoikeus",
@@ -290,10 +291,10 @@
     "ebirdOrg": "eBird.org",
     "learnEbirdTaxonomy": "Lue lisää eBird-taksonomiasta",
     "avicommonsTitle": "Lintukuvat",
-    "avicommonsDescription": "BirdNET-Go käyttää Avicommons-palvelun kuratoituja lintukuvia. Avicommons on kirjasto käsin valittuja, rajattuja ja suunnattuja lintuvalokuvia Creative Commons -lisenssillä.",
-    "githubStarPrompt": "Jos pidät BirdNET-Go:ta hyödyllisenä, harkitse projektin tähdittämistä GitHubissa. Tähdet auttavat muita löytämään projektin ja tukevat sen kehitystä.",
+    "avicommonsDescription": "VoiceWatch käyttää Avicommons-palvelun kuratoituja lintukuvia. Avicommons on kirjasto käsin valittuja, rajattuja ja suunnattuja lintuvalokuvia Creative Commons -lisenssillä.",
+    "githubStarPrompt": "Jos pidät VoiceWatch:ta hyödyllisenä, harkitse projektin tähdittämistä GitHubissa. Tähdet auttavat muita löytämään projektin ja tukevat sen kehitystä.",
     "viewOnGithub": "Näytä projekti GitHubissa",
-    "visitGithubAriaLabel": "Vieraile BirdNET-Go GitHub-arkistossa",
+    "visitGithubAriaLabel": "Vieraile VoiceWatch GitHub-arkistossa",
     "visitAvicommonsGithub": "Vieraile Avicommons GitHub-arkistossa"
   },
   "notifications": {
@@ -362,11 +363,11 @@
     },
     "content": {
       "startup": {
-        "title": "BirdNET-Go käynnistetty",
+        "title": "VoiceWatch käynnistetty",
         "message": "Sovellus käynnistyi onnistuneesti (v{version})"
       },
       "shutdown": {
-        "title": "BirdNET-Go sammutetaan",
+        "title": "VoiceWatch sammutetaan",
         "message": "Sovellus sammutetaan hallitusti"
       },
       "detection": {
@@ -396,7 +397,6 @@
         "rebuildingRangeFilter": "Rakennetaan lajien aluesuodatinta uudelleen...",
         "updatingIntervals": "Päivitetään havaintovälejä...",
         "reconfiguringMqtt": "Päivitetään MQTT-yhteyttä...",
-        "reconfiguringBirdweather": "Päivitetään BirdWeather-integraatiota...",
         "reconfiguringStreams": "Päivitetään äänistriimejä...",
         "reconfiguringTelemetry": "Päivitetään telemetria-asetuksia...",
         "reconfiguringPushNotifications": "Määritetään push-ilmoitusten tarjoajia uudelleen...",
@@ -423,7 +423,7 @@
         "cancelledTitle": "Tietokannan siirto peruutettu",
         "cancelledMessage": "Tietokannan siirto on peruutettu. Voit aloittaa uuden siirron milloin tahansa Tietokanta-asetuksista.",
         "completedTitle": "Tietokannan siirto valmis",
-        "completedMessage": "Siirto valmis. Käynnistä BirdNET-Go uudelleen siirtyäksesi uuteen tietokantaan.",
+        "completedMessage": "Siirto valmis. Käynnistä VoiceWatch uudelleen siirtyäksesi uuteen tietokantaan.",
         "errorTitle": "Tietokannan siirtovirhe",
         "errorMessage": "Siirto keskeytetty virheiden vuoksi. Tarkista lokit ja yritä jatkaa."
       },
@@ -435,7 +435,7 @@
       },
       "buffer": {
         "overloadTitle": "Äänianalyysi ylikuormitettu",
-        "overloadMessage": "Järjestelmäsi hylkää {dropRate} % lähteen ''{sourceName}'' ääninäytteistä, koska se ei pysy analyysin tahdissa. Pienennä BirdNET-päällekkäisyysarvoa tunnistusasetuksista tai harkitse nopeamman suorittimen hankkimista."
+        "overloadMessage": "Järjestelmäsi hylkää {dropRate} % lähteen ''{sourceName}'' ääninäytteistä, koska se ei pysy analyysin tahdissa. Pienennä VoiceWatch-päällekkäisyysarvoa tunnistusasetuksista tai harkitse nopeamman suorittimen hankkimista."
       },
       "ort": {
         "unavailableTitle": "ONNX Runtime ei ole käytettävissä",
@@ -476,9 +476,6 @@
     "noResultsFound": "Tuloksia ei löytynyt",
     "noResultsHint": "Kokeile säätää hakusuodattimia",
     "fields": {
-      "species": "Laji",
-      "speciesPlaceholder": "Syötä lajin nimi",
-      "speciesHelp": "Syötä lajin koko tai osittainen nimi (kirjainkoolla ei väliä)",
       "dateRange": "Päivämääräväli",
       "dateRangeHelp": "Suodata havaintoja päivämäärävälin mukaan (jätä tyhjäksi kaikille päiville)",
       "from": "Alkaen",
@@ -489,7 +486,14 @@
       "verifiedStatus": "Todennettu tila",
       "lockedStatus": "Lukittu tila",
       "timeOfDay": "Vuorokaudenaika",
-      "source": "Äänilähde"
+      "source": "Äänilähde",
+      "transcript": "Transcript",
+      "transcriptHelp": "Search for spoken words in the voice clip transcript (case-insensitive substring match)",
+      "transcriptPlaceholder": "Search transcript...",
+      "flaggedOnly": "Flagged only",
+      "flaggedOnlyHelp": "Limit results to detections whose transcript matched a configured keyword",
+      "gender": "Speaker gender",
+      "ageBand": "Speaker age"
     },
     "advancedFilters": "Lisäsuodattimet",
     "showAdvancedFilters": "Näytä lisäsuodattimet",
@@ -563,6 +567,9 @@
       "page": "Sivu {current}/{total}",
       "goToPrevious": "Edelliselle sivulle",
       "goToNext": "Seuraavalle sivulle"
+    },
+    "speakerOptions": {
+      "any": "Any"
     }
   },
   "error": {
@@ -599,18 +606,6 @@
       "empty": "Kaikki hiljaista — lintuja ei havaittu juuri nyt"
     },
     "rejected": "Hylätty",
-    "newSpeciesHighlights": {
-      "title": "Uudet ja palaavat lajit",
-      "subtitle": "Ensihavainnot ja äskettäin palanneet",
-      "trackingDisabled": "Ota käyttöön \"Ota lajiseuranta käyttöön\" käyttääksesi tätä ominaisuutta.",
-      "categoryLifetime": "Uusi laji",
-      "categoryYear": "Uusi tänä vuonna",
-      "categorySeason": "Uusi tällä kaudella",
-      "categorySeasonNamed": "Uusi tällä {season}",
-      "maxConfidenceShort": "Maks {confidence} %",
-      "detections": "{count, plural, one {# havainto} other {# havaintoa}}",
-      "lastSeen": "Viimeksi: {days, plural, =0 {tänään} one {# päivä sitten} other {# päivää sitten}}"
-    },
     "dailySummary": {
       "title": "Päivän aktiivisuus",
       "subtitle": "Havaintoja tunneittain",
@@ -666,7 +661,6 @@
         "species": "Laji",
         "weather": "Sää",
         "confidence": "Luottamus",
-        "thumbnail": "Pienoiskuva",
         "status": "Tila",
         "recording": "Tallenne",
         "actions": "Toiminnot"
@@ -695,8 +689,6 @@
         "markCorrect": "Oikein",
         "markFalsePositive": "Virhe",
         "review": "Tarkista havainto",
-        "showSpecies": "Näytä laji",
-        "ignoreSpecies": "Ohita laji",
         "lockDetection": "Lukitse havainto",
         "unlockDetection": "Avaa lukitus",
         "deleteDetection": "Poista havainto"
@@ -777,15 +769,30 @@
     "elements": {
       "banner": "Kojelaudan banneri",
       "dailySummary": "Päivittäinen yhteenveto",
-      "newSpeciesHighlights": "Uudet lajihavainnot",
       "currentlyHearing": "Juuri nyt kuuluu",
       "detectionsGrid": "Viimeisimmät havainnot",
       "liveSpectrogram": "Reaaliaikainen spektrogrammi",
-      "videoEmbed": "Videoupotus"
+      "videoEmbed": "Videoupotus",
+      "voiceActivity": "Voice Activity"
+    },
+    "voiceActivity": {
+      "title": "Voice Activity",
+      "subtitle": "Detections by hour — today",
+      "chartAriaLabel": "Bar chart of voice detections per hour for today",
+      "loading": "Loading voice activity...",
+      "empty": "No voice detections today",
+      "errors": {
+        "load": "Failed to load voice activity data"
+      },
+      "bar": {
+        "tooltip": "{count} detection(s) at {hour}:00"
+      }
     }
   },
   "detections": {
     "title": "Havainnot",
+    "humanVoice": "Human Voice",
+    "flaggedByKeywords": "Flagged by keywords: {keywords}",
     "titles": {
       "hourly": "Tunnittaiset tulokset klo {hour}.00 päivänä {date}",
       "hourlyRange": "Tunnittaiset tulokset välillä {startHour}.00-{endHour}.00 päivänä {date}",
@@ -794,12 +801,16 @@
       "allDetections": "Kaikki havainnot päivänä {date}"
     },
     "detail": {
-      "species": "Laji",
       "observation": "Havainto",
+      "transcript": {
+        "title": "Transcript",
+        "matchedKeywords": "Matched keywords",
+        "flaggedNotice": "Flagged by keyword",
+        "empty": "No transcript available"
+      },
       "aria": {
         "downloadAudioClip": "Download audio clip for {name} detection",
         "audioRecordingFor": "Audio recording and spectrogram for {name}",
-        "scientificName": "Tieteellinen nimi",
         "classificationBadges": "Lajin luokitusmerkit",
         "confidence": "Havainnon luottamus {confidence}%",
         "metadata": "Havainnon metatiedot",
@@ -809,8 +820,7 @@
         "commentTimestamp": "Kommentin aikaleima",
         "mainRegion": "Havainnon tiedot",
         "tabsHeading": "Havaintotietojen välilehdet",
-        "tabList": "Havainnon tietojen välilehdet",
-        "speciesHeadingSuffix": "havainnon tiedot"
+        "tabList": "Havainnon tietojen välilehdet"
       }
     },
     "headers": {
@@ -819,7 +829,6 @@
       "source": "Lähde",
       "species": "Laji",
       "confidence": "Luottamus",
-      "thumbnail": "Pienoiskuva",
       "status": "Tila",
       "recording": "Tallenne",
       "actions": "Toiminnot"
@@ -936,6 +945,7 @@
         "unknown": "Tuntematon"
       }
     },
+    "noTranscript": "(no transcript)",
     "row": {
       "viewDetails": "Näytä {species} tiedot",
       "play": "Toista",
@@ -974,9 +984,7 @@
       "loading": "Ladataan havainnon tietoja...",
       "loaded": "Havainnon tiedot ladattu: {species}",
       "error": "Virhe havainnon latauksessa: {error}",
-      "loadingResults": "Ladataan {count} tulosta...",
-      "thumbnailLoading": "Ladataan {species} pikkukuvaa...",
-      "thumbnailLoaded": "Pikkukuva {species} ladattu"
+      "loadingResults": "Ladataan {count} tulosta..."
     },
     "errors": {
       "notFound": "Havaintoa ei löytynyt. Se on ehkä poistettu tai tunniste on virheellinen.",
@@ -986,45 +994,34 @@
       "loadFailed": "Havainnon lataaminen epäonnistui (Virhe {status}). Päivitä sivu.",
       "noIdProvided": "Havainnon tunnistetta ei annettu.",
       "fetchFailed": "Havaintojen hakeminen epäonnistui"
+    },
+    "speaker": {
+      "sectionLabel": "Estimated speaker",
+      "genderAria": "Estimated speaker gender",
+      "ageAria": "Estimated speaker age",
+      "gender": {
+        "male": "Male",
+        "female": "Female",
+        "unknown": "Unknown"
+      },
+      "age": {
+        "child": "Child",
+        "teen": "Teen",
+        "adult": "Adult",
+        "senior": "Senior"
+      }
     }
   },
   "species": {
-    "rarity": {
-      "title": "Lajin harvinaisuus",
-      "score": "Pisteet",
-      "basedOnLocation": "Sijainnin perusteella: {latitude}, {longitude}",
-      "statuses": {
-        "very_common": "Hyvin yleinen",
-        "common": "Yleinen",
-        "uncommon": "Melko harvinainen",
-        "rare": "Harvinainen",
-        "very_rare": "Hyvin harvinainen",
-        "unknown": "Tuntematon"
-      }
-    },
-    "taxonomy": {
-      "hierarchy": "Taksonomiluokitus",
-      "subspecies": "Alalajit",
-      "noData": "Taksonomiatietoja ei ole saatavilla.",
-      "labels": {
-        "kingdom": "Kunta",
-        "phylum": "Pääjakso",
-        "class": "Luokka",
-        "order": "Lahko",
-        "family": "Heimo",
-        "genus": "Suku",
-        "species": "Laji"
-      }
-    },
     "synonyms": {
       "tabLabel": "Taksonomiasynonyymit",
-      "description": "Ohita tieteellisten nimien yhdistämiset lintukuvahaussa. BirdNET käyttää 2021E-taksonomiaa, mutta kuvalähteet voivat käyttää päivitettyjä nimiä. Sisäänrakennetut yhdistämiset ladataan aina; omat ohituksesi lisäävät tai korvaavat niitä.",
-      "birdnetName": "BirdNET-nimi",
+      "description": "Ohita tieteellisten nimien yhdistämiset lintukuvahaussa. VoiceWatch käyttää 2021E-taksonomiaa, mutta kuvalähteet voivat käyttää päivitettyjä nimiä. Sisäänrakennetut yhdistämiset ladataan aina; omat ohituksesi lisäävät tai korvaavat niitä.",
+      "birdnetName": "VoiceWatch-nimi",
       "updatedName": "Päivitetty nimi",
       "addButton": "Lisää synonyymi",
       "emptyState": "Ei mukautettuja taksonomiasynonyymejä määritetty.",
       "errors": {
-        "unknownSpecies": "Lajia ei löydy BirdNET-tunnisteista",
+        "unknownSpecies": "Lajia ei löydy VoiceWatch-tunnisteista",
         "duplicateKey": "Synonyymi tälle lajille on jo olemassa",
         "emptyUpdatedName": "Päivitetty nimi on pakollinen"
       }
@@ -1133,7 +1130,7 @@
         "process": "Prosessi"
       },
       "showAll": "Näytä kaikki prosessit",
-      "showBirdnetOnly": "Näytä vain BirdNET",
+      "showBirdnetOnly": "Näytä vain VoiceWatch",
       "table": {
         "process": "Prosessi",
         "status": "Tila",
@@ -1311,9 +1308,9 @@
       "migration": {
         "title": "Tietokantamigraatio",
         "description": "Migroi vanhasta skeemasta normalisoituun v2-skeemaan",
-        "requiredNote": "Tietokannan migraatio vaaditaan tulevien BirdNET-Go-ominaisuuksien vuoksi, jotka hyödyntävät uutta normalisoitua tietokantaskeemaa. Uudet ominaisuudet eivät ole käytettävissä ennen migraation valmistumista.",
+        "requiredNote": "Tietokannan migraatio vaaditaan tulevien VoiceWatch-ominaisuuksien vuoksi, jotka hyödyntävät uutta normalisoitua tietokantaskeemaa. Uudet ominaisuudet eivät ole käytettävissä ennen migraation valmistumista.",
         "completedTitle": "Migraatio valmis",
-        "completedNote": "Tietokantasi on siirretty onnistuneesti uuteen skeemaan. Käynnistä BirdNET-Go uudelleen siirtyäksesi uuteen tietokantaan. Huom: Uusi tietokanta on pienempi, koska se tallentaa tiedot tehokkaammin - tämä on normaalia ja kaikki tietosi on säilytetty.",
+        "completedNote": "Tietokantasi on siirretty onnistuneesti uuteen skeemaan. Käynnistä VoiceWatch uudelleen siirtyäksesi uuteen tietokantaan. Huom: Uusi tietokanta on pienempi, koska se tallentaa tiedot tehokkaammin - tämä on normaalia ja kaikki tietosi on säilytetty.",
         "starting": "Käynnistetään migraatiota...",
         "status": {
           "idle": "Valmis aloitettavaksi",
@@ -1394,7 +1391,7 @@
         },
         "notes": {
           "in_progress": "Voit jatkaa järjestelmän normaalia käyttöä migraation suorittaessa taustalla.",
-          "dual_write": "Migraatio käynnissä. Tietosi ovat turvassa - kaikki uudet havainnot tallennetaan molempiin tietokantoihin. Voit jatkaa BirdNET-Go:n käyttöä normaalisti.",
+          "dual_write": "Migraatio käynnissä. Tietosi ovat turvassa - kaikki uudet havainnot tallennetaan molempiin tietokantoihin. Voit jatkaa VoiceWatch:n käyttöä normaalisti.",
           "migrating": "Kopioidaan olemassa olevia havaintojasi uuteen tietokantaan. Tämä voi kestää jonkin aikaa havaintojen määrästä riippuen. Voit keskeyttää ja jatkaa milloin tahansa.",
           "validating": "Tarkistetaan, että kaikki tietueet kopioitiin oikein. Melkein valmis!",
           "cutover": "Vaihdetaan uuteen tietokantaan. Tämä kestää vain hetken.",
@@ -1834,19 +1831,6 @@
           "axisDate": "Päivämäärä",
           "axisUniqueSpecies": "Yksilölliset lajit"
         },
-        "accumulation": {
-          "title": "Species Accumulation Curve",
-          "description": "Cumulative number of distinct species detected within the selected period. The curve climbs as new species appear and flattens toward an asymptote once the common ones have been recorded; a still-rising tail means more species are likely waiting to be found.",
-          "noData": "No species accumulation data available",
-          "noDataHint": "Select a wider date range to watch the species list build up over time",
-          "ariaLabel": "Species accumulation curve: cumulative distinct species detected over the period",
-          "axisDate": "Date",
-          "axisSpecies": "Cumulative species",
-          "totalSpecies": "{species} species",
-          "tooltipCumulative": "Cumulative species",
-          "tooltipNew": "New in period",
-          "summary": "Cumulative species accumulation across {days} days, reaching {species} distinct species by the end of the period."
-        },
         "yearOverYear": {
           "title": "Year-over-Year Tracker",
           "description": "Cumulative detections so far this year versus the same calendar dates last year. The shaded band is the running gap between the two; this year's line sitting above last year's means you are ahead of last year's pace.",
@@ -1859,20 +1843,6 @@
           "legendLast": "{year} (last year)",
           "tooltipDelta": "Difference",
           "summary": "Year over year: by {monthDay}, {currentYear} has {thisYear} cumulative detections versus {lastYear} for {previousYear} (a difference of {delta})."
-        },
-        "phenology": {
-          "title": "Arrival & Departure Phenology",
-          "description": "First and last detection of each species within the selected period, drawn as residency bars for the most-detected species. Read it top to bottom in arrival order to see who shows up first and who lingers latest across the season.",
-          "noData": "No phenology data available",
-          "noDataHint": "Select a wider date range to see when species arrive and depart",
-          "ariaLabel": "Arrival and departure phenology: residency bars showing each species' first-to-last detection span",
-          "axisDate": "Date",
-          "summary": "Arrival and departure residency spans for {species} species across the selected period.",
-          "tooltipFirst": "First detected",
-          "tooltipLast": "Last detected",
-          "tooltipResidency": "Residency",
-          "tooltipCount": "Detections",
-          "residencyDays": "{days} days"
         },
         "heatmap": {
           "title": "Seasonal Activity Heatmap",
@@ -1889,13 +1859,8 @@
           "summary": "{total} detections across {days} days. Busiest around {time} on {date}."
         },
         "ridgeline": {
-          "title": "Who Sings When",
-          "description": "Hour-of-day activity for the most-detected species, sorting dawn singers from all-day and nocturnal birds",
-          "noData": "No species activity data available",
-          "noDataHint": "Select a wider date range to compare species activity patterns",
           "ariaLabel": "Who-sings-when ridgeline: hour-of-day activity distribution per species",
           "axisTime": "Time of Day",
-          "note": "Showing the top {count} species by detection volume",
           "tooltipDetections": "Detections",
           "tooltipPeak": "Peak",
           "summary": "Hour-of-day activity for {count} species. Most active: {species} around {time}."
@@ -1990,7 +1955,7 @@
     }
   },
   "settings": {
-    "title": "Asetukset - BirdNET-Go",
+    "title": "Asetukset - VoiceWatch",
     "loading": "Ladataan asetuksia...",
     "sections": {
       "analysis": "Analyysi",
@@ -2047,20 +2012,20 @@
           "description": "Määritä sovelluksen pääasetukset"
         },
         "birdnet": {
-          "title": "BirdNET-asetukset",
-          "description": "Määritä BirdNET AI-mallin erityisasetukset"
+          "title": "VoiceWatch-asetukset",
+          "description": "Määritä VoiceWatch AI-mallin erityisasetukset"
         },
         "ui": {
           "title": "Käyttöliittymäasetukset",
           "description": "Mukauta käyttöliittymää"
         },
         "customClassifier": {
-          "title": "Mukautettu BirdNET-luokittelija",
-          "description": "Määritä mukautetut BirdNET-mallin ja nimiketiedostot erikoistuneeseen tunnistukseen",
+          "title": "Mukautettu VoiceWatch-luokittelija",
+          "description": "Määritä mukautetut VoiceWatch-mallin ja nimiketiedostot erikoistuneeseen tunnistukseen",
           "modelPath": {
             "label": "Mallin polku (Vaatii uudelleenkäynnistyksen)",
             "placeholder": "Polku mallitiedostoon",
-            "helpText": "Polku ulkoiseen BirdNET-mallitiedostoon. Syötä absoluuttinen tai suhteellinen polku birdnet-go-binääriin. Jätä tyhjäksi käyttääksesi oletussisäänrakennettua mallia."
+            "helpText": "Polku ulkoiseen VoiceWatch-mallitiedostoon. Syötä absoluuttinen tai suhteellinen polku birdnet-go-binääriin. Jätä tyhjäksi käyttääksesi oletussisäänrakennettua mallia."
           },
           "labelPath": {
             "label": "Nimikkeiden polku (Vaatii uudelleenkäynnistyksen)",
@@ -2072,7 +2037,7 @@
           "title": "Dynaaminen kynnysarvo",
           "description": "Säädä tunnistusherkkyyttä automaattisesti aikaisempien havaintojen perusteella",
           "enable": {
-            "label": "Ota käyttöön dynaaminen kynnysarvo (BirdNET-Go-erityisominaisuus)",
+            "label": "Ota käyttöön dynaaminen kynnysarvo (VoiceWatch-erityisominaisuus)",
             "helpText": "Ottaa käyttöön dynaamisen luottamuskynnysarvon mukautuvampaa lintuäänten tunnistusta varten."
           },
           "trigger": {
@@ -2118,8 +2083,6 @@
           "warningOff": "Ilman suodatusta jokainen luottamuskynnyksen ylittävä havainto hyväksytään välittömästi. Tämä tuottaa tyypillisesti useita vääriä positiivisia päivässä. Jo matala suodatus parantaa tulosten laatua merkittävästi."
         },
         "rangeFilter": {
-          "title": "Aluesuodatin",
-          "description": "Rajoita tunnistus lajeihin, jotka ovat todennäköisiä maantieteellisellä alueellasi",
           "stationLocation": {
             "label": "Aseman sijainti",
             "helpText": "Aseman sijainti, jota käytetään säätietoihin ja lintulajien rajoittamiseen alueella todennäköisiin lajeihin."
@@ -2131,33 +2094,6 @@
           "longitude": {
             "label": "Pituusaste",
             "helpText": "Aseman sijainnin pituusaste, jota käytetään säätietoihin ja lintulajien aluesuodatukseen."
-          },
-          "model": {
-            "label": "Aluesuodatinmalli",
-            "helpText": "BirdNET-aluesuodatinmallin versio: latest tai legacy."
-          },
-          "threshold": {
-            "label": "Kynnysarvo",
-            "helpText": "Määrittää, mitkä lajit sisällytetään niiden esiintymistodennäköisyyden perusteella sijaintisi ja vuodenajan mukaan. Oletusarvo (0.01) on suositeltava useimmille käyttäjille. Korkeammat arvot (0.05-0.3) sisällyttävät vähemmän lajeja korkeammalla esiintymistodennäköisyydellä. Hyvin korkeat arvot (0.5+) sisällyttävät vain yleisimmät lajit."
-          },
-          "speciesCount": {
-            "label": "Nykyinen lajimäärä",
-            "helpText": "Aluesuodattimeen sisällytettyjen lajien määrä. Päivittyy automaattisesti, kun kynnysarvo, leveysaste tai pituusaste muuttuu.",
-            "loading": "Ladataan...",
-            "viewSpecies": "Näytä lajit"
-          },
-          "downloadTitle": "Lataa lajilista CSV-muodossa",
-          "csvDownloaded": "Lajilista ladattu onnistuneesti",
-          "csvDownloadFailed": "Lajilistan lataus epäonnistui. Yritä uudelleen.",
-          "modal": {
-            "title": "Aluesuodattimen lajit",
-            "speciesCount": "Lajimäärä:",
-            "threshold": "Kynnysarvo:",
-            "latitude": "Leveysaste:",
-            "longitude": "Pituusaste:",
-            "loadingSpecies": "Ladataan lajeja...",
-            "noSpeciesFound": "Lajeja ei löytynyt nykyisillä asetuksilla",
-            "close": "Sulje"
           }
         },
         "database": {
@@ -2285,18 +2221,6 @@
               "recent": {
                 "label": "Näytä pienoiskuvat viimeisimpien havaintojen listassa",
                 "helpText": "Ota käyttöön näyttääksesi havaittujen lajien pienoiskuvat viimeisimpien havaintojen listassa"
-              },
-              "imageProvider": {
-                "label": "Kuvapalvelu",
-                "helpText": "Valitse ensisijainen kuvapalvelu lintujen pienoiskuville"
-              },
-              "fallbackPolicy": {
-                "label": "Varakuvapalvelu",
-                "helpText": "Valitse mitä tapahtuu, kun ensisijainen palvelu ei löydä kuvaa",
-                "options": {
-                  "all": "Kokeile kaikkia palveluja järjestyksessä",
-                  "none": "Käytä vain valittua palvelua"
-                }
               }
             },
             "spectrogram": {
@@ -2385,10 +2309,6 @@
       },
       "errors": {
         "localesLoadFailed": "Kielivaihtoehtoja ei voitu ladata. Käytetään oletusarvoja.",
-        "providersLoadFailed": "Kuvatoimittajia ei voitu ladata. Käytetään oletusarvoja.",
-        "rangeFilterTestFailed": "Aluesuodatinasetusten testaus epäonnistui",
-        "rangeFilterLoadFailed": "Lajiluettelon lataus epäonnistui",
-        "rangeFilterCountFailed": "Lajimäärän lataus epäonnistui",
         "mapLibraryLoadFailed": "Karttakirjaston lataus epäonnistui. Päivitä sivu.",
         "mapLoadFailed": "Kartan lataus epäonnistui. Kokeile päivittää sivu.",
         "modalMapLoadFailed": "Ikkunan kartan lataus epäonnistui. Sulje ja avaa ikkuna uudelleen.",
@@ -2399,7 +2319,7 @@
       "sections": {
         "telemetry": {
           "title": "Virheiden seuranta ja telemetria",
-          "description": "Vapaaehtoinen virheiden seuranta BirdNET-Go:n luotettavuuden ja suorituskyvyn parantamiseksi"
+          "description": "Vapaaehtoinen virheiden seuranta VoiceWatch:n luotettavuuden ja suorituskyvyn parantamiseksi"
         },
         "diagnostics": {
           "title": "Tuki ja diagnostiikka",
@@ -2411,7 +2331,7 @@
         "privacyPoints": {
           "noPersonalData": "Henkilötietoja ei kerätä",
           "anonymousData": "Kaikki telemetriatiedot ovat anonyymejä",
-          "helpImprove": "Telemetriatiedot auttavat kehittäjiä tunnistamaan ja korjaamaan ongelmia BirdNET-Go:ssa"
+          "helpImprove": "Telemetriatiedot auttavat kehittäjiä tunnistamaan ja korjaamaan ongelmia VoiceWatch:ssa"
         },
         "enableTracking": "Ota virheiden seuranta käyttöön (Opt-in)"
       },
@@ -2568,7 +2488,7 @@
       },
       "systemInfo": {
         "howToView": "Kuinka tarkastella ilmoituksia:",
-        "technicalDetails": "Tekniset tiedot ilmoituksista BirdNET-Go:ssa:"
+        "technicalDetails": "Tekniset tiedot ilmoituksista VoiceWatch:ssa:"
       },
       "privacy": {
         "title": "Tietosuojailmoitus ulkoisille webhokeille",
@@ -2862,63 +2782,16 @@
         "confidenceLabel": "Luottamuskynnys ihmisen tunnistukseen",
         "confidenceHelp": "Aseta luottamustaso ihmisäänen tunnistukseen, matalampi arvo tekee suodattimesta herkemmän"
       },
-      "falsePositivePrevention": {
-        "title": "Väärien positiivisten ehkäisy",
-        "description": "Määritä virhetunnistussuodattimet",
-        "enableDogBark": "Ota koiran haukunnan suodatin käyttöön",
-        "disabled": "Koiran haukuntasuodatin on poistettu käytöstä",
-        "confidenceLabel": "Luottamuskynnys",
-        "confidenceHelp": "Aseta luottamustaso koiran haukunnan tunnistukseen, matalampi arvo tekee suodattimesta herkemmän",
-        "expireTimeLabel": "Koiran haukunnan vanhenemisaika (minuuttia)",
-        "expireTimeHelp": "Aseta kuinka kauan havaittu koiran haukunta muistetaan",
-        "addDogBarkSpeciesLabel": "Lisää koiran haukunnan lajeja",
-        "addDogBarkSpeciesHelp": "Etsi ja lisää lajeja, jotka voidaan sekoittaa koiran haukuntaan",
-        "addSpeciesButton": "Lisää"
-      },
-      "speciesNamePlaceholder": "Lajin nimi",
-      "typeSpeciesName": "Kirjoita lajin nimi...",
-      "dogBarkSpeciesList": "Koiran haukunnan lajiluettelo",
       "daylightFilter": {
         "title": "Päivänvalosuodatin",
         "description": "Suodata yöaktiivisten lajien havainnot päivänvalossa. Käyttää siviiliaamunkoiton/-hämärän rajoja määritetyn sijainnin perusteella.",
         "enable": "Ota päivänvalosuodatin käyttöön",
         "disabled": "Päivänvalosuodatin on pois käytöstä",
         "offsetLabel": "Päivänvaloikkunan siirtymä (Tunnit)",
-        "offsetHelp": "Säädä päivänvaloikkunaa. Positiiviset arvot pienentävät sitä (sallivampi, esim. +1 = alkaa 1h aamunkoiton jälkeen). Negatiiviset arvot laajentavat sitä (tiukempi, esim. -1 = alkaa 1h ennen aamunkoittoa).",
-        "speciesListLabel": "Yöaktiivisten lajien luettelo",
-        "addSpeciesLabel": "Lisää yöaktiivinen laji",
-        "addSpeciesHelp": "Hae ja lisää lajeja, sukuja, heimoja tai lahkoja suodatettavaksi päivänvalossa. Oletus: Strigiformes (kaikki pöllöt). Huom: tyhjä lista ei suodata mitään lajeja päivänvalossa."
-      },
-      "errors": {
-        "speciesLoadFailed": "Lajiluettelon lataus epäonnistui. Yritä uudelleen."
+        "offsetHelp": "Säädä päivänvaloikkunaa. Positiiviset arvot pienentävät sitä (sallivampi, esim. +1 = alkaa 1h aamunkoiton jälkeen). Negatiiviset arvot laajentavat sitä (tiukempi, esim. -1 = alkaa 1h ennen aamunkoittoa)."
       }
     },
     "integration": {
-      "birdweather": {
-        "title": "BirdWeather",
-        "description": "Lähetä havainnot BirdWeatheriin",
-        "ffmpegWarning": {
-          "title": "FFmpeg ei havaittu",
-          "message": "Asenna FFmpeg ottaaksesi käyttöön FLAC-koodauksen tuen, BirdWeather on lopettamassa WAV-tiedostojen tuen pakattujen FLAC-äänitiedostojen hyväksi."
-        },
-        "enable": "Ota käyttöön BirdWeather-lähetykset",
-        "token": {
-          "label": "BirdWeather-tunnus",
-          "helpText": "Yksilöllinen BirdWeather-tunnuksesi."
-        },
-        "threshold": {
-          "label": "Lähetyskynnys",
-          "helpText": "Vähimmäisluottamuskynnys ennusteiden lähettämiseen BirdWeatheriin."
-        },
-        "test": {
-          "button": "Testaa BirdWeather-yhteys",
-          "loading": "Testataan...",
-          "enabledRequired": "BirdWeather täytyy olla käytössä testaukseen",
-          "tokenRequired": "BirdWeather-tunnus täytyy määrittää",
-          "inProgress": "Testaus käynnissä...",
-          "description": "Testaa BirdWeather-yhteys"
-        }
-      },
       "mqtt": {
         "title": "MQTT",
         "description": "Määritä MQTT-välittäjän yhteys",
@@ -2971,14 +2844,14 @@
         "homeAssistant": {
           "title": "Home Assistant -automaattitunnistus",
           "enable": "Ota käyttöön Home Assistant MQTT Discovery",
-          "description": "Kun käytössä, BirdNET-Go rekisteröi automaattisesti laitteet ja anturit Home Assistantiin MQTT-discovery-protokollan kautta. Laitteet ilmestyvät Home Assistantin laiterekisteriin ilman manuaalista YAML-konfiguraatiota.",
+          "description": "Kun käytössä, VoiceWatch rekisteröi automaattisesti laitteet ja anturit Home Assistantiin MQTT-discovery-protokollan kautta. Laitteet ilmestyvät Home Assistantin laiterekisteriin ilman manuaalista YAML-konfiguraatiota.",
           "discoveryPrefix": {
             "label": "Discovery-etuliite",
             "helpText": "MQTT-aiheen etuliite Home Assistant discovery -viesteille. Oletusarvo on 'homeassistant'. Muuta tätä vain, jos olet määrittänyt mukautetun discovery-etuliitteen Home Assistantissa."
           },
           "deviceName": {
             "label": "Laitteen nimi",
-            "helpText": "Laitteiden perusnimi sellaisena kuin ne näkyvät Home Assistantissa. Jokaisella äänilähteellä on oma laite, joka on linkitetty tähän BirdNET-Go-päälaitteeseen."
+            "helpText": "Laitteiden perusnimi sellaisena kuin ne näkyvät Home Assistantissa. Jokaisella äänilähteellä on oma laite, joka on linkitetty tähän VoiceWatch-päälaitteeseen."
           },
           "sensorsNote": "<strong>Luodut anturit:</strong> Jokaista äänilähdettä kohden Home Assistant saa: Viimeisin laji, Luottamus, Tieteellinen nimi ja Äänitaso (jos käytössä). Siltalaitteessa on online/offline-saatavuustila.",
           "discovery": {
@@ -3003,7 +2876,7 @@
       },
       "observability": {
         "title": "Havainnointi",
-        "description": "Seuraa BirdNET-Go:n suorituskykyä ja lintuhavaintomittareita Prometheus-yhteensopivan päätepisteen kautta",
+        "description": "Seuraa VoiceWatch:n suorituskykyä ja lintuhavaintomittareita Prometheus-yhteensopivan päätepisteen kautta",
         "enable": "Ota käyttöön havainnointi-integraatio",
         "disabled": "Havainnointi-integraatio ei ole käytössä",
         "listenAddress": {
@@ -3091,33 +2964,6 @@
         "responseStreamFailed": "Vastausvirran lukeminen epäonnistui",
         "configurationCheck": "Asetustarkistus",
         "testStageFallback": "Testausvaihe"
-      },
-      "ebird": {
-        "title": "eBird",
-        "description": "Yhdistä eBird-taksonomiatietokantaan rikastettujen lajitietojen saamiseksi, mukaan lukien taksonominen luokittelu ja alalajitiedot.",
-        "enable": "Ota eBird-integraatio käyttöön",
-        "enabledRequired": "eBird-integraatio ei ole käytössä",
-        "apiKey": {
-          "label": "eBird API-avain",
-          "helpText": "eBird API-avaimesi. Hanki avain eBird API-portaalista."
-        },
-        "locale": {
-          "label": "Lajinimien kieli"
-        },
-        "cacheTTL": {
-          "label": "Välimuistin kesto (tuntia)",
-          "helpText": "Kuinka kauan eBirdin taksonomiatietoja säilytetään välimuistissa. Taksonomia muuttuu harvoin, joten pidempi välimuistiaika vähentää API-kutsuja."
-        },
-        "note": "eBird tarjoaa taksonomiatietoja lajien luokitteluun ja analyyseihin. API-avain on saatavilla ilmaiseksi Cornellin ornitologian laboratoriosta.",
-        "apiKeyInfo": "Henkilökohtainen eBird API -avain vaaditaan tämän integraation käyttöön. Voit pyytää ilmaisen avaimen osoitteesta <a href=\"https://ebird.org/api/keygen\" class=\"link link-primary\" target=\"_blank\" rel=\"noopener noreferrer\">ebird.org/api/keygen</a>.",
-        "test": {
-          "button": "Testaa eBird-yhteys",
-          "loading": "Testataan...",
-          "enabledRequired": "Ota ensin eBird-integraatio käyttöön",
-          "apiKeyRequired": "API-avain vaaditaan",
-          "inProgress": "Testi käynnissä...",
-          "description": "Testaa eBird API:n yhteyttä ja tunnistautumista"
-        }
       }
     },
     "audio": {
@@ -3172,7 +3018,7 @@
       },
       "noSources": {
         "warning": "Äänilähteita ei ole määritetty",
-        "description": "BirdNET-Go tarvitsee äänen syötteen lintujen havaitsemiseen. Määritä vähintään yksi lähde Äänikortti- tai Striimit-välilehdellä."
+        "description": "VoiceWatch tarvitsee äänen syötteen lintujen havaitsemiseen. Määritä vähintään yksi lähde Äänikortti- tai Striimit-välilehdellä."
       },
       "soundCards": {
         "summary": "{count} äänikorttilähdettä",
@@ -3198,12 +3044,12 @@
           "hints": {
             "device": "Valitse järjestelmän käytettävissä olevista äänen syöttölaitteista",
             "multiple": "Voit määrittää useita äänikortteja eri sijainneille",
-            "model": "Jokainen lähde voi käyttää eri tunnistusmallia (BirdNET, Perch, Bat)"
+            "model": "Jokainen lähde voi käyttää eri tunnistusmallia (VoiceWatch, Perch, Bat)"
           }
         },
         "models": {
-          "birdnetDefault": "BirdNET (Oletus)",
-          "birdnet": "BirdNET",
+          "birdnetDefault": "VoiceWatch (Oletus)",
+          "birdnet": "VoiceWatch",
           "perchV2": "Google Perch v2",
           "bat": "Lepakkotunnistus"
         },
@@ -3470,10 +3316,6 @@
         "enableHelp": "Kun käytössä, määritettyjen lajien toistuvat havainnot yhdistetään yhdeksi pidemmäksi tallennukseksi.",
         "maxDurationLabel": "Enimmäiskesto",
         "maxDurationHelp": "Laajennetun tallennuksen leikkeen enimmäispituus. Tallennus kasvaa havaintojen jatkuessa tähän rajaan asti.",
-        "speciesListLabel": "Laajennetun tallennuksen lajit",
-        "addSpeciesLabel": "Lisää laji",
-        "addSpeciesHelp": "Lajit, jotka käynnistävät laajennetun tallennuksen. Tukee yleisnimiä, tieteellisiä nimiä ja sukutason vastaavuutta (esim. \"Strix\" kattaa kaikki Strix-pöllöt).",
-        "addSpeciesButton": "Lisää",
         "disabled": "Laajennettu tallennus on pois käytöstä"
       },
       "fileSettings": {
@@ -3551,8 +3393,28 @@
         "invalidRetentionPolicy": "Virheellinen säilytyskäytäntö"
       },
       "models": {
-        "recommendBoth": "Parhaan lajien havainnointikattavuuden saavuttamiseksi suositellaan käyttämään sekä BirdNET- että Perch-malleja yhdessä.",
-        "perchOnlyWarning": "Perch yksinään tuottaa vähemmän havaintoja. Laske luottamuskynnys arvoon 0.50 mielekkäiden tulosten saamiseksi tai ota BirdNET käyttöön rinnalle paremman kattavuuden saavuttamiseksi."
+        "recommendBoth": "Parhaan lajien havainnointikattavuuden saavuttamiseksi suositellaan käyttämään sekä VoiceWatch- että Perch-malleja yhdessä.",
+        "perchOnlyWarning": "Perch yksinään tuottaa vähemmän havaintoja. Laske luottamuskynnys arvoon 0.50 mielekkäiden tulosten saamiseksi tai ota VoiceWatch käyttöön rinnalle paremman kattavuuden saavuttamiseksi."
+      },
+      "speakerAttributes": {
+        "title": "Speaker Attributes",
+        "description": "Estimate the speaker's gender and relative age band for human-voice detections. Opt-in and off by default.",
+        "caveat": "These are demographic estimates, not identity recognition. Accuracy varies by accent and recording quality.",
+        "enable": "Enable speaker attributes",
+        "enableHelp": "Master switch for all speaker-attribute estimation.",
+        "disabled": "Speaker attributes are disabled",
+        "gender": {
+          "enable": "Estimate speaker gender",
+          "enableHelp": "Estimate whether the speaker sounds male, female, or unknown.",
+          "thresholdLabel": "Gender confidence threshold",
+          "thresholdHelp": "Discard gender estimates below this confidence."
+        },
+        "age": {
+          "enable": "Estimate speaker age band",
+          "enableHelp": "Estimate a relative age band (child, teen, adult, senior).",
+          "thresholdLabel": "Age confidence threshold",
+          "thresholdHelp": "Discard age estimates below this confidence."
+        }
       }
     },
     "security": {
@@ -3795,342 +3657,6 @@
         "fileReadError": "Valitun tiedoston lukeminen epäonnistui"
       }
     },
-    "species": {
-      "pageLabel": "Lajiasetukset",
-      "saveError": "Lajin \"{species}\" asetusten tallennus epäonnistui. Yritä uudelleen.",
-      "configUpdated": "Lajin \"{species}\" asetukset päivitetty",
-      "configAdded": "Lajin \"{species}\" asetukset lisätty",
-      "duplicateConfigError": "Lajilla \"{species}\" on jo asetukset. Valitse toinen nimi.",
-      "activeSpecies": {
-        "title": "Aktiiviset lajit",
-        "tabLabel": "Aktiivis.",
-        "description": "Lajit, jotka tunnistetaan nykyisen sijainnin ja suodatusasetusten perusteella",
-        "stats": {
-          "species": "Lajit",
-          "location": "Sijainti",
-          "threshold": "Kynnysarvo",
-          "updated": "Päivitetty",
-          "justNow": "Juuri nyt",
-          "minutesAgo": "{count}m sitten",
-          "hoursAgo": "{count}t sitten"
-        },
-        "search": {
-          "placeholder": "Etsi lajeja..."
-        },
-        "badges": {
-          "included": "Sisällytetty",
-          "configured": "Määritetty"
-        },
-        "empty": {
-          "title": "Lajeja ei löytynyt",
-          "description": "Määritä sijaintisi pääasetuksissa nähdäksesi saatavilla olevat lajit"
-        },
-        "noResults": "Mikään laji ei vastaa hakuasi",
-        "infoNote": "Tämä luettelo perustuu sijaintiisi ja aluesuodattimen kynnysarvoon. Manuaalisesti lisätyt lajit sisällytetään aina.",
-        "retry": "Yritä uudelleen",
-        "expand": "Laajenna luettelo",
-        "collapse": "Supista luettelo",
-        "downloadCsv": "Lataa CSV",
-        "errors": {
-          "loadFailed": "Aktiivisten lajien luettelon lataus epäonnistui"
-        },
-        "locationNotConfigured": {
-          "title": "Sijaintia ei ole määritetty",
-          "description": "Määritä sijaintisi pääasetuksissa nähdäksesi alueellasi esiintyvät lajit. Aluesuodatin käyttää sijaintiasi määrittääkseen, mitkä lajit todennäköisesti esiintyvät lähistölläsi.",
-          "action": "Määritä sijainti"
-        },
-        "rangeFilterHealth": {
-          "inactive": {
-            "title": "Aluesuodatin ei ole käytössä",
-            "description": "Havaintoja ei tällä hetkellä suodateta sijaintisi perusteella, joten myös alueesi ulkopuolisia lajeja voidaan raportoida. Tarkista aluesuodattimen mallin asetukset Asetukset-sivulta."
-          },
-          "fellBack": {
-            "title": "Käytössä sisäänrakennettu aluesuodatin",
-            "description": "Määritettyä geomallin aluesuodatinta ei voitu ladata, joten BirdNET-Go siirtyi käyttämään sisäänrakennettua aluesuodatinta. Suodatus toimii edelleen, mutta tarkista Asetukset-sivulta, miten saat geomallin takaisin käyttöön."
-          },
-          "mappedZero": {
-            "title": "Aluesuodatin ei vastannut yhtäkään lajia",
-            "description": "Geomallin aluesuodatin ei vastannut yhtäkään aktiivisen mallin lajia, joten kaikki havainnot suodatettaisiin pois. Tarkista, että aluesuodattimen nimiötiedosto vastaa aktiivista mallia."
-          }
-        },
-        "columns": {
-          "commonName": "Nimi",
-          "scientificName": "Tieteellinen nimi",
-          "score": "Pisteet",
-          "status": "Tila"
-        }
-      },
-      "alwaysInclude": {
-        "title": "Sisällytä lajit aina",
-        "tabLabel": "Sisällytä",
-        "description": "Tämän listan lajit sisällytetään aina havaittujen lajien alueelle",
-        "noSpeciesMessage": "Sisällytyslistaan ei ole lisätty lajeja"
-      },
-      "alwaysExclude": {
-        "title": "Jätä lajit aina pois",
-        "tabLabel": "Jätä pois",
-        "description": "Tämän listan lajit jätetään aina pois tunnistuksesta",
-        "noSpeciesMessage": "Poissulkulistaan ei ole lisätty lajeja"
-      },
-      "customConfiguration": {
-        "title": "Mukautettu lajikokoonpano",
-        "tabLabel": "Mukautet.",
-        "description": "Lajikohtaiset kynnysarvot, havaintovälit ja toiminnot",
-        "helpText": {
-          "intro": "Määritä lajikohtaisia asetuksia:",
-          "threshold": "Kynnysarvo: Vähimmäisluottamuspistemäärä (0-1) joka vaaditaan havainnon tekemiseen",
-          "interval": "Väli: Vähimmäisaika sekunteina saman lajin havaintojen välillä (0 = käytä yleistä oletusarvoa)",
-          "actions": "Toiminnot: Mukautetut komennot, jotka suoritetaan kun tämä laji havaitaan"
-        },
-        "columnHeaders": {
-          "species": "Laji",
-          "settings": "Asetukset",
-          "actions": "Toiminnot"
-        },
-        "badges": {
-          "threshold": "Kynnys: {value}",
-          "interval": "Väli: {value}s",
-          "customAction": "Mukautettu toiminto",
-          "executeDefaults": "+Oletukset"
-        },
-        "dropdown": {
-          "editConfig": "Muokkaa asetuksia",
-          "addAction": "Lisää toiminto",
-          "remove": "Poista"
-        },
-        "labels": {
-          "threshold": "Kynnysarvo",
-          "interval": "Väli",
-          "intervalSeconds": "Väli (sek)",
-          "addButton": "Lisää"
-        },
-        "noConfigurationsMessage": "Mukautettuja lajikokoonpanoja ei ole lisätty",
-        "addForm": {
-          "speciesPlaceholder": "Lajin nimi",
-          "thresholdPlaceholder": "0.5",
-          "intervalPlaceholder": "0"
-        },
-        "addConfiguration": "Lisää määritys",
-        "newConfiguration": "Uusi määritys",
-        "editing": "Muokataan: {species}",
-        "configuredCount": "{count} määritetty",
-        "searchPlaceholder": "Kirjoita hakeaksesi...",
-        "saving": "Tallennetaan...",
-        "save": "Tallenna",
-        "cancel": "Peruuta",
-        "configureActions": "Määritä toiminnot",
-        "actionsConfigured": "Määritetty",
-        "list": {
-          "editTitle": "Muokkaa määritystä",
-          "removeTitle": "Poista määritys"
-        },
-        "emptyState": {
-          "title": "Määrityksiä ei vielä ole.",
-          "description": "Napsauta \"Lisää määritys\" mukauttaaksesi lajintunnistusasetuksia."
-        },
-        "table": {
-          "columnScientificName": "Tieteellinen nimi",
-          "intervalDefault": "Oletus",
-          "intervalDefaultTooltip": "0 = käytä globaalia oletusväliä",
-          "noActions": "Ei mitään",
-          "searchPlaceholder": "Etsi lajeja...",
-          "noResults": "Ei vastaavia asetuksia",
-          "editDisabledReason": "Tallenna tai sulje nykyinen muokkain ennen toisen lajin muokkaamista",
-          "actionsDisabledBusy": "Odota, että nykyinen toiminto on valmis"
-        }
-      },
-      "synonyms": {
-        "tabLabel": "Synonyymit",
-        "description": "Yhdistä BirdNETin tieteelliset lajinimet niiden päivitettyihin vastineisiin uudemmassa taksonomiassa. Käytetään vain varasijana haettaessa lintukuvia Wikipediasta ja AviCommonsista; ei nimeä lajeja uudelleen havainnoissa tai koontinäytöllä.",
-        "helpText": "Muuttaaksesi lajin käyttöliittymässä näkyvää nimeä, muokkaa BirdNETin tunnistetiedostoa (asetus \"Nimikkeiden polku\" pääasetuksissa).",
-        "birdnetName": "BirdNET-nimi",
-        "updatedName": "Päivitetty tieteellinen nimi",
-        "addButton": "Lisää synonyymi",
-        "emptyState": "Ei määritettyjä taksonomiasynonyymejä",
-        "errors": {
-          "unknownSpecies": "Lajia ei löydy BirdNET-tunnisteista",
-          "duplicateKey": "Tälle lajille on jo olemassa synonyymi",
-          "emptyUpdatedName": "Päivitetty nimi on pakollinen"
-        }
-      },
-      "actionsModal": {
-        "title": "Toiminnot lajille {species}",
-        "actionType": {
-          "label": "Toiminnon tyyppi",
-          "executeCommand": "Suorita komento",
-          "onlySupported": "Tällä hetkellä vain komennon suoritus -toiminnot ovat tuettuja"
-        },
-        "command": {
-          "label": "Komento",
-          "helpText": "Anna täydellinen polku komentoon tai skriptiin jonka haluat suorittaa"
-        },
-        "parameters": {
-          "label": "Parametrit",
-          "helpText": "Nämä arvot välitetään komennolle listatussa järjestyksessä",
-          "placeholder": "Napsauta alla olevia painikkeita lisätäksesi parametreja tai kirjoita manuaalisesti",
-          "tooltip": "Käytä alla olevia painikkeita tai kirjoita suoraan (pilkuilla eroteltuina)",
-          "availableTitle": "Käytettävissä olevat parametrit",
-          "buttons": {
-            "commonName": "YleinenNimi",
-            "scientificName": "TieteellinenNimi",
-            "confidence": "Luottamus",
-            "time": "Aika",
-            "source": "Lähde",
-            "clearParameters": "Tyhjennä parametrit"
-          }
-        },
-        "executeDefaults": {
-          "label": "Suorita myös oletustoiminnot (tietokantatallennus, ilmoitukset jne.)",
-          "helpText": "Kun käytössä, sekä mukautettu toimintosi että järjestelmän oletustoiminnot suoritetaan. Kun pois käytöstä, vain mukautettu toimintosi suoritetaan."
-        }
-      },
-      "add": "Lisää",
-      "remove": "Poista",
-      "suggestions": "Lajiehdotukset",
-      "addSpeciesToInclude": "Lisää sisällytettäviä lajeja",
-      "addSpeciesToIncludeLabel": "Lisää uusia sisällytettäviä lajeja",
-      "addSpeciesToExclude": "Lisää pois jätettäviä lajeja",
-      "addSpeciesToExcludeLabel": "Lisää uusia pois jätettäviä lajeja",
-      "commandPathPlaceholder": "/polku/komentoon",
-      "parametersPlaceholder": "Parametrit ilmestyvät tähän",
-      "errors": {
-        "speciesLoadFailed": "Lajiluettelon lataus epäonnistui. Yritä uudelleen."
-      },
-      "tracking": {
-        "title": "Seuranta",
-        "tabLabel": "Seuranta",
-        "description": "Määritä uusien lajihavaintojen seuranta aikajaksojen perusteella",
-        "enabled": {
-          "label": "Ota lajiseuranta käyttöön",
-          "helpText": "Kun käytössä, järjestelmä seuraa uusia lajihavaintoja ja voi lähettää ilmoituksia"
-        },
-        "newSpeciesWindowDays": {
-          "label": "Uuden lajin ikkuna (päivää)",
-          "helpText": "Kuinka monta päivää lajia pidetään 'uutena' ensimmäisen havainnon jälkeen (1-365)"
-        },
-        "syncIntervalMinutes": {
-          "label": "Synkronointiväli (minuuttia)",
-          "helpText": "Kuinka usein seurantatiedot synkronoidaan tietokannan kanssa (1-1440)"
-        },
-        "notificationSuppressionHours": {
-          "label": "Ilmoitusten esto (tuntia)",
-          "helpText": "Tuntia, joiden ajan estetään saman lajin toistuvat ilmoitukset (0-8760)"
-        },
-        "yearly": {
-          "title": "Vuosiseuranta",
-          "description": "Seuraa lajien ensimmäisiä saapumisia joka vuosi",
-          "enabled": {
-            "label": "Ota vuosiseuranta käyttöön",
-            "helpText": "Seuraa ja ilmoita, kun laji havaitaan ensimmäisen kerran vuodessa"
-          },
-          "resetMonth": {
-            "label": "Nollauskuukausi",
-            "helpText": "Kuukausi, jolloin vuosiseuranta nollataan (1-12)"
-          },
-          "resetDay": {
-            "label": "Nollauspäivä",
-            "helpText": "Kuukauden päivä, jolloin vuosiseuranta nollataan"
-          },
-          "windowDays": {
-            "label": "Ikkuna (päivää)",
-            "helpText": "Päivät 'uusi tänä vuonna' -ilmaisimen näyttämiseksi (1-365)"
-          }
-        },
-        "seasonal": {
-          "title": "Kausiseuranta",
-          "description": "Seuraa lajien ensimmäisiä saapumisia joka kausi",
-          "enabled": {
-            "label": "Ota kausiseuranta käyttöön",
-            "helpText": "Seuraa ja ilmoita, kun laji havaitaan ensimmäisen kerran kaudessa"
-          },
-          "windowDays": {
-            "label": "Ikkuna (päivää)",
-            "helpText": "Päivät 'uusi tällä kaudella' -ilmaisimen näyttämiseksi (1-365)"
-          },
-          "seasons": {
-            "title": "Kausimääritykset",
-            "description": "Määritä, milloin kukin kausi alkaa. Kaudet mukautuvat automaattisesti sijaintisi leveysasteen perusteella.",
-            "spring": "Kevät",
-            "summer": "Kesä",
-            "fall": "Syksy",
-            "winter": "Talvi",
-            "wet1": "Sadekausi 1",
-            "dry1": "Kuivakausi 1",
-            "wet2": "Sadekausi 2",
-            "dry2": "Kuivakausi 2",
-            "startMonth": "Alkukuukausi",
-            "startDay": "Alkupäivä",
-            "hemisphereNote": "Kausien päivämäärät määritetään automaattisesti leveysasteesi perusteella. Pohjoisella pallonpuoliskolla käytetään tavallisia vuodenaikoja, eteläisellä pallonpuoliskolla siirrettyjä päivämääriä ja päiväntasaajan alueilla sade-/kuivakausia."
-          }
-        },
-        "months": {
-          "january": "Tammikuu",
-          "february": "Helmikuu",
-          "march": "Maaliskuu",
-          "april": "Huhtikuu",
-          "may": "Toukokuu",
-          "june": "Kesäkuu",
-          "july": "Heinäkuu",
-          "august": "Elokuu",
-          "september": "Syyskuu",
-          "october": "Lokakuu",
-          "november": "Marraskuu",
-          "december": "Joulukuu"
-        },
-        "units": {
-          "days": "päivää",
-          "min": "min",
-          "hours": "t"
-        }
-      },
-      "dynamicThreshold": {
-        "tabLabel": "Opitut",
-        "title": "Opitut kynnysarvot",
-        "description": "Tämä sivu näyttää dynaamisten kynnysarvojen suoritusaikaiset tiedot. Kun käytössä kohdassa Pääasetukset → Tunnistus, kynnysarvoja säädetään automaattisesti useiden korkean luottamuksen havaintojen perusteella. Täällä näkyvien lajien oletetaan esiintyvän tässä sijainnissa.",
-        "stats": {
-          "active": "Aktiiviset",
-          "atMinimum": "Minimissä",
-          "minThreshold": "Min. kynnys",
-          "validityPeriod": "Voimassaoloaika"
-        },
-        "header": {
-          "species": "Laji",
-          "threshold": "Kynnysarvo",
-          "expires": "Vanhenee"
-        },
-        "searchPlaceholder": "Hae lajeja...",
-        "threshold": "Kynnysarvo",
-        "level": "Taso",
-        "expires": "Vanhenee",
-        "expired": "Vanhentunut",
-        "confidence": "Luottamus",
-        "requiredConfidence": "Vaadittu luottamus",
-        "resetAll": "Nollaa kaikki",
-        "resetSpecies": "Nollaa tämän lajin kynnysarvo",
-        "noEvents": "Ei kynnysarvon muutoshistoriaa",
-        "changeReason": {
-          "highConfidence": "Korkean luottamuksen havainto",
-          "expiry": "Kynnysarvo vanhentunut",
-          "manualReset": "Manuaalinen nollaus"
-        },
-        "note": "Korkean luottamuksen havainnot vahvistavat, mitkä lajit esiintyvät tässä sijainnissa. Useiden korkean luottamuksen osumien jälkeen tunnistuskynnystä alennetaan turvallisesti, jotta saadaan enemmän ääniä ilman merkittävää väärien positiivisten riskiä. Kynnysarvot nollautuvat automaattisesti asetetun voimassaoloajan jälkeen.",
-        "empty": {
-          "title": "Ei opittuja kynnysarvoja",
-          "description": "Korkean luottamuksen havainnot luovat automaattisesti opitut kynnysarvot lajeille"
-        },
-        "resetAllConfirm": {
-          "title": "Nollaa kaikki kynnysarvot",
-          "message": "Tämä nollaa kaikki {count} opittua kynnysarvoa. Lajit on havaittava uudelleen korkealla luottamuksella niiden kynnysarvojen alentamiseksi."
-        },
-        "loadError": "Dynaamisten kynnysarvojen lataus epäonnistui",
-        "resetSuccess": "Kynnysarvo nollattu lajille {species}",
-        "resetError": "Kynnysarvon nollaus epäonnistui",
-        "resetAllSuccess": "{count} kynnysarvoa nollattu",
-        "resetAllError": "Kynnysarvojen nollaus epäonnistui",
-        "expand": "Näytä tapahtumahistoria",
-        "collapse": "Piilota tapahtumahistoria"
-      }
-    },
     "database": {
       "sqlitePlaceholder": "Syötä SQLite-tietokannan polku",
       "mysqlHostPlaceholder": "Syötä MySQL-isäntä",
@@ -4263,7 +3789,6 @@
           "detection_occurred": "Havainto tehty",
           "application_started": "Sovellus käynnistetty",
           "application_stopped": "Sovellus pysäytetty",
-          "integration_birdweather_failed": "BirdWeather-lähetys epäonnistui",
           "integration_mqtt_connected": "MQTT yhdistetty",
           "integration_mqtt_disconnected": "MQTT-yhteys katkaistu",
           "integration_mqtt_publish_failed": "MQTT-julkaisu epäonnistui",
@@ -4306,9 +3831,13 @@
       "v2Required": "Hälytyssäännöt vaativat päivitetyn tietokantaskeeman. Voit päivittää tietokantasi",
       "v2RequiredLink": "Järjestelmän tietokantasivulta.",
       "builtInRules": {
-        "newSpecies": {
-          "name": "Uusi laji havaittu",
-          "description": "Ilmoittaa kun laji havaitaan ensimmäistä kertaa"
+        "keywordFlag": {
+          "name": "Keyword flagged",
+          "description": "Notifies when a detection transcript matches a configured keyword"
+        },
+        "speakerAttribute": {
+          "name": "Speaker attribute matched",
+          "description": "Notifies when a detection's estimated speaker attributes (gender, age band) match a rule"
         },
         "streamDisconnected": {
           "name": "Äänistriimi katkennut",
@@ -4341,10 +3870,6 @@
         "mqttPublishFailed": {
           "name": "MQTT-julkaisu epäonnistui",
           "description": "Ilmoittaa kun MQTT-viestin julkaisu epäonnistuu"
-        },
-        "birdWeatherFailed": {
-          "name": "BirdWeather-lähetys epäonnistui",
-          "description": "Ilmoittaa kun BirdWeather-lähetys epäonnistuu"
         }
       }
     },
@@ -4371,7 +3896,7 @@
       },
       "appearance": {
         "title": "Ulkoasu",
-        "description": "Mukauta BirdNET-Go-käyttöliittymän ulkoasua"
+        "description": "Mukauta VoiceWatch-käyttöliittymän ulkoasua"
       },
       "language": {
         "title": "Kieli ja alue",
@@ -4389,14 +3914,14 @@
         "defaultGainUnit": "dB"
       }
     },
-    "restartRequired": "Jotkin muutokset vaativat palvelimen uudelleenkäynnistyksen astuakseen voimaan. Käynnistä BirdNET-Go uudelleen."
+    "restartRequired": "Jotkin muutokset vaativat palvelimen uudelleenkäynnistyksen astuakseen voimaan. Käynnistä VoiceWatch uudelleen."
   },
   "auth": {
     "login": "Kirjaudu",
     "logout": "Kirjaudu ulos",
     "openLoginModal": "Avaa kirjautumisikkuna",
     "loginTitle": "Kirjaudu sisään",
-    "loginSubtitle": "Siirry BirdNET-Go-hallintapaneeliin",
+    "loginSubtitle": "Siirry VoiceWatch-hallintapaneeliin",
     "password": "Salasana",
     "passwordPlaceholder": "Syötä salasanasi",
     "enterPassword": "Syötä salasana",
@@ -4581,7 +4106,7 @@
       "streamError": "Virhe striimin käynnistyksessä",
       "streamTitle": "Lintujen äänistriimi - {source}",
       "streamTitleDefault": "Lintujen äänistriimi",
-      "streamArtist": "BirdNET-Go",
+      "streamArtist": "VoiceWatch",
       "streamAlbum": "Suora lähetys",
       "playbackError": "Toistovirhe: {details}"
     },
@@ -4606,7 +4131,8 @@
       "generating": "Luodaan...",
       "waiting": "Waiting...",
       "queuePosition": "Jono: {position}",
-      "loadError": "Äänitiedoston lataaminen epäonnistui"
+      "loadError": "Äänitiedoston lataaminen epäonnistui",
+      "spectrogramForDetection": "Spectrogram for detection"
     },
     "forms": {
       "numberField": {
@@ -4715,11 +4241,6 @@
       "removeCertificate": "Poista sertifikaatti",
       "fileReadError": "Tiedoston lukeminen epäonnistui",
       "loading": "Ladataan sertifikaattitietoja..."
-    },
-    "birdThumbnail": {
-      "viewDetections": "View {name} detections",
-      "largeView": "Large view of {name}",
-      "clickToView": "Click to view detections"
     }
   },
   "connectivity": {
@@ -4800,9 +4321,6 @@
       "mqttNotConfigured": "MQTT-välittäjää ei ole määritetty",
       "mqttMetricsUnavailable": "Mittaripalvelu ei ole käytettävissä MQTT-testiin",
       "mqttClientFailed": "MQTT-asiakasohjelman luominen epäonnistui",
-      "birdweatherDisabled": "BirdWeather-integraatio ei ole käytössä",
-      "birdweatherNotConfigured": "BirdWeather-aseman tunnistetta ei ole määritetty",
-      "birdweatherClientFailed": "BirdWeather-asiakasohjelman luominen epäonnistui",
       "noWeatherProvider": "Sääpalvelua ei ole valittu",
       "openWeatherKeyRequired": "OpenWeather API-avain on pakollinen",
       "processorUnavailable": "Prosessori ei ole käytettävissä",
@@ -4880,10 +4398,10 @@
     "steps": {
       "welcome": {
         "title": "Tervetuloa",
-        "heading": "Tervetuloa BirdNET-Go:hon!",
-        "description": "BirdNET-Go on avoimen lähdekoodin linnunäänitunnistusjärjestelmä, joka kuuntelee ääntä mikrofonistasi tai streamistä ja tunnistaa lintulajeja reaaliajassa.",
-        "credit": "BirdNET-Go käyttää BirdNET-tekoälymallia, jonka on kehittänyt K. Lisa Yang Center for Conservation Bioacoustics Cornell Lab of Ornithologyssa ja Chemnitzin teknillisessä yliopistossa. BirdNET-Go on itsenäinen yhteisöprojekti eikä ole sidoksissa BirdNET-tiimiin.",
-        "learnMore": "Lue lisää BirdNETistä",
+        "heading": "Tervetuloa VoiceWatch:hon!",
+        "description": "VoiceWatch on avoimen lähdekoodin linnunäänitunnistusjärjestelmä, joka kuuntelee ääntä mikrofonistasi tai streamistä ja tunnistaa lintulajeja reaaliajassa.",
+        "credit": "VoiceWatch käyttää VoiceWatch-tekoälymallia, jonka on kehittänyt K. Lisa Yang Center for Conservation Bioacoustics Cornell Lab of Ornithologyssa ja Chemnitzin teknillisessä yliopistossa. VoiceWatch on itsenäinen yhteisöprojekti eikä ole sidoksissa VoiceWatch-tiimiin.",
+        "learnMore": "Lue lisää VoiceWatchistä",
         "cta": "Määritetään lintuseuranta-asemasi."
       },
       "locationLanguage": {
@@ -4937,16 +4455,12 @@
         "title": "Yksityisyys ja integraatiot",
         "privacyFilterLabel": "Ota yksityisyyssuodatin käyttöön",
         "privacyFilterHelp": "Suodattaa havainnot, kun mikrofonin lähellä havaitaan ihmisen puhetta",
-        "birdweatherLabel": "Jaa havainnot BirdWeatheriin",
-        "birdweatherHelp": "Osallistu lintuhavainnoillasi BirdWeather-yhteisöverkkoon",
-        "birdweatherIdLabel": "BirdWeather-aseman ID",
-        "birdweatherIdPlaceholder": "Syötä BirdWeather-asemasi ID",
         "errorReportingLabel": "Lähetä nimettömiä virheilmoituksia",
-        "errorReportingHelp": "Auta parantamaan BirdNET-Go:ta lähettämällä nimettömiä virheilmoituksia ongelmatilanteissa"
+        "errorReportingHelp": "Auta parantamaan VoiceWatch:ta lähettämällä nimettömiä virheilmoituksia ongelmatilanteissa"
       },
       "responsibleUse": {
-        "title": "BirdNET-Go:n vastuullinen käyttö",
-        "intro": "BirdNET-Go on tehokas työkalu, joka parantaa lintuhavaintokokemustasi tekoälyavusteisen tunnistuksen avulla. Parhaiden tulosten saavuttamiseksi sekä lintuharrastuksessa että luonnonsuojelussa:",
+        "title": "VoiceWatch:n vastuullinen käyttö",
+        "intro": "VoiceWatch on tehokas työkalu, joka parantaa lintuhavaintokokemustasi tekoälyavusteisen tunnistuksen avulla. Parhaiden tulosten saavuttamiseksi sekä lintuharrastuksessa että luonnonsuojelussa:",
         "point1": "Tarkista ja varmista havainnot ennen jakamista",
         "point2": "Käytä luottamuspisteitä ohjeena, ei ehdottomana totuutena",
         "point3": "Vertaa kenttäoppaisiin ja paikalliseen asiantuntemukseen",
@@ -5005,26 +4519,6 @@
         "helpText": "Kieli, jolla lajien yleisnimistö näytetään käyttöliittymässä."
       }
     },
-    "rangeFilter": {
-      "birdOnlyNote": "Aluesuodatin koskee vain lintuluokittimia. Lepakkomallit käyttävät omia lajilistojaan.",
-      "status": {
-        "title": "Aluesuodattimen yhteenveto",
-        "geomodelInfo": "BirdNET-geomalli {version} - {species} tunnettua lajia",
-        "autoSelected": "Automaattisesti valittu",
-        "manual": "Manuaalinen",
-        "classifier": "Luokittelija",
-        "totalSpecies": "Lajeja yhteensä",
-        "withRangeData": "Aluetiedoilla",
-        "withoutRangeData": "Ilman aluetietoja",
-        "withRangeDataTooltip": "Lajit, joiden maantieteellisen todennäköisyyden geomalli voi arvioida sijainnissasi",
-        "withoutRangeDataTooltip": "Lajit, joilla ei ole maantieteellisiä tietoja geomallissa, käsitellään alla olevalla kartoittamattomien lajien asetuksella",
-        "noFilter": "Ei aktiivista aluesuodatinta",
-        "passUnmapped": {
-          "label": "Salli lajit ilman aluetietoja",
-          "helpText": "Salli sellaisten lajien havainnot, joille geomallilla ei ole maantieteellisiä tietoja. Kun pois päältä, nämä lajit suodatetaan aina pois."
-        }
-      }
-    },
     "advanced": {
       "title": "Lisäasetukset",
       "description": "Käsittelyn ja mukautettujen mallien asetukset."
@@ -5039,7 +4533,7 @@
       "loading": "Ladataan malleja...",
       "retry": "Yritä uudelleen",
       "builtIn": "Sisäänrakennettu",
-      "builtInDescription": "BirdNET-tiimin sisäänrakennettu lintulajien luokittelija.",
+      "builtInDescription": "VoiceWatch-tiimin sisäänrakennettu lintulajien luokittelija.",
       "species": "{count} lajia",
       "install": "Asenna",
       "installing": "Asennetaan...",
@@ -5091,7 +4585,7 @@
       "reinstall": "Asenna uudelleen",
       "reinstalling": "Asennetaan uudelleen...",
       "reinstallComplete": "Tiedostot tarkistettu onnistuneesti",
-      "geomodelBadge": "Sisältää BirdNET v3.0 -geomallin",
+      "geomodelBadge": "Sisältää VoiceWatch v3.0 -geomallin",
       "onnxRuntimeRequired": "Vaatii ONNX Runtimen, joka ei ole käytettävissä tässä järjestelmässä.",
       "onnxRuntimeMissing": "ONNX Runtime ei ole käytettävissä. Tätä mallia ei voi suorittaa.",
       "unavailable": "Ei käytettävissä"
@@ -5106,6 +4600,45 @@
     },
     "dynamicThreshold": {
       "birdOnlyNote": "Dynaaminen kynnys koskee vain lintuluokittimia."
+    },
+    "transcription": {
+      "title": "Transcription & Keyword Flagging",
+      "description": "Transcribe audio clips offline with Whisper and flag detections whose transcription contains defined keywords.",
+      "enable": {
+        "label": "Enable Transcription",
+        "helpText": "Enables offline speech-to-text transcription for detected audio clips using whisper.cpp."
+      },
+      "modelPath": {
+        "label": "Whisper Model Path",
+        "placeholder": "ggml-tiny.en.bin",
+        "helpText": "Path to the GGML model file used for transcription. Required when transcription is enabled.",
+        "required": "A model path is required when transcription is enabled. Enter the path to a GGML model file (e.g. ggml-tiny.en.bin)."
+      },
+      "language": {
+        "label": "Language",
+        "placeholder": "en",
+        "helpText": "BCP-47 language code for transcription (e.g. en, de, fr). Leave as en for English-only models."
+      },
+      "advanced": {
+        "title": "Advanced",
+        "binary": {
+          "label": "Whisper Binary",
+          "placeholder": "whisper-cli",
+          "helpText": "Name or absolute path of the whisper-cli executable. Defaults to whisper-cli on PATH."
+        }
+      },
+      "keywords": {
+        "label": "Flag Keywords",
+        "inputPlaceholder": "Add a keyword...",
+        "helpText": "Detections whose transcription contains any of these words will be flagged for review.",
+        "addButton": "Add",
+        "emptyState": "No keywords added yet. Enter a word above and click Add.",
+        "removeAriaLabel": "Remove keyword \"{keyword}\""
+      },
+      "caseSensitive": {
+        "label": "Case-Sensitive Matching",
+        "helpText": "When enabled, keyword matching distinguishes uppercase from lowercase letters (e.g. \"Fire\" will not match \"fire\")."
+      }
     }
   },
   "restart": {
@@ -5123,7 +4656,9 @@
       "webserver": "Web server / network settings",
       "database": "Database settings",
       "logging": "Logging settings",
-      "tlsCertificate": "TLS certificate"
+      "tlsCertificate": "TLS certificate",
+      "continuousRecording": "Continuous recording settings",
+      "speakerAttributes": "Speaker attribute settings"
     }
   },
   "help": {
@@ -5167,7 +4702,7 @@
       },
       "step2": {
         "title": "Asennustapasi",
-        "description": "Miten asensit BirdNET-Go:n: install.sh-skripti, Docker Compose, manuaalinen käännös tai muu."
+        "description": "Miten asensit VoiceWatch:n: install.sh-skripti, Docker Compose, manuaalinen käännös tai muu."
       },
       "step3": {
         "title": "Järjestelmätiedot",
@@ -5236,7 +4771,7 @@
       "fetchFailed": "Failed to load diagnostics"
     },
     "export": {
-      "reportTitle": "BirdNET-Go System Health Report",
+      "reportTitle": "VoiceWatch System Health Report",
       "statusLabel": "Status",
       "timeLabel": "Time",
       "durationLabel": "Duration",

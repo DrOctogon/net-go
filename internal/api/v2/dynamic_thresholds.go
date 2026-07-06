@@ -10,8 +10,8 @@ import (
 	"time"
 
 	"github.com/labstack/echo/v4"
-	"github.com/tphakala/birdnet-go/internal/analysis/processor"
-	"github.com/tphakala/birdnet-go/internal/errors"
+	"github.com/tphakala/voicewatch/internal/analysis/processor"
+	"github.com/tphakala/voicewatch/internal/errors"
 )
 
 // Pagination defaults for dynamic threshold endpoints
@@ -230,7 +230,7 @@ func (c *Controller) addMemoryThresholds(thresholdMap map[string]*DynamicThresho
 		return
 	}
 	memoryData := proc.GetDynamicThresholdData()
-	baseThreshold := c.currentSettings().BirdNET.Threshold
+	baseThreshold := c.currentSettings().VoiceWatch.Threshold
 
 	for _, dt := range memoryData {
 		key := strings.ToLower(dt.ModelName) + ":" + strings.ToLower(dt.SpeciesName)

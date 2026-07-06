@@ -40,11 +40,11 @@ import (
 	"text/template"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/httpclient"
-	"github.com/tphakala/birdnet-go/internal/logger"
-	"github.com/tphakala/birdnet-go/internal/secrets"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/httpclient"
+	"github.com/tphakala/voicewatch/internal/logger"
+	"github.com/tphakala/voicewatch/internal/secrets"
 )
 
 const (
@@ -222,7 +222,7 @@ func NewWebhookProvider(name string, enabled bool, endpoints []WebhookEndpoint, 
 
 	// Create HTTP client with production settings
 	cfg := httpclient.DefaultConfig()
-	cfg.UserAgent = "BirdNET-Go-Webhook/1.0"
+	cfg.UserAgent = "VoiceWatch-Webhook/1.0"
 	cfg.DefaultTimeout = defaultWebhookTimeout
 	wp.client = httpclient.New(&cfg)
 

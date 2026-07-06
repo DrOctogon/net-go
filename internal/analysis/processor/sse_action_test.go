@@ -13,10 +13,9 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tphakala/birdnet-go/internal/conf"
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	"github.com/tphakala/birdnet-go/internal/detection"
-	"github.com/tphakala/birdnet-go/internal/imageprovider"
+	"github.com/tphakala/voicewatch/internal/conf"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/detection"
 )
 
 // MockSSEBroadcaster captures broadcast calls for testing.
@@ -24,7 +23,6 @@ type MockSSEBroadcaster struct {
 	mu             sync.Mutex
 	broadcastCount int
 	lastNote       *datastore.Note
-	lastImage      *imageprovider.BirdImage
 	broadcastErr   error
 }
 
@@ -34,13 +32,12 @@ func NewMockSSEBroadcaster() *MockSSEBroadcaster {
 }
 
 // BroadcastFunc returns a function suitable for SSEAction.SSEBroadcaster.
-func (m *MockSSEBroadcaster) BroadcastFunc() func(*datastore.Note, *imageprovider.BirdImage) error {
-	return func(note *datastore.Note, image *imageprovider.BirdImage) error {
+func (m *MockSSEBroadcaster) BroadcastFunc() func(*datastore.Note) error {
+	return func(note *datastore.Note) error {
 		m.mu.Lock()
 		defer m.mu.Unlock()
 		m.broadcastCount++
 		m.lastNote = note
-		m.lastImage = image
 		return m.broadcastErr
 	}
 }

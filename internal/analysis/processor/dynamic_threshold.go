@@ -4,9 +4,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tphakala/birdnet-go/internal/datastore"
-	"github.com/tphakala/birdnet-go/internal/errors"
-	"github.com/tphakala/birdnet-go/internal/logger"
+	"github.com/tphakala/voicewatch/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/logger"
 )
 
 // Threshold level multipliers define how much the base threshold is reduced at each level.
@@ -24,7 +24,7 @@ const (
 )
 
 // defaultModelID is the model identity used when no explicit model ID is provided.
-const defaultModelID = "BirdNET"
+const defaultModelID = "VoiceWatch"
 
 // dynamicThresholdKey creates a composite key for scoping thresholds per model.
 // The key format is "modelID:speciesLowercase".
@@ -203,7 +203,7 @@ func (p *Processor) LearnFromApprovedDetection(modelID, speciesLowercase, scient
 	}
 
 	// Use global threshold as base (species has no custom threshold)
-	baseThreshold := float32(settings.BirdNET.Threshold)
+	baseThreshold := float32(settings.VoiceWatch.Threshold)
 
 	// Calculate learning cooldown based on detection window duration
 	// This prevents multiple threshold learnings within a single detection event
@@ -503,14 +503,14 @@ func levelMultiplier(level int) float64 {
 }
 
 // RecalculateDynamicThresholds recomputes all CurrentValue entries based on the current
-// BirdNET.Threshold. This must be called when the global base threshold changes so that
+// VoiceWatch.Threshold. This must be called when the global base threshold changes so that
 // stored absolute values remain consistent with each species' level/tier.
 // Species with custom per-species thresholds are not present in the dynamic thresholds
 // map (they are filtered out in LearnFromApprovedDetection), so no special handling is needed.
 func (p *Processor) RecalculateDynamicThresholds() {
 	log := GetLogger()
 	settings := p.currentSettings()
-	newBase := float64(settings.BirdNET.Threshold)
+	newBase := float64(settings.VoiceWatch.Threshold)
 	minThreshold := settings.Realtime.DynamicThreshold.Min
 
 	p.thresholdsMutex.Lock()

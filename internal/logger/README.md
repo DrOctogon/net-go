@@ -1,6 +1,6 @@
 # Logger Package
 
-Centralized, module-aware logging system for BirdNET-Go built on Go's standard `log/slog`.
+Centralized, module-aware logging system for VoiceWatch built on Go's standard `log/slog`.
 
 ## Features
 
@@ -22,7 +22,7 @@ When converting a package to use the centralized logger, follow this pattern:
 ```go
 package mypackage
 
-import "github.com/tphakala/birdnet-go/internal/logger"
+import "github.com/tphakala/voicewatch/internal/logger"
 
 // GetLogger returns the mypackage logger.
 func GetLogger() logger.Logger {
@@ -83,7 +83,7 @@ func FunctionWithClosure() {
 package mypackage
 
 import (
-    "github.com/tphakala/birdnet-go/internal/logger"
+    "github.com/tphakala/voicewatch/internal/logger"
 )
 
 func cleanupTestArtifacts() {
@@ -98,7 +98,7 @@ func cleanupTestArtifacts() {
 ### 5. Checklist
 
 - [ ] Remove `import "log"` and `import "log/slog"`
-- [ ] Add `import "github.com/tphakala/birdnet-go/internal/logger"`
+- [ ] Add `import "github.com/tphakala/voicewatch/internal/logger"`
 - [ ] Create `GetLogger()` function returning `logger.Global().Module("pkgname")`
 - [ ] Replace `log.Printf(...)` with `log.Info(..., logger.String(...))` etc.
 - [ ] Cache logger at function start: `log := GetLogger()`
@@ -114,7 +114,7 @@ func cleanupTestArtifacts() {
 ### Basic Usage
 
 ```go
-import "github.com/tphakala/birdnet-go/internal/logger"
+import "github.com/tphakala/voicewatch/internal/logger"
 
 // Create central logger from config
 cfg := &logger.LoggingConfig{
@@ -349,7 +349,7 @@ Use the Echo adapter to route Echo's internal logs through pkg/logger:
 
 ```go
 import (
-    "github.com/tphakala/birdnet-go/internal/logger"
+    "github.com/tphakala/voicewatch/internal/logger"
     "github.com/labstack/echo/v4"
 )
 
@@ -673,7 +673,7 @@ import "log"
 log.Printf("User logged in: %s", userID)
 
 // New
-import "github.com/tphakala/birdnet-go/internal/logger"
+import "github.com/tphakala/voicewatch/internal/logger"
 logger.Info("User logged in", logger.String("user_id", userID))
 ```
 
@@ -685,7 +685,7 @@ import "log/slog"
 slog.Error("Failed", "key", value, "key2", value2)
 
 // New
-import "github.com/tphakala/birdnet-go/internal/logger"
+import "github.com/tphakala/voicewatch/internal/logger"
 logger.Error("Failed",
     logger.String("key", value),
     logger.Int("key2", value2))
@@ -744,4 +744,4 @@ e.Logger = logger.NewEchoLoggerAdapter(appLogger.Module("echo"))
 ## See Also
 
 - [Go slog documentation](https://pkg.go.dev/log/slog)
-- [internal/logger godoc](https://pkg.go.dev/github.com/tphakala/birdnet-go/internal/logger)
+- [internal/logger godoc](https://pkg.go.dev/github.com/tphakala/voicewatch/internal/logger)
