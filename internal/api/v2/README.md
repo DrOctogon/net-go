@@ -156,8 +156,17 @@ Lightweight connectivity check. Returns a minimal response with no database quer
 | GET    | `/media/audio/:filename`             | `ServeAudioClip`         | ❌   | Serve audio file                   |
 | GET    | `/media/spectrogram/:filename`       | `ServeSpectrogram`       | ❌   | Serve spectrogram image            |
 | GET    | `/media/audio`                       | `ServeAudioByQueryID`    | ❌   | Serve audio by detection ID        |
-| GET    | `/spectrogram/:id/status`            | `GetSpectrogramStatus`   | ❌   | Get spectrogram generation status  |
+| GET    | `/audio/:id`                         | `ServeAudioByID`         | 🔒   | Serve detection audio by ID        |
+| GET    | `/spectrogram/:id`                   | `ServeSpectrogramByID`   | 🔒   | Serve detection spectrogram by ID  |
+| GET    | `/spectrogram/:id/status`            | `GetSpectrogramStatus`   | 🔒   | Get spectrogram generation status  |
+| POST   | `/spectrogram/:id/generate`          | `GenerateSpectrogramByID`| 🔒   | Trigger spectrogram generation     |
 | POST   | `/audio/:id/clip`                    | `ExtractAudioClipByID`   | ✅   | Extract audio clip from time range |
+
+> 🔒 = gated by `privateModeAuth`: public by default, requires authentication when
+> `Security.PrivateMode` is enabled. These ID-based routes are registered on
+> `c.Echo` (not `c.Group`), so the middleware is attached explicitly at the route
+> — raw human-voice audio and spectrograms must not be reachable unauthenticated
+> in private mode.
 
 ### Notifications (`notifications.go`)
 

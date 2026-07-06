@@ -185,6 +185,54 @@ func TestInitMediaRoutesRegistration(t *testing.T) {
 	}
 }
 
+// rejectingAuthMiddleware always fails authentication with 401, so a route that
+// is properly gated never reaches its handler.
+func rejectingAuthMiddleware() echo.MiddlewareFunc {
+	return func(echo.HandlerFunc) echo.HandlerFunc {
+		return func(ctx echo.Context) error {
+			return echo.NewHTTPError(http.StatusUnauthorized, "unauthorized")
+		}
+	}
+}
+
+// TestMediaByIDRoutesGatedByPrivateMode is a regression test for a privacy leak:
+// the ID-based media routes are registered on c.Echo (not c.Group), so they did
+// not inherit the group's privateModeAuth middleware and served raw human-voice
+// audio and spectrograms without authentication even when PrivateMode was on.
+// With PrivateMode enabled and a rejecting auth middleware, every by-ID media
+// route must return 401 rather than reaching its handler.
+//
+// Not parallel: publishTestSettings mutates the process-global settings snapshot.
+func TestMediaByIDRoutesGatedByPrivateMode(t *testing.T) {
+	e, _, controller := setupTestEnvironment(t)
+	WithAuthMiddleware(rejectingAuthMiddleware())(controller)
+
+	settings := newValidTestSettings()
+	settings.Security.PrivateMode = true
+	publishTestSettings(t, settings)
+
+	controller.initMediaRoutes()
+
+	cases := []struct {
+		method string
+		path   string
+	}{
+		{http.MethodGet, "/api/v2/audio/1"},
+		{http.MethodGet, "/api/v2/spectrogram/1"},
+		{http.MethodGet, "/api/v2/spectrogram/1/status"},
+		{http.MethodPost, "/api/v2/spectrogram/1/generate"},
+	}
+	for _, tc := range cases {
+		t.Run(tc.method+" "+tc.path, func(t *testing.T) {
+			req := httptest.NewRequest(tc.method, tc.path, http.NoBody)
+			rec := httptest.NewRecorder()
+			e.ServeHTTP(rec, req)
+			assert.Equal(t, http.StatusUnauthorized, rec.Code,
+				"PrivateMode-on media by-ID route must reject unauthenticated access")
+		})
+	}
+}
+
 // createTestAudioFile creates a valid WAV file for testing that meets the minimum size requirements.
 // The file will be at least 1024 bytes to pass validation.
 func createTestAudioFile(t *testing.T, path string) error {

@@ -187,11 +187,17 @@ func (c *Controller) initMediaRoutes() {
 		return
 	}
 
-	// ID-based routes using SFS
-	c.Echo.GET("/api/v2/audio/:id", c.ServeAudioByID)
-	c.Echo.GET("/api/v2/spectrogram/:id", c.ServeSpectrogramByID)
-	c.Echo.GET("/api/v2/spectrogram/:id/status", c.GetSpectrogramStatus)
-	c.Echo.POST("/api/v2/spectrogram/:id/generate", c.GenerateSpectrogramByID)
+	// ID-based routes using SFS. These are registered directly on c.Echo (not
+	// c.Group) by design — see the route-namespace note in the package README —
+	// so they do NOT inherit the group's privateModeAuth middleware. Attach it
+	// explicitly: raw detection audio and spectrograms are sensitive human-voice
+	// data and must be gated when PrivateMode is enabled. privateModeAuth is a
+	// pass-through when PrivateMode is off, so default (public) installs are
+	// unaffected.
+	c.Echo.GET("/api/v2/audio/:id", c.ServeAudioByID, c.privateModeAuth)
+	c.Echo.GET("/api/v2/spectrogram/:id", c.ServeSpectrogramByID, c.privateModeAuth)
+	c.Echo.GET("/api/v2/spectrogram/:id/status", c.GetSpectrogramStatus, c.privateModeAuth)
+	c.Echo.POST("/api/v2/spectrogram/:id/generate", c.GenerateSpectrogramByID, c.privateModeAuth)
 
 	// Clip extraction (requires authentication)
 	c.Echo.POST("/api/v2/audio/:id/clip", c.ExtractAudioClipByID, c.authMiddleware)
