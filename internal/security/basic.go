@@ -23,7 +23,7 @@ func IsInLocalSubnet(clientIP net.IP) bool {
 		GetLogger().Debug("IsInLocalSubnet check failed: client IP is nil")
 		return false
 	}
-	secLog := GetLogger().With(logger.String("ip", clientIP.String()))
+	secLog := GetLogger().With(logger.IP("ip", clientIP.String()))
 
 	// IPv6 link-local addresses (fe80::/10) are by definition on the local
 	// network segment; routers do not forward them (RFC 4291).
