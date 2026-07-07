@@ -69,14 +69,15 @@ type MoonResponse struct {
 
 // initWeatherRoutes registers all weather-related API endpoints
 func (c *Controller) initWeatherRoutes() {
-	// Create weather API group
+	// Create weather API group. Subgroups derived from c.Group inherit its
+	// middleware, so these routes are already gated by c.privateModeAuth
+	// (attached to c.Group in initRoutes): when PrivateMode is enabled the
+	// whole v2 API, weather included, requires authentication. These GET
+	// endpoints otherwise follow the same public-read pattern as the
+	// detections list; weather data (dates, sun/moon times) is not treated as
+	// sensitive. If that ever changes, copy the always-on auth pattern used by
+	// the protected v2 groups rather than adding ad-hoc middleware here.
 	weatherGroup := c.Group.Group("/weather")
-
-	// TODO: Consider adding authentication middleware to protect these endpoints
-	// Example: weatherGroup.Use(middlewares.RequireAuth())
-
-	// TODO: Consider implementing rate limiting for these endpoints to prevent abuse
-	// Example: weatherGroup.Use(middlewares.RateLimit(100, time.Hour))
 
 	// Daily weather routes
 	weatherGroup.GET("/daily/:date", c.GetDailyWeather)
