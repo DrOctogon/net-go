@@ -21,6 +21,8 @@
   import VerificationBadges from '$lib/desktop/components/ui/VerificationBadges.svelte';
   import ErrorAlert from '$lib/desktop/components/ui/ErrorAlert.svelte';
   import { t } from '$lib/i18n';
+  import { fetchWithCSRF } from '$lib/utils/api';
+  import { toastActions } from '$lib/stores/toast';
   import type { Detection } from '$lib/types/detection.types';
   import { hasReviewPermission, isAuthenticated } from '$lib/utils/auth';
   import { formatLocalDateTime } from '$lib/utils/date';
@@ -37,6 +39,7 @@
     Clock,
     Flag,
     History,
+    SquarePen,
     StickyNote,
     Sun,
     Moon,
@@ -99,6 +102,64 @@
     time?: string;
   }
   let similarVoices = $state<SimilarVoice[]>([]);
+
+  // Speaker roster: user-assigned names for voice-print cluster ids
+  // (auth-gated endpoint; empty map for guests or when nothing is named).
+  let speakerNames = $state<Record<string, string>>({});
+  let renameOpen = $state(false);
+  let renameValue = $state('');
+  let renameSaving = $state(false);
+
+  $effect(() => {
+    speakerNames = {};
+    if (!$isAuthenticated) return;
+
+    const controller = new AbortController();
+    fetch(buildAppUrl('/api/v2/speakers'), { signal: controller.signal })
+      .then(response => (response.ok ? response.json() : []))
+      .then((data: unknown) => {
+        if (controller.signal.aborted || !Array.isArray(data)) return;
+        const names: Record<string, string> = {};
+        for (const entry of data as { speakerId?: string; name?: string }[]) {
+          if (entry.speakerId && entry.name) names[entry.speakerId] = entry.name;
+        }
+        speakerNames = names;
+      })
+      .catch(() => {
+        // Roster is a display nicety; fall back to raw cluster ids.
+      });
+
+    return () => {
+      controller.abort();
+    };
+  });
+
+  async function saveSpeakerName(speakerId: string): Promise<void> {
+    const name = renameValue.trim();
+    renameSaving = true;
+    try {
+      await fetchWithCSRF(`/api/v2/speakers/${speakerId}/name`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name }),
+      });
+      const next = { ...speakerNames };
+      if (name === '') {
+        // Deleting the key (not assigning undefined) so the map stays clean.
+        delete next[speakerId]; // eslint-disable-line security/detect-object-injection -- key is a validated spk_<n> id
+      } else {
+        // eslint-disable-next-line security/detect-object-injection -- key is a validated spk_<n> id
+        next[speakerId] = name;
+      }
+      speakerNames = next;
+      renameOpen = false;
+    } catch (error) {
+      toastActions.error(t('detections.speaker.renameFailed'));
+      logger.error('Failed to save speaker name:', error);
+    } finally {
+      renameSaving = false;
+    }
+  }
 
   $effect(() => {
     const det = detection;
@@ -437,6 +498,62 @@
         <div class="meta-section" aria-label={t('detections.speaker.sectionLabel')}>
           <div class="speaker-attr-label">{t('detections.speaker.sectionLabel')}</div>
           <SpeakerAttributeChips detection={det} variant="default" />
+        </div>
+      {/if}
+
+      <!-- Speaker identity (voice-print cluster) with inline rename -->
+      {#if det.speakerId}
+        <div class="meta-section" aria-label={t('detections.speaker.identityLabel')}>
+          <div class="speaker-attr-label">{t('detections.speaker.identityLabel')}</div>
+          {#if renameOpen}
+            <form
+              class="flex items-center gap-2"
+              onsubmit={e => {
+                e.preventDefault();
+                void saveSpeakerName(det.speakerId ?? '');
+              }}
+            >
+              <input
+                type="text"
+                class="input input-sm flex-1 min-w-0"
+                bind:value={renameValue}
+                maxlength="64"
+                placeholder={t('detections.speaker.renamePlaceholder')}
+                aria-label={t('detections.speaker.renamePlaceholder')}
+                disabled={renameSaving}
+              />
+              <button type="submit" class="btn btn-sm btn-primary" disabled={renameSaving}>
+                {t('common.save')}
+              </button>
+              <button
+                type="button"
+                class="btn btn-sm"
+                onclick={() => (renameOpen = false)}
+                disabled={renameSaving}
+              >
+                {t('common.cancel')}
+              </button>
+            </form>
+          {:else}
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-medium">
+                {speakerNames[det.speakerId] ?? det.speakerId}
+              </span>
+              {#if $isAuthenticated}
+                <button
+                  type="button"
+                  class="btn btn-ghost btn-xs"
+                  onclick={() => {
+                    renameValue = speakerNames[det.speakerId ?? ''] ?? '';
+                    renameOpen = true;
+                  }}
+                  aria-label={t('detections.speaker.renameAction')}
+                >
+                  <SquarePen class="w-3.5 h-3.5" />
+                </button>
+              {/if}
+            </div>
+          {/if}
         </div>
       {/if}
 

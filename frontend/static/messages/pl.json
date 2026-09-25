@@ -1014,7 +1014,11 @@
         "teen": "Teen",
         "adult": "Adult",
         "senior": "Senior"
-      }
+      },
+      "identityLabel": "Mówca",
+      "renamePlaceholder": "Nazwij ten głos",
+      "renameAction": "Zmień nazwę mówcy",
+      "renameFailed": "Nie udało się zapisać nazwy mówcy"
     }
   },
   "species": {

@@ -1014,7 +1014,11 @@
         "teen": "Teen",
         "adult": "Adult",
         "senior": "Senior"
-      }
+      },
+      "identityLabel": "Beszélő",
+      "renamePlaceholder": "Nevezze el ezt a hangot",
+      "renameAction": "Beszélő átnevezése",
+      "renameFailed": "A beszélő nevének mentése sikertelen"
     }
   },
   "species": {

@@ -1014,7 +1014,11 @@
         "teen": "Teen",
         "adult": "Adult",
         "senior": "Senior"
-      }
+      },
+      "identityLabel": "Puhuja",
+      "renamePlaceholder": "Nimeä tämä ääni",
+      "renameAction": "Nimeä puhuja uudelleen",
+      "renameFailed": "Puhujan nimen tallennus epäonnistui"
     }
   },
   "species": {

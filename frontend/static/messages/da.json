@@ -1014,7 +1014,11 @@
         "teen": "Teen",
         "adult": "Adult",
         "senior": "Senior"
-      }
+      },
+      "identityLabel": "Taler",
+      "renamePlaceholder": "Navngiv denne stemme",
+      "renameAction": "Omdøb taler",
+      "renameFailed": "Kunne ikke gemme talerens navn"
     }
   },
   "species": {

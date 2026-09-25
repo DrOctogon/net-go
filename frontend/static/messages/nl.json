@@ -1014,7 +1014,11 @@
         "teen": "Teen",
         "adult": "Adult",
         "senior": "Senior"
-      }
+      },
+      "identityLabel": "Spreker",
+      "renamePlaceholder": "Geef deze stem een naam",
+      "renameAction": "Spreker hernoemen",
+      "renameFailed": "Kan sprekersnaam niet opslaan"
     }
   },
   "species": {
