@@ -203,15 +203,22 @@ func (a *TranscribeAction) flagKeywords(ctx context.Context, transcript string, 
 	if species == "" {
 		species = a.Result.Species.ScientificName
 	}
+	props := map[string]any{
+		alerting.PropertyKeywords:    keywordsHit,
+		alerting.PropertyDetectionID: noteID,
+		alerting.PropertySpeciesName: species,
+	}
+	// Privacy: the full verbatim transcript is attached to the alert (and thus
+	// egressed to any external notification channels) only when the operator has
+	// explicitly opted in. By default only the matched keywords travel, never the
+	// raw speech content. Checked per-event so the toggle hot-reloads.
+	if cfg.IncludeTranscriptInAlerts {
+		props[alerting.PropertyTranscript] = transcript
+	}
 	alerting.TryPublish(&alerting.AlertEvent{
 		ObjectType: alerting.ObjectTypeKeywordFlag,
 		EventName:  alerting.EventKeywordMatched,
-		Properties: map[string]any{
-			alerting.PropertyKeywords:    keywordsHit,
-			alerting.PropertyTranscript:  transcript,
-			alerting.PropertyDetectionID: noteID,
-			alerting.PropertySpeciesName: species,
-		},
+		Properties: props,
 	})
 
 	GetLogger().Info("Detection flagged by transcript keyword",

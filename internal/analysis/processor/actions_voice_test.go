@@ -202,8 +202,50 @@ func TestTranscribeAction_KeywordHit_FlagsAndAlerts(t *testing.T) {
 	assert.Equal(t, alerting.ObjectTypeKeywordFlag, event.ObjectType)
 	assert.Equal(t, alerting.EventKeywordMatched, event.EventName)
 	assert.Equal(t, "fire", event.Properties[alerting.PropertyKeywords])
-	assert.Equal(t, "the house is on fire", event.Properties[alerting.PropertyTranscript])
 	assert.Equal(t, uint(42), event.Properties[alerting.PropertyDetectionID])
+	// Privacy default: the verbatim transcript must NOT be attached to the alert
+	// (and thus never egressed to external channels) unless explicitly opted in.
+	_, hasTranscript := event.Properties[alerting.PropertyTranscript]
+	assert.False(t, hasTranscript, "transcript must be withheld from alerts by default")
+}
+
+func TestTranscribeAction_KeywordHit_IncludeTranscriptOptIn(t *testing.T) {
+	// Not parallel: mutates the package-level alert bus singleton.
+	bus := alerting.NewAlertEventBus(nil)
+	t.Cleanup(bus.Stop)
+	alerting.SetGlobalBus(bus)
+	t.Cleanup(func() { alerting.SetGlobalBus(nil) })
+
+	var got atomic.Pointer[alerting.AlertEvent]
+	bus.Subscribe(func(e *alerting.AlertEvent) { got.Store(e) })
+
+	transcriber := &fakeTranscriber{
+		available: true,
+		result:    transcription.Result{Text: "the house is on fire", Language: "en"},
+	}
+	repo := NewMockDetectionRepository()
+	ctxData := &DetectionContext{}
+	ctxData.NoteID.Store(42)
+
+	settings := settingsWithKeywords([]string{"fire"}, false)
+	settings.Realtime.Transcription.IncludeTranscriptInAlerts = true
+
+	action := &TranscribeAction{
+		Settings:     settings,
+		Result:       testDetection().Result,
+		Transcriber:  transcriber,
+		Repo:         repo,
+		DetectionCtx: ctxData,
+		ClipName:     "clip.wav",
+	}
+
+	require.NoError(t, action.Execute(t.Context(), nil))
+
+	require.Eventually(t, func() bool { return got.Load() != nil }, time.Second, 5*time.Millisecond)
+	event := got.Load()
+	// Opt-in: the verbatim transcript is attached to the alert payload.
+	assert.Equal(t, "the house is on fire", event.Properties[alerting.PropertyTranscript])
+	assert.Equal(t, "fire", event.Properties[alerting.PropertyKeywords])
 }
 
 func TestTranscribeAction_NoKeywordHit_DoesNotFlagOrAlert(t *testing.T) {
