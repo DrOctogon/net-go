@@ -44,6 +44,9 @@ const (
 	EventKeywordMatched = "keyword.matched"
 
 	EventSpeakerAttributeMatched = "speaker.attribute_matched"
+	// EventNewSpeakerDetected fires when a detection's voice-print embedding
+	// matched no known cluster and a new speaker ID was created (unknown voice).
+	EventNewSpeakerDetected = "speaker.new_speaker_detected"
 )
 
 // Metric names identify threshold-based metrics.
@@ -100,6 +103,7 @@ const (
 	// Properties for speaker-attribute events.
 	PropertySpeakerGender  = "gender"
 	PropertySpeakerAgeBand = "age_band"
+	PropertySpeakerID      = "speaker_id"
 )
 
 // Action targets identify where notifications are sent.
@@ -134,6 +138,9 @@ const (
 
 	RuleKeySpeakerAttrName = "settings.alerts.builtInRules.speakerAttribute.name"
 	RuleKeySpeakerAttrDesc = "settings.alerts.builtInRules.speakerAttribute.description"
+
+	RuleKeyNewSpeakerName = "settings.alerts.builtInRules.newSpeaker.name"
+	RuleKeyNewSpeakerDesc = "settings.alerts.builtInRules.newSpeaker.description"
 )
 
 // Alert notification i18n key constants.

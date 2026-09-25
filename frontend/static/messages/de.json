@@ -3875,6 +3875,10 @@
         "mqttPublishFailed": {
           "name": "MQTT-Veröffentlichung fehlgeschlagen",
           "description": "Benachrichtigt, wenn die Veröffentlichung einer MQTT-Nachricht fehlschlägt"
+        },
+        "newSpeaker": {
+          "name": "Neuer Sprecher erkannt",
+          "description": "Benachrichtigt, wenn eine unbekannte Stimme erkannt wird (kein passender bekannter Sprecher)"
         }
       }
     },

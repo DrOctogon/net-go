@@ -96,3 +96,43 @@ func TestClustererConcurrentAssign(t *testing.T) {
 	wg.Wait()
 	assert.Equal(t, 1, c.NumClusters())
 }
+
+func TestClustererAssignWithNovelty(t *testing.T) {
+	t.Parallel()
+
+	t.Run("empty embedding is not novel", func(t *testing.T) {
+		t.Parallel()
+		c := NewClusterer(0.75)
+		id, isNew := c.AssignWithNovelty(nil)
+		assert.Empty(t, id)
+		assert.False(t, isNew)
+	})
+
+	t.Run("first embedding creates a new cluster", func(t *testing.T) {
+		t.Parallel()
+		c := NewClusterer(0.75)
+		id, isNew := c.AssignWithNovelty([]float32{1, 0, 0})
+		assert.Equal(t, "spk_1", id)
+		assert.True(t, isNew)
+	})
+
+	t.Run("similar embedding reuses the cluster and is not novel", func(t *testing.T) {
+		t.Parallel()
+		c := NewClusterer(0.75)
+		first, isNew := c.AssignWithNovelty([]float32{1, 0, 0})
+		require.True(t, isNew)
+		second, isNew := c.AssignWithNovelty([]float32{0.99, 0.01, 0})
+		assert.Equal(t, first, second)
+		assert.False(t, isNew)
+	})
+
+	t.Run("dissimilar embedding creates another new cluster", func(t *testing.T) {
+		t.Parallel()
+		c := NewClusterer(0.75)
+		_, isNew := c.AssignWithNovelty([]float32{1, 0, 0})
+		require.True(t, isNew)
+		id, isNew := c.AssignWithNovelty([]float32{0, 1, 0})
+		assert.Equal(t, "spk_2", id)
+		assert.True(t, isNew)
+	})
+}

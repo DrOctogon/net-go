@@ -3875,6 +3875,10 @@
         "mqttPublishFailed": {
           "name": "Publikacja MQTT nie powiodła się",
           "description": "Powiadamia, gdy publikacja wiadomości MQTT nie powiedzie się"
+        },
+        "newSpeaker": {
+          "name": "Wykryto nowego mówcę",
+          "description": "Powiadamia o wykryciu nieznanego głosu (brak pasującego znanego mówcy)"
         }
       }
     },
