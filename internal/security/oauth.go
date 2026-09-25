@@ -675,7 +675,7 @@ func (s *OAuth2Server) UpdateProviders() {
 func (s *OAuth2Server) IsUserAuthenticated(c echo.Context) bool {
 	settings := s.currentSettings()
 	clientIP := parseIPWithZone(c.RealIP())
-	secLog := GetLogger().With(logger.String("client_ip", c.RealIP()))
+	secLog := GetLogger().With(logger.IP("client_ip", c.RealIP()))
 	secLog.Debug("Checking user authentication status")
 
 	if settings.Security.AllowSubnetBypass.Enabled && IsInLocalSubnet(clientIP) {
@@ -949,7 +949,7 @@ func (s *OAuth2Server) ValidateAccessToken(token string) error {
 // IsAuthenticationEnabled checks if any authentication method is enabled
 func (s *OAuth2Server) IsAuthenticationEnabled(ip string) bool {
 	settings := s.currentSettings()
-	authLog := GetLogger().With(logger.String("ip", ip))
+	authLog := GetLogger().With(logger.IP("ip", ip))
 	authLog.Debug("Checking if authentication is enabled for IP")
 	if s.IsRequestFromAllowedSubnet(ip) {
 		authLog.Info("Authentication bypassed: request from allowed subnet")
@@ -976,7 +976,7 @@ func (s *OAuth2Server) IsAuthenticationEnabled(ip string) bool {
 
 // IsRequestFromAllowedSubnet checks if the request IP is within allowed subnets
 func (s *OAuth2Server) IsRequestFromAllowedSubnet(ipStr string) bool {
-	authLog := GetLogger().With(logger.String("ip", ipStr))
+	authLog := GetLogger().With(logger.IP("ip", ipStr))
 	authLog.Debug("Checking if IP is in allowed subnet")
 
 	// Check if subnet bypass is enabled first

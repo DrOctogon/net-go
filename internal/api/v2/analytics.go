@@ -234,7 +234,7 @@ func (c *Controller) GetDailySpeciesSummary(ctx echo.Context) error {
 		logger.String("date", selectedDate),
 		logger.Float64("min_confidence", minConfidence),
 		logger.Int("limit", limit),
-		logger.String("ip", ip),
+		logger.IP("ip", ip),
 		logger.String("path", path),
 	)
 
@@ -249,7 +249,7 @@ func (c *Controller) GetDailySpeciesSummary(ctx echo.Context) error {
 		return c.handleAnalyticsQueryError(ctx, err, "Daily species summary", "Failed to get daily species data",
 			logger.String("date", selectedDate),
 			logger.Float64("min_confidence", minConfidence),
-			logger.String("ip", ip),
+			logger.IP("ip", ip),
 			logger.String("path", path),
 		)
 	}
@@ -260,7 +260,7 @@ func (c *Controller) GetDailySpeciesSummary(ctx echo.Context) error {
 		// Errors during hourly fetch are logged within the helper; map the overall failure.
 		return c.handleAnalyticsQueryError(ctx, err, "Daily species aggregation", "Failed to process daily species data",
 			logger.String("date", selectedDate),
-			logger.String("ip", ip),
+			logger.IP("ip", ip),
 			logger.String("path", path),
 		)
 	}
@@ -284,7 +284,7 @@ func (c *Controller) GetDailySpeciesSummary(ctx echo.Context) error {
 		logger.String("date", selectedDate),
 		logger.Int("count", len(result)),
 		logger.Bool("limit_applied", limit > 0),
-		logger.String("ip", ip),
+		logger.IP("ip", ip),
 		logger.String("path", path),
 	)
 
@@ -308,7 +308,7 @@ func (c *Controller) GetBatchDailySpeciesSummary(ctx echo.Context) error {
 		logger.Int("date_count", len(dates)),
 		logger.Float64("min_confidence", minConfidence),
 		logger.Int("limit", limit),
-		logger.String("ip", ip),
+		logger.IP("ip", ip),
 		logger.String("path", path),
 	)
 
@@ -351,7 +351,7 @@ func (c *Controller) processBatchDates(ctx context.Context, dates []string, minC
 			c.logDebugIfEnabled("Batch daily species summary: client canceled request",
 				logger.String("date", selectedDate),
 				logger.Error(err),
-				logger.String("ip", ip),
+				logger.IP("ip", ip),
 				logger.String("path", path),
 			)
 			break
@@ -381,7 +381,7 @@ func (c *Controller) processSingleDateForBatch(ctx context.Context, selectedDate
 	if err != nil {
 		c.logBatchQueryError("Failed to get data for date in batch request", err,
 			logger.String("date", selectedDate),
-			logger.String("ip", ip),
+			logger.IP("ip", ip),
 			logger.String("path", path),
 		)
 		return nil, err
@@ -392,7 +392,7 @@ func (c *Controller) processSingleDateForBatch(ctx context.Context, selectedDate
 	if err != nil {
 		c.logBatchQueryError("Failed to aggregate data for date in batch request", err,
 			logger.String("date", selectedDate),
-			logger.String("ip", ip),
+			logger.IP("ip", ip),
 			logger.String("path", path),
 		)
 		return nil, err
@@ -404,7 +404,7 @@ func (c *Controller) processSingleDateForBatch(ctx context.Context, selectedDate
 		c.logErrorIfEnabled("Failed to build response for date in batch request",
 			logger.String("date", selectedDate),
 			logger.Error(err),
-			logger.String("ip", ip),
+			logger.IP("ip", ip),
 			logger.String("path", path),
 		)
 		return nil, err
@@ -646,7 +646,7 @@ func (c *Controller) GetSpeciesSummary(ctx echo.Context) error {
 	c.logInfoIfEnabled("Retrieving species summary",
 		logger.String("start_date", startDate),
 		logger.String("end_date", endDate),
-		logger.String("ip", ip),
+		logger.IP("ip", ip),
 		logger.String("path", path),
 	)
 
@@ -659,7 +659,7 @@ func (c *Controller) GetSpeciesSummary(ctx echo.Context) error {
 	c.logInfoIfEnabled("Database query completed",
 		logger.Int64("duration_ms", dbDuration.Milliseconds()),
 		logger.Int("record_count", len(summaryData)),
-		logger.String("ip", ip),
+		logger.IP("ip", ip),
 		logger.String("path", path),
 	)
 
@@ -667,7 +667,7 @@ func (c *Controller) GetSpeciesSummary(ctx echo.Context) error {
 		return c.handleAnalyticsQueryError(ctx, err, "Species summary", "Failed to get species summary data",
 			logger.String("start_date", startDate),
 			logger.String("end_date", endDate),
-			logger.String("ip", ip),
+			logger.IP("ip", ip),
 			logger.String("path", path),
 		)
 	}
@@ -683,7 +683,7 @@ func (c *Controller) GetSpeciesSummary(ctx echo.Context) error {
 		logger.String("end_date", endDate),
 		logger.Int("count", len(response)),
 		logger.Int("limit", limit),
-		logger.String("ip", ip),
+		logger.IP("ip", ip),
 		logger.String("path", path),
 	)
 
@@ -740,7 +740,7 @@ func (c *Controller) applyOptionalLimit(ctx echo.Context, response []SpeciesSumm
 		c.logWarnIfEnabled("Invalid limit parameter",
 			logger.String("value", limitStr),
 			logger.Error(err),
-			logger.String("ip", ip),
+			logger.IP("ip", ip),
 			logger.String("path", path),
 		)
 		return response, 0
@@ -776,7 +776,7 @@ func (c *Controller) GetHourlyAnalytics(ctx echo.Context) error {
 	c.logInfoIfEnabled("Retrieving hourly analytics",
 		logger.String("date", date),
 		logger.String("species", speciesParam),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 		logger.String("path", ctx.Request().URL.Path),
 	)
 
@@ -799,7 +799,7 @@ func (c *Controller) GetHourlyAnalytics(ctx echo.Context) error {
 		return c.handleAnalyticsQueryError(ctx, err, "Hourly analytics", "Failed to get hourly analytics data",
 			logger.String("date", date),
 			logger.String("species", speciesParam),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 			logger.String("path", ctx.Request().URL.Path),
 		)
 	}
@@ -830,7 +830,7 @@ func (c *Controller) GetHourlyAnalytics(ctx echo.Context) error {
 		logger.String("date", date),
 		logger.String("species", speciesParam),
 		logger.Int("total", total),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 		logger.String("path", ctx.Request().URL.Path),
 	)
 
@@ -874,7 +874,7 @@ func (c *Controller) GetDailyAnalytics(ctx echo.Context) error {
 		logger.String("start_date", startDate),
 		logger.String("end_date", endDate),
 		logger.String("species", speciesParam),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 		logger.String("path", ctx.Request().URL.Path),
 	)
 
@@ -897,7 +897,7 @@ func (c *Controller) GetDailyAnalytics(ctx echo.Context) error {
 			logger.String("start_date", startDate),
 			logger.String("end_date", endDate),
 			logger.String("species", speciesParam),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 			logger.String("path", ctx.Request().URL.Path),
 		)
 	}
@@ -939,7 +939,7 @@ func (c *Controller) GetDailyAnalytics(ctx echo.Context) error {
 		logger.String("species", speciesParam),
 		logger.Int("data_points", len(response.Data)),
 		logger.Int("total", totalCount),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 		logger.String("path", ctx.Request().URL.Path),
 	)
 
@@ -981,7 +981,7 @@ func (c *Controller) GetSpeciesDiversity(ctx echo.Context) error {
 	c.logInfoIfEnabled("Retrieving species diversity data",
 		logger.String("start_date", startDate),
 		logger.String("end_date", endDate),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 		logger.String("path", ctx.Request().URL.Path),
 	)
 
@@ -994,7 +994,7 @@ func (c *Controller) GetSpeciesDiversity(ctx echo.Context) error {
 		return c.handleAnalyticsQueryError(ctx, err, "Species diversity", "Failed to get species diversity data",
 			logger.String("start_date", startDate),
 			logger.String("end_date", endDate),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 			logger.String("path", ctx.Request().URL.Path),
 		)
 	}
@@ -1034,7 +1034,7 @@ func (c *Controller) GetSpeciesDiversity(ctx echo.Context) error {
 		logger.String("end_date", endDate),
 		logger.Int("data_points", len(response.Data)),
 		logger.Int("max_diversity", maxDiversity),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 		logger.String("path", ctx.Request().URL.Path),
 	)
 
@@ -1119,7 +1119,7 @@ func (c *Controller) GetActivityHeatmap(ctx echo.Context) error {
 		logger.String("start_date", startDate),
 		logger.String("end_date", endDate),
 		logger.String("species", speciesParam),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 		logger.String("path", ctx.Request().URL.Path),
 	)
 
@@ -1141,7 +1141,7 @@ func (c *Controller) GetActivityHeatmap(ctx echo.Context) error {
 			logger.String("start_date", startDate),
 			logger.String("end_date", endDate),
 			logger.String("species", speciesParam),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 			logger.String("path", ctx.Request().URL.Path),
 		)
 	}
@@ -1155,7 +1155,7 @@ func (c *Controller) GetActivityHeatmap(ctx echo.Context) error {
 		logger.String("end_date", endDate),
 		logger.Int("slot_resolution_minutes", data.SlotResolutionMinutes),
 		logger.Int("cell_count", len(data.CellCount)),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 		logger.String("path", ctx.Request().URL.Path),
 	)
 
@@ -1271,7 +1271,7 @@ func (c *Controller) GetDawnChorusOnset(ctx echo.Context) error {
 		logger.String("start_date", startDate),
 		logger.String("end_date", endDate),
 		logger.String("species", speciesParam),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 		logger.String("path", ctx.Request().URL.Path),
 	)
 
@@ -1285,7 +1285,7 @@ func (c *Controller) GetDawnChorusOnset(ctx echo.Context) error {
 			logger.String("start_date", startDate),
 			logger.String("end_date", endDate),
 			logger.String("species", speciesParam),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 			logger.String("path", ctx.Request().URL.Path),
 		)
 	}
@@ -1294,7 +1294,7 @@ func (c *Controller) GetDawnChorusOnset(ctx echo.Context) error {
 		logger.String("start_date", startDate),
 		logger.String("end_date", endDate),
 		logger.Int("day_count", len(data)),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 		logger.String("path", ctx.Request().URL.Path),
 	)
 
@@ -1404,7 +1404,7 @@ func (c *Controller) GetAnalyticsSun(ctx echo.Context) error {
 
 	c.logInfoIfEnabled("Retrieving analytics sun times",
 		logger.String("date", repDate),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 		logger.String("path", ctx.Request().URL.Path),
 	)
 
@@ -1434,7 +1434,7 @@ func (c *Controller) GetAnalyticsSun(ctx echo.Context) error {
 		// available:false (not 500) so the client renders the bars without shading.
 		c.logInfoIfEnabled("Sun times unavailable for date (polar day/night)",
 			logger.String("date", repDate),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 		)
 		return ctx.JSON(http.StatusOK, resp)
 	}
@@ -1462,7 +1462,7 @@ func (c *Controller) GetAnalyticsSun(ctx echo.Context) error {
 	c.logInfoIfEnabled("Analytics sun times retrieved",
 		logger.String("date", repDate),
 		logger.Bool("available", resp.Available),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 		logger.String("path", ctx.Request().URL.Path),
 	)
 
@@ -1516,7 +1516,7 @@ func serveTopNHourlyChart[T any](
 		logger.String("start_date", startDate),
 		logger.String("end_date", endDate),
 		logger.Int("limit", limit),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 		logger.String("path", ctx.Request().URL.Path),
 	)
 
@@ -1530,7 +1530,7 @@ func serveTopNHourlyChart[T any](
 			logger.String("start_date", startDate),
 			logger.String("end_date", endDate),
 			logger.Int("limit", limit),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 			logger.String("path", ctx.Request().URL.Path),
 		)
 	}
@@ -1539,7 +1539,7 @@ func serveTopNHourlyChart[T any](
 		logger.String("start_date", startDate),
 		logger.String("end_date", endDate),
 		logger.Int("species_count", len(data)),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 		logger.String("path", ctx.Request().URL.Path),
 	)
 
@@ -1682,7 +1682,7 @@ func (c *Controller) GetConfidenceDistribution(ctx echo.Context) error {
 		logger.String("species", speciesParam),
 		logger.Int("bins", bins),
 		logger.Int("limit", limit),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 		logger.String("path", ctx.Request().URL.Path),
 	)
 
@@ -1696,7 +1696,7 @@ func (c *Controller) GetConfidenceDistribution(ctx echo.Context) error {
 			logger.String("start_date", startDate),
 			logger.String("end_date", endDate),
 			logger.String("species", speciesParam),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 			logger.String("path", ctx.Request().URL.Path),
 		)
 	}
@@ -1705,7 +1705,7 @@ func (c *Controller) GetConfidenceDistribution(ctx echo.Context) error {
 		logger.String("start_date", startDate),
 		logger.String("end_date", endDate),
 		logger.Int("species_count", len(data)),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 		logger.String("path", ctx.Request().URL.Path),
 	)
 
@@ -1800,7 +1800,7 @@ func (c *Controller) GetAnalyticsSources(ctx echo.Context) error {
 	c.logInfoIfEnabled("Retrieving analytics audio sources",
 		logger.String("start_date", startDate),
 		logger.String("end_date", endDate),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 		logger.String("path", ctx.Request().URL.Path),
 	)
 
@@ -1813,7 +1813,7 @@ func (c *Controller) GetAnalyticsSources(ctx echo.Context) error {
 		return c.handleAnalyticsQueryError(ctx, err, "Analytics sources", "Failed to get audio sources",
 			logger.String("start_date", startDate),
 			logger.String("end_date", endDate),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 			logger.String("path", ctx.Request().URL.Path),
 		)
 	}
@@ -1830,7 +1830,7 @@ func (c *Controller) GetAnalyticsSources(ctx echo.Context) error {
 
 	c.logInfoIfEnabled("Analytics audio sources retrieved",
 		logger.Int("count", len(resp.Sources)),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 		logger.String("path", ctx.Request().URL.Path),
 	)
 
@@ -1899,7 +1899,7 @@ func (c *Controller) GetYearOverYear(ctx echo.Context) error {
 
 	c.logInfoIfEnabled("Retrieving year-over-year tracker",
 		logger.String("date", date),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 		logger.String("path", ctx.Request().URL.Path),
 	)
 
@@ -1911,7 +1911,7 @@ func (c *Controller) GetYearOverYear(ctx echo.Context) error {
 	if err != nil {
 		return c.handleAnalyticsQueryError(ctx, err, "Year-over-year", "Failed to get year-over-year",
 			logger.String("date", date),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 			logger.String("path", ctx.Request().URL.Path),
 		)
 	}
@@ -1920,7 +1920,7 @@ func (c *Controller) GetYearOverYear(ctx echo.Context) error {
 		logger.String("date", date),
 		logger.Int("current_year", data.CurrentYear),
 		logger.Int("days", len(data.Points)),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 		logger.String("path", ctx.Request().URL.Path),
 	)
 
@@ -1965,7 +1965,7 @@ func (c *Controller) GetTimeOfDayDistribution(ctx echo.Context) error {
 		return c.handleAnalyticsQueryError(ctx, err, "Time of day distribution", "Failed to get hourly distribution data",
 			logger.String("start_date", startDate),
 			logger.String("end_date", endDate),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 		)
 	}
 
@@ -1993,7 +1993,7 @@ func (c *Controller) GetNewSpeciesDetections(ctx echo.Context) error {
 	c.logInfoIfEnabled("Retrieving new species detections",
 		logger.String("start_date", startDate),
 		logger.String("end_date", endDate),
-		logger.String("ip", ip),
+		logger.IP("ip", ip),
 		logger.String("path", path),
 	)
 
@@ -2018,7 +2018,7 @@ func (c *Controller) GetNewSpeciesDetections(ctx echo.Context) error {
 			logger.String("end_date", endDate),
 			logger.Int("limit", limit),
 			logger.Int("offset", offset),
-			logger.String("ip", ip),
+			logger.IP("ip", ip),
 			logger.String("path", path),
 		)
 	}
@@ -2032,7 +2032,7 @@ func (c *Controller) GetNewSpeciesDetections(ctx echo.Context) error {
 		logger.Int("count", len(response)),
 		logger.Int("limit", limit),
 		logger.Int("offset", offset),
-		logger.String("ip", ip),
+		logger.IP("ip", ip),
 		logger.String("path", path),
 	)
 
@@ -2164,7 +2164,7 @@ func (c *Controller) GetBatchHourlySpeciesData(ctx echo.Context) error {
 		logger.String("date", date),
 		logger.Int("species_count", len(speciesParams)),
 		logger.Float64("min_confidence", minConfidence),
-		logger.String("ip", ip),
+		logger.IP("ip", ip),
 		logger.String("path", path),
 	)
 
@@ -2213,7 +2213,7 @@ func (c *Controller) processHourlyBatchSpecies(ctx echo.Context, speciesParams [
 			c.logDebugIfEnabled("Batch hourly species data: client canceled request",
 				logger.String("species", speciesItem),
 				logger.Error(err),
-				logger.String("ip", ip),
+				logger.IP("ip", ip),
 				logger.String("path", path),
 			)
 			break
@@ -2238,7 +2238,7 @@ func (c *Controller) processHourlyBatchSpecies(ctx echo.Context, speciesParams [
 			if c.logBatchQueryError("Error getting hourly data for species in batch request", err,
 				logger.String("species", speciesItem),
 				logger.String("date", date),
-				logger.String("ip", ip),
+				logger.IP("ip", ip),
 				logger.String("path", path),
 			) {
 				break // client disconnected; stop the batch
@@ -2292,7 +2292,7 @@ func (c *Controller) GetBatchDailySpeciesData(ctx echo.Context) error {
 		logger.String("end_date", endDate),
 		logger.Int("species_requested", len(speciesParams)),
 		logger.Int("species_unique", len(uniqueSpecies)),
-		logger.String("ip", ip),
+		logger.IP("ip", ip),
 		logger.String("path", path),
 	)
 
@@ -2349,7 +2349,7 @@ func (c *Controller) processDailyBatchSpecies(ctx echo.Context, uniqueSpecies []
 			c.logDebugIfEnabled("Batch daily species data: client canceled request",
 				logger.String("species", speciesItem),
 				logger.Error(err),
-				logger.String("ip", ip),
+				logger.IP("ip", ip),
 				logger.String("path", path),
 			)
 			break
@@ -2369,7 +2369,7 @@ func (c *Controller) processDailyBatchSpecies(ctx echo.Context, uniqueSpecies []
 				logger.String("species", speciesItem),
 				logger.String("start_date", startDate),
 				logger.String("end_date", endDate),
-				logger.String("ip", ip),
+				logger.IP("ip", ip),
 				logger.String("path", path),
 			) {
 				break // client disconnected; stop the batch
@@ -2409,7 +2409,7 @@ func (c *Controller) handleBatchDailyResults(ctx echo.Context, results map[strin
 			logger.Int("successful", len(results)),
 			logger.Int("failed", len(processingErrors)),
 			logger.Any("errors", processingErrors),
-			logger.String("ip", ip),
+			logger.IP("ip", ip),
 			logger.String("path", path),
 		)
 	}
@@ -2419,7 +2419,7 @@ func (c *Controller) handleBatchDailyResults(ctx echo.Context, results map[strin
 			logger.Int("requested_species", requestedCount),
 			logger.Int("unique_species", uniqueCount),
 			logger.Any("errors", processingErrors),
-			logger.String("ip", ip),
+			logger.IP("ip", ip),
 			logger.String("path", path),
 		)
 		return c.HandleError(ctx, fmt.Errorf("failed to process any requested species"), "Failed to process batch daily request", http.StatusInternalServerError)
@@ -2430,7 +2430,7 @@ func (c *Controller) handleBatchDailyResults(ctx echo.Context, results map[strin
 		logger.Int("unique_species", uniqueCount),
 		logger.Int("successful_species", len(results)),
 		logger.Int("failed_species", len(processingErrors)),
-		logger.String("ip", ip),
+		logger.IP("ip", ip),
 		logger.String("path", path),
 	)
 	return ctx.JSON(http.StatusOK, results)

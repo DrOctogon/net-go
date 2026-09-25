@@ -494,7 +494,7 @@ func (c *Controller) logSSEConnection(clientID, ip, userAgent, streamType string
 
 	c.logInfoIfEnabled(fmt.Sprintf("SSE %s client %s", streamType, action),
 		logger.String("client_id", clientID),
-		logger.String("ip", ip),
+		logger.IP("ip", ip),
 		logger.String("user_agent", userAgent),
 	)
 }

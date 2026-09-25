@@ -78,7 +78,7 @@ func (m *Middleware) validateAuthService(c echo.Context) error {
 	if m.AuthService == nil {
 		m.log().Error("Authentication middleware called with nil AuthService",
 			logger.String("path", c.Request().URL.Path),
-			logger.String("ip", c.RealIP()))
+			logger.IP("ip", c.RealIP()))
 		return c.JSON(http.StatusInternalServerError, map[string]string{
 			"error": "Internal configuration error: authentication service not available",
 		})
@@ -92,7 +92,7 @@ func (m *Middleware) validateAuthService(c echo.Context) error {
 func (m *Middleware) shouldBypassAuth(c echo.Context) bool {
 	if !m.AuthService.IsAuthRequired(c) {
 		m.log().Debug("Authentication not required for this client",
-			logger.String("ip", c.RealIP()),
+			logger.IP("ip", c.RealIP()),
 			logger.String("path", c.Request().URL.Path))
 		c.Set(CtxKeyIsAuthenticated, true) // Bypassed = effectively authenticated
 		c.Set(CtxKeyAuthMethod, AuthMethodNone)
@@ -117,7 +117,7 @@ func (m *Middleware) tryTokenAuth(c echo.Context) authResult {
 	log := m.log()
 	log.Debug("Attempting token authentication",
 		logger.String("path", path),
-		logger.String("ip", ip))
+		logger.IP("ip", ip))
 
 	parts := strings.SplitN(authHeader, " ", bearerTokenParts)
 	if len(parts) != bearerTokenParts || !strings.EqualFold(parts[0], "bearer") {
@@ -131,7 +131,7 @@ func (m *Middleware) tryTokenAuth(c echo.Context) authResult {
 
 	log.Debug("Token authentication successful",
 		logger.String("path", path),
-		logger.String("ip", ip))
+		logger.IP("ip", ip))
 	c.Set(CtxKeyIsAuthenticated, true)
 	// Note: Username is not available for token auth as tokens don't store user identity.
 	// The current AccessToken struct only contains token string and expiry.
@@ -145,7 +145,7 @@ func (m *Middleware) tryTokenAuth(c echo.Context) authResult {
 func (m *Middleware) handleMalformedAuthHeader(c echo.Context, path, ip string) authResult {
 	m.log().Warn("Malformed Authorization header",
 		logger.String("path", path),
-		logger.String("ip", ip))
+		logger.IP("ip", ip))
 	c.Response().Header().Set("WWW-Authenticate", `Bearer realm="api"`)
 	return authResult{
 		handled: true,
@@ -159,7 +159,7 @@ func (m *Middleware) handleMalformedAuthHeader(c echo.Context, path, ip string) 
 func (m *Middleware) handleInvalidToken(c echo.Context, path, ip string) authResult {
 	m.log().Warn("Token validation failed",
 		logger.String("path", path),
-		logger.String("ip", ip))
+		logger.IP("ip", ip))
 	c.Response().Header().Set("WWW-Authenticate",
 		`Bearer realm="api", error="invalid_token", error_description="Invalid or expired token"`)
 	return authResult{
@@ -177,7 +177,7 @@ func (m *Middleware) trySessionAuth(c echo.Context) bool {
 	log := m.log()
 	log.Debug("Attempting session authentication",
 		logger.String("path", path),
-		logger.String("ip", ip))
+		logger.IP("ip", ip))
 
 	if err := m.AuthService.CheckAccess(c); err != nil {
 		return false
@@ -185,7 +185,7 @@ func (m *Middleware) trySessionAuth(c echo.Context) bool {
 
 	log.Debug("Session authentication successful",
 		logger.String("path", path),
-		logger.String("ip", ip))
+		logger.IP("ip", ip))
 	c.Set(CtxKeyIsAuthenticated, true)
 	c.Set(CtxKeyAuthMethod, m.AuthService.GetAuthMethod(c))
 	c.Set(CtxKeyUsername, m.AuthService.GetUsername(c))
@@ -204,7 +204,7 @@ func (m *Middleware) handleUnauthenticated(c echo.Context) error {
 
 	m.log().Info("Authentication required but not provided/valid",
 		logger.String("path", path),
-		logger.String("ip", ip))
+		logger.IP("ip", ip))
 
 	if m.isBrowserRequest(c) {
 		return m.redirectToLogin(c, path, ip)
@@ -223,7 +223,7 @@ func (m *Middleware) isBrowserRequest(c echo.Context) bool {
 func (m *Middleware) redirectToLogin(c echo.Context, path, ip string) error {
 	m.log().Info("Redirecting unauthenticated browser client to login page",
 		logger.String("path", path),
-		logger.String("ip", ip))
+		logger.IP("ip", ip))
 
 	finalLoginPath := m.buildLoginRedirectURL(c, ip)
 	return c.Redirect(http.StatusFound, finalLoginPath)
@@ -303,7 +303,7 @@ func (m *Middleware) getSafeRedirectPath(originPath, originQuery, loginPath, ip 
 	if !security.IsValidRedirect(originPath) {
 		m.log().Warn("Invalid redirect path detected during unauthenticated request, defaulting to '/'",
 			logger.String("invalid_path", originPath),
-			logger.String("ip", ip))
+			logger.IP("ip", ip))
 		return "/"
 	}
 
@@ -318,7 +318,7 @@ func (m *Middleware) returnAPIUnauthorized(c echo.Context, path, ip string) erro
 	acceptHeader := c.Request().Header.Get("Accept")
 	m.log().Info("Returning 401 Unauthorized for unauthenticated API client",
 		logger.String("path", path),
-		logger.String("ip", ip),
+		logger.IP("ip", ip),
 		logger.String("accept_header", acceptHeader))
 
 	return c.JSON(http.StatusUnauthorized, map[string]string{

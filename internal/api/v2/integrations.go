@@ -225,7 +225,7 @@ func (c *Controller) GetMQTTStatus(ctx echo.Context) error {
 	path := ctx.Request().URL.Path
 	c.logInfoIfEnabled("Getting MQTT status",
 		logger.String("path", path),
-		logger.String("ip", ip))
+		logger.IP("ip", ip))
 
 	// Get MQTT configuration from fresh settings
 	settings := c.currentSettings()
@@ -243,14 +243,14 @@ func (c *Controller) GetMQTTStatus(ctx echo.Context) error {
 	if !mqttConfig.Enabled {
 		c.logInfoIfEnabled("MQTT is disabled, returning status",
 			logger.String("path", path),
-			logger.String("ip", ip))
+			logger.IP("ip", ip))
 		return ctx.JSON(http.StatusOK, status)
 	}
 
 	// Check connection status using a temporary client
 	c.logDebugIfEnabled("Checking MQTT connection status",
 		logger.String("path", path),
-		logger.String("ip", ip))
+		logger.IP("ip", ip))
 	connected, checkErr := c.checkMQTTConnectionStatus(ctx.Request().Context(), settings)
 	status.Connected = connected
 	if checkErr != "" {
@@ -262,7 +262,7 @@ func (c *Controller) GetMQTTStatus(ctx echo.Context) error {
 		logger.String("broker", status.Broker),
 		logger.String("last_error", status.LastError),
 		logger.String("path", path),
-		logger.String("ip", ip),
+		logger.IP("ip", ip),
 	)
 	return ctx.JSON(http.StatusOK, status)
 }
@@ -634,7 +634,7 @@ func getProviderDisplayName(provider string) string {
 func (c *Controller) TriggerHomeAssistantDiscovery(ctx echo.Context) error {
 	c.logInfoIfEnabled("Triggering Home Assistant discovery",
 		logger.String("path", ctx.Request().URL.Path),
-		logger.String("ip", ctx.RealIP()))
+		logger.IP("ip", ctx.RealIP()))
 
 	// Snapshot processor to avoid TOCTOU race
 	proc := c.Processor
@@ -649,7 +649,7 @@ func (c *Controller) TriggerHomeAssistantDiscovery(ctx echo.Context) error {
 
 	c.logInfoIfEnabled("Home Assistant discovery triggered successfully",
 		logger.String("path", ctx.Request().URL.Path),
-		logger.String("ip", ctx.RealIP()))
+		logger.IP("ip", ctx.RealIP()))
 
 	return ctx.JSON(http.StatusOK, map[string]any{
 		"success": true,
