@@ -172,5 +172,23 @@ func DefaultRules() []entities.AlertRule {
 				{Target: TargetBell, SortOrder: 0},
 			},
 		},
+		{
+			// Fires only when the opt-in voice-print analysis is enabled and the
+			// clusterer creates a brand-new speaker ID (an unknown voice). Like the
+			// speaker-attribute rule, it is inert until the feature produces data.
+			Name:           "New speaker detected",
+			Description:    "Notifies when an unknown voice is detected (no matching known speaker)",
+			NameKey:        RuleKeyNewSpeakerName,
+			DescriptionKey: RuleKeyNewSpeakerDesc,
+			Enabled:        true,
+			BuiltIn:        true,
+			ObjectType:     ObjectTypeSpeakerAttr,
+			TriggerType:    TriggerTypeEvent,
+			EventName:      EventNewSpeakerDetected,
+			CooldownSec:    60,
+			Actions: []entities.AlertAction{
+				{Target: TargetBell, SortOrder: 0},
+			},
+		},
 	}
 }

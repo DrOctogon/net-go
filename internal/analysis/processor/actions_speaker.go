@@ -80,7 +80,7 @@ func (p *Processor) analyzeSpeakerAttributes(ctx context.Context, item *PendingD
 	// is empty unless a real model produced one, so this is a no-op in the
 	// scaffold/Noop path. Clustering is independent of the gender/age estimates.
 	if p.speakerClusterer != nil && len(attrs.Embedding) > 0 {
-		r.SpeakerID = p.speakerClusterer.Assign(attrs.Embedding)
+		r.SpeakerID, r.SpeakerIsNew = p.speakerClusterer.AssignWithNovelty(attrs.Embedding)
 	}
 }
 
@@ -113,6 +113,30 @@ func emitSpeakerAttributeAlert(settings *conf.Settings, r *detection.Result) {
 			alerting.PropertySpeakerAgeBand: r.AgeBand,
 			alerting.PropertyConfidence:     confidence,
 			alerting.PropertyDetectionID:    r.ID,
+		},
+	})
+}
+
+// emitNewSpeakerAlert publishes a speaker.new_speaker_detected alert for a
+// persisted detection whose voice-print embedding created a brand-new cluster
+// (an unknown voice). Called post-save from DatabaseAction alongside
+// emitSpeakerAttributeAlert. No-op unless the opt-in speaker-attribute analysis
+// is enabled and the clusterer actually minted a new speaker ID for this
+// detection.
+func emitNewSpeakerAlert(settings *conf.Settings, r *detection.Result) {
+	if settings == nil || !settings.Realtime.Audio.SpeakerAttributes.Enabled {
+		return
+	}
+	if r == nil || !r.SpeakerIsNew || r.SpeakerID == "" {
+		return
+	}
+
+	alerting.TryPublish(&alerting.AlertEvent{
+		ObjectType: alerting.ObjectTypeSpeakerAttr,
+		EventName:  alerting.EventNewSpeakerDetected,
+		Properties: map[string]any{
+			alerting.PropertySpeakerID:   r.SpeakerID,
+			alerting.PropertyDetectionID: r.ID,
 		},
 	})
 }

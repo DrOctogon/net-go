@@ -282,3 +282,37 @@ func TestEmitSpeakerAttributeAlert_WithAttributes_NoPanic(t *testing.T) {
 		emitSpeakerAttributeAlert(speakerAttrSettings(true), r)
 	})
 }
+
+func TestEmitNewSpeakerAlert_ShortCircuits(t *testing.T) {
+	novel := &detection.Result{SpeakerID: "spk_1", SpeakerIsNew: true}
+
+	tests := []struct {
+		name     string
+		settings *conf.Settings
+		result   *detection.Result
+	}{
+		{name: "nil settings", settings: nil, result: novel},
+		{name: "disabled settings", settings: speakerAttrSettings(false), result: novel},
+		{name: "nil result", settings: speakerAttrSettings(true), result: nil},
+		{name: "known speaker is not novel", settings: speakerAttrSettings(true), result: &detection.Result{SpeakerID: "spk_1", SpeakerIsNew: false}},
+		{name: "novel flag without speaker id", settings: speakerAttrSettings(true), result: &detection.Result{SpeakerIsNew: true}},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.NotPanics(t, func() {
+				emitNewSpeakerAlert(tt.settings, tt.result)
+			})
+		})
+	}
+}
+
+func TestEmitNewSpeakerAlert_WithNewSpeaker_NoPanic(t *testing.T) {
+	// As with the attribute alert, no global alert bus is configured here, so
+	// TryPublish is a safe no-op; this exercises the publish path.
+	r := &detection.Result{ID: 7, SpeakerID: "spk_3", SpeakerIsNew: true}
+
+	assert.NotPanics(t, func() {
+		emitNewSpeakerAlert(speakerAttrSettings(true), r)
+	})
+}

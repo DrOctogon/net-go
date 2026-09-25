@@ -3875,6 +3875,10 @@
         "mqttPublishFailed": {
           "name": "MQTT publicatie mislukt",
           "description": "Meldt wanneer het publiceren van een MQTT-bericht mislukt"
+        },
+        "newSpeaker": {
+          "name": "Nieuwe spreker gedetecteerd",
+          "description": "Meldt wanneer een onbekende stem wordt gedetecteerd (geen overeenkomende bekende spreker)"
         }
       }
     },

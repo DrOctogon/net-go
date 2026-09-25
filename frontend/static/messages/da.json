@@ -3875,6 +3875,10 @@
         "mqttPublishFailed": {
           "name": "MQTT-publicering mislykkedes",
           "description": "Notificerer, når publicering af en MQTT-besked mislykkes"
+        },
+        "newSpeaker": {
+          "name": "Ny taler registreret",
+          "description": "Giver besked, når en ukendt stemme registreres (ingen matchende kendt taler)"
         }
       }
     },

@@ -3875,6 +3875,10 @@
         "mqttPublishFailed": {
           "name": "MQTT publish failed",
           "description": "Notifies when an MQTT message publish fails"
+        },
+        "newSpeaker": {
+          "name": "New speaker detected",
+          "description": "Notifies when an unknown voice is detected (no matching known speaker)"
         }
       }
     },
