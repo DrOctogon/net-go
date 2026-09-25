@@ -31,7 +31,7 @@ func NewRequestLoggerWithSkipper(skipper middleware.Skipper) echo.MiddlewareFunc
 					logger.String("method", v.Method),
 					logger.String("uri", v.URI),
 					logger.Int("status", v.Status),
-					logger.String("ip", v.RemoteIP),
+					logger.IP("ip", v.RemoteIP),
 					logger.Int64("latency_ms", v.Latency.Milliseconds()),
 					logger.Error(v.Error))
 			} else {
@@ -39,7 +39,7 @@ func NewRequestLoggerWithSkipper(skipper middleware.Skipper) echo.MiddlewareFunc
 					logger.String("method", v.Method),
 					logger.String("uri", v.URI),
 					logger.Int("status", v.Status),
-					logger.String("ip", v.RemoteIP),
+					logger.IP("ip", v.RemoteIP),
 					logger.Int64("latency_ms", v.Latency.Milliseconds()))
 			}
 			return nil

@@ -84,7 +84,7 @@ func (c *Controller) initSettingsRoutes() {
 func (c *Controller) GetAllSettings(ctx echo.Context) error {
 	c.logInfoIfEnabled("Getting all settings",
 		logger.String("path", ctx.Request().URL.Path),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 	)
 
 	// Read the controller's lock-free settings snapshot.
@@ -95,7 +95,7 @@ func (c *Controller) GetAllSettings(ctx echo.Context) error {
 		if settings == nil {
 			c.logErrorIfEnabled("Settings not initialized when trying to get all settings",
 				logger.String("path", ctx.Request().URL.Path),
-				logger.String("ip", ctx.RealIP()),
+				logger.IP("ip", ctx.RealIP()),
 			)
 			return c.HandleError(ctx, fmt.Errorf("settings not initialized"), "Failed to get settings", http.StatusInternalServerError)
 		}
@@ -103,7 +103,7 @@ func (c *Controller) GetAllSettings(ctx echo.Context) error {
 
 	c.logInfoIfEnabled("Retrieved all settings successfully",
 		logger.String("path", ctx.Request().URL.Path),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 	)
 
 	// Return a sanitized copy with secrets redacted

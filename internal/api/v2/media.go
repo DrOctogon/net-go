@@ -228,7 +228,7 @@ func (c *Controller) translateSecureFSError(ctx echo.Context, err error, userMsg
 			logger.Error(err),
 			logger.Int("status_code", httpErr.Code),
 			logger.String("path", ctx.Request().URL.Path),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 		)
 		return httpErr
 	}
@@ -243,7 +243,7 @@ func (c *Controller) translateSecureFSError(ctx echo.Context, err error, userMsg
 		c.logWarnIfEnabled("Path traversal attempt detected",
 			logger.Error(err),
 			logger.String("path", ctx.Request().URL.Path),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 			logger.Bool("tunneled", isTunneled),
 			logger.String("tunnel_provider", tunnelProvider),
 		)
@@ -252,7 +252,7 @@ func (c *Controller) translateSecureFSError(ctx echo.Context, err error, userMsg
 		c.logWarnIfEnabled("Invalid file path provided",
 			logger.Error(err),
 			logger.String("path", ctx.Request().URL.Path),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 			logger.Bool("tunneled", isTunneled),
 			logger.String("tunnel_provider", tunnelProvider),
 		)
@@ -261,7 +261,7 @@ func (c *Controller) translateSecureFSError(ctx echo.Context, err error, userMsg
 		c.logWarnIfEnabled("Access denied to resource",
 			logger.Error(err),
 			logger.String("path", ctx.Request().URL.Path),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 			logger.Bool("tunneled", isTunneled),
 			logger.String("tunnel_provider", tunnelProvider),
 		)
@@ -270,7 +270,7 @@ func (c *Controller) translateSecureFSError(ctx echo.Context, err error, userMsg
 		c.logWarnIfEnabled("Requested resource is not a regular file",
 			logger.Error(err),
 			logger.String("path", ctx.Request().URL.Path),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 			logger.Bool("tunneled", isTunneled),
 			logger.String("tunnel_provider", tunnelProvider),
 		)
@@ -279,7 +279,7 @@ func (c *Controller) translateSecureFSError(ctx echo.Context, err error, userMsg
 		c.logInfoIfEnabled("Resource not found", // Info level as 404 is common
 			logger.Error(err),
 			logger.String("path", ctx.Request().URL.Path),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 			logger.Bool("tunneled", isTunneled),
 			logger.String("tunnel_provider", tunnelProvider),
 		)
@@ -288,7 +288,7 @@ func (c *Controller) translateSecureFSError(ctx echo.Context, err error, userMsg
 		c.logWarnIfEnabled("Request timed out",
 			logger.Error(err),
 			logger.String("path", ctx.Request().URL.Path),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 			logger.Bool("tunneled", isTunneled),
 			logger.String("tunnel_provider", tunnelProvider),
 		)
@@ -297,7 +297,7 @@ func (c *Controller) translateSecureFSError(ctx echo.Context, err error, userMsg
 		c.logInfoIfEnabled("Request canceled by client",
 			logger.Error(err),
 			logger.String("path", ctx.Request().URL.Path),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 			logger.Bool("tunneled", isTunneled),
 			logger.String("tunnel_provider", tunnelProvider),
 		)
@@ -309,7 +309,7 @@ func (c *Controller) translateSecureFSError(ctx echo.Context, err error, userMsg
 		logger.Error(err),
 		logger.String("user_message", userMsg),
 		logger.String("path", ctx.Request().URL.Path),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 		logger.Bool("tunneled", isTunneled),
 		logger.String("tunnel_provider", tunnelProvider),
 	)
@@ -544,7 +544,7 @@ func (c *Controller) ServeAudioClip(ctx echo.Context) error {
 	if filename == "" {
 		c.logErrorIfEnabled("Missing filename parameter for ServeAudioClip",
 			logger.String("path", ctx.Request().URL.Path),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 		)
 		return c.HandleError(ctx, fmt.Errorf("missing filename"), "Filename parameter is required", http.StatusBadRequest)
 	}
@@ -552,7 +552,7 @@ func (c *Controller) ServeAudioClip(ctx echo.Context) error {
 	c.logInfoIfEnabled("Serving audio clip by filename",
 		logger.String("filename", filename),
 		logger.String("path", ctx.Request().URL.Path),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 	)
 
 	// Normalize and validate the path using the common helper
@@ -562,7 +562,7 @@ func (c *Controller) ServeAudioClip(ctx echo.Context) error {
 			logger.String("original_filename", filename),
 			logger.Error(err),
 			logger.String("path", ctx.Request().URL.Path),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 		)
 		return c.HandleError(ctx, err, "Invalid file path", http.StatusBadRequest)
 	}
@@ -580,7 +580,7 @@ func (c *Controller) ServeAudioClip(ctx echo.Context) error {
 			return c.handleAudio404WithWait(ctx, normalizedFilename, err,
 				logger.String("filename", filename),
 				logger.String("path", ctx.Request().URL.Path),
-				logger.String("ip", ctx.RealIP()),
+				logger.IP("ip", ctx.RealIP()),
 			)
 		}
 		// Error logging is handled within translateSecureFSError
@@ -590,7 +590,7 @@ func (c *Controller) ServeAudioClip(ctx echo.Context) error {
 	c.logInfoIfEnabled("Successfully served audio clip by filename",
 		logger.String("filename", filename),
 		logger.String("path", ctx.Request().URL.Path),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 	)
 
 	// If err is nil, ServeRelativeFile handled the response successfully
@@ -681,7 +681,7 @@ func (c *Controller) ServeAudioByID(ctx echo.Context) error {
 			return c.handleAudio404WithWait(ctx, normalizedClipPath, err,
 				logger.String("note_id", noteID),
 				logger.String("path", ctx.Request().URL.Path),
-				logger.String("ip", ctx.RealIP()),
+				logger.IP("ip", ctx.RealIP()),
 			)
 		}
 		return c.translateSecureFSError(ctx, err, "Failed to serve audio clip due to an unexpected error")
@@ -1200,7 +1200,7 @@ func (c *Controller) validateNoteIDAndGetClipPath(ctx echo.Context) (noteID, cli
 	if noteID == "" {
 		c.logErrorIfEnabled("Missing note ID for spectrogram request",
 			logger.String("path", ctx.Request().URL.Path),
-			logger.String("ip", ctx.RealIP()))
+			logger.IP("ip", ctx.RealIP()))
 		err = fmt.Errorf("missing ID")
 		_ = c.HandleError(ctx, err, "Note ID is required", http.StatusBadRequest)
 		return
@@ -1211,7 +1211,7 @@ func (c *Controller) validateNoteIDAndGetClipPath(ctx echo.Context) (noteID, cli
 		c.logErrorIfEnabled("Non-numeric note ID for spectrogram request",
 			logger.String("note_id", noteID),
 			logger.String("path", ctx.Request().URL.Path),
-			logger.String("ip", ctx.RealIP()))
+			logger.IP("ip", ctx.RealIP()))
 		err = fmt.Errorf("invalid note ID: %s", noteID)
 		_ = c.HandleError(ctx, err, "Note ID must be a numeric value", http.StatusBadRequest)
 		return
@@ -1223,7 +1223,7 @@ func (c *Controller) validateNoteIDAndGetClipPath(ctx echo.Context) (noteID, cli
 			logger.String("note_id", noteID),
 			logger.Error(err),
 			logger.String("path", ctx.Request().URL.Path),
-			logger.String("ip", ctx.RealIP()))
+			logger.IP("ip", ctx.RealIP()))
 		if isClipNotFoundErr(err) {
 			_ = c.HandleError(ctx, err, "No audio clip available for this note", http.StatusNotFound)
 			return
@@ -1236,7 +1236,7 @@ func (c *Controller) validateNoteIDAndGetClipPath(ctx echo.Context) (noteID, cli
 		c.logWarnIfEnabled("Empty clip path for note",
 			logger.String("note_id", noteID),
 			logger.String("path", ctx.Request().URL.Path),
-			logger.String("ip", ctx.RealIP()))
+			logger.IP("ip", ctx.RealIP()))
 		err = fmt.Errorf("no audio file found for note %s", noteID)
 		_ = c.HandleError(ctx, err, "No audio clip available for this note", http.StatusNotFound)
 		return
@@ -1264,7 +1264,7 @@ func (c *Controller) handleUserRequestedMode(ctx echo.Context, noteID, clipPath 
 				logger.String("note_id", noteID),
 				logger.String("spectrogram_path", relSpectrogramPath),
 				logger.String("path", ctx.Request().URL.Path),
-				logger.String("ip", ctx.RealIP()))
+				logger.IP("ip", ctx.RealIP()))
 
 			ctx.Response().Header().Set("Cache-Control", fmt.Sprintf("public, max-age=%d, immutable", SpectrogramCacheSeconds))
 			err = c.SFS.ServeRelativeFile(ctx, relSpectrogramPath)
@@ -1283,7 +1283,7 @@ func (c *Controller) handleUserRequestedMode(ctx echo.Context, noteID, clipPath 
 		logger.String("note_id", noteID),
 		logger.String("mode", conf.SpectrogramModeUserRequested),
 		logger.String("path", ctx.Request().URL.Path),
-		logger.String("ip", ctx.RealIP()))
+		logger.IP("ip", ctx.RealIP()))
 
 	return c.returnSpectrogramNotGeneratedError(ctx)
 }
@@ -1306,7 +1306,7 @@ func (c *Controller) returnSpectrogramNotGeneratedError(ctx echo.Context) (bool,
 		logger.String("correlation_id", errorResp.CorrelationID),
 		logger.String("mode", conf.SpectrogramModeUserRequested),
 		logger.String("path", ctx.Request().URL.Path),
-		logger.String("ip", ctx.RealIP()))
+		logger.IP("ip", ctx.RealIP()))
 
 	// Return standard error response with mode in data field (API v2 envelope)
 	// Mode is placed in data object to maintain envelope consistency
@@ -1336,7 +1336,7 @@ func (c *Controller) handleAutoPreRenderMode(ctx echo.Context, noteID, clipPath 
 			logger.Error(err),
 			logger.Int64("duration_ms", generationDuration.Milliseconds()),
 			logger.String("path", ctx.Request().URL.Path),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 		}
 
 		// Check if this is an operational error (context canceled, timeout, etc.)
@@ -1355,7 +1355,7 @@ func (c *Controller) handleAutoPreRenderMode(ctx echo.Context, noteID, clipPath 
 		logger.String("spectrogram_path", spectrogramPath),
 		logger.Int64("duration_ms", generationDuration.Milliseconds()),
 		logger.String("path", ctx.Request().URL.Path),
-		logger.String("ip", ctx.RealIP()))
+		logger.IP("ip", ctx.RealIP()))
 
 	// Set cache headers before serving — spectrograms are deterministic (same clip + params = same image)
 	// and never change once generated. This allows browsers to serve from disk cache on reload,
@@ -1377,7 +1377,7 @@ func (c *Controller) handleAutoPreRenderMode(ctx echo.Context, noteID, clipPath 
 			logger.Error(err),
 			logger.Int64("serve_duration_ms", serveDuration.Milliseconds()),
 			logger.String("path", ctx.Request().URL.Path),
-			logger.String("ip", ctx.RealIP()))
+			logger.IP("ip", ctx.RealIP()))
 		return c.translateSecureFSError(ctx, err, "Failed to serve spectrogram image")
 	}
 
@@ -1387,7 +1387,7 @@ func (c *Controller) handleAutoPreRenderMode(ctx echo.Context, noteID, clipPath 
 		logger.Int64("serve_duration_ms", serveDuration.Milliseconds()),
 		logger.Int64("total_duration_ms", time.Since(generationStart).Milliseconds()),
 		logger.String("path", ctx.Request().URL.Path),
-		logger.String("ip", ctx.RealIP()))
+		logger.IP("ip", ctx.RealIP()))
 	return nil
 }
 
@@ -1468,7 +1468,7 @@ func (c *Controller) ServeSpectrogramByID(ctx echo.Context) error {
 		logger.String("size_param", params.sizeStr),
 		logger.String("model_type", modelType),
 		logger.String("path", ctx.Request().URL.Path),
-		logger.String("ip", ctx.RealIP()))
+		logger.IP("ip", ctx.RealIP()))
 
 	// Check spectrogram generation mode
 	spectrogramMode := c.currentSettings().Realtime.Dashboard.Spectrogram.GetMode()
@@ -1729,7 +1729,7 @@ func (c *Controller) GenerateSpectrogramByID(ctx echo.Context) error {
 		logger.Bool("raw", params.raw),
 		logger.String("size_param", params.sizeStr),
 		logger.String("path", ctx.Request().URL.Path),
-		logger.String("ip", ctx.RealIP()))
+		logger.IP("ip", ctx.RealIP()))
 
 	// Check if spectrogram already exists (fast path)
 	// Also compute the immutable queue key for status tracking

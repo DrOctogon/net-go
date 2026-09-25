@@ -2266,7 +2266,7 @@ func (c *Controller) logHLSClientConnection(sourceID, clientIP, requestPath stri
 		}
 		GetLogger().Info("HLS stream request",
 			logger.String("source_id", privacy.SanitizeRTSPUrl(sourceID)),
-			logger.String("client_ip", clientIP),
+			logger.IP("client_ip", clientIP),
 			logger.String("status", streamStartMsg))
 	}
 }

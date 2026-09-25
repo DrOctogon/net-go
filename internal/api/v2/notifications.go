@@ -651,12 +651,12 @@ func (c *Controller) logNotificationConnection(clientID, ip, userAgent string, c
 	if s := c.currentSettings(); s != nil && s.WebServer.Debug && connected {
 		c.logDebugIfEnabled("notification SSE client "+action,
 			logger.String("clientId", clientID),
-			logger.String("ip", privacy.AnonymizeIP(ip)),
+			logger.IP("ip", privacy.AnonymizeIP(ip)),
 			logger.String("user_agent", privacy.RedactUserAgent(userAgent)))
 	} else {
 		c.logInfoIfEnabled("notification SSE client "+action,
 			logger.String("clientId", clientID),
-			logger.String("ip", privacy.AnonymizeIP(ip)))
+			logger.IP("ip", privacy.AnonymizeIP(ip)))
 	}
 }
 

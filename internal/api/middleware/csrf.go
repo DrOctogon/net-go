@@ -237,7 +237,7 @@ func NewCSRF(config *CSRFConfig) echo.MiddlewareFunc {
 			GetLogger().Warn("CSRF validation failed",
 				logger.String("method", c.Request().Method),
 				logger.String("path", c.Request().URL.Path),
-				logger.String("remote_ip", c.RealIP()),
+				logger.IP("remote_ip", c.RealIP()),
 				logger.Error(err))
 
 			return echo.NewHTTPError(http.StatusForbidden, "Invalid CSRF token")
