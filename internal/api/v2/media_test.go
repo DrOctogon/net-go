@@ -20,7 +20,6 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tphakala/voicewatch/internal/api/middleware"
 	"github.com/tphakala/voicewatch/internal/audiocore/ffmpeg"
-	"github.com/tphakala/voicewatch/internal/conf"
 	"github.com/tphakala/voicewatch/internal/datastore/mocks"
 	"github.com/tphakala/voicewatch/internal/securefs"
 	"gorm.io/gorm"
@@ -478,13 +477,14 @@ func setupMediaTestEnvironment(t *testing.T) (*echo.Echo, *Controller, string) {
 		assert.NoError(t, controller.SFS.Close(), "Failed to close SFS")
 	}) // Ensure this one is closed too
 
-	// Assign the tempDir to settings just in case any *other* part relies on it
-	// (though SecureFS should make this less necessary). Copy-on-write: mutating
-	// through Load() races with parallel tests' handlers reading the snapshot
-	// (Controller.Settings is documented as publish-a-fresh-pointer only).
-	clonedSettings := conf.CloneSettings(controller.Settings.Load())
-	clonedSettings.Realtime.Audio.Export.Path = tempDir
-	controller.Settings.Store(clonedSettings)
+	// NOTE: the export path is deliberately NOT written into the shared
+	// settings snapshot here. SecureFS (assigned above) roots all media file
+	// access in tempDir, and handlers read settings through currentSettings(),
+	// which prefers the PROCESS-GLOBAL snapshot — mutating it in place from
+	// parallel media tests is a data race (caught by -race in CI), and
+	// publishing per-test snapshots from parallel tests would clobber each
+	// other. Tests that genuinely need a settings field visible to handlers
+	// must be non-parallel and use publishTestSettings (test_utils_test.go).
 
 	// Inject passthrough auth middleware so authenticated routes (e.g. clip extraction)
 	// can be registered and tested without a real auth service
