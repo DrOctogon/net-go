@@ -359,7 +359,13 @@ func buildExportFFmpegArgs(opts *ExportOptions, tempPath, audioFilter string) []
 // Normalization takes precedence over gain adjustment.
 func buildExportAudioFilter(ctx context.Context, opts *ExportOptions) (string, error) {
 	if opts.Normalization.Enabled {
-		return buildNormalizationFilter(ctx, opts)
+		filter, err := buildNormalizationFilter(ctx, opts)
+		if err != nil {
+			return "", err
+		}
+		// See loudnormFrameSamples: loudnorm output must be re-chunked before
+		// encoding on FFmpeg 9+.
+		return filter + "," + loudnormRechunkFilter(), nil
 	}
 
 	if opts.GainDB != 0 {
