@@ -166,6 +166,7 @@ func (a *DatabaseAction) ExecuteContext(ctx context.Context, _ any) error {
 	// a.Result.ID is valid (estimates were attached pre-save at the approval
 	// seam). No-op unless the opt-in feature is on and attributes are present.
 	emitSpeakerAttributeAlert(a.Settings, &a.Result)
+	emitNewSpeakerAlert(a.Settings, &a.Result)
 
 	// After successful save, publish detection event to the event bus.
 	a.publishDetectionEvent(isNewSpecies, daysSinceFirstSeen, novelty)

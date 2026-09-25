@@ -48,8 +48,17 @@ func NewClusterer(threshold float64) *Clusterer {
 // embedding (nothing to cluster). The embedding is copied before being retained,
 // so the caller may reuse its slice.
 func (c *Clusterer) Assign(embedding []float32) string {
+	id, _ := c.AssignWithNovelty(embedding)
+	return id
+}
+
+// AssignWithNovelty is Assign plus a novelty flag: isNew is true when the
+// embedding did not match any existing cluster and a new one was created
+// (an unknown voice). It is false for an empty embedding and for matches
+// against known clusters, including clusters restored from a snapshot.
+func (c *Clusterer) AssignWithNovelty(embedding []float32) (id string, isNew bool) {
 	if len(embedding) == 0 {
-		return ""
+		return "", false
 	}
 
 	c.mu.Lock()
@@ -68,16 +77,16 @@ func (c *Clusterer) Assign(embedding []float32) string {
 
 	if bestIdx >= 0 {
 		c.clusters[bestIdx].update(embedding)
-		return c.clusters[bestIdx].id
+		return c.clusters[bestIdx].id, false
 	}
 
 	// No match: start a new cluster with a fresh deterministic ID.
 	c.nextID++
-	id := "spk_" + strconv.Itoa(c.nextID)
+	id = "spk_" + strconv.Itoa(c.nextID)
 	centroid := make([]float32, len(embedding))
 	copy(centroid, embedding)
 	c.clusters = append(c.clusters, &cluster{id: id, centroid: centroid, count: 1})
-	return id
+	return id, true
 }
 
 // NumClusters returns the number of distinct speakers seen so far.

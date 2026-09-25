@@ -3875,6 +3875,10 @@
         "mqttPublishFailed": {
           "name": "MQTT-julkaisu epäonnistui",
           "description": "Ilmoittaa kun MQTT-viestin julkaisu epäonnistuu"
+        },
+        "newSpeaker": {
+          "name": "Uusi puhuja havaittu",
+          "description": "Ilmoittaa, kun havaitaan tuntematon ääni (ei vastaavaa tunnettua puhujaa)"
         }
       }
     },

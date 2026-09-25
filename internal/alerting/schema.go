@@ -48,6 +48,9 @@ type OperatorSchema struct {
 // stringOperators are operators valid for string properties.
 var stringOperators = []string{OperatorIs, OperatorIsNot, OperatorIn, OperatorNotIn, OperatorContains, OperatorNotContains}
 
+// labelDetectionID is the shared UI label for the detection-id property.
+const labelDetectionID = "Detection ID"
+
 // numericOperators are operators valid for numeric properties.
 var numericOperators = []string{OperatorGreaterThan, OperatorLessThan, OperatorGreaterOrEqual, OperatorLessOrEqual}
 
@@ -128,6 +131,12 @@ func GetSchema() Schema {
 						Description: "Fires when a detection's estimated speaker attributes (gender, age band) match the rule conditions",
 						Properties:  speakerAttrProperties(),
 					},
+					{
+						Name:        EventNewSpeakerDetected,
+						Label:       "New Speaker Detected",
+						Description: "Fires when a detection's voice-print matches no known speaker and a new speaker ID is created (unknown voice)",
+						Properties:  newSpeakerProperties(),
+					},
 				},
 			},
 		},
@@ -206,7 +215,7 @@ func keywordFlagProperties() []PropertySchema {
 		{Name: PropertyKeywords, Label: "Keywords", Type: "string", Operators: stringOperators},
 		{Name: PropertyTranscript, Label: "Transcript", Type: "string", Operators: stringOperators},
 		{Name: PropertySpeciesName, Label: "Species Name", Type: "string", Operators: stringOperators},
-		{Name: PropertyDetectionID, Label: "Detection ID", Type: "string", Operators: stringOperators},
+		{Name: PropertyDetectionID, Label: labelDetectionID, Type: "string", Operators: stringOperators},
 	}
 }
 
@@ -215,6 +224,13 @@ func speakerAttrProperties() []PropertySchema {
 		{Name: PropertySpeakerGender, Label: "Gender", Type: "string", Operators: stringOperators},
 		{Name: PropertySpeakerAgeBand, Label: "Age Band", Type: "string", Operators: stringOperators},
 		{Name: PropertyConfidence, Label: "Confidence", Type: "number", Operators: numericOperators},
-		{Name: PropertyDetectionID, Label: "Detection ID", Type: "string", Operators: stringOperators},
+		{Name: PropertyDetectionID, Label: labelDetectionID, Type: "string", Operators: stringOperators},
+	}
+}
+
+func newSpeakerProperties() []PropertySchema {
+	return []PropertySchema{
+		{Name: PropertySpeakerID, Label: "Speaker ID", Type: "string", Operators: stringOperators},
+		{Name: PropertyDetectionID, Label: labelDetectionID, Type: "string", Operators: stringOperators},
 	}
 }
