@@ -421,6 +421,7 @@ export type TranslationKey =
   | 'search.fields.flaggedOnlyHelp'
   | 'search.fields.gender'
   | 'search.fields.ageBand'
+  | 'search.fields.speakerId'
   | 'search.advancedFilters'
   | 'search.showAdvancedFilters'
   | 'search.hideAdvancedFilters'

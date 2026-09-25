@@ -60,6 +60,9 @@ type SearchRequest struct {
 	// speaker attribute. Unrecognized values are ignored (treated as no filter).
 	Gender  string `json:"gender"`
 	AgeBand string `json:"ageBand"`
+	// SpeakerID restricts results to detections assigned to the given
+	// voice-print cluster (e.g. "spk_3"). Invalid values are ignored.
+	SpeakerID string `json:"speakerId"`
 	Page    int    `json:"page"`
 	SortBy  string `json:"sortBy"`
 }
@@ -204,6 +207,7 @@ func (c *Controller) buildSearchFilters(req *SearchRequest, ctxTimeout context.C
 		Flagged:           flagged,
 		Gender:            validSpeakerGenderFilter(req.Gender),
 		AgeBand:           validSpeakerAgeBandFilter(req.AgeBand),
+		SpeakerID:         validSpeakerIDFilter(req.SpeakerID),
 		Page:              req.Page,
 		PerPage:           defaultPerPage,
 		SortBy:            req.SortBy,

@@ -176,6 +176,8 @@
   // Speaker-attribute filters: 'any' means "do not filter" and is not sent.
   let genderFilter = $state<'any' | SpeakerGender>('any');
   let ageBandFilter = $state<'any' | SpeakerAgeBand>('any');
+  // Voice-print cluster id filter (e.g. "spk_3"); empty means "do not filter".
+  let speakerIdFilter = $state('');
   let formSubmitted = $state(false);
   let advancedFilters = $state(false);
   let isLoading = $state(false);
@@ -290,6 +292,7 @@
         ...(flaggedOnly ? { flagged: true } : {}),
         ...(genderFilter !== 'any' ? { gender: genderFilter } : {}),
         ...(ageBandFilter !== 'any' ? { ageBand: ageBandFilter } : {}),
+        ...(speakerIdFilter.trim() !== '' ? { speakerId: speakerIdFilter.trim() } : {}),
       };
 
       interface SearchResponse {
@@ -329,6 +332,7 @@
     flaggedOnly = false;
     genderFilter = 'any';
     ageBandFilter = 'any';
+    speakerIdFilter = '';
     formSubmitted = false;
     results = [];
     errorMessage = '';
@@ -695,6 +699,20 @@
                     <option value={ageBand}>{t(`detections.speaker.age.${ageBand}`)}</option>
                   {/each}
                 </select>
+              </div>
+
+              <!-- Speaker (voice-print cluster) ID -->
+              <div class="form-control">
+                <label class="label" for="speakerIdFilter">
+                  <span class="label-text">{t('search.fields.speakerId')}</span>
+                </label>
+                <input
+                  id="speakerIdFilter"
+                  type="text"
+                  bind:value={speakerIdFilter}
+                  placeholder="spk_3"
+                  class="input w-full"
+                />
               </div>
 
               <!-- Audio Source -->

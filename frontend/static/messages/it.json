@@ -493,7 +493,8 @@
       "flaggedOnly": "Flagged only",
       "flaggedOnlyHelp": "Limit results to detections whose transcript matched a configured keyword",
       "gender": "Speaker gender",
-      "ageBand": "Speaker age"
+      "ageBand": "Speaker age",
+      "speakerId": "ID del parlante"
     },
     "advancedFilters": "Filtri avanzati",
     "showAdvancedFilters": "Mostra filtri avanzati",
