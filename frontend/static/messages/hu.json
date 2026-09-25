@@ -821,6 +821,10 @@
         "mainRegion": "Detektálás részletei",
         "tabsHeading": "Detektálási információk lapjai",
         "tabList": "Detektálás részleteinek lapjai"
+      },
+      "similarVoices": {
+        "title": "Hasonló hangok",
+        "openDetection": "{id} észlelés megnyitása"
       }
     },
     "headers": {

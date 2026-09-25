@@ -821,6 +821,10 @@
         "mainRegion": "Detekteringsinformation",
         "tabsHeading": "Flikar med detekteringsinformation",
         "tabList": "Flikar med detekteringsdetaljer"
+      },
+      "similarVoices": {
+        "title": "Liknande röster",
+        "openDetection": "Öppna detektion {id}"
       }
     },
     "headers": {

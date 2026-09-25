@@ -655,6 +655,8 @@ export type TranslationKey =
   | 'detections.detail.aria.mainRegion'
   | 'detections.detail.aria.tabsHeading'
   | 'detections.detail.aria.tabList'
+  | 'detections.detail.similarVoices.title'
+  | 'detections.detail.similarVoices.openDetection' // params: id
   | 'detections.headers.dateTime'
   | 'detections.headers.weather'
   | 'detections.headers.source'
@@ -3624,6 +3626,7 @@ export type TranslationParams = {
   'detections.detail.aria.downloadAudioClip': { name: string | number };
   'detections.detail.aria.audioRecordingFor': { name: string | number };
   'detections.detail.aria.confidence': { confidence: string | number };
+  'detections.detail.similarVoices.openDetection': { id: string | number };
   'detections.pagination.showing': {
     from: string | number;
     to: string | number;

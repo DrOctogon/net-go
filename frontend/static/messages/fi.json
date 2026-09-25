@@ -821,6 +821,10 @@
         "mainRegion": "Havainnon tiedot",
         "tabsHeading": "Havaintotietojen välilehdet",
         "tabList": "Havainnon tietojen välilehdet"
+      },
+      "similarVoices": {
+        "title": "Samankaltaiset äänet",
+        "openDetection": "Avaa havainto {id}"
       }
     },
     "headers": {

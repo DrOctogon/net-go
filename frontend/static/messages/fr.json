@@ -821,6 +821,10 @@
         "mainRegion": "Détails de détection",
         "tabsHeading": "Onglets d'informations de détection",
         "tabList": "Onglets des détails de détection"
+      },
+      "similarVoices": {
+        "title": "Voix similaires",
+        "openDetection": "Ouvrir la détection {id}"
       }
     },
     "headers": {

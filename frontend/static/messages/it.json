@@ -821,6 +821,10 @@
         "mainRegion": "Dettagli del rilevamento",
         "tabsHeading": "Schede informazioni rilevamento",
         "tabList": "Schede dettagli rilevamento"
+      },
+      "similarVoices": {
+        "title": "Voci simili",
+        "openDetection": "Apri rilevamento {id}"
       }
     },
     "headers": {

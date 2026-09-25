@@ -821,6 +821,10 @@
         "mainRegion": "Podrobnosti detekce",
         "tabsHeading": "Karty s informacemi o detekci",
         "tabList": "Karty podrobností detekce"
+      },
+      "similarVoices": {
+        "title": "Podobné hlasy",
+        "openDetection": "Otevřít detekci {id}"
       }
     },
     "headers": {
