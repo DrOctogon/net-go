@@ -477,9 +477,14 @@ func setupMediaTestEnvironment(t *testing.T) (*echo.Echo, *Controller, string) {
 		assert.NoError(t, controller.SFS.Close(), "Failed to close SFS")
 	}) // Ensure this one is closed too
 
-	// Assign the tempDir to settings just in case any *other* part relies on it
-	// (though SecureFS should make this less necessary)
-	controller.Settings.Load().Realtime.Audio.Export.Path = tempDir
+	// NOTE: the export path is deliberately NOT written into the shared
+	// settings snapshot here. SecureFS (assigned above) roots all media file
+	// access in tempDir, and handlers read settings through currentSettings(),
+	// which prefers the PROCESS-GLOBAL snapshot — mutating it in place from
+	// parallel media tests is a data race (caught by -race in CI), and
+	// publishing per-test snapshots from parallel tests would clobber each
+	// other. Tests that genuinely need a settings field visible to handlers
+	// must be non-parallel and use publishTestSettings (test_utils_test.go).
 
 	// Inject passthrough auth middleware so authenticated routes (e.g. clip extraction)
 	// can be registered and tested without a real auth service

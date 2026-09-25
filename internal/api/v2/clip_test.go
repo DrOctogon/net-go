@@ -10,6 +10,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/tphakala/voicewatch/internal/conf"
 	"github.com/tphakala/voicewatch/internal/datastore/mocks"
 	"gorm.io/gorm"
 )
@@ -90,7 +91,13 @@ func TestExtractAudioClipByID(t *testing.T) {
 				if ffmpegErr != nil {
 					t.Skip("FFmpeg not available, skipping extraction test")
 				}
-				controller.Settings.Load().Realtime.Audio.FfmpegPath = ffmpegPath
+				cloned := conf.CloneSettings(conf.GetSettings())
+				if cloned == nil {
+					cloned = conf.CloneSettings(controller.Settings.Load())
+				}
+				cloned.Realtime.Audio.FfmpegPath = ffmpegPath
+				publishTestSettings(t, cloned)
+				controller.Settings.Store(cloned)
 			}
 
 			path := "/api/v2/audio/" + tc.noteID + "/clip"
