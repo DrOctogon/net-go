@@ -895,7 +895,7 @@ func (s *Server) handleOAuthBegin(c echo.Context) error {
 	provider := c.Param("provider")
 	log := s.securityLog().With(
 		logger.String("provider", provider),
-		logger.String("ip", c.RealIP()),
+		logger.IP("ip", c.RealIP()),
 	)
 
 	log.Info("OAuth login begin request")
@@ -940,7 +940,7 @@ func (s *Server) handleOAuthCallback(c echo.Context) error {
 	provider := c.Param("provider")
 	log := s.securityLog().With(
 		logger.String("provider", provider),
-		logger.String("ip", c.RealIP()),
+		logger.IP("ip", c.RealIP()),
 	)
 
 	log.Info("OAuth login callback received")

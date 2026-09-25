@@ -605,7 +605,7 @@ func (c *Controller) LoggingMiddleware() echo.MiddlewareFunc {
 				logger.String("path", req.URL.Path),
 				logger.String("query", req.URL.RawQuery),
 				logger.Int("status", status),
-				logger.String("ip", ctx.RealIP()), // Uses custom extractor
+				logger.IP("ip", ctx.RealIP()), // Uses custom extractor
 				logger.Bool("tunneled", isTunneled),
 				logger.String("tunnel_provider", tunnelProvider),
 				logger.String("user_agent", req.UserAgent()),
@@ -979,7 +979,7 @@ func (c *Controller) handleErrorInternal(ctx echo.Context, err error, message st
 		logger.Int("code", code),
 		logger.String("path", ctx.Request().URL.Path),
 		logger.String("method", ctx.Request().Method),
-		logger.String("ip", ip),
+		logger.IP("ip", ip),
 		logger.Bool("tunneled", isTunneled),
 		logger.String("tunnel_provider", tunnelProvider),
 	}
@@ -1091,7 +1091,7 @@ func (c *Controller) logAPIRequest(ctx echo.Context, level logger.LogLevel, msg 
 	baseFields := make([]logger.Field, 0, 2+len(fields))
 	baseFields = append(baseFields,
 		logger.String("path", path),
-		logger.String("ip", ip),
+		logger.IP("ip", ip),
 	)
 
 	// Append specific fields to base fields

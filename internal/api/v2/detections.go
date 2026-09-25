@@ -425,7 +425,7 @@ func (c *Controller) validateDateParameters(startDateStr, endDateStr string, ctx
 				logger.String("parameter", dp.name),
 				logger.String("value", dp.value),
 				logger.String("path", ctx.Request().URL.Path),
-				logger.String("ip", ctx.RealIP()))
+				logger.IP("ip", ctx.RealIP()))
 			return &dateValidationError{message: err.Error(), paramName: dp.name}
 		}
 	}
@@ -436,7 +436,7 @@ func (c *Controller) validateDateParameters(startDateStr, endDateStr string, ctx
 			logger.String("start_date", startDateStr),
 			logger.String("end_date", endDateStr),
 			logger.String("path", ctx.Request().URL.Path),
-			logger.String("ip", ctx.RealIP()))
+			logger.IP("ip", ctx.RealIP()))
 		return errors.NewStd("start_date cannot be after end_date")
 	}
 
@@ -574,7 +574,7 @@ func (c *Controller) GetDetections(ctx echo.Context) error {
 		c.logErrorIfEnabled("Failed to parse query parameters",
 			logger.Error(err),
 			logger.String("path", ctx.Request().URL.Path),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 		)
 		var dateErr *dateValidationError
 		if errors.As(err, &dateErr) {
@@ -596,7 +596,7 @@ func (c *Controller) GetDetections(ctx echo.Context) error {
 		logger.Int("limit", params.NumResults),
 		logger.Int("offset", params.Offset),
 		logger.String("path", ctx.Request().URL.Path),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 	)
 
 	// Get notes based on query type
@@ -606,7 +606,7 @@ func (c *Controller) GetDetections(ctx echo.Context) error {
 			logger.String("queryType", params.QueryType),
 			logger.Error(err),
 			logger.String("path", ctx.Request().URL.Path),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 		)
 		return c.HandleError(ctx, err, "Failed to retrieve detections", http.StatusInternalServerError)
 	}
@@ -626,7 +626,7 @@ func (c *Controller) GetDetections(ctx echo.Context) error {
 		logger.Int("pages", response.TotalPages),
 		logger.Int("currentPage", response.CurrentPage),
 		logger.String("path", ctx.Request().URL.Path),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 	)
 
 	return ctx.JSON(http.StatusOK, response)
@@ -1517,7 +1517,7 @@ func (c *Controller) ReviewDetection(ctx echo.Context) error {
 			logger.String("detection_id", idStr),
 			logger.Bool("current_locked", note.Locked),
 			logger.Bool("new_locked", req.LockDetection),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 		)
 
 		err = c.AddLock(note.ID, req.LockDetection)
@@ -1527,7 +1527,7 @@ func (c *Controller) ReviewDetection(ctx echo.Context) error {
 				logger.String("detection_id", idStr),
 				logger.Bool("attempted_lock_state", req.LockDetection),
 				logger.Error(err),
-				logger.String("ip", ctx.RealIP()),
+				logger.IP("ip", ctx.RealIP()),
 			)
 			return c.HandleError(ctx, err, "Failed to update lock status", http.StatusInternalServerError)
 		}
@@ -1620,7 +1620,7 @@ func (c *Controller) IgnoreSpecies(ctx echo.Context) error {
 		logger.String("species", req.CommonName),
 		logger.String("action", action),
 		logger.Bool("is_excluded", isExcluded),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 	)
 
 	return ctx.JSON(http.StatusOK, IgnoreSpeciesResponse{
