@@ -68,8 +68,8 @@ type Note struct {
 	// "similar voices" lookups. JSON-serialized; null when no embedding computed.
 	VoicePrintEmbedding []float32 `gorm:"serializer:json"`
 	ProcessingTime      time.Duration
-	Unlikely       bool    `gorm:"default:false"`                 // Tagged by ultrasonic validation filter
-	Occurrence     float64 `gorm:"-" json:"occurrence,omitempty"` // Runtime only, occurrence probability (0-1) based on location/time
+	Unlikely            bool    `gorm:"default:false"`                 // Tagged by ultrasonic validation filter
+	Occurrence          float64 `gorm:"-" json:"occurrence,omitempty"` // Runtime only, occurrence probability (0-1) based on location/time
 	// RawLabel is the full un-truncated classifier label (e.g. "power_tool"); runtime-only,
 	// not persisted. Used at Save time to classify non-bird sound classes correctly.
 	RawLabel string        `gorm:"-"`
@@ -219,34 +219,34 @@ type DetectionRecord struct {
 // users experience a sudden drop in detections after restart when learned thresholds are lost.
 type DynamicThreshold struct {
 	ID             uint      `gorm:"primaryKey"`
-	SpeciesName    string    `gorm:"uniqueIndex:idx_dt_species_model;not null;size:200"`                   // Common name (lowercase)
+	SpeciesName    string    `gorm:"uniqueIndex:idx_dt_species_model;not null;size:200"`                      // Common name (lowercase)
 	ModelName      string    `gorm:"uniqueIndex:idx_dt_species_model;not null;size:100;default:'VoiceWatch'"` // Model that produced this threshold
-	ScientificName string    `gorm:"size:200"`                                                             // Scientific name for thumbnails
-	Level          int       `gorm:"not null;default:0"`                                                   // Adjustment level (0-3)
-	CurrentValue   float64   `gorm:"not null"`                                                             // Current threshold value
-	BaseThreshold  float64   `gorm:"not null"`                                                             // Original base threshold for reference
-	HighConfCount  int       `gorm:"not null;default:0"`                                                   // Count of high-confidence detections
-	ValidHours     int       `gorm:"not null"`                                                             // Hours until expiry
-	ExpiresAt      time.Time `gorm:"index;not null"`                                                       // When this threshold expires
-	LastTriggered  time.Time `gorm:"index;not null"`                                                       // Last time threshold was triggered
-	FirstCreated   time.Time `gorm:"not null"`                                                             // When first created
-	UpdatedAt      time.Time `gorm:"not null"`                                                             // Last update time
-	TriggerCount   int       `gorm:"not null;default:0"`                                                   // Total number of times triggered (for statistics)
+	ScientificName string    `gorm:"size:200"`                                                                // Scientific name for thumbnails
+	Level          int       `gorm:"not null;default:0"`                                                      // Adjustment level (0-3)
+	CurrentValue   float64   `gorm:"not null"`                                                                // Current threshold value
+	BaseThreshold  float64   `gorm:"not null"`                                                                // Original base threshold for reference
+	HighConfCount  int       `gorm:"not null;default:0"`                                                      // Count of high-confidence detections
+	ValidHours     int       `gorm:"not null"`                                                                // Hours until expiry
+	ExpiresAt      time.Time `gorm:"index;not null"`                                                          // When this threshold expires
+	LastTriggered  time.Time `gorm:"index;not null"`                                                          // Last time threshold was triggered
+	FirstCreated   time.Time `gorm:"not null"`                                                                // When first created
+	UpdatedAt      time.Time `gorm:"not null"`                                                                // Last update time
+	TriggerCount   int       `gorm:"not null;default:0"`                                                      // Total number of times triggered (for statistics)
 }
 
 // ThresholdEvent records each change to a dynamic threshold for audit/history purposes.
 // This enables the frontend to display a timeline of threshold adjustments per species.
 type ThresholdEvent struct {
 	ID            uint      `gorm:"primaryKey"`
-	SpeciesName   string    `gorm:"index;not null;size:200"`             // Common name (lowercase)
+	SpeciesName   string    `gorm:"index;not null;size:200"`                // Common name (lowercase)
 	ModelName     string    `gorm:"not null;size:100;default:'VoiceWatch'"` // Model that produced this event
-	PreviousLevel int       `gorm:"not null"`                            // Level before change
-	NewLevel      int       `gorm:"not null"`                            // Level after change
-	PreviousValue float64   `gorm:"not null"`                            // Threshold value before change
-	NewValue      float64   `gorm:"not null"`                            // Threshold value after change
-	ChangeReason  string    `gorm:"not null;size:50"`                    // "high_confidence", "expiry", "manual_reset"
-	Confidence    float64   `gorm:"default:0"`                           // Detection confidence that triggered change (if applicable)
-	CreatedAt     time.Time `gorm:"index;not null"`                      // When the event occurred
+	PreviousLevel int       `gorm:"not null"`                               // Level before change
+	NewLevel      int       `gorm:"not null"`                               // Level after change
+	PreviousValue float64   `gorm:"not null"`                               // Threshold value before change
+	NewValue      float64   `gorm:"not null"`                               // Threshold value after change
+	ChangeReason  string    `gorm:"not null;size:50"`                       // "high_confidence", "expiry", "manual_reset"
+	Confidence    float64   `gorm:"default:0"`                              // Detection confidence that triggered change (if applicable)
+	CreatedAt     time.Time `gorm:"index;not null"`                         // When the event occurred
 
 	// ScientificName is a virtual field (not persisted in legacy DB) used by v2only
 	// datastore to correctly resolve the Label foreign key. The processor populates
@@ -266,4 +266,20 @@ type NotificationHistory struct {
 	ExpiresAt        time.Time `gorm:"index;not null"`                                                                          // When this record expires (2x suppression window)
 	CreatedAt        time.Time `gorm:"not null"`                                                                                // When first created
 	UpdatedAt        time.Time `gorm:"not null"`                                                                                // Last update time
+}
+
+// MaxSpeakerNameLength is the maximum length (in bytes, after trimming) of a
+// user-assigned speaker display name. Shared by the datastore validation and
+// the API v2 request validation so both layers enforce the same cap.
+const MaxSpeakerNameLength = 64
+
+// SpeakerName maps a voice-print speaker cluster id (e.g. "spk_3", as issued
+// by speaker.Clusterer) to a user-assigned display name for the household
+// roster. Rows only exist for named speakers; clearing a name deletes the row.
+type SpeakerName struct {
+	ID        uint      `gorm:"primaryKey"`
+	SpeakerID string    `gorm:"uniqueIndex;not null;size:32"` // Voice-print cluster id ("spk_<n>")
+	Name      string    `gorm:"not null;size:64"`             // User-assigned display name (trimmed)
+	CreatedAt time.Time `gorm:"not null"`                     // When first named
+	UpdatedAt time.Time `gorm:"not null"`                     // Last rename time
 }

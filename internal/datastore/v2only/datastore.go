@@ -1854,6 +1854,20 @@ func (ds *Datastore) GetAllHourlyWeather() ([]datastore.HourlyWeather, error) {
 	return nil, fmt.Errorf("GetAllHourlyWeather: %w", ErrOperationNotSupported)
 }
 
+// GetSpeakerNames returns the household speaker roster. Voice-print speaker
+// clusters are a legacy-schema feature (notes.speaker_id), so v2-only mode has
+// no speakers to name; return an empty roster rather than an error so the
+// dashboard degrades gracefully.
+func (ds *Datastore) GetSpeakerNames(_ context.Context) ([]datastore.SpeakerName, error) {
+	return []datastore.SpeakerName{}, nil
+}
+
+// SetSpeakerName is not supported in v2-only mode (no voice-print speaker
+// clusters exist in the v2 schema).
+func (ds *Datastore) SetSpeakerName(_ context.Context, _, _ string) error {
+	return fmt.Errorf("SetSpeakerName: %w", ErrOperationNotSupported)
+}
+
 // SaveHourlyWeather saves hourly weather data.
 func (ds *Datastore) SaveHourlyWeather(hourlyWeather *datastore.HourlyWeather) error {
 	if hourlyWeather == nil {

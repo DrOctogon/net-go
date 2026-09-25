@@ -638,6 +638,7 @@ func (c *Controller) initRoutes() {
 		{"app routes", c.initAppRoutes},
 		{"search routes", c.initSearchRoutes},
 		{"detection routes", c.initDetectionRoutes},
+		{"speaker routes", c.initSpeakerRoutes},
 		{"analytics routes", c.initAnalyticsRoutes},
 		{"weather routes", c.initWeatherRoutes},
 		{"system routes", c.initSystemRoutes},
