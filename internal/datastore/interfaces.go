@@ -257,6 +257,9 @@ type Interface interface {
 	GetNotificationHistory(ctx context.Context, scientificName string, notificationType string) (*NotificationHistory, error)
 	GetActiveNotificationHistory(ctx context.Context, after time.Time) ([]NotificationHistory, error)
 	DeleteExpiredNotificationHistory(ctx context.Context, before time.Time) (int64, error) // Returns count deleted
+	// Speaker roster methods (household speaker naming)
+	GetSpeakerNames(ctx context.Context) ([]SpeakerName, error)   // List user-assigned speaker names
+	SetSpeakerName(ctx context.Context, speakerID, name string) error // Upsert; empty name clears the mapping
 	// Database stats method for runtime statistics
 	GetDatabaseStats(ctx context.Context) (*DatabaseStats, error)
 	// PingWithLatency executes a trivial query (SELECT 1) and returns the round-trip time.

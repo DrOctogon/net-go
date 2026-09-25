@@ -435,6 +435,14 @@ func (m *MockDatastore) CountResults() (int64, error) {
 	return 0, nil
 }
 
+func (m *MockDatastore) GetSpeakerNames(ctx context.Context) ([]datastore.SpeakerName, error) {
+	return nil, nil
+}
+
+func (m *MockDatastore) SetSpeakerName(ctx context.Context, speakerID, name string) error {
+	return nil
+}
+
 // createTestProcessor creates a processor with mock datastore for testing
 func createTestProcessor() *Processor {
 	settings := &conf.Settings{}

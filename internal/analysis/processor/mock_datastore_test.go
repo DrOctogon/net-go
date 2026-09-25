@@ -428,6 +428,12 @@ func (m *ActionMockDatastore) GetResultsBatch(_, _ uint, _ int) ([]datastore.Res
 func (m *ActionMockDatastore) CountResults() (int64, error) {
 	return 0, nil
 }
+func (m *ActionMockDatastore) GetSpeakerNames(_ context.Context) ([]datastore.SpeakerName, error) {
+	return nil, nil
+}
+func (m *ActionMockDatastore) SetSpeakerName(_ context.Context, _, _ string) error {
+	return nil
+}
 
 // Compile-time check that ActionMockDatastore implements datastore.Interface
 var _ datastore.Interface = (*ActionMockDatastore)(nil)

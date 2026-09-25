@@ -137,6 +137,13 @@ Lightweight connectivity check. Returns a minimal response with no database quer
 | POST   | `/detections/batch/lock`      | `BatchLockDetections`   | ✅   | Bulk lock or unlock detections             |
 | POST   | `/detections/batch/resolve`   | `BatchResolveDetections`| ✅   | Resolve query params to detection IDs      |
 
+### Speakers (`speakers.go`)
+
+| Method | Route                | Handler             | Auth | Description                                                          |
+| ------ | -------------------- | ------------------- | ---- | -------------------------------------------------------------------- |
+| GET    | `/speakers`          | `GetSpeakers`       | ✅   | Household speaker roster: `[{speakerId, name}]`                       |
+| PUT    | `/speakers/:id/name` | `UpdateSpeakerName` | ✅   | Set display name for a `spk_<n>` cluster; empty name clears mapping   |
+
 ### Integrations (`integrations.go`)
 
 | Method | Route                                        | Handler                         | Auth | Description                                    |
