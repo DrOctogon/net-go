@@ -286,6 +286,7 @@ type detectionQueryParams struct {
 	Transcript string
 	Gender     string
 	AgeBand    string
+	SpeakerID  string
 	// Sorting
 	SortBy string
 	// Include additional data
@@ -295,13 +296,13 @@ type detectionQueryParams struct {
 // advancedSearchCacheKey generates a deterministic cache key for advanced search queries.
 // Includes all filter parameters to avoid cache collisions.
 func (p *detectionQueryParams) advancedSearchCacheKey() string {
-	return fmt.Sprintf("adv_search:%s:%d:%d:%s:%s:%s:%s:%s:%s:%s:%s:%s:%s:%s:%s:%s:%s:%d:%s:%s",
+	return fmt.Sprintf("adv_search:%s:%d:%d:%s:%s:%s:%s:%s:%s:%s:%s:%s:%s:%s:%s:%s:%s:%d:%s:%s:%s",
 		p.Search, p.NumResults, p.Offset,
 		p.Confidence, p.TimeOfDay, p.HourRange,
 		p.Verified, p.Location, p.Locked, p.Flagged, p.Transcript,
 		p.Species, p.Date, p.StartDate+":"+p.EndDate,
 		p.SortBy, p.QueryType, p.Hour, p.Duration,
-		p.Gender, p.AgeBand)
+		p.Gender, p.AgeBand, p.SpeakerID)
 }
 
 // parseDetectionQueryParams extracts and validates query parameters from the request
@@ -325,6 +326,7 @@ func (c *Controller) parseDetectionQueryParams(ctx echo.Context) (*detectionQuer
 		Transcript: ctx.QueryParam("transcript"),
 		Gender:     ctx.QueryParam("gender"),
 		AgeBand:    ctx.QueryParam("ageBand"),
+		SpeakerID:  ctx.QueryParam("speakerId"),
 		// Sorting
 		SortBy: ctx.QueryParam("sortBy"),
 		// Include weather data
@@ -641,6 +643,7 @@ func (p *detectionQueryParams) needsAdvancedRouting() bool {
 		p.HourRange != "" || p.Verified != "" ||
 		p.Location != "" || p.Locked != "" || p.Flagged != "" ||
 		p.Transcript != "" || p.Gender != "" || p.AgeBand != "" ||
+		p.SpeakerID != "" ||
 		p.StartDate != "" || p.EndDate != "" {
 		return true
 	}
@@ -1186,6 +1189,7 @@ func (c *Controller) buildAdvancedSearchFilters(params *detectionQueryParams) da
 	}
 	filters.Gender = validSpeakerGenderFilter(params.Gender)
 	filters.AgeBand = validSpeakerAgeBandFilter(params.AgeBand)
+	filters.SpeakerID = validSpeakerIDFilter(params.SpeakerID)
 
 	// Apply sorting
 	filters.SortBy = params.SortBy

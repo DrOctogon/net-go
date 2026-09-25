@@ -2160,6 +2160,9 @@ type SearchFilters struct {
 	// notes.gender / notes.age_band columns. Empty means no filter.
 	Gender  string
 	AgeBand string
+	// SpeakerID is an exact-match filter on the notes.speaker_id voice-print
+	// cluster column. Empty means no filter.
+	SpeakerID string
 	Page    int
 	PerPage int
 	SortBy  string
@@ -2335,6 +2338,9 @@ func applyCommonFilters(query *gorm.DB, filters *SearchFilters, ds *DataStore) *
 	}
 	if filters.AgeBand != "" {
 		query = query.Where("notes.age_band = ?", filters.AgeBand)
+	}
+	if filters.SpeakerID != "" {
+		query = query.Where("notes.speaker_id = ?", filters.SpeakerID)
 	}
 
 	return query
