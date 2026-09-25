@@ -3879,6 +3879,10 @@
         "mqttPublishFailed": {
           "name": "MQTT publikálás sikertelen",
           "description": "Értesít, amikor egy MQTT üzenet publikálása sikertelen"
+        },
+        "newSpeaker": {
+          "name": "Új beszélő észlelve",
+          "description": "Értesít, ha ismeretlen hang észlelhető (nincs egyező ismert beszélő)"
         }
       }
     },

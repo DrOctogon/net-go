@@ -3879,6 +3879,10 @@
         "mqttPublishFailed": {
           "name": "Publicación MQTT fallida",
           "description": "Notifica cuando falla la publicación de un mensaje MQTT"
+        },
+        "newSpeaker": {
+          "name": "Nuevo hablante detectado",
+          "description": "Notifica cuando se detecta una voz desconocida (sin hablante conocido coincidente)"
         }
       }
     },

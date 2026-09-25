@@ -64,6 +64,10 @@ type Result struct {
 	AgeConfidence       float64
 	SpeakerID           string
 	VoicePrintEmbedding []float32
+	// SpeakerIsNew is true when SpeakerID was created for this detection (the
+	// voice matched no known cluster). Transient: drives the new-speaker alert
+	// and is not persisted.
+	SpeakerIsNew bool
 
 	// Review status (populated from DB relations when loaded)
 	Verified string

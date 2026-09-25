@@ -3879,6 +3879,10 @@
         "mqttPublishFailed": {
           "name": "Publikácia MQTT zlyhala",
           "description": "Upozorní, keď zlyhá publikácia správy MQTT"
+        },
+        "newSpeaker": {
+          "name": "Zistený nový hovoriaci",
+          "description": "Upozorní, keď sa zistí neznámy hlas (žiadny zodpovedajúci známy hovoriaci)"
         }
       }
     },

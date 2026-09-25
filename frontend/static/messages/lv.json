@@ -3879,6 +3879,10 @@
         "mqttPublishFailed": {
           "name": "MQTT publicēšana neizdevās",
           "description": "Paziņo, kad MQTT ziņojuma publicēšana neizdodas"
+        },
+        "newSpeaker": {
+          "name": "Atklāts jauns runātājs",
+          "description": "Paziņo, kad tiek atklāta nezināma balss (nav atbilstoša zināma runātāja)"
         }
       }
     },

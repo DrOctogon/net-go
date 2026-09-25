@@ -2848,6 +2848,8 @@ export type TranslationKey =
   | 'settings.alerts.builtInRules.mqttDisconnected.description'
   | 'settings.alerts.builtInRules.mqttPublishFailed.name'
   | 'settings.alerts.builtInRules.mqttPublishFailed.description'
+  | 'settings.alerts.builtInRules.newSpeaker.name'
+  | 'settings.alerts.builtInRules.newSpeaker.description'
   | 'settings.appearance.colorScheme'
   | 'settings.appearance.colorSchemeDescription'
   | 'settings.appearance.schemeBlue'

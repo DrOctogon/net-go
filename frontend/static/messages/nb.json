@@ -3879,6 +3879,10 @@
         "mqttPublishFailed": {
           "name": "MQTT-publisering mislyktes",
           "description": "Varsler når publisering av en MQTT-melding mislyktes"
+        },
+        "newSpeaker": {
+          "name": "Ny taler oppdaget",
+          "description": "Varsler når en ukjent stemme oppdages (ingen samsvarende kjent taler)"
         }
       }
     },

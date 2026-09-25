@@ -36,6 +36,7 @@ func TestGetSchema_AllEventsPresent(t *testing.T) {
 		EventDeviceStarted, EventDeviceStopped, EventDeviceError,
 		EventKeywordMatched,
 		EventSpeakerAttributeMatched,
+		EventNewSpeakerDetected,
 	}
 	assert.ElementsMatch(t, expectedEvents, allEvents)
 }
