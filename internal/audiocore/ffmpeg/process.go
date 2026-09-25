@@ -178,6 +178,19 @@ const (
 	loudnormTargetLRA = 7.0
 )
 
+// loudnormFrameSamples re-chunks loudnorm output into fixed-size frames.
+// In dynamic (non-linear) mode loudnorm can emit a single frame spanning the
+// whole clip; FFmpeg 9 encoders no longer re-chunk filter output, and FLAC
+// rejects blocks larger than 65535 samples ("invalid block size"). 4096
+// matches FLAC's default block size.
+const loudnormFrameSamples = 4096
+
+// loudnormRechunkFilter returns the asetnsamples filter that must follow any
+// loudnorm filter in a chain (see loudnormFrameSamples).
+func loudnormRechunkFilter() string {
+	return fmt.Sprintf("asetnsamples=n=%d", loudnormFrameSamples)
+}
+
 // BuildProcessingFilterChain constructs an FFmpeg -af filter string from AudioFilters.
 // Filter order: denoise -> normalize -> gain (per spec).
 // Returns an empty string if no filters are active.
@@ -207,6 +220,7 @@ func BuildProcessingFilterChain(f AudioFilters) string {
 				loudnormTargetI, loudnormTargetLRA, loudnormTargetTP,
 			))
 		}
+		filters = append(filters, loudnormRechunkFilter())
 	}
 
 	// 3. Gain (volume).
