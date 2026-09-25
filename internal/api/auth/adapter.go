@@ -64,7 +64,7 @@ func (a *SecurityAdapter) GetUsername(c echo.Context) string {
 	if err == nil && userId != "" {
 		a.log().Debug("Retrieved username from session as fallback",
 			logger.String("path", c.Request().URL.Path),
-			logger.String("ip", c.RealIP()))
+			logger.IP("ip", c.RealIP()))
 		return userId
 	}
 
@@ -72,7 +72,7 @@ func (a *SecurityAdapter) GetUsername(c echo.Context) string {
 	// where users are authenticated by IP without going through login flow
 	a.log().Debug("No username in context or session (expected for subnet bypass)",
 		logger.String("path", c.Request().URL.Path),
-		logger.String("ip", c.RealIP()))
+		logger.IP("ip", c.RealIP()))
 	return ""
 }
 

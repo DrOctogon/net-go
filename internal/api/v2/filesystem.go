@@ -101,7 +101,7 @@ func (c *Controller) BrowseFileSystem(ctx echo.Context) error {
 		c.logErrorIfEnabled("Failed to bind browse request",
 			logger.Error(err),
 			logger.String("path", ctx.Request().URL.Path),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 		)
 		return c.HandleError(ctx, err, "Invalid request parameters", http.StatusBadRequest)
 	}
@@ -118,7 +118,7 @@ func (c *Controller) BrowseFileSystem(ctx echo.Context) error {
 		c.logWarnIfEnabled("Path validation failed",
 			logger.String("requested_path", req.Path),
 			logger.Error(err),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 		)
 		return c.HandleError(ctx, err, "Unable to access path", status)
 	}
@@ -129,7 +129,7 @@ func (c *Controller) BrowseFileSystem(ctx echo.Context) error {
 		c.logErrorIfEnabled("Failed to read directory",
 			logger.String("path", pathResult.browsePath),
 			logger.Error(err),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 		)
 		return c.HandleError(ctx, err, "Unable to read directory", http.StatusForbidden)
 	}
@@ -173,7 +173,7 @@ func (c *Controller) BrowseFileSystem(ctx echo.Context) error {
 	c.logInfoIfEnabled("Successfully browsed directory",
 		logger.String("path", currentPath),
 		logger.Int("item_count", len(items)),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 	)
 
 	return ctx.JSON(http.StatusOK, response)

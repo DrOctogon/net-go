@@ -234,7 +234,7 @@ func (c *Controller) GetAppConfig(ctx echo.Context) error {
 	c.logDebugIfEnabled("Serving app config",
 		logger.Bool("security_enabled", securityEnabled),
 		logger.Bool("access_allowed", accessAllowed),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 	)
 
 	return ctx.JSON(http.StatusOK, response)
