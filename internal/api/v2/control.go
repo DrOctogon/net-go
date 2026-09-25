@@ -69,7 +69,7 @@ func (c *Controller) initControlRoutes() {
 func (c *Controller) GetAvailableActions(ctx echo.Context) error {
 	c.logInfoIfEnabled("Getting available control actions",
 		logger.String("path", ctx.Request().URL.Path),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 	)
 
 	actions := []ControlAction{
@@ -105,7 +105,7 @@ func (c *Controller) GetAvailableActions(ctx echo.Context) error {
 	c.logInfoIfEnabled("Retrieved available control actions successfully",
 		logger.Int("action_count", len(actions)),
 		logger.String("path", ctx.Request().URL.Path),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 	)
 
 	return ctx.JSON(http.StatusOK, actions)
@@ -123,7 +123,7 @@ func (c *Controller) GetAvailableActions(ctx echo.Context) error {
 func (c *Controller) handleControlSignal(ctx echo.Context, signal, action, logMessage, successMessage string) error {
 	c.logInfoIfEnabled(logMessage,
 		logger.String("path", ctx.Request().URL.Path),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 	)
 
 	if c.controlChan == nil {
@@ -132,7 +132,7 @@ func (c *Controller) handleControlSignal(ctx echo.Context, signal, action, logMe
 			logger.Error(err),
 			logger.String("action", action),
 			logger.String("path", ctx.Request().URL.Path),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 		)
 		return c.HandleError(ctx, err,
 			"System control interface not available - server may need to be restarted", http.StatusInternalServerError)
@@ -151,7 +151,7 @@ func (c *Controller) handleControlSignal(ctx echo.Context, signal, action, logMe
 		c.logInfoIfEnabled("Control signal sent successfully",
 			logger.String("action", action),
 			logger.String("path", ctx.Request().URL.Path),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 		)
 	case <-c.ctx.Done():
 		return c.HandleError(ctx, c.ctx.Err(),
@@ -162,7 +162,7 @@ func (c *Controller) handleControlSignal(ctx echo.Context, signal, action, logMe
 			logger.Error(err),
 			logger.String("action", action),
 			logger.String("path", ctx.Request().URL.Path),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 		)
 		return c.HandleError(ctx, err,
 			"Request timeout while sending control signal", http.StatusRequestTimeout)
@@ -220,7 +220,7 @@ func (c *Controller) handleRestartRequest(ctx echo.Context, action string, setFl
 
 	c.logInfoIfEnabled(successMessage,
 		logger.String("action", action),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 	)
 
 	// Record restart event as Sentry breadcrumb for diagnostics
@@ -248,7 +248,7 @@ func (c *Controller) handleRestartRequest(ctx echo.Context, action string, setFl
 func (c *Controller) RestartServer(ctx echo.Context) error {
 	c.logInfoIfEnabled("Received request to restart server",
 		logger.String("path", ctx.Request().URL.Path),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 	)
 
 	return c.handleRestartRequest(ctx, ActionRestartServer, restart.SetBinaryRestart, "Server restart initiated")
@@ -259,7 +259,7 @@ func (c *Controller) RestartServer(ctx echo.Context) error {
 func (c *Controller) RestartContainer(ctx echo.Context) error {
 	c.logInfoIfEnabled("Received request to restart container",
 		logger.String("path", ctx.Request().URL.Path),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 	)
 
 	// Check if running in a container
@@ -293,7 +293,7 @@ func (c *Controller) RestartAudioSource(ctx echo.Context) error {
 	c.logInfoIfEnabled("Received request to restart audio source",
 		logger.String("source_id", sourceID),
 		logger.String("path", ctx.Request().URL.Path),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 	)
 
 	eng := c.engine.Load()
@@ -317,7 +317,7 @@ func (c *Controller) RestartAudioSource(ctx echo.Context) error {
 			logger.String("source_id", sourceID),
 			logger.Error(err),
 			logger.String("path", ctx.Request().URL.Path),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 		)
 		return c.HandleError(ctx, err, "Failed to restart audio source", http.StatusInternalServerError)
 	}
@@ -325,7 +325,7 @@ func (c *Controller) RestartAudioSource(ctx echo.Context) error {
 	c.logInfoIfEnabled("Audio source restarted successfully",
 		logger.String("source_id", sourceID),
 		logger.String("path", ctx.Request().URL.Path),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 	)
 
 	return ctx.JSON(http.StatusOK, ControlResult{

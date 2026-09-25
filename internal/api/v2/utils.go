@@ -190,7 +190,7 @@ func (c *Controller) requireQueryParam(ctx echo.Context, paramName, operation st
 		c.logErrorIfEnabled("Missing required parameter",
 			logger.String("parameter", paramName),
 			logger.String("operation", operation),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 			logger.String("path", ctx.Request().URL.Path),
 		)
 		_ = c.HandleError(ctx, nil, "Missing required parameter: "+paramName, http.StatusBadRequest)
@@ -207,7 +207,7 @@ func (c *Controller) requireQueryArrayParam(ctx echo.Context, paramName, operati
 		c.logErrorIfEnabled("Missing required parameter",
 			logger.String("parameter", paramName),
 			logger.String("operation", operation),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 			logger.String("path", ctx.Request().URL.Path),
 		)
 		_ = c.HandleError(ctx, nil, "Missing required parameter: "+paramName+" (array)", http.StatusBadRequest)
@@ -224,7 +224,7 @@ func (c *Controller) validateBatchSize(ctx echo.Context, count, maxSize int, ope
 			logger.Int("requested", count),
 			logger.Int("max", maxSize),
 			logger.String("operation", operation),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 			logger.String("path", ctx.Request().URL.Path),
 		)
 		_ = c.HandleError(ctx, nil, fmt.Sprintf("Too many items requested. Maximum: %d", maxSize), http.StatusBadRequest)
@@ -245,7 +245,7 @@ func (c *Controller) validateDateFormatWithResponse(ctx echo.Context, dateStr, p
 			logger.String("value", dateStr),
 			logger.String("operation", operation),
 			logger.Error(err),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 			logger.String("path", ctx.Request().URL.Path),
 		)
 		_ = c.HandleError(ctx, nil, "Invalid date format. Use YYYY-MM-DD", http.StatusBadRequest)
@@ -265,7 +265,7 @@ func (c *Controller) validateDateFormatStrictWithResponse(ctx echo.Context, date
 			logger.String("parameter", paramName),
 			logger.String("value", dateStr),
 			logger.String("operation", operation),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 			logger.String("path", ctx.Request().URL.Path),
 		)
 		_ = c.HandleError(ctx, nil, "Invalid "+paramName+" format or contains invalid characters. Use YYYY-MM-DD", http.StatusBadRequest)
@@ -287,7 +287,7 @@ func (c *Controller) parseOptionalPositiveInt(ctx echo.Context, paramName string
 			logger.String("parameter", paramName),
 			logger.String("value", str),
 			logger.Int("default", defaultVal),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 			logger.String("path", ctx.Request().URL.Path),
 		)
 		return defaultVal
@@ -308,7 +308,7 @@ func (c *Controller) parseOptionalFloat(ctx echo.Context, paramName string, defa
 			logger.String("parameter", paramName),
 			logger.String("value", str),
 			logger.Float64("default", defaultVal),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 			logger.String("path", ctx.Request().URL.Path),
 		)
 		return defaultVal
@@ -444,7 +444,7 @@ func (c *Controller) validateDateOrderWithResponse(ctx echo.Context, startDate, 
 			logger.String("end_date", endDate),
 			logger.String("error", "start_date cannot be after end_date"),
 			logger.String("operation", operation),
-			logger.String("ip", ctx.RealIP()),
+			logger.IP("ip", ctx.RealIP()),
 			logger.String("path", ctx.Request().URL.Path),
 		)
 		_ = c.HandleError(ctx, nil, "`start_date` cannot be after `end_date`", http.StatusBadRequest)
@@ -919,7 +919,7 @@ func (c *Controller) handleBatchResponse(ctx echo.Context, result any, successCo
 			logger.Int("successful", successCount),
 			logger.Int("failed", len(processingErrors)),
 			logger.Any("errors", processingErrors),
-			logger.String("ip", ip),
+			logger.IP("ip", ip),
 			logger.String("path", urlPath))
 	}
 
@@ -928,7 +928,7 @@ func (c *Controller) handleBatchResponse(ctx echo.Context, result any, successCo
 		c.logErrorIfEnabled("All items in "+operationName+" failed",
 			logger.Int("requested", requestedCount),
 			logger.Any("errors", processingErrors),
-			logger.String("ip", ip),
+			logger.IP("ip", ip),
 			logger.String("path", urlPath))
 		return c.HandleError(ctx, fmt.Errorf("failed to process any requested items"),
 			"Failed to process "+operationName, http.StatusInternalServerError)
@@ -939,7 +939,7 @@ func (c *Controller) handleBatchResponse(ctx echo.Context, result any, successCo
 		logger.Int("requested", requestedCount),
 		logger.Int("successful", successCount),
 		logger.Int("failed", len(processingErrors)),
-		logger.String("ip", ip),
+		logger.IP("ip", ip),
 		logger.String("path", urlPath))
 
 	return ctx.JSON(http.StatusOK, result)

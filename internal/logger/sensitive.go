@@ -15,6 +15,21 @@ func Username(value string) Field {
 	return Field{Key: internKey("username"), Value: privacy.ScrubUsername(value)}
 }
 
+// IP creates a field with an anonymized client IP address for safe logging.
+// The address is hashed (e.g., "public-1a2b3c4d5e6f7a8b") so security and auth
+// logs can correlate activity from the same client without recording the raw,
+// re-identifying IP. The IP category (public/private/invalid) is preserved as a
+// prefix for operational triage. This mirrors Username: it keeps auth log lines
+// consistent so a hashed username is never paired with a cleartext source IP.
+//
+// Example:
+//
+//	log.Warn("Failed login attempt", logger.Username(user), logger.IP("ip", c.RealIP()))
+//	// Output: {"username": "user-8c6976e5", "ip": "public-1a2b3c4d5e6f7a8b"}
+func IP(key, value string) Field {
+	return Field{Key: internKey(key), Value: privacy.AnonymizeIP(value)}
+}
+
 // Password creates a field indicating a password was present (always redacted).
 // This field is useful for logging that a password was provided without exposing it.
 //

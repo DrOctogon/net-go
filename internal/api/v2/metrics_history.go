@@ -107,7 +107,7 @@ func (c *Controller) StreamMetrics(ctx echo.Context) error {
 	clientID := generateCorrelationID()
 	c.logInfoIfEnabled("Metrics SSE client connected",
 		logger.String("client_id", clientID),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 	)
 
 	// Send initial connection message

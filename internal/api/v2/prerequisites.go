@@ -84,7 +84,7 @@ const MinMySQLWaitTimeout = 600
 // Returns the status of all prerequisite checks before migration can start.
 func (c *Controller) GetPrerequisites(ctx echo.Context) error {
 	ip, path := ctx.RealIP(), ctx.Request().URL.Path
-	c.logInfoIfEnabled("Checking migration prerequisites", logger.String("path", path), logger.String("ip", ip))
+	c.logInfoIfEnabled("Checking migration prerequisites", logger.String("path", path), logger.IP("ip", ip))
 
 	criticalFailures := 0
 	warnings := 0
@@ -129,7 +129,7 @@ func (c *Controller) GetPrerequisites(ctx echo.Context) error {
 
 	c.logInfoIfEnabled("Prerequisites check complete",
 		logger.String("path", path),
-		logger.String("ip", ip),
+		logger.IP("ip", ip),
 		logger.Bool("can_start", canStart),
 		logger.Int("critical_failures", criticalFailures),
 		logger.Int("warnings", warnings))

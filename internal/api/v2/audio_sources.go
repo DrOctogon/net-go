@@ -53,7 +53,7 @@ func isStreamSourceType(t audiocore.SourceType) bool {
 func (c *Controller) listSources(ctx echo.Context, label string, filter func(audiocore.SourceType) bool, anonymize bool) error {
 	c.logInfoIfEnabled("Listing "+label,
 		logger.String("path", ctx.Request().URL.Path),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 	)
 
 	resp := AudioSourceListResponse{Sources: []AudioSourceInfo{}}
@@ -85,7 +85,7 @@ func (c *Controller) listSources(ctx echo.Context, label string, filter func(aud
 	c.logInfoIfEnabled(label+" listed",
 		logger.Int("count", len(resp.Sources)),
 		logger.String("path", ctx.Request().URL.Path),
-		logger.String("ip", ctx.RealIP()),
+		logger.IP("ip", ctx.RealIP()),
 	)
 
 	return ctx.JSON(http.StatusOK, resp)

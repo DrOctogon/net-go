@@ -164,7 +164,7 @@ func (c *Controller) initLegacyCleanupRoutes() {
 // Returns information about the legacy database for the cleanup UI.
 func (c *Controller) GetLegacyStatus(ctx echo.Context) error {
 	ip, path := ctx.RealIP(), ctx.Request().URL.Path
-	c.logInfoIfEnabled("Getting legacy database status", logger.String("path", path), logger.String("ip", ip))
+	c.logInfoIfEnabled("Getting legacy database status", logger.String("path", path), logger.IP("ip", ip))
 
 	response := LegacyStatusResponse{
 		Tables: []LegacyTableInfo{},
@@ -352,7 +352,7 @@ func (c *Controller) getLegacyStatusMySQL(ctx echo.Context, response *LegacyStat
 // Initiates asynchronous legacy database cleanup.
 func (c *Controller) StartLegacyCleanup(ctx echo.Context) error {
 	ip, path := ctx.RealIP(), ctx.Request().URL.Path
-	c.logInfoIfEnabled("Starting legacy database cleanup", logger.String("path", path), logger.String("ip", ip))
+	c.logInfoIfEnabled("Starting legacy database cleanup", logger.String("path", path), logger.IP("ip", ip))
 
 	// Check if we're in v2-only mode (check before trying to start)
 	if !isV2OnlyMode {
@@ -410,7 +410,7 @@ func (c *Controller) StartLegacyCleanup(ctx echo.Context) error {
 		}
 	})
 
-	c.logInfoIfEnabled("Legacy cleanup started", logger.String("path", path), logger.String("ip", ip))
+	c.logInfoIfEnabled("Legacy cleanup started", logger.String("path", path), logger.IP("ip", ip))
 
 	return ctx.JSON(http.StatusOK, CleanupActionResponse{
 		Success: true,
