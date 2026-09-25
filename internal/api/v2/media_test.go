@@ -20,6 +20,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tphakala/voicewatch/internal/api/middleware"
 	"github.com/tphakala/voicewatch/internal/audiocore/ffmpeg"
+	"github.com/tphakala/voicewatch/internal/conf"
 	"github.com/tphakala/voicewatch/internal/datastore/mocks"
 	"github.com/tphakala/voicewatch/internal/securefs"
 	"gorm.io/gorm"
@@ -478,8 +479,12 @@ func setupMediaTestEnvironment(t *testing.T) (*echo.Echo, *Controller, string) {
 	}) // Ensure this one is closed too
 
 	// Assign the tempDir to settings just in case any *other* part relies on it
-	// (though SecureFS should make this less necessary)
-	controller.Settings.Load().Realtime.Audio.Export.Path = tempDir
+	// (though SecureFS should make this less necessary). Copy-on-write: mutating
+	// through Load() races with parallel tests' handlers reading the snapshot
+	// (Controller.Settings is documented as publish-a-fresh-pointer only).
+	clonedSettings := conf.CloneSettings(controller.Settings.Load())
+	clonedSettings.Realtime.Audio.Export.Path = tempDir
+	controller.Settings.Store(clonedSettings)
 
 	// Inject passthrough auth middleware so authenticated routes (e.g. clip extraction)
 	// can be registered and tested without a real auth service
