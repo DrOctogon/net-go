@@ -821,6 +821,10 @@
         "mainRegion": "Herkenningsdetails",
         "tabsHeading": "Tabbladen met herkenningsinformatie",
         "tabList": "Tabbladen met herkenningsdetails"
+      },
+      "similarVoices": {
+        "title": "Vergelijkbare stemmen",
+        "openDetection": "Detectie {id} openen"
       }
     },
     "headers": {

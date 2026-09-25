@@ -821,6 +821,10 @@
         "mainRegion": "Atklāšanas informācija",
         "tabsHeading": "Atklāšanas informācijas cilnes",
         "tabList": "Atklāšanas detaļu cilnes"
+      },
+      "similarVoices": {
+        "title": "Līdzīgas balsis",
+        "openDetection": "Atvērt noteikšanu {id}"
       }
     },
     "headers": {

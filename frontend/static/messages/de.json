@@ -821,6 +821,10 @@
         "mainRegion": "Erkennungsdetails",
         "tabsHeading": "Registerkarten mit Erkennungsinformationen",
         "tabList": "Registerkarten der Erkennungsdetails"
+      },
+      "similarVoices": {
+        "title": "Ähnliche Stimmen",
+        "openDetection": "Erkennung {id} öffnen"
       }
     },
     "headers": {

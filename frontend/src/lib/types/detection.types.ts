@@ -34,6 +34,7 @@ export interface Detection {
   genderConfidence?: number; // Confidence of the gender estimate (0..1)
   ageBand?: string; // Estimated relative age band ("child" | "teen" | "adult" | "senior"; empty = no estimate)
   ageConfidence?: number; // Confidence of the age-band estimate (0..1)
+  speakerId?: string; // Voice-print cluster id (e.g. "spk_3"; empty = not clustered)
   comments?: Comment[];
   clipName?: string;
   weather?: Weather;

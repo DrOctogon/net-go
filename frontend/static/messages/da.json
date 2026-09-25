@@ -821,6 +821,10 @@
         "mainRegion": "Registreringsdetaljer",
         "tabsHeading": "Faner med registreringsoplysninger",
         "tabList": "Faner for registreringsdetaljer"
+      },
+      "similarVoices": {
+        "title": "Lignende stemmer",
+        "openDetection": "Åbn detektion {id}"
       }
     },
     "headers": {

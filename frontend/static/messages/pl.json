@@ -821,6 +821,10 @@
         "mainRegion": "Szczegóły detekcji",
         "tabsHeading": "Karty informacji o detekcji",
         "tabList": "Karty szczegółów detekcji"
+      },
+      "similarVoices": {
+        "title": "Podobne głosy",
+        "openDetection": "Otwórz wykrycie {id}"
       }
     },
     "headers": {

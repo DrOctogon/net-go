@@ -28,6 +28,7 @@
   import { loggers } from '$lib/utils/logger';
   import { highlightKeywords } from '$lib/utils/highlightKeywords';
   import SourceBadge from '$lib/desktop/features/dashboard/components/SourceBadge.svelte';
+  import { navigation } from '$lib/stores/navigation.svelte';
   import SpeakerAttributeChips from '$lib/desktop/components/data/SpeakerAttributeChips.svelte';
   import { getSpeakerChips } from '$lib/utils/speakerAttributes';
   import {
@@ -85,6 +86,41 @@
 
   // AbortController for preventing race conditions
   let detectionController: AbortController | null = null;
+
+  // Similar-voices lookup (auth-gated endpoint; only meaningful when the
+  // detection carries a voice-print cluster id). Best-effort: failures and
+  // empty results simply hide the section.
+  interface SimilarVoice {
+    id: number;
+    score: number; // cosine similarity in [-1, 1]
+    gender?: string;
+    ageBand?: string;
+    date?: string;
+    time?: string;
+  }
+  let similarVoices = $state<SimilarVoice[]>([]);
+
+  $effect(() => {
+    const det = detection;
+    similarVoices = [];
+    if (!det?.speakerId || !$isAuthenticated) return;
+
+    const controller = new AbortController();
+    fetch(buildAppUrl(`/api/v2/detections/${det.id}/similar`), { signal: controller.signal })
+      .then(response => (response.ok ? response.json() : []))
+      .then((data: unknown) => {
+        if (!controller.signal.aborted && Array.isArray(data)) {
+          similarVoices = data as SimilarVoice[];
+        }
+      })
+      .catch(() => {
+        // Section is supplementary; leave it hidden on failure.
+      });
+
+    return () => {
+      controller.abort();
+    };
+  });
 
   // Validate detection ID to prevent path traversal attacks
   // Only allow alphanumeric characters, hyphens, and underscores
@@ -512,6 +548,52 @@
       </section>
     {/if}
   </div>
+
+  <!-- Similar Voices: other detections whose voice-print embedding is closest
+       to this one. Hidden when the lookup is empty, unauthorized, or failed. -->
+  {#if similarVoices.length > 0}
+    <section aria-labelledby="similar-voices-heading" class="mt-8">
+      <h3 id="similar-voices-heading" class="section-heading">
+        {t('detections.detail.similarVoices.title')}
+      </h3>
+      <div class="content-panel">
+        <ul class="list-none p-0 m-0 divide-y divide-[var(--border-100)]">
+          {#each similarVoices as sv (sv.id)}
+            <li>
+              <button
+                type="button"
+                class="w-full flex items-center justify-between gap-3 py-2 text-left text-sm hover:bg-[var(--color-base-200)] rounded px-2"
+                onclick={() => navigation.navigate(`/ui/detections/${sv.id}`)}
+                aria-label={t('detections.detail.similarVoices.openDetection', {
+                  id: sv.id,
+                })}
+              >
+                <span class="text-[var(--color-base-content)]/80">
+                  {sv.date ?? ''}
+                  {sv.time ?? ''}
+                </span>
+                <span class="flex items-center gap-2 shrink-0">
+                  {#if sv.gender}
+                    <span class="text-xs text-[var(--color-base-content)]/60"
+                      >{t(`detections.speaker.gender.${sv.gender}`)}</span
+                    >
+                  {/if}
+                  {#if sv.ageBand}
+                    <span class="text-xs text-[var(--color-base-content)]/60"
+                      >{t(`detections.speaker.age.${sv.ageBand}`)}</span
+                    >
+                  {/if}
+                  <span class="font-medium tabular-nums">
+                    {Math.round(sv.score * 100)}%
+                  </span>
+                </span>
+              </button>
+            </li>
+          {/each}
+        </ul>
+      </div>
+    </section>
+  {/if}
 {/snippet}
 
 {#snippet historyTab()}
