@@ -1014,7 +1014,11 @@
         "teen": "Teen",
         "adult": "Adult",
         "senior": "Senior"
-      }
+      },
+      "identityLabel": "Runātājs",
+      "renamePlaceholder": "Nosauciet šo balsi",
+      "renameAction": "Pārdēvēt runātāju",
+      "renameFailed": "Neizdevās saglabāt runātāja vārdu"
     }
   },
   "species": {

@@ -1014,7 +1014,11 @@
         "teen": "Teen",
         "adult": "Adult",
         "senior": "Senior"
-      }
+      },
+      "identityLabel": "Falante",
+      "renamePlaceholder": "Dê um nome a esta voz",
+      "renameAction": "Renomear falante",
+      "renameFailed": "Falha ao guardar o nome do falante"
     }
   },
   "species": {

@@ -1014,7 +1014,11 @@
         "teen": "Teen",
         "adult": "Adult",
         "senior": "Senior"
-      }
+      },
+      "identityLabel": "Hablante",
+      "renamePlaceholder": "Nombra esta voz",
+      "renameAction": "Renombrar hablante",
+      "renameFailed": "No se pudo guardar el nombre del hablante"
     }
   },
   "species": {

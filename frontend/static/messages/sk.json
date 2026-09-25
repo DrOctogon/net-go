@@ -1014,7 +1014,11 @@
         "teen": "Teen",
         "adult": "Adult",
         "senior": "Senior"
-      }
+      },
+      "identityLabel": "Hovoriaci",
+      "renamePlaceholder": "Pomenujte tento hlas",
+      "renameAction": "Premenovať hovoriaceho",
+      "renameFailed": "Nepodarilo sa uložiť meno hovoriaceho"
     }
   },
   "species": {
