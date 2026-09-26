@@ -67,6 +67,9 @@ jobs:
             VERSION=${{ env.VERSION }}
             SENTRY_DSN=${{ secrets.SENTRY_DSN }}
             BUILDKIT_INLINE_CACHE=1
+            PROJECT_NAME=VoiceWatch
+            PROJECT_REPO_URL=https://github.com/${{ github.repository }}
+            PROJECT_COMMUNITY_URL=https://github.com/${{ github.repository }}/discussions
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: |
