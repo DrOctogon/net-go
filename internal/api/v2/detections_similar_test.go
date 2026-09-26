@@ -104,9 +104,9 @@ func TestGetSimilarDetections_HappyPath(t *testing.T) {
 
 	candidates := []datastore.Note{
 		// Same speaker as target (identical vector) -> cosine 1.0.
-		{ID: 2, VoicePrintEmbedding: []float32{1, 0, 0}, Gender: "male", AgeBand: "adult", Date: "2025-01-02", Time: "09:45:12"},
+		{ID: 2, VoicePrintEmbedding: []float32{1, 0, 0}, Gender: "male", AgeBand: "adult", Date: "2025-01-02", Time: "09:45:12", SpeakerID: "speaker-abc"},
 		// Somewhat similar -> cosine ~0.707, still above the 0.5 floor.
-		{ID: 3, VoicePrintEmbedding: []float32{1, 1, 0}, Gender: "female", AgeBand: "child", Date: "2025-01-03", Time: "11:00:00"},
+		{ID: 3, VoicePrintEmbedding: []float32{1, 1, 0}, Gender: "female", AgeBand: "child", Date: "2025-01-03", Time: "11:00:00", SpeakerID: "speaker-xyz"},
 		// Orthogonal -> cosine 0, below the similarity floor, must be dropped.
 		{ID: 4, VoicePrintEmbedding: []float32{0, 1, 0}},
 		// No embedding -> must be skipped before scoring.
@@ -133,9 +133,11 @@ func TestGetSimilarDetections_HappyPath(t *testing.T) {
 	assert.Equal(t, "adult", got[0].AgeBand)
 	assert.Equal(t, "2025-01-02", got[0].Date)
 	assert.Equal(t, "09:45:12", got[0].Time)
+	assert.Equal(t, "speaker-abc", got[0].SpeakerID)
 
 	assert.Equal(t, uint(3), got[1].ID)
 	assert.InDelta(t, 0.7071067811865475, got[1].Score, 1e-9)
+	assert.Equal(t, "speaker-xyz", got[1].SpeakerID)
 
 	mockDS.AssertExpectations(t)
 }
