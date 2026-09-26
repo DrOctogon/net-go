@@ -2,12 +2,16 @@ package speaker
 
 import (
 	"io/fs"
+	"math"
 	"os"
 	"path/filepath"
+	"runtime"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	"github.com/tphakala/voicewatch/internal/errors"
 )
 
 // oneHot returns a length-n embedding that is 1 at index hot and 0 elsewhere.
@@ -131,4 +135,68 @@ func TestClusterer_SnapshotIsolation(t *testing.T) {
 
 	snap.Clusters[0].Centroid[0] = 999 // corrupt the snapshot copy
 	assert.Equal(t, "spk_1", c.Assign(oneHot(4, 0)), "live centroid must be untouched by snapshot mutation")
+}
+
+func TestClusterer_SaveFailsOnUnmarshalableThreshold(t *testing.T) {
+	t.Parallel()
+
+	// json.Marshal rejects NaN/Inf floats. NaN <= 0 is false, so NewClusterer
+	// keeps it verbatim instead of falling back to DefaultClusterThreshold,
+	// giving Save's json.Marshal call a genuine, reachable failure.
+	c := NewClusterer(math.NaN())
+	path := filepath.Join(t.TempDir(), "clusters.json")
+
+	err := c.Save(path)
+	require.Error(t, err)
+	assert.True(t, errors.IsCategory(err, errors.CategoryFileIO))
+
+	_, statErr := os.Stat(path)
+	assert.True(t, os.IsNotExist(statErr), "destination file must not be created on marshal failure")
+}
+
+func TestClusterer_SaveFailsOnReadOnlyDir(t *testing.T) {
+	t.Parallel()
+
+	// chmod cannot make a directory unwritable for its owner on Windows, so
+	// os.CreateTemp would still succeed there.
+	if runtime.GOOS == "windows" {
+		t.Skip("chmod cannot make a directory unwritable for the owner on Windows")
+	}
+
+	dir := t.TempDir()
+	require.NoError(t, os.Chmod(dir, 0o555))
+	t.Cleanup(func() {
+		_ = os.Chmod(dir, 0o755)
+	})
+
+	c := NewClusterer(0)
+	c.Assign(oneHot(4, 0))
+	path := filepath.Join(dir, "clusters.json")
+
+	err := c.Save(path)
+	require.Error(t, err)
+	assert.True(t, errors.IsCategory(err, errors.CategoryFileIO))
+}
+
+func TestClusterer_SaveFailsWhenDestIsDirectory(t *testing.T) {
+	t.Parallel()
+
+	dir := t.TempDir()
+	path := filepath.Join(dir, "clusters.json")
+	require.NoError(t, os.Mkdir(path, 0o755))
+
+	c := NewClusterer(0)
+	c.Assign(oneHot(4, 0))
+
+	err := c.Save(path)
+	require.Error(t, err)
+	assert.True(t, errors.IsCategory(err, errors.CategoryFileIO))
+
+	// os.Rename must have failed cleanly: the temp file is cleaned up and the
+	// directory at path is left untouched.
+	entries, readErr := os.ReadDir(dir)
+	require.NoError(t, readErr)
+	require.Len(t, entries, 1, "failed rename must not leave a stray temp file behind")
+	assert.Equal(t, "clusters.json", entries[0].Name())
+	assert.True(t, entries[0].IsDir())
 }
