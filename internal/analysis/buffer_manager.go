@@ -385,9 +385,29 @@ func (m *BufferManager) UpdateMonitors(sourceModels map[string][]monitorConfig) 
 	return nil
 }
 
+// contextForQuit derives a context that is cancelled when quitChan closes.
+// The returned cancel must be called when the caller returns so the watcher
+// goroutine exits even if quitChan never closes.
+func contextForQuit(quitChan <-chan struct{}) (context.Context, context.CancelFunc) {
+	ctx, cancel := context.WithCancel(context.Background())
+	go func() {
+		select {
+		case <-quitChan:
+			cancel()
+		case <-ctx.Done():
+		}
+	}()
+	return ctx, cancel
+}
+
 // analysisBufferMonitor reads from the audiocore analysis buffer and feeds
 // audio chunks to the VoiceWatch analysis pipeline.
 func (m *BufferManager) analysisBufferMonitor(quitChan chan struct{}, cfg *monitorConfig) {
+	// Cancelled when quitChan closes, so in-flight inference inside
+	// ProcessData is aborted at shutdown instead of running to completion.
+	ctx, cancel := contextForQuit(quitChan)
+	defer cancel()
+
 	detectionOffset := cfg.spec.ClipLength
 	const pollInterval = 100 * time.Millisecond
 
@@ -404,7 +424,7 @@ func (m *BufferManager) analysisBufferMonitor(quitChan chan struct{}, cfg *monit
 			return
 		case <-ticker.C:
 			tickCount++
-			keepRunning, newHasReadBuffer := m.processMonitorTick(quitChan, cfg, analysisWindowBytes, detectionOffset, hasReadBuffer, tickCount)
+			keepRunning, newHasReadBuffer := m.processMonitorTick(ctx, quitChan, cfg, analysisWindowBytes, detectionOffset, hasReadBuffer, tickCount)
 			hasReadBuffer = newHasReadBuffer
 			if !keepRunning {
 				return
@@ -426,6 +446,7 @@ func (m *BufferManager) analysisBufferMonitor(quitChan chan struct{}, cfg *monit
 // "defer release()" immediately after Read, so every exit path including the
 // try-again-later (nil data), error, and partial-read branches releases.
 func (m *BufferManager) processMonitorTick(
+	ctx context.Context,
 	quitChan <-chan struct{},
 	cfg *monitorConfig,
 	analysisWindowBytes int,
@@ -483,7 +504,7 @@ func (m *BufferManager) processMonitorTick(
 	beginTimeOffset := time.Duration(conf.Setting().Realtime.Audio.Export.PreCapture)*time.Second + detectionOffset
 	startTime := time.Now().Add(-beginTimeOffset)
 
-	if processErr := ProcessData(context.Background(), m.bn, m.bufferMgr, data, startTime, audioCapturedAt, cfg.sourceID, cfg.modelID); processErr != nil {
+	if processErr := ProcessData(ctx, m.bn, m.bufferMgr, data, startTime, audioCapturedAt, cfg.sourceID, cfg.modelID); processErr != nil {
 		m.logger.Error("error processing data",
 			logger.String("source_id", cfg.sourceID),
 			logger.String("model_id", cfg.modelID),

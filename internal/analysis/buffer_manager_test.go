@@ -165,3 +165,35 @@ func TestDetectionOffset_DerivedFromClipLength(t *testing.T) {
 		})
 	}
 }
+
+func TestContextForQuit(t *testing.T) {
+	t.Parallel()
+
+	t.Run("closing quitChan cancels the context", func(t *testing.T) {
+		t.Parallel()
+		quit := make(chan struct{})
+		ctx, cancel := contextForQuit(quit)
+		defer cancel()
+
+		require.NoError(t, ctx.Err())
+		close(quit)
+		select {
+		case <-ctx.Done():
+			// cancelled as expected
+		case <-time.After(2 * time.Second):
+			t.Fatal("context not cancelled after quitChan close")
+		}
+	})
+
+	t.Run("cancel releases the watcher without quitChan closing", func(t *testing.T) {
+		t.Parallel()
+		quit := make(chan struct{})
+		ctx, cancel := contextForQuit(quit)
+		cancel()
+		select {
+		case <-ctx.Done():
+		case <-time.After(2 * time.Second):
+			t.Fatal("context not cancelled by cancel()")
+		}
+	})
+}
