@@ -1,6 +1,7 @@
 package speaker
 
 import (
+	"math"
 	"strconv"
 	"sync"
 )
@@ -10,6 +11,14 @@ import (
 // models typically separate distinct speakers well above this; the value should
 // be recalibrated once a real model is wired in.
 const DefaultClusterThreshold = 0.75
+
+// maxCosineSimilarity is the maximum value Cosine can return. A threshold
+// above this can never be met, which would silently break clustering (every
+// voice becomes a new cluster).
+const maxCosineSimilarity = 1.0
+
+// spkIDPrefix prefixes every clusterer-minted speaker ID (e.g. "spk_1").
+const spkIDPrefix = "spk_"
 
 // MaxClusters caps how many speaker clusters are retained. When a new voice
 // arrives at the cap, the least-recently-seen cluster is evicted (its ID is
@@ -47,9 +56,12 @@ type cluster struct {
 }
 
 // NewClusterer returns a Clusterer using the given cosine-similarity threshold.
-// A threshold <= 0 falls back to DefaultClusterThreshold.
+// A threshold that is <= 0, NaN, infinite, or greater than the maximum
+// possible cosine similarity (1.0) falls back to DefaultClusterThreshold —
+// any of those would either break clustering (every voice becomes a new
+// cluster) or make the threshold unmarshalable when saving a snapshot.
 func NewClusterer(threshold float64) *Clusterer {
-	if threshold <= 0 {
+	if math.IsNaN(threshold) || math.IsInf(threshold, 0) || threshold <= 0 || threshold > maxCosineSimilarity {
 		threshold = DefaultClusterThreshold
 	}
 	return &Clusterer{threshold: threshold}
@@ -98,7 +110,7 @@ func (c *Clusterer) AssignWithNovelty(embedding []float32) (id string, isNew boo
 	// No match: start a new cluster with a fresh deterministic ID, evicting
 	// the least-recently-seen cluster when at the cap (see MaxClusters).
 	c.nextID++
-	id = "spk_" + strconv.Itoa(c.nextID)
+	id = spkIDPrefix + strconv.Itoa(c.nextID)
 	centroid := make([]float32, len(embedding))
 	copy(centroid, embedding)
 	fresh := &cluster{id: id, centroid: centroid, count: 1, lastSeen: c.seq}
