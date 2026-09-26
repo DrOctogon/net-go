@@ -185,7 +185,11 @@ func TestNewErrorResponseDebugMode(t *testing.T) {
 	assert.Equal(t, "Safe message", resp.Message)
 
 	// Test 2: Debug mode — Error field should expose raw err.Error()
-	c.Settings.Load().WebServer.Debug = true
+	// newErrorResponse reads via controllerSettings() (per-controller only, not
+	// the global snapshot), so a plain clone-and-store is sufficient here.
+	debugSettings := conf.CloneSettings(c.Settings.Load())
+	debugSettings.WebServer.Debug = true
+	c.Settings.Store(debugSettings)
 
 	resp = c.newErrorResponse(testErr, "Safe message", http.StatusBadRequest)
 	assert.Equal(t, "code=400, message=Test error", resp.Error, "Debug mode should expose raw error")

@@ -359,11 +359,16 @@ func TestComplexNestedPreservation(t *testing.T) {
 	e := echo.New()
 	controller := getTestController(t, e)
 
-	// Update controller settings with complex initial state
+	// Update controller settings with complex initial state.
+	// Build a fresh clone rather than mutating the settings snapshot returned
+	// by Settings.Load() in place: getSettingsOrFallback() (used by the
+	// handler under test) reads that same pointer, and CloneSettings performs
+	// a deep copy, so mutate-after-clone is safe.
 	// Use lowercase keys since that's what a real config would have after normalization
-	controller.Settings.Load().Realtime.Species.Include = []string{"Robin", "Eagle", "Owl"}
-	controller.Settings.Load().Realtime.Species.Exclude = []string{"Crow", "Pigeon"}
-	controller.Settings.Load().Realtime.Species.Config["robin"] = conf.SpeciesConfig{
+	initial := conf.CloneSettings(controller.Settings.Load())
+	initial.Realtime.Species.Include = []string{"Robin", "Eagle", "Owl"}
+	initial.Realtime.Species.Exclude = []string{"Crow", "Pigeon"}
+	initial.Realtime.Species.Config["robin"] = conf.SpeciesConfig{
 		Threshold: 0.8,
 		Interval:  30,
 		Actions: []conf.SpeciesAction{{
@@ -371,16 +376,17 @@ func TestComplexNestedPreservation(t *testing.T) {
 			Command: "/usr/bin/notify",
 		}},
 	}
-	controller.Settings.Load().Realtime.Species.Config["eagle"] = conf.SpeciesConfig{
+	initial.Realtime.Species.Config["eagle"] = conf.SpeciesConfig{
 		Threshold: 0.9,
 		Interval:  60,
 	}
+	controller.Settings.Store(initial)
 
 	// Capture initial state
-	initialInclude := make([]string, len(controller.Settings.Load().Realtime.Species.Include))
-	copy(initialInclude, controller.Settings.Load().Realtime.Species.Include)
-	initialExclude := make([]string, len(controller.Settings.Load().Realtime.Species.Exclude))
-	copy(initialExclude, controller.Settings.Load().Realtime.Species.Exclude)
+	initialInclude := make([]string, len(initial.Realtime.Species.Include))
+	copy(initialInclude, initial.Realtime.Species.Include)
+	initialExclude := make([]string, len(initial.Realtime.Species.Exclude))
+	copy(initialExclude, initial.Realtime.Species.Exclude)
 
 	// Update only one deeply nested field
 	update := map[string]any{

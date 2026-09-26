@@ -315,20 +315,25 @@ func Test_setSSEHeaders(t *testing.T) {
 }
 
 func TestController_logNotificationConnection(t *testing.T) {
-	t.Parallel()
-
-	// Test with nil logger (should not panic)
+	// Not t.Parallel(): logNotificationConnection reads settings via
+	// currentSettings(), which prefers the process-global snapshot over this
+	// controller's own, so the test must publish its settings globally.
 	c := &Controller{
 		apiLogger: nil,
 	}
-	c.Settings.Store(mockController().Settings.Load())
+	settings := conf.CloneSettings(mockController().Settings.Load())
+	publishTestSettings(t, settings)
+	c.Settings.Store(settings)
 
 	// These should not panic
 	c.logNotificationConnection("test-client", "192.168.1.1", "test-agent", true)
 	c.logNotificationConnection("test-client", "192.168.1.1", "", false)
 
 	// Test with different debug settings
-	c.Settings.Load().WebServer.Debug = false
+	settings = conf.CloneSettings(settings)
+	settings.WebServer.Debug = false
+	publishTestSettings(t, settings)
+	c.Settings.Store(settings)
 	c.logNotificationConnection("test-client", "192.168.1.1", "test-agent", true)
 }
 
@@ -343,9 +348,13 @@ func TestController_logNotificationError(t *testing.T) {
 }
 
 func TestController_logToastSent(t *testing.T) {
-	t.Parallel()
-
+	// Not t.Parallel(): logToastSent reads settings via currentSettings(),
+	// which prefers the process-global snapshot over this controller's own,
+	// so the test must publish its settings globally.
 	c := mockController()
+	settings := conf.CloneSettings(c.Settings.Load())
+	publishTestSettings(t, settings)
+	c.Settings.Store(settings)
 
 	notif := &notification.Notification{
 		ID:        "test-id",
@@ -361,14 +370,21 @@ func TestController_logToastSent(t *testing.T) {
 	c.logToastSent("test-client", notif)
 
 	// Test with debug disabled
-	c.Settings.Load().WebServer.Debug = false
+	settings = conf.CloneSettings(settings)
+	settings.WebServer.Debug = false
+	publishTestSettings(t, settings)
+	c.Settings.Store(settings)
 	c.logToastSent("test-client", notif)
 }
 
 func TestController_logNotificationSent(t *testing.T) {
-	t.Parallel()
-
+	// Not t.Parallel(): logNotificationSent reads settings via
+	// currentSettings(), which prefers the process-global snapshot over this
+	// controller's own, so the test must publish its settings globally.
 	c := mockController()
+	settings := conf.CloneSettings(c.Settings.Load())
+	publishTestSettings(t, settings)
+	c.Settings.Store(settings)
 
 	notif := &notification.Notification{
 		ID:       "test-id",
@@ -380,7 +396,10 @@ func TestController_logNotificationSent(t *testing.T) {
 	c.logNotificationSent("test-client", notif)
 
 	// Test with debug disabled
-	c.Settings.Load().WebServer.Debug = false
+	settings = conf.CloneSettings(settings)
+	settings.WebServer.Debug = false
+	publishTestSettings(t, settings)
+	c.Settings.Store(settings)
 	c.logNotificationSent("test-client", notif)
 }
 

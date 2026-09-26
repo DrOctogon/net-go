@@ -127,9 +127,11 @@ func TestPatchTaxonomySynonymsMerge(t *testing.T) {
 	e := echo.New()
 	controller := getTestController(t, e)
 
-	controller.Settings.Load().TaxonomySynonyms = map[string]string{
+	initial := conf.CloneSettings(controller.Settings.Load())
+	initial.TaxonomySynonyms = map[string]string{
 		"Corvus corax": "Common Raven",
 	}
+	controller.Settings.Store(initial)
 
 	body, err := json.Marshal(map[string]any{
 		"Parus major": "Great Tit",
@@ -159,7 +161,9 @@ func TestPatchAlertingValidation(t *testing.T) {
 	e := echo.New()
 	controller := getTestController(t, e)
 	// Enable debug so the raw validation error is exposed in the "error" field
-	controller.Settings.Load().WebServer.Debug = true
+	debugSettings := conf.CloneSettings(controller.Settings.Load())
+	debugSettings.WebServer.Debug = true
+	controller.Settings.Store(debugSettings)
 
 	body, err := json.Marshal(map[string]any{
 		"historyRetentionDays": -1,
@@ -189,7 +193,9 @@ func TestPatchAlertingValidation(t *testing.T) {
 func TestPatchAlertingZeroRetention(t *testing.T) {
 	e := echo.New()
 	controller := getTestController(t, e)
-	controller.Settings.Load().Alerting.HistoryRetentionDays = 30
+	initial := conf.CloneSettings(controller.Settings.Load())
+	initial.Alerting.HistoryRetentionDays = 30
+	controller.Settings.Store(initial)
 
 	body, err := json.Marshal(map[string]any{
 		"historyRetentionDays": 0,
@@ -273,7 +279,9 @@ func TestPatchWebServerLiveStreamValidation(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			e := echo.New()
 			controller := getTestController(t, e)
-			controller.Settings.Load().WebServer.Debug = true
+			debugSettings := conf.CloneSettings(controller.Settings.Load())
+			debugSettings.WebServer.Debug = true
+			controller.Settings.Store(debugSettings)
 
 			body, err := json.Marshal(tt.payload)
 			require.NoError(t, err)
