@@ -158,8 +158,10 @@ func (c *Controller) initDetectionRoutes() {
 	detectionGroup.POST("/ignore", c.IgnoreSpecies)
 	detectionGroup.GET("/ignored", c.GetExcludedSpecies)
 	// Similar-voices correlation returns cross-detection links; gate behind auth
-	// (it exposes more than a single record once embeddings exist).
-	detectionGroup.GET("/:id/similar", c.GetSimilarDetections)
+	// (it exposes more than a single record once embeddings exist). Rate limited
+	// because each request fans out to embedding comparisons.
+	detectionGroup.GET("/:id/similar", c.GetSimilarDetections,
+		newIPRateLimiter(similarDetectionsRateLimitPerMinute))
 
 	// Batch operation endpoints
 	batchGroup := detectionGroup.Group("/batch")
@@ -614,7 +616,7 @@ func (c *Controller) GetDetections(ctx echo.Context) error {
 
 	// Convert notes to response format
 	detections := c.convertNotesToDetectionResponses(notes, params.IncludeWeather)
-	c.stripSourceForUnauthenticated(ctx, detections)
+	c.stripSensitiveForUnauthenticated(ctx, detections)
 
 	// Create paginated response
 	response := c.createPaginatedResponse(detections, totalResults, params.NumResults, params.Offset)
@@ -706,18 +708,45 @@ func (c *Controller) getDetectionsByQueryType(params *detectionQueryParams) ([]d
 	}
 }
 
-// stripSourceForUnauthenticated removes audio source metadata from detection
-// responses for unauthenticated clients. Source ids and display names are
-// private data: they can reveal internal hostnames, IPs, stream paths, and
-// user-chosen labels. This matches the anonymization done by the audio source
-// listing endpoints and the search endpoint.
-func (c *Controller) stripSourceForUnauthenticated(ctx echo.Context, detections []DetectionResponse) {
+// stripSensitiveForUnauthenticated removes private fields from detection
+// responses for unauthenticated clients. This is the shared choke point for
+// every public detection endpoint; add new sensitive DetectionResponse fields
+// to stripSensitiveDetectionFields, never to individual handlers.
+func (c *Controller) stripSensitiveForUnauthenticated(ctx echo.Context, detections []DetectionResponse) {
 	if c.isClientAuthenticated(ctx) {
 		return
 	}
 	for i := range detections {
-		detections[i].Source = nil
+		stripSensitiveDetectionFields(&detections[i])
 	}
+}
+
+// stripSensitiveDetectionFields blanks the fields of a detection response that
+// must never reach unauthenticated clients:
+//
+//   - Source: source ids and display names can reveal internal hostnames, IPs,
+//     stream paths, and user-chosen labels. This matches the anonymization done
+//     by the audio source listing endpoints and the search endpoint.
+//   - Transcript/TranscriptLang: verbatim speech captured in the household.
+//   - KeywordsHit: reveals both spoken content and the user's configured
+//     watch-keywords.
+//   - Flagged: stripped even though it is a lone boolean, because it still
+//     discloses that a configured keyword was spoken in a given clip — an
+//     anonymous caller could correlate flagged timestamps with household
+//     activity without ever seeing the transcript.
+//   - Gender/GenderConfidence/AgeBand/AgeConfidence/SpeakerID: speaker
+//     attributes and voice-print identity of household members.
+func stripSensitiveDetectionFields(d *DetectionResponse) {
+	d.Source = nil
+	d.Transcript = ""
+	d.TranscriptLang = ""
+	d.Flagged = false
+	d.KeywordsHit = nil
+	d.Gender = ""
+	d.GenderConfidence = 0
+	d.AgeBand = ""
+	d.AgeConfidence = 0
+	d.SpeakerID = ""
 }
 
 // convertNotesToDetectionResponses converts datastore notes to API detection responses
@@ -1288,7 +1317,7 @@ func (c *Controller) GetDetection(ctx echo.Context) error {
 	weatherCache := make(map[string][]datastore.HourlyWeather)
 	detection := c.noteToDetectionResponse(&note, true, weatherCache)
 	if !c.isClientAuthenticated(ctx) {
-		detection.Source = nil
+		stripSensitiveDetectionFields(&detection)
 	}
 	return ctx.JSON(http.StatusOK, detection)
 }
@@ -1312,7 +1341,7 @@ func (c *Controller) GetRecentDetections(ctx echo.Context) error {
 	}
 
 	detections := c.convertNotesToDetectionResponses(notes, includeWeather)
-	c.stripSourceForUnauthenticated(ctx, detections)
+	c.stripSensitiveForUnauthenticated(ctx, detections)
 	return ctx.JSON(http.StatusOK, detections)
 }
 
