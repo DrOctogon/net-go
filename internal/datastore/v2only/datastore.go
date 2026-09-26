@@ -742,7 +742,10 @@ func (ds *Datastore) Save(note *datastore.Note, results []datastore.Results) err
 		DetectedAt: detectedAt,
 		Confidence: note.Confidence,
 		Unlikely:   note.Unlikely,
+		Flagged:    note.Flagged,
 	}
+
+	applySpeechFields(det, note)
 
 	if note.Latitude != 0 {
 		det.Latitude = &note.Latitude
@@ -828,6 +831,39 @@ func (ds *Datastore) Save(note *datastore.Note, results []datastore.Results) err
 	note.ID = det.ID
 
 	return nil
+}
+
+// applySpeechFields copies the speech-derived and speaker-attribute fields from
+// a legacy Note onto a v2 Detection. Fields are stored as NULL when unset so
+// VAD-only detections carry no empty speech columns.
+func applySpeechFields(det *entities.Detection, note *datastore.Note) {
+	if note.Transcript != "" {
+		det.Transcript = &note.Transcript
+	}
+	if note.TranscriptLang != "" {
+		det.TranscriptLang = &note.TranscriptLang
+	}
+	if note.KeywordsHit != "" {
+		det.KeywordsHit = &note.KeywordsHit
+	}
+	if note.Gender != "" {
+		det.Gender = &note.Gender
+	}
+	if note.GenderConfidence != 0 {
+		det.GenderConfidence = &note.GenderConfidence
+	}
+	if note.AgeBand != "" {
+		det.AgeBand = &note.AgeBand
+	}
+	if note.AgeConfidence != 0 {
+		det.AgeConfidence = &note.AgeConfidence
+	}
+	if note.SpeakerID != "" {
+		det.SpeakerID = &note.SpeakerID
+	}
+	if len(note.VoicePrintEmbedding) > 0 {
+		det.VoicePrintEmbedding = note.VoicePrintEmbedding
+	}
 }
 
 // buildDedupedPredictions deduplicates predictions by label_id, keeping the highest confidence
@@ -996,7 +1032,36 @@ func (ds *Datastore) detectionToNote(det *entities.Detection) datastore.Note {
 		Unlikely:       det.Unlikely,
 		Verified:       verified,
 		Locked:         locked,
+		Flagged:        det.Flagged,
 	}
+
+	// Speech-derived and speaker-attribute fields (nil-safe deref; the legacy
+	// Note model represents "unset" as zero values).
+	if det.Transcript != nil {
+		note.Transcript = *det.Transcript
+	}
+	if det.TranscriptLang != nil {
+		note.TranscriptLang = *det.TranscriptLang
+	}
+	if det.KeywordsHit != nil {
+		note.KeywordsHit = *det.KeywordsHit
+	}
+	if det.Gender != nil {
+		note.Gender = *det.Gender
+	}
+	if det.GenderConfidence != nil {
+		note.GenderConfidence = *det.GenderConfidence
+	}
+	if det.AgeBand != nil {
+		note.AgeBand = *det.AgeBand
+	}
+	if det.AgeConfidence != nil {
+		note.AgeConfidence = *det.AgeConfidence
+	}
+	if det.SpeakerID != nil {
+		note.SpeakerID = *det.SpeakerID
+	}
+	note.VoicePrintEmbedding = det.VoicePrintEmbedding
 
 	// Populate model info from preloaded Model entity
 	if det.Model != nil {
@@ -2341,14 +2406,78 @@ func (ds *Datastore) ClearNoteClipPathsByNames(clipNames []string) (int64, error
 	return totalAffected, nil
 }
 
-// ScrubSpeechDataByClipNames is a no-op on the v2 store. The speech-derived and
-// biometric-adjacent columns (transcript, keywords, gender/age, speaker id,
-// voice-print embedding) are carried only by the legacy Note model, which backs
-// the transcription/speaker pipelines; the v2 detections table has no such
-// columns. Implemented to satisfy diskmanager.Interface so retention can run
-// against either store.
-func (ds *Datastore) ScrubSpeechDataByClipNames(_ []string) (int64, error) {
-	return 0, nil
+// scrubbedSpeechColumns is the set of speech-derived and biometric-adjacent
+// v2 detection columns cleared by ScrubSpeechDataByClipNames. All are nullable,
+// so scrubbing sets them to NULL. The flagged column is deliberately retained:
+// the keyword-match fact survives, only the matched words are scrubbed
+// (mirrors the legacy DataStore implementation).
+var scrubbedSpeechColumns = map[string]any{
+	"transcript":            nil,
+	"transcript_lang":       nil,
+	"keywords_hit":          nil,
+	"gender":                nil,
+	"gender_confidence":     nil,
+	"age_band":              nil,
+	"age_confidence":        nil,
+	"speaker_id":            nil,
+	"voice_print_embedding": nil,
+}
+
+// ScrubSpeechDataByClipNames erases speech-derived and biometric-adjacent fields
+// from detections whose audio clip was removed by the retention policy, so derived
+// voice data never outlives the recording it came from. Updates are batched to
+// stay within SQLite's parameter limit (999). Returns the number of rows scrubbed.
+func (ds *Datastore) ScrubSpeechDataByClipNames(clipNames []string) (int64, error) {
+	if len(clipNames) == 0 {
+		return 0, nil
+	}
+
+	const batchSize = 500
+	var totalAffected int64
+	ctx := context.Background()
+	detectionsTable := ds.manager.TablePrefix() + "detections"
+
+	for i := 0; i < len(clipNames); i += batchSize {
+		end := min(i+batchSize, len(clipNames))
+		batch := clipNames[i:end]
+
+		result := ds.manager.DB().WithContext(ctx).
+			Table(detectionsTable).
+			Where("clip_name IN ?", batch).
+			Updates(scrubbedSpeechColumns)
+		if result.Error != nil {
+			return totalAffected, fmt.Errorf("failed to scrub speech data for %d names: %w", len(batch), result.Error)
+		}
+		totalAffected += result.RowsAffected
+	}
+
+	return totalAffected, nil
+}
+
+// UpdateNoteTranscript stores the speech-to-text transcript and its language for
+// a detection, touching only the transcript columns.
+func (ds *Datastore) UpdateNoteTranscript(ctx context.Context, noteID uint, transcript, language string) error {
+	detectionsTable := ds.manager.TablePrefix() + "detections"
+	return ds.manager.DB().WithContext(ctx).
+		Table(detectionsTable).
+		Where("id = ?", noteID).
+		Updates(map[string]any{
+			"transcript":      transcript,
+			"transcript_lang": language,
+		}).Error
+}
+
+// UpdateNoteKeywordFlag marks a detection as keyword-flagged and stores the
+// comma-joined list of matched keywords, touching only the flag columns.
+func (ds *Datastore) UpdateNoteKeywordFlag(ctx context.Context, noteID uint, flagged bool, keywordsHit string) error {
+	detectionsTable := ds.manager.TablePrefix() + "detections"
+	return ds.manager.DB().WithContext(ctx).
+		Table(detectionsTable).
+		Where("id = ?", noteID).
+		Updates(map[string]any{
+			"flagged":      flagged,
+			"keywords_hit": keywordsHit,
+		}).Error
 }
 
 // ============================================================

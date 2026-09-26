@@ -7,8 +7,6 @@ import (
 	"strconv"
 	"time"
 
-	"gorm.io/gorm"
-
 	"github.com/tphakala/voicewatch/internal/datastore/mapper"
 	"github.com/tphakala/voicewatch/internal/detection"
 )
@@ -310,22 +308,14 @@ func (r *detectionRepository) GetClipPath(ctx context.Context, id string) (strin
 
 // UpdateTranscript stores the speech-to-text transcript and language for a
 // detection. It updates only the transcript columns, leaving all other fields
-// untouched. Following the v2 detection repository convention, the write is
-// performed as a targeted column update inside a transaction.
+// untouched. The write is delegated to the store so each backend (legacy notes
+// table, v2 detections table) performs the targeted update natively.
 func (r *detectionRepository) UpdateTranscript(ctx context.Context, id, transcript, language string) error {
 	noteID, err := r.parseID(id)
 	if err != nil {
 		return err
 	}
-	if err := r.store.Transaction(func(tx *gorm.DB) error {
-		return tx.WithContext(ctx).
-			Model(&Note{}).
-			Where("id = ?", noteID).
-			Updates(map[string]any{
-				"transcript":      transcript,
-				"transcript_lang": language,
-			}).Error
-	}); err != nil {
+	if err := r.store.UpdateNoteTranscript(ctx, noteID, transcript, language); err != nil {
 		return fmt.Errorf("failed to update transcript for detection %s: %w", id, err)
 	}
 	return nil
@@ -333,21 +323,13 @@ func (r *detectionRepository) UpdateTranscript(ctx context.Context, id, transcri
 
 // UpdateKeywordFlag marks a detection as flagged and stores the comma-joined list
 // of matched keywords. It updates only the flag columns, leaving all other fields
-// untouched, mirroring the targeted-update convention of UpdateTranscript.
+// untouched, mirroring the backend-delegated convention of UpdateTranscript.
 func (r *detectionRepository) UpdateKeywordFlag(ctx context.Context, id string, flagged bool, keywordsHit string) error {
 	noteID, err := r.parseID(id)
 	if err != nil {
 		return err
 	}
-	if err := r.store.Transaction(func(tx *gorm.DB) error {
-		return tx.WithContext(ctx).
-			Model(&Note{}).
-			Where("id = ?", noteID).
-			Updates(map[string]any{
-				"flagged":      flagged,
-				"keywords_hit": keywordsHit,
-			}).Error
-	}); err != nil {
+	if err := r.store.UpdateNoteKeywordFlag(ctx, noteID, flagged, keywordsHit); err != nil {
 		return fmt.Errorf("failed to update keyword flag for detection %s: %w", id, err)
 	}
 	return nil
@@ -469,13 +451,13 @@ func (r *detectionRepository) noteToResult(note *Note) (*detection.Result, error
 			CommonName:     note.CommonName,
 			Code:           note.SpeciesCode,
 		},
-		Confidence:     note.Confidence,
-		Latitude:       note.Latitude,
-		Longitude:      note.Longitude,
-		Threshold:      note.Threshold,
-		Sensitivity:    note.Sensitivity,
-		ClipName:       note.ClipName,
-		ProcessingTime: note.ProcessingTime,
+		Confidence:          note.Confidence,
+		Latitude:            note.Latitude,
+		Longitude:           note.Longitude,
+		Threshold:           note.Threshold,
+		Sensitivity:         note.Sensitivity,
+		ClipName:            note.ClipName,
+		ProcessingTime:      note.ProcessingTime,
 		Unlikely:            note.Unlikely,
 		Occurrence:          note.Occurrence,
 		Verified:            note.Verified,

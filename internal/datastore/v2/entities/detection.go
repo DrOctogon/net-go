@@ -31,6 +31,27 @@ type Detection struct {
 	// Validation flags
 	Unlikely bool `gorm:"default:false"` // Tagged by ultrasonic validation filter
 
+	// Speech-derived fields (VoiceWatch). Additive nullable columns mirroring the
+	// legacy Note model; empty/NULL when transcription is disabled or the clip
+	// contained no recognizable speech. Column names match the legacy notes table
+	// so the scrub and search paths speak one vocabulary.
+	Transcript     *string `gorm:"type:text"`        // speech-to-text transcription of the saved clip
+	TranscriptLang *string `gorm:"type:varchar(32)"` // language the transcript was produced in (e.g. "en")
+	Flagged        bool    `gorm:"default:false"`    // transcript matched a configured keyword
+	KeywordsHit    *string `gorm:"type:text"`        // comma-joined list of matched keywords
+
+	// Speaker attributes (VoiceWatch). Demographic *estimates*, not biometric
+	// identity; populated only when the opt-in speaker-attributes analysis is
+	// enabled. NULL when the feature is disabled (the default).
+	Gender           *string  `gorm:"type:varchar(16)"` // estimated gender: "male"/"female"/"unknown"
+	GenderConfidence *float64 // 0..1 confidence for Gender
+	AgeBand          *string  `gorm:"type:varchar(16)"` // estimated age band: child/teen/adult/senior
+	AgeConfidence    *float64 // 0..1 confidence for AgeBand
+	SpeakerID        *string  `gorm:"type:varchar(64)"` // voice-print cluster/speaker id
+	// VoicePrintEmbedding is the serialized speaker-embedding vector used for
+	// "similar voices" lookups. JSON-serialized; NULL when no embedding computed.
+	VoicePrintEmbedding []float32 `gorm:"serializer:json"`
+
 	// Migration reference (preserves legacy ID for lookups and related data migration)
 	LegacyID *uint `gorm:"index"`
 

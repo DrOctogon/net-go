@@ -267,6 +267,12 @@ func (m *ActionMockDatastore) ClearNoteClipPathsByNames(_ []string) (int64, erro
 func (m *ActionMockDatastore) ScrubSpeechDataByClipNames(_ []string) (int64, error) {
 	return 0, nil
 }
+func (m *ActionMockDatastore) UpdateNoteTranscript(_ context.Context, _ uint, _, _ string) error {
+	return nil
+}
+func (m *ActionMockDatastore) UpdateNoteKeywordFlag(_ context.Context, _ uint, _ bool, _ string) error {
+	return nil
+}
 func (m *ActionMockDatastore) CountHourlyDetections(_, _ string, _ int) (int64, error) {
 	return 0, nil
 }
@@ -595,6 +601,7 @@ func (m *MockDetectionRepository) GetLastTranscript() (id, text, language string
 	defer m.mu.Unlock()
 	return m.transcriptID, m.transcriptText, m.transcriptLang
 }
+
 // UpdateKeywordFlag captures the keyword-flag persistence call for verification.
 func (m *MockDetectionRepository) UpdateKeywordFlag(_ context.Context, id string, flagged bool, keywordsHit string) error {
 	m.mu.Lock()

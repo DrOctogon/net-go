@@ -182,6 +182,14 @@ type Interface interface {
 	GetLockedNotesClipPaths() ([]string, error)
 	ClearNoteClipPathsByNames(clipNames []string) (int64, error)
 	ScrubSpeechDataByClipNames(clipNames []string) (int64, error)
+	// UpdateNoteTranscript stores the speech-to-text transcript and its language
+	// for a detection, touching only the transcript columns. Implemented natively
+	// by both the legacy and v2 stores so the detection repository stays
+	// backend-agnostic.
+	UpdateNoteTranscript(ctx context.Context, noteID uint, transcript, language string) error
+	// UpdateNoteKeywordFlag marks a detection as keyword-flagged and stores the
+	// comma-joined list of matched keywords, touching only the flag columns.
+	UpdateNoteKeywordFlag(ctx context.Context, noteID uint, flagged bool, keywordsHit string) error
 	CountHourlyDetections(date, hour string, duration int) (int64, error)
 	// Analytics methods
 	GetSpeciesSummaryData(ctx context.Context, startDate, endDate string) ([]SpeciesSummaryData, error)
@@ -258,10 +266,10 @@ type Interface interface {
 	GetActiveNotificationHistory(ctx context.Context, after time.Time) ([]NotificationHistory, error)
 	DeleteExpiredNotificationHistory(ctx context.Context, before time.Time) (int64, error) // Returns count deleted
 	// Speaker roster methods (household speaker naming)
-	GetSpeakerNames(ctx context.Context) ([]SpeakerName, error)         // List user-assigned speaker names
-	GetSpeakerRoster(ctx context.Context) ([]SpeakerRosterEntry, error) // Full roster: named + unnamed speakers with detection counts
+	GetSpeakerNames(ctx context.Context) ([]SpeakerName, error)                                             // List user-assigned speaker names
+	GetSpeakerRoster(ctx context.Context) ([]SpeakerRosterEntry, error)                                     // Full roster: named + unnamed speakers with detection counts
 	GetSpeakerDailyActivity(ctx context.Context, startDate, endDate string) ([]SpeakerDailyActivity, error) // Per-speaker daily detection counts, optional inclusive date range
-	SetSpeakerName(ctx context.Context, speakerID, name string) error   // Upsert; empty name clears the mapping
+	SetSpeakerName(ctx context.Context, speakerID, name string) error                                       // Upsert; empty name clears the mapping
 	// Database stats method for runtime statistics
 	GetDatabaseStats(ctx context.Context) (*DatabaseStats, error)
 	// PingWithLatency executes a trivial query (SELECT 1) and returns the round-trip time.
@@ -2106,6 +2114,30 @@ func (ds *DataStore) ScrubSpeechDataByClipNames(clipNames []string) (int64, erro
 	}
 
 	return totalAffected, nil
+}
+
+// UpdateNoteTranscript stores the speech-to-text transcript and its language for
+// a note, touching only the transcript columns.
+func (ds *DataStore) UpdateNoteTranscript(ctx context.Context, noteID uint, transcript, language string) error {
+	return ds.DB.WithContext(ctx).
+		Model(&Note{}).
+		Where("id = ?", noteID).
+		Updates(map[string]any{
+			"transcript":      transcript,
+			"transcript_lang": language,
+		}).Error
+}
+
+// UpdateNoteKeywordFlag marks a note as keyword-flagged and stores the
+// comma-joined list of matched keywords, touching only the flag columns.
+func (ds *DataStore) UpdateNoteKeywordFlag(ctx context.Context, noteID uint, flagged bool, keywordsHit string) error {
+	return ds.DB.WithContext(ctx).
+		Model(&Note{}).
+		Where("id = ?", noteID).
+		Updates(map[string]any{
+			"flagged":      flagged,
+			"keywords_hit": keywordsHit,
+		}).Error
 }
 
 // CountHourlyDetections counts the number of detections for a specific date and hour.
