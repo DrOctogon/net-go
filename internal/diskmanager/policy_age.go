@@ -112,7 +112,7 @@ func AgeBasedCleanup(quit <-chan struct{}, db Interface) CleanupResult {
 			logger.String("retention_period", retentionPeriodSetting),
 			logger.Error(err))
 		// Try to get current disk usage for the result
-		currentUsage, diskErr := GetDiskUsage(baseDir)
+		currentUsage, diskErr := getDiskUsage(baseDir)
 		utilization := 0
 		if diskErr == nil {
 			utilization = int(currentUsage)
@@ -167,7 +167,7 @@ func AgeBasedCleanup(quit <-chan struct{}, db Interface) CleanupResult {
 	clearDeletedClipPaths(db, deletedNames, baseDir, "age", retention.ScrubSpeechData)
 
 	// Get final disk utilization
-	diskUsage, diskErr := GetDiskUsage(baseDir)
+	diskUsage, diskErr := getDiskUsage(baseDir)
 	if diskErr != nil {
 		// Combine errors if getting disk usage failed after the loop
 		finalErr := fmt.Errorf("cleanup completed but failed to get disk usage: %w (loop error: %w)", diskErr, loopErr)

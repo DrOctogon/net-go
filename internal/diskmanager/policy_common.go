@@ -29,6 +29,16 @@ const configKeyRetentionMaxUsage = "retention.max_usage"
 // Matches the viper default in conf/defaults.go.
 const defaultMaxUsagePercent = "80%"
 
+// Disk-usage seams for tests. They default to the real syscall-backed
+// implementations and are only reassigned from _test.go files (see
+// policy_test_helpers_test.go) so that retention tests can drive the REAL
+// cleanup code paths against a t.TempDir() with deterministic disk-usage
+// numbers. Production code must never reassign these.
+var (
+	getDiskUsage         = GetDiskUsage
+	getDetailedDiskUsage = GetDetailedDiskUsage
+)
+
 // Package-level metrics with explicit synchronization
 var (
 	// Thread-safe diskMetrics with explicit synchronization
@@ -482,7 +492,7 @@ func ShouldSkipUsageBasedCleanup(retention *conf.RetentionSettings, baseDir stri
 	}
 
 	// Get current disk usage percentage
-	currentUsage, usageErr := GetDiskUsage(baseDir)
+	currentUsage, usageErr := getDiskUsage(baseDir)
 	if usageErr != nil {
 		return false, 0, usageErr
 	}
@@ -490,7 +500,7 @@ func ShouldSkipUsageBasedCleanup(retention *conf.RetentionSettings, baseDir stri
 	utilization = int(currentUsage)
 
 	// Update metrics with actual disk space info (not placeholder)
-	spaceInfo, err := GetDetailedDiskUsage(baseDir)
+	spaceInfo, err := getDetailedDiskUsage(baseDir)
 	if err == nil {
 		updateDiskUsageMetrics(spaceInfo)
 	} else {
@@ -541,7 +551,7 @@ func prepareInitialCleanup(db Interface) (files []FileInfo, baseDir string, rete
 	files, err := GetAudioFiles(baseDir, allowedFileTypes, db)
 	if err != nil {
 		// Try to get current disk usage for the result even if file listing failed
-		currentUsage, diskErr := GetDiskUsage(baseDir)
+		currentUsage, diskErr := getDiskUsage(baseDir)
 		utilization := 0
 		if diskErr == nil {
 			utilization = int(currentUsage)
@@ -563,7 +573,7 @@ func prepareInitialCleanup(db Interface) (files []FileInfo, baseDir string, rete
 
 	if len(files) == 0 {
 		// Get current disk utilization even if no files were processed
-		currentUsage, diskErr := GetDiskUsage(baseDir)
+		currentUsage, diskErr := getDiskUsage(baseDir)
 		utilization := 0
 		if diskErr == nil {
 			utilization = int(currentUsage)
