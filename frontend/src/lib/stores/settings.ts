@@ -808,7 +808,6 @@ export interface SettingsFormData {
   output?: OutputSettings;
   backup?: BackupSettings;
   notification?: NotificationSettings;
-  taxonomySynonyms?: Record<string, string>;
 }
 
 // Global settings state interface
@@ -1045,7 +1044,6 @@ function createEmptySettings(): SettingsFormData {
         },
       },
     },
-    taxonomySynonyms: {},
   };
 }
 
@@ -1266,13 +1264,6 @@ export const settingsActions = {
         originalData: { ...state.originalData, security: sync(state.originalData.security) },
       };
     });
-  },
-
-  updateTaxonomySynonyms(synonyms: Record<string, string>) {
-    settingsStore.update(state => ({
-      ...state,
-      formData: { ...state.formData, taxonomySynonyms: synonyms },
-    }));
   },
 
   async saveSettings() {

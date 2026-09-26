@@ -33,7 +33,6 @@ func CloneSettings(src *Settings) *Settings {
 
 	// Root-level slices and maps.
 	dst.ValidationWarnings = slices.Clone(src.ValidationWarnings)
-	dst.TaxonomySynonyms = maps.Clone(src.TaxonomySynonyms)
 
 	// Logging.
 	dst.Logging.ModuleOutputs = cloneModuleOutputs(src.Logging.ModuleOutputs)

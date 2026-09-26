@@ -56,7 +56,6 @@ func newPopulatedSettings() *Settings {
 	compress := true
 	s := &Settings{}
 	s.ValidationWarnings = []string{"warn-1", "warn-2"}
-	s.TaxonomySynonyms = map[string]string{"American Robin": "Turdus migratorius"}
 
 	s.Logging.ModuleLevels = map[string]string{"audio": "debug"}
 	s.Logging.ModuleOutputs = map[string]logger.ModuleOutput{
@@ -182,8 +181,6 @@ func newPopulatedSettings() *Settings {
 func mutateCloneEverywhere(dst *Settings) {
 	dst.ValidationWarnings[0] = mutated
 	dst.ValidationWarnings = append(dst.ValidationWarnings, "added")
-	dst.TaxonomySynonyms["American Robin"] = mutated
-	dst.TaxonomySynonyms["new-key"] = "value"
 
 	dst.Logging.ModuleLevels["audio"] = mutated
 	dst.Logging.ModuleLevels["added"] = "debug"
@@ -279,7 +276,6 @@ func assertSourceUnchanged(t *testing.T, src *Settings) {
 	t.Helper()
 
 	assert.Equal(t, []string{"warn-1", "warn-2"}, src.ValidationWarnings)
-	assert.Equal(t, map[string]string{"American Robin": "Turdus migratorius"}, src.TaxonomySynonyms)
 
 	assert.Equal(t, map[string]string{"audio": "debug"}, src.Logging.ModuleLevels)
 	require.Contains(t, src.Logging.ModuleOutputs, "audio")
