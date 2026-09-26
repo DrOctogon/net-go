@@ -16,7 +16,6 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"github.com/patrickmn/go-cache"
 	"github.com/shirou/gopsutil/v3/disk"
 	"github.com/shirou/gopsutil/v3/mem"
 	"github.com/tphakala/voicewatch/internal/alerting"
@@ -77,7 +76,7 @@ type Controller struct {
 	DisableSaveSettings  bool         // disables disk persistence of settings
 	isGlobalOwner        bool         // true when this controller owns the global settings singleton
 	settingsMutex        sync.RWMutex // Serializes the read-modify-write in settings update handlers; reads are lock-free via the atomic Settings pointer
-	detectionCache       *cache.Cache // Cache for detection queries
+	detectionCache       *ttlCache    // Cache for detection queries (stoppable janitor; see ttl_cache.go)
 	startTime            *time.Time
 	SFS                  *securefs.SecureFS     // Add SecureFS instance
 	apiLogger            logger.Logger          // Structured logger for API operations
@@ -453,7 +452,7 @@ func NewWithOptions(e *echo.Echo, ds datastore.Interface, settings *conf.Setting
 		isGlobalOwner:        settings == conf.GetSettings(),
 		SunCalc:              sunCalc,
 		controlChan:          controlChan,
-		detectionCache:       cache.New(detectionCacheExpiry, detectionCacheCleanup),
+		detectionCache:       newTTLCache(detectionCacheExpiry, detectionCacheCleanup),
 		SFS:                  sfs, // Assign SecureFS instance
 		metrics:              metrics,
 		ctx:                  ctx,
@@ -866,9 +865,8 @@ func (c *Controller) Shutdown() {
 		GetLogger().Error("Error flushing logs", logger.Error(err))
 	}
 
-	// TODO: The go-cache library's janitor goroutine cannot be stopped.
-	// Consider migrating to a context-aware cache implementation.
 	if c.detectionCache != nil {
+		c.detectionCache.Stop() // terminates the cleanup janitor goroutine
 		c.detectionCache.Flush()
 	}
 
