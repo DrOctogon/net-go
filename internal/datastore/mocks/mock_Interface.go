@@ -5970,6 +5970,104 @@ func (_c *MockInterface_UpdateNoteComment_Call) RunAndReturn(run func(string, st
 	return _c
 }
 
+// UpdateNoteKeywordFlag provides a mock function with given fields: ctx, noteID, flagged, keywordsHit
+func (_m *MockInterface) UpdateNoteKeywordFlag(ctx context.Context, noteID uint, flagged bool, keywordsHit string) error {
+	ret := _m.Called(ctx, noteID, flagged, keywordsHit)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateNoteKeywordFlag")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, uint, bool, string) error); ok {
+		r0 = rf(ctx, noteID, flagged, keywordsHit)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// MockInterface_UpdateNoteKeywordFlag_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateNoteKeywordFlag'
+type MockInterface_UpdateNoteKeywordFlag_Call struct {
+	*mock.Call
+}
+
+// UpdateNoteKeywordFlag is a helper method to define mock.On call
+//   - ctx context.Context
+//   - noteID uint
+//   - flagged bool
+//   - keywordsHit string
+func (_e *MockInterface_Expecter) UpdateNoteKeywordFlag(ctx interface{}, noteID interface{}, flagged interface{}, keywordsHit interface{}) *MockInterface_UpdateNoteKeywordFlag_Call {
+	return &MockInterface_UpdateNoteKeywordFlag_Call{Call: _e.mock.On("UpdateNoteKeywordFlag", ctx, noteID, flagged, keywordsHit)}
+}
+
+func (_c *MockInterface_UpdateNoteKeywordFlag_Call) Run(run func(ctx context.Context, noteID uint, flagged bool, keywordsHit string)) *MockInterface_UpdateNoteKeywordFlag_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(uint), args[2].(bool), args[3].(string))
+	})
+	return _c
+}
+
+func (_c *MockInterface_UpdateNoteKeywordFlag_Call) Return(_a0 error) *MockInterface_UpdateNoteKeywordFlag_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *MockInterface_UpdateNoteKeywordFlag_Call) RunAndReturn(run func(context.Context, uint, bool, string) error) *MockInterface_UpdateNoteKeywordFlag_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// UpdateNoteTranscript provides a mock function with given fields: ctx, noteID, transcript, language
+func (_m *MockInterface) UpdateNoteTranscript(ctx context.Context, noteID uint, transcript string, language string) error {
+	ret := _m.Called(ctx, noteID, transcript, language)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateNoteTranscript")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, uint, string, string) error); ok {
+		r0 = rf(ctx, noteID, transcript, language)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// MockInterface_UpdateNoteTranscript_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateNoteTranscript'
+type MockInterface_UpdateNoteTranscript_Call struct {
+	*mock.Call
+}
+
+// UpdateNoteTranscript is a helper method to define mock.On call
+//   - ctx context.Context
+//   - noteID uint
+//   - transcript string
+//   - language string
+func (_e *MockInterface_Expecter) UpdateNoteTranscript(ctx interface{}, noteID interface{}, transcript interface{}, language interface{}) *MockInterface_UpdateNoteTranscript_Call {
+	return &MockInterface_UpdateNoteTranscript_Call{Call: _e.mock.On("UpdateNoteTranscript", ctx, noteID, transcript, language)}
+}
+
+func (_c *MockInterface_UpdateNoteTranscript_Call) Run(run func(ctx context.Context, noteID uint, transcript string, language string)) *MockInterface_UpdateNoteTranscript_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(uint), args[2].(string), args[3].(string))
+	})
+	return _c
+}
+
+func (_c *MockInterface_UpdateNoteTranscript_Call) Return(_a0 error) *MockInterface_UpdateNoteTranscript_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *MockInterface_UpdateNoteTranscript_Call) RunAndReturn(run func(context.Context, uint, string, string) error) *MockInterface_UpdateNoteTranscript_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // NewMockInterface creates a new instance of MockInterface. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
 // The first argument is typically a *testing.T value.
 func NewMockInterface(t interface {

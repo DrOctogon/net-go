@@ -749,6 +749,12 @@ func (s *testLegacyInterface) SaveImageCache(_ *datastore.ImageCache) error     
 func (s *testLegacyInterface) GetLockedNotesClipPaths() ([]string, error)           { return nil, nil }
 func (s *testLegacyInterface) ClearNoteClipPathsByNames(_ []string) (int64, error)  { return 0, nil }
 func (s *testLegacyInterface) ScrubSpeechDataByClipNames(_ []string) (int64, error) { return 0, nil }
+func (s *testLegacyInterface) UpdateNoteTranscript(_ context.Context, _ uint, _, _ string) error {
+	return nil
+}
+func (s *testLegacyInterface) UpdateNoteKeywordFlag(_ context.Context, _ uint, _ bool, _ string) error {
+	return nil
+}
 func (s *testLegacyInterface) CountHourlyDetections(_, _ string, _ int) (int64, error) {
 	return 0, nil
 }

@@ -133,9 +133,15 @@ func (m *MockDatastore) SaveImageCache(*datastore.ImageCache) error { return nil
 func (m *MockDatastore) GetAllImageCaches(string) ([]datastore.ImageCache, error) {
 	return make([]datastore.ImageCache, 0), nil
 }
-func (m *MockDatastore) GetLockedNotesClipPaths() ([]string, error)               { return make([]string, 0), nil }
-func (m *MockDatastore) ClearNoteClipPathsByNames(_ []string) (int64, error)      { return 0, nil }
-func (m *MockDatastore) ScrubSpeechDataByClipNames(_ []string) (int64, error)     { return 0, nil }
+func (m *MockDatastore) GetLockedNotesClipPaths() ([]string, error)           { return make([]string, 0), nil }
+func (m *MockDatastore) ClearNoteClipPathsByNames(_ []string) (int64, error)  { return 0, nil }
+func (m *MockDatastore) ScrubSpeechDataByClipNames(_ []string) (int64, error) { return 0, nil }
+func (m *MockDatastore) UpdateNoteTranscript(context.Context, uint, string, string) error {
+	return nil
+}
+func (m *MockDatastore) UpdateNoteKeywordFlag(context.Context, uint, bool, string) error {
+	return nil
+}
 func (m *MockDatastore) CountHourlyDetections(string, string, int) (int64, error) { return 0, nil }
 func (m *MockDatastore) GetSpeciesSummaryData(context.Context, string, string) ([]datastore.SpeciesSummaryData, error) {
 	return make([]datastore.SpeciesSummaryData, 0), nil
