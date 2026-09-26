@@ -18,6 +18,10 @@
   let loading = $state(true);
   let error = $state<string | null>(null);
   let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+  // AbortController for preventing stale-response races: page/sort/search/numResults
+  // navigation can fire fetchDetections faster than responses return, so an older,
+  // slower response must never overwrite state from a newer request.
+  let detectionsController: AbortController | null = null;
 
   // Local storage keys for user preferences
   const RESULTS_PER_PAGE_KEY = 'birdnet-detections-results-per-page';
@@ -104,6 +108,11 @@
 
   // Fetch detections data
   async function fetchDetections() {
+    detectionsController?.abort();
+    const controller = new AbortController();
+    detectionsController = controller;
+    const { signal } = controller;
+
     loading = true;
     error = null;
 
@@ -120,7 +129,14 @@
       // Always include weather data for the detections page
       queryString.append('includeWeather', 'true');
 
-      const data = (await fetchWithCSRF(`/api/v2/detections?${queryString.toString()}`)) as any;
+      const data = (await fetchWithCSRF(`/api/v2/detections?${queryString.toString()}`, {
+        signal,
+      })) as any;
+
+      // Check the captured signal, not the shared controller: a newer request may
+      // have replaced detectionsController with a fresh, non-aborted instance, and
+      // checking that would let this stale response overwrite newer data.
+      if (signal.aborted) return;
 
       // Validate numResults before using
       const validatedNumResults =
@@ -148,10 +164,18 @@
         dashboardSettings: data.dashboardSettings,
       };
     } catch (err) {
+      if (signal.aborted || (err instanceof Error && err.name === 'AbortError')) {
+        return;
+      }
       error = err instanceof Error ? err.message : t('detections.errors.fetchFailed');
       logger.error('Error fetching detections:', err);
     } finally {
-      loading = false;
+      // Only the request that still owns the controller may reset shared state; a
+      // superseded request must not clear a newer request's loading flag/controller.
+      if (detectionsController === controller) {
+        loading = false;
+        detectionsController = null;
+      }
     }
   }
 
@@ -267,6 +291,9 @@
       if (debounceTimer) {
         clearTimeout(debounceTimer);
       }
+
+      // Abort any in-flight detections fetch
+      detectionsController?.abort();
     };
   });
 </script>
