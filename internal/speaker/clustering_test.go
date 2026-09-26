@@ -136,3 +136,68 @@ func TestClustererAssignWithNovelty(t *testing.T) {
 		assert.True(t, isNew)
 	})
 }
+
+func TestClustererCapAndEviction(t *testing.T) {
+	t.Parallel()
+
+	// Orthogonal unit embeddings guarantee zero cosine similarity, so every
+	// distinct index creates a new cluster.
+	embed := func(dim, hot int) []float32 {
+		e := make([]float32, dim)
+		e[hot] = 1
+		return e
+	}
+
+	t.Run("cluster count never exceeds the cap", func(t *testing.T) {
+		t.Parallel()
+		c := NewClusterer(0.75)
+		for i := range MaxClusters + 10 {
+			c.Assign(embed(MaxClusters+10, i))
+		}
+		assert.Equal(t, MaxClusters, c.NumClusters())
+	})
+
+	t.Run("least recently seen cluster is evicted", func(t *testing.T) {
+		t.Parallel()
+		c := NewClusterer(0.75)
+		dim := MaxClusters + 2
+		firstID := c.Assign(embed(dim, 0)) // oldest...
+		for i := 1; i < MaxClusters; i++ {
+			c.Assign(embed(dim, i))
+		}
+		// ...but touch the first cluster again so cluster #2 becomes LRU.
+		gotFirst := c.Assign(embed(dim, 0))
+		require.Equal(t, firstID, gotFirst)
+
+		// Cap reached; a new voice evicts the LRU (cluster for index 1).
+		newID, isNew := c.AssignWithNovelty(embed(dim, MaxClusters))
+		assert.True(t, isNew)
+		assert.NotEmpty(t, newID)
+		assert.Equal(t, MaxClusters, c.NumClusters())
+
+		// The recently-touched first cluster survived eviction.
+		stillFirst, isNewAgain := c.AssignWithNovelty(embed(dim, 0))
+		assert.Equal(t, firstID, stillFirst)
+		assert.False(t, isNewAgain)
+
+		// The evicted voice (index 1) now clusters as NEW with a fresh ID —
+		// evicted IDs are never reused.
+		reassigned, novel := c.AssignWithNovelty(embed(dim, 1))
+		assert.True(t, novel)
+		assert.NotEqual(t, "spk_2", reassigned)
+	})
+
+	t.Run("lastSeen survives snapshot round trip", func(t *testing.T) {
+		t.Parallel()
+		c := NewClusterer(0.75)
+		c.Assign([]float32{1, 0})
+		c.Assign([]float32{0, 1})
+		c.Assign([]float32{1, 0}) // touch first again
+
+		restored := NewClustererFromSnapshot(c.Snapshot())
+		// Same match behavior after restore.
+		id, isNew := restored.AssignWithNovelty([]float32{1, 0})
+		assert.Equal(t, "spk_1", id)
+		assert.False(t, isNew)
+	})
+}
