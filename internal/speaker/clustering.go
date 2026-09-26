@@ -11,6 +11,14 @@ import (
 // be recalibrated once a real model is wired in.
 const DefaultClusterThreshold = 0.75
 
+// MaxClusters caps how many speaker clusters are retained. When a new voice
+// arrives at the cap, the least-recently-seen cluster is evicted (its ID is
+// never reused). Bounds the O(N) cosine scan in AssignWithNovelty and the
+// snapshot size.
+// ponytail: fixed cap + LRU eviction; make it a config knob and/or add an ANN
+// index only if real deployments exceed 64 recurring speakers.
+const MaxClusters = 64
+
 // Clusterer performs online, greedy voice-print clustering to assign a stable
 // speaker ID to detections. Each Assign compares a new embedding against the
 // running centroid of every known cluster and either joins the most-similar
@@ -26,12 +34,16 @@ type Clusterer struct {
 	threshold float64
 	clusters  []*cluster
 	nextID    int
+	// seq is a monotonic tick, incremented per assignment, used to track each
+	// cluster's recency for LRU eviction at MaxClusters.
+	seq int64
 }
 
 type cluster struct {
 	id       string
 	centroid []float32 // running mean of member embeddings
 	count    int
+	lastSeen int64 // Clusterer.seq value of the most recent match/creation
 }
 
 // NewClusterer returns a Clusterer using the given cosine-similarity threshold.
@@ -75,17 +87,33 @@ func (c *Clusterer) AssignWithNovelty(embedding []float32) (id string, isNew boo
 		}
 	}
 
+	c.seq++
+
 	if bestIdx >= 0 {
 		c.clusters[bestIdx].update(embedding)
+		c.clusters[bestIdx].lastSeen = c.seq
 		return c.clusters[bestIdx].id, false
 	}
 
-	// No match: start a new cluster with a fresh deterministic ID.
+	// No match: start a new cluster with a fresh deterministic ID, evicting
+	// the least-recently-seen cluster when at the cap (see MaxClusters).
 	c.nextID++
 	id = "spk_" + strconv.Itoa(c.nextID)
 	centroid := make([]float32, len(embedding))
 	copy(centroid, embedding)
-	c.clusters = append(c.clusters, &cluster{id: id, centroid: centroid, count: 1})
+	fresh := &cluster{id: id, centroid: centroid, count: 1, lastSeen: c.seq}
+
+	if len(c.clusters) >= MaxClusters {
+		lru := 0
+		for i, cl := range c.clusters {
+			if cl.lastSeen < c.clusters[lru].lastSeen {
+				lru = i
+			}
+		}
+		c.clusters[lru] = fresh
+	} else {
+		c.clusters = append(c.clusters, fresh)
+	}
 	return id, true
 }
 

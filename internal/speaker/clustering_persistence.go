@@ -24,6 +24,10 @@ type ClusterSnapshot struct {
 	ID       string    `json:"id"`
 	Centroid []float32 `json:"centroid"`
 	Count    int       `json:"count"`
+	// LastSeen is the clusterer's monotonic recency tick at the cluster's most
+	// recent match (used for LRU eviction at MaxClusters). Absent in snapshots
+	// written before eviction existed; such clusters restore as equally old.
+	LastSeen int64 `json:"lastSeen,omitempty"`
 }
 
 // Snapshot returns a deep copy of the clusterer's current state. The returned
@@ -41,7 +45,7 @@ func (c *Clusterer) Snapshot() SpeakerClusterSnapshot {
 	for i, cl := range c.clusters {
 		centroid := make([]float32, len(cl.centroid))
 		copy(centroid, cl.centroid)
-		out.Clusters[i] = ClusterSnapshot{ID: cl.id, Centroid: centroid, Count: cl.count}
+		out.Clusters[i] = ClusterSnapshot{ID: cl.id, Centroid: centroid, Count: cl.count, LastSeen: cl.lastSeen}
 	}
 	return out
 }
@@ -66,7 +70,12 @@ func NewClustererFromSnapshot(s SpeakerClusterSnapshot) *Clusterer {
 		if count < 1 {
 			count = 1
 		}
-		c.clusters = append(c.clusters, &cluster{id: cs.ID, centroid: centroid, count: count})
+		c.clusters = append(c.clusters, &cluster{id: cs.ID, centroid: centroid, count: count, lastSeen: cs.LastSeen})
+		if cs.LastSeen > c.seq {
+			// Resume the recency tick past the newest restored cluster so new
+			// assignments always rank as more recent than restored state.
+			c.seq = cs.LastSeen
+		}
 	}
 	return c
 }
