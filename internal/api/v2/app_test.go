@@ -1395,7 +1395,12 @@ func TestGetAppConfig_PublicAccessFlags(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			controller.Settings.Load().Security.PublicAccess.LiveAudio = tt.enabled
+			// Not parallel: mutates the settings snapshot that setupAppConfigTest
+			// published globally, which GetAppConfig reads via currentSettings.
+			cloned := conf.CloneSettings(controller.Settings.Load())
+			cloned.Security.PublicAccess.LiveAudio = tt.enabled
+			publishTestSettings(t, cloned)
+			controller.Settings.Store(cloned)
 
 			req := httptest.NewRequest(http.MethodGet, "/api/v2/app/config", http.NoBody)
 			rec := httptest.NewRecorder()
@@ -1441,7 +1446,10 @@ func TestGetAppConfig_LiveSpectrogramField(t *testing.T) {
 			e, controller := setupAppConfigTest(t, nil)
 
 			// Set the LiveSpectrogram value for this test case
-			controller.Settings.Load().Realtime.Dashboard.LiveSpectrogram = tt.enabled
+			cloned := conf.CloneSettings(controller.Settings.Load())
+			cloned.Realtime.Dashboard.LiveSpectrogram = tt.enabled
+			publishTestSettings(t, cloned)
+			controller.Settings.Store(cloned)
 
 			req := httptest.NewRequest(http.MethodGet, "/api/v2/app/config", http.NoBody)
 			rec := httptest.NewRecorder()
@@ -1474,8 +1482,11 @@ func TestGetAppConfig_SentryConfigWhenEnabled(t *testing.T) {
 	t.Setenv("BIRDNET_GO_SENTRY_DSN", "https://dummy@example.ingest.sentry.io/1")
 
 	// Enable Sentry in settings
-	controller.Settings.Load().Sentry.Enabled = true
-	controller.Settings.Load().SystemID = "test-system-id-123"
+	cloned := conf.CloneSettings(controller.Settings.Load())
+	cloned.Sentry.Enabled = true
+	cloned.SystemID = "test-system-id-123"
+	publishTestSettings(t, cloned)
+	controller.Settings.Store(cloned)
 
 	e := echo.New()
 	req := httptest.NewRequest(http.MethodGet, "/api/v2/app/config", http.NoBody)
@@ -1503,7 +1514,10 @@ func TestGetAppConfig_SentryConfigWhenDisabled(t *testing.T) {
 	_, controller := setupAppConfigTest(t, nil)
 
 	// Sentry disabled (default)
-	controller.Settings.Load().Sentry.Enabled = false
+	cloned := conf.CloneSettings(controller.Settings.Load())
+	cloned.Sentry.Enabled = false
+	publishTestSettings(t, cloned)
+	controller.Settings.Store(cloned)
 
 	e := echo.New()
 	req := httptest.NewRequest(http.MethodGet, "/api/v2/app/config", http.NoBody)

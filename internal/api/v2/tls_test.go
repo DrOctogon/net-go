@@ -77,7 +77,10 @@ func TestTLSGetCertificate_WithCert(t *testing.T) {
 	require.NoError(t, err)
 
 	// Set TLS mode in settings
-	controller.Settings.Load().Security.TLSMode = conf.TLSModeSelfSigned
+	cloned := conf.CloneSettings(controller.Settings.Load())
+	cloned.Security.TLSMode = conf.TLSModeSelfSigned
+	publishTestSettings(t, cloned)
+	controller.Settings.Store(cloned)
 
 	req := httptest.NewRequest(http.MethodGet, "/api/v2/tls/certificate", http.NoBody)
 	rec := httptest.NewRecorder()
@@ -184,7 +187,10 @@ func TestTLSDeleteCertificate(t *testing.T) {
 	require.NoError(t, err)
 
 	// Set TLS mode
-	controller.Settings.Load().Security.TLSMode = conf.TLSModeManual
+	cloned := conf.CloneSettings(controller.Settings.Load())
+	cloned.Security.TLSMode = conf.TLSModeManual
+	publishTestSettings(t, cloned)
+	controller.Settings.Store(cloned)
 
 	// Delete the certificate
 	req := httptest.NewRequest(http.MethodDelete, "/api/v2/tls/certificate", http.NoBody)

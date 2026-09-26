@@ -48,7 +48,10 @@ func TestGetMQTTTLSCertificate_WithManualPaths(t *testing.T) {
 	require.NoError(t, os.WriteFile(certFile, []byte(certPEM), 0o644))
 
 	// Point settings to this file
-	controller.Settings.Load().Realtime.MQTT.TLS.CACert = certFile
+	cloned := conf.CloneSettings(controller.Settings.Load())
+	cloned.Realtime.MQTT.TLS.CACert = certFile
+	publishTestSettings(t, cloned)
+	controller.Settings.Store(cloned)
 
 	req := httptest.NewRequest(http.MethodGet, "/api/v2/integrations/mqtt/tls/certificate", http.NoBody)
 	rec := httptest.NewRecorder()
@@ -308,9 +311,12 @@ func TestDeleteMQTTTLSCertificate(t *testing.T) {
 	require.NoError(t, err)
 
 	// Update settings paths
-	controller.Settings.Load().Realtime.MQTT.TLS.CACert = tlsMgr.GetCertificatePath(mqttTLSServiceName, conf.TLSCertTypeCA)
-	controller.Settings.Load().Realtime.MQTT.TLS.ClientCert = tlsMgr.GetCertificatePath(mqttTLSServiceName, conf.TLSCertTypeClient)
-	controller.Settings.Load().Realtime.MQTT.TLS.ClientKey = tlsMgr.GetCertificatePath(mqttTLSServiceName, conf.TLSCertTypeKey)
+	cloned := conf.CloneSettings(controller.Settings.Load())
+	cloned.Realtime.MQTT.TLS.CACert = tlsMgr.GetCertificatePath(mqttTLSServiceName, conf.TLSCertTypeCA)
+	cloned.Realtime.MQTT.TLS.ClientCert = tlsMgr.GetCertificatePath(mqttTLSServiceName, conf.TLSCertTypeClient)
+	cloned.Realtime.MQTT.TLS.ClientKey = tlsMgr.GetCertificatePath(mqttTLSServiceName, conf.TLSCertTypeKey)
+	publishTestSettings(t, cloned)
+	controller.Settings.Store(cloned)
 
 	// DELETE
 	req := httptest.NewRequest(http.MethodDelete, "/api/v2/integrations/mqtt/tls/certificate", http.NoBody)
@@ -359,7 +365,10 @@ func TestDeleteMQTTTLSCertificate_ExternalPaths(t *testing.T) {
 	require.NoError(t, os.WriteFile(certFile, []byte(certPEM), 0o644))
 
 	// Point settings to this external file
-	controller.Settings.Load().Realtime.MQTT.TLS.CACert = certFile
+	cloned := conf.CloneSettings(controller.Settings.Load())
+	cloned.Realtime.MQTT.TLS.CACert = certFile
+	publishTestSettings(t, cloned)
+	controller.Settings.Store(cloned)
 
 	// DELETE
 	req := httptest.NewRequest(http.MethodDelete, "/api/v2/integrations/mqtt/tls/certificate", http.NoBody)

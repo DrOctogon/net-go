@@ -15,6 +15,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
+	"github.com/tphakala/voicewatch/internal/conf"
 )
 
 // Test constants for integration tests
@@ -26,7 +27,7 @@ const (
 // runIntegrationConnectionHandlerTest runs table-driven tests for integration connection handlers
 func runIntegrationConnectionHandlerTest(t *testing.T, handlerFunc func(*Controller, echo.Context) error, endpoint string, testCases []struct {
 	name           string
-	setupSettings  func(*Controller)
+	setupSettings  func(*testing.T, *Controller)
 	expectedStatus int
 	expectedBody   string
 }) {
@@ -39,7 +40,7 @@ func runIntegrationConnectionHandlerTest(t *testing.T, handlerFunc func(*Control
 			e, _, controller := setupTestEnvironment(t)
 
 			// Configure settings
-			tc.setupSettings(controller)
+			tc.setupSettings(t, controller)
 
 			// Create request with appropriate body
 			req := httptest.NewRequest(http.MethodPost, endpoint, http.NoBody)
@@ -64,7 +65,7 @@ func runIntegrationConnectionHandlerTest(t *testing.T, handlerFunc func(*Control
 // runIntegrationConnectionWithDisconnectionTest runs integration connection handlers test with client disconnection.
 // This helper is preserved for future use when mock injection becomes available in the test framework.
 // Currently skipped because it requires mocking package-level functions for network operations.
-func runIntegrationConnectionWithDisconnectionTest(t *testing.T, handlerFunc func(*Controller, echo.Context) error, endpoint string, setupSettings func(*Controller)) {
+func runIntegrationConnectionWithDisconnectionTest(t *testing.T, handlerFunc func(*Controller, echo.Context) error, endpoint string, setupSettings func(*testing.T, *Controller)) {
 	t.Helper()
 
 	// Skip this test since we can't override package-level functions in our test environment
@@ -74,7 +75,7 @@ func runIntegrationConnectionWithDisconnectionTest(t *testing.T, handlerFunc fun
 	e, _, controller := setupTestEnvironment(t)
 
 	// Configure settings
-	setupSettings(controller)
+	setupSettings(t, controller)
 
 	// Create a cancellable context
 	ctx, cancel := context.WithCancel(t.Context())
@@ -208,10 +209,13 @@ func TestGetMQTTStatus(t *testing.T) {
 			e, _, controller := setupTestEnvironment(t)
 
 			// Configure settings
-			controller.Settings.Load().Realtime.MQTT.Enabled = tc.mqttEnabled
-			controller.Settings.Load().Realtime.MQTT.Broker = tc.mqttBroker
-			controller.Settings.Load().Realtime.MQTT.Topic = tc.mqttTopic
-			controller.Settings.Load().Main.Name = testBirdNetName
+			cloned := conf.CloneSettings(controller.Settings.Load())
+			cloned.Realtime.MQTT.Enabled = tc.mqttEnabled
+			cloned.Realtime.MQTT.Broker = tc.mqttBroker
+			cloned.Realtime.MQTT.Topic = tc.mqttTopic
+			cloned.Main.Name = testBirdNetName
+			publishTestSettings(t, cloned)
+			controller.Settings.Store(cloned)
 
 			// Create request
 			req := httptest.NewRequest(http.MethodGet, "/api/v2/integrations/mqtt/status", http.NoBody)
@@ -240,24 +244,32 @@ func TestTestMQTTConnection(t *testing.T) {
 	// Define test cases
 	testCases := []struct {
 		name           string
-		setupSettings  func(*Controller)
+		setupSettings  func(*testing.T, *Controller)
 		expectedStatus int
 		expectedBody   string
 	}{
 		{
 			name: "MQTT Not Enabled",
-			setupSettings: func(controller *Controller) {
-				controller.Settings.Load().Realtime.MQTT.Enabled = false
-				controller.Settings.Load().Realtime.MQTT.Broker = testMQTTBroker
+			setupSettings: func(t *testing.T, controller *Controller) {
+				t.Helper()
+				cloned := conf.CloneSettings(controller.Settings.Load())
+				cloned.Realtime.MQTT.Enabled = false
+				cloned.Realtime.MQTT.Broker = testMQTTBroker
+				publishTestSettings(t, cloned)
+				controller.Settings.Store(cloned)
 			},
 			expectedStatus: http.StatusOK,
 			expectedBody:   `{"success":false,"message":"MQTT is not enabled in settings"}`,
 		},
 		{
 			name: "Broker Not Configured",
-			setupSettings: func(controller *Controller) {
-				controller.Settings.Load().Realtime.MQTT.Enabled = true
-				controller.Settings.Load().Realtime.MQTT.Broker = ""
+			setupSettings: func(t *testing.T, controller *Controller) {
+				t.Helper()
+				cloned := conf.CloneSettings(controller.Settings.Load())
+				cloned.Realtime.MQTT.Enabled = true
+				cloned.Realtime.MQTT.Broker = ""
+				publishTestSettings(t, cloned)
+				controller.Settings.Store(cloned)
 			},
 			expectedStatus: http.StatusBadRequest,
 			expectedBody:   `{"success":false,"message":"MQTT broker not configured"}`,
@@ -311,9 +323,13 @@ func TestWriteJSONResponse(t *testing.T) {
 
 // Advanced test for MQTT connection with client disconnection
 func TestMQTTConnectionWithClientDisconnection(t *testing.T) {
-	runIntegrationConnectionWithDisconnectionTest(t, (*Controller).TestMQTTConnection, "/api/v2/integrations/mqtt/test", func(controller *Controller) {
-		controller.Settings.Load().Realtime.MQTT.Enabled = true
-		controller.Settings.Load().Realtime.MQTT.Broker = testMQTTBroker
+	runIntegrationConnectionWithDisconnectionTest(t, (*Controller).TestMQTTConnection, "/api/v2/integrations/mqtt/test", func(t *testing.T, controller *Controller) {
+		t.Helper()
+		cloned := conf.CloneSettings(controller.Settings.Load())
+		cloned.Realtime.MQTT.Enabled = true
+		cloned.Realtime.MQTT.Broker = testMQTTBroker
+		publishTestSettings(t, cloned)
+		controller.Settings.Store(cloned)
 	})
 }
 
@@ -323,10 +339,13 @@ func TestGetMQTTStatusWithControlChannel(t *testing.T) {
 	e, _, controller := setupTestEnvironment(t)
 
 	// Configure settings
-	controller.Settings.Load().Realtime.MQTT.Enabled = true
-	controller.Settings.Load().Realtime.MQTT.Broker = testMQTTBroker
-	controller.Settings.Load().Realtime.MQTT.Topic = "birdnet/detections"
-	controller.Settings.Load().Main.Name = testBirdNetName
+	cloned := conf.CloneSettings(controller.Settings.Load())
+	cloned.Realtime.MQTT.Enabled = true
+	cloned.Realtime.MQTT.Broker = testMQTTBroker
+	cloned.Realtime.MQTT.Topic = "birdnet/detections"
+	cloned.Main.Name = testBirdNetName
+	publishTestSettings(t, cloned)
+	controller.Settings.Store(cloned)
 
 	// Create a mock control channel
 	controlChan := make(chan string, 1)
@@ -366,8 +385,11 @@ func TestErrorHandlingForIntegrations(t *testing.T) {
 		e, _, controller := setupTestEnvironment(t)
 
 		// Configure settings to enable MQTT
-		controller.Settings.Load().Realtime.MQTT.Enabled = true
-		controller.Settings.Load().Realtime.MQTT.Broker = "tcp://invalid-broker.example.com:1883"
+		cloned := conf.CloneSettings(controller.Settings.Load())
+		cloned.Realtime.MQTT.Enabled = true
+		cloned.Realtime.MQTT.Broker = "tcp://invalid-broker.example.com:1883"
+		publishTestSettings(t, cloned)
+		controller.Settings.Store(cloned)
 
 		// Create a test HTTP request
 		req := httptest.NewRequest(http.MethodPost, "/api/v2/integrations/mqtt/test", http.NoBody)
@@ -389,8 +411,11 @@ func TestErrorHandlingForIntegrations(t *testing.T) {
 		e, _, controller := setupTestEnvironment(t)
 
 		// Configure settings to enable MQTT
-		controller.Settings.Load().Realtime.MQTT.Enabled = true
-		controller.Settings.Load().Realtime.MQTT.Broker = testMQTTBroker
+		cloned := conf.CloneSettings(controller.Settings.Load())
+		cloned.Realtime.MQTT.Enabled = true
+		cloned.Realtime.MQTT.Broker = testMQTTBroker
+		publishTestSettings(t, cloned)
+		controller.Settings.Store(cloned)
 
 		// Create a cancellable context
 		ctx, cancel := context.WithCancel(t.Context())
@@ -417,10 +442,13 @@ func TestErrorHandlingForIntegrations(t *testing.T) {
 		e, _, controller := setupTestEnvironment(t)
 
 		// Configure settings to enable MQTT with an invalid broker
-		controller.Settings.Load().Realtime.MQTT.Enabled = true
-		controller.Settings.Load().Realtime.MQTT.Broker = "tcp://nonexistent.broker:1883"
-		controller.Settings.Load().Realtime.MQTT.Topic = "birdnet/detections"
-		controller.Settings.Load().Main.Name = testBirdNetName
+		cloned := conf.CloneSettings(controller.Settings.Load())
+		cloned.Realtime.MQTT.Enabled = true
+		cloned.Realtime.MQTT.Broker = "tcp://nonexistent.broker:1883"
+		cloned.Realtime.MQTT.Topic = "birdnet/detections"
+		cloned.Main.Name = testBirdNetName
+		publishTestSettings(t, cloned)
+		controller.Settings.Store(cloned)
 
 		// Create request
 		req := httptest.NewRequest(http.MethodGet, "/api/v2/integrations/mqtt/status", http.NoBody)
