@@ -70,8 +70,12 @@ func ensureSessionSecret(settings *Settings) error {
 	}
 
 	if err := SaveYAMLConfig(configFile, settings); err != nil {
-		// Log the error but don't fail - the generated secret will work for this session
-		GetLogger().Warn("Failed to save generated SessionSecret to config file", logger.Error(err))
+		// Don't fail startup — the generated secret works for this session. But
+		// an unpersisted secret regenerates on every restart, silently
+		// invalidating all sessions, so log at Error and surface it on the
+		// health page via LastConfigPersistFailure.
+		GetLogger().Error("Failed to save generated SessionSecret to config file; sessions will not survive restarts until the config file is writable", logger.Error(err))
+		recordConfigPersistFailure("session_secret", configFile, err)
 		return nil
 	}
 

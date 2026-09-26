@@ -228,6 +228,18 @@ func (c *Controller) registerHealthChecks() {
 		),
 
 		// Config checks
+		checks.NewConfigPersistenceCheck(func() *checks.ConfigPersistInfo {
+			f := conf.LastConfigPersistFailure()
+			if f == nil {
+				return nil
+			}
+			return &checks.ConfigPersistInfo{
+				Operation: f.Operation,
+				Path:      f.Path,
+				Error:     f.Error,
+				At:        f.At,
+			}
+		}),
 		checks.NewToolAvailabilityCheck(func() []checks.ToolInfo {
 			s := c.currentSettings()
 			return []checks.ToolInfo{
