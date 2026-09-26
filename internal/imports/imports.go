@@ -236,6 +236,18 @@ func (e *Engine) Run(ctx context.Context, src Source, opts ImportOptions, report
 			Build()
 	}
 
+	// Iterate can return nil even when the context was cancelled: a Source
+	// implementation may finish its last batch (fn returns nil) in the same
+	// window the caller cancels ctx, racing the check inside the batch loop
+	// above. Recheck here so a cancellation right at the tail of iteration
+	// still surfaces as "cancelled" instead of a false "done"/success.
+	if err := ctx.Err(); err != nil {
+		e.log.Info("import cancelled",
+			logger.Int("inserted", stats.Inserted),
+			logger.Int("skipped", stats.Skipped))
+		return stats, err
+	}
+
 	stats.Phase = "done"
 	e.report(reporter, stats)
 

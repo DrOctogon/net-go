@@ -100,6 +100,39 @@ func TestSetSpeakerName_Validation(t *testing.T) {
 	require.Len(t, names, 1)
 }
 
+func TestSetSpeakerName_RejectsUnsafeInput(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name    string
+		input   string
+		wantErr bool
+	}{
+		{name: "control character (bell)", input: "Alice\x07", wantErr: true},
+		{name: "ansi escape sequence", input: "\x1b[31mAlice\x1b[0m", wantErr: true},
+		{name: "embedded newline", input: "Alice\nBob", wantErr: true},
+		{name: "invalid utf8", input: "Alice\xff\xfe", wantErr: true},
+		{name: "emoji is fine", input: "Alice 👩", wantErr: false},
+		{name: "normal name is fine", input: "Alice", wantErr: false},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			ds := createDatabase(t, createTestSettings(t))
+			ctx := t.Context()
+
+			err := ds.SetSpeakerName(ctx, "spk_1", tt.input)
+			if tt.wantErr {
+				require.Error(t, err)
+				return
+			}
+			require.NoError(t, err)
+		})
+	}
+}
+
 func TestGetSpeakerNames_EmptyDatabase(t *testing.T) {
 	t.Parallel()
 

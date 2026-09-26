@@ -16,6 +16,7 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"github.com/tphakala/voicewatch/internal/datastore"
+	apierrors "github.com/tphakala/voicewatch/internal/errors"
 )
 
 const (
@@ -334,6 +335,26 @@ func TestUpdateSpeakerName_DatastoreError(t *testing.T) {
 
 	require.NoError(t, err)
 	assert.Equal(t, http.StatusInternalServerError, rec.Code)
+
+	mockDS.AssertExpectations(t)
+}
+
+// TestUpdateSpeakerName_ValidationErrorIsBadRequest verifies that a
+// CategoryValidation error surfaced by the datastore (e.g. the control-char /
+// invalid-UTF-8 sanitization in SetSpeakerName) maps to 400, not the generic
+// 500 used for other datastore failures.
+func TestUpdateSpeakerName_ValidationErrorIsBadRequest(t *testing.T) {
+	e, mockDS, controller := setupTestEnvironment(t)
+	validationErr := apierrors.Newf("invalid name: control characters").
+		Component("datastore").
+		Category(apierrors.CategoryValidation).
+		Build()
+	mockDS.On("SetSpeakerName", mock.Anything, testRosterSpeakerID, testRosterName).Return(validationErr)
+
+	rec, err := callUpdateSpeakerName(t, e, controller, testRosterSpeakerID, testRosterNameBody)
+
+	require.NoError(t, err)
+	assert.Equal(t, http.StatusBadRequest, rec.Code)
 
 	mockDS.AssertExpectations(t)
 }

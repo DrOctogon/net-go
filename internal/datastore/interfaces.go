@@ -187,7 +187,6 @@ type Interface interface {
 	GetSpeciesSummaryData(ctx context.Context, startDate, endDate string) ([]SpeciesSummaryData, error)
 	GetHourlyAnalyticsData(ctx context.Context, date string, species string) ([]HourlyAnalyticsData, error)
 	GetDailyAnalyticsData(ctx context.Context, startDate, endDate string, species string) ([]DailyAnalyticsData, error)
-	GetDetectionTrends(ctx context.Context, period string, limit int) ([]DailyAnalyticsData, error)
 	GetHourlyDistribution(ctx context.Context, startDate, endDate string, species string) ([]HourlyDistributionData, error)
 	GetNewSpeciesDetections(ctx context.Context, startDate, endDate string, limit, offset int) ([]NewSpeciesData, error)
 	GetSpeciesFirstDetectionInPeriod(ctx context.Context, startDate, endDate string, limit, offset int) ([]NewSpeciesData, error)
@@ -258,10 +257,10 @@ type Interface interface {
 	GetActiveNotificationHistory(ctx context.Context, after time.Time) ([]NotificationHistory, error)
 	DeleteExpiredNotificationHistory(ctx context.Context, before time.Time) (int64, error) // Returns count deleted
 	// Speaker roster methods (household speaker naming)
-	GetSpeakerNames(ctx context.Context) ([]SpeakerName, error)         // List user-assigned speaker names
-	GetSpeakerRoster(ctx context.Context) ([]SpeakerRosterEntry, error) // Full roster: named + unnamed speakers with detection counts
+	GetSpeakerNames(ctx context.Context) ([]SpeakerName, error)                                             // List user-assigned speaker names
+	GetSpeakerRoster(ctx context.Context) ([]SpeakerRosterEntry, error)                                     // Full roster: named + unnamed speakers with detection counts
 	GetSpeakerDailyActivity(ctx context.Context, startDate, endDate string) ([]SpeakerDailyActivity, error) // Per-speaker daily detection counts, optional inclusive date range
-	SetSpeakerName(ctx context.Context, speakerID, name string) error   // Upsert; empty name clears the mapping
+	SetSpeakerName(ctx context.Context, speakerID, name string) error                                       // Upsert; empty name clears the mapping
 	// Database stats method for runtime statistics
 	GetDatabaseStats(ctx context.Context) (*DatabaseStats, error)
 	// PingWithLatency executes a trivial query (SELECT 1) and returns the round-trip time.

@@ -8,6 +8,8 @@ import (
 	"sort"
 	"strings"
 	"time"
+	"unicode"
+	"unicode/utf8"
 
 	"github.com/tphakala/voicewatch/internal/errors"
 	"gorm.io/gorm/clause"
@@ -137,6 +139,14 @@ func (ds *DataStore) SetSpeakerName(ctx context.Context, speakerID, name string)
 	name = strings.TrimSpace(name)
 	if len(name) > MaxSpeakerNameLength {
 		return validationError("name exceeds maximum length", "name", len(name))
+	}
+	if name != "" {
+		if !utf8.ValidString(name) {
+			return validationError("name is not valid UTF-8", "name", name)
+		}
+		if strings.ContainsFunc(name, unicode.IsControl) {
+			return validationError("name contains non-printable control characters", "name", name)
+		}
 	}
 
 	if name == "" {
