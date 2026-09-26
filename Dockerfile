@@ -102,7 +102,7 @@ RUN --mount=type=cache,target=/go/pkg/mod,uid=10001,gid=10001 \
     BUILD_VERSION="${BUILD_VERSION}" SENTRY_DSN="${SENTRY_DSN}" PROJECT_NAME="${PROJECT_NAME}" PROJECT_REPO_URL="${PROJECT_REPO_URL}" PROJECT_COMMUNITY_URL="${PROJECT_COMMUNITY_URL}" DOCKER_LIB_DIR=/home/dev-user/lib task noembed_${TARGET} OPENVINO=false
 
 # Create final image using a multi-platform base image
-FROM --platform=$TARGETPLATFORM debian:trixie-slim
+FROM debian:trixie-slim
 
 # The Silero VAD model ships embedded in the binary (see
 # internal/classifier/humanvoice/embed.go), written out at runtime — there are

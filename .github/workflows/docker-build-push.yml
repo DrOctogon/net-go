@@ -104,7 +104,13 @@ jobs:
           exit 1
 
       - name: Login to Docker Hub
-        if: inputs.push-to-dockerhub
+        # Upstream hardcodes the tphakala Docker Hub namespace below. Forks have
+        # no credentials for that account, so only attempt this when the fork
+        # owner has explicitly opted in by setting the DOCKERHUB_REPO repository
+        # variable (Settings -> Secrets and variables -> Actions -> Variables).
+        # Default is to skip, so forks stop attempting pushes to upstream's
+        # namespace.
+        if: inputs.push-to-dockerhub && vars.DOCKERHUB_REPO != ''
         continue-on-error: true
         id: dockerhub-login
         run: |
@@ -191,6 +197,9 @@ jobs:
             BUILD_VERSION=${{ inputs.version }}
             SENTRY_DSN=${{ secrets.SENTRY_DSN }}
             BUILDKIT_INLINE_CACHE=1
+            PROJECT_NAME=VoiceWatch
+            PROJECT_REPO_URL=https://github.com/${{ github.repository }}
+            PROJECT_COMMUNITY_URL=https://github.com/${{ github.repository }}/discussions
           tags: ${{ steps.tags.outputs.tags }}
           cache-from: |
             type=gha
@@ -249,7 +258,8 @@ jobs:
           exit 1
 
       - name: Login to Docker Hub
-        if: inputs.push-to-dockerhub
+        # See the matching gate + comment in the build job above.
+        if: inputs.push-to-dockerhub && vars.DOCKERHUB_REPO != ''
         continue-on-error: true
         id: dockerhub-login
         run: |
