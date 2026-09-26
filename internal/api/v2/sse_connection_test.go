@@ -25,6 +25,7 @@ import (
 	"sync"
 	"sync/atomic"
 	"testing"
+	"testing/synctest"
 	"time"
 
 	"github.com/labstack/echo/v4"
@@ -385,6 +386,54 @@ func TestSSERateLimiting(t *testing.T) {
 	client.CloseIdleConnections()
 
 	// Cleanup is immediate with DisableKeepAlives=true
+}
+
+// TestSSEEventLoopMulti_DeliversWithoutSleepTick proves the genuinely blocking
+// select in runSSEEventLoopMulti delivers a message the instant it is sent,
+// rather than waiting for the old default-branch poll (which slept for
+// sseEventLoopSleep == 10ms between non-blocking channel checks). synctest's
+// fake clock makes the absence of that sleep observable: synctest.Wait()
+// blocks until every goroutine in the bubble is durably blocked again, and it
+// never advances fake time to satisfy a pending timer. If the loop still
+// needed a sleep to notice the message, this test would hang (and fail on
+// timeout) rather than fake-advancing past it - it doesn't hang, because the
+// channel receive is now a real select case.
+func TestSSEEventLoopMulti_DeliversWithoutSleepTick(t *testing.T) {
+	synctest.Test(t, func(t *testing.T) {
+		e := echo.New()
+		rec := httptest.NewRecorder()
+		req := httptest.NewRequest(http.MethodGet, "/test", http.NoBody)
+		ctx := e.NewContext(req, rec)
+
+		c := &Controller{}
+		client := &SSEClient{
+			Channel:     make(chan SSEDetectionData, 1),
+			PendingChan: make(chan any, 1),
+			Done:        make(chan struct{}, 1),
+		}
+
+		loopErr := make(chan error, 1)
+		go func() {
+			loopErr <- c.runSSEEventLoopMulti(ctx, client, "test-client", detectionStreamEndpoint)
+		}()
+
+		// Let the loop goroutine start and park on its blocking select.
+		synctest.Wait()
+
+		client.Channel <- SSEDetectionData{ID: 42, EventType: "new_detection"}
+
+		// Waits for the loop to go idle again. No real (or fake) time needs to
+		// pass for the send above to be processed - if it did, this bubble
+		// would deadlock instead of returning, since nothing else advances the
+		// fake clock.
+		synctest.Wait()
+
+		assert.Contains(t, rec.Body.String(), `"id":42`,
+			"message should be delivered as soon as it is sent, with no poll delay")
+
+		close(client.Done)
+		require.NoError(t, <-loopErr)
+	})
 }
 
 // setupSSETestServer creates a test server with SSE endpoints configured
