@@ -105,6 +105,47 @@ func TestSeedDefaultRules_AlreadySeeded(t *testing.T) {
 	assert.Len(t, repo.rules, len(defaults))
 }
 
+// TestSeedDefaultRules_RenamedBuiltInMatchedByNameKey guards against
+// regressing to name-only matching: a built-in rule seeded under an old
+// display Name (but already carrying its current NameKey) must be recognized
+// as existing, not duplicated, if the default's Name is later changed.
+func TestSeedDefaultRules_RenamedBuiltInMatchedByNameKey(t *testing.T) {
+	defaults := DefaultRules()
+	require.NotEmpty(t, defaults)
+	target := defaults[0]
+
+	const oldName = "Old Display Name (renamed since)"
+	existing := entities.AlertRule{
+		ID:              1,
+		Name:            oldName,
+		NameKey:         target.NameKey,
+		BuiltIn:         true,
+		Enabled:         target.Enabled,
+		ObjectType:      target.ObjectType,
+		TriggerType:     target.TriggerType,
+		EventName:       target.EventName,
+		CooldownSec:     target.CooldownSec,
+		EscalationSteps: target.EscalationSteps,
+	}
+	repo := &initMockRepo{rules: []entities.AlertRule{existing}}
+
+	err := seedDefaultRules(t.Context(), repo, initTestLogger())
+	require.NoError(t, err)
+
+	// No duplicate: exactly one rule per default NameKey.
+	assert.Len(t, repo.rules, len(defaults), "renamed built-in should be recognized by NameKey, not duplicated")
+
+	found := false
+	for i := range repo.rules {
+		if repo.rules[i].NameKey != target.NameKey {
+			continue
+		}
+		found = true
+		assert.Equal(t, oldName, repo.rules[i].Name, "existing row identified by NameKey must survive unrenamed")
+	}
+	assert.True(t, found, "rule matching target NameKey should still be present")
+}
+
 func TestInitialize_SeedsAndCreatesEngine(t *testing.T) {
 	repo := &initMockRepo{}
 	bus := NewAlertEventBus(nil)

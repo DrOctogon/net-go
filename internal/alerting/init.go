@@ -356,27 +356,44 @@ func Initialize(
 	return engine, nil
 }
 
-// seedDefaultRules ensures all built-in default rules exist. It checks by name
-// so partial seeds from previous runs self-heal on restart.
+// seedDefaultRules ensures all built-in default rules exist. Existence is
+// checked by the stable NameKey when a default defines one, falling back to
+// Name otherwise (and for rows seeded before NameKey existed). Matching by
+// Name alone would treat a renamed built-in as missing and create a
+// duplicate instead of recognizing the existing row.
 func seedDefaultRules(ctx context.Context, repo repository.AlertRuleRepository, log logger.Logger) error {
 	existing, err := repo.ListRules(ctx, repository.AlertRuleFilter{})
 	if err != nil {
 		return err
 	}
 
-	// Build set of existing rule names for fast lookup
-	existingNames := make(map[string]struct{}, len(existing))
+	// Build lookup sets: by NameKey (stable identity, empty for rows seeded
+	// before NameKey existed) and by Name (fallback for those legacy rows,
+	// and for any default that has no NameKey of its own).
+	existingByNameKey := make(map[string]struct{}, len(existing))
+	existingByName := make(map[string]struct{}, len(existing))
 	for i := range existing {
-		existingNames[existing[i].Name] = struct{}{}
+		if existing[i].NameKey != "" {
+			existingByNameKey[existing[i].NameKey] = struct{}{}
+		}
+		existingByName[existing[i].Name] = struct{}{}
 	}
 
 	defaults := DefaultRules()
 	var created int
 	for i := range defaults {
-		if _, exists := existingNames[defaults[i].Name]; exists {
+		d := &defaults[i]
+		var exists bool
+		if d.NameKey != "" {
+			_, exists = existingByNameKey[d.NameKey]
+		}
+		if !exists {
+			_, exists = existingByName[d.Name]
+		}
+		if exists {
 			continue
 		}
-		if err := repo.CreateRule(ctx, &defaults[i]); err != nil {
+		if err := repo.CreateRule(ctx, d); err != nil {
 			return err
 		}
 		created++

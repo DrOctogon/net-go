@@ -351,12 +351,18 @@ func (job *BackupJob) setDownloadURL(url string) {
 // Controller methods for backup endpoints
 
 // backupJobManager is the singleton job manager (initialized in initBackupRoutes).
-var backupJobManager *BackupJobManager
+var (
+	backupJobManager     *BackupJobManager
+	backupJobManagerOnce sync.Once
+)
 
 // initBackupRoutes initializes backup-related routes.
 func (c *Controller) initBackupRoutes() {
-	// Initialize job manager if not already done
-	if backupJobManager == nil {
+	// Initialize job manager exactly once. sync.Once (rather than a bare
+	// nil check) guards against concurrent route initializations racing to
+	// construct the singleton — e.g. multiple Controllers created in
+	// parallel tests, or a hot-reload re-registering routes.
+	backupJobManagerOnce.Do(func() {
 		backupJobManager = NewBackupJobManager()
 		// Clean up any orphaned temp files from previous runs.
 		// Scan database directories where backup files are now written,
@@ -370,7 +376,7 @@ func (c *Controller) initBackupRoutes() {
 			dbDirs = append(dbDirs, filepath.Dir(c.V2Manager.Path()))
 		}
 		backupJobManager.CleanupOrphanedTempFiles(dbDirs...)
-	}
+	})
 
 	// Create backup API group under system/database
 	backupGroup := c.Group.Group("/system/database/backup/jobs")
