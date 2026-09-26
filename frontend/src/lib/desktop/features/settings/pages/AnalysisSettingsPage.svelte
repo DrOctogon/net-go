@@ -1136,6 +1136,18 @@
           onchange={value => updateTranscription('keywordCaseSensitive', value)}
         />
       </div>
+
+      <!-- Transcript-in-alerts opt-in (privacy: default off, verbatim speech
+           leaves the device via external alert channels when enabled) -->
+      <div class="mt-4">
+        <Checkbox
+          checked={transcription.includeTranscriptInAlerts}
+          label={t('analysis.transcription.includeTranscriptInAlerts.label')}
+          helpText={t('analysis.transcription.includeTranscriptInAlerts.helpText')}
+          disabled={store.isLoading || store.isSaving}
+          onchange={value => updateTranscription('includeTranscriptInAlerts', value)}
+        />
+      </div>
     </SettingsSection>
   </div>
 {/snippet}

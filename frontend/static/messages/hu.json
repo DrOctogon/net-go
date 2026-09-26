@@ -4660,6 +4660,10 @@
       "caseSensitive": {
         "label": "Case-Sensitive Matching",
         "helpText": "When enabled, keyword matching distinguishes uppercase from lowercase letters (e.g. \"Fire\" will not match \"fire\")."
+      },
+      "includeTranscriptInAlerts": {
+        "label": "Átirat hozzáadása a riasztásokhoz",
+        "helpText": "Ha engedélyezve van, a külső csatornákra (MQTT, push, webhookok) küldött kulcsszó-riasztások tartalmazzák a szó szerinti átiratot. Alapértelmezésben kikapcsolva: az átiratok rögzített beszédet tartalmaznak, és bekapcsolás esetén elhagyják ezt az eszközt."
       }
     }
   },

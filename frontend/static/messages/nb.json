@@ -4660,6 +4660,10 @@
       "caseSensitive": {
         "label": "Case-Sensitive Matching",
         "helpText": "When enabled, keyword matching distinguishes uppercase from lowercase letters (e.g. \"Fire\" will not match \"fire\")."
+      },
+      "includeTranscriptInAlerts": {
+        "label": "Inkluder transkripsjon i varsler",
+        "helpText": "Når aktivert, inneholder nøkkelordvarsler sendt til eksterne kanaler (MQTT, push, webhooks) den ordrette transkripsjonen. Av som standard: transkripsjoner inneholder innspilt tale og forlater denne enheten når de inkluderes."
       }
     }
   },
