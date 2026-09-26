@@ -23,6 +23,14 @@ type SpeakerRosterEntry struct {
 	Detections int64
 }
 
+// SpeakerDailyActivity is one row of per-speaker presence analytics:
+// how many detections a voice-print speaker cluster produced on one day.
+type SpeakerDailyActivity struct {
+	SpeakerID string
+	Date      string
+	Count     int
+}
+
 // speakerNamesUpdatedAtColumn is the updated_at column name used in the
 // upsert's conflict assignment list.
 const speakerNamesUpdatedAtColumn = "updated_at"
@@ -81,6 +89,41 @@ func (ds *DataStore) GetSpeakerRoster(ctx context.Context) ([]SpeakerRosterEntry
 
 	sort.Slice(roster, func(a, b int) bool { return roster[a].SpeakerID < roster[b].SpeakerID })
 	return roster, nil
+}
+
+// GetSpeakerDailyActivity returns per-speaker daily detection counts,
+// optionally bounded by an inclusive [startDate, endDate] range (YYYY-MM-DD
+// formatted strings; empty means unbounded on that side). Modeled on
+// GetDailyAnalyticsData: parameterized date filters, grouped by speaker and
+// day, ordered by date then speaker id.
+func (ds *DataStore) GetSpeakerDailyActivity(ctx context.Context, startDate, endDate string) ([]SpeakerDailyActivity, error) {
+	var activity []SpeakerDailyActivity
+
+	query := ds.DB.WithContext(ctx).
+		Model(&Note{}).
+		Select("speaker_id, date, COUNT(*) as count").
+		Where("speaker_id != ''").
+		Group("speaker_id, date").
+		Order("date, speaker_id")
+
+	// Apply date range filter (same idiom as GetDailyAnalyticsData).
+	switch {
+	case startDate != "" && endDate != "":
+		query = query.Where("date >= ? AND date <= ?", startDate, endDate)
+	case startDate != "":
+		query = query.Where("date >= ?", startDate)
+	case endDate != "":
+		query = query.Where("date <= ?", endDate)
+	}
+
+	if err := query.Scan(&activity).Error; err != nil {
+		return nil, dbError(err, "get_speaker_daily_activity", errors.PriorityMedium,
+			"table", "notes",
+			"action", "count_speaker_daily_activity",
+			"start_date", startDate,
+			"end_date", endDate)
+	}
+	return activity, nil
 }
 
 // SetSpeakerName upserts the display name for a speaker cluster id.

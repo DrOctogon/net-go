@@ -3935,7 +3935,12 @@
       "unnamed": "onbenoemd",
       "empty": "Nog geen sprekers. Sprekers verschijnen hier zodra detecties aan een stem worden gekoppeld.",
       "loadFailed": "Sprekersoverzicht laden mislukt",
-      "loginRequired": "Log in om het sprekersoverzicht te bekijken en te beheren."
+      "loginRequired": "Log in om het sprekersoverzicht te bekijken en te beheren.",
+      "activityTab": "Activiteit",
+      "activityDescription": "Dagelijkse detectieaantallen per spreker.",
+      "activityEmpty": "Nog geen sprekeractiviteit. Dagelijkse aantallen verschijnen hier zodra detecties aan stemmen zijn toegewezen.",
+      "activityLoadFailed": "Kan sprekeractiviteit niet laden",
+      "activityDateColumn": "Datum"
     }
   },
   "auth": {

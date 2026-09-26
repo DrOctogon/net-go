@@ -3935,7 +3935,12 @@
       "unnamed": "névtelen",
       "empty": "Még nincsenek beszélők. A beszélők itt jelennek meg, amint az észlelések egy hanghoz lesznek rendelve.",
       "loadFailed": "Nem sikerült betölteni a beszélők listáját",
-      "loginRequired": "Jelentkezzen be a beszélők listájának megtekintéséhez és kezeléséhez."
+      "loginRequired": "Jelentkezzen be a beszélők listájának megtekintéséhez és kezeléséhez.",
+      "activityTab": "Aktivitás",
+      "activityDescription": "Napi észlelésszámok beszélőnként.",
+      "activityEmpty": "Még nincs beszélőaktivitás. A napi számok itt jelennek meg, amint az észlelések hangokhoz lesznek rendelve.",
+      "activityLoadFailed": "Nem sikerült betölteni a beszélők aktivitását",
+      "activityDateColumn": "Dátum"
     }
   },
   "auth": {

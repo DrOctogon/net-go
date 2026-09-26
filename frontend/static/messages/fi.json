@@ -3935,7 +3935,12 @@
       "unnamed": "nimeämätön",
       "empty": "Ei vielä puhujia. Puhujat näkyvät täällä, kun havainnot yhdistetään ääneen.",
       "loadFailed": "Puhujaluettelon lataaminen epäonnistui",
-      "loginRequired": "Kirjaudu sisään nähdäksesi ja hallitaksesi puhujaluetteloa."
+      "loginRequired": "Kirjaudu sisään nähdäksesi ja hallitaksesi puhujaluetteloa.",
+      "activityTab": "Aktiivisuus",
+      "activityDescription": "Päivittäiset havaintomäärät kullekin puhujalle.",
+      "activityEmpty": "Ei vielä puhuja-aktiivisuutta. Päivittäiset määrät näkyvät täällä, kun havainnot on liitetty ääniin.",
+      "activityLoadFailed": "Puhuja-aktiivisuuden lataaminen epäonnistui",
+      "activityDateColumn": "Päivämäärä"
     }
   },
   "auth": {

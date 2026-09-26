@@ -3756,6 +3756,66 @@ func (_c *MockInterface_GetReviewsBatch_Call) RunAndReturn(run func(uint, int) (
 	return _c
 }
 
+// GetSpeakerDailyActivity provides a mock function with given fields: ctx, startDate, endDate
+func (_m *MockInterface) GetSpeakerDailyActivity(ctx context.Context, startDate string, endDate string) ([]datastore.SpeakerDailyActivity, error) {
+	ret := _m.Called(ctx, startDate, endDate)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetSpeakerDailyActivity")
+	}
+
+	var r0 []datastore.SpeakerDailyActivity
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, string, string) ([]datastore.SpeakerDailyActivity, error)); ok {
+		return rf(ctx, startDate, endDate)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, string, string) []datastore.SpeakerDailyActivity); ok {
+		r0 = rf(ctx, startDate, endDate)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]datastore.SpeakerDailyActivity)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, string, string) error); ok {
+		r1 = rf(ctx, startDate, endDate)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockInterface_GetSpeakerDailyActivity_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetSpeakerDailyActivity'
+type MockInterface_GetSpeakerDailyActivity_Call struct {
+	*mock.Call
+}
+
+// GetSpeakerDailyActivity is a helper method to define mock.On call
+//   - ctx context.Context
+//   - startDate string
+//   - endDate string
+func (_e *MockInterface_Expecter) GetSpeakerDailyActivity(ctx interface{}, startDate interface{}, endDate interface{}) *MockInterface_GetSpeakerDailyActivity_Call {
+	return &MockInterface_GetSpeakerDailyActivity_Call{Call: _e.mock.On("GetSpeakerDailyActivity", ctx, startDate, endDate)}
+}
+
+func (_c *MockInterface_GetSpeakerDailyActivity_Call) Run(run func(ctx context.Context, startDate string, endDate string)) *MockInterface_GetSpeakerDailyActivity_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(string), args[2].(string))
+	})
+	return _c
+}
+
+func (_c *MockInterface_GetSpeakerDailyActivity_Call) Return(_a0 []datastore.SpeakerDailyActivity, _a1 error) *MockInterface_GetSpeakerDailyActivity_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockInterface_GetSpeakerDailyActivity_Call) RunAndReturn(run func(context.Context, string, string) ([]datastore.SpeakerDailyActivity, error)) *MockInterface_GetSpeakerDailyActivity_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // GetSpeakerNames provides a mock function with given fields: ctx
 func (_m *MockInterface) GetSpeakerNames(ctx context.Context) ([]datastore.SpeakerName, error) {
 	ret := _m.Called(ctx)

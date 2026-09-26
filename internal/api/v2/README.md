@@ -142,6 +142,7 @@ Lightweight connectivity check. Returns a minimal response with no database quer
 | Method | Route                | Handler             | Auth | Description                                                          |
 | ------ | -------------------- | ------------------- | ---- | -------------------------------------------------------------------- |
 | GET    | `/speakers`          | `GetSpeakers`       | ✅   | Full speaker roster (named + unnamed): `[{speakerId, name, detections}]`; `name` is `""` for unnamed speakers |
+| GET    | `/speakers/activity` | `GetSpeakerActivity`| ✅   | Per-speaker daily detection counts: `[{speakerId, date, count}]`, ordered by date then speaker id. Optional `start`/`end` (YYYY-MM-DD, inclusive); defaults to the last 30 days; range capped at 366 days. Names join client-side from `/speakers` |
 | PUT    | `/speakers/:id/name` | `UpdateSpeakerName` | ✅   | Set display name for a `spk_<n>` cluster; empty name clears mapping   |
 
 ### Integrations (`integrations.go`)

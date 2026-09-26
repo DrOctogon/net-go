@@ -3935,7 +3935,12 @@
       "unnamed": "nienazwany",
       "empty": "Brak mówców. Mówcy pojawią się tutaj, gdy detekcje zostaną przypisane do głosu.",
       "loadFailed": "Nie udało się wczytać listy mówców",
-      "loginRequired": "Zaloguj się, aby wyświetlić listę mówców i nią zarządzać."
+      "loginRequired": "Zaloguj się, aby wyświetlić listę mówców i nią zarządzać.",
+      "activityTab": "Aktywność",
+      "activityDescription": "Dzienna liczba detekcji dla każdego mówcy.",
+      "activityEmpty": "Brak aktywności mówców. Dzienne liczby pojawią się tutaj, gdy detekcje zostaną przypisane do głosów.",
+      "activityLoadFailed": "Nie udało się wczytać aktywności mówców",
+      "activityDateColumn": "Data"
     }
   },
   "auth": {

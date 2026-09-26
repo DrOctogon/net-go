@@ -9,6 +9,7 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
@@ -219,6 +220,110 @@ func TestUpdateSpeakerName_EmptyNameClearsMapping(t *testing.T) {
 			mockDS.AssertExpectations(t)
 		})
 	}
+}
+
+// callGetSpeakerActivity invokes the GetSpeakerActivity handler with the
+// given query string (e.g. "start=2024-01-01&end=2024-01-31"), returning the
+// recorder and any handler error.
+func callGetSpeakerActivity(t *testing.T, e *echo.Echo, controller *Controller, query string) (*httptest.ResponseRecorder, error) {
+	t.Helper()
+	target := "/api/v2/speakers/activity"
+	if query != "" {
+		target += "?" + query
+	}
+	req := httptest.NewRequest(http.MethodGet, target, http.NoBody)
+	rec := httptest.NewRecorder()
+	c := e.NewContext(req, rec)
+	return rec, controller.GetSpeakerActivity(c)
+}
+
+func TestGetSpeakerActivity_DefaultRangeEmpty(t *testing.T) {
+	e, mockDS, controller := setupTestEnvironment(t)
+	// No params: last-30-days window, both bounds set and 29 days apart.
+	mockDS.On("GetSpeakerDailyActivity", mock.Anything,
+		time.Now().AddDate(0, 0, -29).Format(time.DateOnly),
+		time.Now().Format(time.DateOnly)).
+		Return([]datastore.SpeakerDailyActivity{}, nil)
+
+	rec, err := callGetSpeakerActivity(t, e, controller, "")
+
+	require.NoError(t, err)
+	assert.Equal(t, http.StatusOK, rec.Code)
+	// Empty activity must serialize as [], not null.
+	assert.JSONEq(t, "[]", rec.Body.String())
+
+	mockDS.AssertExpectations(t)
+}
+
+// testActivityStart / testActivityEnd bound the explicit range used by the
+// speaker activity happy-path test.
+const (
+	testActivityStart = "2030-01-01"
+	testActivityEnd   = "2030-01-31"
+)
+
+func TestGetSpeakerActivity_ExplicitRangeHappyPath(t *testing.T) {
+	e, mockDS, controller := setupTestEnvironment(t)
+	mockDS.On("GetSpeakerDailyActivity", mock.Anything, testActivityStart, testActivityEnd).
+		Return([]datastore.SpeakerDailyActivity{
+			{SpeakerID: testRosterSpeakerID, Date: testActivityStart, Count: 5},
+			{SpeakerID: "spk_5", Date: "2030-01-02", Count: 2},
+		}, nil)
+
+	rec, err := callGetSpeakerActivity(t, e, controller, "start="+testActivityStart+"&end="+testActivityEnd)
+
+	require.NoError(t, err)
+	assert.Equal(t, http.StatusOK, rec.Code)
+
+	var out []SpeakerDailyActivityEntry
+	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &out))
+	assert.Equal(t, []SpeakerDailyActivityEntry{
+		{SpeakerID: testRosterSpeakerID, Date: testActivityStart, Count: 5},
+		{SpeakerID: "spk_5", Date: "2030-01-02", Count: 2},
+	}, out)
+
+	mockDS.AssertExpectations(t)
+}
+
+func TestGetSpeakerActivity_InvalidParams(t *testing.T) {
+	testCases := []struct {
+		name  string
+		query string
+	}{
+		{name: "garbage start", query: "start=notadate"},
+		{name: "garbage end", query: "end=2024-99-99"},
+		{name: "sql injection start", query: "start=2024-01-01'--"},
+		{name: "start after end", query: "start=2024-02-01&end=2024-01-01"},
+		{name: "range too large", query: "start=2020-01-01&end=2024-01-01"},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			e, mockDS, controller := setupTestEnvironment(t)
+
+			rec, err := callGetSpeakerActivity(t, e, controller, tc.query)
+
+			require.NoError(t, err)
+			assert.Equal(t, http.StatusBadRequest, rec.Code)
+
+			// Validation must reject before any datastore access.
+			mockDS.AssertNotCalled(t, "GetSpeakerDailyActivity", mock.Anything, mock.Anything, mock.Anything)
+			mockDS.AssertExpectations(t)
+		})
+	}
+}
+
+func TestGetSpeakerActivity_DatastoreError(t *testing.T) {
+	e, mockDS, controller := setupTestEnvironment(t)
+	mockDS.On("GetSpeakerDailyActivity", mock.Anything, mock.Anything, mock.Anything).
+		Return(nil, errors.New("db down"))
+
+	rec, err := callGetSpeakerActivity(t, e, controller, "")
+
+	require.NoError(t, err)
+	assert.Equal(t, http.StatusInternalServerError, rec.Code)
+
+	mockDS.AssertExpectations(t)
 }
 
 func TestUpdateSpeakerName_DatastoreError(t *testing.T) {

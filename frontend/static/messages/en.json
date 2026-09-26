@@ -3935,7 +3935,12 @@
       "unnamed": "unnamed",
       "empty": "No speakers yet. Speakers appear here once detections are assigned to a voice.",
       "loadFailed": "Failed to load speaker roster",
-      "loginRequired": "Sign in to view and manage the speaker roster."
+      "loginRequired": "Sign in to view and manage the speaker roster.",
+      "activityTab": "Activity",
+      "activityDescription": "Daily detection counts for each speaker.",
+      "activityEmpty": "No speaker activity yet. Daily counts appear here once detections are assigned to voices.",
+      "activityLoadFailed": "Failed to load speaker activity",
+      "activityDateColumn": "Date"
     }
   },
   "auth": {

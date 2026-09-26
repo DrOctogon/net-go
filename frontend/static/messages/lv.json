@@ -3935,7 +3935,12 @@
       "unnamed": "nenosaukts",
       "empty": "Pagaidām nav runātāju. Runātāji šeit parādīsies, kad noteikšanas gadījumi tiks piesaistīti balsij.",
       "loadFailed": "Neizdevās ielādēt runātāju sarakstu",
-      "loginRequired": "Piesakieties, lai skatītu un pārvaldītu runātāju sarakstu."
+      "loginRequired": "Piesakieties, lai skatītu un pārvaldītu runātāju sarakstu.",
+      "activityTab": "Aktivitāte",
+      "activityDescription": "Ikdienas noteikšanu skaits katram runātājam.",
+      "activityEmpty": "Pagaidām nav runātāju aktivitātes. Ikdienas skaits šeit parādīsies, tiklīdz noteikšanas tiks piesaistītas balsīm.",
+      "activityLoadFailed": "Neizdevās ielādēt runātāju aktivitāti",
+      "activityDateColumn": "Datums"
     }
   },
   "auth": {

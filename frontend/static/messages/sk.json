@@ -3935,7 +3935,12 @@
       "unnamed": "nepomenovaný",
       "empty": "Zatiaľ žiadni hovoriaci. Hovoriaci sa tu zobrazia, keď budú detekcie priradené k hlasu.",
       "loadFailed": "Nepodarilo sa načítať zoznam hovoriacich",
-      "loginRequired": "Prihláste sa na zobrazenie a správu zoznamu hovoriacich."
+      "loginRequired": "Prihláste sa na zobrazenie a správu zoznamu hovoriacich.",
+      "activityTab": "Aktivita",
+      "activityDescription": "Denné počty detekcií pre každého hovoriaceho.",
+      "activityEmpty": "Zatiaľ žiadna aktivita hovoriacich. Denné počty sa tu zobrazia, keď budú detekcie priradené hlasom.",
+      "activityLoadFailed": "Nepodarilo sa načítať aktivitu hovoriacich",
+      "activityDateColumn": "Dátum"
     }
   },
   "auth": {

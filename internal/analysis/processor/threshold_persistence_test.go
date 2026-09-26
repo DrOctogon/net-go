@@ -447,6 +447,10 @@ func (m *MockDatastore) GetSpeakerRoster(ctx context.Context) ([]datastore.Speak
 	return nil, nil
 }
 
+func (m *MockDatastore) GetSpeakerDailyActivity(ctx context.Context, startDate, endDate string) ([]datastore.SpeakerDailyActivity, error) {
+	return nil, nil
+}
+
 // createTestProcessor creates a processor with mock datastore for testing
 func createTestProcessor() *Processor {
 	settings := &conf.Settings{}

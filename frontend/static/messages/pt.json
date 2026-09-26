@@ -3935,7 +3935,12 @@
       "unnamed": "sem nome",
       "empty": "Ainda não há falantes. Os falantes aparecerão aqui quando as detecções forem atribuídas a uma voz.",
       "loadFailed": "Falha ao carregar a lista de falantes",
-      "loginRequired": "Inicie sessão para ver e gerir a lista de falantes."
+      "loginRequired": "Inicie sessão para ver e gerir a lista de falantes.",
+      "activityTab": "Atividade",
+      "activityDescription": "Contagens diárias de deteções por orador.",
+      "activityEmpty": "Ainda não há atividade de oradores. As contagens diárias aparecerão aqui quando as deteções forem atribuídas a vozes.",
+      "activityLoadFailed": "Falha ao carregar a atividade dos oradores",
+      "activityDateColumn": "Data"
     }
   },
   "auth": {

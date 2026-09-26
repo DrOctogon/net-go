@@ -1869,6 +1869,13 @@ func (ds *Datastore) GetSpeakerRoster(_ context.Context) ([]datastore.SpeakerRos
 	return []datastore.SpeakerRosterEntry{}, nil
 }
 
+// GetSpeakerDailyActivity returns per-speaker daily detection counts. Voice
+// prints are a legacy-schema feature (mirrors GetSpeakerRoster), so v2-only
+// mode always has no speaker activity.
+func (ds *Datastore) GetSpeakerDailyActivity(_ context.Context, _, _ string) ([]datastore.SpeakerDailyActivity, error) {
+	return []datastore.SpeakerDailyActivity{}, nil
+}
+
 // SetSpeakerName is not supported in v2-only mode (no voice-print speaker
 // clusters exist in the v2 schema).
 func (ds *Datastore) SetSpeakerName(_ context.Context, _, _ string) error {

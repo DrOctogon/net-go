@@ -113,9 +113,16 @@ func TestGetSpeakerNames_EmptyDatabase(t *testing.T) {
 // seedSpeakerNote saves a minimal detection note carrying the given speaker id.
 func seedSpeakerNote(t *testing.T, ds Interface, speakerID string) {
 	t.Helper()
+	seedSpeakerNoteOnDate(t, ds, speakerID, "2024-01-15")
+}
+
+// seedSpeakerNoteOnDate saves a minimal detection note for a speaker on a
+// specific date (YYYY-MM-DD).
+func seedSpeakerNoteOnDate(t *testing.T, ds Interface, speakerID, date string) {
+	t.Helper()
 	note := Note{
 		SourceNode:     "test-node",
-		Date:           "2024-01-15",
+		Date:           date,
 		Time:           "14:30:45",
 		ScientificName: "Human vocal",
 		CommonName:     "Human vocal",
@@ -148,6 +155,83 @@ func TestGetSpeakerRoster_MergesCountsAndNames(t *testing.T) {
 		{SpeakerID: "spk_2", Name: "", Detections: 1},
 		{SpeakerID: "spk_9", Name: "Bob", Detections: 0},
 	}, roster)
+}
+
+// Dates used by the speaker daily-activity tests.
+const (
+	activityDayA = "2030-01-10"
+	activityDayB = "2030-01-15"
+	activityDayC = "2030-01-20"
+)
+
+func TestGetSpeakerDailyActivity_GroupsBySpeakerAndDate(t *testing.T) {
+	t.Parallel()
+
+	ds := createDatabase(t, createTestSettings(t))
+	ctx := t.Context()
+
+	// spk_1: 2 detections on day B, 1 on day C. spk_2: 1 on day B.
+	// A note with no speaker id must not appear in the activity.
+	seedSpeakerNoteOnDate(t, ds, "spk_1", activityDayB)
+	seedSpeakerNoteOnDate(t, ds, "spk_1", activityDayB)
+	seedSpeakerNoteOnDate(t, ds, "spk_1", activityDayC)
+	seedSpeakerNoteOnDate(t, ds, "spk_2", activityDayB)
+	seedSpeakerNoteOnDate(t, ds, "", activityDayB)
+
+	activity, err := ds.GetSpeakerDailyActivity(ctx, "", "")
+	require.NoError(t, err)
+	assert.Equal(t, []SpeakerDailyActivity{
+		{SpeakerID: "spk_1", Date: activityDayB, Count: 2},
+		{SpeakerID: "spk_2", Date: activityDayB, Count: 1},
+		{SpeakerID: "spk_1", Date: activityDayC, Count: 1},
+	}, activity)
+}
+
+func TestGetSpeakerDailyActivity_DateRangeFilter(t *testing.T) {
+	t.Parallel()
+
+	ds := createDatabase(t, createTestSettings(t))
+	ctx := t.Context()
+
+	seedSpeakerNoteOnDate(t, ds, "spk_1", activityDayA)
+	seedSpeakerNoteOnDate(t, ds, "spk_1", activityDayB)
+	seedSpeakerNoteOnDate(t, ds, "spk_1", activityDayC)
+
+	// Inclusive bounded range keeps only the middle day.
+	activity, err := ds.GetSpeakerDailyActivity(ctx, "2030-01-11", "2030-01-19")
+	require.NoError(t, err)
+	assert.Equal(t, []SpeakerDailyActivity{
+		{SpeakerID: "spk_1", Date: activityDayB, Count: 1},
+	}, activity)
+
+	// Boundary dates are inclusive.
+	activity, err = ds.GetSpeakerDailyActivity(ctx, activityDayA, activityDayC)
+	require.NoError(t, err)
+	require.Len(t, activity, 3)
+
+	// Open-ended start.
+	activity, err = ds.GetSpeakerDailyActivity(ctx, "", activityDayA)
+	require.NoError(t, err)
+	assert.Equal(t, []SpeakerDailyActivity{
+		{SpeakerID: "spk_1", Date: activityDayA, Count: 1},
+	}, activity)
+
+	// Open-ended end.
+	activity, err = ds.GetSpeakerDailyActivity(ctx, activityDayC, "")
+	require.NoError(t, err)
+	assert.Equal(t, []SpeakerDailyActivity{
+		{SpeakerID: "spk_1", Date: activityDayC, Count: 1},
+	}, activity)
+}
+
+func TestGetSpeakerDailyActivity_EmptyDatabase(t *testing.T) {
+	t.Parallel()
+
+	ds := createDatabase(t, createTestSettings(t))
+
+	activity, err := ds.GetSpeakerDailyActivity(t.Context(), "", "")
+	require.NoError(t, err)
+	assert.Empty(t, activity)
 }
 
 func TestGetSpeakerRoster_EmptyDatabase(t *testing.T) {

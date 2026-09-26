@@ -3935,7 +3935,12 @@
       "unnamed": "namnlös",
       "empty": "Inga talare ännu. Talare visas här när detektioner kopplas till en röst.",
       "loadFailed": "Det gick inte att läsa in talarlistan",
-      "loginRequired": "Logga in för att se och hantera talarlistan."
+      "loginRequired": "Logga in för att se och hantera talarlistan.",
+      "activityTab": "Aktivitet",
+      "activityDescription": "Dagliga detektionsantal för varje talare.",
+      "activityEmpty": "Ingen talaraktivitet ännu. Dagliga antal visas här när detektioner tilldelas röster.",
+      "activityLoadFailed": "Det gick inte att läsa in talaraktivitet",
+      "activityDateColumn": "Datum"
     }
   },
   "auth": {
