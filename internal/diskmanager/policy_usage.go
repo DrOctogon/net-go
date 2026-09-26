@@ -259,7 +259,7 @@ func processUsageDeletionLoop(files []FileInfo, speciesMonthCount map[string]map
 func getFinalUsagePercent(baseDir string, lastKnownGoodUsagePercent int) int {
 	log := GetLogger()
 
-	finalDiskInfo, finalDiskErr := GetDetailedDiskUsage(baseDir)
+	finalDiskInfo, finalDiskErr := getDetailedDiskUsage(baseDir)
 	if finalDiskErr != nil {
 		log.Warn("Failed to get final accurate disk usage after cleanup, using last known value",
 			logger.String("policy", "usage"),
@@ -292,10 +292,10 @@ func getFinalUsagePercent(baseDir string, lastKnownGoodUsagePercent int) int {
 // - err: any error encountered getting disk info
 func checkInitialUsage(baseDir string, usageThreshold int) (initialUsagePercent int, diskInfo DiskSpaceInfo, proceed bool, err error) {
 	// Try to get detailed disk usage info first
-	diskInfo, err = GetDetailedDiskUsage(baseDir)
+	diskInfo, err = getDetailedDiskUsage(baseDir)
 	if err != nil {
 		// Try fallback to percentage-only method if detailed info fails
-		initialUsagePercentFloat, fallbackErr := GetDiskUsage(baseDir)
+		initialUsagePercentFloat, fallbackErr := getDiskUsage(baseDir)
 		if fallbackErr != nil {
 			err = fmt.Errorf("failed to get initial disk usage (both detailed and percentage): %w, %w", err, fallbackErr)
 			return 0, DiskSpaceInfo{}, false, err
@@ -420,7 +420,7 @@ func refreshUsageDataIfNeeded(deletedCount, refreshInterval int, baseDir string,
 
 	// Only refresh every refreshInterval deletions to minimize I/O impact
 	if deletedCount > 0 && deletedCount%refreshInterval == 0 && baseDir != "" {
-		refreshedDiskInfo, refreshErr := GetDetailedDiskUsage(baseDir)
+		refreshedDiskInfo, refreshErr := getDetailedDiskUsage(baseDir)
 		if refreshErr != nil {
 			log.Warn("Failed to refresh disk usage during cleanup, continuing with estimated usage",
 				logger.String("policy", "usage"),

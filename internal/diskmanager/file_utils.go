@@ -488,14 +488,3 @@ func getLockedClips(db Interface) ([]string, error) {
 	}
 	return db.GetLockedNotesClipPaths()
 }
-
-// isLockedClip checks if a file path is in the list of locked clips
-func isLockedClip(path string, lockedClips []string) bool {
-	filename := filepath.Base(path)
-	for _, lockedPath := range lockedClips {
-		if filepath.Base(lockedPath) == filename {
-			return true
-		}
-	}
-	return false
-}
