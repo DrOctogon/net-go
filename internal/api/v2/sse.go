@@ -25,10 +25,9 @@ import (
 // SSE connection configuration
 const (
 	// Connection timeouts
-	maxSSEStreamDuration = 30 * time.Minute      // Maximum stream duration to prevent resource leaks
-	sseHeartbeatInterval = 15 * time.Second      // Heartbeat interval for keep-alive (must be < server WriteTimeout)
-	sseEventLoopSleep    = 10 * time.Millisecond // Sleep duration when no events
-	sseWriteDeadline     = 10 * time.Second      // Write deadline for SSE messages
+	maxSSEStreamDuration = 30 * time.Minute // Maximum stream duration to prevent resource leaks
+	sseHeartbeatInterval = 15 * time.Second // Heartbeat interval for keep-alive (must be < server WriteTimeout)
+	sseWriteDeadline     = 10 * time.Second // Write deadline for SSE messages
 
 	// Endpoints
 	detectionStreamEndpoint  = "/api/v2/detections/stream"
@@ -613,9 +612,25 @@ func (c *Controller) StreamDetections(ctx echo.Context) error {
 
 // runSSEEventLoopMulti handles the SSE event loop for detection streams,
 // which receive both detection events and pending detection snapshots.
+//
+// The select below blocks genuinely on every case - no default branch, no
+// polling sleep - so a message on either data channel is delivered the moment
+// it arrives instead of waiting for the next 10ms poll tick. client.PendingChan
+// is always set by StreamDetections, but a nil channel here is harmless: a nil
+// channel is simply never selected, which is exactly the old "if
+// client.PendingChan != nil" guard's effect.
+//
+// detectionCh/pendingCh are local copies of the client's channels. When one is
+// closed (RemoveClient/CloseAllClients close both together, plus client.Done),
+// the receive still returns immediately with ok=false; we return nil there,
+// matching the previous "!ok -> return nil" behavior exactly rather than
+// looping (a closed channel is always ready, so leaving it selected would spin).
 func (c *Controller) runSSEEventLoopMulti(ctx echo.Context, client *SSEClient, clientID, endpoint string) error {
 	ticker := time.NewTicker(sseHeartbeatInterval)
 	defer ticker.Stop()
+
+	detectionCh := client.Channel
+	pendingCh := client.PendingChan
 
 	for {
 		select {
@@ -632,54 +647,35 @@ func (c *Controller) runSSEEventLoopMulti(ctx echo.Context, client *SSEClient, c
 		case <-client.Done:
 			return nil
 
-		default:
-			sent := false
-
-			// Check for detection data
-			select {
-			case detection, ok := <-client.Channel:
-				if !ok {
-					return nil
-				}
-				if err := c.sendSSEMessage(ctx, "detection", detection); err != nil {
-					c.logErrorIfEnabled("Failed to send SSE detection",
-						logger.String("client_id", clientID),
-						logger.String("endpoint", endpoint),
-						logger.Error(err),
-					)
-					c.recordSSEError(endpoint, "send_failed")
-					return err
-				}
-				c.recordSSEMessage(endpoint, "detection")
-				sent = true
-			default:
+		case detection, ok := <-detectionCh:
+			if !ok {
+				return nil
 			}
-
-			// Check for pending data
-			if client.PendingChan != nil {
-				select {
-				case pending, ok := <-client.PendingChan:
-					if !ok {
-						return nil
-					}
-					if err := c.sendSSEMessage(ctx, "pending", pending); err != nil {
-						c.logErrorIfEnabled("Failed to send SSE pending",
-							logger.String("client_id", clientID),
-							logger.String("endpoint", endpoint),
-							logger.Error(err),
-						)
-						c.recordSSEError(endpoint, "send_failed")
-						return err
-					}
-					c.recordSSEMessage(endpoint, "pending")
-					sent = true
-				default:
-				}
+			if err := c.sendSSEMessage(ctx, "detection", detection); err != nil {
+				c.logErrorIfEnabled("Failed to send SSE detection",
+					logger.String("client_id", clientID),
+					logger.String("endpoint", endpoint),
+					logger.Error(err),
+				)
+				c.recordSSEError(endpoint, "send_failed")
+				return err
 			}
+			c.recordSSEMessage(endpoint, "detection")
 
-			if !sent {
-				time.Sleep(sseEventLoopSleep)
+		case pending, ok := <-pendingCh:
+			if !ok {
+				return nil
 			}
+			if err := c.sendSSEMessage(ctx, "pending", pending); err != nil {
+				c.logErrorIfEnabled("Failed to send SSE pending",
+					logger.String("client_id", clientID),
+					logger.String("endpoint", endpoint),
+					logger.Error(err),
+				)
+				c.recordSSEError(endpoint, "send_failed")
+				return err
+			}
+			c.recordSSEMessage(endpoint, "pending")
 		}
 	}
 }
@@ -693,26 +689,27 @@ func (c *Controller) StreamSoundLevels(ctx echo.Context) error {
 		},
 		func(ctx echo.Context, client *SSEClient, clientID string) error {
 			return c.runSSEEventLoop(ctx, client, clientID, soundLevelStreamEndpoint,
-				func() (any, bool) {
-					select {
-					case soundLevel, ok := <-client.SoundLevelChan:
-						if !ok {
-							return nil, false // Channel closed, no more data
-						}
-						return soundLevel, true
-					default:
-						return nil, false
-					}
-				},
-				"soundlevel",
-				streamTypeSoundLevels,
-			)
+				client.SoundLevelChan, "soundlevel", streamTypeSoundLevels)
 		})
 }
 
-// runSSEEventLoop handles the common SSE event loop pattern for all stream types
-func (c *Controller) runSSEEventLoop(ctx echo.Context, client *SSEClient, clientID string, endpoint string,
-	dataReceiver func() (any, bool), eventType string, heartbeatType string) error {
+// runSSEEventLoop handles the common SSE event loop pattern for single-data-channel
+// stream types (currently only sound levels).
+//
+// The select blocks genuinely on every case - no default branch, no polling
+// sleep - so a message on dataCh is delivered the moment it arrives instead of
+// waiting for the next 10ms poll tick.
+//
+// Closed-channel behavior intentionally differs from runSSEEventLoopMulti: the
+// previous dataReceiver closure returned hasData=false (not a close signal) once
+// SoundLevelChan was closed, so the loop never ended on its own - only
+// ctx.Done()/client.Done()/a heartbeat-send failure did. We preserve that by
+// nil-ing the local dataCh variable on close instead of returning: a nil
+// channel is never selected, so the loop keeps running without that case
+// spinning (a closed channel is always ready, so leaving it selected would
+// otherwise busy-loop).
+func (c *Controller) runSSEEventLoop(ctx echo.Context, client *SSEClient, clientID, endpoint string,
+	dataCh <-chan SSESoundLevelData, eventType, heartbeatType string) error {
 
 	ticker := time.NewTicker(sseHeartbeatInterval)
 	defer ticker.Stop()
@@ -735,24 +732,22 @@ func (c *Controller) runSSEEventLoop(ctx echo.Context, client *SSEClient, client
 			// Client marked for removal
 			return nil
 
-		default:
-			// Check for data on the channel (non-blocking)
-			if data, hasData := dataReceiver(); hasData {
-				if err := c.sendSSEMessage(ctx, eventType, data); err != nil {
-					c.logErrorIfEnabled("Failed to send SSE message",
-						logger.String("client_id", clientID),
-						logger.String("endpoint", endpoint),
-						logger.String("event_type", eventType),
-						logger.Error(err),
-					)
-					c.recordSSEError(endpoint, "send_failed")
-					return err
-				}
-				c.recordSSEMessage(endpoint, eventType)
-			} else {
-				// Small sleep to prevent busy-waiting when no data
-				time.Sleep(sseEventLoopSleep)
+		case data, ok := <-dataCh:
+			if !ok {
+				dataCh = nil // stop selecting a closed channel; loop keeps running
+				continue
 			}
+			if err := c.sendSSEMessage(ctx, eventType, data); err != nil {
+				c.logErrorIfEnabled("Failed to send SSE message",
+					logger.String("client_id", clientID),
+					logger.String("endpoint", endpoint),
+					logger.String("event_type", eventType),
+					logger.Error(err),
+				)
+				c.recordSSEError(endpoint, "send_failed")
+				return err
+			}
+			c.recordSSEMessage(endpoint, eventType)
 		}
 	}
 }

@@ -33,7 +33,26 @@ const (
 	transcribeInitialDelay = 2 * time.Second
 	transcribeMaxDelay     = 10 * time.Second
 	transcribeMultiplier   = 1.5
+
+	// maxConcurrentTranscriptions caps how many whisper-cli + ffmpeg process pairs
+	// run at once. Every TranscribeAction.Execute reloads the full GGML model and
+	// shells out to two processes (internal/transcription/whispercli.go); a
+	// detection burst spawning N concurrent pairs starves a Raspberry Pi's
+	// inference core instead of finishing any of them promptly. The job queue
+	// dispatches one goroutine per due job regardless of action type
+	// (jobqueue.processDueJobs has no notion of action type), so capping there
+	// would either throttle every action or need type-aware plumbing. Gating
+	// here instead only affects transcription jobs and leaves the dispatcher's
+	// goroutines for SSE/MQTT/database/etc. jobs completely unaffected.
+	// Raise this on hardware with headroom for concurrent model loads.
+	maxConcurrentTranscriptions = 1
 )
+
+// transcribeSem serializes transcription work across every TranscribeAction in
+// the process. A new TranscribeAction (and a new WhisperCLI) is constructed per
+// detection, so the cap must live at package scope rather than on the action or
+// the transcriber.
+var transcribeSem = make(chan struct{}, maxConcurrentTranscriptions)
 
 // TranscribeAction transcribes a saved audio clip to text using the configured
 // speech-to-text backend and persists the transcript onto the detection. It runs
@@ -106,6 +125,22 @@ func (a *TranscribeAction) Execute(ctx context.Context, _ any) error {
 		return nil
 	}
 	clipPath := filepath.Join(a.Settings.Realtime.Audio.Export.Path, clipName)
+
+	// Acquire the process-wide transcription slot before running the heavy
+	// backend. Waiting here (rather than skipping) is deliberate: a burst of
+	// detections should transcribe one at a time, not drop transcripts. Respect
+	// context cancellation/timeout so a job stuck waiting doesn't block forever.
+	select {
+	case transcribeSem <- struct{}{}:
+	case <-ctx.Done():
+		return errors.New(ctx.Err()).
+			Component("analysis.processor").
+			Category(errors.CategoryCancellation).
+			Context("operation", "transcribe_wait_slot").
+			Context("retryable", true).
+			Build()
+	}
+	defer func() { <-transcribeSem }()
 
 	result, err := a.Transcriber.Transcribe(ctx, clipPath)
 	if err != nil {

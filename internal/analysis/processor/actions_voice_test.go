@@ -18,6 +18,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/tphakala/voicewatch/internal/alerting"
+	"github.com/tphakala/voicewatch/internal/analysis/jobqueue"
 	"github.com/tphakala/voicewatch/internal/conf"
 	"github.com/tphakala/voicewatch/internal/transcription"
 )
@@ -307,6 +308,117 @@ func TestTranscribeAction_EmptyKeywordList_IsNoOp(t *testing.T) {
 
 	require.NoError(t, action.Execute(t.Context(), nil))
 	assert.Equal(t, 0, repo.GetKeywordFlagCalls(), "empty keyword list must be a no-op")
+}
+
+// concurrencyTrackingTranscriber is a Transcriber test double that simulates a
+// heavy whisper-cli invocation: it sleeps for `delay` per call and records the
+// highest number of calls it ever saw in flight simultaneously. Used to prove
+// transcribeSem (internal/analysis/processor/actions_voice.go) actually
+// serializes transcription work.
+type concurrencyTrackingTranscriber struct {
+	delay   time.Duration
+	current atomic.Int32
+	max     atomic.Int32
+}
+
+func (c *concurrencyTrackingTranscriber) Available() bool { return true }
+
+func (c *concurrencyTrackingTranscriber) Transcribe(_ context.Context, _ string) (transcription.Result, error) {
+	n := c.current.Add(1)
+	defer c.current.Add(-1)
+	for {
+		observedMax := c.max.Load()
+		if n <= observedMax {
+			break
+		}
+		if c.max.CompareAndSwap(observedMax, n) {
+			break
+		}
+	}
+	time.Sleep(c.delay)
+	return transcription.Result{Text: "hi", Language: "en"}, nil
+}
+
+// instantAction is a minimal jobqueue.Action stand-in for an unrelated action
+// type (e.g. SSE/MQTT/database). It reports the time it ran so the test can
+// prove it was not queued behind the transcription jobs.
+type instantAction struct {
+	ranAt chan time.Time
+}
+
+func (a *instantAction) Execute(_ context.Context, _ any) error {
+	a.ranAt <- time.Now()
+	return nil
+}
+
+func (a *instantAction) GetDescription() string { return "instant test action" }
+
+// TestTranscribeAction_ConcurrencyCap_SerializesAcrossJobs drives real
+// TranscribeAction jobs through a real jobqueue.JobQueue (mirroring how the
+// processor wires them up) to prove two things about the maxConcurrentTranscriptions
+// cap: (1) three concurrently-due transcription jobs never run their backend at
+// the same time, and (2) an unrelated action type queued alongside them is not
+// blocked behind the cap - the job queue still spawns its goroutine immediately.
+func TestTranscribeAction_ConcurrencyCap_SerializesAcrossJobs(t *testing.T) {
+	// Not parallel: transcribeSem is package-level, so a sibling t.Parallel()
+	// test also calling TranscribeAction.Execute would add noise to the timing
+	// assertions below.
+	const (
+		numTranscriptions = 3
+		simulatedWork     = 80 * time.Millisecond
+	)
+
+	ctx := t.Context()
+	queue := jobqueue.NewJobQueueWithOptions(10, false)
+	queue.SetProcessingInterval(5 * time.Millisecond)
+	queue.Start()
+	t.Cleanup(func() {
+		assert.NoError(t, queue.StopWithTimeout(5*time.Second))
+	})
+
+	tracker := &concurrencyTrackingTranscriber{delay: simulatedWork}
+	repo := NewMockDetectionRepository()
+
+	start := time.Now()
+
+	for i := range numTranscriptions {
+		ctxData := &DetectionContext{}
+		ctxData.NoteID.Store(uint64(i + 1))
+		action := &TranscribeAction{
+			Settings:     settingsWithTranscription(true),
+			Result:       testDetection().Result,
+			Transcriber:  tracker,
+			Repo:         repo,
+			DetectionCtx: ctxData,
+			ClipName:     "clip.wav",
+		}
+		_, err := queue.Enqueue(ctx, action, nil, jobqueue.RetryConfig{Enabled: false})
+		require.NoError(t, err)
+	}
+
+	fast := &instantAction{ranAt: make(chan time.Time, 1)}
+	_, err := queue.Enqueue(ctx, fast, nil, jobqueue.RetryConfig{Enabled: false})
+	require.NoError(t, err)
+
+	var fastRanAt time.Time
+	select {
+	case fastRanAt = <-fast.ranAt:
+	case <-time.After(2 * time.Second):
+		t.Fatal("unrelated action never ran - it must not queue behind transcriptions")
+	}
+
+	require.Eventually(t, func() bool {
+		return queue.GetStats().SuccessfulJobs == numTranscriptions+1
+	}, 5*time.Second, 5*time.Millisecond, "all transcription jobs should eventually succeed")
+
+	// The unrelated action type ran well before three serialized transcriptions
+	// (each simulatedWork long) could possibly have finished - proving the cap
+	// lives inside TranscribeAction.Execute, not in the queue's dispatcher.
+	assert.Less(t, fastRanAt.Sub(start), simulatedWork,
+		"unrelated action must not be blocked behind the transcription concurrency cap")
+
+	// Exactly one transcription ever ran its backend at a time.
+	assert.Equal(t, int32(1), tracker.max.Load(), "transcriptions must run sequentially, not concurrently")
 }
 
 func TestTranscribeAction_NoDetectionID_ReturnsRetryableError(t *testing.T) {
