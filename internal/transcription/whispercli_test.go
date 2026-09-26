@@ -147,7 +147,11 @@ func TestWhisperCLI_resampleTo16k_ContextCancellation(t *testing.T) {
 	skipOnWindows(t)
 
 	dir := t.TempDir()
-	sleepyFFmpeg := writeFakeBin(t, dir, "ffmpeg-sleep.sh", "#!/bin/sh\nsleep 5\nexit 0\n")
+	// exec replaces the shell with sleep so CommandContext's kill hits the
+	// sleeping process itself. Without exec, the kill takes the shell but the
+	// orphaned sleep child keeps the inherited stdout pipe open and cmd.Wait
+	// blocks for the full 5s (observed on CI; passed locally only by luck).
+	sleepyFFmpeg := writeFakeBin(t, dir, "ffmpeg-sleep.sh", "#!/bin/sh\nexec sleep 5\n")
 
 	w := NewWhisperCLI(Config{Model: testModelPath, FFmpeg: sleepyFFmpeg})
 
