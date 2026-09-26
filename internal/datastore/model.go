@@ -19,7 +19,7 @@ type AudioSource struct {
 type Note struct {
 	ID         uint `gorm:"primaryKey"`
 	SourceNode string
-	Date       string `gorm:"index:idx_notes_date;index:idx_notes_date_commonname_confidence;index:idx_notes_sciname_date;index:idx_notes_sciname_date_optimized,priority:2"`
+	Date       string `gorm:"index:idx_notes_date;index:idx_notes_date_commonname_confidence;index:idx_notes_sciname_date;index:idx_notes_sciname_date_optimized,priority:2;index:idx_notes_speakerid_date,priority:2"`
 	Time       string `gorm:"index:idx_notes_time"`
 	//InputFile      string
 	// Source is runtime-only: the AudioSource display metadata is built from
@@ -62,11 +62,13 @@ type Note struct {
 	Gender           string  // estimated gender: "male"/"female"/"unknown"/""
 	GenderConfidence float64 `gorm:"default:0"` // 0..1 confidence for Gender
 	AgeBand          string  // estimated relative age band: child/teen/adult/senior/""
-	AgeConfidence    float64 `gorm:"default:0"` // 0..1 confidence for AgeBand
-	SpeakerID        string  // voice-print cluster/speaker id; empty until assigned
+	AgeConfidence    float64 `gorm:"default:0"`                                                           // 0..1 confidence for AgeBand
+	SpeakerID        string  `gorm:"index:idx_notes_speakerid;index:idx_notes_speakerid_date,priority:1"` // voice-print cluster/speaker id; empty until assigned
 	// VoicePrintEmbedding is the serialized speaker-embedding vector used for
 	// "similar voices" lookups. JSON-serialized; null when no embedding computed.
-	VoicePrintEmbedding []float32 `gorm:"serializer:json"`
+	// json:"-" — never expose the raw embedding vector via API; DTOs surface
+	// derived fields only (see internal/api/v2/detections.go).
+	VoicePrintEmbedding []float32 `gorm:"serializer:json" json:"-"`
 	ProcessingTime      time.Duration
 	Unlikely            bool    `gorm:"default:false"`                 // Tagged by ultrasonic validation filter
 	Occurrence          float64 `gorm:"-" json:"occurrence,omitempty"` // Runtime only, occurrence probability (0-1) based on location/time

@@ -12,6 +12,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/tphakala/voicewatch/internal/datastore"
+	"github.com/tphakala/voicewatch/internal/errors"
 )
 
 const (
@@ -180,6 +181,9 @@ func (c *Controller) UpdateSpeakerName(ctx echo.Context) error {
 	}
 
 	if err := c.DS.SetSpeakerName(ctx.Request().Context(), speakerID, name); err != nil {
+		if errors.IsCategory(err, errors.CategoryValidation) {
+			return c.HandleError(ctx, err, "Invalid speaker name", http.StatusBadRequest)
+		}
 		return c.HandleError(ctx, err, "Failed to update speaker name", http.StatusInternalServerError)
 	}
 

@@ -4,7 +4,6 @@ package datastore
 import (
 	"context"
 	"fmt"
-	"strings"
 	"time"
 
 	"github.com/tphakala/voicewatch/internal/conf"
@@ -597,82 +596,6 @@ func (ds *DataStore) GetSpeciesPhenology(_ context.Context, _, _ string, _ int) 
 // real method.
 func (ds *DataStore) GetAcousticSuccession(_ context.Context, _, _ string, _ int) ([]SpeciesHourlyCounts, error) {
 	return []SpeciesHourlyCounts{}, nil
-}
-
-// GetDetectionTrends calculates the trend in detections over time
-func (ds *DataStore) GetDetectionTrends(ctx context.Context, period string, limit int) ([]DailyAnalyticsData, error) {
-	var trends []DailyAnalyticsData
-
-	var interval string
-	switch period {
-	case "week":
-		interval = "7 days"
-	case "month":
-		interval = "30 days"
-	case "year":
-		interval = "365 days"
-	default:
-		interval = "30 days" // Default to month
-	}
-
-	// Calculate start date based on the period
-	var startDate string
-	switch strings.ToLower(ds.Dialector().Name()) {
-	case DialectSQLite:
-		startDate = fmt.Sprintf("date('now', '-%s')", interval)
-		query := fmt.Sprintf(`
-			SELECT date, COUNT(*) as count
-			FROM notes
-			WHERE date >= %s
-			GROUP BY date
-			ORDER BY date DESC
-			LIMIT ?
-		`, startDate)
-
-		if err := ds.DB.WithContext(ctx).Raw(query, limit).Scan(&trends).Error; err != nil {
-			return nil, errors.New(err).
-				Component("datastore").
-				Category(errors.CategoryDatabase).
-				Context("operation", "get_detection_trends_sqlite").
-				Context("period", period).
-				Context("limit", fmt.Sprintf("%d", limit)).
-				Build()
-		}
-	case DialectMySQL:
-		startDate = fmt.Sprintf("DATE_SUB(CURRENT_DATE, INTERVAL %s)", interval)
-		query := fmt.Sprintf(`
-			SELECT date, COUNT(*) as count
-			FROM notes
-			WHERE date >= %s
-			GROUP BY date
-			ORDER BY date DESC
-			LIMIT ?
-		`, startDate)
-
-		if err := ds.DB.WithContext(ctx).Raw(query, limit).Scan(&trends).Error; err != nil {
-			return nil, errors.New(err).
-				Component("datastore").
-				Category(errors.CategoryDatabase).
-				Context("operation", "get_detection_trends_mysql").
-				Context("period", period).
-				Context("limit", fmt.Sprintf("%d", limit)).
-				Build()
-		}
-	default:
-		// Safely get database type for error context
-		dialectName := DialectUnknown
-		if d := ds.Dialector(); d != nil {
-			dialectName = d.Name()
-		}
-		return nil, errors.Newf("unsupported database dialect").
-			Component("datastore").
-			Category(errors.CategoryConfiguration).
-			Context("operation", "get_detection_trends").
-			Context("dialect", dialectName).
-			Build()
-	}
-
-	return trends, nil
 }
 
 // GetHourlyDistribution retrieves hourly detection distribution across a date range
