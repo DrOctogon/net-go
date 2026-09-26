@@ -27,7 +27,7 @@ func TestControllerShutdownCleansUpGoroutines(t *testing.T) {
 		goleak.IgnoreTopFunction("runtime.gopark"),
 		goleak.IgnoreTopFunction("sync.runtime_notifyListWait"),
 		// Ignore the go-cache janitor which we can't control
-		goleak.IgnoreTopFunction("github.com/patrickmn/go-cache.(*janitor).Run"),
+		goleak.IgnoreTopFunction("github.com/tphakala/voicewatch/internal/api/v2.(*ttlCache).janitor"),
 		// Ignore lumberjack logger goroutines
 		goleak.IgnoreTopFunction("gopkg.in/natefinch/lumberjack%2ev2.(*Logger).millRun"),
 	)
@@ -144,7 +144,7 @@ func TestGoroutineCleanupWithoutRoutes(t *testing.T) {
 			goleak.IgnoreTopFunction("runtime.gopark"),
 			goleak.IgnoreTopFunction("sync.runtime_notifyListWait"),
 			// Ignore the go-cache janitor which we can't control
-			goleak.IgnoreTopFunction("github.com/patrickmn/go-cache.(*janitor).Run"),
+			goleak.IgnoreTopFunction("github.com/tphakala/voicewatch/internal/api/v2.(*ttlCache).janitor"),
 			// Ignore lumberjack logger goroutines
 			goleak.IgnoreTopFunction("gopkg.in/natefinch/lumberjack%2ev2.(*Logger).millRun"),
 		)

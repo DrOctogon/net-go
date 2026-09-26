@@ -14,7 +14,6 @@ import (
 	"time"
 
 	"github.com/labstack/echo/v4"
-	"github.com/patrickmn/go-cache"
 	"github.com/tphakala/voicewatch/internal/conf"
 	"github.com/tphakala/voicewatch/internal/datastore"
 	detectionPkg "github.com/tphakala/voicewatch/internal/detection"
@@ -1014,7 +1013,7 @@ func (c *Controller) getHourlyDetections(date, hour string, duration, numResults
 	c.detectionCache.Set(cacheKey, struct {
 		Notes []datastore.Note
 		Total int64
-	}{notes, totalCount}, cache.DefaultExpiration)
+	}{notes, totalCount})
 
 	c.logInfoIfEnabled("Retrieved hourly detections",
 		logger.String("date", date),
@@ -1072,7 +1071,7 @@ func (c *Controller) getSpeciesDetections(species, date, hour string, duration, 
 	c.detectionCache.Set(cacheKey, struct {
 		Notes []datastore.Note
 		Total int64
-	}{notes, totalCount}, cache.DefaultExpiration)
+	}{notes, totalCount})
 
 	c.logInfoIfEnabled("Retrieved species detections",
 		logger.String("species", species),
@@ -1112,7 +1111,7 @@ func (c *Controller) getSearchDetectionsAdvanced(params *detectionQueryParams) (
 	c.detectionCache.Set(cacheKey, struct {
 		Notes []datastore.Note
 		Total int64
-	}{notes, totalCount}, cache.DefaultExpiration)
+	}{notes, totalCount})
 
 	return notes, totalCount, nil
 }
@@ -1227,7 +1226,7 @@ func (c *Controller) getSearchDetections(search string, numResults, offset int) 
 	c.detectionCache.Set(cacheKey, struct {
 		Notes []datastore.Note
 		Total int64
-	}{notes, totalCount}, cache.DefaultExpiration)
+	}{notes, totalCount})
 
 	c.logInfoIfEnabled("Retrieved search results",
 		logger.String("query", search),
@@ -1267,7 +1266,7 @@ func (c *Controller) getAllDetections(numResults, offset int) ([]datastore.Note,
 	c.detectionCache.Set(cacheKey, struct {
 		Notes []datastore.Note
 		Total int64
-	}{notes, totalResults}, cache.DefaultExpiration)
+	}{notes, totalResults})
 
 	c.logInfoIfEnabled("Retrieved all detections",
 		logger.Int("count", len(notes)),
