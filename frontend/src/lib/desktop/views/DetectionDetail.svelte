@@ -100,6 +100,7 @@
     ageBand?: string;
     date?: string;
     time?: string;
+    speakerId?: string;
   }
   let similarVoices = $state<SimilarVoice[]>([]);
 
@@ -690,6 +691,11 @@
                   {sv.time ?? ''}
                 </span>
                 <span class="flex items-center gap-2 shrink-0">
+                  {#if sv.speakerId}
+                    <span class="text-xs text-[var(--color-base-content)]/60"
+                      >{speakerNames[sv.speakerId] ?? sv.speakerId}</span
+                    >
+                  {/if}
                   {#if sv.gender}
                     <span class="text-xs text-[var(--color-base-content)]/60"
                       >{t(`detections.speaker.gender.${sv.gender}`)}</span

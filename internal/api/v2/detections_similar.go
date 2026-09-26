@@ -33,12 +33,13 @@ const (
 // intentionally omitted: clip filenames can encode source/device details and
 // this endpoint only needs the id + score to link detections.
 type SimilarDetection struct {
-	ID      uint    `json:"id"`
-	Score   float64 `json:"score"` // cosine similarity in [-1, 1]; higher = more similar
-	Gender  string  `json:"gender,omitempty"`
-	AgeBand string  `json:"ageBand,omitempty"`
-	Date    string  `json:"date,omitempty"`
-	Time    string  `json:"time,omitempty"`
+	ID        uint    `json:"id"`
+	Score     float64 `json:"score"` // cosine similarity in [-1, 1]; higher = more similar
+	Gender    string  `json:"gender,omitempty"`
+	AgeBand   string  `json:"ageBand,omitempty"`
+	Date      string  `json:"date,omitempty"`
+	Time      string  `json:"time,omitempty"`
+	SpeakerID string  `json:"speakerId,omitempty"`
 }
 
 // GetSimilarDetections returns detections whose voice-print embedding is most
@@ -80,12 +81,13 @@ func (c *Controller) GetSimilarDetections(ctx echo.Context) error {
 			continue
 		}
 		matches = append(matches, SimilarDetection{
-			ID:      cand.ID,
-			Score:   score,
-			Gender:  cand.Gender,
-			AgeBand: cand.AgeBand,
-			Date:    cand.Date,
-			Time:    cand.Time,
+			ID:        cand.ID,
+			Score:     score,
+			Gender:    cand.Gender,
+			AgeBand:   cand.AgeBand,
+			Date:      cand.Date,
+			Time:      cand.Time,
+			SpeakerID: cand.SpeakerID,
 		})
 	}
 
