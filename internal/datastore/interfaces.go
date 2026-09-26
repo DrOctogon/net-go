@@ -258,7 +258,7 @@ type Interface interface {
 	GetActiveNotificationHistory(ctx context.Context, after time.Time) ([]NotificationHistory, error)
 	DeleteExpiredNotificationHistory(ctx context.Context, before time.Time) (int64, error) // Returns count deleted
 	// Speaker roster methods (household speaker naming)
-	GetSpeakerNames(ctx context.Context) ([]SpeakerName, error)   // List user-assigned speaker names
+	GetSpeakerNames(ctx context.Context) ([]SpeakerName, error)       // List user-assigned speaker names
 	SetSpeakerName(ctx context.Context, speakerID, name string) error // Upsert; empty name clears the mapping
 	// Database stats method for runtime statistics
 	GetDatabaseStats(ctx context.Context) (*DatabaseStats, error)
@@ -395,9 +395,9 @@ func (ds *DataStore) GetDBCounters() *dbstats.Counters {
 func (ds *DataStore) UpdateNameMaps(_ []string) {}
 
 // SpeciesNameResolver resolves a scientific name to a localized common name,
-// returning "" when unknown. Satisfied by *openfauna.Resolver. The locale argument
-// is accepted for interface symmetry; resolvers are built for the active species
-// locale (settings.VoiceWatch.Locale), not a per-call locale.
+// returning "" when unknown. The locale argument is accepted for interface
+// symmetry; resolvers are built for the active species locale
+// (settings.VoiceWatch.Locale), not a per-call locale.
 type SpeciesNameResolver interface {
 	Resolve(scientificName, locale string) string
 	// ResolveLocal returns a name only if it is already resident in memory (no
@@ -2166,10 +2166,10 @@ type SearchFilters struct {
 	// SpeakerID is an exact-match filter on the notes.speaker_id voice-print
 	// cluster column. Empty means no filter.
 	SpeakerID string
-	Page    int
-	PerPage int
-	SortBy  string
-	Ctx     context.Context // Add context for cancellation/timeout
+	Page      int
+	PerPage   int
+	SortBy    string
+	Ctx       context.Context // Add context for cancellation/timeout
 }
 
 // sanitise validates and normalises the search filters, returning an error for invalid combinations.

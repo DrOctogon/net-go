@@ -184,15 +184,6 @@ type MQTTTestResult struct {
 	ElapsedTime int64  `json:"elapsed_time_ms,omitempty"` // Time taken to complete the test in milliseconds
 }
 
-// BirdWeatherStatus represents the current status of the BirdWeather integration
-type BirdWeatherStatus struct {
-	Enabled          bool    `json:"enabled"`              // Whether BirdWeather integration is enabled
-	StationID        string  `json:"station_id"`           // The BirdWeather station ID
-	Threshold        float64 `json:"threshold"`            // The confidence threshold for reporting detections
-	LocationAccuracy float64 `json:"location_accuracy"`    // The location accuracy in meters
-	LastError        string  `json:"last_error,omitempty"` // Most recent error message, if any issues occurred
-}
-
 // initIntegrationsRoutes registers all integration-related API endpoints
 func (c *Controller) initIntegrationsRoutes() {
 	c.logInfoIfEnabled("Initializing integrations routes")

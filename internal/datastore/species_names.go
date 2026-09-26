@@ -12,9 +12,8 @@ type SpeciesName struct {
 // batchLocalizer is the optional cold-path capability used to localize the
 // scientific-only labels (bats, Perch-unique species) that ResolveLocal misses.
 // SpeciesNameResolver implementations may also satisfy this to make those labels
-// searchable; the production *openfauna.Resolver does. Kept separate from
-// SpeciesNameResolver so adding it does not force a change on every implementer or a
-// mock regeneration.
+// searchable. Kept separate from SpeciesNameResolver so adding it does not force
+// a change on every implementer or a mock regeneration.
 type batchLocalizer interface {
 	ResolveLocalizedBatch(scientificNames []string) map[string]string
 }
