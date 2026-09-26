@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"strconv"
+	"strings"
 
 	"github.com/tphakala/voicewatch/internal/errors"
 )
@@ -50,20 +52,43 @@ func (c *Clusterer) Snapshot() SpeakerClusterSnapshot {
 	return out
 }
 
-// NewClustererFromSnapshot rebuilds a Clusterer from a snapshot. A non-positive
-// snapshot threshold falls back to DefaultClusterThreshold (same rule as
-// NewClusterer). Clusters with an empty centroid are dropped defensively; a
-// non-positive member count is clamped to 1 so the incremental-mean update stays
-// well defined. Centroids are copied, so the snapshot may be reused afterward.
+// NewClustererFromSnapshot rebuilds a Clusterer from a snapshot. Invalid or
+// unsafe state is dropped or corrected defensively, since a snapshot may have
+// been hand-edited or written by an older/buggy version:
+//
+//   - An invalid threshold (non-positive, NaN, infinite, or > 1.0, the maximum
+//     possible cosine similarity) falls back to DefaultClusterThreshold (same
+//     rule as NewClusterer).
+//   - Clusters with an empty centroid are dropped defensively.
+//   - The dimension of the first valid (non-empty-centroid) cluster wins: any
+//     later cluster whose centroid has a different length is dropped too,
+//     since Cosine returns 0 for mismatched lengths, making it permanently
+//     unmatchable and a wasted MaxClusters slot.
+//   - A non-positive member count is clamped to 1 so the incremental-mean
+//     update stays well defined.
+//   - nextID is raised, if needed, past the highest numeric suffix among
+//     restored "spk_<n>" IDs, so a stale (too-low) snapshot NextID can never
+//     mint a new ID that collides with a restored one.
+//
+// Centroids are copied, so the snapshot may be reused afterward.
 func NewClustererFromSnapshot(s SpeakerClusterSnapshot) *Clusterer {
 	c := NewClusterer(s.Threshold)
 	c.nextID = s.NextID
 	c.clusters = make([]*cluster, 0, len(s.Clusters))
+
+	dim := -1
+	maxSuffix := 0
 	for i := range s.Clusters {
 		cs := s.Clusters[i]
 		if len(cs.Centroid) == 0 {
 			continue
 		}
+		if dim == -1 {
+			dim = len(cs.Centroid)
+		} else if len(cs.Centroid) != dim {
+			continue
+		}
+
 		centroid := make([]float32, len(cs.Centroid))
 		copy(centroid, cs.Centroid)
 		count := cs.Count
@@ -76,8 +101,29 @@ func NewClustererFromSnapshot(s SpeakerClusterSnapshot) *Clusterer {
 			// assignments always rank as more recent than restored state.
 			c.seq = cs.LastSeen
 		}
+		if n, ok := spkIDSuffix(cs.ID); ok && n > maxSuffix {
+			maxSuffix = n
+		}
+	}
+	if maxSuffix > c.nextID {
+		c.nextID = maxSuffix
 	}
 	return c
+}
+
+// spkIDSuffix parses the numeric suffix of a clusterer-minted speaker ID
+// (e.g. "spk_5" -> 5, true). It returns false for anything else, including
+// non-conforming or malformed IDs, so restore logic can ignore them safely.
+func spkIDSuffix(id string) (int, bool) {
+	suffix, ok := strings.CutPrefix(id, spkIDPrefix)
+	if !ok {
+		return 0, false
+	}
+	n, err := strconv.Atoi(suffix)
+	if err != nil || n < 0 {
+		return 0, false
+	}
+	return n, true
 }
 
 // Save atomically writes the clusterer's snapshot to path as JSON. It writes to a

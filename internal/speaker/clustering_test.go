@@ -1,6 +1,7 @@
 package speaker
 
 import (
+	"math"
 	"sync"
 	"testing"
 
@@ -74,12 +75,30 @@ func TestClustererAssign(t *testing.T) {
 	})
 }
 
-func TestNewClustererDefaultThreshold(t *testing.T) {
+func TestNewClustererThresholdValidation(t *testing.T) {
 	t.Parallel()
-	c := NewClusterer(0)
-	assert.InDelta(t, DefaultClusterThreshold, c.threshold, 1e-9)
-	cNeg := NewClusterer(-1)
-	assert.InDelta(t, DefaultClusterThreshold, cNeg.threshold, 1e-9)
+
+	tests := []struct {
+		name      string
+		threshold float64
+		want      float64
+	}{
+		{"NewClusterer: zero threshold falls back to default", 0, DefaultClusterThreshold},
+		{"NewClusterer: negative threshold falls back to default", -1, DefaultClusterThreshold},
+		{"NewClusterer: NaN threshold falls back to default", math.NaN(), DefaultClusterThreshold},
+		{"NewClusterer: positive-infinity threshold falls back to default", math.Inf(1), DefaultClusterThreshold},
+		{"NewClusterer: negative-infinity threshold falls back to default", math.Inf(-1), DefaultClusterThreshold},
+		{"NewClusterer: threshold above cosine max falls back to default", 1.5, DefaultClusterThreshold},
+		{"NewClusterer: threshold exactly at cosine max is kept", 1.0, 1.0},
+		{"NewClusterer: valid threshold is kept unchanged", 0.5, 0.5},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			c := NewClusterer(tt.threshold)
+			assert.InDelta(t, tt.want, c.threshold, 1e-9)
+		})
+	}
 }
 
 func TestClustererConcurrentAssign(t *testing.T) {
