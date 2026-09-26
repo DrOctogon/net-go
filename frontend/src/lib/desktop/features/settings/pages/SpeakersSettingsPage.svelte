@@ -121,7 +121,12 @@
   let activity = $state<SpeakerDailyActivityEntry[]>([]);
   let activityLoading = $state(false);
   let activityLoadError = $state(false);
-  let activityRequested = $state(false);
+  // Plain (non-reactive) guard: never rendered, only read/written inside the
+  // $effect below. Making it $state would add it as a dependency of that same
+  // effect (it's read in the guard and written right after), causing Svelte
+  // to re-run the effect on the next flush and abort the in-flight fetch via
+  // the effect's own cleanup before the response ever arrives.
+  let activityRequested = false;
 
   // Speaker display names, joined client-side from the roster.
   let nameById = $derived(new Map(roster.map(entry => [entry.speakerId, entry.name])));
