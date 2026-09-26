@@ -347,6 +347,12 @@ Performance Optimizations:
     }
   }
 
+  // AbortControllers for preventing stale-response races: date navigation can
+  // fire fetchDailySummary/fetchRecentDetections faster than responses return,
+  // and an older, slower response must never overwrite newer state.
+  let dailySummaryController: AbortController | null = null;
+  let recentDetectionsController: AbortController | null = null;
+
   // Fetch functions
   async function fetchDailySummary() {
     if (!connectionState.isOnline) {
@@ -354,25 +360,37 @@ Performance Optimizations:
       return;
     }
 
+    dailySummaryController?.abort();
+    const controller = new AbortController();
+    dailySummaryController = controller;
+    const { signal } = controller;
+    const requestedDate = selectedDate;
+
     isLoadingSummary = true;
     summaryError = null;
 
     try {
       // Check cache first - if valid entry exists within TTL, return it
-      const cached = dailySummaryCache.get(selectedDate);
+      const cached = dailySummaryCache.get(requestedDate);
       if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
         // Cache hit - use cached data directly
         dailySummary = cached.data;
-        isLoadingSummary = false;
-        logger.debug(`Daily summary cache hit for ${selectedDate}`);
+        logger.debug(`Daily summary cache hit for ${requestedDate}`);
         return;
       }
 
       // Cache miss or expired - fetch from API
-      logger.debug(`Daily summary cache miss for ${selectedDate}, fetching from API`);
+      logger.debug(`Daily summary cache miss for ${requestedDate}, fetching from API`);
       const response = await fetch(
-        buildAppUrl(`/api/v2/analytics/species/daily?date=${selectedDate}&limit=${summaryLimit}`)
+        buildAppUrl(`/api/v2/analytics/species/daily?date=${requestedDate}&limit=${summaryLimit}`),
+        { signal }
       );
+
+      // Check the captured signal, not the shared controller: a newer request may
+      // have replaced dailySummaryController with a fresh, non-aborted instance, and
+      // checking that would let this stale response overwrite newer data.
+      if (signal.aborted) return;
+
       if (!response.ok) {
         throw new Error(
           t('dashboard.errors.dailySummaryFetch', {
@@ -381,12 +399,13 @@ Performance Optimizations:
         );
       }
       const data = await response.json();
+      if (signal.aborted) return;
 
       // Update UI
       dailySummary = data;
 
       // Cache the result for future requests
-      dailySummaryCache.set(selectedDate, {
+      dailySummaryCache.set(requestedDate, {
         data: data,
         timestamp: Date.now(),
       });
@@ -399,11 +418,19 @@ Performance Optimizations:
         enforceMaxCacheSize();
       }
     } catch (error) {
+      if (signal.aborted || (error instanceof Error && error.name === 'AbortError')) {
+        return;
+      }
       summaryError =
         error instanceof Error ? error.message : t('dashboard.errors.dailySummaryLoad');
       logger.error('Error fetching daily summary:', error);
     } finally {
-      isLoadingSummary = false;
+      // Only the request that still owns the controller may reset shared state; a
+      // superseded request must not clear a newer request's loading flag/controller.
+      if (dailySummaryController === controller) {
+        isLoadingSummary = false;
+        dailySummaryController = null;
+      }
     }
   }
 
@@ -448,6 +475,11 @@ Performance Optimizations:
       return;
     }
 
+    recentDetectionsController?.abort();
+    const controller = new AbortController();
+    recentDetectionsController = controller;
+    const { signal } = controller;
+
     isLoadingDetections = true;
     detectionsError = null;
 
@@ -458,8 +490,15 @@ Performance Optimizations:
       const response = await fetch(
         buildAppUrl(
           `/api/v2/detections/recent?limit=${Math.max(detectionLimit, MIN_FETCH_LIMIT)}&includeWeather=true`
-        )
+        ),
+        { signal }
       );
+
+      // Check the captured signal, not the shared controller: a newer request may
+      // have replaced recentDetectionsController with a fresh, non-aborted instance,
+      // and checking that would let this stale response overwrite newer data.
+      if (signal.aborted) return;
+
       if (!response.ok) {
         throw new Error(
           t('dashboard.errors.recentDetectionsFetch', {
@@ -468,6 +507,7 @@ Performance Optimizations:
         );
       }
       const rawData = await response.json();
+      if (signal.aborted) return;
 
       // Deduplicate by ID to prevent Svelte each_key_duplicate errors.
       const seen = new Set<number>();
@@ -498,11 +538,19 @@ Performance Optimizations:
 
       recentDetections = newData;
     } catch (error) {
+      if (signal.aborted || (error instanceof Error && error.name === 'AbortError')) {
+        return;
+      }
       detectionsError =
         error instanceof Error ? error.message : t('dashboard.errors.recentDetectionsLoad');
       logger.error('Error fetching recent detections:', error);
     } finally {
-      isLoadingDetections = false;
+      // Only the request that still owns the controller may reset shared state; a
+      // superseded request must not clear a newer request's loading flag/controller.
+      if (recentDetectionsController === controller) {
+        isLoadingDetections = false;
+        recentDetectionsController = null;
+      }
     }
   }
 
@@ -863,6 +911,10 @@ Performance Optimizations:
 
       // Cancel any pending preload requests
       preloadCache.clear();
+
+      // Abort any in-flight daily summary / recent detections fetches
+      dailySummaryController?.abort();
+      recentDetectionsController?.abort();
     };
   });
 
