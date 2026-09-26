@@ -1499,6 +1499,18 @@ func (p *Processor) flushPendingDetections() (pendingCount, flushedCount int) {
 	var terminalNotifs []SSEPendingDetection
 	var broadcastSnapshot []SSEPendingDetection
 
+	// Approved detections collected under the lock and processed after it is
+	// released: processApprovedDetection runs speaker-attribute ONNX inference
+	// and O(N) voice-print clustering, and holding pendingMutex across that
+	// stalls detection ingestion (which needs the same mutex). Each entry owns
+	// its PendingDetection copy — the map entry is deleted before the lock is
+	// released, so nothing else aliases it.
+	type approvedFlush struct {
+		item        PendingDetection
+		speciesName string
+	}
+	var approved []approvedFlush
+
 	p.pendingMutex.Lock()
 
 	pendingCount = len(p.pendingDetections)
@@ -1540,7 +1552,10 @@ func (p *Processor) flushPendingDetections() (pendingCount, flushedCount int) {
 			logger.Int("required", itemMinDetections),
 			logger.String("operation", "flush_detection"))
 
-		p.processApprovedDetection(p.flusherCtx, &item, speciesName)
+		// The notification DTO depends only on accumulation fields (species,
+		// counts, source), not on anything processApprovedDetection computes,
+		// so it is built here while the deferred processing happens post-unlock.
+		approved = append(approved, approvedFlush{item: item, speciesName: speciesName})
 		delete(p.pendingDetections, mapKey)
 		flushedCount++
 
@@ -1564,6 +1579,13 @@ func (p *Processor) flushPendingDetections() (pendingCount, flushedCount int) {
 	}
 
 	p.pendingMutex.Unlock()
+
+	// Heavy per-detection work happens here, outside the lock; broadcast last
+	// so the approved notification never races ahead of the database save its
+	// status implies (same external ordering as when this ran under the lock).
+	for i := range approved {
+		p.processApprovedDetection(p.flusherCtx, &approved[i].item, approved[i].speciesName)
+	}
 
 	if broadcastSnapshot != nil {
 		p.broadcastPendingSnapshot(broadcastSnapshot)
