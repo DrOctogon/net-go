@@ -80,7 +80,6 @@ func setDefaultConfig() {
 	viper.SetDefault("voicewatch.modelpath", "")
 	viper.SetDefault("voicewatch.labelpath", "")
 	viper.SetDefault("voicewatch.usexnnpack", true)
-	viper.SetDefault("taxonomysynonyms", map[string]string{})
 
 	// Global model enablement (VoiceWatch only by default)
 	viper.SetDefault("models.enabled", []string{"voicewatch"})

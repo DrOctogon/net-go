@@ -76,9 +76,6 @@ var hotReloadRegistry = map[string]hotReloadEntry{
 	// --- LowMemory (applied once at startup: mallopt before threads, GOMEMLIMIT) ---
 	"LowMemory": {categories: []hotReloadCategory{hotReloadRestart}},
 
-	// --- TaxonomySynonyms ---
-	"TaxonomySynonyms": {categories: []hotReloadCategory{hotReloadFresh}},
-
 	// --- Input (runtime only, yaml:"-") ---
 	"Input": {categories: []hotReloadCategory{hotReloadRuntime}},
 

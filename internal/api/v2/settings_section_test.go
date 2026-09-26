@@ -83,18 +83,6 @@ func TestPatchMissingSections(t *testing.T) {
 				assert.Equal(t, []string{"voicewatch", "perch_v2"}, settings.Models.Enabled)
 			},
 		},
-		{
-			name:    "taxonomysynonyms section accepts valid update",
-			section: "taxonomysynonyms",
-			body: map[string]any{
-				"Parus major": "Great Tit",
-			},
-			verify: func(t *testing.T, settings *conf.Settings) {
-				t.Helper()
-				require.Contains(t, settings.TaxonomySynonyms, "Parus major")
-				assert.Equal(t, "Great Tit", settings.TaxonomySynonyms["Parus major"])
-			},
-		},
 	}
 
 	for _, tt := range tests {
@@ -119,40 +107,6 @@ func TestPatchMissingSections(t *testing.T) {
 			tt.verify(t, controller.Settings.Load())
 		})
 	}
-}
-
-// TestPatchTaxonomySynonymsMerge verifies that PATCH merges new synonym
-// entries with existing ones instead of replacing the entire map.
-func TestPatchTaxonomySynonymsMerge(t *testing.T) {
-	e := echo.New()
-	controller := getTestController(t, e)
-
-	initial := conf.CloneSettings(controller.Settings.Load())
-	initial.TaxonomySynonyms = map[string]string{
-		"Corvus corax": "Common Raven",
-	}
-	controller.Settings.Store(initial)
-
-	body, err := json.Marshal(map[string]any{
-		"Parus major": "Great Tit",
-	})
-	require.NoError(t, err)
-
-	req := httptest.NewRequest(http.MethodPatch, "/api/v2/settings/taxonomysynonyms", bytes.NewReader(body))
-	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	rec := httptest.NewRecorder()
-	ctx := e.NewContext(req, rec)
-	ctx.SetParamNames("section")
-	ctx.SetParamValues("taxonomysynonyms")
-
-	err = controller.UpdateSectionSettings(ctx)
-	require.NoError(t, err)
-	assert.Equal(t, http.StatusOK, rec.Code)
-
-	assert.Equal(t, "Common Raven", controller.Settings.Load().TaxonomySynonyms["Corvus corax"],
-		"existing entry must be preserved after PATCH")
-	assert.Equal(t, "Great Tit", controller.Settings.Load().TaxonomySynonyms["Parus major"],
-		"new entry must be added by PATCH")
 }
 
 // TestPatchAlertingValidation verifies that the alerting section validator
