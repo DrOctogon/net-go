@@ -674,6 +674,10 @@ func (s *testLegacyInterface) GetSpeakerRoster(_ context.Context) ([]datastore.S
 	return []datastore.SpeakerRosterEntry{}, nil
 }
 
+func (s *testLegacyInterface) GetSpeakerDailyActivity(_ context.Context, _, _ string) ([]datastore.SpeakerDailyActivity, error) {
+	return []datastore.SpeakerDailyActivity{}, nil
+}
+
 func (s *testLegacyInterface) Open() error                                         { return nil }
 func (s *testLegacyInterface) Close() error                                        { return nil }
 func (s *testLegacyInterface) Save(_ *datastore.Note, _ []datastore.Results) error { return nil }

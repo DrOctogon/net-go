@@ -8,6 +8,9 @@
   Data: GET /api/v2/speakers (auth-gated) returns
   [{speakerId, name, detections}]; PUT /api/v2/speakers/:id/name renames
   (empty name clears). Renames apply immediately - no save/reset bar.
+  The Activity tab lazily fetches GET /api/v2/speakers/activity
+  ([{speakerId, date, count}], last 30 days) and joins display names
+  client-side from the roster.
 
   Props: None - This is a page component
 
@@ -17,7 +20,7 @@
   import SettingsSection from '$lib/desktop/features/settings/components/SettingsSection.svelte';
   import SettingsTabs from '$lib/desktop/features/settings/components/SettingsTabs.svelte';
   import type { TabDefinition } from '$lib/desktop/features/settings/components/SettingsTabs.svelte';
-  import { Users, SquarePen } from '@lucide/svelte';
+  import { Users, SquarePen, BarChart2 } from '@lucide/svelte';
   import { t } from '$lib/i18n';
   import { fetchWithCSRF } from '$lib/utils/api';
   import { toastActions } from '$lib/stores/toast';
@@ -31,6 +34,12 @@
     speakerId: string;
     name: string;
     detections: number;
+  }
+
+  interface SpeakerDailyActivityEntry {
+    speakerId: string;
+    date: string;
+    count: number;
   }
 
   let roster = $state<SpeakerRosterEntry[]>([]);
@@ -107,12 +116,67 @@
 
   let activeTab = $state('roster');
 
+  // Activity tab state: per-speaker daily detection counts, fetched lazily
+  // the first time the tab is opened (default window: last 30 days).
+  let activity = $state<SpeakerDailyActivityEntry[]>([]);
+  let activityLoading = $state(false);
+  let activityLoadError = $state(false);
+  let activityRequested = $state(false);
+
+  // Speaker display names, joined client-side from the roster.
+  let nameById = $derived(new Map(roster.map(entry => [entry.speakerId, entry.name])));
+
+  // Newest day first; within a day, busiest speaker first.
+  let sortedActivity = $derived(
+    [...activity].sort(
+      (a, b) =>
+        b.date.localeCompare(a.date) || b.count - a.count || a.speakerId.localeCompare(b.speakerId)
+    )
+  );
+
+  $effect(() => {
+    if (activeTab !== 'activity' || activityRequested || !$isAuthenticated) {
+      return;
+    }
+    activityRequested = true;
+    activityLoading = true;
+
+    const controller = new AbortController();
+    fetch(buildAppUrl('/api/v2/speakers/activity'), { signal: controller.signal })
+      .then(response => {
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return response.json();
+      })
+      .then((data: unknown) => {
+        if (controller.signal.aborted) return;
+        activity = Array.isArray(data) ? (data as SpeakerDailyActivityEntry[]) : [];
+        activityLoading = false;
+      })
+      .catch(error => {
+        if (controller.signal.aborted) return;
+        activityLoadError = true;
+        activityLoading = false;
+        logger.error('Failed to load speaker activity:', error);
+      });
+
+    return () => {
+      controller.abort();
+    };
+  });
+
   let tabs = $derived<TabDefinition[]>([
     {
       id: 'roster',
       label: t('settings.speakers.title'),
       icon: Users,
       content: rosterTabContent,
+      hasChanges: false,
+    },
+    {
+      id: 'activity',
+      label: t('settings.speakers.activityTab'),
+      icon: BarChart2,
+      content: activityTabContent,
       hasChanges: false,
     },
   ]);
@@ -204,6 +268,56 @@
                       </button>
                     {/if}
                   </td>
+                </tr>
+              {/each}
+            </tbody>
+          </table>
+        </div>
+      {/if}
+    </SettingsSection>
+  </div>
+{/snippet}
+
+{#snippet activityTabContent()}
+  <div class="space-y-6">
+    <SettingsSection
+      title={t('settings.speakers.activityTab')}
+      description={t('settings.speakers.activityDescription')}
+      defaultOpen={true}
+    >
+      {#if !$isAuthenticated}
+        <p class="py-4 text-sm opacity-70">{t('settings.speakers.loginRequired')}</p>
+      {:else if activityLoading}
+        <p class="py-4 text-sm opacity-70">{t('common.ui.loadingSettings')}</p>
+      {:else if activityLoadError}
+        <p class="py-4 text-sm text-[var(--color-error)]">
+          {t('settings.speakers.activityLoadFailed')}
+        </p>
+      {:else if sortedActivity.length === 0}
+        <p class="py-4 text-sm opacity-70">{t('settings.speakers.activityEmpty')}</p>
+      {:else}
+        <div class="overflow-x-auto">
+          <table class="table w-full">
+            <thead>
+              <tr>
+                <th>{t('settings.speakers.activityDateColumn')}</th>
+                <th>{t('detections.speaker.identityLabel')}</th>
+                <th class="text-right">{t('navigation.detections')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {#each sortedActivity as entry (entry.date + entry.speakerId)}
+                <tr>
+                  <td class="tabular-nums">{entry.date}</td>
+                  <td>
+                    {#if nameById.get(entry.speakerId)}
+                      <span class="font-medium">{nameById.get(entry.speakerId)}</span>
+                      <span class="ml-2 text-xs opacity-60">{entry.speakerId}</span>
+                    {:else}
+                      <span class="font-medium">{entry.speakerId}</span>
+                    {/if}
+                  </td>
+                  <td class="text-right tabular-nums">{entry.count}</td>
                 </tr>
               {/each}
             </tbody>

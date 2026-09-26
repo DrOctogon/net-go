@@ -3935,7 +3935,12 @@
       "unnamed": "sans nom",
       "empty": "Aucun locuteur pour l'instant. Les locuteurs apparaîtront ici dès que des détections seront associées à une voix.",
       "loadFailed": "Échec du chargement de la liste des locuteurs",
-      "loginRequired": "Connectez-vous pour afficher et gérer la liste des locuteurs."
+      "loginRequired": "Connectez-vous pour afficher et gérer la liste des locuteurs.",
+      "activityTab": "Activité",
+      "activityDescription": "Nombre quotidien de détections pour chaque locuteur.",
+      "activityEmpty": "Aucune activité de locuteur pour le moment. Les comptes quotidiens apparaîtront ici lorsque des détections seront attribuées à des voix.",
+      "activityLoadFailed": "Échec du chargement de l'activité des locuteurs",
+      "activityDateColumn": "Date"
     }
   },
   "auth": {

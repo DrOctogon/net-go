@@ -3935,7 +3935,12 @@
       "unnamed": "sin nombre",
       "empty": "Aún no hay hablantes. Los hablantes aparecerán aquí cuando las detecciones se asignen a una voz.",
       "loadFailed": "No se pudo cargar la lista de hablantes",
-      "loginRequired": "Inicie sesión para ver y gestionar la lista de hablantes."
+      "loginRequired": "Inicie sesión para ver y gestionar la lista de hablantes.",
+      "activityTab": "Actividad",
+      "activityDescription": "Recuentos diarios de detecciones por hablante.",
+      "activityEmpty": "Aún no hay actividad de hablantes. Los recuentos diarios aparecerán aquí cuando las detecciones se asignen a voces.",
+      "activityLoadFailed": "No se pudo cargar la actividad de los hablantes",
+      "activityDateColumn": "Fecha"
     }
   },
   "auth": {

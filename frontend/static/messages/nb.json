@@ -3935,7 +3935,12 @@
       "unnamed": "unavngitt",
       "empty": "Ingen talere ennå. Talere vises her når registreringer knyttes til en stemme.",
       "loadFailed": "Kunne ikke laste taleroversikten",
-      "loginRequired": "Logg inn for å se og administrere taleroversikten."
+      "loginRequired": "Logg inn for å se og administrere taleroversikten.",
+      "activityTab": "Aktivitet",
+      "activityDescription": "Daglige deteksjonstall for hver taler.",
+      "activityEmpty": "Ingen taleraktivitet ennå. Daglige tall vises her når deteksjoner tilordnes stemmer.",
+      "activityLoadFailed": "Kunne ikke laste taleraktivitet",
+      "activityDateColumn": "Dato"
     }
   },
   "auth": {

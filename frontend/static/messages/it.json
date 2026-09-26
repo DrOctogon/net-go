@@ -3935,7 +3935,12 @@
       "unnamed": "senza nome",
       "empty": "Nessun parlante per ora. I parlanti appariranno qui quando i rilevamenti verranno associati a una voce.",
       "loadFailed": "Impossibile caricare l'elenco dei parlanti",
-      "loginRequired": "Accedi per visualizzare e gestire l'elenco dei parlanti."
+      "loginRequired": "Accedi per visualizzare e gestire l'elenco dei parlanti.",
+      "activityTab": "Attività",
+      "activityDescription": "Conteggi giornalieri dei rilevamenti per ogni parlante.",
+      "activityEmpty": "Ancora nessuna attività dei parlanti. I conteggi giornalieri appariranno qui quando i rilevamenti saranno assegnati alle voci.",
+      "activityLoadFailed": "Impossibile caricare l'attività dei parlanti",
+      "activityDateColumn": "Data"
     }
   },
   "auth": {

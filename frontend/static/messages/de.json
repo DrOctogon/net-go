@@ -3935,7 +3935,12 @@
       "unnamed": "unbenannt",
       "empty": "Noch keine Sprecher. Sprecher erscheinen hier, sobald Erkennungen einer Stimme zugeordnet werden.",
       "loadFailed": "Sprecherliste konnte nicht geladen werden",
-      "loginRequired": "Melden Sie sich an, um die Sprecherliste anzuzeigen und zu verwalten."
+      "loginRequired": "Melden Sie sich an, um die Sprecherliste anzuzeigen und zu verwalten.",
+      "activityTab": "Aktivität",
+      "activityDescription": "Tägliche Erkennungszahlen für jeden Sprecher.",
+      "activityEmpty": "Noch keine Sprecheraktivität. Tägliche Zahlen erscheinen hier, sobald Erkennungen Stimmen zugeordnet wurden.",
+      "activityLoadFailed": "Sprecheraktivität konnte nicht geladen werden",
+      "activityDateColumn": "Datum"
     }
   },
   "auth": {

@@ -8,9 +8,20 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/labstack/echo/v4"
 	"github.com/tphakala/voicewatch/internal/datastore"
+)
+
+const (
+	// speakerActivityDefaultDays is the window returned by GET
+	// /speakers/activity when no start date is given: the last 30 days
+	// (inclusive of today).
+	speakerActivityDefaultDays = 30
+	// speakerActivityMaxRangeDays caps the requested date range so a single
+	// request cannot ask for an unbounded scan (366 covers a leap year).
+	speakerActivityMaxRangeDays = 366
 )
 
 // SpeakerNameEntry is the PUT /speakers/:id/name response: a voice-print
@@ -48,6 +59,7 @@ func (c *Controller) initSpeakerRoutes() {
 
 	speakerGroup := c.Group.Group("/speakers", c.authMiddleware)
 	speakerGroup.GET("", c.GetSpeakers)
+	speakerGroup.GET("/activity", c.GetSpeakerActivity)
 	speakerGroup.PUT("/:id/name", c.UpdateSpeakerName)
 }
 
@@ -66,6 +78,76 @@ func (c *Controller) GetSpeakers(ctx echo.Context) error {
 			SpeakerID:  roster[i].SpeakerID,
 			Name:       roster[i].Name,
 			Detections: roster[i].Detections,
+		})
+	}
+
+	return ctx.JSON(http.StatusOK, entries)
+}
+
+// SpeakerDailyActivityEntry is one GET /speakers/activity row: how many
+// detections one voice-print speaker cluster produced on one day. Display
+// names are joined client-side from the roster (GET /speakers).
+type SpeakerDailyActivityEntry struct {
+	SpeakerID string `json:"speakerId"`
+	Date      string `json:"date"`
+	Count     int    `json:"count"`
+}
+
+// parseSpeakerActivityRange validates the optional start/end query params
+// (YYYY-MM-DD) and applies defaults: end defaults to today, start to
+// speakerActivityDefaultDays before end (inclusive window). Returns the
+// resolved dates or a non-empty message describing the validation failure.
+func parseSpeakerActivityRange(startParam, endParam string, now time.Time) (startDate, endDate, errMsg string) {
+	end := now
+	if endParam != "" {
+		parsed, err := time.Parse(time.DateOnly, endParam)
+		if err != nil {
+			return "", "", "Invalid end date format. Use YYYY-MM-DD"
+		}
+		end = parsed
+	}
+
+	start := end.AddDate(0, 0, -(speakerActivityDefaultDays - 1))
+	if startParam != "" {
+		parsed, err := time.Parse(time.DateOnly, startParam)
+		if err != nil {
+			return "", "", "Invalid start date format. Use YYYY-MM-DD"
+		}
+		start = parsed
+	}
+
+	if start.After(end) {
+		return "", "", "start date cannot be after end date"
+	}
+	if start.AddDate(0, 0, speakerActivityMaxRangeDays).Before(end) {
+		return "", "", fmt.Sprintf("Date range too large. Maximum: %d days", speakerActivityMaxRangeDays)
+	}
+
+	return start.Format(time.DateOnly), end.Format(time.DateOnly), ""
+}
+
+// GetSpeakerActivity returns per-speaker daily detection counts as
+// [{speakerId, date, count}], ordered by date then speaker id. Optional
+// start/end query params (YYYY-MM-DD, inclusive) bound the range; the
+// default window is the last speakerActivityDefaultDays days.
+func (c *Controller) GetSpeakerActivity(ctx echo.Context) error {
+	startDate, endDate, errMsg := parseSpeakerActivityRange(
+		ctx.QueryParam("start"), ctx.QueryParam("end"), time.Now())
+	if errMsg != "" {
+		return c.HandleError(ctx, fmt.Errorf("invalid speaker activity range"), errMsg, http.StatusBadRequest)
+	}
+
+	activity, err := c.DS.GetSpeakerDailyActivity(ctx.Request().Context(), startDate, endDate)
+	if err != nil {
+		return c.HandleError(ctx, err, "Failed to get speaker activity", http.StatusInternalServerError)
+	}
+
+	entries := make([]SpeakerDailyActivityEntry, 0, len(activity))
+	for i := range activity {
+		entries = append(entries, SpeakerDailyActivityEntry{
+			SpeakerID: activity[i].SpeakerID,
+			Date:      activity[i].Date,
+			Count:     activity[i].Count,
 		})
 	}
 
