@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net"
 	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
@@ -558,6 +559,42 @@ func NewWithOptions(e *echo.Echo, ds datastore.Interface, settings *conf.Setting
 	return c, nil // Return controller and nil error
 }
 
+// redactedQueryValue replaces the value of sensitive query parameters in
+// request logs.
+const redactedQueryValue = "[redacted]"
+
+// redactedQueryParams lists query parameter names whose values carry free text
+// derived from or matched against household speech (transcript substrings,
+// search terms). Their values must never land in request logs or the support
+// dumps built from them.
+var redactedQueryParams = []string{"transcript", "search"}
+
+// redactSensitiveQuery returns rawQuery with the values of sensitive
+// parameters (see redactedQueryParams) replaced by redactedQueryValue. Other
+// parameters are preserved; a query without sensitive parameters is returned
+// verbatim. An unparseable query string is redacted wholesale rather than
+// logged raw.
+func redactSensitiveQuery(rawQuery string) string {
+	if rawQuery == "" {
+		return rawQuery
+	}
+	values, err := url.ParseQuery(rawQuery)
+	if err != nil {
+		return redactedQueryValue
+	}
+	changed := false
+	for _, key := range redactedQueryParams {
+		if _, present := values[key]; present {
+			values.Set(key, redactedQueryValue)
+			changed = true
+		}
+	}
+	if !changed {
+		return rawQuery
+	}
+	return values.Encode()
+}
+
 // LoggingMiddleware creates a middleware function that logs API requests
 func (c *Controller) LoggingMiddleware() echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
@@ -602,7 +639,7 @@ func (c *Controller) LoggingMiddleware() echo.MiddlewareFunc {
 			fields := []logger.Field{
 				logger.String("method", req.Method),
 				logger.String("path", req.URL.Path),
-				logger.String("query", req.URL.RawQuery),
+				logger.String("query", redactSensitiveQuery(req.URL.RawQuery)),
 				logger.Int("status", status),
 				logger.IP("ip", ctx.RealIP()), // Uses custom extractor
 				logger.Bool("tunneled", isTunneled),

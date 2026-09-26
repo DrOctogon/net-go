@@ -57,10 +57,14 @@ func (c *Controller) initSpeakerRoutes() {
 		return
 	}
 
-	speakerGroup := c.Group.Group("/speakers", c.authMiddleware)
+	// Rate limiting runs before auth so unauthenticated hammering is bounded
+	// too; the name mutation gets an additional, stricter budget.
+	speakerGroup := c.Group.Group("/speakers",
+		newIPRateLimiter(speakerRosterRateLimitPerMinute), c.authMiddleware)
 	speakerGroup.GET("", c.GetSpeakers)
 	speakerGroup.GET("/activity", c.GetSpeakerActivity)
-	speakerGroup.PUT("/:id/name", c.UpdateSpeakerName)
+	speakerGroup.PUT("/:id/name", c.UpdateSpeakerName,
+		newIPRateLimiter(speakerNameRateLimitPerMinute))
 }
 
 // GetSpeakers returns the full household speaker roster: every speaker

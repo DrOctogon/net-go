@@ -139,7 +139,13 @@ func (c *Controller) HandleSearch(ctx echo.Context) error {
 	// Source display names can embed internal host details for stream sources
 	// without a user-configured name. This endpoint is public, so hide the
 	// source from unauthenticated clients, matching the anonymization done by
-	// the audio source listing endpoints.
+	// the audio source listing endpoints and stripSensitiveDetectionFields.
+	//
+	// Source is the only sensitive field DetectionRecord carries: it has no
+	// transcript, keyword, or speaker-attribute fields (guests can still
+	// filter on them, but the rows returned never contain them; a guarded
+	// test asserts the wire shape stays that way). If speech or speaker
+	// fields are ever added to DetectionRecord, they must be blanked here.
 	if !c.isClientAuthenticated(ctx) {
 		for i := range results {
 			results[i].Source = ""

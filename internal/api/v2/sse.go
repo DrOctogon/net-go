@@ -65,6 +65,12 @@ type WriteDeadlineSetter interface {
 // Uses explicit fields with camelCase JSON tags instead of embedding datastore.Note
 // to avoid exposing internal Go struct layout, sensitive data (filesystem paths,
 // RTSP credentials), and to provide a stable, well-defined API contract.
+//
+// PRIVACY: the /detections/stream endpoint is public (guests can subscribe),
+// so this struct must never carry speech/speaker fields (transcript, keyword
+// flags, gender/age attributes, speaker id). If any are added, the same guest
+// stripping applied by stripSensitiveDetectionFields must be applied per
+// subscriber first. TestSearchAndSSEWireStructsCarryNoSpeechFields guards this.
 type SSEDetectionData struct {
 	// Detection identity and classification
 	ID             uint    `json:"id"`
