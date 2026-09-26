@@ -302,3 +302,67 @@ func (c *DiskBudgetCheck) Run(_ context.Context) health.Result {
 		Timestamp:  time.Now(),
 	}
 }
+
+// ConfigPersistInfo mirrors conf.ConfigPersistFailure without importing conf
+// (checks stay dependency-light; the caller adapts).
+type ConfigPersistInfo struct {
+	Operation string
+	Path      string
+	Error     string
+	At        time.Time
+}
+
+// ConfigPersistenceCheck surfaces failures to write generated configuration
+// back to disk (e.g. the session-secret backfill). Such failures do not stop
+// startup, but they mean regenerated secrets silently invalidate sessions on
+// every restart — worth a visible warning.
+type ConfigPersistenceCheck struct {
+	getFailure func() *ConfigPersistInfo
+}
+
+// NewConfigPersistenceCheck creates the check from a provider closure that
+// returns the most recent persistence failure, or nil when none occurred.
+func NewConfigPersistenceCheck(getFailure func() *ConfigPersistInfo) *ConfigPersistenceCheck {
+	return &ConfigPersistenceCheck{getFailure: getFailure}
+}
+
+// Name returns the check identifier.
+func (c *ConfigPersistenceCheck) Name() string { return "config_persistence" }
+
+// Category returns the config category.
+func (c *ConfigPersistenceCheck) Category() health.Category { return health.CategoryConfig }
+
+// Run reports the most recent config-persistence failure, if any.
+func (c *ConfigPersistenceCheck) Run(_ context.Context) health.Result {
+	start := time.Now()
+
+	if c.getFailure == nil {
+		return skippedResult(c.Name(), c.Category(), start)
+	}
+
+	failure := c.getFailure()
+	status := health.StatusHealthy
+	msg := "Generated configuration persists to disk"
+	var details map[string]any
+
+	if failure != nil {
+		status = health.StatusWarning
+		msg = fmt.Sprintf("Failed to persist %s to config file; generated values will not survive restarts", failure.Operation)
+		details = map[string]any{
+			"operation": failure.Operation,
+			"path":      failure.Path,
+			"error":     failure.Error,
+			"at":        failure.At,
+		}
+	}
+
+	return health.Result{
+		Name:       c.Name(),
+		Category:   c.Category(),
+		Status:     status,
+		Message:    msg,
+		Details:    details,
+		DurationMS: float64(time.Since(start).Microseconds()) / 1000,
+		Timestamp:  time.Now(),
+	}
+}

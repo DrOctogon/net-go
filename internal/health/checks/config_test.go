@@ -3,6 +3,7 @@ package checks
 import (
 	"encoding/json"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -92,4 +93,39 @@ func TestToolAvailabilityCheck_DetailsContent(t *testing.T) {
 	assert.Equal(t, "Sox", tools[1]["name"])
 	assert.Empty(t, tools[1]["path"])
 	assert.Equal(t, "missing", tools[1]["status"])
+}
+
+func TestConfigPersistenceCheck(t *testing.T) {
+	t.Parallel()
+
+	t.Run("nil provider is skipped", func(t *testing.T) {
+		t.Parallel()
+		c := NewConfigPersistenceCheck(nil)
+		res := c.Run(t.Context())
+		assert.Equal(t, health.StatusSkipped, res.Status)
+	})
+
+	t.Run("no failure is healthy", func(t *testing.T) {
+		t.Parallel()
+		c := NewConfigPersistenceCheck(func() *ConfigPersistInfo { return nil })
+		res := c.Run(t.Context())
+		assert.Equal(t, health.StatusHealthy, res.Status)
+	})
+
+	t.Run("recorded failure warns with details", func(t *testing.T) {
+		t.Parallel()
+		at := time.Now()
+		c := NewConfigPersistenceCheck(func() *ConfigPersistInfo {
+			return &ConfigPersistInfo{
+				Operation: "session_secret",
+				Path:      "/config/config.yaml",
+				Error:     "read-only file system",
+				At:        at,
+			}
+		})
+		res := c.Run(t.Context())
+		assert.Equal(t, health.StatusWarning, res.Status)
+		assert.Contains(t, res.Message, "session_secret")
+		assert.Equal(t, "read-only file system", res.Details["error"])
+	})
 }
