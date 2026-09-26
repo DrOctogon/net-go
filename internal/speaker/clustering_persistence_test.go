@@ -1,6 +1,7 @@
 package speaker
 
 import (
+	"encoding/json"
 	"io/fs"
 	"math"
 	"os"
@@ -140,10 +141,12 @@ func TestClusterer_SnapshotIsolation(t *testing.T) {
 func TestClusterer_SaveFailsOnUnmarshalableThreshold(t *testing.T) {
 	t.Parallel()
 
-	// json.Marshal rejects NaN/Inf floats. NaN <= 0 is false, so NewClusterer
-	// keeps it verbatim instead of falling back to DefaultClusterThreshold,
-	// giving Save's json.Marshal call a genuine, reachable failure.
-	c := NewClusterer(math.NaN())
+	// json.Marshal rejects NaN/Inf floats. NewClusterer now validates its
+	// threshold (falling back to DefaultClusterThreshold for NaN/Inf/<=0/>1.0),
+	// so this invalid state is no longer reachable through the constructor.
+	// Construct it directly (same package) to keep Save's marshal-failure
+	// branch covered.
+	c := &Clusterer{threshold: math.NaN()}
 	path := filepath.Join(t.TempDir(), "clusters.json")
 
 	err := c.Save(path)
@@ -152,6 +155,184 @@ func TestClusterer_SaveFailsOnUnmarshalableThreshold(t *testing.T) {
 
 	_, statErr := os.Stat(path)
 	assert.True(t, os.IsNotExist(statErr), "destination file must not be created on marshal failure")
+}
+
+func TestNewClustererFromSnapshot_ThresholdValidation(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name      string
+		threshold float64
+		want      float64
+	}{
+		{"NewClustererFromSnapshot: zero threshold falls back to default", 0, DefaultClusterThreshold},
+		{"NewClustererFromSnapshot: negative threshold falls back to default", -1, DefaultClusterThreshold},
+		{"NewClustererFromSnapshot: NaN threshold falls back to default", math.NaN(), DefaultClusterThreshold},
+		{"NewClustererFromSnapshot: infinite threshold falls back to default", math.Inf(1), DefaultClusterThreshold},
+		{"NewClustererFromSnapshot: threshold above cosine max falls back to default", 1.5, DefaultClusterThreshold},
+		{"NewClustererFromSnapshot: valid threshold is kept unchanged", 0.5, 0.5},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			c := NewClustererFromSnapshot(SpeakerClusterSnapshot{Threshold: tt.threshold})
+			assert.InDelta(t, tt.want, c.threshold, 1e-9)
+		})
+	}
+}
+
+func TestLoad_ThresholdValidation(t *testing.T) {
+	t.Parallel()
+
+	// NaN/Inf cannot round-trip through JSON, but out-of-range finite values
+	// (and the historical <=0 case) can, so drive these through a real
+	// Save-file's worth of JSON via Load rather than in-memory only.
+	tests := []struct {
+		name      string
+		threshold float64
+		want      float64
+	}{
+		{"Load: zero threshold falls back to default", 0, DefaultClusterThreshold},
+		{"Load: negative threshold falls back to default", -1, DefaultClusterThreshold},
+		{"Load: threshold above cosine max falls back to default", 1.5, DefaultClusterThreshold},
+		{"Load: valid threshold is kept unchanged", 0.5, 0.5},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			path := filepath.Join(t.TempDir(), "clusters.json")
+			data, err := json.Marshal(SpeakerClusterSnapshot{Threshold: tt.threshold})
+			require.NoError(t, err)
+			require.NoError(t, os.WriteFile(path, data, 0o600))
+
+			loaded, err := Load(path)
+			require.NoError(t, err)
+			assert.InDelta(t, tt.want, loaded.threshold, 1e-9)
+		})
+	}
+}
+
+func TestNewClustererFromSnapshot_DropsMismatchedDimensionClusters(t *testing.T) {
+	t.Parallel()
+
+	// spk_2's centroid has a different dimension than the first valid
+	// cluster (spk_1); it is permanently unmatchable (Cosine returns 0 on
+	// length mismatch) and must be dropped rather than waste a slot.
+	snap := SpeakerClusterSnapshot{
+		Threshold: 0.75,
+		NextID:    3,
+		Clusters: []ClusterSnapshot{
+			{ID: "spk_1", Centroid: []float32{1, 0, 0}, Count: 1},
+			{ID: "spk_2", Centroid: []float32{0, 1}, Count: 1},
+			{ID: "spk_3", Centroid: []float32{0, 1, 0}, Count: 1},
+		},
+	}
+
+	c := NewClustererFromSnapshot(snap)
+	require.Equal(t, 2, c.NumClusters())
+
+	ids := make([]string, len(c.clusters))
+	for i, cl := range c.clusters {
+		ids[i] = cl.id
+	}
+	assert.ElementsMatch(t, []string{"spk_1", "spk_3"}, ids)
+}
+
+func TestNewClustererFromSnapshot_FirstValidClusterDimensionWins(t *testing.T) {
+	t.Parallel()
+
+	// The empty-centroid cluster is dropped before dimension is established, so
+	// spk_12 (3-dim) sets the dimension, not spk_11's empty entry; spk_13
+	// (2-dim) then mismatches and is dropped too.
+	snap := SpeakerClusterSnapshot{
+		Clusters: []ClusterSnapshot{
+			{ID: "spk_11", Centroid: nil, Count: 1},
+			{ID: "spk_12", Centroid: []float32{1, 0, 0}, Count: 1},
+			{ID: "spk_13", Centroid: []float32{0, 1}, Count: 1},
+		},
+	}
+
+	c := NewClustererFromSnapshot(snap)
+	require.Equal(t, 1, c.NumClusters())
+	assert.Equal(t, "spk_12", c.clusters[0].id)
+}
+
+func TestNewClustererFromSnapshot_NextIDMonotonic(t *testing.T) {
+	t.Parallel()
+
+	t.Run("nextID rises above the max restored spk_N suffix", func(t *testing.T) {
+		t.Parallel()
+		snap := SpeakerClusterSnapshot{
+			Threshold: 0.75,
+			NextID:    1, // lower than the existing spk_5
+			Clusters: []ClusterSnapshot{
+				{ID: "spk_5", Centroid: []float32{1, 0, 0}, Count: 1},
+			},
+		}
+		c := NewClustererFromSnapshot(snap)
+
+		// A brand-new orthogonal voice must not collide with spk_1..spk_5.
+		id, isNew := c.AssignWithNovelty([]float32{0, 1, 0})
+		assert.True(t, isNew)
+		assert.Equal(t, "spk_6", id)
+	})
+
+	t.Run("non-conforming IDs are ignored when computing the max suffix", func(t *testing.T) {
+		t.Parallel()
+		snap := SpeakerClusterSnapshot{
+			NextID: 1,
+			Clusters: []ClusterSnapshot{
+				{ID: "custom-id", Centroid: []float32{1, 0, 0}, Count: 1},
+				{ID: "spk_abc", Centroid: []float32{0, 1, 0}, Count: 1},
+			},
+		}
+		c := NewClustererFromSnapshot(snap)
+
+		id, isNew := c.AssignWithNovelty([]float32{0, 0, 1})
+		assert.True(t, isNew)
+		assert.Equal(t, "spk_2", id, "malformed IDs must not raise nextID")
+	})
+
+	t.Run("snapshot NextID higher than any restored suffix is kept", func(t *testing.T) {
+		t.Parallel()
+		snap := SpeakerClusterSnapshot{
+			NextID: 9,
+			Clusters: []ClusterSnapshot{
+				{ID: "spk_2", Centroid: []float32{1, 0, 0}, Count: 1},
+			},
+		}
+		c := NewClustererFromSnapshot(snap)
+
+		id, isNew := c.AssignWithNovelty([]float32{0, 1, 0})
+		assert.True(t, isNew)
+		assert.Equal(t, "spk_10", id)
+	})
+}
+
+func TestClusterer_SnapshotRestoreRoundTripSanity(t *testing.T) {
+	t.Parallel()
+
+	// Combine all three hardenings: an invalid threshold, a mismatched-dimension
+	// cluster, and a stale NextID lower than an existing spk_N suffix.
+	snap := SpeakerClusterSnapshot{
+		Threshold: -1,
+		NextID:    1,
+		Clusters: []ClusterSnapshot{
+			{ID: "spk_7", Centroid: []float32{1, 0, 0}, Count: 3},
+			{ID: "spk_8", Centroid: []float32{0, 1}, Count: 1}, // wrong dim
+		},
+	}
+
+	c := NewClustererFromSnapshot(snap)
+	assert.InDelta(t, DefaultClusterThreshold, c.threshold, 1e-9)
+	require.Equal(t, 1, c.NumClusters())
+
+	// The surviving cluster still matches its original voice.
+	assert.Equal(t, "spk_7", c.Assign([]float32{1, 0, 0}))
+	// A new voice gets an ID past the highest restored suffix, not spk_2.
+	id, isNew := c.AssignWithNovelty([]float32{0, 1, 0})
+	assert.True(t, isNew)
+	assert.Equal(t, "spk_8", id)
 }
 
 func TestClusterer_SaveFailsOnReadOnlyDir(t *testing.T) {
