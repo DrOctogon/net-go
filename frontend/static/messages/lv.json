@@ -4660,6 +4660,10 @@
       "caseSensitive": {
         "label": "Case-Sensitive Matching",
         "helpText": "When enabled, keyword matching distinguishes uppercase from lowercase letters (e.g. \"Fire\" will not match \"fire\")."
+      },
+      "includeTranscriptInAlerts": {
+        "label": "Iekļaut transkripciju brīdinājumos",
+        "helpText": "Ja iespējots, atslēgvārdu brīdinājumi, kas nosūtīti uz ārējiem kanāliem (MQTT, push, webhooks), ietver burtisku transkripciju. Pēc noklusējuma izslēgts: transkripcijas satur ierakstītu runu un, ja tās iekļauj, tās atstāj šo ierīci."
       }
     }
   },

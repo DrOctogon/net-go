@@ -4660,6 +4660,10 @@
       "caseSensitive": {
         "label": "Case-Sensitive Matching",
         "helpText": "When enabled, keyword matching distinguishes uppercase from lowercase letters (e.g. \"Fire\" will not match \"fire\")."
+      },
+      "includeTranscriptInAlerts": {
+        "label": "Transcriptie opnemen in meldingen",
+        "helpText": "Indien ingeschakeld bevatten trefwoordmeldingen naar externe kanalen (MQTT, push, webhooks) de letterlijke transcriptie. Standaard uit: transcripties bevatten opgenomen spraak en verlaten dit apparaat wanneer ze worden opgenomen."
       }
     }
   },

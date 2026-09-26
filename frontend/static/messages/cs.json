@@ -4660,6 +4660,10 @@
       "caseSensitive": {
         "label": "Case-Sensitive Matching",
         "helpText": "When enabled, keyword matching distinguishes uppercase from lowercase letters (e.g. \"Fire\" will not match \"fire\")."
+      },
+      "includeTranscriptInAlerts": {
+        "label": "Zahrnout přepis do upozornění",
+        "helpText": "Pokud je povoleno, upozornění na klíčová slova odesílaná do externích kanálů (MQTT, push, webhooky) obsahují doslovný přepis. Ve výchozím nastavení vypnuto: přepisy obsahují nahranou řeč a při zahrnutí opouštějí toto zařízení."
       }
     }
   },

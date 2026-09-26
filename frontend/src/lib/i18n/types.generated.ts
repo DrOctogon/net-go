@@ -3400,6 +3400,8 @@ export type TranslationKey =
   | 'analysis.transcription.keywords.removeAriaLabel' // params: keyword
   | 'analysis.transcription.caseSensitive.label'
   | 'analysis.transcription.caseSensitive.helpText'
+  | 'analysis.transcription.includeTranscriptInAlerts.label'
+  | 'analysis.transcription.includeTranscriptInAlerts.helpText'
   | 'restart.applicationRestart'
   | 'restart.containerRestart'
   | 'restart.confirmTitle'
