@@ -1974,6 +1974,7 @@
       "filters": "Filtre",
       "integration": "Integrácie",
       "security": "Zabezpečenie",
+      "speakers": "Hovoriaci",
       "species": "Druhy",
       "notifications": "Upozornenia",
       "support": "Podpora"
@@ -3927,7 +3928,15 @@
         "defaultGainUnit": "dB"
       }
     },
-    "restartRequired": "Niektoré zmeny vyžadujú reštart servera. Reštartujte VoiceWatch."
+    "restartRequired": "Niektoré zmeny vyžadujú reštart servera. Reštartujte VoiceWatch.",
+    "speakers": {
+      "title": "Zoznam hovoriacich",
+      "description": "Všetci hovoriaci rozpoznaní podľa hlasového odtlačku, pomenovaní aj nepomenovaní, s počtom detekcií.",
+      "unnamed": "nepomenovaný",
+      "empty": "Zatiaľ žiadni hovoriaci. Hovoriaci sa tu zobrazia, keď budú detekcie priradené k hlasu.",
+      "loadFailed": "Nepodarilo sa načítať zoznam hovoriacich",
+      "loginRequired": "Prihláste sa na zobrazenie a správu zoznamu hovoriacich."
+    }
   },
   "auth": {
     "login": "Prihlásenie",

@@ -1974,6 +1974,7 @@
       "filters": "Filtros",
       "integration": "Integraciones",
       "security": "Seguridad",
+      "speakers": "Hablantes",
       "species": "Especies",
       "notifications": "Notificaciones",
       "support": "Soporte"
@@ -3927,7 +3928,15 @@
         "defaultGainUnit": "dB"
       }
     },
-    "restartRequired": "Algunos cambios requieren reiniciar el servidor para aplicarse. Reinicia VoiceWatch."
+    "restartRequired": "Algunos cambios requieren reiniciar el servidor para aplicarse. Reinicia VoiceWatch.",
+    "speakers": {
+      "title": "Lista de hablantes",
+      "description": "Todos los hablantes con huella de voz, con y sin nombre, con su número de detecciones.",
+      "unnamed": "sin nombre",
+      "empty": "Aún no hay hablantes. Los hablantes aparecerán aquí cuando las detecciones se asignen a una voz.",
+      "loadFailed": "No se pudo cargar la lista de hablantes",
+      "loginRequired": "Inicie sesión para ver y gestionar la lista de hablantes."
+    }
   },
   "auth": {
     "login": "Iniciar sesión",

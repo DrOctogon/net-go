@@ -109,3 +109,53 @@ func TestGetSpeakerNames_EmptyDatabase(t *testing.T) {
 	require.NoError(t, err)
 	assert.Empty(t, names)
 }
+
+// seedSpeakerNote saves a minimal detection note carrying the given speaker id.
+func seedSpeakerNote(t *testing.T, ds Interface, speakerID string) {
+	t.Helper()
+	note := Note{
+		SourceNode:     "test-node",
+		Date:           "2024-01-15",
+		Time:           "14:30:45",
+		ScientificName: "Human vocal",
+		CommonName:     "Human vocal",
+		Confidence:     0.9,
+		SpeakerID:      speakerID,
+	}
+	require.NoError(t, ds.Save(&note, nil))
+}
+
+func TestGetSpeakerRoster_MergesCountsAndNames(t *testing.T) {
+	t.Parallel()
+
+	ds := createDatabase(t, createTestSettings(t))
+	ctx := t.Context()
+
+	// spk_1: named, 2 detections. spk_2: unnamed, 1 detection.
+	// spk_9: named, no detections (retention-scrubbed). Plus one note with no
+	// speaker id, which must not appear on the roster.
+	seedSpeakerNote(t, ds, "spk_1")
+	seedSpeakerNote(t, ds, "spk_1")
+	seedSpeakerNote(t, ds, "spk_2")
+	seedSpeakerNote(t, ds, "")
+	require.NoError(t, ds.SetSpeakerName(ctx, "spk_1", "Alice"))
+	require.NoError(t, ds.SetSpeakerName(ctx, "spk_9", "Bob"))
+
+	roster, err := ds.GetSpeakerRoster(ctx)
+	require.NoError(t, err)
+	assert.Equal(t, []SpeakerRosterEntry{
+		{SpeakerID: "spk_1", Name: "Alice", Detections: 2},
+		{SpeakerID: "spk_2", Name: "", Detections: 1},
+		{SpeakerID: "spk_9", Name: "Bob", Detections: 0},
+	}, roster)
+}
+
+func TestGetSpeakerRoster_EmptyDatabase(t *testing.T) {
+	t.Parallel()
+
+	ds := createDatabase(t, createTestSettings(t))
+
+	roster, err := ds.GetSpeakerRoster(t.Context())
+	require.NoError(t, err)
+	assert.Empty(t, roster)
+}

@@ -1974,6 +1974,7 @@
       "filters": "Filtri",
       "integration": "Integrazioni",
       "security": "Sicurezza",
+      "speakers": "Parlanti",
       "species": "Specie",
       "notifications": "Notifiche",
       "support": "Supporto"
@@ -3927,7 +3928,15 @@
         "defaultGainUnit": "dB"
       }
     },
-    "restartRequired": "Alcune modifiche richiedono un riavvio del server per avere effetto. Riavvia VoiceWatch."
+    "restartRequired": "Alcune modifiche richiedono un riavvio del server per avere effetto. Riavvia VoiceWatch.",
+    "speakers": {
+      "title": "Elenco dei parlanti",
+      "description": "Tutti i parlanti con impronta vocale, con o senza nome, con il numero di rilevamenti.",
+      "unnamed": "senza nome",
+      "empty": "Nessun parlante per ora. I parlanti appariranno qui quando i rilevamenti verranno associati a una voce.",
+      "loadFailed": "Impossibile caricare l'elenco dei parlanti",
+      "loginRequired": "Accedi per visualizzare e gestire l'elenco dei parlanti."
+    }
   },
   "auth": {
     "login": "Accedi",

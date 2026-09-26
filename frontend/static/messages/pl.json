@@ -1974,6 +1974,7 @@
       "filters": "Filtry",
       "integration": "Integracje",
       "security": "Bezpieczeństwo",
+      "speakers": "Mówcy",
       "species": "Gatunki",
       "notifications": "Powiadomienia",
       "support": "Wsparcie"
@@ -3927,7 +3928,15 @@
         "defaultGainUnit": "dB"
       }
     },
-    "restartRequired": "Niektóre zmiany wymagają ponownego uruchomienia serwera. Uruchom ponownie VoiceWatch."
+    "restartRequired": "Niektóre zmiany wymagają ponownego uruchomienia serwera. Uruchom ponownie VoiceWatch.",
+    "speakers": {
+      "title": "Lista mówców",
+      "description": "Wszyscy mówcy rozpoznani po odcisku głosu, nazwani i nienazwani, z liczbą detekcji.",
+      "unnamed": "nienazwany",
+      "empty": "Brak mówców. Mówcy pojawią się tutaj, gdy detekcje zostaną przypisane do głosu.",
+      "loadFailed": "Nie udało się wczytać listy mówców",
+      "loginRequired": "Zaloguj się, aby wyświetlić listę mówców i nią zarządzać."
+    }
   },
   "auth": {
     "login": "Zaloguj",

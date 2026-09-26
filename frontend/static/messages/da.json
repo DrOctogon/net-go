@@ -1974,6 +1974,7 @@
       "filters": "Filtre",
       "integration": "Integrationer",
       "security": "Sikkerhed",
+      "speakers": "Talere",
       "species": "Arter",
       "notifications": "Notifikationer",
       "support": "Support"
@@ -3927,7 +3928,15 @@
         "defaultGainUnit": "dB"
       }
     },
-    "restartRequired": "Nogle ændringer kræver genstart af serveren for at træde i kraft. Genstart venligst VoiceWatch."
+    "restartRequired": "Nogle ændringer kræver genstart af serveren for at træde i kraft. Genstart venligst VoiceWatch.",
+    "speakers": {
+      "title": "Taleroversigt",
+      "description": "Alle stemmeaftryk-talere, navngivne og unavngivne, med deres antal detektioner.",
+      "unnamed": "unavngivet",
+      "empty": "Ingen talere endnu. Talere vises her, når detektioner knyttes til en stemme.",
+      "loadFailed": "Kunne ikke indlæse taleroversigten",
+      "loginRequired": "Log ind for at se og administrere taleroversigten."
+    }
   },
   "auth": {
     "login": "Log ind",

@@ -1974,6 +1974,7 @@
       "filters": "Filtres",
       "integration": "Intégrations",
       "security": "Sécurité",
+      "speakers": "Locuteurs",
       "species": "Espèces",
       "notifications": "Notifications",
       "support": "Support"
@@ -3927,7 +3928,15 @@
         "defaultGainUnit": "dB"
       }
     },
-    "restartRequired": "Certaines modifications nécessitent un redémarrage du serveur pour prendre effet. Veuillez redémarrer VoiceWatch."
+    "restartRequired": "Certaines modifications nécessitent un redémarrage du serveur pour prendre effet. Veuillez redémarrer VoiceWatch.",
+    "speakers": {
+      "title": "Liste des locuteurs",
+      "description": "Tous les locuteurs à empreinte vocale, nommés ou non, avec leur nombre de détections.",
+      "unnamed": "sans nom",
+      "empty": "Aucun locuteur pour l'instant. Les locuteurs apparaîtront ici dès que des détections seront associées à une voix.",
+      "loadFailed": "Échec du chargement de la liste des locuteurs",
+      "loginRequired": "Connectez-vous pour afficher et gérer la liste des locuteurs."
+    }
   },
   "auth": {
     "login": "Connexion",

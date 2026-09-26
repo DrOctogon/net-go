@@ -670,6 +670,10 @@ func (s *testLegacyInterface) GetSpeakerNames(_ context.Context) ([]datastore.Sp
 
 func (s *testLegacyInterface) SetSpeakerName(_ context.Context, _, _ string) error { return nil }
 
+func (s *testLegacyInterface) GetSpeakerRoster(_ context.Context) ([]datastore.SpeakerRosterEntry, error) {
+	return []datastore.SpeakerRosterEntry{}, nil
+}
+
 func (s *testLegacyInterface) Open() error                                         { return nil }
 func (s *testLegacyInterface) Close() error                                        { return nil }
 func (s *testLegacyInterface) Save(_ *datastore.Note, _ []datastore.Results) error { return nil }

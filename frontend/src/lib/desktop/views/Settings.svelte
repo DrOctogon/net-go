@@ -17,6 +17,7 @@
   import NotificationsSettingsSection from '$lib/desktop/features/settings/pages/NotificationsSettingsPage.svelte';
   import UserInterfaceSettingsSection from '$lib/desktop/features/settings/pages/UserInterfaceSettingsPage.svelte';
   import AnalysisSettingsSection from '$lib/desktop/features/settings/pages/AnalysisSettingsPage.svelte';
+  import SpeakersSettingsSection from '$lib/desktop/features/settings/pages/SpeakersSettingsPage.svelte';
   import ErrorAlert from '$lib/desktop/components/ui/ErrorAlert.svelte';
   import LoadingSpinner from '$lib/desktop/components/ui/LoadingSpinner.svelte';
 
@@ -29,6 +30,7 @@
     detectionfilters: 'filters',
     integrations: 'integration',
     security: 'security',
+    speakers: 'speakers',
     notifications: 'notifications',
     support: 'support',
   };
@@ -91,6 +93,8 @@
         <IntegrationSettingsSection />
       {:else if currentSection === 'security'}
         <SecuritySettingsSection />
+      {:else if currentSection === 'speakers'}
+        <SpeakersSettingsSection />
       {:else if currentSection === 'notifications'}
         <NotificationsSettingsSection />
       {:else if currentSection === 'support'}

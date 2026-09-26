@@ -1974,6 +1974,7 @@
       "filters": "Filters",
       "integration": "Integrations",
       "security": "Security",
+      "speakers": "Speakers",
       "species": "Species",
       "notifications": "Notifications",
       "support": "Support"
@@ -3927,7 +3928,15 @@
         "defaultGainUnit": "dB"
       }
     },
-    "restartRequired": "Some changes require a server restart to take effect. Please restart VoiceWatch."
+    "restartRequired": "Some changes require a server restart to take effect. Please restart VoiceWatch.",
+    "speakers": {
+      "title": "Speaker Roster",
+      "description": "All voice-print speakers, named and unnamed, with their detection counts.",
+      "unnamed": "unnamed",
+      "empty": "No speakers yet. Speakers appear here once detections are assigned to a voice.",
+      "loadFailed": "Failed to load speaker roster",
+      "loginRequired": "Sign in to view and manage the speaker roster."
+    }
   },
   "auth": {
     "login": "Login",

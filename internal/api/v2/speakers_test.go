@@ -54,17 +54,17 @@ func callUpdateSpeakerName(t *testing.T, e *echo.Echo, controller *Controller, i
 
 func TestGetSpeakers_Empty(t *testing.T) {
 	e, mockDS, controller := setupTestEnvironment(t)
-	mockDS.On("GetSpeakerNames", mock.Anything).Return([]datastore.SpeakerName{}, nil)
+	mockDS.On("GetSpeakerRoster", mock.Anything).Return([]datastore.SpeakerRosterEntry{}, nil)
 
 	rec, err := callGetSpeakers(t, e, controller)
 
 	require.NoError(t, err)
 	assert.Equal(t, http.StatusOK, rec.Code)
 
-	var out []SpeakerNameEntry
+	var out []SpeakerRosterEntry
 	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &out))
 	// Empty roster must serialize as [], not null.
-	assert.Equal(t, []SpeakerNameEntry{}, out)
+	assert.Equal(t, []SpeakerRosterEntry{}, out)
 	assert.JSONEq(t, "[]", rec.Body.String())
 
 	mockDS.AssertExpectations(t)
@@ -72,9 +72,11 @@ func TestGetSpeakers_Empty(t *testing.T) {
 
 func TestGetSpeakers_HappyPath(t *testing.T) {
 	e, mockDS, controller := setupTestEnvironment(t)
-	mockDS.On("GetSpeakerNames", mock.Anything).Return([]datastore.SpeakerName{
-		{SpeakerID: "spk_7", Name: testRosterName},
-		{SpeakerID: testRosterSpeakerID, Name: "Bob"},
+	// Roster mixes named and unnamed speakers; unnamed rows have empty names.
+	mockDS.On("GetSpeakerRoster", mock.Anything).Return([]datastore.SpeakerRosterEntry{
+		{SpeakerID: testRosterSpeakerID, Name: "Bob", Detections: 12},
+		{SpeakerID: "spk_5", Name: "", Detections: 3},
+		{SpeakerID: "spk_7", Name: testRosterName, Detections: 0},
 	}, nil)
 
 	rec, err := callGetSpeakers(t, e, controller)
@@ -82,11 +84,12 @@ func TestGetSpeakers_HappyPath(t *testing.T) {
 	require.NoError(t, err)
 	assert.Equal(t, http.StatusOK, rec.Code)
 
-	var out []SpeakerNameEntry
+	var out []SpeakerRosterEntry
 	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &out))
-	assert.Equal(t, []SpeakerNameEntry{
-		{SpeakerID: "spk_7", Name: testRosterName},
-		{SpeakerID: testRosterSpeakerID, Name: "Bob"},
+	assert.Equal(t, []SpeakerRosterEntry{
+		{SpeakerID: testRosterSpeakerID, Name: "Bob", Detections: 12},
+		{SpeakerID: "spk_5", Name: "", Detections: 3},
+		{SpeakerID: "spk_7", Name: testRosterName, Detections: 0},
 	}, out)
 
 	mockDS.AssertExpectations(t)
@@ -94,7 +97,7 @@ func TestGetSpeakers_HappyPath(t *testing.T) {
 
 func TestGetSpeakers_DatastoreError(t *testing.T) {
 	e, mockDS, controller := setupTestEnvironment(t)
-	mockDS.On("GetSpeakerNames", mock.Anything).Return(nil, errors.New("db down"))
+	mockDS.On("GetSpeakerRoster", mock.Anything).Return(nil, errors.New("db down"))
 
 	rec, err := callGetSpeakers(t, e, controller)
 

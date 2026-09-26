@@ -5,12 +5,23 @@ package datastore
 
 import (
 	"context"
+	"sort"
 	"strings"
 	"time"
 
 	"github.com/tphakala/voicewatch/internal/errors"
 	"gorm.io/gorm/clause"
 )
+
+// SpeakerRosterEntry is one row of the full speaker roster: a voice-print
+// speaker cluster id, its user-assigned display name (empty when unnamed),
+// and how many detections currently reference it. Named speakers whose
+// detections were all retention-deleted appear with zero detections.
+type SpeakerRosterEntry struct {
+	SpeakerID  string
+	Name       string
+	Detections int64
+}
 
 // speakerNamesUpdatedAtColumn is the updated_at column name used in the
 // upsert's conflict assignment list.
@@ -27,6 +38,49 @@ func (ds *DataStore) GetSpeakerNames(ctx context.Context) ([]SpeakerName, error)
 			"action", "list_speaker_roster")
 	}
 	return names, nil
+}
+
+// GetSpeakerRoster returns every voice-print speaker: cluster ids referenced
+// by current detections (with counts) merged with all user-named speakers, so
+// a named speaker stays on the roster even after its clips were
+// retention-deleted. Two simple queries instead of a FULL OUTER JOIN keeps
+// this portable across SQLite and MySQL. Sorted by speaker id.
+func (ds *DataStore) GetSpeakerRoster(ctx context.Context) ([]SpeakerRosterEntry, error) {
+	var counted []SpeakerRosterEntry
+	err := ds.DB.WithContext(ctx).
+		Model(&Note{}).
+		Select("speaker_id, COUNT(*) AS detections").
+		Where("speaker_id != ''").
+		Group("speaker_id").
+		Scan(&counted).Error
+	if err != nil {
+		return nil, dbError(err, "get_speaker_roster", errors.PriorityMedium,
+			"table", "notes",
+			"action", "count_speaker_detections")
+	}
+
+	names, err := ds.GetSpeakerNames(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	byID := make(map[string]int, len(counted))
+	roster := make([]SpeakerRosterEntry, 0, len(counted)+len(names))
+	for i := range counted {
+		byID[counted[i].SpeakerID] = len(roster)
+		roster = append(roster, counted[i])
+	}
+	for i := range names {
+		if idx, ok := byID[names[i].SpeakerID]; ok {
+			roster[idx].Name = names[i].Name
+		} else {
+			// Named speaker with no current detections (retention-scrubbed).
+			roster = append(roster, SpeakerRosterEntry{SpeakerID: names[i].SpeakerID, Name: names[i].Name})
+		}
+	}
+
+	sort.Slice(roster, func(a, b int) bool { return roster[a].SpeakerID < roster[b].SpeakerID })
+	return roster, nil
 }
 
 // SetSpeakerName upserts the display name for a speaker cluster id.

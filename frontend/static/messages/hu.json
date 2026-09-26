@@ -1974,6 +1974,7 @@
       "filters": "Szűrők",
       "integration": "Integrációk",
       "security": "Biztonság",
+      "speakers": "Beszélők",
       "species": "Fajok",
       "notifications": "Értesítések",
       "support": "Támogatás"
@@ -3927,7 +3928,15 @@
         "defaultGainUnit": "dB"
       }
     },
-    "restartRequired": "Néhány változtatáshoz szerver újraindítás szükséges. Kérjük, indítsa újra a VoiceWatch-t."
+    "restartRequired": "Néhány változtatáshoz szerver újraindítás szükséges. Kérjük, indítsa újra a VoiceWatch-t.",
+    "speakers": {
+      "title": "Beszélők listája",
+      "description": "Minden hanglenyomat alapján felismert beszélő, elnevezett és névtelen, az észlelések számával.",
+      "unnamed": "névtelen",
+      "empty": "Még nincsenek beszélők. A beszélők itt jelennek meg, amint az észlelések egy hanghoz lesznek rendelve.",
+      "loadFailed": "Nem sikerült betölteni a beszélők listáját",
+      "loginRequired": "Jelentkezzen be a beszélők listájának megtekintéséhez és kezeléséhez."
+    }
   },
   "auth": {
     "login": "Bejelentkezés",

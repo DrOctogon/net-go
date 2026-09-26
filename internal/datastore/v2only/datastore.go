@@ -1862,6 +1862,13 @@ func (ds *Datastore) GetSpeakerNames(_ context.Context) ([]datastore.SpeakerName
 	return []datastore.SpeakerName{}, nil
 }
 
+// GetSpeakerRoster returns the full speaker roster. Voice prints are a
+// legacy-schema feature (mirrors GetSpeakerNames), so v2-only mode always
+// has an empty roster.
+func (ds *Datastore) GetSpeakerRoster(_ context.Context) ([]datastore.SpeakerRosterEntry, error) {
+	return []datastore.SpeakerRosterEntry{}, nil
+}
+
 // SetSpeakerName is not supported in v2-only mode (no voice-print speaker
 // clusters exist in the v2 schema).
 func (ds *Datastore) SetSpeakerName(_ context.Context, _, _ string) error {

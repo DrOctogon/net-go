@@ -1974,6 +1974,7 @@
       "filters": "Filter",
       "integration": "Integrationen",
       "security": "Sicherheit",
+      "speakers": "Sprecher",
       "species": "Arten",
       "notifications": "Benachrichtigungen",
       "support": "Unterstützung"
@@ -3927,7 +3928,15 @@
         "defaultGainUnit": "dB"
       }
     },
-    "restartRequired": "Einige Änderungen erfordern einen Neustart des Servers. Bitte starten Sie VoiceWatch neu."
+    "restartRequired": "Einige Änderungen erfordern einen Neustart des Servers. Bitte starten Sie VoiceWatch neu.",
+    "speakers": {
+      "title": "Sprecherliste",
+      "description": "Alle per Stimmabdruck erkannten Sprecher, benannt und unbenannt, mit ihren Erkennungszahlen.",
+      "unnamed": "unbenannt",
+      "empty": "Noch keine Sprecher. Sprecher erscheinen hier, sobald Erkennungen einer Stimme zugeordnet werden.",
+      "loadFailed": "Sprecherliste konnte nicht geladen werden",
+      "loginRequired": "Melden Sie sich an, um die Sprecherliste anzuzeigen und zu verwalten."
+    }
   },
   "auth": {
     "login": "Anmelden",

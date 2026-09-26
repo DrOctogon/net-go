@@ -443,6 +443,10 @@ func (m *MockDatastore) SetSpeakerName(ctx context.Context, speakerID, name stri
 	return nil
 }
 
+func (m *MockDatastore) GetSpeakerRoster(ctx context.Context) ([]datastore.SpeakerRosterEntry, error) {
+	return nil, nil
+}
+
 // createTestProcessor creates a processor with mock datastore for testing
 func createTestProcessor() *Processor {
 	settings := &conf.Settings{}
