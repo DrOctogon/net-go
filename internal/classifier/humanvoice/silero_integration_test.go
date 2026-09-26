@@ -74,3 +74,35 @@ func TestSilero_PredictEmpty(t *testing.T) {
 	require.NoError(t, err)
 	assert.Empty(t, results)
 }
+
+// BenchmarkSilero_Predict measures per-clip inference cost over a 3s clip
+// (93 frames at 512 samples / 16 kHz). Guards the tensor-reuse optimization
+// in internal/inference/onnx/silero.go: allocations per op should stay flat
+// per clip, not scale ~5 tensors per frame. Skips without ONNX Runtime.
+func BenchmarkSilero_Predict(b *testing.B) {
+	modelPath, err := humanvoice.WriteEmbeddedModel(b.TempDir())
+	if err != nil {
+		b.Fatalf("write embedded model: %v", err)
+	}
+	if initErr := inference.InitONNXRuntime(""); initErr != nil {
+		b.Skipf("ONNX Runtime not available: %v", initErr)
+	}
+	m, err := humanvoice.New(&humanvoice.Config{ModelPath: modelPath})
+	if err != nil {
+		b.Fatalf("new model: %v", err)
+	}
+	b.Cleanup(func() { _ = m.Close() })
+
+	clip := make([]float32, 3*16000)
+	for i := range clip {
+		clip[i] = 0.1 * float32(i%160) / 160
+	}
+
+	b.ReportAllocs()
+	b.ResetTimer()
+	for b.Loop() {
+		if _, err := m.Predict(b.Context(), [][]float32{clip}); err != nil {
+			b.Fatalf("predict: %v", err)
+		}
+	}
+}

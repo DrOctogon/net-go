@@ -34,6 +34,24 @@ type SileroVAD struct {
 	sampleRate  int64
 	inputNames  []string
 	outputNames []string
+
+	// Reusable inference buffers and tensors, created once at construction.
+	// ONNX Runtime tensors from this wrapper are backed directly by the Go
+	// slices below, so Predict writes the next window into windowBuf and reads
+	// the probability from probBuf without per-frame tensor allocation
+	// (previously ~5 tensor create/destroy cycles per 512-sample frame). The
+	// recurrent state ping-pongs between stateBufA/B: each frame reads one and
+	// writes the other, so no state copy is needed either. This reuse is why
+	// SileroVAD must not be used concurrently (see type comment).
+	windowBuf []float32
+	stateBufA []float32
+	stateBufB []float32
+	probBuf   []float32
+	tensors   []interface{ Destroy() error }
+	// ioAB runs with stateBufA as input state and stateBufB as output;
+	// ioBA is the reverse. Predict alternates between them.
+	inputsAB, outputsAB []ort.Value
+	inputsBA, outputsBA []ort.Value
 }
 
 // NewSileroVAD loads a Silero VAD ONNX model from modelPath. frameSize is the
@@ -74,13 +92,106 @@ func NewSileroVAD(modelPath string, frameSize int, sampleRate int64, threads int
 		return nil, err
 	}
 
-	return &SileroVAD{
+	s := &SileroVAD{
 		session:     session,
 		frameSize:   frameSize,
 		sampleRate:  sampleRate,
 		inputNames:  inputNames,
 		outputNames: outputNames,
-	}, nil
+	}
+	if err := s.initTensors(); err != nil {
+		_ = s.Close()
+		return nil, err
+	}
+	return s, nil
+}
+
+// initTensors creates the reusable input/output tensors and the two
+// alternating IO bindings. Called once from NewSileroVAD.
+func (s *SileroVAD) initTensors() error {
+	const stateLen = sileroStateRank * sileroBatch * sileroStateDim
+	s.windowBuf = make([]float32, s.frameSize)
+	s.stateBufA = make([]float32, stateLen)
+	s.stateBufB = make([]float32, stateLen)
+	s.probBuf = make([]float32, sileroBatch)
+
+	inputT, err := ort.NewTensor(ort.NewShape(sileroBatch, int64(s.frameSize)), s.windowBuf)
+	if err != nil {
+		return fmt.Errorf("voicewatch: silero input tensor: %w", err)
+	}
+	s.tensors = append(s.tensors, inputT)
+
+	stateShape := ort.NewShape(sileroStateRank, sileroBatch, sileroStateDim)
+	stateTA, err := ort.NewTensor(stateShape, s.stateBufA)
+	if err != nil {
+		return fmt.Errorf("voicewatch: silero state tensor: %w", err)
+	}
+	s.tensors = append(s.tensors, stateTA)
+	stateTB, err := ort.NewTensor(stateShape, s.stateBufB)
+	if err != nil {
+		return fmt.Errorf("voicewatch: silero stateN tensor: %w", err)
+	}
+	s.tensors = append(s.tensors, stateTB)
+
+	// Silero declares "sr" as a rank-0 scalar; the ONNX Runtime wrapper cannot
+	// build a zero-rank tensor (an empty shape flattens to size 0), so a [1]
+	// shape is used, which the runtime accepts for the scalar input.
+	srT, err := ort.NewTensor(ort.NewShape(1), []int64{s.sampleRate})
+	if err != nil {
+		return fmt.Errorf("voicewatch: silero sr tensor: %w", err)
+	}
+	s.tensors = append(s.tensors, srT)
+
+	probT, err := ort.NewTensor(ort.NewShape(sileroBatch, 1), s.probBuf)
+	if err != nil {
+		return fmt.Errorf("voicewatch: silero output tensor: %w", err)
+	}
+	s.tensors = append(s.tensors, probT)
+
+	bindInputs := func(stateT ort.Value) ([]ort.Value, error) {
+		inputs := make([]ort.Value, len(s.inputNames))
+		for i, name := range s.inputNames {
+			switch name {
+			case sileroInputName:
+				inputs[i] = inputT
+			case sileroStateName:
+				inputs[i] = stateT
+			case sileroSRName:
+				inputs[i] = srT
+			default:
+				return nil, fmt.Errorf("voicewatch: unexpected silero input %q", name)
+			}
+		}
+		return inputs, nil
+	}
+	bindOutputs := func(stateT ort.Value) ([]ort.Value, error) {
+		outputs := make([]ort.Value, len(s.outputNames))
+		for i, name := range s.outputNames {
+			switch name {
+			case sileroOutputName:
+				outputs[i] = probT
+			case sileroStateNName:
+				outputs[i] = stateT
+			default:
+				return nil, fmt.Errorf("voicewatch: unexpected silero output %q", name)
+			}
+		}
+		return outputs, nil
+	}
+
+	if s.inputsAB, err = bindInputs(stateTA); err != nil {
+		return err
+	}
+	if s.outputsAB, err = bindOutputs(stateTB); err != nil {
+		return err
+	}
+	if s.inputsBA, err = bindInputs(stateTB); err != nil {
+		return err
+	}
+	if s.outputsBA, err = bindOutputs(stateTA); err != nil {
+		return err
+	}
+	return nil
 }
 
 // Predict runs the VAD over clip in frameSize-sample windows and returns one
@@ -96,103 +207,42 @@ func (s *SileroVAD) Predict(clip []float32) ([]float32, error) {
 		return nil, nil
 	}
 
-	state := make([]float32, sileroStateRank*sileroBatch*sileroStateDim) // zero-initialized
-	sr := []int64{s.sampleRate}
+	// Fresh clip: reset the recurrent state. Only stateBufA needs zeroing —
+	// the first frame reads A and fully overwrites B; every later frame fully
+	// overwrites its output buffer.
+	clear(s.stateBufA)
 	probs := make([]float32, 0, len(clip)/frame)
 
+	useAB := true
 	for off := 0; off+frame <= len(clip); off += frame {
-		prob, newState, err := s.runFrame(clip[off:off+frame], state, sr)
-		if err != nil {
-			return nil, err
+		copy(s.windowBuf, clip[off:off+frame])
+		inputs, outputs := s.inputsBA, s.outputsBA
+		if useAB {
+			inputs, outputs = s.inputsAB, s.outputsAB
 		}
-		probs = append(probs, prob)
-		state = newState
+		if err := s.session.Run(inputs, outputs); err != nil {
+			return nil, fmt.Errorf("voicewatch: silero inference failed: %w", err)
+		}
+		probs = append(probs, s.probBuf[0])
+		useAB = !useAB
 	}
 	return probs, nil
 }
 
-// runFrame runs a single VAD inference for one window, returning the speech
-// probability and the updated recurrent state.
-func (s *SileroVAD) runFrame(window, state []float32, sr []int64) (prob float32, newState []float32, err error) {
-	inputTensor, err := ort.NewTensor(ort.NewShape(sileroBatch, int64(len(window))), window)
-	if err != nil {
-		return 0, nil, fmt.Errorf("voicewatch: silero input tensor: %w", err)
-	}
-	defer func() { _ = inputTensor.Destroy() }()
-
-	stateTensor, err := ort.NewTensor(ort.NewShape(sileroStateRank, sileroBatch, sileroStateDim), state)
-	if err != nil {
-		return 0, nil, fmt.Errorf("voicewatch: silero state tensor: %w", err)
-	}
-	defer func() { _ = stateTensor.Destroy() }()
-
-	// Silero declares "sr" as a rank-0 scalar; the ONNX Runtime wrapper cannot
-	// build a zero-rank tensor (an empty shape flattens to size 0), so a [1]
-	// shape is used, which the runtime accepts for the scalar input.
-	srTensor, err := ort.NewTensor(ort.NewShape(1), sr)
-	if err != nil {
-		return 0, nil, fmt.Errorf("voicewatch: silero sr tensor: %w", err)
-	}
-	defer func() { _ = srTensor.Destroy() }()
-
-	outProb, err := ort.NewEmptyTensor[float32](ort.NewShape(sileroBatch, 1))
-	if err != nil {
-		return 0, nil, fmt.Errorf("voicewatch: silero output tensor: %w", err)
-	}
-	defer func() { _ = outProb.Destroy() }()
-
-	outState, err := ort.NewEmptyTensor[float32](ort.NewShape(sileroStateRank, sileroBatch, sileroStateDim))
-	if err != nil {
-		return 0, nil, fmt.Errorf("voicewatch: silero stateN tensor: %w", err)
-	}
-	defer func() { _ = outState.Destroy() }()
-
-	inputs := make([]ort.Value, len(s.inputNames))
-	for i, name := range s.inputNames {
-		switch name {
-		case sileroInputName:
-			inputs[i] = inputTensor
-		case sileroStateName:
-			inputs[i] = stateTensor
-		case sileroSRName:
-			inputs[i] = srTensor
-		default:
-			return 0, nil, fmt.Errorf("voicewatch: unexpected silero input %q", name)
-		}
-	}
-
-	outputs := make([]ort.Value, len(s.outputNames))
-	for i, name := range s.outputNames {
-		switch name {
-		case sileroOutputName:
-			outputs[i] = outProb
-		case sileroStateNName:
-			outputs[i] = outState
-		default:
-			return 0, nil, fmt.Errorf("voicewatch: unexpected silero output %q", name)
-		}
-	}
-
-	if err := s.session.Run(inputs, outputs); err != nil {
-		return 0, nil, fmt.Errorf("voicewatch: silero inference failed: %w", err)
-	}
-
-	probData := outProb.GetData()
-	if len(probData) == 0 {
-		return 0, nil, fmt.Errorf("voicewatch: silero produced empty output")
-	}
-	updated := outState.GetData()
-	newState = make([]float32, len(updated))
-	copy(newState, updated)
-	return probData[0], newState, nil
-}
-
-// Close releases the ONNX session and associated resources.
+// Close releases the ONNX session and the reusable tensors.
 func (s *SileroVAD) Close() error {
-	if s.session != nil {
-		err := s.session.Destroy()
-		s.session = nil
-		return err
+	var firstErr error
+	for _, t := range s.tensors {
+		if err := t.Destroy(); err != nil && firstErr == nil {
+			firstErr = err
+		}
 	}
-	return nil
+	s.tensors = nil
+	if s.session != nil {
+		if err := s.session.Destroy(); err != nil && firstErr == nil {
+			firstErr = err
+		}
+		s.session = nil
+	}
+	return firstErr
 }
