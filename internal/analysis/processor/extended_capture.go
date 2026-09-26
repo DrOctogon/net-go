@@ -1,11 +1,9 @@
 package processor
 
 import (
-	"strings"
 	"time"
 
 	"github.com/tphakala/voicewatch/internal/logger"
-	"github.com/tphakala/voicewatch/internal/openfauna"
 )
 
 // Extended capture timeout thresholds.
@@ -44,96 +42,6 @@ func (p *Processor) initExtendedCapture() {
 // capture is global: every detection qualifies when the feature is enabled.
 func (p *Processor) isExtendedCaptureEnabled() bool {
 	return p.currentSettings().Realtime.ExtendedCapture.Enabled
-}
-
-// resolveSpeciesFilter resolves the config species list into a set of scientific names.
-// Returns (isAll, resolvedSet) where isAll=true means all species qualify.
-func resolveSpeciesFilter(configSpecies, labels []string, locale, operationName string) (isAll bool, resolvedSet map[string]bool) {
-	if len(configSpecies) == 0 {
-		return true, nil
-	}
-
-	resolved := make(map[string]bool)
-
-	// Build common name -> scientific name lookup from the model labels.
-	commonToScientific := make(map[string]string)
-	scientificNames := make(map[string]bool)
-	for _, label := range labels {
-		if sci, common, found := strings.Cut(label, "_"); found {
-			sciLower := strings.ToLower(sci)
-			commonLower := strings.ToLower(common)
-			commonToScientific[commonLower] = sciLower
-			scientificNames[sciLower] = true
-		} else if sci := strings.ToLower(strings.TrimSpace(label)); sci != "" {
-			// Scientific-only labels (bats, Perch-unique species) have no embedded
-			// common name; index them by scientific name so a scientific-name config
-			// entry still matches them.
-			scientificNames[sci] = true
-		}
-	}
-
-	// Config entries that none of the cheap lookups resolved; reverse-resolved
-	// through OpenFauna in a single batch pass after the loop.
-	var unresolved []string
-
-	for _, entry := range configSpecies {
-		entryLower := strings.ToLower(strings.TrimSpace(entry))
-
-		// Try as scientific name first (cheap map lookup, no side effects)
-		if scientificNames[entryLower] {
-			resolved[entryLower] = true
-			continue
-		}
-
-		// Try as common name (cheap map lookup, no side effects)
-		if sci, ok := commonToScientific[entryLower]; ok {
-			resolved[sci] = true
-			continue
-		}
-
-		// Defer to the OpenFauna reverse lookup below.
-		unresolved = append(unresolved, entry)
-	}
-
-	// Reverse-resolve any still-unresolved entries through OpenFauna in a single
-	// cold-path pass. This canonicalizes localized common names of secondary-model
-	// species (e.g. Finnish "mopsilepakko" -> "Barbastella barbastellus") that have
-	// no embedded common name in the model labels and are not in the taxonomy DB.
-	if len(unresolved) > 0 {
-		// The shared helper returns scientific names already lower-cased, keyed per
-		// entry so the per-entry "matched" tracking (and the unresolved warning below)
-		// still works; it centralizes the lower-casing/locale handling shared with the
-		// range-filter exclude matcher.
-		reverse := openfauna.ReverseResolveToScientificNames(unresolved, locale)
-		stillUnresolved := unresolved[:0]
-		for _, entry := range unresolved {
-			matched := false
-			for _, sci := range reverse[entry] {
-				// Only resolve to species a loaded model can actually emit. OpenFauna
-				// may return scientific names for the localized common name that are
-				// not in any loaded model's labels; resolving to those would silently
-				// match a species nothing can detect and skip the unresolved warning.
-				if !scientificNames[sci] {
-					continue
-				}
-				resolved[sci] = true
-				matched = true
-			}
-			if !matched {
-				stillUnresolved = append(stillUnresolved, entry)
-			}
-		}
-		unresolved = stillUnresolved
-	}
-
-	// Anything still unresolved is a likely config typo; warn so users can spot it.
-	for _, entry := range unresolved {
-		GetLogger().Warn("Species filter entry not resolved",
-			logger.String("entry", entry),
-			logger.String("operation", operationName+"_species_filter"))
-	}
-
-	return false, resolved
 }
 
 // normalizeDetectionTimes sets BeginTime/EndTime on an approved detection.

@@ -6,15 +6,32 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/tphakala/voicewatch/internal/datastore"
-	"github.com/tphakala/voicewatch/internal/openfauna"
 )
 
 const (
-	wiringSpeciesSci   = "Turdus merula"       // seeded into the resolver's working set
-	wiringSpeciesLabel = "Turdus merula_WRONG" // label whose common name the resolver must override
-	wiringLabelCommon  = "WRONG"
-	wiringLocale       = "en"
+	wiringSpeciesSci    = "Turdus merula"       // seeded into the resolver's working set
+	wiringSpeciesLabel  = "Turdus merula_WRONG" // label whose common name the resolver must override
+	wiringLabelCommon   = "WRONG"
+	wiringLocalizedName = "Mustarastas" // fake resolver's localized answer for wiringSpeciesSci
 )
+
+// fakeNameResolver is a minimal datastore.SpeciesNameResolver test fixture standing
+// in for a real resolver implementation. installNameResolver is production wiring
+// for whatever resolver the orchestrator builds; today that call site always passes
+// nil (see control_monitor.go), so these tests exercise the wiring logic itself
+// with a fake rather than depending on any specific resolver package.
+type fakeNameResolver struct {
+	names map[string]string
+}
+
+func (f *fakeNameResolver) Resolve(sci, _ string) string {
+	return f.names[sci]
+}
+
+func (f *fakeNameResolver) ResolveLocal(sci string) (string, bool) {
+	v, ok := f.names[sci]
+	return v, ok
+}
 
 // nameWiringRecorder captures the externally-observable effect of the two
 // name-wiring calls on one surface: the order they ran (setAt < updateAt) and the
@@ -65,11 +82,9 @@ type spyController struct {
 func (s *spyController) SetNameResolver(r datastore.SpeciesNameResolver) { s.setResolver(r) }
 func (s *spyController) UpdateCommonNameMap(_ []string)                  { s.rebuildMaps() }
 
-func newSeededResolver(t *testing.T) *openfauna.Resolver {
+func newSeededResolver(t *testing.T) *fakeNameResolver {
 	t.Helper()
-	of := openfauna.NewResolver()
-	require.NoError(t, of.Rebuild([]string{wiringSpeciesSci}, wiringLocale))
-	return of
+	return &fakeNameResolver{names: map[string]string{wiringSpeciesSci: wiringLocalizedName}}
 }
 
 // wiringObservation captures the externally-visible result of installNameResolver
@@ -113,10 +128,10 @@ func TestInstallNameResolver_InstallsBeforeRebuild(t *testing.T) {
 
 // TestInstallNameResolver_NilResolverStillRebuildsMaps pins the behavior that the
 // map rebuild must run even without a resolver (otherwise search/insights start
-// with empty maps). A typed-nil *openfauna.Resolver is treated as absent by
+// with empty maps). A typed-nil *fakeNameResolver is treated as absent by
 // SetNameResolver, but UpdateNameMaps/UpdateCommonNameMap still fire.
 func TestInstallNameResolver_NilResolverStillRebuildsMaps(t *testing.T) {
-	var typedNil *openfauna.Resolver // nil pointer wrapped into the interface
+	var typedNil *fakeNameResolver // nil pointer wrapped into the interface
 	ds := &spyDatastore{}
 	api := &spyController{}
 
