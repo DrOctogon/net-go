@@ -194,7 +194,7 @@ type ImageCacheQuery struct {
 	ProviderName   string
 }
 
-// DetectionRecord represents a bird detection record for search results
+// DetectionRecord represents a detection record for search results
 type DetectionRecord struct {
 	ID             string    `json:"id"`
 	Timestamp      time.Time `json:"timestamp"`

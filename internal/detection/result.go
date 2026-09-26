@@ -1,4 +1,4 @@
-// Package detection provides the core domain model for bird detection events.
+// Package detection provides the core domain model for detection events.
 // This package defines Result as the single source of truth for detection data
 // used throughout the application. External serialization (API, MQTT, database)
 // is handled by boundary-specific DTOs and entities.
@@ -6,7 +6,7 @@ package detection
 
 import "time"
 
-// Result represents a single bird detection event.
+// Result represents a single detection event.
 // This is the core domain model used throughout the application.
 // External serialization is handled by boundary-specific DTOs.
 type Result struct {

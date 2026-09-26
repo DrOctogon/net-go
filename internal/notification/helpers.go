@@ -43,7 +43,7 @@ func NotifySystemAlert(priority Priority, title, message string) {
 	}
 }
 
-// NotifyDetection creates a bird detection notification
+// NotifyDetection creates a detection notification
 func NotifyDetection(species string, confidence float64, metadata map[string]any) {
 	if !IsInitialized() {
 		return

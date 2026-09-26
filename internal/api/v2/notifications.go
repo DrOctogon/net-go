@@ -513,7 +513,7 @@ func (c *Controller) runNotificationEventLoop(ctx echo.Context, client *Notifica
 			}
 
 			// Guest hardening: unauthenticated SSE subscribers only receive
-			// non-toast bird-detection events. Toast payloads are always
+			// non-toast detection events. Toast payloads are always
 			// created as TypeWarning/TypeInfo today (see toast.go), but we
 			// also check the IsToast metadata as defense-in-depth so a
 			// future TypeDetection toast cannot leak to anonymous clients.
@@ -720,7 +720,7 @@ func (c *Controller) GetNotifications(ctx echo.Context) error {
 		filter.Types = []notification.Type{notification.Type(typeParam)}
 	}
 
-	// Guest hardening: unauthenticated viewers only see bird-detection
+	// Guest hardening: unauthenticated viewers only see detection
 	// notifications, never operational/admin payloads that may contain
 	// integration errors, hostnames, or configuration hints. This overrides
 	// any type filter the caller may have supplied.
