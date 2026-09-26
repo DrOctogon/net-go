@@ -13,11 +13,21 @@ import (
 	"github.com/tphakala/voicewatch/internal/datastore"
 )
 
-// SpeakerNameEntry is one roster row in API responses: a voice-print speaker
-// cluster id and its user-assigned display name.
+// SpeakerNameEntry is the PUT /speakers/:id/name response: a voice-print
+// speaker cluster id and its user-assigned display name.
 type SpeakerNameEntry struct {
 	SpeakerID string `json:"speakerId"`
 	Name      string `json:"name"`
+}
+
+// SpeakerRosterEntry is one GET /speakers roster row: a voice-print speaker
+// cluster id, its user-assigned display name ("" when unnamed), and how many
+// detections currently reference it. The added detections field is
+// backward-compatible with consumers that only read speakerId/name.
+type SpeakerRosterEntry struct {
+	SpeakerID  string `json:"speakerId"`
+	Name       string `json:"name"`
+	Detections int64  `json:"detections"`
 }
 
 // speakerNameRequest is the PUT /speakers/:id/name request body.
@@ -41,19 +51,21 @@ func (c *Controller) initSpeakerRoutes() {
 	speakerGroup.PUT("/:id/name", c.UpdateSpeakerName)
 }
 
-// GetSpeakers returns the household speaker roster: every speaker cluster id
-// that has a user-assigned name, as [{speakerId, name}].
+// GetSpeakers returns the full household speaker roster: every speaker
+// cluster id referenced by detections (named or not) plus every user-named
+// speaker, as [{speakerId, name, detections}].
 func (c *Controller) GetSpeakers(ctx echo.Context) error {
-	names, err := c.DS.GetSpeakerNames(ctx.Request().Context())
+	roster, err := c.DS.GetSpeakerRoster(ctx.Request().Context())
 	if err != nil {
-		return c.HandleError(ctx, err, "Failed to get speaker names", http.StatusInternalServerError)
+		return c.HandleError(ctx, err, "Failed to get speaker roster", http.StatusInternalServerError)
 	}
 
-	entries := make([]SpeakerNameEntry, 0, len(names))
-	for i := range names {
-		entries = append(entries, SpeakerNameEntry{
-			SpeakerID: names[i].SpeakerID,
-			Name:      names[i].Name,
+	entries := make([]SpeakerRosterEntry, 0, len(roster))
+	for i := range roster {
+		entries = append(entries, SpeakerRosterEntry{
+			SpeakerID:  roster[i].SpeakerID,
+			Name:       roster[i].Name,
+			Detections: roster[i].Detections,
 		})
 	}
 

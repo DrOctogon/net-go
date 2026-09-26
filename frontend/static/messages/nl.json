@@ -1974,6 +1974,7 @@
       "filters": "Filters",
       "integration": "Integraties",
       "security": "Beveiliging",
+      "speakers": "Sprekers",
       "species": "Soorten",
       "notifications": "Meldingen",
       "support": "Ondersteuning"
@@ -3927,7 +3928,15 @@
         "defaultGainUnit": "dB"
       }
     },
-    "restartRequired": "Sommige wijzigingen vereisen een herstart van de server. Herstart VoiceWatch."
+    "restartRequired": "Sommige wijzigingen vereisen een herstart van de server. Herstart VoiceWatch.",
+    "speakers": {
+      "title": "Sprekersoverzicht",
+      "description": "Alle sprekers met stemafdruk, benoemd en onbenoemd, met hun aantal detecties.",
+      "unnamed": "onbenoemd",
+      "empty": "Nog geen sprekers. Sprekers verschijnen hier zodra detecties aan een stem worden gekoppeld.",
+      "loadFailed": "Sprekersoverzicht laden mislukt",
+      "loginRequired": "Log in om het sprekersoverzicht te bekijken en te beheren."
+    }
   },
   "auth": {
     "login": "Aanmelden",

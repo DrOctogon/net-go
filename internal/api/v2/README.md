@@ -141,7 +141,7 @@ Lightweight connectivity check. Returns a minimal response with no database quer
 
 | Method | Route                | Handler             | Auth | Description                                                          |
 | ------ | -------------------- | ------------------- | ---- | -------------------------------------------------------------------- |
-| GET    | `/speakers`          | `GetSpeakers`       | ✅   | Household speaker roster: `[{speakerId, name}]`                       |
+| GET    | `/speakers`          | `GetSpeakers`       | ✅   | Full speaker roster (named + unnamed): `[{speakerId, name, detections}]`; `name` is `""` for unnamed speakers |
 | PUT    | `/speakers/:id/name` | `UpdateSpeakerName` | ✅   | Set display name for a `spk_<n>` cluster; empty name clears mapping   |
 
 ### Integrations (`integrations.go`)

@@ -1974,6 +1974,7 @@
       "filters": "Suodattimet",
       "integration": "Integraatiot",
       "security": "Turvallisuus",
+      "speakers": "Puhujat",
       "species": "Lajit",
       "notifications": "Ilmoitukset",
       "support": "Tuki"
@@ -3927,7 +3928,15 @@
         "defaultGainUnit": "dB"
       }
     },
-    "restartRequired": "Jotkin muutokset vaativat palvelimen uudelleenkäynnistyksen astuakseen voimaan. Käynnistä VoiceWatch uudelleen."
+    "restartRequired": "Jotkin muutokset vaativat palvelimen uudelleenkäynnistyksen astuakseen voimaan. Käynnistä VoiceWatch uudelleen.",
+    "speakers": {
+      "title": "Puhujaluettelo",
+      "description": "Kaikki ääniprofiilin perusteella tunnistetut puhujat, nimetyt ja nimeämättömät, havaintomäärineen.",
+      "unnamed": "nimeämätön",
+      "empty": "Ei vielä puhujia. Puhujat näkyvät täällä, kun havainnot yhdistetään ääneen.",
+      "loadFailed": "Puhujaluettelon lataaminen epäonnistui",
+      "loginRequired": "Kirjaudu sisään nähdäksesi ja hallitaksesi puhujaluetteloa."
+    }
   },
   "auth": {
     "login": "Kirjaudu",

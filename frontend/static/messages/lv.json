@@ -1974,6 +1974,7 @@
       "filters": "Filtri",
       "integration": "Integrācijas",
       "security": "Drošība",
+      "speakers": "Runātāji",
       "species": "Sugas",
       "notifications": "Paziņojumi",
       "support": "Atbalsts"
@@ -3927,7 +3928,15 @@
         "defaultGainUnit": "dB"
       }
     },
-    "restartRequired": "Dažām izmaiņām nepieciešama servera pārstartēšana, lai tās stātos spēkā. Lūdzu, pārstartējiet VoiceWatch."
+    "restartRequired": "Dažām izmaiņām nepieciešama servera pārstartēšana, lai tās stātos spēkā. Lūdzu, pārstartējiet VoiceWatch.",
+    "speakers": {
+      "title": "Runātāju saraksts",
+      "description": "Visi balss nospieduma runātāji, nosaukti un nenosaukti, ar noteikšanas gadījumu skaitu.",
+      "unnamed": "nenosaukts",
+      "empty": "Pagaidām nav runātāju. Runātāji šeit parādīsies, kad noteikšanas gadījumi tiks piesaistīti balsij.",
+      "loadFailed": "Neizdevās ielādēt runātāju sarakstu",
+      "loginRequired": "Piesakieties, lai skatītu un pārvaldītu runātāju sarakstu."
+    }
   },
   "auth": {
     "login": "Pieteikties",

@@ -1974,6 +1974,7 @@
       "filters": "Filtre",
       "integration": "Integrasjoner",
       "security": "Sikkerhet",
+      "speakers": "Talere",
       "species": "Arter",
       "notifications": "Varsler",
       "support": "Support"
@@ -3927,7 +3928,15 @@
         "defaultGainUnit": "dB"
       }
     },
-    "restartRequired": "Noen endringer krever en serveromstart for å ta effekt. Start VoiceWatch på nytt."
+    "restartRequired": "Noen endringer krever en serveromstart for å ta effekt. Start VoiceWatch på nytt.",
+    "speakers": {
+      "title": "Taleroversikt",
+      "description": "Alle stemmeavtrykk-talere, navngitte og unavngitte, med antall registreringer.",
+      "unnamed": "unavngitt",
+      "empty": "Ingen talere ennå. Talere vises her når registreringer knyttes til en stemme.",
+      "loadFailed": "Kunne ikke laste taleroversikten",
+      "loginRequired": "Logg inn for å se og administrere taleroversikten."
+    }
   },
   "auth": {
     "login": "Logg inn",

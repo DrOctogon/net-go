@@ -1974,6 +1974,7 @@
       "filters": "Filter",
       "integration": "Integrationer",
       "security": "Säkerhet",
+      "speakers": "Talare",
       "species": "Arter",
       "notifications": "Aviseringar",
       "support": "Support"
@@ -3927,7 +3928,15 @@
         "defaultGainUnit": "dB"
       }
     },
-    "restartRequired": "Vissa ändringar kräver en omstart av servern för att träda i kraft. Starta om VoiceWatch."
+    "restartRequired": "Vissa ändringar kräver en omstart av servern för att träda i kraft. Starta om VoiceWatch.",
+    "speakers": {
+      "title": "Talarlista",
+      "description": "Alla röstavtryckstalare, namngivna och icke namngivna, med antal detektioner.",
+      "unnamed": "namnlös",
+      "empty": "Inga talare ännu. Talare visas här när detektioner kopplas till en röst.",
+      "loadFailed": "Det gick inte att läsa in talarlistan",
+      "loginRequired": "Logga in för att se och hantera talarlistan."
+    }
   },
   "auth": {
     "login": "Logga in",

@@ -1974,6 +1974,7 @@
       "filters": "Filtros",
       "integration": "Integrações",
       "security": "Segurança",
+      "speakers": "Falantes",
       "species": "Espécies",
       "notifications": "Notificações",
       "support": "Suporte"
@@ -3927,7 +3928,15 @@
         "defaultGainUnit": "dB"
       }
     },
-    "restartRequired": "Algumas alterações requerem um reinício do servidor para terem efeito. Por favor, reinicie o VoiceWatch."
+    "restartRequired": "Algumas alterações requerem um reinício do servidor para terem efeito. Por favor, reinicie o VoiceWatch.",
+    "speakers": {
+      "title": "Lista de falantes",
+      "description": "Todos os falantes com impressão vocal, com e sem nome, com o número de detecções.",
+      "unnamed": "sem nome",
+      "empty": "Ainda não há falantes. Os falantes aparecerão aqui quando as detecções forem atribuídas a uma voz.",
+      "loadFailed": "Falha ao carregar a lista de falantes",
+      "loginRequired": "Inicie sessão para ver e gerir a lista de falantes."
+    }
   },
   "auth": {
     "login": "Entrar",

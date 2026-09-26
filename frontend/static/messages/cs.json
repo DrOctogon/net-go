@@ -1974,6 +1974,7 @@
       "filters": "Filtry",
       "integration": "Integrace",
       "security": "Zabezpečení",
+      "speakers": "Mluvčí",
       "species": "Druhy",
       "notifications": "Upozornění",
       "support": "Podpora"
@@ -3927,7 +3928,15 @@
         "defaultGainUnit": "dB"
       }
     },
-    "restartRequired": "Některé změny vyžadují restart serveru. Restartujte prosím VoiceWatch."
+    "restartRequired": "Některé změny vyžadují restart serveru. Restartujte prosím VoiceWatch.",
+    "speakers": {
+      "title": "Seznam mluvčích",
+      "description": "Všichni mluvčí rozpoznaní podle hlasového otisku, pojmenovaní i nepojmenovaní, s počty detekcí.",
+      "unnamed": "nepojmenovaný",
+      "empty": "Zatím žádní mluvčí. Mluvčí se zde objeví, jakmile budou detekce přiřazeny k hlasu.",
+      "loadFailed": "Nepodařilo se načíst seznam mluvčích",
+      "loginRequired": "Přihlaste se pro zobrazení a správu seznamu mluvčích."
+    }
   },
   "auth": {
     "login": "Přihlášení",

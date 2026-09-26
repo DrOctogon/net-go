@@ -174,6 +174,7 @@
     '/detectionfilters': 'settings.sections.filters',
     '/integrations': 'settings.sections.integration',
     '/security': 'settings.sections.security',
+    '/speakers': 'settings.sections.speakers',
     '/notifications': 'settings.sections.notifications',
     '/support': 'settings.sections.support',
   };

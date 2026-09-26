@@ -67,6 +67,7 @@ Performance Optimizations:
     Bell,
     Puzzle,
     Shield,
+    Users,
     LifeBuoy,
     Paintbrush,
     Brain,
@@ -189,6 +190,7 @@ Performance Optimizations:
     settingsNotifications: actualRoute === '/ui/settings/notifications',
     settingsIntegrations: actualRoute === '/ui/settings/integrations',
     settingsSecurity: actualRoute === '/ui/settings/security',
+    settingsSpeakers: actualRoute === '/ui/settings/speakers',
     settingsSupport: actualRoute === '/ui/settings/support',
     settingsUserInterface: actualRoute === '/ui/settings/userinterface',
   }));
@@ -233,6 +235,7 @@ Performance Optimizations:
     settingsNotifications: onNavigate ? '/settings/notifications' : '/ui/settings/notifications',
     settingsIntegrations: onNavigate ? '/settings/integrations' : '/ui/settings/integrations',
     settingsSecurity: onNavigate ? '/settings/security' : '/ui/settings/security',
+    settingsSpeakers: onNavigate ? '/settings/speakers' : '/ui/settings/speakers',
     settingsSupport: onNavigate ? '/settings/support' : '/ui/settings/support',
     settingsUserInterface: onNavigate ? '/settings/userinterface' : '/ui/settings/userinterface',
   });
@@ -357,6 +360,12 @@ Performance Optimizations:
       label: t('settings.sections.security'),
       url: navigationUrls.settingsSecurity,
       routeKey: 'settingsSecurity',
+    },
+    {
+      icon: Users,
+      label: t('settings.sections.speakers'),
+      url: navigationUrls.settingsSpeakers,
+      routeKey: 'settingsSpeakers',
     },
     {
       icon: LifeBuoy,
