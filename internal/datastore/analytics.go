@@ -20,7 +20,7 @@ func isDebugLoggingEnabled() bool {
 	return settings != nil && settings.Debug
 }
 
-// SpeciesSummaryData contains overall statistics for a bird species
+// SpeciesSummaryData contains overall statistics for a species
 type SpeciesSummaryData struct {
 	ScientificName string
 	CommonName     string
@@ -203,7 +203,7 @@ type SpeciesDetectionDate struct {
 	Date           string `json:"date"`
 }
 
-// GetSpeciesSummaryData retrieves overall statistics for all bird species
+// GetSpeciesSummaryData retrieves overall statistics for all species
 // Optional date range filtering with startDate and endDate parameters in YYYY-MM-DD format
 //
 // NOTE: Uses a read-only transaction with repeatable read isolation to prevent race conditions

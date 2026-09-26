@@ -15,7 +15,7 @@ const (
 	DetectionMetadataNoveltyEpisodeStart = "novelty_episode_start"
 )
 
-// DetectionEvent represents a bird detection event that can be processed asynchronously
+// DetectionEvent represents a detection event that can be processed asynchronously
 type DetectionEvent interface {
 	// GetSpeciesName returns the common name of the detected species
 	GetSpeciesName() string

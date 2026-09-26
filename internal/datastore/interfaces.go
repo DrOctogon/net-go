@@ -940,7 +940,7 @@ func (ds *DataStore) SpeciesDetections(species, date, hour string, duration int,
 	return detections, err
 }
 
-// GetLastDetections retrieves the most recent bird detections.
+// GetLastDetections retrieves the most recent detections.
 func (ds *DataStore) GetLastDetections(numDetections int) ([]Note, error) {
 	var notes []Note
 	now := time.Now()
@@ -1249,7 +1249,7 @@ func (ds *DataStore) LatestHourlyWeather() (*HourlyWeather, error) {
 	return &weather, nil
 }
 
-// GetHourlyDetections retrieves bird detections for a specific date and hour.
+// GetHourlyDetections retrieves detections for a specific date and hour.
 func (ds *DataStore) GetHourlyDetections(date, hour string, duration, limit, offset int) ([]Note, error) {
 	var detections []Note
 

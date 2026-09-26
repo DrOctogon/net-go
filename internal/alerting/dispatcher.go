@@ -12,7 +12,7 @@ import (
 
 // NotificationCreator abstracts the notification service for testability.
 // The notifType parameter allows the dispatcher to specify the correct
-// notification type (e.g., TypeDetection for bird detections, TypeWarning
+// notification type (e.g., TypeDetection for detections, TypeWarning
 // for system alerts) so push providers can filter appropriately.
 //
 // The eventProps parameter carries event-specific properties (species name,

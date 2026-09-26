@@ -26,7 +26,7 @@ const (
 	TypeWarning Type = "warning"
 	// TypeInfo indicates an informational notification
 	TypeInfo Type = "info"
-	// TypeDetection indicates a bird detection notification
+	// TypeDetection indicates a detection notification
 	TypeDetection Type = "detection"
 	// TypeSystem indicates a system status notification
 	TypeSystem Type = "system"

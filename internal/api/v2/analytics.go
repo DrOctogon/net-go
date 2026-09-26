@@ -103,7 +103,7 @@ func (c *Controller) logBatchQueryError(msg string, err error, fields ...logger.
 	return false
 }
 
-// SpeciesDailySummary represents a bird in the daily species summary API response
+// SpeciesDailySummary represents a detected species in the daily species summary API response
 type SpeciesDailySummary struct {
 	ScientificName     string  `json:"scientific_name"`
 	CommonName         string  `json:"common_name"`
@@ -125,7 +125,7 @@ type SpeciesDailySummary struct {
 	CurrentSeason   string `json:"current_season,omitempty"`     // Current season name
 }
 
-// SpeciesSummary represents a bird in the overall species summary API response
+// SpeciesSummary represents a detected species in the overall species summary API response
 type SpeciesSummary struct {
 	ScientificName string  `json:"scientific_name"`
 	CommonName     string  `json:"common_name"`
