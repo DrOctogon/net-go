@@ -75,7 +75,7 @@ func TestFlushRunsSpeakerAnalysisOutsidePendingMutex(t *testing.T) {
 	acquired := make(chan struct{})
 	go func() {
 		p.pendingMutex.Lock()
-		p.pendingMutex.Unlock() //nolint:staticcheck // empty critical section is the point: probing acquirability
+		defer p.pendingMutex.Unlock()
 		close(acquired)
 	}()
 
