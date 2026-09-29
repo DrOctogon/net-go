@@ -4503,6 +4503,19 @@
         "errorReportingLabel": "Send anonymous error reports",
         "errorReportingHelp": "Help improve VoiceWatch by sending anonymous error reports when something goes wrong"
       },
+      "speakerVoiceprint": {
+        "title": "Speaker & Voice-Print Features",
+        "intro": "VoiceWatch can try to tell voices apart by grouping clips that sound like the same speaker into voice-print clusters — separate from simply detecting that a human voice occurred.",
+        "point1": "Groups clips into likely-same-speaker clusters based on voice-print similarity",
+        "point2": "Optionally estimates gender and age band per cluster",
+        "point3": "Lets you name clusters on the Speakers roster so you know who's who",
+        "point4": "Can alert you when a voice doesn't match any known cluster",
+        "caveat": "Off by default. Gender and age-band estimation each require you to supply your own ONNX model — none is bundled with VoiceWatch. These are statistical estimates, not identity recognition, and accuracy varies with the model and audio quality.",
+        "settingsHint": "Turn it on and choose your models under",
+        "settingsLinkLabel": "Settings → Audio → Processing → Speaker Attributes",
+        "rosterHint": "Named clusters and new-speaker alerts show up on the",
+        "rosterLinkLabel": "Speakers page"
+      },
       "responsibleUse": {
         "title": "Using VoiceWatch Responsibly",
         "intro": "VoiceWatch is a powerful tool that enhances your birding experience through AI-assisted identification. To ensure the best outcomes for both birding and conservation:",

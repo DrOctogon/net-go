@@ -4503,6 +4503,19 @@
         "errorReportingLabel": "Enviar relatórios de erros anónimos",
         "errorReportingHelp": "Ajude a melhorar o VoiceWatch enviando relatórios de erros anónimos quando algo corre mal"
       },
+      "speakerVoiceprint": {
+        "title": "Funcionalidades de identificação de falantes e impressão de voz",
+        "intro": "O VoiceWatch pode tentar distinguir vozes agrupando clipes que soam como o mesmo falante em clusters de impressão de voz – algo diferente de simplesmente detectar que houve uma voz humana.",
+        "point1": "Agrupa clipes em clusters de provável mesmo falante com base na semelhança da impressão de voz",
+        "point2": "Estima opcionalmente o gênero e a faixa etária por cluster",
+        "point3": "Permite atribuir um nome aos clusters na lista de falantes, para saber quem é quem",
+        "point4": "Pode alertá-lo quando uma voz não corresponde a nenhum cluster conhecido",
+        "caveat": "Desativado por padrão. A estimativa de gênero e de faixa etária exige, cada uma, que você forneça o seu próprio modelo ONNX – nenhum vem incluído com o VoiceWatch. Trata-se de estimativas estatísticas, não de reconhecimento de identidade, e a precisão varia conforme o modelo e a qualidade do áudio.",
+        "settingsHint": "Ative-a e escolha os seus modelos em",
+        "settingsLinkLabel": "Configurações → Áudio → Processamento → Speaker Attributes",
+        "rosterHint": "Os clusters com nome e os alertas de novos falantes aparecem na página de",
+        "rosterLinkLabel": "Falantes"
+      },
       "responsibleUse": {
         "title": "Utilização Responsável do VoiceWatch",
         "intro": "O VoiceWatch é uma ferramenta poderosa que melhora a sua experiência de observação de aves através da identificação assistida por IA. Para garantir os melhores resultados tanto para a observação de aves como para a conservação:",

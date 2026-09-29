@@ -3,9 +3,9 @@ import { getStepsForFlow } from './wizardRegistry';
 
 describe('wizardRegistry — getStepsForFlow()', () => {
   describe('onboarding flow', () => {
-    it('returns 6 steps for onboarding flow', () => {
+    it('returns 7 steps for onboarding flow', () => {
       const steps = getStepsForFlow('onboarding');
-      expect(steps).toHaveLength(6);
+      expect(steps).toHaveLength(7);
     });
 
     it('all onboarding steps are component type', () => {
@@ -29,6 +29,15 @@ describe('wizardRegistry — getStepsForFlow()', () => {
     it('last onboarding step is responsible-use', () => {
       const steps = getStepsForFlow('onboarding');
       expect(steps[steps.length - 1].id).toBe('responsible-use');
+    });
+
+    it('speaker-voiceprint step is placed immediately before responsible-use (privacy adjacency)', () => {
+      const steps = getStepsForFlow('onboarding');
+      const ids = steps.map(s => s.id);
+      const speakerIndex = ids.indexOf('speaker-voiceprint');
+      const responsibleUseIndex = ids.indexOf('responsible-use');
+      expect(speakerIndex).toBeGreaterThan(-1);
+      expect(speakerIndex).toBe(responsibleUseIndex - 1);
     });
   });
 

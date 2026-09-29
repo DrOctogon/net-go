@@ -4503,6 +4503,19 @@
         "errorReportingLabel": "Lähetä nimettömiä virheilmoituksia",
         "errorReportingHelp": "Auta parantamaan VoiceWatch:ta lähettämällä nimettömiä virheilmoituksia ongelmatilanteissa"
       },
+      "speakerVoiceprint": {
+        "title": "Puhujan ja äänijäljen tunnistuksen ominaisuudet",
+        "intro": "VoiceWatch voi yrittää erottaa äänet toisistaan ryhmittelemällä samalta puhujalta kuulostavat klipit äänijälkiklustereiksi – tämä on eri asia kuin pelkkä ihmisäänen havaitseminen.",
+        "point1": "Ryhmittelee klipit todennäköisesti samaa puhujaa edustaviin klustereihin äänijäljen samankaltaisuuden perusteella",
+        "point2": "Arvioi valinnaisesti sukupuolen ja ikäryhmän klusteria kohden",
+        "point3": "Antaa sinun nimetä klustereita puhujaluettelossa, jotta tiedät, kuka on kuka",
+        "point4": "Voi hälyttää, kun ääni ei vastaa mitään tunnettua klusteria",
+        "caveat": "Oletuksena pois päältä. Sukupuolen ja ikäryhmän arviointi vaatii kumpikin oman ONNX-mallin toimittamista – VoiceWatchin mukana ei tule yhtään. Kyseessä ovat tilastolliset arviot, ei henkilöllisyyden tunnistus, ja tarkkuus vaihtelee mallin ja äänenlaadun mukaan.",
+        "settingsHint": "Ota se käyttöön ja valitse mallisi kohdasta",
+        "settingsLinkLabel": "Asetukset → Ääni → Käsittely → Speaker Attributes",
+        "rosterHint": "Nimetyt klusterit ja uusien puhujien hälytykset näkyvät",
+        "rosterLinkLabel": "Puhujat-sivulla"
+      },
       "responsibleUse": {
         "title": "VoiceWatch:n vastuullinen käyttö",
         "intro": "VoiceWatch on tehokas työkalu, joka parantaa lintuhavaintokokemustasi tekoälyavusteisen tunnistuksen avulla. Parhaiden tulosten saavuttamiseksi sekä lintuharrastuksessa että luonnonsuojelussa:",

@@ -4503,6 +4503,19 @@
         "errorReportingLabel": "Anonyme Fehlerberichte senden",
         "errorReportingHelp": "Helfen Sie, VoiceWatch zu verbessern, indem Sie anonyme Fehlerberichte senden, wenn etwas schiefgeht"
       },
+      "speakerVoiceprint": {
+        "title": "Sprecher- und Stimmabdruck-Funktionen",
+        "intro": "VoiceWatch kann versuchen, Stimmen zu unterscheiden, indem Clips, die nach demselben Sprecher klingen, zu Stimmabdruck-Clustern gruppiert werden – das ist etwas anderes als nur zu erkennen, dass eine menschliche Stimme vorkam.",
+        "point1": "Gruppiert Clips anhand der Ähnlichkeit des Stimmabdrucks zu wahrscheinlich gleichen Sprechern",
+        "point2": "Schätzt optional Geschlecht und Altersgruppe pro Cluster",
+        "point3": "Ermöglicht das Benennen von Clustern in der Sprecherliste, damit Sie wissen, wer wer ist",
+        "point4": "Kann Sie benachrichtigen, wenn eine Stimme zu keinem bekannten Cluster passt",
+        "caveat": "Standardmäßig deaktiviert. Für die Schätzung von Geschlecht und Altersgruppe müssen Sie jeweils ein eigenes ONNX-Modell bereitstellen – keines ist in VoiceWatch enthalten. Es handelt sich um statistische Schätzungen, keine Identitätserkennung, und die Genauigkeit hängt vom Modell und der Audioqualität ab.",
+        "settingsHint": "Aktivieren Sie sie und wählen Sie Ihre Modelle unter",
+        "settingsLinkLabel": "Einstellungen → Audio → Verarbeitung → Speaker Attributes",
+        "rosterHint": "Benannte Cluster und Warnungen zu neuen Sprechern erscheinen auf der",
+        "rosterLinkLabel": "Sprecher-Seite"
+      },
       "responsibleUse": {
         "title": "Verantwortungsvolle Nutzung von VoiceWatch",
         "intro": "VoiceWatch ist ein leistungsstarkes Werkzeug, das Ihre Vogelbeobachtungserfahrung durch KI-gestützte Identifizierung verbessert. Um die besten Ergebnisse sowohl für die Vogelbeobachtung als auch für den Naturschutz zu erzielen:",
