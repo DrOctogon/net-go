@@ -4305,7 +4305,8 @@
       "typesRequired": "O tipo de objeto e o tipo de ativação são obrigatórios",
       "duplicateName": "Já existe uma regra com este nome",
       "invalidJSON": "JSON inválido",
-      "invalidEscalation": "Os passos de escalação são inválidos"
+      "invalidEscalation": "Os passos de escalação são inválidos",
+      "builtInDelete": "As regras integradas não podem ser eliminadas — desative-as em alternativa"
     },
     "detection": {
       "invalidDate": "Formato de {paramName} inválido, utilize AAAA-MM-DD"

@@ -4305,7 +4305,8 @@
       "typesRequired": "Objekttype og udløsertype er påkrævet",
       "duplicateName": "En regel med dette navn findes allerede",
       "invalidJSON": "Ugyldig JSON",
-      "invalidEscalation": "Eskaleringstrinnene er ugyldige"
+      "invalidEscalation": "Eskaleringstrinnene er ugyldige",
+      "builtInDelete": "Indbyggede regler kan ikke slettes — deaktiver dem i stedet"
     },
     "detection": {
       "invalidDate": "Ugyldigt {paramName}-format, brug ÅÅÅÅ-MM-DD"

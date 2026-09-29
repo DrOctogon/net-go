@@ -4305,7 +4305,8 @@
       "typesRequired": "Objekta veids un aktivizēšanas veids ir obligāti",
       "duplicateName": "Noteikums ar šādu nosaukumu jau pastāv",
       "invalidJSON": "Nederīgs JSON",
-      "invalidEscalation": "Eskalācijas soļi nav derīgi"
+      "invalidEscalation": "Eskalācijas soļi nav derīgi",
+      "builtInDelete": "Iebūvētos noteikumus nevar dzēst — tā vietā atspējojiet tos"
     },
     "detection": {
       "invalidDate": "Nederīgs {paramName} formāts, izmantojiet YYYY-MM-DD"

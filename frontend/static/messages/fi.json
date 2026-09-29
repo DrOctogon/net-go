@@ -4305,7 +4305,8 @@
       "typesRequired": "Kohdetyyppi ja laukaisutyyppi ovat pakollisia",
       "duplicateName": "Tämänniminen sääntö on jo olemassa",
       "invalidJSON": "Virheellinen JSON",
-      "invalidEscalation": "Eskalaatioaskeleet ovat virheellisiä"
+      "invalidEscalation": "Eskalaatioaskeleet ovat virheellisiä",
+      "builtInDelete": "Sisäänrakennettuja sääntöjä ei voi poistaa — poista ne sen sijaan käytöstä"
     },
     "detection": {
       "invalidDate": "Virheellinen {paramName}-muoto, käytä VVVV-KK-PP"
