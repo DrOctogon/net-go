@@ -4527,6 +4527,19 @@
         "errorReportingLabel": "Névtelen hiba jelentések küldése",
         "errorReportingHelp": "Segítsen fejleszteni a VoiceWatch-t névtelen hiba jelentések küldésével, amikor valami hibásan működik"
       },
+      "speakerVoiceprint": {
+        "title": "Beszélő- és hanglenyomat-funkciók",
+        "intro": "A VoiceWatch megpróbálhatja megkülönböztetni a hangokat azáltal, hogy az azonos beszélőhöz hasonlító klipeket hanglenyomat-klaszterekbe csoportosítja – ez más, mint pusztán azt észlelni, hogy emberi hang hangzott el.",
+        "point1": "A klipeket valószínűsíthetően azonos beszélőhöz tartozó klaszterekbe csoportosítja a hanglenyomat hasonlósága alapján",
+        "point2": "Opcionálisan megbecsüli a nemet és a korcsoportot klaszterenként",
+        "point3": "Lehetővé teszi a klaszterek elnevezését a beszélőlistán, hogy tudja, ki kicsoda",
+        "point4": "Figyelmeztetheti, ha egy hang egyetlen ismert klaszterhez sem illik",
+        "caveat": "Alapértelmezés szerint kikapcsolva. A nem és a korcsoport becsléséhez saját ONNX-modellt kell megadnia mindkettőhöz – a VoiceWatch egyet sem tartalmaz. Ezek statisztikai becslések, nem személyazonosság-felismerés, és a pontosság a modelltől és a hangminőségtől függően változik.",
+        "settingsHint": "Kapcsolja be, és válassza ki a modelljeit itt:",
+        "settingsLinkLabel": "Beállítások → Hang → Feldolgozás → Speaker Attributes",
+        "rosterHint": "Az elnevezett klaszterek és az új beszélőkre vonatkozó riasztások itt jelennek meg:",
+        "rosterLinkLabel": "Beszélők"
+      },
       "responsibleUse": {
         "title": "A VoiceWatch felelős használata",
         "intro": "A VoiceWatch egy hatékony eszköl, amely AI-asszisztált azonosítással javítja a madárlesési élményt. A madárlesés és a természetvédelem legjobb eredményeinek biztosításához:",

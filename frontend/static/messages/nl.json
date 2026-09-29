@@ -4527,6 +4527,19 @@
         "errorReportingLabel": "Anonieme foutrapporten verzenden",
         "errorReportingHelp": "Help VoiceWatch te verbeteren door anonieme foutrapporten te verzenden wanneer er iets misgaat"
       },
+      "speakerVoiceprint": {
+        "title": "Spreker- en stemafdrukfuncties",
+        "intro": "VoiceWatch kan proberen stemmen van elkaar te onderscheiden door clips die klinken als dezelfde spreker te groeperen in stemafdrukclusters – dat is iets anders dan simpelweg detecteren dat er een menselijke stem was.",
+        "point1": "Groepeert clips in clusters van waarschijnlijk dezelfde spreker op basis van stemafdrukovereenkomst",
+        "point2": "Schat optioneel geslacht en leeftijdscategorie per cluster",
+        "point3": "Laat je clusters een naam geven op de sprekerslijst, zodat je weet wie wie is",
+        "point4": "Kan je waarschuwen wanneer een stem niet overeenkomt met een bekend cluster",
+        "caveat": "Standaard uitgeschakeld. Voor het schatten van geslacht en leeftijdscategorie moet je telkens je eigen ONNX-model aanleveren – VoiceWatch levert er geen mee. Dit zijn statistische schattingen, geen identiteitsherkenning, en de nauwkeurigheid varieert met het model en de audiokwaliteit.",
+        "settingsHint": "Zet het aan en kies je modellen onder",
+        "settingsLinkLabel": "Instellingen → Audio → Verwerking → Speaker Attributes",
+        "rosterHint": "Benoemde clusters en meldingen over nieuwe sprekers verschijnen op de",
+        "rosterLinkLabel": "sprekerspagina"
+      },
       "responsibleUse": {
         "title": "Verantwoord gebruik van VoiceWatch",
         "intro": "VoiceWatch is een krachtig hulpmiddel dat je vogelervaring verbetert door AI-ondersteunde identificatie. Om de beste resultaten voor zowel vogelen als natuurbehoud te waarborgen:",

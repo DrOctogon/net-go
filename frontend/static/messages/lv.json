@@ -4527,6 +4527,19 @@
         "errorReportingLabel": "Sūtīt anonīmus kļūdu ziņojumus",
         "errorReportingHelp": "Palīdziet uzlabot VoiceWatch, sūtot anonīmus kļūdu ziņojumus, kad kaut kas noiet greizi"
       },
+      "speakerVoiceprint": {
+        "title": "Runātāju un balss nospieduma funkcijas",
+        "intro": "VoiceWatch var mēģināt atšķirt balsis, grupējot klipus, kas izklausās pēc tā paša runātāja, balss nospieduma kopās – tas atšķiras no vienkāršas cilvēka balss noteikšanas.",
+        "point1": "Grupē klipus iespējamās viena runātāja kopās, pamatojoties uz balss nospieduma līdzību",
+        "point2": "Pēc izvēles novērtē dzimumu un vecuma grupu katrai kopai",
+        "point3": "Ļauj nosaukt kopas runātāju sarakstā, lai jūs zinātu, kas ir kas",
+        "point4": "Var brīdināt, ja balss neatbilst nevienai zināmai kopai",
+        "caveat": "Pēc noklusējuma izslēgts. Dzimuma un vecuma grupas novērtēšanai katrai nepieciešams jūsu paša ONNX modelis – VoiceWatch tādu nesatur. Tie ir statistiski aprēķini, nevis identitātes atpazīšana, un precizitāte atšķiras atkarībā no modeļa un audio kvalitātes.",
+        "settingsHint": "Ieslēdziet to un izvēlieties modeļus sadaļā",
+        "settingsLinkLabel": "Iestatījumi → Audio → Apstrāde → Speaker Attributes",
+        "rosterHint": "Nosauktās kopas un brīdinājumi par jauniem runātājiem parādās lapā",
+        "rosterLinkLabel": "Runātāji"
+      },
       "responsibleUse": {
         "title": "VoiceWatch atbildīga lietošana",
         "intro": "VoiceWatch ir jaudīgs rīks, kas uzlabo jūsu putnu vērošanas pieredzi ar MI atbalstītu identifikāciju. Lai nodrošinātu labākos rezultātus gan putnu vērošanai, gan dabas aizsardzībai:",

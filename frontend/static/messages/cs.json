@@ -4527,6 +4527,19 @@
         "errorReportingLabel": "Odesílat anonymní hlášení chyb",
         "errorReportingHelp": "Pomozte vylepšit VoiceWatch odesíláním anonymních hlášení chyb, když něco selže"
       },
+      "speakerVoiceprint": {
+        "title": "Funkce rozpoznávání mluvčích a hlasové otisky",
+        "intro": "VoiceWatch dokáže odlišit hlasy od sebe tím, že seskupuje klipy, které znějí jako stejný mluvčí, do shluků na základě hlasového otisku – to je něco jiného než pouhá detekce, že došlo k lidskému hlasu.",
+        "point1": "Seskupuje klipy do pravděpodobně stejných mluvčích na základě podobnosti hlasového otisku",
+        "point2": "Volitelně odhaduje pohlaví a věkovou skupinu pro každý shluk",
+        "point3": "Umožňuje pojmenovat shluky v seznamu mluvčích, abyste věděli, kdo je kdo",
+        "point4": "Může vás upozornit, když hlas neodpovídá žádnému známému shluku",
+        "caveat": "Ve výchozím nastavení vypnuto. Odhad pohlaví a věkové skupiny vyžaduje, abyste pro každý atribut dodali vlastní model ONNX – žádný není součástí VoiceWatch. Jde o statistické odhady, ne o rozpoznání identity, a přesnost se liší podle modelu a kvality zvuku.",
+        "settingsHint": "Zapnete ji a vyberete si modely v",
+        "settingsLinkLabel": "Nastavení → Zvuk → Zpracování → Speaker Attributes",
+        "rosterHint": "Pojmenované shluky a upozornění na nové mluvčí se zobrazují na stránce",
+        "rosterLinkLabel": "Mluvčí"
+      },
       "responsibleUse": {
         "title": "Zodpovědné používání VoiceWatch",
         "intro": "VoiceWatch je výkonný nástroj, který obohacuje vaše pozorování ptáků o identifikaci s pomocí AI. Pro nejlepší výsledky v pozorování i ochraně přírody:",

@@ -4527,6 +4527,19 @@
         "errorReportingLabel": "Invia segnalazioni di errore anonime",
         "errorReportingHelp": "Aiuta a migliorare VoiceWatch inviando segnalazioni di errore anonime quando qualcosa va storto"
       },
+      "speakerVoiceprint": {
+        "title": "Funzionalità di riconoscimento del parlante e impronta vocale",
+        "intro": "VoiceWatch può provare a distinguere le voci raggruppando le clip che sembrano provenire dallo stesso parlante in cluster di impronta vocale, cosa diversa dal semplice rilevare che è stata rilevata una voce umana.",
+        "point1": "Raggruppa le clip in cluster di probabile stesso parlante in base alla somiglianza dell'impronta vocale",
+        "point2": "Stima facoltativamente genere e fascia d'età per ciascun cluster",
+        "point3": "Consente di assegnare un nome ai cluster nell'elenco dei parlanti, così sai chi è chi",
+        "point4": "Può avvisarti quando una voce non corrisponde a nessun cluster noto",
+        "caveat": "Disattivato per impostazione predefinita. La stima del genere e della fascia d'età richiede ciascuna che tu fornisca un tuo modello ONNX: nessuno è incluso in VoiceWatch. Si tratta di stime statistiche, non di riconoscimento dell'identità, e l'accuratezza varia in base al modello e alla qualità audio.",
+        "settingsHint": "Attivala e scegli i tuoi modelli in",
+        "settingsLinkLabel": "Impostazioni → Audio → Elaborazione → Speaker Attributes",
+        "rosterHint": "I cluster con nome e gli avvisi sui nuovi parlanti compaiono nella pagina",
+        "rosterLinkLabel": "Parlanti"
+      },
       "responsibleUse": {
         "title": "Usare VoiceWatch in modo responsabile",
         "intro": "VoiceWatch è uno strumento potente che migliora la tua esperienza di birdwatching attraverso l'identificazione assistita dall'IA. Per garantire i migliori risultati sia per il birdwatching che per la conservazione:",

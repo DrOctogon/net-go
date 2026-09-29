@@ -4527,6 +4527,19 @@
         "errorReportingLabel": "Wysyłaj anonimowe raporty o błędach",
         "errorReportingHelp": "Pomóż ulepszyć VoiceWatch wysyłając anonimowe raporty o błędach, gdy coś pójdzie nie tak"
       },
+      "speakerVoiceprint": {
+        "title": "Funkcje rozpoznawania mówców i odcisku głosu",
+        "intro": "VoiceWatch może próbować odróżniać głosy, grupując klipy brzmiące jak ten sam mówca w klastry na podstawie odcisku głosu – to coś innego niż samo wykrycie, że wystąpił ludzki głos.",
+        "point1": "Grupuje klipy w klastry prawdopodobnie tego samego mówcy na podstawie podobieństwa odcisku głosu",
+        "point2": "Opcjonalnie szacuje płeć i przedział wiekowy dla każdego klastra",
+        "point3": "Pozwala nadać klastrom nazwy na liście mówców, abyś wiedział, kto jest kim",
+        "point4": "Może powiadomić Cię, gdy głos nie pasuje do żadnego znanego klastra",
+        "caveat": "Domyślnie wyłączone. Szacowanie płci i przedziału wiekowego wymaga dostarczenia własnego modelu ONNX dla każdego z nich – żaden nie jest dołączony do VoiceWatch. To szacunki statystyczne, a nie rozpoznawanie tożsamości, a dokładność zależy od modelu i jakości dźwięku.",
+        "settingsHint": "Włącz tę funkcję i wybierz swoje modele w",
+        "settingsLinkLabel": "Ustawienia → Audio → Przetwarzanie → Speaker Attributes",
+        "rosterHint": "Nazwane klastry i powiadomienia o nowych mówcach pojawiają się na stronie",
+        "rosterLinkLabel": "Mówcy"
+      },
       "responsibleUse": {
         "title": "Odpowiedzialne korzystanie z VoiceWatch",
         "intro": "VoiceWatch to potężne narzędzie, które wzbogaca doświadczenie obserwacji ptaków dzięki identyfikacji wspomaganej przez AI. Aby zapewnić najlepsze wyniki zarówno dla obserwacji, jak i ochrony przyrody:",
