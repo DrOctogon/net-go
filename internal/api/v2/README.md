@@ -150,6 +150,92 @@ Lightweight connectivity check. Returns a minimal response with no database quer
 
 All `/speakers` routes are rate limited to 30 requests/min per IP; `PUT /speakers/:id/name` has an additional 10/min budget.
 
+### App (`app.go`)
+
+| Method | Route                 | Handler         | Auth | Description                                     |
+| ------ | --------------------- | --------------- | ---- | ----------------------------------------------- |
+| GET    | `/app/config`         | `GetAppConfig`  | ❌   | Frontend bootstrap configuration                |
+| POST   | `/app/wizard/dismiss` | `DismissWizard` | ❌   | Persist dismissal of the first-run setup wizard |
+
+### Audio Health (`audio_health.go`)
+
+| Method | Route           | Handler          | Auth | Description                           |
+| ------ | --------------- | ---------------- | ---- | ------------------------------------- |
+| GET    | `/health/audio` | `GetAudioHealth` | ✅   | Audio pipeline liveness/health status |
+
+### Database Overview (`database_overview.go`)
+
+| Method | Route                       | Handler               | Auth | Description                                |
+| ------ | --------------------------- | --------------------- | ---- | ------------------------------------------ |
+| GET    | `/system/database/overview` | `GetDatabaseOverview` | ✅   | Database statistics for the admin overview |
+
+### Database Backups (`backup.go`)
+
+All routes are under `/system/database/backup/jobs` and auth-protected.
+
+| Method | Route           | Handler              | Auth | Description                 |
+| ------ | --------------- | -------------------- | ---- | --------------------------- |
+| POST   | ``              | `StartBackupJob`     | ✅   | Start a backup job          |
+| GET    | ``              | `ListBackupJobs`     | ✅   | List backup jobs            |
+| GET    | `/:id`          | `GetBackupJobStatus` | ✅   | Status of one backup job    |
+| GET    | `/:id/download` | `DownloadBackupFile` | ✅   | Download a finished backup  |
+| DELETE | `/:id`          | `CancelBackupJob`    | ✅   | Cancel a running backup job |
+
+### Database Migration (`migration.go`)
+
+All routes are under `/system/database/migration` and auth-protected; POST operations additionally require the migration state manager.
+
+| Method | Route               | Handler              | Auth | Description                      |
+| ------ | ------------------- | -------------------- | ---- | -------------------------------- |
+| GET    | `/status`           | `GetMigrationStatus` | ✅   | Legacy→v2 migration status       |
+| GET    | `/prerequisites`    | `GetPrerequisites`   | ✅   | Pre-flight prerequisite checks   |
+| POST   | `/start`            | `StartMigration`     | ✅   | Start the migration              |
+| POST   | `/pause`            | `PauseMigration`     | ✅   | Pause the migration              |
+| POST   | `/resume`           | `ResumeMigration`    | ✅   | Resume a paused migration        |
+| POST   | `/retry-validation` | `RetryValidation`    | ✅   | Re-run post-migration validation |
+| POST   | `/cancel`           | `CancelMigration`    | ✅   | Cancel the migration             |
+| POST   | `/rollback`         | `RollbackMigration`  | ✅   | Roll back to the legacy database |
+
+### Legacy Cleanup (`legacy_cleanup.go`)
+
+All routes are under `/system/database/legacy` and auth-protected.
+
+| Method | Route      | Handler              | Auth | Description                         |
+| ------ | ---------- | -------------------- | ---- | ----------------------------------- |
+| GET    | `/status`  | `GetLegacyStatus`    | ✅   | Legacy-table status after migration |
+| POST   | `/cleanup` | `StartLegacyCleanup` | ✅   | Remove legacy tables post-migration |
+
+### Dynamic Thresholds (`dynamic_thresholds.go`)
+
+| Method | Route                                 | Handler                     | Auth | Description                             |
+| ------ | ------------------------------------- | --------------------------- | ---- | --------------------------------------- |
+| GET    | `/dynamic-thresholds`                 | `GetDynamicThresholds`      | ❌   | All per-species dynamic thresholds      |
+| GET    | `/dynamic-thresholds/stats`           | `GetDynamicThresholdStats`  | ❌   | Aggregate dynamic-threshold statistics  |
+| GET    | `/dynamic-thresholds/:species`        | `GetDynamicThreshold`       | ❌   | One species' dynamic threshold          |
+| GET    | `/dynamic-thresholds/:species/events` | `GetThresholdEvents`        | ❌   | Threshold adjustment events for species |
+| DELETE | `/dynamic-thresholds/:species`        | `ResetDynamicThreshold`     | ✅   | Reset one species' dynamic threshold    |
+| DELETE | `/dynamic-thresholds`                 | `ResetAllDynamicThresholds` | ✅   | Reset all dynamic thresholds            |
+
+### Metrics History (`metrics_history.go`)
+
+| Method | Route                     | Handler             | Auth | Description                                |
+| ------ | ------------------------- | ------------------- | ---- | ------------------------------------------ |
+| GET    | `/system/metrics/history` | `GetMetricsHistory` | ✅   | Historical system metrics (sparkline data) |
+| GET    | `/system/metrics/stream`  | `StreamMetrics`     | ✅⚡ | SSE stream of live system metrics          |
+
+### Stream Testing (`streams_test_handler.go`)
+
+| Method | Route                       | Handler           | Auth | Description                                |
+| ------ | --------------------------- | ----------------- | ---- | ------------------------------------------ |
+| POST   | `/streams/test`             | `TestStream`      | ✅   | Probe an RTSP stream's audio configuration |
+| POST   | `/streams/analyze-channels` | `AnalyzeChannels` | ✅   | Analyze per-channel energy of a stream     |
+
+### Terminal (`terminal.go`)
+
+| Method | Route          | Handler            | Auth | Description                      |
+| ------ | -------------- | ------------------ | ---- | -------------------------------- |
+| GET    | `/terminal/ws` | `HandleTerminalWS` | ✅   | WebSocket for the admin terminal |
+
 ### Integrations (`integrations.go`)
 
 | Method | Route                                        | Handler                         | Auth | Description                           |

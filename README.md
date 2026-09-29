@@ -92,6 +92,15 @@ Docker images are published for `linux/amd64` and `linux/arm64`. Pre-built binar
 - **Estimates, not identity recognition** — demographic inferences whose accuracy varies by accent, language, and recording quality. Disabled by default; each attribute (gender / age / voice-print) is individually toggled
 - **No model ships with VoiceWatch** — you supply an ONNX model file per attribute (see the privacy statement and `docs/HUMAN_VOICE_MODEL_PLAN.md`)
 
+### Speaker roster and presence (builds on voice-print clustering)
+
+- **Speaker roster** — every voice-print cluster (`spk_N`) is listed with its detection count and can be given a human name (`PUT /api/v2/speakers/:id/name`); managed from the Speakers settings page
+- **Per-speaker daily activity** — presence/occupancy view showing who was heard on which days (`GET /api/v2/speakers/activity`)
+- **Similar voices** — each detection links to the most similar voice-prints across the archive (cosine similarity, auth-gated)
+- **"New speaker detected" built-in alert** — fires when a voice matches no known cluster (event `speaker.new_speaker_detected`); enabled by default, inert until voice-print analysis is on
+- **Speaker search filters** — `speakerId`, `gender`, and `ageBand` on both search surfaces
+- **Privacy defaults** — verbatim transcripts are withheld from external alert channels and, along with speaker attributes and source identity, from unauthenticated API and SSE clients unless explicitly opted in
+
 ### Audio inputs
 
 - Soundcard capture and RTSP / RTSPS streams, including multiple sources in parallel

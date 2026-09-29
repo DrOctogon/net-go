@@ -340,6 +340,40 @@ realtime:
     exclude: []           # Always exclude these species regardless of confidence
     config:
 
+# Human voice / speech detection (Silero VAD)
+humanvoice:
+  # modelpath: /path/to/silero_vad.onnx  # optional: external model file; the embedded model is used when unset
+  threshold: 0.5          # confidence threshold for human voice detections
+
+# Global model enablement and management
+models:
+  enabled:                # model IDs to load at startup
+    - voicewatch
+  # directory: models/    # base directory for downloaded model files
+  # installed: []         # installed model IDs managed by the model gallery
+
+# Low-memory mode for constrained systems (e.g. Raspberry Pi)
+lowmemory:
+  mode: auto              # auto (detect from system memory), on, off
+
+# Backup system (disabled by default)
+backup:
+  enabled: false          # true to enable the backup system
+  debug: false            # detailed debug logging for backup operations
+  encryption: false       # encrypt backup archives (requires encryption_key)
+  # encryption_key: ""    # base64-encoded AES-256-GCM key; keep secret
+  sanitize_config: true   # strip secrets from the config copy included in backups
+  retention:
+    maxage: 30d           # delete backups older than this
+    maxbackups: 30        # keep at most this many backups
+    minbackups: 7         # never delete below this many
+  targets: []             # backup destinations; configure via the UI
+  schedules: []           # automatic backup schedules; configure via the UI
+
+# Alerting rules engine
+alerting:
+  history_retention_days: 30  # days to retain alert history (0 = unlimited)
+
 webserver:
   enabled: true           # true to enable web server
   port: 8080              # port for web server
