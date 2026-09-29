@@ -54,6 +54,15 @@ type Result struct {
 	// used by the datastore to classify non-bird sound classes correctly.
 	RawLabel string
 
+	// Speech-derived fields (VoiceWatch). Populated when a saved clip has been
+	// transcribed (transcription runs after save, so these are typically set
+	// when a persisted detection is loaded back, e.g. for migration). Zero
+	// values mean no transcript / no keyword match.
+	Transcript     string // Speech-to-text transcription of the saved clip
+	TranscriptLang string // Language the transcript was produced in (e.g. "en")
+	Flagged        bool   // Transcript matched a configured keyword
+	KeywordsHit    string // Comma-joined list of matched keywords
+
 	// Speaker attributes (Wave 5). Estimated demographic attributes and a
 	// voice-print embedding attached after detection when the opt-in
 	// speaker-attributes analysis is enabled. Zero-valued otherwise. These are

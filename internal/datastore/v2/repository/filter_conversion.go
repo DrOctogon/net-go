@@ -620,6 +620,15 @@ func ConvertSearchFilters(
 	// TimeOfDay to hours conversion
 	sf.IncludedHours = singleTimeOfDayToHours(filters.TimeOfDay)
 
+	// Speech-derived filters (transcript substring, keyword flag, speaker
+	// attributes) map directly; the repository query builder applies them
+	// with legacy-equivalent semantics.
+	sf.Transcript = filters.Transcript
+	sf.Flagged = filters.Flagged
+	sf.Gender = filters.Gender
+	sf.AgeBand = filters.AgeBand
+	sf.SpeakerID = filters.SpeakerID
+
 	// Sorting
 	// Default sort is by detected_at descending
 	sf.SortBy = SortFieldDetectedAt
@@ -733,6 +742,15 @@ func ConvertAdvancedFilters(
 
 		// Timezone for hour calculations
 		TimezoneOffset: GetTimezoneOffset(tz),
+
+		// Speech-derived filters (transcript substring, keyword flag, speaker
+		// attributes) map directly; the repository query builder applies them
+		// with legacy-equivalent semantics.
+		Transcript: filters.Transcript,
+		Flagged:    filters.Flagged,
+		Gender:     filters.Gender,
+		AgeBand:    filters.AgeBand,
+		SpeakerID:  filters.SpeakerID,
 	}
 
 	// Map SortBy string to v2 sort field constants

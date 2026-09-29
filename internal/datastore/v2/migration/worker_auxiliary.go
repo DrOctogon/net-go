@@ -49,6 +49,12 @@ type AuxiliaryMigrationResult struct {
 		Skipped               int
 		Error                 error
 	}
+	SpeakerNames struct {
+		Total    int
+		Migrated int
+		Skipped  int
+		Error    error
+	}
 }
 
 // auxSection pairs a section name with its migration stats for iteration.
@@ -66,6 +72,7 @@ func (r *AuxiliaryMigrationResult) sections() []auxSection {
 		{"threshold", r.Thresholds.Total, r.Thresholds.Migrated, r.Thresholds.Error},
 		{"threshold events", r.ThresholdEvents.Total, r.ThresholdEvents.Migrated, r.ThresholdEvents.Error},
 		{"notifications", r.Notifications.Total, r.Notifications.Migrated, r.Notifications.Error},
+		{"speaker names", r.SpeakerNames.Total, r.SpeakerNames.Migrated, r.SpeakerNames.Error},
 	}
 }
 
@@ -99,7 +106,8 @@ func (r *AuxiliaryMigrationResult) HasErrors() bool {
 		r.Thresholds.Error != nil ||
 		r.ThresholdEvents.Error != nil ||
 		r.Notifications.Error != nil ||
-		r.Weather.Error != nil
+		r.Weather.Error != nil ||
+		r.SpeakerNames.Error != nil
 }
 
 // Summary returns a human-readable summary of the migration.
@@ -138,6 +146,12 @@ func (r *AuxiliaryMigrationResult) Summary() string {
 	}
 	b.WriteString("\n")
 
+	fmt.Fprintf(&b, "  Speaker Names: %d/%d migrated", r.SpeakerNames.Migrated, r.SpeakerNames.Total)
+	if r.SpeakerNames.Error != nil {
+		fmt.Fprintf(&b, " (fetch error: %v)", r.SpeakerNames.Error)
+	}
+	b.WriteString("\n")
+
 	return b.String()
 }
 
@@ -150,6 +164,7 @@ type AuxiliaryMigrator struct {
 	imageCacheRepo   repository.ImageCacheRepository
 	thresholdRepo    repository.DynamicThresholdRepository
 	notificationRepo repository.NotificationHistoryRepository
+	speakerNameRepo  repository.SpeakerNameRepository
 	logger           logger.Logger
 
 	// Cached lookup table IDs for label creation
@@ -166,6 +181,7 @@ type AuxiliaryMigratorConfig struct {
 	ImageCacheRepo   repository.ImageCacheRepository
 	ThresholdRepo    repository.DynamicThresholdRepository
 	NotificationRepo repository.NotificationHistoryRepository
+	SpeakerNameRepo  repository.SpeakerNameRepository
 	Logger           logger.Logger
 
 	// Required: Cached lookup table IDs
@@ -183,6 +199,7 @@ func NewAuxiliaryMigrator(cfg *AuxiliaryMigratorConfig) *AuxiliaryMigrator {
 		imageCacheRepo:     cfg.ImageCacheRepo,
 		thresholdRepo:      cfg.ThresholdRepo,
 		notificationRepo:   cfg.NotificationRepo,
+		speakerNameRepo:    cfg.SpeakerNameRepo,
 		logger:             cfg.Logger,
 		defaultModelID:     cfg.DefaultModelID,
 		speciesLabelTypeID: cfg.SpeciesLabelTypeID,
@@ -213,6 +230,7 @@ func (m *AuxiliaryMigrator) MigrateAll(ctx context.Context) (*AuxiliaryMigration
 	m.migrateDynamicThresholds(ctx, result)
 	m.migrateNotificationHistory(ctx, result)
 	m.migrateWeatherData(ctx, result)
+	m.migrateSpeakerNames(ctx, result)
 
 	// Log comprehensive summary with structured fields
 	m.logger.Info("auxiliary migration completed",
@@ -227,7 +245,9 @@ func (m *AuxiliaryMigrator) MigrateAll(ctx context.Context) (*AuxiliaryMigration
 		logger.Int("daily_events_total", result.Weather.DailyEventsTotal),
 		logger.Int("daily_events_migrated", result.Weather.DailyEventsMigrated),
 		logger.Int("hourly_weather_total", result.Weather.HourlyWeatherTotal),
-		logger.Int("hourly_weather_migrated", result.Weather.HourlyWeatherMigrated))
+		logger.Int("hourly_weather_migrated", result.Weather.HourlyWeatherMigrated),
+		logger.Int("speaker_names_total", result.SpeakerNames.Total),
+		logger.Int("speaker_names_migrated", result.SpeakerNames.Migrated))
 
 	// Caller can inspect result.HasErrors() to decide if this is acceptable
 	return result, nil
@@ -629,6 +649,54 @@ func (m *AuxiliaryMigrator) migrateWeatherData(ctx context.Context, result *Auxi
 		logger.Int("skipped", result.Weather.Skipped))
 }
 
+// migrateSpeakerNames migrates the user-assigned speaker roster names
+// (legacy speaker_names table) to the v2 speaker_names table. The table is a
+// small household roster (one row per named voice-print cluster), so rows are
+// upserted individually with skip counters, following the auxiliary pattern.
+// Upserting by speaker_id keeps the migration idempotent across re-runs.
+func (m *AuxiliaryMigrator) migrateSpeakerNames(ctx context.Context, result *AuxiliaryMigrationResult) {
+	if m.speakerNameRepo == nil {
+		m.logger.Debug("speaker name repo not configured, skipping")
+		return
+	}
+
+	legacyNames, err := m.legacyStore.GetSpeakerNames(ctx)
+	if err != nil {
+		m.logger.Warn("failed to get legacy speaker names", logger.Error(err))
+		result.SpeakerNames.Error = err
+		return
+	}
+
+	result.SpeakerNames.Total = len(legacyNames)
+	if len(legacyNames) == 0 {
+		m.logger.Debug("no speaker names to migrate")
+		return
+	}
+
+	for i := range legacyNames {
+		n := &legacyNames[i]
+		v2Name := &entities.SpeakerName{
+			SpeakerID: n.SpeakerID,
+			Name:      n.Name,
+			CreatedAt: n.CreatedAt,
+			UpdatedAt: n.UpdatedAt,
+		}
+		if err := m.speakerNameRepo.Save(ctx, v2Name); err != nil {
+			m.logger.Warn("failed to migrate speaker name",
+				logger.String("speaker_id", n.SpeakerID),
+				logger.Error(err))
+			result.SpeakerNames.Skipped++
+			continue
+		}
+		result.SpeakerNames.Migrated++
+	}
+
+	m.logger.Info("speaker name migration completed",
+		logger.Int("total", result.SpeakerNames.Total),
+		logger.Int("migrated", result.SpeakerNames.Migrated),
+		logger.Int("skipped", result.SpeakerNames.Skipped))
+}
+
 // ValidateAuxiliaryTables validates that auxiliary tables have been migrated.
 func (m *AuxiliaryMigrator) ValidateAuxiliaryTables(ctx context.Context) error {
 	if m.legacyStore == nil {
@@ -666,6 +734,15 @@ func (m *AuxiliaryMigrator) ValidateAuxiliaryTables(ctx context.Context) error {
 		legacyHourlyWeather, _ := m.legacyStore.GetAllHourlyWeather()
 		m.logger.Info("hourly weather validation",
 			logger.Int("legacy_count", len(legacyHourlyWeather)))
+	}
+
+	// Validate speaker names
+	if m.speakerNameRepo != nil {
+		legacyNames, _ := m.legacyStore.GetSpeakerNames(ctx)
+		v2Names, _ := m.speakerNameRepo.GetAll(ctx)
+		m.logger.Info("speaker name validation",
+			logger.Int("legacy_count", len(legacyNames)),
+			logger.Int("v2_count", len(v2Names)))
 	}
 
 	return nil

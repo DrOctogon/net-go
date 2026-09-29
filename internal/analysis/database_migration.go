@@ -86,6 +86,7 @@ func setupMigrationWorker(cfg *migrationSetupConfig) error {
 	imageCacheRepo := repository.NewImageCacheRepository(v2DB, nil, labelRepo, cfg.useV2Prefix, isMySQL)
 	thresholdRepo := repository.NewDynamicThresholdRepository(v2DB, nil, labelRepo, cfg.useV2Prefix, isMySQL)
 	notificationRepo := repository.NewNotificationHistoryRepository(v2DB, nil, labelRepo, cfg.useV2Prefix, isMySQL)
+	speakerNameRepo := repository.NewSpeakerNameRepository(v2DB, cfg.useV2Prefix)
 
 	// Create the legacy detection repository
 	legacyRepo := datastore.NewDetectionRepository(cfg.ds, time.Local)
@@ -125,6 +126,7 @@ func setupMigrationWorker(cfg *migrationSetupConfig) error {
 		ImageCacheRepo:     imageCacheRepo,
 		ThresholdRepo:      thresholdRepo,
 		NotificationRepo:   notificationRepo,
+		SpeakerNameRepo:    speakerNameRepo,
 		Logger:             migrationLogger,
 		DefaultModelID:     defaultModel.ID,
 		SpeciesLabelTypeID: speciesLabelType.ID,
