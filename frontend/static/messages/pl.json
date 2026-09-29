@@ -774,7 +774,8 @@
       "detectionsGrid": "Ostatnie detekcje",
       "liveSpectrogram": "Spektrogram na żywo",
       "videoEmbed": "Osadzenie wideo",
-      "voiceActivity": "Voice Activity"
+      "voiceActivity": "Voice Activity",
+      "recentSpeakers": "Ostatni mówcy"
     },
     "voiceActivity": {
       "title": "Voice Activity",
@@ -787,6 +788,18 @@
       },
       "bar": {
         "tooltip": "{count} detection(s) at {hour}:00"
+      }
+    },
+    "recentSpeakers": {
+      "title": "Ostatni mówcy",
+      "subtitle": "Najaktywniejsi mówcy według detekcji",
+      "loading": "Ładowanie mówców...",
+      "empty": "Brak mówców. Mówcy pojawią się tutaj, gdy detekcje głosu zostaną dopasowane do odcisków głosu.",
+      "signInHint": "Zaloguj się, aby zobaczyć listę mówców gospodarstwa domowego.",
+      "detectionsCount": "{count} detekcji",
+      "rowAriaLabel": "Otwórz ustawienia mówcy {name}",
+      "errors": {
+        "load": "Nie udało się załadować listy mówców"
       }
     }
   },

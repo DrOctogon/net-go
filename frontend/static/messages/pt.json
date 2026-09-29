@@ -774,7 +774,8 @@
       "detectionsGrid": "Detecções recentes",
       "liveSpectrogram": "Espectrograma ao vivo",
       "videoEmbed": "Vídeo incorporado",
-      "voiceActivity": "Voice Activity"
+      "voiceActivity": "Voice Activity",
+      "recentSpeakers": "Falantes recentes"
     },
     "voiceActivity": {
       "title": "Voice Activity",
@@ -787,6 +788,18 @@
       },
       "bar": {
         "tooltip": "{count} detection(s) at {hour}:00"
+      }
+    },
+    "recentSpeakers": {
+      "title": "Falantes recentes",
+      "subtitle": "Principais falantes por detecções",
+      "loading": "Carregando falantes...",
+      "empty": "Ainda não há falantes. Os falantes aparecem aqui quando as detecções de voz são associadas a impressões vocais.",
+      "signInHint": "Faça login para ver a lista de falantes da residência.",
+      "detectionsCount": "{count} detecção(ões)",
+      "rowAriaLabel": "Abrir as configurações do falante {name}",
+      "errors": {
+        "load": "Falha ao carregar a lista de falantes"
       }
     }
   },

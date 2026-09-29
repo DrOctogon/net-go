@@ -22,7 +22,7 @@ func (s *Settings) MigrateDashboardLayout() bool {
 		Elements: []DashboardElement{
 			{
 				ID:      "daily-summary-0",
-				Type:    "daily-summary",
+				Type:    DashboardElementTypeDailySummary,
 				Enabled: true,
 				Summary: &DailySummaryConfig{
 					SummaryLimit: summaryLimit,
@@ -58,7 +58,7 @@ func (s *Settings) MigrateDashboardLayout() bool {
 // the value into the layout element config.
 func (s *Settings) GetEffectiveSummaryLimit() int {
 	for _, el := range s.Realtime.Dashboard.Layout.Elements {
-		if el.Type == "daily-summary" && el.Summary != nil && el.Summary.SummaryLimit > 0 {
+		if el.Type == DashboardElementTypeDailySummary && el.Summary != nil && el.Summary.SummaryLimit > 0 {
 			return el.Summary.SummaryLimit
 		}
 	}

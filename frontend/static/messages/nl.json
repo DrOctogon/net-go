@@ -774,7 +774,8 @@
       "detectionsGrid": "Recente detecties",
       "liveSpectrogram": "Live spectrogram",
       "videoEmbed": "Video-inbedding",
-      "voiceActivity": "Voice Activity"
+      "voiceActivity": "Voice Activity",
+      "recentSpeakers": "Recente sprekers"
     },
     "voiceActivity": {
       "title": "Voice Activity",
@@ -787,6 +788,18 @@
       },
       "bar": {
         "tooltip": "{count} detection(s) at {hour}:00"
+      }
+    },
+    "recentSpeakers": {
+      "title": "Recente sprekers",
+      "subtitle": "Meest actieve sprekers op detecties",
+      "loading": "Sprekers laden...",
+      "empty": "Nog geen sprekers. Sprekers verschijnen hier zodra stemdetecties aan stemprofielen zijn gekoppeld.",
+      "signInHint": "Meld u aan om de sprekerslijst van het huishouden te bekijken.",
+      "detectionsCount": "{count} detectie(s)",
+      "rowAriaLabel": "Sprekersinstellingen voor {name} openen",
+      "errors": {
+        "load": "Kan de sprekerslijst niet laden"
       }
     }
   },

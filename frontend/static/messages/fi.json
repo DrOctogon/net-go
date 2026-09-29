@@ -774,7 +774,8 @@
       "detectionsGrid": "Viimeisimmät havainnot",
       "liveSpectrogram": "Reaaliaikainen spektrogrammi",
       "videoEmbed": "Videoupotus",
-      "voiceActivity": "Voice Activity"
+      "voiceActivity": "Voice Activity",
+      "recentSpeakers": "Viimeisimmät puhujat"
     },
     "voiceActivity": {
       "title": "Voice Activity",
@@ -787,6 +788,18 @@
       },
       "bar": {
         "tooltip": "{count} detection(s) at {hour}:00"
+      }
+    },
+    "recentSpeakers": {
+      "title": "Viimeisimmät puhujat",
+      "subtitle": "Eniten havaintoja keränneet puhujat",
+      "loading": "Ladataan puhujia...",
+      "empty": "Ei vielä puhujia. Puhujat näkyvät täällä, kun äänihavainnot yhdistetään ääniprofiileihin.",
+      "signInHint": "Kirjaudu sisään nähdäksesi kotitalouden puhujaluettelon.",
+      "detectionsCount": "{count} havainto(a)",
+      "rowAriaLabel": "Avaa puhujan {name} asetukset",
+      "errors": {
+        "load": "Puhujaluettelon lataaminen epäonnistui"
       }
     }
   },

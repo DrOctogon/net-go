@@ -774,7 +774,8 @@
       "detectionsGrid": "Recent Detections",
       "liveSpectrogram": "Live Spectrogram",
       "videoEmbed": "Video Embed",
-      "voiceActivity": "Voice Activity"
+      "voiceActivity": "Voice Activity",
+      "recentSpeakers": "Recent Speakers"
     },
     "voiceActivity": {
       "title": "Voice Activity",
@@ -787,6 +788,18 @@
       },
       "bar": {
         "tooltip": "{count} detection(s) at {hour}:00"
+      }
+    },
+    "recentSpeakers": {
+      "title": "Recent Speakers",
+      "subtitle": "Top speakers by detections",
+      "loading": "Loading speakers...",
+      "empty": "No speakers yet. Speakers appear here once voice detections are matched to voice prints.",
+      "signInHint": "Sign in to view the household speaker roster.",
+      "detectionsCount": "{count} detection(s)",
+      "rowAriaLabel": "Open speaker settings for {name}",
+      "errors": {
+        "load": "Failed to load speaker roster"
       }
     }
   },

@@ -774,7 +774,8 @@
       "detectionsGrid": "Detecciones recientes",
       "liveSpectrogram": "Espectrograma en vivo",
       "videoEmbed": "Video incrustado",
-      "voiceActivity": "Voice Activity"
+      "voiceActivity": "Voice Activity",
+      "recentSpeakers": "Hablantes recientes"
     },
     "voiceActivity": {
       "title": "Voice Activity",
@@ -787,6 +788,18 @@
       },
       "bar": {
         "tooltip": "{count} detection(s) at {hour}:00"
+      }
+    },
+    "recentSpeakers": {
+      "title": "Hablantes recientes",
+      "subtitle": "Principales hablantes por detecciones",
+      "loading": "Cargando hablantes...",
+      "empty": "Aún no hay hablantes. Los hablantes aparecen aquí cuando las detecciones de voz se asocian a huellas de voz.",
+      "signInHint": "Inicia sesión para ver la lista de hablantes del hogar.",
+      "detectionsCount": "{count} detección(es)",
+      "rowAriaLabel": "Abrir la configuración del hablante {name}",
+      "errors": {
+        "load": "No se pudo cargar la lista de hablantes"
       }
     }
   },

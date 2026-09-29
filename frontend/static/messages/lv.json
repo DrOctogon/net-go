@@ -774,7 +774,8 @@
       "detectionsGrid": "Nesenās atklāšanas",
       "liveSpectrogram": "Tiešraides spektrogramma",
       "videoEmbed": "Video iegultne",
-      "voiceActivity": "Voice Activity"
+      "voiceActivity": "Voice Activity",
+      "recentSpeakers": "Nesenie runātāji"
     },
     "voiceActivity": {
       "title": "Voice Activity",
@@ -787,6 +788,18 @@
       },
       "bar": {
         "tooltip": "{count} detection(s) at {hour}:00"
+      }
+    },
+    "recentSpeakers": {
+      "title": "Nesenie runātāji",
+      "subtitle": "Aktīvākie runātāji pēc atklāšanām",
+      "loading": "Ielādē runātājus...",
+      "empty": "Pagaidām nav runātāju. Runātāji šeit parādīsies, kad balss atklāšanas tiks sasaistītas ar balss nospiedumiem.",
+      "signInHint": "Pierakstieties, lai skatītu mājsaimniecības runātāju sarakstu.",
+      "detectionsCount": "{count} atklāšana(s)",
+      "rowAriaLabel": "Atvērt runātāja {name} iestatījumus",
+      "errors": {
+        "load": "Neizdevās ielādēt runātāju sarakstu"
       }
     }
   },

@@ -69,6 +69,7 @@
     'detections-grid',
     'video-embed',
     'voice-activity',
+    'recent-speakers',
   ];
 
   // Maximum number of instances allowed per element type

@@ -8,6 +8,7 @@ const elementLabelKeys = new Map<string, string>([
   ['live-spectrogram', 'dashboard.elements.liveSpectrogram'],
   ['video-embed', 'dashboard.elements.videoEmbed'],
   ['voice-activity', 'dashboard.elements.voiceActivity'],
+  ['recent-speakers', 'dashboard.elements.recentSpeakers'],
 ]);
 
 export function getElementLabel(type: string): string {

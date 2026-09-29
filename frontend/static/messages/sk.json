@@ -774,7 +774,8 @@
       "detectionsGrid": "Nedávne detekcie",
       "liveSpectrogram": "Živý spektrogram",
       "videoEmbed": "Vložené video",
-      "voiceActivity": "Voice Activity"
+      "voiceActivity": "Voice Activity",
+      "recentSpeakers": "Nedávni hovoriaci"
     },
     "voiceActivity": {
       "title": "Voice Activity",
@@ -787,6 +788,18 @@
       },
       "bar": {
         "tooltip": "{count} detection(s) at {hour}:00"
+      }
+    },
+    "recentSpeakers": {
+      "title": "Nedávni hovoriaci",
+      "subtitle": "Najčastejší hovoriaci podľa detekcií",
+      "loading": "Načítavajú sa hovoriaci...",
+      "empty": "Zatiaľ žiadni hovoriaci. Hovoriaci sa tu zobrazia, keď budú hlasové detekcie priradené k hlasovým odtlačkom.",
+      "signInHint": "Prihláste sa, aby ste videli zoznam hovoriacich v domácnosti.",
+      "detectionsCount": "{count} detekcie/í",
+      "rowAriaLabel": "Otvoriť nastavenia hovoriaceho {name}",
+      "errors": {
+        "load": "Nepodarilo sa načítať zoznam hovoriacich"
       }
     }
   },

@@ -624,6 +624,7 @@ export type TranslationKey =
   | 'dashboard.elements.liveSpectrogram'
   | 'dashboard.elements.videoEmbed'
   | 'dashboard.elements.voiceActivity'
+  | 'dashboard.elements.recentSpeakers'
   | 'dashboard.voiceActivity.title'
   | 'dashboard.voiceActivity.subtitle'
   | 'dashboard.voiceActivity.chartAriaLabel'
@@ -631,6 +632,14 @@ export type TranslationKey =
   | 'dashboard.voiceActivity.empty'
   | 'dashboard.voiceActivity.errors.load'
   | 'dashboard.voiceActivity.bar.tooltip' // params: count, hour
+  | 'dashboard.recentSpeakers.title'
+  | 'dashboard.recentSpeakers.subtitle'
+  | 'dashboard.recentSpeakers.loading'
+  | 'dashboard.recentSpeakers.empty'
+  | 'dashboard.recentSpeakers.signInHint'
+  | 'dashboard.recentSpeakers.detectionsCount' // params: count
+  | 'dashboard.recentSpeakers.rowAriaLabel' // params: name
+  | 'dashboard.recentSpeakers.errors.load'
   | 'detections.title'
   | 'detections.humanVoice'
   | 'detections.flaggedByKeywords' // params: keywords
@@ -3635,6 +3644,8 @@ export type TranslationParams = {
   'dashboard.errors.configFetch': { status: string | number };
   'dashboard.editMode.configureTitle': { element: string | number };
   'dashboard.voiceActivity.bar.tooltip': { count: string | number; hour: string | number };
+  'dashboard.recentSpeakers.detectionsCount': { count: string | number };
+  'dashboard.recentSpeakers.rowAriaLabel': { name: string | number };
   'detections.flaggedByKeywords': { keywords: string | number };
   'detections.titles.hourly': { hour: string | number; date: string | number };
   'detections.titles.hourlyRange': {
