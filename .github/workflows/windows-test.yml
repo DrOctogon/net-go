@@ -68,8 +68,9 @@ jobs:
 
       - name: Add mingw gcc to PATH
         run: |
-          # -race needs CGO + a C compiler; windows-latest ships MSYS2 mingw but
-          # not on the default PATH. Prepend it so `gcc` resolves to mingw-w64.
+          # CGO needs a C compiler (the tflite/onnxruntime bindings are cgo);
+          # windows-latest ships MSYS2 mingw but not on the default PATH.
+          # Prepend it so `gcc` resolves to mingw-w64.
           # printf keeps the backslashes literal without echo escape ambiguity.
           printf '%s\n' 'C:\msys64\mingw64\bin' >> "$GITHUB_PATH"
 
@@ -152,12 +153,23 @@ jobs:
           # Write the -json stream to a file and take pass/fail from go test's own
           # exit code (no gotestfmt: go can wrap non-JSON build output into JSON
           # events whose content crashes its tokenizer). Failed tests are printed
-          # below and in the job summary. Longer timeout than Linux: the native
-          # runner with -race is much slower, and api/v2 (the largest package,
-          # ~2000 tests) intermittently exceeded the old 600s per-package ceiling
-          # under runner load (cumulative race-instrumented work, not a deadlock).
-          # 900s adds headroom and stays under the 25m step cap below.
-          go test -tags noembed,skipfrontend -race -json -v -short -timeout 900s ./... > gotest.log 2>&1
+          # below and in the job summary.
+          #
+          # NO -race on this job (deliberate): the race detector on
+          # windows/amd64 + Go 1.26.1 intermittently crashes the Go runtime
+          # itself, not the code under test — "fatal error: invalid g status"
+          # / "unexpected signal during runtime execution" with GC
+          # mark/preemption frames and goid=0. It is nondeterministic, so it
+          # red-flagged unrelated PRs roughly one run in five and always
+          # passed on rerun. Race coverage is kept on the Linux unit-test job
+          # (golangci-test.yml), which runs the same suite with -race on every
+          # push; this job's value is verifying the code builds and behaves on
+          # native Windows. Revisit if a later Go release fixes the runtime bug.
+          #
+          # 900s per-package timeout retained: api/v2 (the largest package,
+          # ~2000 tests) needs headroom under runner load, and it stays under
+          # the 25m step cap below.
+          go test -tags noembed,skipfrontend -json -v -short -timeout 900s ./... > gotest.log 2>&1
           TEST_EXIT_CODE=$?
 
           # `jq -R 'fromjson? // empty'` reads every line as raw text and only
