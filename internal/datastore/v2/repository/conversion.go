@@ -126,6 +126,37 @@ func ConvertToV2Detection(ctx context.Context, result *detection.Result, deps *C
 		LegacyID:         &legacyID,
 	}
 
+	// Speech-derived and speaker-attribute columns (VoiceWatch). Empty/zero
+	// domain values map to NULL, matching the v2only note conversion.
+	det.Flagged = result.Flagged
+	if result.Transcript != "" {
+		det.Transcript = &result.Transcript
+	}
+	if result.TranscriptLang != "" {
+		det.TranscriptLang = &result.TranscriptLang
+	}
+	if result.KeywordsHit != "" {
+		det.KeywordsHit = &result.KeywordsHit
+	}
+	if result.Gender != "" {
+		det.Gender = &result.Gender
+	}
+	if result.GenderConfidence != 0 {
+		det.GenderConfidence = &result.GenderConfidence
+	}
+	if result.AgeBand != "" {
+		det.AgeBand = &result.AgeBand
+	}
+	if result.AgeConfidence != 0 {
+		det.AgeConfidence = &result.AgeConfidence
+	}
+	if result.SpeakerID != "" {
+		det.SpeakerID = &result.SpeakerID
+	}
+	if len(result.VoicePrintEmbedding) > 0 {
+		det.VoicePrintEmbedding = result.VoicePrintEmbedding
+	}
+
 	return det, nil
 }
 

@@ -45,6 +45,7 @@ type TestContext struct {
 	ImageCacheRepo   repository.ImageCacheRepository
 	ThresholdRepo    repository.DynamicThresholdRepository
 	NotificationRepo repository.NotificationHistoryRepository
+	SpeakerNameRepo  repository.SpeakerNameRepository
 
 	// Lookup table IDs
 	SpeciesLabelTypeID uint  // "species" label type ID
@@ -134,6 +135,7 @@ func (ctx *TestContext) setupLegacyDB(t *testing.T, tmpDir string) {
 		&datastore.ThresholdEvent{},
 		&datastore.ImageCache{},
 		&datastore.NotificationHistory{},
+		&datastore.SpeakerName{},
 	)
 	require.NoError(t, err, "failed to migrate legacy schema")
 
@@ -195,6 +197,7 @@ func (ctx *TestContext) setupV2DB(t *testing.T, tmpDir string) {
 	ctx.ImageCacheRepo = repository.NewImageCacheRepository(db, nil, ctx.LabelRepo, false, false)
 	ctx.ThresholdRepo = repository.NewDynamicThresholdRepository(db, nil, ctx.LabelRepo, false, false)
 	ctx.NotificationRepo = repository.NewNotificationHistoryRepository(db, nil, ctx.LabelRepo, false, false)
+	ctx.SpeakerNameRepo = repository.NewSpeakerNameRepository(db, false)
 
 	// Populate lookup tables for V2 normalized schema
 	ctx.setupLookupTables(t)
@@ -293,6 +296,7 @@ func (ctx *TestContext) createAuxiliaryMigrator(t *testing.T) {
 		ImageCacheRepo:     ctx.ImageCacheRepo,
 		ThresholdRepo:      ctx.ThresholdRepo,
 		NotificationRepo:   ctx.NotificationRepo,
+		SpeakerNameRepo:    ctx.SpeakerNameRepo,
 		Logger:             ctx.Logger,
 		DefaultModelID:     ctx.DefaultModelID,
 		SpeciesLabelTypeID: ctx.SpeciesLabelTypeID,
@@ -519,6 +523,18 @@ func convertNoteToResult(note *datastore.Note, _ []datastore.Results, review *da
 		EndTime:        note.EndTime,
 		Model:          detection.DefaultModelInfo(),
 		AudioSource:    detection.AudioSource{},
+		// Speech-derived and speaker-attribute fields (mirrors the production
+		// noteToResult in internal/datastore/detection_repository.go).
+		Transcript:          note.Transcript,
+		TranscriptLang:      note.TranscriptLang,
+		Flagged:             note.Flagged,
+		KeywordsHit:         note.KeywordsHit,
+		Gender:              note.Gender,
+		GenderConfidence:    note.GenderConfidence,
+		AgeBand:             note.AgeBand,
+		AgeConfidence:       note.AgeConfidence,
+		SpeakerID:           note.SpeakerID,
+		VoicePrintEmbedding: note.VoicePrintEmbedding,
 	}
 
 	// Add review status
@@ -664,8 +680,11 @@ func (s *testLegacyInterface) GetAllHourlyWeather() ([]datastore.HourlyWeather, 
 // Stub implementations for unused datastore.Interface methods.
 // These are required by the interface but not used in migration tests.
 
-func (s *testLegacyInterface) GetSpeakerNames(_ context.Context) ([]datastore.SpeakerName, error) {
-	return []datastore.SpeakerName{}, nil
+// GetSpeakerNames implements datastore.Interface (used by AuxiliaryMigrator).
+func (s *testLegacyInterface) GetSpeakerNames(ctx context.Context) ([]datastore.SpeakerName, error) {
+	var names []datastore.SpeakerName
+	err := s.db.WithContext(ctx).Order("speaker_id").Find(&names).Error
+	return names, err
 }
 
 func (s *testLegacyInterface) SetSpeakerName(_ context.Context, _, _ string) error { return nil }

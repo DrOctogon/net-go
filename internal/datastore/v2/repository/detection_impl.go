@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"maps"
 	"slices"
+	"strings"
 	"time"
 
 	"github.com/tphakala/voicewatch/internal/datastore"
@@ -656,8 +657,40 @@ func (r *detectionRepository) buildSearchFilters(query *gorm.DB, filters *Search
 	if filters.MinID > 0 {
 		query = query.Where("id > ?", filters.MinID)
 	}
+
+	// Speech-derived filters (VoiceWatch). All columns live on the detections
+	// table; names are qualified because Search may JOIN labels/reviews/locks.
+	// Semantics mirror the legacy notes-table filters exactly: transcript is a
+	// case-insensitive substring match with LIKE wildcards escaped ('!' is the
+	// escape character because a backslash ESCAPE breaks MySQL string literals);
+	// the speaker-attribute filters are parameterized exact matches, and NULL
+	// rows never match a non-empty filter.
+	detTable := r.tableName()
+	if filters.Transcript != "" {
+		escaped := speechLikeEscaper.Replace(filters.Transcript)
+		query = query.Where(fmt.Sprintf("LOWER(%s.transcript) LIKE LOWER(?) ESCAPE '!'", detTable), "%"+escaped+"%")
+	}
+	if filters.Flagged != nil {
+		query = query.Where(fmt.Sprintf("%s.flagged = ?", detTable), *filters.Flagged)
+	}
+	if filters.Gender != "" {
+		query = query.Where(fmt.Sprintf("%s.gender = ?", detTable), filters.Gender)
+	}
+	if filters.AgeBand != "" {
+		query = query.Where(fmt.Sprintf("%s.age_band = ?", detTable), filters.AgeBand)
+	}
+	if filters.SpeakerID != "" {
+		query = query.Where(fmt.Sprintf("%s.speaker_id = ?", detTable), filters.SpeakerID)
+	}
 	return query
 }
+
+// speechLikeEscaper escapes the LIKE metacharacters %, _, and the escape
+// character itself in a user-supplied transcript search term, using '!' as the
+// escape character so the generated SQL is valid on both SQLite and MySQL
+// (a backslash ESCAPE clause breaks MySQL's default sql_mode; see
+// scientificNameLikeEscaper in the v2only package for the same rationale).
+var speechLikeEscaper = strings.NewReplacer(`!`, `!!`, `%`, `!%`, `_`, `!_`)
 
 // buildSearchJoins applies JOIN clauses for filters requiring related tables.
 func (r *detectionRepository) buildSearchJoins(query *gorm.DB, filters *SearchFilters) *gorm.DB {

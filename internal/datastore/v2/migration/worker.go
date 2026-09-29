@@ -3,6 +3,7 @@ package migration
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"sync"
@@ -1617,6 +1618,46 @@ func (w *Worker) insertRecordsIndividually(ctx context.Context, dets []*entities
 	return migrated
 }
 
+// detectionUpdateMap builds the column update map for refreshing an existing
+// (unlocked, dual-written) v2 record from its converted legacy counterpart.
+// Legacy is the source of truth during migration. Speech columns are included
+// because transcription runs asynchronously after save and writes only to the
+// active (legacy) store during migration, so dual-written v2 rows would
+// otherwise permanently miss transcripts/keyword flags written mid-migration.
+// The voice-print embedding is marshaled to JSON explicitly: map-based Updates
+// bypass GORM's field serializer.
+func detectionUpdateMap(det *entities.Detection) map[string]any {
+	updates := map[string]any{
+		"label_id":   det.LabelID,
+		"model_id":   det.ModelID,
+		"confidence": det.Confidence,
+		// Speech-derived columns: nil pointers write NULL, mirroring legacy.
+		"transcript":        det.Transcript,
+		"transcript_lang":   det.TranscriptLang,
+		"flagged":           det.Flagged,
+		"keywords_hit":      det.KeywordsHit,
+		"gender":            det.Gender,
+		"gender_confidence": det.GenderConfidence,
+		"age_band":          det.AgeBand,
+		"age_confidence":    det.AgeConfidence,
+		"speaker_id":        det.SpeakerID,
+	}
+	if len(det.VoicePrintEmbedding) > 0 {
+		if data, err := json.Marshal(det.VoicePrintEmbedding); err == nil {
+			updates["voice_print_embedding"] = string(data)
+		}
+	} else {
+		updates["voice_print_embedding"] = nil
+	}
+	if det.SourceID != nil {
+		updates["source_id"] = *det.SourceID
+	}
+	if det.ClipName != nil {
+		updates["clip_name"] = *det.ClipName
+	}
+	return updates
+}
+
 // updateExistingRecords updates existing unlocked records. Returns count migrated.
 func (w *Worker) updateExistingRecords(ctx context.Context, records []*detection.Result) int {
 	migrated := 0
@@ -1628,19 +1669,7 @@ func (w *Worker) updateExistingRecords(ctx context.Context, records []*detection
 			continue
 		}
 
-		updates := map[string]any{
-			"label_id":   det.LabelID,
-			"model_id":   det.ModelID,
-			"confidence": det.Confidence,
-		}
-		if det.SourceID != nil {
-			updates["source_id"] = *det.SourceID
-		}
-		if det.ClipName != nil {
-			updates["clip_name"] = *det.ClipName
-		}
-
-		if updateErr := w.v2Detection.Update(ctx, r.ID, updates); updateErr != nil {
+		if updateErr := w.v2Detection.Update(ctx, r.ID, detectionUpdateMap(det)); updateErr != nil {
 			w.logger.Warn("failed to update record", logger.Uint64("id", uint64(r.ID)), logger.Error(updateErr))
 			w.trackDirtyID(r.ID)
 			continue
@@ -1678,18 +1707,7 @@ func (w *Worker) migrateRecord(ctx context.Context, result *detection.Result) er
 		}
 
 		// Update existing unlocked record - legacy is source of truth during migration
-		updates := map[string]any{
-			"label_id":   det.LabelID,
-			"model_id":   det.ModelID,
-			"confidence": det.Confidence,
-		}
-		if det.SourceID != nil {
-			updates["source_id"] = *det.SourceID
-		}
-		if det.ClipName != nil {
-			updates["clip_name"] = *det.ClipName
-		}
-		return w.v2Detection.Update(ctx, result.ID, updates)
+		return w.v2Detection.Update(ctx, result.ID, detectionUpdateMap(det))
 	}
 
 	// Create new record with specific ID

@@ -71,6 +71,25 @@ type SearchFilters struct {
 
 	// MinID filters to records with ID > MinID (cursor-based pagination).
 	MinID uint
+
+	// Transcript is a free-text LIKE filter on the detections.transcript column
+	// (case-insensitive substring; LIKE wildcards in the term are escaped).
+	// Empty string means no filter. Mirrors legacy AdvancedSearchFilters.Transcript.
+	Transcript string
+
+	// Flagged, when non-nil, restricts results to detections where flagged = *Flagged
+	// (keyword-flagged detections). Mirrors the legacy flagged filter.
+	Flagged *bool
+
+	// Gender / AgeBand are exact-match speaker-attribute filters on the nullable
+	// detections.gender / detections.age_band columns. Empty string means no filter;
+	// NULL rows never match a non-empty filter (same narrowing as legacy).
+	Gender  string
+	AgeBand string
+
+	// SpeakerID is an exact-match filter on the detections.speaker_id voice-print
+	// cluster column. Empty string means no filter.
+	SpeakerID string
 }
 
 // ModelStats contains statistics for a specific AI model.
