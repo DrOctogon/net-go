@@ -1,8 +1,16 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { waitFor, cleanup } from '@testing-library/svelte';
+import { waitFor, cleanup, screen, fireEvent } from '@testing-library/svelte';
 import { createComponentTestFactory } from '../../../test/render-helpers';
 import DetectionDetail from './DetectionDetail.svelte';
 import type { Detection } from '$lib/types/detection.types';
+
+vi.mock('$lib/utils/api', () => ({
+  fetchWithCSRF: vi.fn(),
+}));
+
+import { fetchWithCSRF } from '$lib/utils/api';
+
+const mockFetchWithCSRF = vi.mocked(fetchWithCSRF);
 
 // Heavy / context-dependent children are not relevant to the fetch-race logic.
 vi.mock('$lib/desktop/components/media/AudioPlayer.svelte');
@@ -114,5 +122,94 @@ describe('DetectionDetail stale-response race (#978)', () => {
 
     expect(container.textContent).toContain(FRESH_DATE);
     expect(container.textContent).not.toContain(STALE_DATE);
+  });
+});
+
+describe('DetectionDetail similar-voices merge', () => {
+  const DETECTION_ID = 'det-1';
+
+  /**
+   * Stub the three endpoints the detail view reads. The detection's own cluster
+   * is spk_1 (the merge TARGET) and the similar-voices row is spk_2 (the source).
+   */
+  function stubFetch({ rowSpeakerId = 'spk_2' }: { rowSpeakerId?: string } = {}) {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn((input: RequestInfo | URL) => {
+        const url = String(input);
+        if (url.includes('/similar')) {
+          return Promise.resolve(
+            jsonResponse([{ id: 2, score: 0.93, speakerId: rowSpeakerId, date: '2024-06-01' }])
+          );
+        }
+        if (url.includes('/api/v2/speakers')) {
+          return Promise.resolve(
+            jsonResponse([
+              { speakerId: 'spk_1', name: 'Alice' },
+              { speakerId: 'spk_2', name: 'Bob' },
+            ])
+          );
+        }
+        if (url.includes(`/api/v2/detections/${DETECTION_ID}`)) {
+          return Promise.resolve(
+            jsonResponse(makeDetection({ id: 1, date: FRESH_DATE, speakerId: 'spk_1' }))
+          );
+        }
+        return Promise.resolve(jsonResponse({}));
+      })
+    );
+  }
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    cleanup();
+    vi.unstubAllGlobals();
+  });
+
+  it('merges the row cluster INTO the detection cluster (row = source, detection = target)', async () => {
+    mockFetchWithCSRF.mockResolvedValue(undefined);
+    stubFetch();
+    detailTest.render({ detectionId: DETECTION_ID });
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole('button', { name: 'detections.speaker.merge.actionAria' })
+      ).toBeInTheDocument();
+    });
+
+    await fireEvent.click(
+      screen.getByRole('button', { name: 'detections.speaker.merge.actionAria' })
+    );
+
+    // The confirmation names the surviving speaker, so it must be the "named" variant.
+    expect(screen.getByText('detections.speaker.merge.confirmNamed')).toBeInTheDocument();
+
+    await fireEvent.click(
+      screen.getByRole('button', { name: 'detections.speaker.merge.confirmLabel' })
+    );
+
+    await waitFor(() => {
+      expect(mockFetchWithCSRF).toHaveBeenCalledWith('/api/v2/speakers/spk_1/merge', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sourceId: 'spk_2' }),
+      });
+    });
+  });
+
+  it('hides the merge action when the row belongs to the same cluster', async () => {
+    stubFetch({ rowSpeakerId: 'spk_1' });
+    detailTest.render({ detectionId: DETECTION_ID });
+
+    await waitFor(() => {
+      expect(screen.getByText('detections.detail.similarVoices.title')).toBeInTheDocument();
+    });
+
+    expect(
+      screen.queryByRole('button', { name: 'detections.speaker.merge.actionAria' })
+    ).not.toBeInTheDocument();
   });
 });

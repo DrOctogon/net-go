@@ -18,8 +18,18 @@ vi.mock('$lib/utils/api', () => ({
 }));
 
 import { fetchWithCSRF } from '$lib/utils/api';
+import { toastActions } from '$lib/stores/toast';
 
 const mockFetchWithCSRF = vi.mocked(fetchWithCSRF);
+const mockToastError = vi.mocked(toastActions.error);
+
+/** HTTP status the speaker cluster endpoints return when voice-print clustering is off. */
+const CLUSTERING_UNAVAILABLE_STATUS = 503;
+
+/** An ApiError-shaped rejection: only `status` is read by the error mapping. */
+function httpError(status: number): Error & { status: number } {
+  return Object.assign(new Error(`HTTP ${status}`), { status });
+}
 
 interface RosterEntry {
   speakerId: string;
@@ -201,6 +211,101 @@ describe('SpeakersSettingsPage', () => {
         expect(
           screen.queryByLabelText('detections.speaker.renamePlaceholder')
         ).not.toBeInTheDocument();
+      });
+    });
+
+    describe('Forget flow', () => {
+      /** Count of GET /api/v2/speakers roster calls (excludes the activity endpoint). */
+      function rosterFetchCount(): number {
+        return vi
+          .mocked(global.fetch)
+          .mock.calls.filter(
+            ([url]) =>
+              String(url).includes('/api/v2/speakers') && !String(url).includes('/activity')
+          ).length;
+      }
+
+      async function openForgetDialog() {
+        render(SpeakersSettingsPage);
+        await waitFor(() => {
+          expect(screen.getByText('Alice')).toBeInTheDocument();
+        });
+        await fireEvent.click(
+          screen.getByRole('button', { name: 'settings.speakers.forget.action' })
+        );
+      }
+
+      beforeEach(() => {
+        stubFetch({ roster: [{ speakerId: 'spk_1', name: 'Alice', detections: 5 }] });
+      });
+
+      it('opens a confirmation dialog that spells out the consequences', async () => {
+        await openForgetDialog();
+
+        expect(screen.getByText('settings.speakers.forget.title')).toBeInTheDocument();
+        expect(screen.getByText('settings.speakers.forget.confirm')).toBeInTheDocument();
+        expect(
+          screen.getByRole('button', { name: 'settings.speakers.forget.confirmLabel' })
+        ).toBeInTheDocument();
+        expect(mockFetchWithCSRF).not.toHaveBeenCalled();
+      });
+
+      it('cancel closes the dialog, issues no request, and keeps the row', async () => {
+        await openForgetDialog();
+
+        await fireEvent.click(screen.getByRole('button', { name: 'Cancel' }));
+
+        expect(mockFetchWithCSRF).not.toHaveBeenCalled();
+        expect(screen.queryByText('settings.speakers.forget.confirm')).not.toBeInTheDocument();
+        expect(screen.getByText('Alice')).toBeInTheDocument();
+      });
+
+      it('confirm issues the DELETE and refetches the roster', async () => {
+        mockFetchWithCSRF.mockResolvedValue(undefined);
+        await openForgetDialog();
+        expect(rosterFetchCount()).toBe(1);
+
+        await fireEvent.click(
+          screen.getByRole('button', { name: 'settings.speakers.forget.confirmLabel' })
+        );
+
+        await waitFor(() => {
+          expect(mockFetchWithCSRF).toHaveBeenCalledWith('/api/v2/speakers/spk_1', {
+            method: 'DELETE',
+          });
+        });
+        // The roster is refetched rather than patched locally.
+        await waitFor(() => {
+          expect(rosterFetchCount()).toBe(2);
+        });
+        expect(screen.queryByText('settings.speakers.forget.confirm')).not.toBeInTheDocument();
+      });
+
+      it('reports the feature as off when the endpoint answers 503', async () => {
+        mockFetchWithCSRF.mockRejectedValue(httpError(CLUSTERING_UNAVAILABLE_STATUS));
+        await openForgetDialog();
+
+        await fireEvent.click(
+          screen.getByRole('button', { name: 'settings.speakers.forget.confirmLabel' })
+        );
+
+        await waitFor(() => {
+          expect(mockToastError).toHaveBeenCalledWith('detections.speaker.clusteringOff');
+        });
+        expect(mockToastError).not.toHaveBeenCalledWith('settings.speakers.forget.failed');
+      });
+
+      it('reports a generic failure for other errors', async () => {
+        mockFetchWithCSRF.mockRejectedValue(httpError(500));
+        await openForgetDialog();
+
+        await fireEvent.click(
+          screen.getByRole('button', { name: 'settings.speakers.forget.confirmLabel' })
+        );
+
+        await waitFor(() => {
+          expect(mockToastError).toHaveBeenCalledWith('settings.speakers.forget.failed');
+        });
       });
     });
   });

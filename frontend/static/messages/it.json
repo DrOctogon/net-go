@@ -1031,7 +1031,21 @@
       "identityLabel": "Parlante",
       "renamePlaceholder": "Assegna un nome a questa voce",
       "renameAction": "Rinomina parlante",
-      "renameFailed": "Impossibile salvare il nome del parlante"
+      "renameFailed": "Impossibile salvare il nome del parlante",
+      "clusteringOff": "L’analisi dell’impronta vocale è disattivata, quindi non è possibile unire o dimenticare i parlanti.",
+      "nameAction": "Questo è…",
+      "nameHint": "Questa voce non ha ancora un nome. Assegnalo una volta e ogni rilevamento di questa voce, passato e futuro, mostrerà quel nome.",
+      "merge": {
+        "action": "Stesso parlante",
+        "actionAria": "Unisci {source} a questo parlante",
+        "title": "Unire questi due parlanti?",
+        "confirmNamed": "{source} verrà unito a {target}. Ogni rilevamento etichettato {source} passerà a {target} e {source} verrà ritirato: il suo identificativo non sarà mai riutilizzato. Il parlante che resta è {target}, con il nome «{name}». Nessun rilevamento o clip audio viene eliminato. L’operazione non può essere annullata.",
+        "confirmUnnamed": "{source} verrà unito a {target}. Ogni rilevamento etichettato {source} passerà a {target} e {source} verrà ritirato: il suo identificativo non sarà mai riutilizzato. Il parlante che resta è {target}, che non ha ancora un nome. Nessun rilevamento o clip audio viene eliminato. L’operazione non può essere annullata.",
+        "confirmLabel": "Unisci parlanti",
+        "inProgress": "Unione dei parlanti…",
+        "success": "Parlanti uniti",
+        "failed": "Unione dei parlanti non riuscita"
+      }
     }
   },
   "species": {
@@ -3957,7 +3971,17 @@
       "activityDescription": "Conteggi giornalieri dei rilevamenti per ogni parlante.",
       "activityEmpty": "Ancora nessuna attività dei parlanti. I conteggi giornalieri appariranno qui quando i rilevamenti saranno assegnati alle voci.",
       "activityLoadFailed": "Impossibile caricare l'attività dei parlanti",
-      "activityDateColumn": "Data"
+      "activityDateColumn": "Data",
+      "actionsColumn": "Azioni",
+      "forget": {
+        "action": "Dimentica {name}",
+        "title": "Dimenticare questo parlante?",
+        "confirm": "{name} verrà dimenticato: il nome viene rimosso e i suoi {count} rilevamenti perdono l’etichetta del parlante. I rilevamenti, il loro audio e la loro cronologia vengono conservati. Questa impronta vocale non corrisponderà più ai nuovi audio e l’identificativo {id} non sarà mai riutilizzato. L’operazione non può essere annullata.",
+        "confirmLabel": "Dimentica parlante",
+        "inProgress": "Dimenticando il parlante…",
+        "success": "Parlante dimenticato",
+        "failed": "Impossibile dimenticare il parlante"
+      }
     }
   },
   "auth": {

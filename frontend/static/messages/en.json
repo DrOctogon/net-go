@@ -1031,7 +1031,21 @@
       "identityLabel": "Speaker",
       "renamePlaceholder": "Name this voice",
       "renameAction": "Rename speaker",
-      "renameFailed": "Failed to save speaker name"
+      "renameFailed": "Failed to save speaker name",
+      "clusteringOff": "Voice-print analysis is off, so speakers cannot be merged or forgotten.",
+      "nameAction": "This is…",
+      "nameHint": "This voice has no name yet. Name it once and every detection from this voice, past and future, shows that name.",
+      "merge": {
+        "action": "Same speaker",
+        "actionAria": "Merge {source} into this speaker",
+        "title": "Merge these two speakers?",
+        "confirmNamed": "{source} will be merged into {target}. Every detection labelled {source} is relabelled {target}, and {source} is retired — its id is never reused. The surviving speaker is {target}, named “{name}”. No detections or audio clips are deleted. This cannot be undone.",
+        "confirmUnnamed": "{source} will be merged into {target}. Every detection labelled {source} is relabelled {target}, and {source} is retired — its id is never reused. The surviving speaker is {target}, which still has no name. No detections or audio clips are deleted. This cannot be undone.",
+        "confirmLabel": "Merge speakers",
+        "inProgress": "Merging speakers…",
+        "success": "Speakers merged",
+        "failed": "Failed to merge speakers"
+      }
     }
   },
   "species": {
@@ -3957,7 +3971,17 @@
       "activityDescription": "Daily detection counts for each speaker.",
       "activityEmpty": "No speaker activity yet. Daily counts appear here once detections are assigned to voices.",
       "activityLoadFailed": "Failed to load speaker activity",
-      "activityDateColumn": "Date"
+      "activityDateColumn": "Date",
+      "actionsColumn": "Actions",
+      "forget": {
+        "action": "Forget {name}",
+        "title": "Forget this speaker?",
+        "confirm": "{name} will be forgotten: its name is removed and its {count} detections lose their speaker label. The detections, their audio and their history are kept. This voice print stops matching new audio, and the id {id} is never reused. This cannot be undone.",
+        "confirmLabel": "Forget speaker",
+        "inProgress": "Forgetting speaker…",
+        "success": "Speaker forgotten",
+        "failed": "Failed to forget speaker"
+      }
     }
   },
   "auth": {

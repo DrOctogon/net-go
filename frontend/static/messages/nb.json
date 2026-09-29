@@ -1031,7 +1031,21 @@
       "identityLabel": "Taler",
       "renamePlaceholder": "Gi denne stemmen et navn",
       "renameAction": "Gi taleren nytt navn",
-      "renameFailed": "Kunne ikke lagre talerens navn"
+      "renameFailed": "Kunne ikke lagre talerens navn",
+      "clusteringOff": "Stemmeavtrykkanalyse er slått av, så talere kan ikke slås sammen eller glemmes.",
+      "nameAction": "Dette er…",
+      "nameHint": "Denne stemmen har ennå ikke noe navn. Gi den navn én gang, og alle deteksjoner av stemmen – tidligere og framtidige – viser det navnet.",
+      "merge": {
+        "action": "Samme taler",
+        "actionAria": "Slå sammen {source} med denne taleren",
+        "title": "Slå sammen disse to talerne?",
+        "confirmNamed": "{source} slås sammen med {target}. Hver deteksjon merket {source} merkes om til {target}, og {source} tas ut av bruk – id-en gjenbrukes aldri. Taleren som blir igjen, er {target}, med navnet «{name}». Ingen deteksjoner eller lydklipp slettes. Dette kan ikke angres.",
+        "confirmUnnamed": "{source} slås sammen med {target}. Hver deteksjon merket {source} merkes om til {target}, og {source} tas ut av bruk – id-en gjenbrukes aldri. Taleren som blir igjen, er {target}, som fortsatt ikke har noe navn. Ingen deteksjoner eller lydklipp slettes. Dette kan ikke angres.",
+        "confirmLabel": "Slå sammen talere",
+        "inProgress": "Slår sammen talere…",
+        "success": "Talere slått sammen",
+        "failed": "Kunne ikke slå sammen talere"
+      }
     }
   },
   "species": {
@@ -3957,7 +3971,17 @@
       "activityDescription": "Daglige deteksjonstall for hver taler.",
       "activityEmpty": "Ingen taleraktivitet ennå. Daglige tall vises her når deteksjoner tilordnes stemmer.",
       "activityLoadFailed": "Kunne ikke laste taleraktivitet",
-      "activityDateColumn": "Dato"
+      "activityDateColumn": "Dato",
+      "actionsColumn": "Handlinger",
+      "forget": {
+        "action": "Glem {name}",
+        "title": "Glem denne taleren?",
+        "confirm": "{name} glemmes: navnet fjernes, og de {count} deteksjonene mister talermerket. Deteksjonene, lyden og historikken beholdes. Dette stemmeavtrykket samsvarer ikke med ny lyd lenger, og id-en {id} gjenbrukes aldri. Dette kan ikke angres.",
+        "confirmLabel": "Glem taler",
+        "inProgress": "Glemmer taler…",
+        "success": "Taler glemt",
+        "failed": "Kunne ikke glemme taleren"
+      }
     }
   },
   "auth": {

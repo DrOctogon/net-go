@@ -20,9 +20,11 @@
   import SettingsSection from '$lib/desktop/features/settings/components/SettingsSection.svelte';
   import SettingsTabs from '$lib/desktop/features/settings/components/SettingsTabs.svelte';
   import type { TabDefinition } from '$lib/desktop/features/settings/components/SettingsTabs.svelte';
-  import { Users, SquarePen, BarChart2 } from '@lucide/svelte';
+  import ConfirmModal from '$lib/desktop/components/modals/ConfirmModal.svelte';
+  import { Users, SquarePen, BarChart2, Trash2 } from '@lucide/svelte';
   import { t } from '$lib/i18n';
   import { fetchWithCSRF } from '$lib/utils/api';
+  import { forgetSpeakerCluster } from '$lib/utils/speakerClusterOps';
   import { toastActions } from '$lib/stores/toast';
   import { isAuthenticated } from '$lib/utils/auth';
   import { buildAppUrl } from '$lib/utils/urlHelpers';
@@ -51,6 +53,14 @@
   let renameValue = $state('');
   let renameSaving = $state(false);
 
+  // Forget flow: the row awaiting confirmation, then the in-flight DELETE.
+  let forgetTarget = $state<SpeakerRosterEntry | null>(null);
+  let forgetSaving = $state(false);
+
+  // Bumped after a forget so the roster effect below re-fetches; the server is
+  // the source of truth for which clusters still exist.
+  let rosterVersion = $state(0);
+
   // Most-detected speakers first; ties broken by cluster id for stable order.
   let sortedRoster = $derived(
     [...roster].sort(
@@ -59,6 +69,7 @@
   );
 
   $effect(() => {
+    void rosterVersion;
     roster = [];
     loadError = false;
     if (!$isAuthenticated) {
@@ -111,6 +122,27 @@
       logger.error('Failed to save speaker name:', error);
     } finally {
       renameSaving = false;
+    }
+  }
+
+  // Display label used in the forget confirmation: the assigned name when there
+  // is one, otherwise the raw cluster id.
+  let forgetLabel = $derived(
+    forgetTarget === null ? '' : forgetTarget.name || forgetTarget.speakerId
+  );
+
+  async function confirmForget(): Promise<void> {
+    const target = forgetTarget;
+    if (target === null) return;
+
+    forgetSaving = true;
+    try {
+      if (await forgetSpeakerCluster(target.speakerId)) {
+        forgetTarget = null;
+        rosterVersion++; // refetch rather than patching the list locally
+      }
+    } finally {
+      forgetSaving = false;
     }
   }
 
@@ -211,7 +243,7 @@
               <tr>
                 <th>{t('detections.speaker.identityLabel')}</th>
                 <th class="text-right">{t('navigation.detections')}</th>
-                <th><span class="sr-only">{t('detections.speaker.renameAction')}</span></th>
+                <th><span class="sr-only">{t('settings.speakers.actionsColumn')}</span></th>
               </tr>
             </thead>
             <tbody>
@@ -262,7 +294,11 @@
                   </td>
                   <td class="text-right tabular-nums">{entry.detections}</td>
                   <td class="text-right">
-                    {#if renameId !== entry.speakerId}
+                    {#if forgetSaving && forgetTarget?.speakerId === entry.speakerId}
+                      <span class="text-xs opacity-70" role="status">
+                        {t('settings.speakers.forget.inProgress')}
+                      </span>
+                    {:else if renameId !== entry.speakerId}
                       <button
                         type="button"
                         class="btn btn-ghost btn-xs"
@@ -270,6 +306,18 @@
                         aria-label={t('detections.speaker.renameAction')}
                       >
                         <SquarePen class="w-3.5 h-3.5" aria-hidden="true" />
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-ghost btn-xs text-[var(--color-error)]"
+                        onclick={() => (forgetTarget = entry)}
+                        disabled={forgetSaving}
+                        title={forgetSaving ? t('settings.speakers.forget.inProgress') : undefined}
+                        aria-label={t('settings.speakers.forget.action', {
+                          name: entry.name || entry.speakerId,
+                        })}
+                      >
+                        <Trash2 class="w-3.5 h-3.5" aria-hidden="true" />
                       </button>
                     {/if}
                   </td>
@@ -336,3 +384,21 @@
 <main class="settings-page-content" aria-label={t('settings.speakers.description')}>
   <SettingsTabs {tabs} bind:activeTab showActions={false} />
 </main>
+
+<!-- Forget confirmation: spells out exactly what is lost and what is kept. -->
+{#if forgetTarget !== null}
+  <ConfirmModal
+    isOpen={true}
+    title={t('settings.speakers.forget.title')}
+    message={t('settings.speakers.forget.confirm', {
+      name: forgetLabel,
+      id: forgetTarget.speakerId,
+      count: forgetTarget.detections,
+    })}
+    confirmLabel={forgetSaving
+      ? t('settings.speakers.forget.inProgress')
+      : t('settings.speakers.forget.confirmLabel')}
+    onClose={() => (forgetTarget = null)}
+    onConfirm={confirmForget}
+  />
+{/if}

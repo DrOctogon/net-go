@@ -1031,7 +1031,21 @@
       "identityLabel": "Beszélő",
       "renamePlaceholder": "Nevezze el ezt a hangot",
       "renameAction": "Beszélő átnevezése",
-      "renameFailed": "A beszélő nevének mentése sikertelen"
+      "renameFailed": "A beszélő nevének mentése sikertelen",
+      "clusteringOff": "A hanglenyomat-elemzés ki van kapcsolva, ezért a beszélők nem vonhatók össze és nem törölhetők.",
+      "nameAction": "Ez itt…",
+      "nameHint": "Ennek a hangnak még nincs neve. Nevezze el egyszer, és a hang minden észlelése – a korábbiak és a jövőbeliek is – ezt a nevet mutatja.",
+      "merge": {
+        "action": "Ugyanaz a beszélő",
+        "actionAria": "{source} összevonása ezzel a beszélővel",
+        "title": "Összevonja ezt a két beszélőt?",
+        "confirmNamed": "A {source} beolvad a {target} beszélőbe. Minden {source} jelölésű észlelés {target} jelölést kap, a {source} pedig kivonásra kerül – az azonosítóját soha nem használjuk újra. A megmaradó beszélő a {target}, „{name}” névvel. Egyetlen észlelés vagy hangfelvétel sem törlődik. A művelet nem vonható vissza.",
+        "confirmUnnamed": "A {source} beolvad a {target} beszélőbe. Minden {source} jelölésű észlelés {target} jelölést kap, a {source} pedig kivonásra kerül – az azonosítóját soha nem használjuk újra. A megmaradó beszélő a {target}, amelynek még mindig nincs neve. Egyetlen észlelés vagy hangfelvétel sem törlődik. A művelet nem vonható vissza.",
+        "confirmLabel": "Beszélők összevonása",
+        "inProgress": "Beszélők összevonása…",
+        "success": "A beszélők összevonva",
+        "failed": "A beszélők összevonása nem sikerült"
+      }
     }
   },
   "species": {
@@ -3957,7 +3971,17 @@
       "activityDescription": "Napi észlelésszámok beszélőnként.",
       "activityEmpty": "Még nincs beszélőaktivitás. A napi számok itt jelennek meg, amint az észlelések hangokhoz lesznek rendelve.",
       "activityLoadFailed": "Nem sikerült betölteni a beszélők aktivitását",
-      "activityDateColumn": "Dátum"
+      "activityDateColumn": "Dátum",
+      "actionsColumn": "Műveletek",
+      "forget": {
+        "action": "{name} törlése",
+        "title": "Törli ezt a beszélőt?",
+        "confirm": "A {name} törlődik: a neve eltűnik, és a hozzá tartozó {count} észlelés elveszti a beszélőjelölést. Az észlelések, a hangfelvételeik és az előzményeik megmaradnak. Ez a hanglenyomat többé nem illeszkedik új felvételekhez, és a {id} azonosítót soha nem használjuk újra. A művelet nem vonható vissza.",
+        "confirmLabel": "Beszélő törlése",
+        "inProgress": "Beszélő törlése…",
+        "success": "A beszélő törölve",
+        "failed": "A beszélő törlése nem sikerült"
+      }
     }
   },
   "auth": {

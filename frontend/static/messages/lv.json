@@ -1031,7 +1031,21 @@
       "identityLabel": "Runātājs",
       "renamePlaceholder": "Nosauciet šo balsi",
       "renameAction": "Pārdēvēt runātāju",
-      "renameFailed": "Neizdevās saglabāt runātāja vārdu"
+      "renameFailed": "Neizdevās saglabāt runātāja vārdu",
+      "clusteringOff": "Balss nospieduma analīze ir izslēgta, tāpēc runātājus nevar apvienot vai aizmirst.",
+      "nameAction": "Šis ir…",
+      "nameHint": "Šai balsij vēl nav vārda. Nosauciet to vienreiz, un katrā šīs balss atklāšanā — gan agrākā, gan turpmākā — būs redzams šis vārds.",
+      "merge": {
+        "action": "Tas pats runātājs",
+        "actionAria": "Apvienot {source} ar šo runātāju",
+        "title": "Apvienot šos divus runātājus?",
+        "confirmNamed": "{source} tiks apvienots ar {target}. Katra atklāšana, kas apzīmēta ar {source}, tiks pārmarķēta uz {target}, un {source} tiks izņemts no lietošanas — tā identifikators nekad netiks izmantots atkārtoti. Paliek {target} ar vārdu “{name}”. Neviena atklāšana vai audio ieraksts netiek dzēsts. Šo darbību nevar atsaukt.",
+        "confirmUnnamed": "{source} tiks apvienots ar {target}. Katra atklāšana, kas apzīmēta ar {source}, tiks pārmarķēta uz {target}, un {source} tiks izņemts no lietošanas — tā identifikators nekad netiks izmantots atkārtoti. Paliek {target}, kuram joprojām nav vārda. Neviena atklāšana vai audio ieraksts netiek dzēsts. Šo darbību nevar atsaukt.",
+        "confirmLabel": "Apvienot runātājus",
+        "inProgress": "Notiek runātāju apvienošana…",
+        "success": "Runātāji apvienoti",
+        "failed": "Neizdevās apvienot runātājus"
+      }
     }
   },
   "species": {
@@ -3957,7 +3971,17 @@
       "activityDescription": "Ikdienas noteikšanu skaits katram runātājam.",
       "activityEmpty": "Pagaidām nav runātāju aktivitātes. Ikdienas skaits šeit parādīsies, tiklīdz noteikšanas tiks piesaistītas balsīm.",
       "activityLoadFailed": "Neizdevās ielādēt runātāju aktivitāti",
-      "activityDateColumn": "Datums"
+      "activityDateColumn": "Datums",
+      "actionsColumn": "Darbības",
+      "forget": {
+        "action": "Aizmirst {name}",
+        "title": "Aizmirst šo runātāju?",
+        "confirm": "{name} tiks aizmirsts: vārds tiek noņemts un tā {count} atklāšanas zaudē runātāja apzīmējumu. Atklāšanas, to audio un vēsture tiek saglabāta. Šis balss nospiedums vairs neatbildīs jaunam audio, un identifikators {id} nekad netiks izmantots atkārtoti. Šo darbību nevar atsaukt.",
+        "confirmLabel": "Aizmirst runātāju",
+        "inProgress": "Notiek runātāja aizmiršana…",
+        "success": "Runātājs aizmirsts",
+        "failed": "Neizdevās aizmirst runātāju"
+      }
     }
   },
   "auth": {
