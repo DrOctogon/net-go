@@ -44,6 +44,7 @@ import (
 	"github.com/tphakala/voicewatch/internal/suncalc"
 	"golang.org/x/text/unicode/norm"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 // Sentinel errors for operations not supported in v2-only mode.
@@ -1919,32 +1920,123 @@ func (ds *Datastore) GetAllHourlyWeather() ([]datastore.HourlyWeather, error) {
 	return nil, fmt.Errorf("GetAllHourlyWeather: %w", ErrOperationNotSupported)
 }
 
-// GetSpeakerNames returns the household speaker roster. Voice-print speaker
-// clusters are a legacy-schema feature (notes.speaker_id), so v2-only mode has
-// no speakers to name; return an empty roster rather than an error so the
-// dashboard degrades gracefully.
-func (ds *Datastore) GetSpeakerNames(_ context.Context) ([]datastore.SpeakerName, error) {
-	return []datastore.SpeakerName{}, nil
+// GetSpeakerNames returns all user-assigned speaker names ordered by speaker
+// id, from the v2 speaker_names table (added with the phase-2 speech port).
+func (ds *Datastore) GetSpeakerNames(ctx context.Context) ([]datastore.SpeakerName, error) {
+	var rows []entities.SpeakerName
+	if err := ds.manager.DB().WithContext(ctx).Order("speaker_id").Find(&rows).Error; err != nil {
+		return nil, fmt.Errorf("get speaker names: %w", err)
+	}
+	out := make([]datastore.SpeakerName, len(rows))
+	for i, r := range rows {
+		out[i] = datastore.SpeakerName{
+			ID: r.ID, SpeakerID: r.SpeakerID, Name: r.Name,
+			CreatedAt: r.CreatedAt, UpdatedAt: r.UpdatedAt,
+		}
+	}
+	return out, nil
 }
 
-// GetSpeakerRoster returns the full speaker roster. Voice prints are a
-// legacy-schema feature (mirrors GetSpeakerNames), so v2-only mode always
-// has an empty roster.
-func (ds *Datastore) GetSpeakerRoster(_ context.Context) ([]datastore.SpeakerRosterEntry, error) {
-	return []datastore.SpeakerRosterEntry{}, nil
+// GetSpeakerRoster returns every voice-print speaker cluster with its
+// detection count and user-assigned name. Mirrors the legacy semantics: two
+// portable queries merged in Go (no FULL OUTER JOIN), and named speakers whose
+// detections were retention-scrubbed stay listed with zero detections.
+func (ds *Datastore) GetSpeakerRoster(ctx context.Context) ([]datastore.SpeakerRosterEntry, error) {
+	var counted []datastore.SpeakerRosterEntry
+	detections := ds.manager.TablePrefix() + "detections"
+	err := ds.manager.DB().WithContext(ctx).
+		Table(detections).
+		Select("speaker_id, COUNT(*) AS detections").
+		Where("speaker_id IS NOT NULL AND speaker_id != ''").
+		Group("speaker_id").
+		Scan(&counted).Error
+	if err != nil {
+		return nil, fmt.Errorf("get speaker roster: %w", err)
+	}
+
+	names, err := ds.GetSpeakerNames(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	byID := make(map[string]int, len(counted))
+	roster := make([]datastore.SpeakerRosterEntry, 0, len(counted)+len(names))
+	for i := range counted {
+		byID[counted[i].SpeakerID] = len(roster)
+		roster = append(roster, counted[i])
+	}
+	for i := range names {
+		if idx, ok := byID[names[i].SpeakerID]; ok {
+			roster[idx].Name = names[i].Name
+		} else {
+			roster = append(roster, datastore.SpeakerRosterEntry{SpeakerID: names[i].SpeakerID, Name: names[i].Name})
+		}
+	}
+	sort.Slice(roster, func(a, b int) bool { return roster[a].SpeakerID < roster[b].SpeakerID })
+	return roster, nil
 }
 
-// GetSpeakerDailyActivity returns per-speaker daily detection counts. Voice
-// prints are a legacy-schema feature (mirrors GetSpeakerRoster), so v2-only
-// mode always has no speaker activity.
-func (ds *Datastore) GetSpeakerDailyActivity(_ context.Context, _, _ string) ([]datastore.SpeakerDailyActivity, error) {
-	return []datastore.SpeakerDailyActivity{}, nil
+// GetSpeakerDailyActivity returns per-speaker daily detection counts,
+// optionally bounded by an inclusive [startDate, endDate] range. v2 stores
+// detection times as Unix seconds, so days are bucketed with
+// detectionDateExpr in the configured timezone (same approach as the daily
+// analytics queries) and the range bounds are converted with parseDateRange.
+func (ds *Datastore) GetSpeakerDailyActivity(ctx context.Context, startDate, endDate string) ([]datastore.SpeakerDailyActivity, error) {
+	start, end, err := ds.parseDateRange(startDate, endDate)
+	if err != nil {
+		return nil, err
+	}
+
+	dateExpr := ds.detectionDateExpr(ds.zoneOffsetSeconds(dateRangeOffsetAnchor(start, end)))
+	detections := ds.manager.TablePrefix() + "detections"
+
+	query := ds.manager.DB().WithContext(ctx).
+		Table(detections+" AS d").
+		Select("d.speaker_id AS speaker_id, "+dateExpr+" AS date, COUNT(*) AS count").
+		Where("d.speaker_id IS NOT NULL AND d.speaker_id != ''").
+		Group("d.speaker_id, " + dateExpr).
+		Order("date, speaker_id")
+	if start > 0 {
+		query = query.Where("d.detected_at >= ?", start)
+	}
+	if end > 0 && end != math.MaxInt64 {
+		query = query.Where("d.detected_at <= ?", end)
+	}
+
+	var activity []datastore.SpeakerDailyActivity
+	if err := query.Scan(&activity).Error; err != nil {
+		return nil, fmt.Errorf("get speaker daily activity: %w", err)
+	}
+	return activity, nil
 }
 
-// SetSpeakerName is not supported in v2-only mode (no voice-print speaker
-// clusters exist in the v2 schema).
-func (ds *Datastore) SetSpeakerName(_ context.Context, _, _ string) error {
-	return fmt.Errorf("SetSpeakerName: %w", ErrOperationNotSupported)
+// SetSpeakerName upserts the display name for a speaker cluster id in the v2
+// speaker_names table; an empty (trimmed) name deletes the mapping. Validation
+// is shared with the legacy store via datastore.NormalizeSpeakerName.
+func (ds *Datastore) SetSpeakerName(ctx context.Context, speakerID, name string) error {
+	name, err := datastore.NormalizeSpeakerName(speakerID, name)
+	if err != nil {
+		return err
+	}
+
+	db := ds.manager.DB().WithContext(ctx)
+	if name == "" {
+		if err := db.Where("speaker_id = ?", speakerID).Delete(&entities.SpeakerName{}).Error; err != nil {
+			return fmt.Errorf("clear speaker name: %w", err)
+		}
+		return nil
+	}
+
+	now := time.Now()
+	entry := entities.SpeakerName{SpeakerID: speakerID, Name: name, CreatedAt: now, UpdatedAt: now}
+	err = db.Clauses(clause.OnConflict{
+		Columns:   []clause.Column{{Name: "speaker_id"}},
+		DoUpdates: clause.AssignmentColumns([]string{"name", "updated_at"}),
+	}).Create(&entry).Error
+	if err != nil {
+		return fmt.Errorf("set speaker name: %w", err)
+	}
+	return nil
 }
 
 // SaveHourlyWeather saves hourly weather data.

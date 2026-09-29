@@ -37,6 +37,31 @@ type SpeakerDailyActivity struct {
 // upsert's conflict assignment list.
 const speakerNamesUpdatedAtColumn = "updated_at"
 
+// NormalizeSpeakerName validates a speaker rename request and returns the
+// trimmed display name. It is shared by every store implementation (legacy and
+// v2) so validation rules cannot drift: empty speaker id rejected; the trimmed
+// name must be valid UTF-8, free of control characters, and at most
+// MaxSpeakerNameLength bytes. An empty trimmed name is valid and means "clear
+// the mapping".
+func NormalizeSpeakerName(speakerID, name string) (string, error) {
+	if speakerID == "" {
+		return "", validationError("speaker id cannot be empty", "speaker_id", "")
+	}
+	name = strings.TrimSpace(name)
+	if len(name) > MaxSpeakerNameLength {
+		return "", validationError("name exceeds maximum length", "name", len(name))
+	}
+	if name != "" {
+		if !utf8.ValidString(name) {
+			return "", validationError("name is not valid UTF-8", "name", name)
+		}
+		if strings.ContainsFunc(name, unicode.IsControl) {
+			return "", validationError("name contains non-printable control characters", "name", name)
+		}
+	}
+	return name, nil
+}
+
 // GetSpeakerNames returns all user-assigned speaker names ordered by speaker id.
 // An empty roster returns an empty slice, not an error.
 func (ds *DataStore) GetSpeakerNames(ctx context.Context) ([]SpeakerName, error) {
@@ -132,21 +157,9 @@ func (ds *DataStore) GetSpeakerDailyActivity(ctx context.Context, startDate, end
 // The name is trimmed; an empty (or whitespace-only) name deletes the mapping.
 // Clearing a mapping that does not exist is a no-op.
 func (ds *DataStore) SetSpeakerName(ctx context.Context, speakerID, name string) error {
-	if speakerID == "" {
-		return validationError("speaker id cannot be empty", "speaker_id", "")
-	}
-
-	name = strings.TrimSpace(name)
-	if len(name) > MaxSpeakerNameLength {
-		return validationError("name exceeds maximum length", "name", len(name))
-	}
-	if name != "" {
-		if !utf8.ValidString(name) {
-			return validationError("name is not valid UTF-8", "name", name)
-		}
-		if strings.ContainsFunc(name, unicode.IsControl) {
-			return validationError("name contains non-printable control characters", "name", name)
-		}
+	name, err := NormalizeSpeakerName(speakerID, name)
+	if err != nil {
+		return err
 	}
 
 	if name == "" {
