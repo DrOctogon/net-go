@@ -390,6 +390,29 @@ func TestDeleteAlertRule_HappyPath(t *testing.T) {
 	assert.ErrorIs(t, err, repository.ErrAlertRuleNotFound)
 }
 
+func TestDeleteAlertRule_BuiltInRejected(t *testing.T) {
+	e, controller := setupAlertTestEnvironment(t)
+	ctx := t.Context()
+
+	rule := &entities.AlertRule{
+		Name: "Built-in under test", NameKey: "settings.alerts.builtInRules.test.name",
+		ObjectType: "detection", TriggerType: alerting.TriggerTypeEvent,
+		EventName: "x", CooldownSec: 60, Enabled: true, BuiltIn: true,
+		Actions: []entities.AlertAction{{Target: testAlertActionBell}},
+	}
+	require.NoError(t, controller.alertRuleRepo.CreateRule(ctx, rule))
+
+	rec, err := callDeleteAlertRule(t, e, controller, strconv.FormatUint(uint64(rule.ID), 10))
+
+	require.NoError(t, err)
+	assert.Equal(t, http.StatusConflict, rec.Code)
+
+	// The rule must still exist; Toggle remains the supported disable path.
+	kept, err := controller.alertRuleRepo.GetRule(ctx, rule.ID)
+	require.NoError(t, err)
+	assert.True(t, kept.BuiltIn)
+}
+
 func TestDeleteAlertRule_NotFound(t *testing.T) {
 	e, controller := setupAlertTestEnvironment(t)
 

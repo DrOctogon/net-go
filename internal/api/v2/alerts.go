@@ -136,6 +136,10 @@ func (c *Controller) GetAlertSchema(ctx echo.Context) error {
 }
 
 // ListAlertRules returns all alert rules, optionally filtered.
+// errBuiltInRuleDelete rejects deletion of built-in alert rules (use Toggle to
+// disable them instead; they are reseeded by name-key on startup regardless).
+var errBuiltInRuleDelete = errors.NewStd("built-in alert rules cannot be deleted")
+
 func (c *Controller) ListAlertRules(ctx echo.Context) error {
 	if !datastoreV2.IsEnhancedDatabase() {
 		return c.requireV2(ctx)
@@ -302,6 +306,20 @@ func (c *Controller) DeleteAlertRule(ctx echo.Context) error {
 	id, err := parseUintParam(ctx, "id")
 	if err != nil {
 		return c.HandleErrorWithKey(ctx, err, "Invalid rule ID", http.StatusBadRequest, notification.MsgErrAlertInvalidID, nil)
+	}
+
+	// Built-in rules are the product's safety net (and get reseeded on restart
+	// anyway); disabling via Toggle is the supported way to silence them.
+	rule, err := c.alertRuleRepo.GetRule(ctx.Request().Context(), id)
+	if err != nil {
+		if errors.Is(err, repository.ErrAlertRuleNotFound) {
+			return c.HandleErrorWithKey(ctx, err, "Alert rule not found", http.StatusNotFound, notification.MsgErrAlertNotFound, nil)
+		}
+		c.logErrorIfEnabled("failed to load alert rule for delete", logger.Error(err))
+		return c.HandleError(ctx, err, "Failed to delete alert rule", http.StatusInternalServerError)
+	}
+	if rule.BuiltIn {
+		return c.HandleErrorWithKey(ctx, errBuiltInRuleDelete, "Built-in rules cannot be deleted; disable them instead", http.StatusConflict, notification.MsgErrAlertBuiltInDelete, nil)
 	}
 
 	if err := c.alertRuleRepo.DeleteRule(ctx.Request().Context(), id); err != nil {

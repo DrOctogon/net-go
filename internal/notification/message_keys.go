@@ -86,6 +86,7 @@ const (
 	MsgErrAlertV2Required        = "errors.alert.v2Required"
 	MsgErrAlertInvalidID         = "errors.alert.invalidID"
 	MsgErrAlertNotFound          = "errors.alert.notFound"
+	MsgErrAlertBuiltInDelete     = "errors.alert.builtInDelete"
 	MsgErrAlertInvalidBody       = "errors.alert.invalidBody"
 	MsgErrAlertNameRequired      = "errors.alert.nameRequired"
 	MsgErrAlertTypesRequired     = "errors.alert.typesRequired"

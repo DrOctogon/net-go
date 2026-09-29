@@ -4305,7 +4305,8 @@
       "typesRequired": "Object type and trigger type are required",
       "duplicateName": "A rule with this name already exists",
       "invalidJSON": "Invalid JSON",
-      "invalidEscalation": "Escalation steps are invalid"
+      "invalidEscalation": "Escalation steps are invalid",
+      "builtInDelete": "Built-in rules cannot be deleted — disable them instead"
     },
     "detection": {
       "invalidDate": "Invalid {paramName} format, use YYYY-MM-DD"
