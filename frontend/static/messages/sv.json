@@ -4503,6 +4503,19 @@
         "errorReportingLabel": "Skicka anonyma felrapporter",
         "errorReportingHelp": "Hjälp till att förbättra VoiceWatch genom att skicka anonyma felrapporter när något går fel"
       },
+      "speakerVoiceprint": {
+        "title": "Talar- och röstavtrycksfunktioner",
+        "intro": "VoiceWatch kan försöka skilja röster åt genom att gruppera klipp som låter som samma talare i röstavtrycks-kluster – vilket skiljer sig från att bara upptäcka att en mänsklig röst förekom.",
+        "point1": "Grupperar klipp i sannolikt samma-talare-kluster baserat på likhet i röstavtryck",
+        "point2": "Uppskattar valfritt kön och åldersgrupp per kluster",
+        "point3": "Låter dig namnge kluster i talarlistan så att du vet vem som är vem",
+        "point4": "Kan varna dig när en röst inte matchar något känt kluster",
+        "caveat": "Avstängt som standard. Uppskattning av kön och åldersgrupp kräver var och en att du tillhandahåller din egen ONNX-modell – ingen medföljer VoiceWatch. Det här är statistiska uppskattningar, inte identitetsigenkänning, och noggrannheten varierar med modellen och ljudkvaliteten.",
+        "settingsHint": "Slå på den och välj dina modeller under",
+        "settingsLinkLabel": "Inställningar → Ljud → Bearbetning → Speaker Attributes",
+        "rosterHint": "Namngivna kluster och varningar om nya talare visas på",
+        "rosterLinkLabel": "sidan Talare"
+      },
       "responsibleUse": {
         "title": "Ansvarsfull användning av VoiceWatch",
         "intro": "VoiceWatch är ett kraftfullt verktyg som förbättrar din fågelskådning genom AI-assisterad identifiering. För att säkerställa bästa resultat för både fågelskådning och naturvård:",

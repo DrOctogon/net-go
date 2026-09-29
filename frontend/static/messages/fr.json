@@ -4503,6 +4503,19 @@
         "errorReportingLabel": "Envoyer des rapports d'erreurs anonymes",
         "errorReportingHelp": "Aidez à améliorer VoiceWatch en envoyant des rapports d'erreurs anonymes lorsque quelque chose ne fonctionne pas"
       },
+      "speakerVoiceprint": {
+        "title": "Fonctionnalités de reconnaissance des locuteurs et d'empreinte vocale",
+        "intro": "VoiceWatch peut essayer de distinguer les voix en regroupant les extraits qui semblent provenir du même locuteur en clusters d'empreinte vocale – ce qui est différent du simple fait de détecter qu'une voix humaine a été présente.",
+        "point1": "Regroupe les extraits en clusters de locuteurs probablement identiques selon la similarité de l'empreinte vocale",
+        "point2": "Estime en option le genre et la tranche d'âge par cluster",
+        "point3": "Permet de nommer les clusters dans la liste des locuteurs pour savoir qui est qui",
+        "point4": "Peut vous alerter lorsqu'une voix ne correspond à aucun cluster connu",
+        "caveat": "Désactivé par défaut. L'estimation du genre et de la tranche d'âge nécessite chacune que vous fournissiez votre propre modèle ONNX – aucun n'est inclus avec VoiceWatch. Ce sont des estimations statistiques, pas une reconnaissance d'identité, et la précision varie selon le modèle et la qualité audio.",
+        "settingsHint": "Activez-la et choisissez vos modèles dans",
+        "settingsLinkLabel": "Paramètres → Audio → Traitement → Speaker Attributes",
+        "rosterHint": "Les clusters nommés et les alertes de nouveaux locuteurs apparaissent sur la page",
+        "rosterLinkLabel": "Locuteurs"
+      },
       "responsibleUse": {
         "title": "Utilisation responsable de VoiceWatch",
         "intro": "VoiceWatch est un outil puissant qui enrichit votre expérience ornithologique grâce à l'identification assistée par IA. Pour garantir les meilleurs résultats tant pour l'observation que pour la conservation :",

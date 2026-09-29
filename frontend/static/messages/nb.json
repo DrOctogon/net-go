@@ -4503,6 +4503,19 @@
         "errorReportingLabel": "Send anonyme feilrapporter",
         "errorReportingHelp": "Hjelp med å forbedre VoiceWatch ved å sende anonyme feilrapporter når noe går galt"
       },
+      "speakerVoiceprint": {
+        "title": "Funksjoner for talergjenkjenning og stemmeavtrykk",
+        "intro": "VoiceWatch kan forsøke å skille stemmer fra hverandre ved å gruppere klipp som høres ut som samme taler, i stemmeavtrykk-klynger – dette er noe annet enn bare å oppdage at en menneskestemme forekom.",
+        "point1": "Grupperer klipp i sannsynlige samme-taler-klynger basert på likhet i stemmeavtrykk",
+        "point2": "Estimerer valgfritt kjønn og aldersgruppe per klynge",
+        "point3": "Lar deg navngi klynger i talerlisten, så du vet hvem som er hvem",
+        "point4": "Kan varsle deg når en stemme ikke samsvarer med noen kjent klynge",
+        "caveat": "Av som standard. Estimering av kjønn og aldersgruppe krever hver for seg at du leverer din egen ONNX-modell – ingen følger med VoiceWatch. Dette er statistiske anslag, ikke identitetsgjenkjenning, og nøyaktigheten varierer med modellen og lydkvaliteten.",
+        "settingsHint": "Slå den på og velg modellene dine under",
+        "settingsLinkLabel": "Innstillinger → Lyd → Behandling → Speaker Attributes",
+        "rosterHint": "Navngitte klynger og varsler om nye talere vises på",
+        "rosterLinkLabel": "Talere-siden"
+      },
       "responsibleUse": {
         "title": "Ansvarlig bruk av VoiceWatch",
         "intro": "VoiceWatch er et kraftig verktøy som forbedrer fuglekikkeropplevelsen din gjennom KI-støttet identifikasjon. For å sikre best mulig resultater for både fuglekikking og naturvern:",

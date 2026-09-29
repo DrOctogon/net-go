@@ -33,6 +33,12 @@ const onboardingSteps: WizardStep[] = [
     component: () => import('./steps/IntegrationStep.svelte'),
   },
   {
+    id: 'speaker-voiceprint',
+    type: 'component',
+    titleKey: 'wizard.steps.speakerVoiceprint.title',
+    component: () => import('./steps/SpeakerVoiceprintStep.svelte'),
+  },
+  {
     id: 'responsible-use',
     type: 'component',
     titleKey: 'wizard.steps.responsibleUse.title',
