@@ -505,10 +505,10 @@ func stripSSEPendingForGuest(pending any) any {
 		return pending
 	}
 	stripped := make([]processor.SSEPendingDetection, len(snapshot))
-	for i, item := range snapshot {
-		item.Source = ""
-		item.SourceID = ""
-		stripped[i] = item
+	copy(stripped, snapshot)
+	for i := range stripped {
+		stripped[i].Source = ""
+		stripped[i].SourceID = ""
 	}
 	return stripped
 }

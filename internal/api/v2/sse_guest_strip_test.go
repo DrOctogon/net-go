@@ -12,6 +12,8 @@ import (
 	"github.com/tphakala/voicewatch/internal/analysis/processor"
 )
 
+const testSourceDisplayName = "Backyard Cam"
+
 func TestStripSSEDetectionForGuest(t *testing.T) {
 	t.Parallel()
 
@@ -20,7 +22,7 @@ func TestStripSSEDetectionForGuest(t *testing.T) {
 		ScientificName: "Homo sapiens",
 		Latitude:       60.17,
 		Longitude:      24.94,
-		Source:         &SSESourceInfo{ID: "rtsp-1", Type: "rtsp", DisplayName: "Backyard Cam"},
+		Source:         &SSESourceInfo{ID: "rtsp-1", DisplayName: testSourceDisplayName},
 	}
 	stripSSEDetectionForGuest(&d)
 
@@ -38,7 +40,7 @@ func TestStripSSEPendingForGuest(t *testing.T) {
 	t.Run("snapshot sources blanked, original untouched", func(t *testing.T) {
 		t.Parallel()
 		original := []processor.SSEPendingDetection{
-			{Species: "Human Voice", Source: "Backyard Cam", SourceID: "rtsp-1", HitCount: 3},
+			{Species: "Human Voice", Source: testSourceDisplayName, SourceID: "rtsp-1", HitCount: 3},
 			{Species: "Human Voice", Source: "Porch", SourceID: "rtsp-2", HitCount: 1},
 		}
 		out := stripSSEPendingForGuest(original)
@@ -54,7 +56,7 @@ func TestStripSSEPendingForGuest(t *testing.T) {
 		assert.Equal(t, 3, stripped[0].HitCount)
 		// The broadcast slice is shared across clients: authenticated
 		// subscribers must still see the original values.
-		assert.Equal(t, "Backyard Cam", original[0].Source)
+		assert.Equal(t, testSourceDisplayName, original[0].Source)
 		assert.Equal(t, "rtsp-1", original[0].SourceID)
 	})
 
