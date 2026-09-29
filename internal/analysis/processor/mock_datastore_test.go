@@ -446,6 +446,12 @@ func (m *ActionMockDatastore) GetSpeakerRoster(_ context.Context) ([]datastore.S
 func (m *ActionMockDatastore) GetSpeakerDailyActivity(_ context.Context, _, _ string) ([]datastore.SpeakerDailyActivity, error) {
 	return nil, nil
 }
+func (m *ActionMockDatastore) ReassignSpeakerID(_ context.Context, _, _ string) (int64, error) {
+	return 0, nil
+}
+func (m *ActionMockDatastore) ClearSpeakerID(_ context.Context, _ string) (int64, error) {
+	return 0, nil
+}
 
 // Compile-time check that ActionMockDatastore implements datastore.Interface
 var _ datastore.Interface = (*ActionMockDatastore)(nil)

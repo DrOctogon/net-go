@@ -269,6 +269,8 @@ type Interface interface {
 	GetSpeakerRoster(ctx context.Context) ([]SpeakerRosterEntry, error)                                     // Full roster: named + unnamed speakers with detection counts
 	GetSpeakerDailyActivity(ctx context.Context, startDate, endDate string) ([]SpeakerDailyActivity, error) // Per-speaker daily detection counts, optional inclusive date range
 	SetSpeakerName(ctx context.Context, speakerID, name string) error                                       // Upsert; empty name clears the mapping
+	ReassignSpeakerID(ctx context.Context, fromID, toID string) (int64, error)                               // Bulk relabel detections fromID -> toID (cluster merge); returns rows affected
+	ClearSpeakerID(ctx context.Context, speakerID string) (int64, error)                                    // Bulk unlabel detections of speakerID (forget cluster); returns rows affected
 	// Database stats method for runtime statistics
 	GetDatabaseStats(ctx context.Context) (*DatabaseStats, error)
 	// PingWithLatency executes a trivial query (SELECT 1) and returns the round-trip time.

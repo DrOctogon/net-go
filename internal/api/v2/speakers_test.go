@@ -110,20 +110,9 @@ func TestGetSpeakers_DatastoreError(t *testing.T) {
 }
 
 func TestUpdateSpeakerName_InvalidID(t *testing.T) {
-	invalidIDs := []string{
-		"3",            // bare number
-		"spk_",         // missing counter
-		"SPK_3",        // wrong case
-		"spk_3x",       // trailing garbage
-		"spk_3;DROP",   // injection attempt
-		"speaker_3",    // wrong prefix
-		"spk_-1",       // negative
-		"spk_3%20",     // encoded whitespace
-		"..%2Fspk_3",   // traversal attempt
-		"spk_3 OR 1=1", // SQL injection attempt
-	}
-
-	for _, id := range invalidIDs {
+	// invalidSpeakerIDs is shared with the cluster-management handler tests
+	// (speakers_manage_test.go) so every /speakers mutation rejects the same set.
+	for _, id := range invalidSpeakerIDs {
 		t.Run(id, func(t *testing.T) {
 			e, mockDS, controller := setupTestEnvironment(t)
 

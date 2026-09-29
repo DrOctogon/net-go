@@ -11,8 +11,10 @@ import (
 	"time"
 
 	"github.com/labstack/echo/v4"
+	"github.com/tphakala/voicewatch/internal/analysis/processor"
 	"github.com/tphakala/voicewatch/internal/datastore"
 	"github.com/tphakala/voicewatch/internal/errors"
+	"github.com/tphakala/voicewatch/internal/speaker"
 )
 
 const (
@@ -23,6 +25,9 @@ const (
 	// speakerActivityMaxRangeDays caps the requested date range so a single
 	// request cannot ask for an unbounded scan (366 covers a leap year).
 	speakerActivityMaxRangeDays = 366
+	// speakerClusteringUnavailableMessage is returned when cluster management is
+	// requested while voice-print clustering is not running.
+	speakerClusteringUnavailableMessage = "Voice-print speaker clustering is not enabled"
 )
 
 // SpeakerNameEntry is the PUT /speakers/:id/name response: a voice-print
@@ -66,6 +71,100 @@ func (c *Controller) initSpeakerRoutes() {
 	speakerGroup.GET("/activity", c.GetSpeakerActivity)
 	speakerGroup.PUT("/:id/name", c.UpdateSpeakerName,
 		newIPRateLimiter(speakerNameRateLimitPerMinute))
+	// Cluster management mutates voice-print state and bulk-relabels detections,
+	// so it shares the stricter budget of the name mutation.
+	speakerGroup.POST("/:id/merge", c.MergeSpeakers,
+		newIPRateLimiter(speakerNameRateLimitPerMinute))
+	speakerGroup.DELETE("/:id", c.ForgetSpeaker,
+		newIPRateLimiter(speakerNameRateLimitPerMinute))
+}
+
+// speakerMergeRequest is the POST /speakers/:id/merge request body: the cluster
+// to fold into the path id.
+type speakerMergeRequest struct {
+	SourceID string `json:"sourceId"`
+}
+
+// SpeakerMergeResult is the POST /speakers/:id/merge response: the surviving
+// target cluster id and the retired source id.
+type SpeakerMergeResult struct {
+	SpeakerID string `json:"speakerId"`
+	SourceID  string `json:"sourceId"`
+}
+
+// speakerClusterOpStatus maps a processor cluster-management error to an HTTP
+// status: unknown cluster -> 404, self-merge -> 409, voice-print clustering or
+// datastore unavailable -> 503, anything else (including the defensive
+// centroid-dimension mismatch) -> 500.
+func speakerClusterOpStatus(err error) int {
+	switch {
+	case errors.Is(err, speaker.ErrUnknownCluster):
+		return http.StatusNotFound
+	case errors.Is(err, speaker.ErrSameCluster):
+		return http.StatusConflict
+	case errors.Is(err, processor.ErrSpeakerClusteringUnavailable),
+		errors.Is(err, processor.ErrDatastoreUnavailable):
+		return http.StatusServiceUnavailable
+	default:
+		return http.StatusInternalServerError
+	}
+}
+
+// MergeSpeakers folds one voice-print cluster into another, correcting the
+// online clusterer splitting a single person across two ids. The path id is the
+// surviving target; the body's sourceId is retired. Its detections are
+// relabelled and its centroid folded into the target's (count-weighted).
+func (c *Controller) MergeSpeakers(ctx echo.Context) error {
+	targetID := validSpeakerIDFilter(ctx.Param("id"))
+	if targetID == "" {
+		return c.HandleError(ctx, fmt.Errorf("invalid speaker id"),
+			"Invalid speaker ID, expected format spk_<n>", http.StatusBadRequest)
+	}
+
+	req := &speakerMergeRequest{}
+	if err := ctx.Bind(req); err != nil {
+		return c.HandleError(ctx, err, "Invalid request format", http.StatusBadRequest)
+	}
+	sourceID := validSpeakerIDFilter(strings.TrimSpace(req.SourceID))
+	if sourceID == "" {
+		return c.HandleError(ctx, fmt.Errorf("invalid source speaker id"),
+			"Invalid sourceId, expected format spk_<n>", http.StatusBadRequest)
+	}
+	if sourceID == targetID {
+		return c.HandleError(ctx, fmt.Errorf("%w: %s", speaker.ErrSameCluster, targetID),
+			"Cannot merge a speaker into itself", http.StatusConflict)
+	}
+
+	if c.Processor == nil {
+		return c.HandleError(ctx, processor.ErrSpeakerClusteringUnavailable,
+			speakerClusteringUnavailableMessage, http.StatusServiceUnavailable)
+	}
+	if err := c.Processor.MergeSpeakerClusters(ctx.Request().Context(), targetID, sourceID); err != nil {
+		return c.HandleError(ctx, err, "Failed to merge speakers", speakerClusterOpStatus(err))
+	}
+
+	return ctx.JSON(http.StatusOK, SpeakerMergeResult{SpeakerID: targetID, SourceID: sourceID})
+}
+
+// ForgetSpeaker removes a voice-print cluster: its detections are unlabelled
+// (the clips are kept), its display name is deleted, and the cluster is dropped
+// from the clusterer. The id is retired and never reissued.
+func (c *Controller) ForgetSpeaker(ctx echo.Context) error {
+	speakerID := validSpeakerIDFilter(ctx.Param("id"))
+	if speakerID == "" {
+		return c.HandleError(ctx, fmt.Errorf("invalid speaker id"),
+			"Invalid speaker ID, expected format spk_<n>", http.StatusBadRequest)
+	}
+
+	if c.Processor == nil {
+		return c.HandleError(ctx, processor.ErrSpeakerClusteringUnavailable,
+			speakerClusteringUnavailableMessage, http.StatusServiceUnavailable)
+	}
+	if err := c.Processor.ForgetSpeakerCluster(ctx.Request().Context(), speakerID); err != nil {
+		return c.HandleError(ctx, err, "Failed to forget speaker", speakerClusterOpStatus(err))
+	}
+
+	return ctx.NoContent(http.StatusNoContent)
 }
 
 // GetSpeakers returns the full household speaker roster: every speaker

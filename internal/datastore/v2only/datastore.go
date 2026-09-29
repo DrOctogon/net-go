@@ -2010,6 +2010,43 @@ func (ds *Datastore) GetSpeakerDailyActivity(ctx context.Context, startDate, end
 	return activity, nil
 }
 
+// ReassignSpeakerID repoints every v2 detection labelled fromID at toID and
+// returns the number of rows changed (database half of a cluster merge; see the
+// legacy twin in datastore/speaker_names.go).
+func (ds *Datastore) ReassignSpeakerID(ctx context.Context, fromID, toID string) (int64, error) {
+	if fromID == "" || toID == "" {
+		return 0, fmt.Errorf("reassign speaker id: %w", datastore.ErrEmptySpeakerID)
+	}
+
+	result := ds.manager.DB().WithContext(ctx).
+		Table(ds.manager.TablePrefix() + "detections").
+		Where("speaker_id = ?", fromID).
+		Update("speaker_id", toID)
+	if result.Error != nil {
+		return 0, fmt.Errorf("reassign speaker id %s -> %s: %w", fromID, toID, result.Error)
+	}
+	return result.RowsAffected, nil
+}
+
+// ClearSpeakerID unlabels every v2 detection belonging to speakerID and returns
+// the number of rows changed (database half of forgetting a cluster). The v2
+// detections.speaker_id column is nullable, so unlabelled means NULL — already
+// excluded by every roster/activity query.
+func (ds *Datastore) ClearSpeakerID(ctx context.Context, speakerID string) (int64, error) {
+	if speakerID == "" {
+		return 0, fmt.Errorf("clear speaker id: %w", datastore.ErrEmptySpeakerID)
+	}
+
+	result := ds.manager.DB().WithContext(ctx).
+		Table(ds.manager.TablePrefix() + "detections").
+		Where("speaker_id = ?", speakerID).
+		Update("speaker_id", nil)
+	if result.Error != nil {
+		return 0, fmt.Errorf("clear speaker id %s: %w", speakerID, result.Error)
+	}
+	return result.RowsAffected, nil
+}
+
 // SetSpeakerName upserts the display name for a speaker cluster id in the v2
 // speaker_names table; an empty (trimmed) name deletes the mapping. Validation
 // is shared with the legacy store via datastore.NormalizeSpeakerName.

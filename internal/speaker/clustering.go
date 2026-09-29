@@ -1,9 +1,26 @@
 package speaker
 
 import (
+	"fmt"
 	"math"
+	"slices"
 	"strconv"
 	"sync"
+
+	"github.com/tphakala/voicewatch/internal/errors"
+)
+
+// Cluster-management errors, returned by Merge and Remove so callers (the API
+// layer) can map them to status codes without string matching.
+var (
+	// ErrUnknownCluster means no cluster with the requested ID exists.
+	ErrUnknownCluster = errors.NewStd("unknown speaker cluster")
+	// ErrSameCluster means a merge named the same cluster as target and source.
+	ErrSameCluster = errors.NewStd("cannot merge a speaker cluster into itself")
+	// ErrCentroidDimensionMismatch means two clusters carry differently sized
+	// centroids and cannot be averaged. Defensive: a fixed-dimension voice-print
+	// model never produces this.
+	ErrCentroidDimensionMismatch = errors.NewStd("speaker cluster centroids have different dimensions")
 )
 
 // DefaultClusterThreshold is the cosine-similarity floor above which a voice
@@ -134,6 +151,82 @@ func (c *Clusterer) NumClusters() int {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	return len(c.clusters)
+}
+
+// HasCluster reports whether a cluster with the given ID currently exists.
+// Callers that act on the result must tolerate the cluster disappearing
+// afterwards (LRU eviction, a concurrent Merge/Remove).
+func (c *Clusterer) HasCluster(id string) bool {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	return c.indexOf(id) >= 0
+}
+
+// Merge folds the source cluster into the target: the target's centroid becomes
+// the count-weighted mean of both centroids, its count becomes the sum, and its
+// lastSeen the more recent of the two. The source cluster is then removed. The
+// target's ID survives; the source's ID is retired and never reissued, since
+// nextID is left untouched.
+//
+// It is the correction for the greedy online clusterer splitting one person
+// across two IDs (a voice heard first over a noisy source, say).
+func (c *Clusterer) Merge(targetID, sourceID string) error {
+	if targetID == sourceID {
+		return fmt.Errorf("%w: %s", ErrSameCluster, targetID)
+	}
+
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	ti, si := c.indexOf(targetID), c.indexOf(sourceID)
+	if ti < 0 {
+		return fmt.Errorf("%w: %s", ErrUnknownCluster, targetID)
+	}
+	if si < 0 {
+		return fmt.Errorf("%w: %s", ErrUnknownCluster, sourceID)
+	}
+
+	target, source := c.clusters[ti], c.clusters[si]
+	if len(target.centroid) != len(source.centroid) {
+		// Defensive: a fixed-dimension model never trips this, and
+		// NewClustererFromSnapshot drops off-dimension clusters on restore.
+		return fmt.Errorf("%w: %s has %d dimensions, %s has %d",
+			ErrCentroidDimensionMismatch, targetID, len(target.centroid), sourceID, len(source.centroid))
+	}
+
+	// Count-weighted mean of the two running means, which is exactly the mean
+	// of all members of both clusters. Accumulated in float64 so a large count
+	// ratio does not lose the smaller cluster entirely to float32 rounding.
+	total := target.count + source.count
+	tw, sw := float64(target.count), float64(source.count)
+	for i := range target.centroid {
+		target.centroid[i] = float32((float64(target.centroid[i])*tw + float64(source.centroid[i])*sw) / float64(total))
+	}
+	target.count = total
+	target.lastSeen = max(target.lastSeen, source.lastSeen)
+
+	c.clusters = slices.Delete(c.clusters, si, si+1)
+	return nil
+}
+
+// Remove drops the cluster with the given ID ("forget this voice"). Its ID is
+// retired, not reissued: nextID is left untouched.
+func (c *Clusterer) Remove(id string) error {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	i := c.indexOf(id)
+	if i < 0 {
+		return fmt.Errorf("%w: %s", ErrUnknownCluster, id)
+	}
+	c.clusters = slices.Delete(c.clusters, i, i+1)
+	return nil
+}
+
+// indexOf returns the index of the cluster with the given ID, or -1. The caller
+// must hold c.mu.
+func (c *Clusterer) indexOf(id string) int {
+	return slices.IndexFunc(c.clusters, func(cl *cluster) bool { return cl.id == id })
 }
 
 // update folds a new embedding into the cluster's running-mean centroid using
