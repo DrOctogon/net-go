@@ -14,6 +14,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/tphakala/voicewatch/internal/analysis/processor"
 	"github.com/tphakala/voicewatch/internal/audiocore/soundlevel"
 	"github.com/tphakala/voicewatch/internal/datastore"
 	"github.com/tphakala/voicewatch/internal/errors"
@@ -189,6 +190,12 @@ type SSEClient struct {
 	Response       http.ResponseWriter
 	Done           chan struct{} // Signal-only buffered channel to prevent blocking
 	StreamType     string        // streamTypeDetections, streamTypeSoundLevels, or streamTypeAll
+
+	// authenticated is captured at subscribe time and decides whether this
+	// client receives source/location fields (guests get them stripped, same
+	// policy as the REST endpoints). Session-scoped: a logout mid-stream takes
+	// effect on reconnect, mirroring how REST re-evaluates per request.
+	authenticated bool
 
 	// Health tracking for auto-disconnect of slow/blocked clients
 	// Uses atomic operations for thread-safe access during concurrent broadcasts
@@ -478,6 +485,34 @@ func createSSEClient(clientID string, ctx echo.Context, streamType string) *SSEC
 	}
 }
 
+// stripSSEDetectionForGuest blanks source identity and station location from a
+// detection event bound for an unauthenticated subscriber — the same policy the
+// REST endpoints apply via stripSensitiveDetectionFields. Speech/speaker fields
+// never ride SSEDetectionData (see the wire-shape tripwire test), so only
+// source/location need handling here.
+func stripSSEDetectionForGuest(d *SSEDetectionData) {
+	d.Source = nil
+	d.Latitude = 0
+	d.Longitude = 0
+}
+
+// stripSSEPendingForGuest returns a guest-safe copy of a pending-detection
+// snapshot ([]processor.SSEPendingDetection): source display name and raw
+// source ID are blanked. Non-snapshot payloads pass through unchanged.
+func stripSSEPendingForGuest(pending any) any {
+	snapshot, ok := pending.([]processor.SSEPendingDetection)
+	if !ok {
+		return pending
+	}
+	stripped := make([]processor.SSEPendingDetection, len(snapshot))
+	for i, item := range snapshot {
+		item.Source = ""
+		item.SourceID = ""
+		stripped[i] = item
+	}
+	return stripped
+}
+
 // sendConnectionMessage sends the initial connection message to the client
 func (c *Controller) sendConnectionMessage(ctx echo.Context, clientID, message, streamType string) error {
 	data := map[string]string{
@@ -566,6 +601,7 @@ func (c *Controller) handleSSEStream(ctx echo.Context, streamType, message, logP
 	// Generate client ID and create client
 	clientID := generateCorrelationID()
 	client := createSSEClient(clientID, ctx, streamType)
+	client.authenticated = c.isClientAuthenticated(ctx)
 
 	// Allow custom setup
 	if setupFunc != nil {
@@ -651,6 +687,9 @@ func (c *Controller) runSSEEventLoopMulti(ctx echo.Context, client *SSEClient, c
 			if !ok {
 				return nil
 			}
+			if !client.authenticated {
+				stripSSEDetectionForGuest(&detection)
+			}
 			if err := c.sendSSEMessage(ctx, "detection", detection); err != nil {
 				c.logErrorIfEnabled("Failed to send SSE detection",
 					logger.String("client_id", clientID),
@@ -665,6 +704,9 @@ func (c *Controller) runSSEEventLoopMulti(ctx echo.Context, client *SSEClient, c
 		case pending, ok := <-pendingCh:
 			if !ok {
 				return nil
+			}
+			if !client.authenticated {
+				pending = stripSSEPendingForGuest(pending)
 			}
 			if err := c.sendSSEMessage(ctx, "pending", pending); err != nil {
 				c.logErrorIfEnabled("Failed to send SSE pending",
