@@ -3709,6 +3709,7 @@
       "actionsExecuted": "Handlinger utført",
       "actionLabels": {
         "edit": "Rediger regel",
+        "duplicate": "Dupliser regel",
         "enable": "Aktiver regel",
         "disable": "Deaktiver regel",
         "test": "Test regel",
@@ -3776,7 +3777,10 @@
         "eventsCount": "hendelser",
         "metricsCount": "målinger",
         "durationFor": "i",
-        "durationSec": "sek"
+        "durationSec": "sek",
+        "copySuffix": "(kopi)",
+        "keywordOperatorHint": "Når flere nøkkelord treffer samtidig, slås de sammen til én verdi, så \"er\" og \"er ikke\" kan overse et treff. Bruk \"inneholder\" (eller \"er i listen\" for ett enkelt nøkkelord) i stedet.",
+        "builtInClashHint": "Den innebygde regelen \"Nøkkelord flagget\" utløses for hvert nøkkelord med mindre du slår den av — den kan også utløses sammen med denne regelen."
       },
       "export": "Eksporter",
       "import": "Importer",

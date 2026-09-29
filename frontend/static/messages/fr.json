@@ -3709,6 +3709,7 @@
       "actionsExecuted": "Actions exécutées",
       "actionLabels": {
         "edit": "Modifier la règle",
+        "duplicate": "Dupliquer la règle",
         "enable": "Activer la règle",
         "disable": "Désactiver la règle",
         "test": "Tester la règle",
@@ -3776,7 +3777,10 @@
         "eventsCount": "événements",
         "metricsCount": "métriques",
         "durationFor": "pendant",
-        "durationSec": "sec"
+        "durationSec": "sec",
+        "copySuffix": "(copie)",
+        "keywordOperatorHint": "Lorsque plusieurs mots-clés correspondent en même temps, ils sont combinés en une seule valeur, si bien que \"est\" et \"n'est pas\" peuvent manquer une correspondance. Utilisez plutôt \"contient\" (ou \"est dans la liste\" pour un seul mot-clé).",
+        "builtInClashHint": "La règle intégrée \"Mot-clé signalé\" se déclenche pour chaque mot-clé sauf si vous la désactivez — elle peut aussi se déclencher en même temps que cette règle."
       },
       "export": "Exporter",
       "import": "Importer",

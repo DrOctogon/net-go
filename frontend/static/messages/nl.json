@@ -3709,6 +3709,7 @@
       "actionsExecuted": "Uitgevoerde acties",
       "actionLabels": {
         "edit": "Regel bewerken",
+        "duplicate": "Regel dupliceren",
         "enable": "Regel inschakelen",
         "disable": "Regel uitschakelen",
         "test": "Regel testen",
@@ -3776,7 +3777,10 @@
         "eventsCount": "gebeurtenissen",
         "metricsCount": "metrieken",
         "durationFor": "gedurende",
-        "durationSec": "sec"
+        "durationSec": "sec",
+        "copySuffix": "(kopie)",
+        "keywordOperatorHint": "Overeenkomende trefwoorden worden gecombineerd tot één waarde wanneer er meerdere tegelijk overeenkomen, waardoor \"is\" en \"is niet\" een match kunnen missen. Gebruik in plaats daarvan \"bevat\" (of \"staat in lijst\" voor één trefwoord).",
+        "builtInClashHint": "De ingebouwde regel \"Trefwoord gemarkeerd\" wordt voor elk trefwoord geactiveerd, tenzij je deze uitschakelt — deze kan ook samen met deze regel afgaan."
       },
       "export": "Exporteren",
       "import": "Importeren",

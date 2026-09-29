@@ -3709,6 +3709,7 @@
       "actionsExecuted": "Vykonané akce",
       "actionLabels": {
         "edit": "Upravit pravidlo",
+        "duplicate": "Duplikovat pravidlo",
         "enable": "Povolit pravidlo",
         "disable": "Zakázat pravidlo",
         "test": "Otestovat pravidlo",
@@ -3776,7 +3777,10 @@
         "eventsCount": "událostí",
         "metricsCount": "metrik",
         "durationFor": "po dobu",
-        "durationSec": "s"
+        "durationSec": "s",
+        "copySuffix": "(kopie)",
+        "keywordOperatorHint": "Shodující se klíčová slova se při současném výskytu více z nich spojí do jedné hodnoty, takže operátory \"je\" a \"není\" mohou shodu přehlédnout. Použijte místo nich \"obsahuje\" (nebo \"je v seznamu\" pro jediné klíčové slovo).",
+        "builtInClashHint": "Vestavěné pravidlo \"Klíčové slovo označeno\" se spouští pro každé klíčové slovo, dokud jej nezakážete – může se spustit i společně s tímto pravidlem."
       },
       "export": "Exportovat",
       "import": "Importovat",

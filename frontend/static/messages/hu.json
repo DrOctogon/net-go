@@ -3709,6 +3709,7 @@
       "actionsExecuted": "Végrehajtott műveletek",
       "actionLabels": {
         "edit": "Szabály szerkesztése",
+        "duplicate": "Szabály duplikálása",
         "enable": "Szabály engedélyezése",
         "disable": "Szabály letiltása",
         "test": "Szabály tesztelése",
@@ -3776,7 +3777,10 @@
         "eventsCount": "esemény",
         "metricsCount": "metrika",
         "durationFor": "ennyi ideig",
-        "durationSec": "mp"
+        "durationSec": "mp",
+        "copySuffix": "(másolat)",
+        "keywordOperatorHint": "Ha egyszerre több kulcsszó is illeszkedik, ezek egyetlen értékké kombinálódnak, így az \"egyenlő\" és a \"nem egyenlő\" operátor kihagyhatja a találatot. Használja helyette a \"tartalmazza\" (vagy egyetlen kulcsszóhoz a \"szerepel a listában\") operátort.",
+        "builtInClashHint": "A beépített \"Kulcsszóval megjelölve\" szabály minden kulcsszóra lefut, hacsak nem tiltja le — ez a szabály is lefuthat vele egyidejűleg."
       },
       "export": "Exportálás",
       "import": "Importálás",

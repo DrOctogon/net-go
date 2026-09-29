@@ -35,7 +35,13 @@
   } from '@lucide/svelte';
   import { dropdown } from '$lib/utils/transitions';
   import { t } from '$lib/i18n';
-  import type { AlertRule, AlertSchema, ObjectTypeSchema } from '$lib/api/alerts';
+  import {
+    KEYWORDS_PROPERTY,
+    type AlertRule,
+    type AlertSchema,
+    type ObjectTypeSchema,
+  } from '$lib/api/alerts';
+  import { transcriptionSettings } from '$lib/stores/settings';
   import {
     schemaObjectTypeLabel,
     schemaEventLabel,
@@ -172,6 +178,10 @@
   let propertyOptions = $derived(
     availableProperties.map(p => ({ value: p.name, label: schemaPropertyLabel(p.name, p.label) }))
   );
+
+  // Configured transcription keywords, offered as suggestions when a condition
+  // targets the keyword-flag "keywords" property. Free text is still allowed.
+  let configuredKeywords = $derived($transcriptionSettings?.keywords ?? []);
 
   // Get operators for a given property
   function operatorsForProperty(propName: string) {
@@ -664,69 +674,88 @@
       {:else}
         <div class="space-y-2">
           {#each conditions as condition, index (condition.id)}
-            <div
-              class="flex items-center gap-2 p-2.5 rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-200)]"
-            >
-              <!-- Property -->
-              <select
-                bind:value={condition.property}
-                aria-label={t('settings.alerts.editor.property')}
-                class="px-2 py-1.5 rounded-md text-xs border border-[var(--color-base-300)] bg-[var(--color-base-100)] text-[var(--color-base-content)] cursor-pointer outline-none focus:ring-1 focus:ring-[var(--color-primary)]/30"
+            <div class="space-y-1">
+              <div
+                class="flex items-center gap-2 p-2.5 rounded-lg border border-[var(--color-base-300)] bg-[var(--color-base-200)]"
               >
-                {#each propertyOptions as prop (prop.value)}
-                  <option value={prop.value}>{prop.label}</option>
-                {/each}
-              </select>
-              <!-- Operator -->
-              <select
-                bind:value={condition.operator}
-                aria-label={t('settings.alerts.editor.operator')}
-                class="px-2 py-1.5 rounded-md text-xs border border-[var(--color-base-300)] bg-[var(--color-base-100)] text-[var(--color-base-content)] font-mono cursor-pointer outline-none focus:ring-1 focus:ring-[var(--color-primary)]/30"
-              >
-                {#each operatorsForProperty(condition.property ?? '') as op (op.value)}
-                  <option value={op.value}>{op.label}</option>
-                {/each}
-              </select>
-              <!-- Value -->
-              <input
-                type="text"
-                bind:value={condition.value}
-                aria-label={t('settings.alerts.editor.value')}
-                placeholder={t('settings.alerts.editor.valuePlaceholder')}
-                class="flex-1 px-2 py-1.5 rounded-md text-xs border border-[var(--color-base-300)] bg-[var(--color-base-100)] text-[var(--color-base-content)] outline-none focus:ring-1 focus:ring-[var(--color-primary)]/30 tabular-nums placeholder:text-[var(--color-base-content)]/40"
-              />
-              <!-- Duration (metric only) -->
-              {#if triggerType === 'metric'}
-                <div class="flex items-center gap-1">
-                  <span class="text-[10px] text-[var(--color-base-content)]/40"
-                    >{t('settings.alerts.editor.durationFor')}</span
-                  >
-                  <input
-                    type="number"
-                    min="0"
-                    step="1"
-                    aria-label={t('settings.alerts.editor.duration')}
-                    class="w-16 px-2 py-1.5 rounded-md text-xs border border-[var(--color-base-300)] bg-[var(--color-base-100)] text-[var(--color-base-content)] outline-none tabular-nums focus:ring-1 focus:ring-[var(--color-primary)]/30"
-                    value={condition.duration_sec ?? 0}
-                    onchange={e => {
-                      const v = Number(e.currentTarget.value);
-                      condition.duration_sec = Number.isFinite(v) ? Math.max(0, Math.trunc(v)) : 0;
-                    }}
-                  />
-                  <span class="text-[10px] text-[var(--color-base-content)]/40"
-                    >{t('settings.alerts.editor.durationSec')}</span
-                  >
-                </div>
+                <!-- Property -->
+                <select
+                  bind:value={condition.property}
+                  aria-label={t('settings.alerts.editor.property')}
+                  class="px-2 py-1.5 rounded-md text-xs border border-[var(--color-base-300)] bg-[var(--color-base-100)] text-[var(--color-base-content)] cursor-pointer outline-none focus:ring-1 focus:ring-[var(--color-primary)]/30"
+                >
+                  {#each propertyOptions as prop (prop.value)}
+                    <option value={prop.value}>{prop.label}</option>
+                  {/each}
+                </select>
+                <!-- Operator -->
+                <select
+                  bind:value={condition.operator}
+                  aria-label={t('settings.alerts.editor.operator')}
+                  class="px-2 py-1.5 rounded-md text-xs border border-[var(--color-base-300)] bg-[var(--color-base-100)] text-[var(--color-base-content)] font-mono cursor-pointer outline-none focus:ring-1 focus:ring-[var(--color-primary)]/30"
+                >
+                  {#each operatorsForProperty(condition.property ?? '') as op (op.value)}
+                    <option value={op.value}>{op.label}</option>
+                  {/each}
+                </select>
+                <!-- Value -->
+                <input
+                  type="text"
+                  bind:value={condition.value}
+                  list={condition.property === KEYWORDS_PROPERTY
+                    ? `keyword-values-${condition.id}`
+                    : undefined}
+                  aria-label={t('settings.alerts.editor.value')}
+                  placeholder={t('settings.alerts.editor.valuePlaceholder')}
+                  class="flex-1 px-2 py-1.5 rounded-md text-xs border border-[var(--color-base-300)] bg-[var(--color-base-100)] text-[var(--color-base-content)] outline-none focus:ring-1 focus:ring-[var(--color-primary)]/30 tabular-nums placeholder:text-[var(--color-base-content)]/40"
+                />
+                {#if condition.property === KEYWORDS_PROPERTY}
+                  <datalist id="keyword-values-{condition.id}">
+                    {#each configuredKeywords as keyword (keyword)}
+                      <option value={keyword}></option>
+                    {/each}
+                  </datalist>
+                {/if}
+                <!-- Duration (metric only) -->
+                {#if triggerType === 'metric'}
+                  <div class="flex items-center gap-1">
+                    <span class="text-[10px] text-[var(--color-base-content)]/40"
+                      >{t('settings.alerts.editor.durationFor')}</span
+                    >
+                    <input
+                      type="number"
+                      min="0"
+                      step="1"
+                      aria-label={t('settings.alerts.editor.duration')}
+                      class="w-16 px-2 py-1.5 rounded-md text-xs border border-[var(--color-base-300)] bg-[var(--color-base-100)] text-[var(--color-base-content)] outline-none tabular-nums focus:ring-1 focus:ring-[var(--color-primary)]/30"
+                      value={condition.duration_sec ?? 0}
+                      onchange={e => {
+                        const v = Number(e.currentTarget.value);
+                        condition.duration_sec = Number.isFinite(v)
+                          ? Math.max(0, Math.trunc(v))
+                          : 0;
+                      }}
+                    />
+                    <span class="text-[10px] text-[var(--color-base-content)]/40"
+                      >{t('settings.alerts.editor.durationSec')}</span
+                    >
+                  </div>
+                {/if}
+                <!-- Remove -->
+                <button
+                  type="button"
+                  class="w-6 h-6 rounded-md flex items-center justify-center hover:bg-[var(--color-error)]/10 transition-colors cursor-pointer"
+                  aria-label={t('settings.alerts.editor.removeCondition')}
+                  onclick={() => removeCondition(index)}
+                >
+                  <X class="w-3.5 h-3.5 text-[var(--color-error)]" />
+                </button>
+              </div>
+              {#if condition.property === KEYWORDS_PROPERTY}
+                <p class="pl-1 text-[11px] text-[var(--color-base-content)]/50">
+                  {t('settings.alerts.editor.keywordOperatorHint')}
+                </p>
               {/if}
-              <!-- Remove -->
-              <button
-                type="button"
-                class="w-6 h-6 rounded-md flex items-center justify-center hover:bg-[var(--color-error)]/10 transition-colors cursor-pointer"
-                aria-label={t('settings.alerts.editor.removeCondition')}
-                onclick={() => removeCondition(index)}
-              >
-                <X class="w-3.5 h-3.5 text-[var(--color-error)]" />
-              </button>
             </div>
           {/each}
         </div>

@@ -36,6 +36,7 @@
     Send,
     Plus,
     Pencil,
+    Copy,
     Trash2,
     ExternalLink,
     History,
@@ -84,6 +85,7 @@
     importAlertRules,
   } from '$lib/api/alerts';
   import type { AlertRule, AlertHistory as AlertHistoryType, AlertSchema } from '$lib/api/alerts';
+  import { KEYWORDS_PROPERTY, KEYWORD_FLAG_OBJECT_TYPE } from '$lib/api/alerts';
   import { formatLocalDateTime } from '$lib/utils/date';
   import { schemaObjectTypeLabel } from '$lib/utils/alertSchema';
   import { translateField } from '$lib/utils/notifications';
@@ -417,6 +419,9 @@
 
   let editorOpen = $state(false);
   let editingRule = $state<AlertRule | null>(null);
+  // True while the editor is prefilled from "Duplicate rule" — forces Save to
+  // create a new rule instead of updating the source rule's id.
+  let isDuplicating = $state(false);
 
   // Computed stats for summary bar
   let activeCount = $derived(rules.filter(r => r.enabled).length);
@@ -1070,13 +1075,17 @@
   // Rules functions
   // ============================================================
 
-  function showRuleStatus(msg: string, type: 'info' | 'success' | 'error') {
+  function showRuleStatus(
+    msg: string,
+    type: 'info' | 'success' | 'error',
+    durationMs: number = STATUS_DISMISS_MS
+  ) {
     ruleStatusMessage = msg;
     ruleStatusType = type;
     clearTimeout(ruleStatusTimeout);
     ruleStatusTimeout = setTimeout(() => {
       ruleStatusMessage = '';
-    }, STATUS_DISMISS_MS);
+    }, durationMs);
   }
 
   async function loadRules() {
@@ -1208,23 +1217,71 @@
       showRuleStatus(t('settings.alerts.errors.schemaLoadFailed'), 'error');
       return;
     }
+    isDuplicating = false;
     editingRule = rule;
+    editorOpen = true;
+  }
+
+  /** Open the editor prefilled from an existing rule, saving as a new rule. */
+  function handleDuplicateRule(rule: AlertRule) {
+    if (!schema) {
+      showRuleStatus(t('settings.alerts.errors.schemaLoadFailed'), 'error');
+      return;
+    }
+    const resolvedName = translateField(rule.name_key, undefined, rule.name);
+    const resolvedDescription = translateField(rule.description_key, undefined, rule.description);
+    isDuplicating = true;
+    editingRule = {
+      ...rule,
+      name: `${resolvedName} ${t('settings.alerts.editor.copySuffix')}`,
+      description: resolvedDescription,
+      name_key: undefined,
+      description_key: undefined,
+      built_in: false,
+    };
     editorOpen = true;
   }
 
   function closeEditor() {
     editorOpen = false;
     editingRule = null;
+    isDuplicating = false;
+  }
+
+  /** True when a saved keyword-conditioned custom rule may overlap with the
+   * always-on built-in "Keyword flagged" rule (which has no conditions). */
+  function hasBuiltInKeywordClash(rule: AlertRule): boolean {
+    return (
+      !rule.built_in &&
+      rule.object_type === KEYWORD_FLAG_OBJECT_TYPE &&
+      (rule.conditions ?? []).some(c => c.property === KEYWORDS_PROPERTY)
+    );
   }
 
   async function handleEditorSave(data: Partial<AlertRule>) {
+    const creating = data.id == null || isDuplicating;
     try {
-      if (data.id != null) {
-        await updateAlertRule(data.id, data);
-        showRuleStatus(t('settings.alerts.status.updated'), 'success');
+      let saved: AlertRule;
+      if (data.id != null && !isDuplicating) {
+        saved = await updateAlertRule(data.id, data);
       } else {
-        await createAlertRule(data);
-        showRuleStatus(t('settings.alerts.status.created'), 'success');
+        // Strip a stale id (from the duplicated source rule) so this always
+        // creates a new rule rather than updating the one it was copied from.
+        const createData: Partial<AlertRule> = { ...data };
+        delete createData.id;
+        saved = await createAlertRule(createData);
+      }
+      const savedMsg = t(
+        creating ? 'settings.alerts.status.created' : 'settings.alerts.status.updated'
+      );
+      if (hasBuiltInKeywordClash(saved)) {
+        showRuleStatus(
+          `${savedMsg} ${t('settings.alerts.editor.builtInClashHint')}`,
+          'info',
+          STATUS_DISMISS_LONG_MS
+        );
+      } else {
+        showRuleStatus(savedMsg, 'success');
       }
       closeEditor();
       await loadRules();
@@ -2512,6 +2569,15 @@
               onclick={() => openEditor(rule)}
             >
               <Pencil class="size-3.5" />
+            </button>
+            <button
+              class="inline-flex items-center justify-center size-7 rounded-md text-[var(--color-base-content)]/70 hover:bg-[var(--color-base-200)] hover:text-[var(--color-base-content)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              title={t('settings.alerts.actionLabels.duplicate')}
+              aria-label={t('settings.alerts.actionLabels.duplicate')}
+              disabled={editorOpen}
+              onclick={() => handleDuplicateRule(rule)}
+            >
+              <Copy class="size-3.5" />
             </button>
           </div>
         </div>
