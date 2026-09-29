@@ -3722,6 +3722,7 @@
       "actionsExecuted": "Ações executadas",
       "actionLabels": {
         "edit": "Editar regra",
+        "duplicate": "Duplicar regra",
         "enable": "Ativar regra",
         "disable": "Desativar regra",
         "test": "Testar regra",
@@ -3789,7 +3790,10 @@
         "eventsCount": "eventos",
         "metricsCount": "métricas",
         "durationFor": "durante",
-        "durationSec": "seg"
+        "durationSec": "seg",
+        "copySuffix": "(cópia)",
+        "keywordOperatorHint": "As palavras-chave correspondentes são combinadas num único valor quando várias correspondem ao mesmo tempo, pelo que \"é\" e \"não é\" podem não detetar uma correspondência. Use antes \"contém\" (ou \"está na lista\" para uma única palavra-chave).",
+        "builtInClashHint": "A regra incorporada \"Palavra-chave sinalizada\" é acionada para cada palavra-chave, a menos que a desative — também pode ser acionada juntamente com esta regra."
       },
       "export": "Exportar",
       "import": "Importar",

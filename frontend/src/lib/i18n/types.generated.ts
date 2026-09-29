@@ -2726,6 +2726,7 @@ export type TranslationKey =
   | 'settings.alerts.historyCount' // params: total
   | 'settings.alerts.actionsExecuted'
   | 'settings.alerts.actionLabels.edit'
+  | 'settings.alerts.actionLabels.duplicate'
   | 'settings.alerts.actionLabels.enable'
   | 'settings.alerts.actionLabels.disable'
   | 'settings.alerts.actionLabels.test'
@@ -2788,6 +2789,9 @@ export type TranslationKey =
   | 'settings.alerts.editor.metricsCount'
   | 'settings.alerts.editor.durationFor'
   | 'settings.alerts.editor.durationSec'
+  | 'settings.alerts.editor.copySuffix'
+  | 'settings.alerts.editor.keywordOperatorHint'
+  | 'settings.alerts.editor.builtInClashHint'
   | 'settings.alerts.export'
   | 'settings.alerts.import'
   | 'settings.alerts.exporting'

@@ -3722,6 +3722,7 @@
       "actionsExecuted": "Azioni eseguite",
       "actionLabels": {
         "edit": "Modifica regola",
+        "duplicate": "Duplica regola",
         "enable": "Attiva regola",
         "disable": "Disattiva regola",
         "test": "Testa regola",
@@ -3789,7 +3790,10 @@
         "eventsCount": "eventi",
         "metricsCount": "metriche",
         "durationFor": "per",
-        "durationSec": "sec"
+        "durationSec": "sec",
+        "copySuffix": "(copia)",
+        "keywordOperatorHint": "Le parole chiave corrispondenti vengono unite in un unico valore quando ne scattano più contemporaneamente, quindi \"è\" e \"non è\" potrebbero non rilevare una corrispondenza. Usa invece \"contiene\" (o \"è nell'elenco\" per una singola parola chiave).",
+        "builtInClashHint": "La regola integrata \"Parola chiave segnalata\" scatta per ogni parola chiave a meno che non venga disattivata — potrebbe scattare insieme a questa regola."
       },
       "export": "Esporta",
       "import": "Importa",

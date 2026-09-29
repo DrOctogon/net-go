@@ -314,6 +314,7 @@ func v2Entities() []any {
 		&entities.AlertHistory{},
 		// Application metadata
 		&entities.AppMetadata{},
+		&entities.SpeakerName{},
 		// Application event log
 		&entities.AppEvent{},
 	}

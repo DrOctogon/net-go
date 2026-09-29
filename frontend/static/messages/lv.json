@@ -3722,6 +3722,7 @@
       "actionsExecuted": "Izpildītās darbības",
       "actionLabels": {
         "edit": "Rediģēt noteikumu",
+        "duplicate": "Dublicēt noteikumu",
         "enable": "Iespējot noteikumu",
         "disable": "Atspējot noteikumu",
         "test": "Testēt noteikumu",
@@ -3789,7 +3790,10 @@
         "eventsCount": "notikumi",
         "metricsCount": "metrikas",
         "durationFor": "uz",
-        "durationSec": "sek"
+        "durationSec": "sek",
+        "copySuffix": "(kopija)",
+        "keywordOperatorHint": "Ja vienlaikus sakrīt vairāki atslēgvārdi, tie tiek apvienoti vienā vērtībā, tāpēc operatori \"ir\" un \"nav\" var nepamanīt sakritību. Tā vietā izmantojiet \"satur\" (vai \"ir sarakstā\" vienam atslēgvārdam).",
+        "builtInClashHint": "Iebūvētais noteikums \"Atslēgvārds atzīmēts\" tiek aktivizēts par katru atslēgvārdu, ja vien to neatspējojat — tas var tikt aktivizēts arī kopā ar šo noteikumu."
       },
       "export": "Eksportēt",
       "import": "Importēt",

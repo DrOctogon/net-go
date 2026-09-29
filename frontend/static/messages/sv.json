@@ -3722,6 +3722,7 @@
       "actionsExecuted": "Utförda åtgärder",
       "actionLabels": {
         "edit": "Redigera regel",
+        "duplicate": "Duplicera regel",
         "enable": "Aktivera regel",
         "disable": "Inaktivera regel",
         "test": "Testa regel",
@@ -3789,7 +3790,10 @@
         "eventsCount": "händelser",
         "metricsCount": "mätvärden",
         "durationFor": "i",
-        "durationSec": "sek"
+        "durationSec": "sek",
+        "copySuffix": "(kopia)",
+        "keywordOperatorHint": "Matchande nyckelord kombineras till ett enda värde när flera matchar samtidigt, så \"är\" och \"är inte\" kan missa en träff. Använd \"innehåller\" (eller \"finns i listan\" för ett enda nyckelord) istället.",
+        "builtInClashHint": "Den inbyggda regeln \"Nyckelord flaggat\" utlöses för varje nyckelord om du inte inaktiverar den — den kan även utlösas tillsammans med den här regeln."
       },
       "export": "Exportera",
       "import": "Importera",

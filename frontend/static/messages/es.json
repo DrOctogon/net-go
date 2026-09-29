@@ -3722,6 +3722,7 @@
       "actionsExecuted": "Acciones ejecutadas",
       "actionLabels": {
         "edit": "Editar regla",
+        "duplicate": "Duplicar regla",
         "enable": "Activar regla",
         "disable": "Desactivar regla",
         "test": "Probar regla",
@@ -3789,7 +3790,10 @@
         "eventsCount": "eventos",
         "metricsCount": "métricas",
         "durationFor": "durante",
-        "durationSec": "seg"
+        "durationSec": "seg",
+        "copySuffix": "(copia)",
+        "keywordOperatorHint": "Las palabras clave coincidentes se combinan en un solo valor cuando se activan varias a la vez, por lo que \"es\" y \"no es\" pueden pasar por alto una coincidencia. Usa \"contiene\" (o \"está en la lista\" para una sola palabra clave) en su lugar.",
+        "builtInClashHint": "La regla integrada \"Palabra clave marcada\" se activa para cada palabra clave a menos que la desactives; también puede activarse junto con esta regla."
       },
       "export": "Exportar",
       "import": "Importar",
