@@ -774,7 +774,8 @@
       "detectionsGrid": "Senaste detekteringar",
       "liveSpectrogram": "Live spektrogram",
       "videoEmbed": "Videoinbäddning",
-      "voiceActivity": "Voice Activity"
+      "voiceActivity": "Voice Activity",
+      "recentSpeakers": "Senaste talare"
     },
     "voiceActivity": {
       "title": "Voice Activity",
@@ -787,6 +788,18 @@
       },
       "bar": {
         "tooltip": "{count} detection(s) at {hour}:00"
+      }
+    },
+    "recentSpeakers": {
+      "title": "Senaste talare",
+      "subtitle": "Mest aktiva talare efter detekteringar",
+      "loading": "Laddar talare...",
+      "empty": "Inga talare ännu. Talare visas här när röstdetekteringar matchas mot röstavtryck.",
+      "signInHint": "Logga in för att se hushållets talarlista.",
+      "detectionsCount": "{count} detektering(ar)",
+      "rowAriaLabel": "Öppna talarinställningar för {name}",
+      "errors": {
+        "load": "Kunde inte ladda talarlistan"
       }
     }
   },

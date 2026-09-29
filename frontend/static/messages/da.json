@@ -774,7 +774,8 @@
       "detectionsGrid": "Seneste registreringer",
       "liveSpectrogram": "Live spektrogram",
       "videoEmbed": "Videoindlejring",
-      "voiceActivity": "Voice Activity"
+      "voiceActivity": "Voice Activity",
+      "recentSpeakers": "Seneste talere"
     },
     "voiceActivity": {
       "title": "Voice Activity",
@@ -787,6 +788,18 @@
       },
       "bar": {
         "tooltip": "{count} detection(s) at {hour}:00"
+      }
+    },
+    "recentSpeakers": {
+      "title": "Seneste talere",
+      "subtitle": "Mest aktive talere efter registreringer",
+      "loading": "Indlæser talere...",
+      "empty": "Ingen talere endnu. Talere vises her, når stemmeregistreringer matches med stemmeaftryk.",
+      "signInHint": "Log ind for at se husstandens talerliste.",
+      "detectionsCount": "{count} registrering(er)",
+      "rowAriaLabel": "Åbn talerindstillinger for {name}",
+      "errors": {
+        "load": "Kunne ikke indlæse talerlisten"
       }
     }
   },

@@ -774,7 +774,8 @@
       "detectionsGrid": "Détections récentes",
       "liveSpectrogram": "Spectrogramme en direct",
       "videoEmbed": "Vidéo intégrée",
-      "voiceActivity": "Voice Activity"
+      "voiceActivity": "Voice Activity",
+      "recentSpeakers": "Locuteurs récents"
     },
     "voiceActivity": {
       "title": "Voice Activity",
@@ -787,6 +788,18 @@
       },
       "bar": {
         "tooltip": "{count} detection(s) at {hour}:00"
+      }
+    },
+    "recentSpeakers": {
+      "title": "Locuteurs récents",
+      "subtitle": "Principaux locuteurs par détections",
+      "loading": "Chargement des locuteurs...",
+      "empty": "Aucun locuteur pour le moment. Les locuteurs apparaissent ici dès que les détections vocales sont associées à des empreintes vocales.",
+      "signInHint": "Connectez-vous pour voir la liste des locuteurs du foyer.",
+      "detectionsCount": "{count} détection(s)",
+      "rowAriaLabel": "Ouvrir les paramètres du locuteur {name}",
+      "errors": {
+        "load": "Échec du chargement de la liste des locuteurs"
       }
     }
   },

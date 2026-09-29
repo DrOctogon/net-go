@@ -36,7 +36,7 @@ func TestSettings_MigrateDashboardLayout(t *testing.T) {
 						SummaryLimit: 50,
 						Layout: DashboardLayout{
 							Elements: []DashboardElement{
-								{Type: "daily-summary", Enabled: true},
+								{Type: DashboardElementTypeDailySummary, Enabled: true},
 							},
 						},
 					},
@@ -70,7 +70,7 @@ func TestSettings_MigrateDashboardLayout(t *testing.T) {
 				elements := tt.settings.Realtime.Dashboard.Layout.Elements
 
 				// Verify element types, ordering, and enabled state
-				assert.Equal(t, "daily-summary", elements[0].Type)
+				assert.Equal(t, DashboardElementTypeDailySummary, elements[0].Type)
 				assert.True(t, elements[0].Enabled)
 				assert.Equal(t, "currently-hearing", elements[1].Type)
 				assert.True(t, elements[1].Enabled)
@@ -128,7 +128,7 @@ func TestSettings_GetEffectiveSummaryLimit(t *testing.T) {
 						Layout: DashboardLayout{
 							Elements: []DashboardElement{
 								{
-									Type:    "daily-summary",
+									Type:    DashboardElementTypeDailySummary,
 									Enabled: true,
 									Summary: &DailySummaryConfig{SummaryLimit: 50},
 								},
@@ -169,7 +169,7 @@ func TestSettings_GetEffectiveSummaryLimit(t *testing.T) {
 						SummaryLimit: 0,
 						Layout: DashboardLayout{
 							Elements: []DashboardElement{
-								{Type: "daily-summary", Summary: nil},
+								{Type: DashboardElementTypeDailySummary, Summary: nil},
 							},
 						},
 					},

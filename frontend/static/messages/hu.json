@@ -774,7 +774,8 @@
       "detectionsGrid": "Legutóbbi észlelések",
       "liveSpectrogram": "Élő spektrogram",
       "videoEmbed": "Videó beágyazás",
-      "voiceActivity": "Voice Activity"
+      "voiceActivity": "Voice Activity",
+      "recentSpeakers": "Legutóbbi beszélők"
     },
     "voiceActivity": {
       "title": "Voice Activity",
@@ -787,6 +788,18 @@
       },
       "bar": {
         "tooltip": "{count} detection(s) at {hour}:00"
+      }
+    },
+    "recentSpeakers": {
+      "title": "Legutóbbi beszélők",
+      "subtitle": "Legaktívabb beszélők észlelések szerint",
+      "loading": "Beszélők betöltése...",
+      "empty": "Még nincsenek beszélők. A beszélők akkor jelennek meg itt, amikor a hangészlelések hanglenyomatokhoz kapcsolódnak.",
+      "signInHint": "Jelentkezzen be a háztartás beszélőlistájának megtekintéséhez.",
+      "detectionsCount": "{count} észlelés",
+      "rowAriaLabel": "{name} beszélőbeállításainak megnyitása",
+      "errors": {
+        "load": "Nem sikerült betölteni a beszélőlistát"
       }
     }
   },
