@@ -1031,7 +1031,21 @@
       "identityLabel": "Sprecher",
       "renamePlaceholder": "Diese Stimme benennen",
       "renameAction": "Sprecher umbenennen",
-      "renameFailed": "Sprechername konnte nicht gespeichert werden"
+      "renameFailed": "Sprechername konnte nicht gespeichert werden",
+      "clusteringOff": "Die Stimmprofil-Analyse ist ausgeschaltet, daher können Sprecher nicht zusammengeführt oder gelöscht werden.",
+      "nameAction": "Das ist …",
+      "nameHint": "Diese Stimme hat noch keinen Namen. Benenne sie einmal, und jede Erkennung dieser Stimme – vergangene und künftige – zeigt diesen Namen.",
+      "merge": {
+        "action": "Gleicher Sprecher",
+        "actionAria": "{source} in diesen Sprecher zusammenführen",
+        "title": "Diese beiden Sprecher zusammenführen?",
+        "confirmNamed": "{source} wird in {target} zusammengeführt. Jede Erkennung mit {source} wird auf {target} umgeschrieben, und {source} wird stillgelegt – die ID wird nie wieder vergeben. Übrig bleibt {target} mit dem Namen „{name}“. Es werden keine Erkennungen oder Audioclips gelöscht. Das lässt sich nicht widerrufen.",
+        "confirmUnnamed": "{source} wird in {target} zusammengeführt. Jede Erkennung mit {source} wird auf {target} umgeschrieben, und {source} wird stillgelegt – die ID wird nie wieder vergeben. Übrig bleibt {target}, das noch keinen Namen hat. Es werden keine Erkennungen oder Audioclips gelöscht. Das lässt sich nicht widerrufen.",
+        "confirmLabel": "Sprecher zusammenführen",
+        "inProgress": "Sprecher werden zusammengeführt …",
+        "success": "Sprecher zusammengeführt",
+        "failed": "Zusammenführen der Sprecher fehlgeschlagen"
+      }
     }
   },
   "species": {
@@ -3957,7 +3971,17 @@
       "activityDescription": "Tägliche Erkennungszahlen für jeden Sprecher.",
       "activityEmpty": "Noch keine Sprecheraktivität. Tägliche Zahlen erscheinen hier, sobald Erkennungen Stimmen zugeordnet wurden.",
       "activityLoadFailed": "Sprecheraktivität konnte nicht geladen werden",
-      "activityDateColumn": "Datum"
+      "activityDateColumn": "Datum",
+      "actionsColumn": "Aktionen",
+      "forget": {
+        "action": "{name} löschen",
+        "title": "Diesen Sprecher löschen?",
+        "confirm": "{name} wird gelöscht: der Name wird entfernt und die {count} zugehörigen Erkennungen verlieren ihre Sprecherzuordnung. Die Erkennungen, ihre Audiodaten und ihr Verlauf bleiben erhalten. Dieses Stimmprofil erkennt kein neues Audio mehr, und die ID {id} wird nie wieder vergeben. Das lässt sich nicht widerrufen.",
+        "confirmLabel": "Sprecher löschen",
+        "inProgress": "Sprecher wird gelöscht …",
+        "success": "Sprecher gelöscht",
+        "failed": "Löschen des Sprechers fehlgeschlagen"
+      }
     }
   },
   "auth": {

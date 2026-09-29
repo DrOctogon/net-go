@@ -33,6 +33,8 @@
   import { navigation } from '$lib/stores/navigation.svelte';
   import SpeakerAttributeChips from '$lib/desktop/components/data/SpeakerAttributeChips.svelte';
   import { getSpeakerChips } from '$lib/utils/speakerAttributes';
+  import { mergeSpeakerClusters } from '$lib/utils/speakerClusterOps';
+  import ConfirmModal from '$lib/desktop/components/modals/ConfirmModal.svelte';
   import {
     Download,
     Mic,
@@ -111,7 +113,15 @@
   let renameValue = $state('');
   let renameSaving = $state(false);
 
+  // Bumped after a cluster mutation so the roster and similar-voices effects
+  // below (both read it) re-fetch instead of showing retired cluster ids.
+  let clusterVersion = $state(0);
+
+  // Map view of speakerNames for lookups with a non-literal key.
+  let speakerNameById = $derived(new Map(Object.entries(speakerNames)));
+
   $effect(() => {
+    void clusterVersion;
     speakerNames = {};
     if (!$isAuthenticated) return;
 
@@ -162,7 +172,69 @@
     }
   }
 
+  // Merge state: the similar-voices row whose cluster is awaiting confirmation.
+  // The current detection's cluster is always the merge TARGET (it survives);
+  // the row's cluster is the source and is retired.
+  let mergeSourceId = $state<string | null>(null);
+  let mergeSaving = $state(false);
+
+  // The target keeps its own name; an unnamed target adopts the source's, so
+  // the surviving name is whichever of the two exists (target first).
+  let mergeSurvivingName = $derived(
+    mergeSourceId === null
+      ? ''
+      : (speakerNameById.get(detection?.speakerId ?? '') ??
+          speakerNameById.get(mergeSourceId) ??
+          '')
+  );
+
+  let mergeConfirmMessage = $derived(
+    mergeSourceId === null
+      ? ''
+      : mergeSurvivingName !== ''
+        ? t('detections.speaker.merge.confirmNamed', {
+            source: mergeSourceId,
+            target: detection?.speakerId ?? '',
+            name: mergeSurvivingName,
+          })
+        : t('detections.speaker.merge.confirmUnnamed', {
+            source: mergeSourceId,
+            target: detection?.speakerId ?? '',
+          })
+  );
+
+  /**
+   * A similar-voices row is mergeable only when both sides carry a cluster id
+   * and they are different clusters (the backend rejects a self-merge with 409).
+   */
+  function canMergeWith(rowSpeakerId: string | undefined): boolean {
+    const targetId = detection?.speakerId;
+    return (
+      $isAuthenticated &&
+      targetId !== undefined &&
+      rowSpeakerId !== undefined &&
+      rowSpeakerId !== targetId
+    );
+  }
+
+  async function confirmMerge(): Promise<void> {
+    const targetId = detection?.speakerId;
+    const sourceId = mergeSourceId;
+    if (!targetId || !sourceId) return;
+
+    mergeSaving = true;
+    try {
+      if (await mergeSpeakerClusters(targetId, sourceId)) {
+        mergeSourceId = null;
+        clusterVersion++; // refresh the roster map and the similar-voices list
+      }
+    } finally {
+      mergeSaving = false;
+    }
+  }
+
   $effect(() => {
+    void clusterVersion;
     const det = detection;
     similarVoices = [];
     if (!det?.speakerId || !$isAuthenticated) return;
@@ -541,19 +613,39 @@
                 {speakerNames[det.speakerId] ?? det.speakerId}
               </span>
               {#if $isAuthenticated}
-                <button
-                  type="button"
-                  class="btn btn-ghost btn-xs"
-                  onclick={() => {
-                    renameValue = speakerNames[det.speakerId ?? ''] ?? '';
-                    renameOpen = true;
-                  }}
-                  aria-label={t('detections.speaker.renameAction')}
-                >
-                  <SquarePen class="w-3.5 h-3.5" />
-                </button>
+                {#if speakerNameById.get(det.speakerId) === undefined}
+                  <!-- Unnamed cluster: the same rename PUT, labelled as naming a
+                       person rather than "renaming" an id nobody chose. -->
+                  <button
+                    type="button"
+                    class="btn btn-primary btn-xs"
+                    onclick={() => {
+                      renameValue = '';
+                      renameOpen = true;
+                    }}
+                  >
+                    {t('detections.speaker.nameAction')}
+                  </button>
+                {:else}
+                  <button
+                    type="button"
+                    class="btn btn-ghost btn-xs"
+                    onclick={() => {
+                      renameValue = speakerNames[det.speakerId ?? ''] ?? '';
+                      renameOpen = true;
+                    }}
+                    aria-label={t('detections.speaker.renameAction')}
+                  >
+                    <SquarePen class="w-3.5 h-3.5" />
+                  </button>
+                {/if}
               {/if}
             </div>
+            {#if $isAuthenticated && speakerNameById.get(det.speakerId) === undefined}
+              <p class="mt-1 text-xs text-[var(--color-base-content)]/60">
+                {t('detections.speaker.nameHint')}
+              </p>
+            {/if}
           {/if}
         </div>
       {/if}
@@ -677,10 +769,10 @@
       <div class="content-panel">
         <ul class="list-none p-0 m-0 divide-y divide-[var(--border-100)]">
           {#each similarVoices as sv (sv.id)}
-            <li>
+            <li class="flex items-center gap-2">
               <button
                 type="button"
-                class="w-full flex items-center justify-between gap-3 py-2 text-left text-sm hover:bg-[var(--color-base-200)] rounded px-2"
+                class="flex-1 min-w-0 flex items-center justify-between gap-3 py-2 text-left text-sm hover:bg-[var(--color-base-200)] rounded px-2"
                 onclick={() => navigation.navigate(`/ui/detections/${sv.id}`)}
                 aria-label={t('detections.detail.similarVoices.openDetection', {
                   id: sv.id,
@@ -711,6 +803,18 @@
                   </span>
                 </span>
               </button>
+              {#if canMergeWith(sv.speakerId)}
+                <button
+                  type="button"
+                  class="btn btn-ghost btn-xs shrink-0"
+                  onclick={() => (mergeSourceId = sv.speakerId ?? null)}
+                  aria-label={t('detections.speaker.merge.actionAria', {
+                    source: sv.speakerId ?? '',
+                  })}
+                >
+                  {t('detections.speaker.merge.action')}
+                </button>
+              {/if}
             </li>
           {/each}
         </ul>
@@ -960,6 +1064,21 @@
     </section>
   {/if}
 </main>
+
+<!-- Merge confirmation: states the direction and which name survives. -->
+{#if mergeSourceId !== null}
+  <ConfirmModal
+    isOpen={true}
+    title={t('detections.speaker.merge.title')}
+    message={mergeConfirmMessage}
+    confirmLabel={mergeSaving
+      ? t('detections.speaker.merge.inProgress')
+      : t('detections.speaker.merge.confirmLabel')}
+    confirmVariant="warning"
+    onClose={() => (mergeSourceId = null)}
+    onConfirm={confirmMerge}
+  />
+{/if}
 
 <style>
   /* ===========================================

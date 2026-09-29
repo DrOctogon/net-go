@@ -1031,7 +1031,21 @@
       "identityLabel": "Hovoriaci",
       "renamePlaceholder": "Pomenujte tento hlas",
       "renameAction": "Premenovať hovoriaceho",
-      "renameFailed": "Nepodarilo sa uložiť meno hovoriaceho"
+      "renameFailed": "Nepodarilo sa uložiť meno hovoriaceho",
+      "clusteringOff": "Analýza hlasového podpisu je vypnutá, preto hovoriacich nemožno spájať ani zabudnúť.",
+      "nameAction": "Toto je…",
+      "nameHint": "Tento hlas ešte nemá meno. Pomenujte ho raz a každá detekcia tohto hlasu – predošlá aj budúca – bude zobrazovať toto meno.",
+      "merge": {
+        "action": "Ten istý hovoriaci",
+        "actionAria": "Spojiť {source} s týmto hovoriacim",
+        "title": "Spojiť týchto dvoch hovoriacich?",
+        "confirmNamed": "{source} sa spojí s {target}. Každá detekcia označená {source} sa preznačí na {target} a {source} sa vyradí – jeho ID sa už nikdy nepoužije. Zostane {target} s menom „{name}“. Žiadne detekcie ani zvukové nahrávky sa nemažú. Túto akciu nemožno vrátiť.",
+        "confirmUnnamed": "{source} sa spojí s {target}. Každá detekcia označená {source} sa preznačí na {target} a {source} sa vyradí – jeho ID sa už nikdy nepoužije. Zostane {target}, ktorý stále nemá meno. Žiadne detekcie ani zvukové nahrávky sa nemažú. Túto akciu nemožno vrátiť.",
+        "confirmLabel": "Spojiť hovoriacich",
+        "inProgress": "Spájanie hovoriacich…",
+        "success": "Hovoriaci spojení",
+        "failed": "Spojenie hovoriacich sa nepodarilo"
+      }
     }
   },
   "species": {
@@ -3957,7 +3971,17 @@
       "activityDescription": "Denné počty detekcií pre každého hovoriaceho.",
       "activityEmpty": "Zatiaľ žiadna aktivita hovoriacich. Denné počty sa tu zobrazia, keď budú detekcie priradené hlasom.",
       "activityLoadFailed": "Nepodarilo sa načítať aktivitu hovoriacich",
-      "activityDateColumn": "Dátum"
+      "activityDateColumn": "Dátum",
+      "actionsColumn": "Akcie",
+      "forget": {
+        "action": "Zabudnúť {name}",
+        "title": "Zabudnúť tohto hovoriaceho?",
+        "confirm": "{name} sa zabudne: meno sa odstráni a jeho {count} detekcií stratí označenie hovoriaceho. Detekcie, ich zvuk aj história zostanú zachované. Tento hlasový podpis už nebude zodpovedať novému zvuku a ID {id} sa už nikdy nepoužije. Túto akciu nemožno vrátiť.",
+        "confirmLabel": "Zabudnúť hovoriaceho",
+        "inProgress": "Zabúdanie hovoriaceho…",
+        "success": "Hovoriaci zabudnutý",
+        "failed": "Zabudnutie hovoriaceho sa nepodarilo"
+      }
     }
   },
   "auth": {

@@ -1031,7 +1031,21 @@
       "identityLabel": "Spreker",
       "renamePlaceholder": "Geef deze stem een naam",
       "renameAction": "Spreker hernoemen",
-      "renameFailed": "Kan sprekersnaam niet opslaan"
+      "renameFailed": "Kan sprekersnaam niet opslaan",
+      "clusteringOff": "Spraakprofielanalyse staat uit, dus sprekers kunnen niet worden samengevoegd of vergeten.",
+      "nameAction": "Dit is…",
+      "nameHint": "Deze stem heeft nog geen naam. Geef hem één keer een naam en elke detectie van deze stem, eerder en later, toont die naam.",
+      "merge": {
+        "action": "Zelfde spreker",
+        "actionAria": "{source} samenvoegen met deze spreker",
+        "title": "Deze twee sprekers samenvoegen?",
+        "confirmNamed": "{source} wordt samengevoegd met {target}. Elke detectie met label {source} krijgt label {target} en {source} wordt buiten gebruik gesteld — het id wordt nooit hergebruikt. De spreker die overblijft is {target}, met de naam “{name}”. Er worden geen detecties of audiofragmenten verwijderd. Dit kan niet worden teruggedraaid.",
+        "confirmUnnamed": "{source} wordt samengevoegd met {target}. Elke detectie met label {source} krijgt label {target} en {source} wordt buiten gebruik gesteld — het id wordt nooit hergebruikt. De spreker die overblijft is {target}, die nog geen naam heeft. Er worden geen detecties of audiofragmenten verwijderd. Dit kan niet worden teruggedraaid.",
+        "confirmLabel": "Sprekers samenvoegen",
+        "inProgress": "Sprekers samenvoegen…",
+        "success": "Sprekers samengevoegd",
+        "failed": "Samenvoegen van sprekers mislukt"
+      }
     }
   },
   "species": {
@@ -3957,7 +3971,17 @@
       "activityDescription": "Dagelijkse detectieaantallen per spreker.",
       "activityEmpty": "Nog geen sprekeractiviteit. Dagelijkse aantallen verschijnen hier zodra detecties aan stemmen zijn toegewezen.",
       "activityLoadFailed": "Kan sprekeractiviteit niet laden",
-      "activityDateColumn": "Datum"
+      "activityDateColumn": "Datum",
+      "actionsColumn": "Acties",
+      "forget": {
+        "action": "{name} vergeten",
+        "title": "Deze spreker vergeten?",
+        "confirm": "{name} wordt vergeten: de naam wordt verwijderd en de {count} detecties verliezen hun sprekerlabel. De detecties, hun audio en hun geschiedenis blijven bewaard. Dit spraakprofiel herkent geen nieuwe audio meer en het id {id} wordt nooit hergebruikt. Dit kan niet worden teruggedraaid.",
+        "confirmLabel": "Spreker vergeten",
+        "inProgress": "Spreker wordt vergeten…",
+        "success": "Spreker vergeten",
+        "failed": "Vergeten van spreker mislukt"
+      }
     }
   },
   "auth": {

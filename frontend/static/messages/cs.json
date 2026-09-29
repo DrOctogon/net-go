@@ -1031,7 +1031,21 @@
       "identityLabel": "Mluvčí",
       "renamePlaceholder": "Pojmenujte tento hlas",
       "renameAction": "Přejmenovat mluvčího",
-      "renameFailed": "Nepodařilo se uložit jméno mluvčího"
+      "renameFailed": "Nepodařilo se uložit jméno mluvčího",
+      "clusteringOff": "Analýza hlasového podpisu je vypnutá, proto nelze mluvčí slučovat ani zapomínat.",
+      "nameAction": "Toto je…",
+      "nameHint": "Tento hlas dosud nemá jméno. Pojmenujte ho jednou a každá detekce tohoto hlasu – dřívější i budoucí – bude zobrazovat toto jméno.",
+      "merge": {
+        "action": "Stejný mluvčí",
+        "actionAria": "Sloučit {source} do tohoto mluvčího",
+        "title": "Sloučit tyto dva mluvčí?",
+        "confirmNamed": "{source} bude sloučen do {target}. Každá detekce označená {source} bude přeznačena na {target} a {source} bude vyřazen – jeho ID se už nikdy nepoužije. Zůstane {target} se jménem „{name}“. Žádné detekce ani zvukové nahrávky se nemažou. Tuto akci nelze vzít zpět.",
+        "confirmUnnamed": "{source} bude sloučen do {target}. Každá detekce označená {source} bude přeznačena na {target} a {source} bude vyřazen – jeho ID se už nikdy nepoužije. Zůstane {target}, který stále nemá jméno. Žádné detekce ani zvukové nahrávky se nemažou. Tuto akci nelze vzít zpět.",
+        "confirmLabel": "Sloučit mluvčí",
+        "inProgress": "Slučování mluvčích…",
+        "success": "Mluvčí sloučeni",
+        "failed": "Sloučení mluvčích se nezdařilo"
+      }
     }
   },
   "species": {
@@ -3957,7 +3971,17 @@
       "activityDescription": "Denní počty detekcí pro každého mluvčího.",
       "activityEmpty": "Zatím žádná aktivita mluvčích. Denní počty se zde objeví, jakmile budou detekce přiřazeny hlasům.",
       "activityLoadFailed": "Nepodařilo se načíst aktivitu mluvčích",
-      "activityDateColumn": "Datum"
+      "activityDateColumn": "Datum",
+      "actionsColumn": "Akce",
+      "forget": {
+        "action": "Zapomenout {name}",
+        "title": "Zapomenout tohoto mluvčího?",
+        "confirm": "{name} bude zapomenut: jméno se odstraní a jeho {count} detekcí ztratí označení mluvčího. Detekce, jejich zvuk i historie zůstanou zachovány. Tento hlasový podpis už nebude odpovídat novému zvuku a ID {id} se už nikdy nepoužije. Tuto akci nelze vzít zpět.",
+        "confirmLabel": "Zapomenout mluvčího",
+        "inProgress": "Zapomínání mluvčího…",
+        "success": "Mluvčí zapomenut",
+        "failed": "Zapomenutí mluvčího se nezdařilo"
+      }
     }
   },
   "auth": {

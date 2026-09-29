@@ -811,6 +811,18 @@ export type TranslationKey =
   | 'detections.speaker.renamePlaceholder'
   | 'detections.speaker.renameAction'
   | 'detections.speaker.renameFailed'
+  | 'detections.speaker.clusteringOff'
+  | 'detections.speaker.nameAction'
+  | 'detections.speaker.nameHint'
+  | 'detections.speaker.merge.action'
+  | 'detections.speaker.merge.actionAria' // params: source
+  | 'detections.speaker.merge.title'
+  | 'detections.speaker.merge.confirmNamed' // params: source, target, name
+  | 'detections.speaker.merge.confirmUnnamed' // params: source, target
+  | 'detections.speaker.merge.confirmLabel'
+  | 'detections.speaker.merge.inProgress'
+  | 'detections.speaker.merge.success'
+  | 'detections.speaker.merge.failed'
   | 'species.synonyms.tabLabel'
   | 'species.synonyms.description'
   | 'species.synonyms.birdnetName'
@@ -2903,6 +2915,14 @@ export type TranslationKey =
   | 'settings.speakers.activityEmpty'
   | 'settings.speakers.activityLoadFailed'
   | 'settings.speakers.activityDateColumn'
+  | 'settings.speakers.actionsColumn'
+  | 'settings.speakers.forget.action' // params: name
+  | 'settings.speakers.forget.title'
+  | 'settings.speakers.forget.confirm' // params: name, count, id
+  | 'settings.speakers.forget.confirmLabel'
+  | 'settings.speakers.forget.inProgress'
+  | 'settings.speakers.forget.success'
+  | 'settings.speakers.forget.failed'
   | 'auth.login'
   | 'auth.logout'
   | 'auth.openLoginModal'
@@ -3697,6 +3717,13 @@ export type TranslationParams = {
   'detections.aria.error': { error: string | number };
   'detections.aria.loadingResults': { count: string | number };
   'detections.errors.loadFailed': { status: string | number };
+  'detections.speaker.merge.actionAria': { source: string | number };
+  'detections.speaker.merge.confirmNamed': {
+    source: string | number;
+    target: string | number;
+    name: string | number;
+  };
+  'detections.speaker.merge.confirmUnnamed': { source: string | number; target: string | number };
   'spectrogram.gain.level': { value: string | number };
   'system.systemInfo.temperatureValue': { temp: string | number };
   'system.errors.systemInfo': { error: string | number };
@@ -3841,6 +3868,12 @@ export type TranslationParams = {
   'settings.alerts.confirmDelete': { name: string | number };
   'settings.alerts.historyCount': { total: string | number };
   'settings.alerts.status.imported': { imported: string | number; total: string | number };
+  'settings.speakers.forget.action': { name: string | number };
+  'settings.speakers.forget.confirm': {
+    name: string | number;
+    count: string | number;
+    id: string | number;
+  };
   'auth.errors.rateLimited': { minutes: string | number };
   'dataDisplay.table.sortBy': { column: string | number };
   'dataDisplay.table.pageInfo': {

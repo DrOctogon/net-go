@@ -1031,7 +1031,21 @@
       "identityLabel": "Locuteur",
       "renamePlaceholder": "Nommer cette voix",
       "renameAction": "Renommer le locuteur",
-      "renameFailed": "Échec de l'enregistrement du nom du locuteur"
+      "renameFailed": "Échec de l'enregistrement du nom du locuteur",
+      "clusteringOff": "L’analyse d’empreinte vocale est désactivée : les locuteurs ne peuvent pas être fusionnés ni oubliés.",
+      "nameAction": "C’est…",
+      "nameHint": "Cette voix n’a pas encore de nom. Nommez-la une fois et toutes les détections de cette voix, passées comme futures, afficheront ce nom.",
+      "merge": {
+        "action": "Même locuteur",
+        "actionAria": "Fusionner {source} dans ce locuteur",
+        "title": "Fusionner ces deux locuteurs ?",
+        "confirmNamed": "{source} sera fusionné dans {target}. Chaque détection étiquetée {source} sera réétiquetée {target}, et {source} sera retiré — son identifiant ne sera jamais réutilisé. Le locuteur conservé est {target}, nommé « {name} ». Aucune détection ni aucun extrait audio n’est supprimé. Cette action est irréversible.",
+        "confirmUnnamed": "{source} sera fusionné dans {target}. Chaque détection étiquetée {source} sera réétiquetée {target}, et {source} sera retiré — son identifiant ne sera jamais réutilisé. Le locuteur conservé est {target}, qui n’a toujours pas de nom. Aucune détection ni aucun extrait audio n’est supprimé. Cette action est irréversible.",
+        "confirmLabel": "Fusionner les locuteurs",
+        "inProgress": "Fusion des locuteurs…",
+        "success": "Locuteurs fusionnés",
+        "failed": "Échec de la fusion des locuteurs"
+      }
     }
   },
   "species": {
@@ -3957,7 +3971,17 @@
       "activityDescription": "Nombre quotidien de détections pour chaque locuteur.",
       "activityEmpty": "Aucune activité de locuteur pour le moment. Les comptes quotidiens apparaîtront ici lorsque des détections seront attribuées à des voix.",
       "activityLoadFailed": "Échec du chargement de l'activité des locuteurs",
-      "activityDateColumn": "Date"
+      "activityDateColumn": "Date",
+      "actionsColumn": "Actions",
+      "forget": {
+        "action": "Oublier {name}",
+        "title": "Oublier ce locuteur ?",
+        "confirm": "{name} sera oublié : son nom est supprimé et ses {count} détections perdent leur étiquette de locuteur. Les détections, leur audio et leur historique sont conservés. Cette empreinte vocale ne correspondra plus aux nouveaux enregistrements, et l’identifiant {id} ne sera jamais réutilisé. Cette action est irréversible.",
+        "confirmLabel": "Oublier le locuteur",
+        "inProgress": "Oubli du locuteur…",
+        "success": "Locuteur oublié",
+        "failed": "Échec de l’oubli du locuteur"
+      }
     }
   },
   "auth": {

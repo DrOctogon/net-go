@@ -1031,7 +1031,21 @@
       "identityLabel": "Mówca",
       "renamePlaceholder": "Nazwij ten głos",
       "renameAction": "Zmień nazwę mówcy",
-      "renameFailed": "Nie udało się zapisać nazwy mówcy"
+      "renameFailed": "Nie udało się zapisać nazwy mówcy",
+      "clusteringOff": "Analiza odcisku głosu jest wyłączona, więc nie można scalać ani usuwać mówców.",
+      "nameAction": "To jest…",
+      "nameHint": "Ten głos nie ma jeszcze nazwy. Nadaj ją raz, a każde wykrycie tego głosu – wcześniejsze i przyszłe – będzie ją pokazywać.",
+      "merge": {
+        "action": "Ten sam mówca",
+        "actionAria": "Scal {source} z tym mówcą",
+        "title": "Scalić tych dwoch mówców?",
+        "confirmNamed": "{source} zostanie scalony z {target}. Każde wykrycie oznaczone jako {source} zostanie przypisane do {target}, a {source} zostanie wycofany – jego identyfikator nigdy nie będzie użyty ponownie. Pozostaje {target} o nazwie „{name}”. Żadne wykrycia ani nagrania nie są usuwane. Tej operacji nie można cofnąć.",
+        "confirmUnnamed": "{source} zostanie scalony z {target}. Każde wykrycie oznaczone jako {source} zostanie przypisane do {target}, a {source} zostanie wycofany – jego identyfikator nigdy nie będzie użyty ponownie. Pozostaje {target}, który nadal nie ma nazwy. Żadne wykrycia ani nagrania nie są usuwane. Tej operacji nie można cofnąć.",
+        "confirmLabel": "Scal mówców",
+        "inProgress": "Scalanie mówców…",
+        "success": "Mówcy scaleni",
+        "failed": "Nie udało się scalić mówców"
+      }
     }
   },
   "species": {
@@ -3957,7 +3971,17 @@
       "activityDescription": "Dzienna liczba detekcji dla każdego mówcy.",
       "activityEmpty": "Brak aktywności mówców. Dzienne liczby pojawią się tutaj, gdy detekcje zostaną przypisane do głosów.",
       "activityLoadFailed": "Nie udało się wczytać aktywności mówców",
-      "activityDateColumn": "Data"
+      "activityDateColumn": "Data",
+      "actionsColumn": "Akcje",
+      "forget": {
+        "action": "Usuń {name}",
+        "title": "Usunąć tego mówcę?",
+        "confirm": "{name} zostanie usunięty: jego nazwa zniknie, a {count} powiązanych wykryć straci oznaczenie mówcy. Wykrycia, ich nagrania i historia zostają zachowane. Ten odcisk głosu przestanie dopasowywać się do nowych nagrań, a identyfikator {id} nigdy nie będzie użyty ponownie. Tej operacji nie można cofnąć.",
+        "confirmLabel": "Usuń mówcę",
+        "inProgress": "Usuwanie mówcy…",
+        "success": "Mówca usunięty",
+        "failed": "Nie udało się usunąć mówcy"
+      }
     }
   },
   "auth": {

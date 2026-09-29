@@ -1031,7 +1031,21 @@
       "identityLabel": "Puhuja",
       "renamePlaceholder": "Nimeä tämä ääni",
       "renameAction": "Nimeä puhuja uudelleen",
-      "renameFailed": "Puhujan nimen tallennus epäonnistui"
+      "renameFailed": "Puhujan nimen tallennus epäonnistui",
+      "clusteringOff": "Äänijalkianalyysi on pois käytöstä, joten puhujia ei voi yhdistää eikä poistaa.",
+      "nameAction": "Tämä on…",
+      "nameHint": "Tällä äänellä ei ole vielä nimeä. Anna nimi kerran, niin jokainen tämän äänen havainto – menneet ja tulevat – näyttää sen nimen.",
+      "merge": {
+        "action": "Sama puhuja",
+        "actionAria": "Yhdistä {source} tähän puhujaan",
+        "title": "Yhdistetäänkö nämä kaksi puhujaa?",
+        "confirmNamed": "{source} yhdistetään puhujaan {target}. Jokainen havainto, jonka merkintä on {source}, merkitään uudelleen {target}, ja {source} poistuu käytöstä – sen tunnusta ei käytetä enää koskaan. Jäljelle jää {target} nimellä ”{name}”. Havaintoja tai äänileikkeitä ei poisteta. Tätä ei voi peruuttaa.",
+        "confirmUnnamed": "{source} yhdistetään puhujaan {target}. Jokainen havainto, jonka merkintä on {source}, merkitään uudelleen {target}, ja {source} poistuu käytöstä – sen tunnusta ei käytetä enää koskaan. Jäljelle jää {target}, jolla ei vielä ole nimeä. Havaintoja tai äänileikkeitä ei poisteta. Tätä ei voi peruuttaa.",
+        "confirmLabel": "Yhdistä puhujat",
+        "inProgress": "Yhdistetään puhujia…",
+        "success": "Puhujat yhdistetty",
+        "failed": "Puhujien yhdistäminen epäonnistui"
+      }
     }
   },
   "species": {
@@ -3957,7 +3971,17 @@
       "activityDescription": "Päivittäiset havaintomäärät kullekin puhujalle.",
       "activityEmpty": "Ei vielä puhuja-aktiivisuutta. Päivittäiset määrät näkyvät täällä, kun havainnot on liitetty ääniin.",
       "activityLoadFailed": "Puhuja-aktiivisuuden lataaminen epäonnistui",
-      "activityDateColumn": "Päivämäärä"
+      "activityDateColumn": "Päivämäärä",
+      "actionsColumn": "Toiminnot",
+      "forget": {
+        "action": "Poista {name}",
+        "title": "Poistetaanko tämä puhuja?",
+        "confirm": "{name} poistetaan: nimi poistetaan ja sen {count} havaintoa menettävät puhujamerkinnän. Havainnot, niiden äänet ja historia säilyvät. Tämä äänijälki ei enää tunnista uutta ääntä, eikä tunnusta {id} käytetä enää koskaan. Tätä ei voi peruuttaa.",
+        "confirmLabel": "Poista puhuja",
+        "inProgress": "Poistetaan puhujaa…",
+        "success": "Puhuja poistettu",
+        "failed": "Puhujan poistaminen epäonnistui"
+      }
     }
   },
   "auth": {

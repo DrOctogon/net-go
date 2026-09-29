@@ -1031,7 +1031,21 @@
       "identityLabel": "Falante",
       "renamePlaceholder": "Dê um nome a esta voz",
       "renameAction": "Renomear falante",
-      "renameFailed": "Falha ao guardar o nome do falante"
+      "renameFailed": "Falha ao guardar o nome do falante",
+      "clusteringOff": "A análise de impressão vocal está desativada, por isso não é possível juntar nem esquecer falantes.",
+      "nameAction": "Este é…",
+      "nameHint": "Esta voz ainda não tem nome. Dê-lhe um nome uma vez e todas as deteções desta voz, passadas e futuras, mostram esse nome.",
+      "merge": {
+        "action": "Mesmo falante",
+        "actionAria": "Juntar {source} a este falante",
+        "title": "Juntar estes dois falantes?",
+        "confirmNamed": "{source} será juntado a {target}. Todas as deteções identificadas como {source} passam a {target} e {source} é retirado — o seu identificador nunca é reutilizado. O falante que fica é {target}, com o nome «{name}». Nenhuma deteção ou clipe de áudio é eliminado. Esta ação não pode ser desfeita.",
+        "confirmUnnamed": "{source} será juntado a {target}. Todas as deteções identificadas como {source} passam a {target} e {source} é retirado — o seu identificador nunca é reutilizado. O falante que fica é {target}, que continua sem nome. Nenhuma deteção ou clipe de áudio é eliminado. Esta ação não pode ser desfeita.",
+        "confirmLabel": "Juntar falantes",
+        "inProgress": "A juntar falantes…",
+        "success": "Falantes juntados",
+        "failed": "Falha ao juntar falantes"
+      }
     }
   },
   "species": {
@@ -3957,7 +3971,17 @@
       "activityDescription": "Contagens diárias de deteções por orador.",
       "activityEmpty": "Ainda não há atividade de oradores. As contagens diárias aparecerão aqui quando as deteções forem atribuídas a vozes.",
       "activityLoadFailed": "Falha ao carregar a atividade dos oradores",
-      "activityDateColumn": "Data"
+      "activityDateColumn": "Data",
+      "actionsColumn": "Ações",
+      "forget": {
+        "action": "Esquecer {name}",
+        "title": "Esquecer este falante?",
+        "confirm": "{name} será esquecido: o nome é removido e as suas {count} deteções perdem a identificação do falante. As deteções, o respetivo áudio e o histórico são mantidos. Esta impressão vocal deixa de corresponder a novo áudio e o identificador {id} nunca é reutilizado. Esta ação não pode ser desfeita.",
+        "confirmLabel": "Esquecer falante",
+        "inProgress": "A esquecer falante…",
+        "success": "Falante esquecido",
+        "failed": "Falha ao esquecer falante"
+      }
     }
   },
   "auth": {

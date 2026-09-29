@@ -1031,7 +1031,21 @@
       "identityLabel": "Hablante",
       "renamePlaceholder": "Nombra esta voz",
       "renameAction": "Renombrar hablante",
-      "renameFailed": "No se pudo guardar el nombre del hablante"
+      "renameFailed": "No se pudo guardar el nombre del hablante",
+      "clusteringOff": "El análisis de huella vocal está desactivado, así que no se pueden fusionar ni olvidar hablantes.",
+      "nameAction": "Este es…",
+      "nameHint": "Esta voz aún no tiene nombre. Ponle nombre una vez y todas las detecciones de esta voz, pasadas y futuras, mostrarán ese nombre.",
+      "merge": {
+        "action": "Mismo hablante",
+        "actionAria": "Fusionar {source} en este hablante",
+        "title": "¿Fusionar estos dos hablantes?",
+        "confirmNamed": "{source} se fusionará en {target}. Cada detección etiquetada como {source} pasará a {target}, y {source} se retirará: su identificador no se reutilizará nunca. El hablante que queda es {target}, con el nombre «{name}». No se elimina ninguna detección ni ningún clip de audio. Esta acción no se puede deshacer.",
+        "confirmUnnamed": "{source} se fusionará en {target}. Cada detección etiquetada como {source} pasará a {target}, y {source} se retirará: su identificador no se reutilizará nunca. El hablante que queda es {target}, que sigue sin nombre. No se elimina ninguna detección ni ningún clip de audio. Esta acción no se puede deshacer.",
+        "confirmLabel": "Fusionar hablantes",
+        "inProgress": "Fusionando hablantes…",
+        "success": "Hablantes fusionados",
+        "failed": "No se pudieron fusionar los hablantes"
+      }
     }
   },
   "species": {
@@ -3957,7 +3971,17 @@
       "activityDescription": "Recuentos diarios de detecciones por hablante.",
       "activityEmpty": "Aún no hay actividad de hablantes. Los recuentos diarios aparecerán aquí cuando las detecciones se asignen a voces.",
       "activityLoadFailed": "No se pudo cargar la actividad de los hablantes",
-      "activityDateColumn": "Fecha"
+      "activityDateColumn": "Fecha",
+      "actionsColumn": "Acciones",
+      "forget": {
+        "action": "Olvidar {name}",
+        "title": "¿Olvidar este hablante?",
+        "confirm": "{name} se olvidará: se elimina su nombre y sus {count} detecciones pierden la etiqueta de hablante. Las detecciones, su audio y su historial se conservan. Esta huella vocal dejará de coincidir con audio nuevo y el identificador {id} no se reutilizará nunca. Esta acción no se puede deshacer.",
+        "confirmLabel": "Olvidar hablante",
+        "inProgress": "Olvidando hablante…",
+        "success": "Hablante olvidado",
+        "failed": "No se pudo olvidar el hablante"
+      }
     }
   },
   "auth": {
