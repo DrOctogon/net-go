@@ -3709,6 +3709,7 @@
       "actionsExecuted": "Wykonane akcje",
       "actionLabels": {
         "edit": "Edytuj regułę",
+        "duplicate": "Duplikuj regułę",
         "enable": "Włącz regułę",
         "disable": "Wyłącz regułę",
         "test": "Testuj regułę",
@@ -3776,7 +3777,10 @@
         "eventsCount": "zdarzenia",
         "metricsCount": "metryki",
         "durationFor": "przez",
-        "durationSec": "sek"
+        "durationSec": "sek",
+        "copySuffix": "(kopia)",
+        "keywordOperatorHint": "Gdy jednocześnie trafi kilka słów kluczowych, są one łączone w jedną wartość, więc operatory \"jest\" i \"nie jest\" mogą przeoczyć dopasowanie. Użyj zamiast nich \"zawiera\" (lub \"jest na liście\" dla pojedynczego słowa kluczowego).",
+        "builtInClashHint": "Wbudowana reguła \"Oznaczono słowo kluczowe\" uruchamia się dla każdego słowa kluczowego, chyba że ją wyłączysz — może się uruchomić razem z tą regułą."
       },
       "export": "Eksportuj",
       "import": "Importuj",

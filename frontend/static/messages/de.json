@@ -3709,6 +3709,7 @@
       "actionsExecuted": "Ausgeführte Aktionen",
       "actionLabels": {
         "edit": "Regel bearbeiten",
+        "duplicate": "Regel duplizieren",
         "enable": "Regel aktivieren",
         "disable": "Regel deaktivieren",
         "test": "Regel testen",
@@ -3776,7 +3777,10 @@
         "eventsCount": "Ereignisse",
         "metricsCount": "Metriken",
         "durationFor": "für",
-        "durationSec": "Sek"
+        "durationSec": "Sek",
+        "copySuffix": "(Kopie)",
+        "keywordOperatorHint": "Wenn mehrere Schlüsselwörter gleichzeitig treffen, werden sie zu einem Wert zusammengefasst, sodass \"ist\" und \"ist nicht\" einen Treffer übersehen können. Verwenden Sie stattdessen \"enthält\" (oder \"ist in Liste\" für ein einzelnes Schlüsselwort).",
+        "builtInClashHint": "Die integrierte Regel \"Schlüsselwort markiert\" löst für jedes Schlüsselwort aus, sofern sie nicht deaktiviert ist — sie kann zusammen mit dieser Regel auslösen."
       },
       "export": "Exportieren",
       "import": "Importieren",

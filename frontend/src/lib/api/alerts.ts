@@ -129,6 +129,14 @@ export interface AlertHistoryFilter {
   offset?: number;
 }
 
+// ---------- Schema string constants (must match internal/alerting/constants.go) ----------
+
+/** Condition property name for the keyword-flag "keywords" property. */
+export const KEYWORDS_PROPERTY = 'keywords';
+
+/** Object type for the built-in keyword-matching rule family. */
+export const KEYWORD_FLAG_OBJECT_TYPE = 'keyword_flag';
+
 // ---------- API functions ----------
 
 const BASE = '/api/v2/alerts';

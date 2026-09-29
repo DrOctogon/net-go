@@ -3709,6 +3709,7 @@
       "actionsExecuted": "Suoritetut toiminnot",
       "actionLabels": {
         "edit": "Muokkaa sääntöä",
+        "duplicate": "Kahdenna sääntö",
         "enable": "Ota sääntö käyttöön",
         "disable": "Poista sääntö käytöstä",
         "test": "Testaa sääntöä",
@@ -3776,7 +3777,10 @@
         "eventsCount": "tapahtumaa",
         "metricsCount": "mittaria",
         "durationFor": "ajan",
-        "durationSec": "sek"
+        "durationSec": "sek",
+        "copySuffix": "(kopio)",
+        "keywordOperatorHint": "Kun useita avainsanoja osuu kerralla, ne yhdistetään yhdeksi arvoksi, joten \"on\" ja \"ei ole\" voivat jäädä huomaamatta osuman. Käytä sen sijaan \"sisältää\" (tai \"on luettelossa\" yhdelle avainsanalle).",
+        "builtInClashHint": "Sisäänrakennettu sääntö \"Avainsana merkitty\" laukeaa jokaisesta avainsanasta, ellet poista sitä käytöstä — se voi laueta myös tämän säännön ohella."
       },
       "export": "Vie",
       "import": "Tuo",

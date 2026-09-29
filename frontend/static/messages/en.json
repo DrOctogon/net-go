@@ -3709,6 +3709,7 @@
       "actionsExecuted": "Actions executed",
       "actionLabels": {
         "edit": "Edit rule",
+        "duplicate": "Duplicate rule",
         "enable": "Enable rule",
         "disable": "Disable rule",
         "test": "Test rule",
@@ -3776,7 +3777,10 @@
         "eventsCount": "events",
         "metricsCount": "metrics",
         "durationFor": "for",
-        "durationSec": "sec"
+        "durationSec": "sec",
+        "copySuffix": "(copy)",
+        "keywordOperatorHint": "Matched keywords are combined into one value when several fire at once, so \"is\" and \"is not\" can miss a match. Use \"contains\" (or \"is in list\" for a single keyword) instead.",
+        "builtInClashHint": "The built-in \"Keyword flagged\" rule fires for every keyword unless you disable it — it may also fire alongside this rule."
       },
       "export": "Export",
       "import": "Import",
