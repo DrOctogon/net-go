@@ -132,6 +132,63 @@ func (_c *MockInterface_ClearNoteClipPathsByNames_Call) RunAndReturn(run func([]
 	return _c
 }
 
+// ClearSpeakerID provides a mock function with given fields: ctx, speakerID
+func (_m *MockInterface) ClearSpeakerID(ctx context.Context, speakerID string) (int64, error) {
+	ret := _m.Called(ctx, speakerID)
+
+	if len(ret) == 0 {
+		panic("no return value specified for ClearSpeakerID")
+	}
+
+	var r0 int64
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, string) (int64, error)); ok {
+		return rf(ctx, speakerID)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, string) int64); ok {
+		r0 = rf(ctx, speakerID)
+	} else {
+		r0 = ret.Get(0).(int64)
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, string) error); ok {
+		r1 = rf(ctx, speakerID)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockInterface_ClearSpeakerID_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'ClearSpeakerID'
+type MockInterface_ClearSpeakerID_Call struct {
+	*mock.Call
+}
+
+// ClearSpeakerID is a helper method to define mock.On call
+//   - ctx context.Context
+//   - speakerID string
+func (_e *MockInterface_Expecter) ClearSpeakerID(ctx interface{}, speakerID interface{}) *MockInterface_ClearSpeakerID_Call {
+	return &MockInterface_ClearSpeakerID_Call{Call: _e.mock.On("ClearSpeakerID", ctx, speakerID)}
+}
+
+func (_c *MockInterface_ClearSpeakerID_Call) Run(run func(ctx context.Context, speakerID string)) *MockInterface_ClearSpeakerID_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(string))
+	})
+	return _c
+}
+
+func (_c *MockInterface_ClearSpeakerID_Call) Return(_a0 int64, _a1 error) *MockInterface_ClearSpeakerID_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockInterface_ClearSpeakerID_Call) RunAndReturn(run func(context.Context, string) (int64, error)) *MockInterface_ClearSpeakerID_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // Close provides a mock function with no fields
 func (_m *MockInterface) Close() error {
 	ret := _m.Called()
@@ -2260,66 +2317,6 @@ func (_c *MockInterface_GetDatabaseStats_Call) Return(_a0 *datastore.DatabaseSta
 }
 
 func (_c *MockInterface_GetDatabaseStats_Call) RunAndReturn(run func(context.Context) (*datastore.DatabaseStats, error)) *MockInterface_GetDatabaseStats_Call {
-	_c.Call.Return(run)
-	return _c
-}
-
-// GetDetectionTrends provides a mock function with given fields: ctx, period, limit
-func (_m *MockInterface) GetDetectionTrends(ctx context.Context, period string, limit int) ([]datastore.DailyAnalyticsData, error) {
-	ret := _m.Called(ctx, period, limit)
-
-	if len(ret) == 0 {
-		panic("no return value specified for GetDetectionTrends")
-	}
-
-	var r0 []datastore.DailyAnalyticsData
-	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, string, int) ([]datastore.DailyAnalyticsData, error)); ok {
-		return rf(ctx, period, limit)
-	}
-	if rf, ok := ret.Get(0).(func(context.Context, string, int) []datastore.DailyAnalyticsData); ok {
-		r0 = rf(ctx, period, limit)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]datastore.DailyAnalyticsData)
-		}
-	}
-
-	if rf, ok := ret.Get(1).(func(context.Context, string, int) error); ok {
-		r1 = rf(ctx, period, limit)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
-}
-
-// MockInterface_GetDetectionTrends_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetDetectionTrends'
-type MockInterface_GetDetectionTrends_Call struct {
-	*mock.Call
-}
-
-// GetDetectionTrends is a helper method to define mock.On call
-//   - ctx context.Context
-//   - period string
-//   - limit int
-func (_e *MockInterface_Expecter) GetDetectionTrends(ctx interface{}, period interface{}, limit interface{}) *MockInterface_GetDetectionTrends_Call {
-	return &MockInterface_GetDetectionTrends_Call{Call: _e.mock.On("GetDetectionTrends", ctx, period, limit)}
-}
-
-func (_c *MockInterface_GetDetectionTrends_Call) Run(run func(ctx context.Context, period string, limit int)) *MockInterface_GetDetectionTrends_Call {
-	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(string), args[2].(int))
-	})
-	return _c
-}
-
-func (_c *MockInterface_GetDetectionTrends_Call) Return(_a0 []datastore.DailyAnalyticsData, _a1 error) *MockInterface_GetDetectionTrends_Call {
-	_c.Call.Return(_a0, _a1)
-	return _c
-}
-
-func (_c *MockInterface_GetDetectionTrends_Call) RunAndReturn(run func(context.Context, string, int) ([]datastore.DailyAnalyticsData, error)) *MockInterface_GetDetectionTrends_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -4771,6 +4768,64 @@ func (_c *MockInterface_PruneAppEvents_Call) Return(_a0 int64, _a1 error) *MockI
 }
 
 func (_c *MockInterface_PruneAppEvents_Call) RunAndReturn(run func(context.Context, int) (int64, error)) *MockInterface_PruneAppEvents_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// ReassignSpeakerID provides a mock function with given fields: ctx, fromID, toID
+func (_m *MockInterface) ReassignSpeakerID(ctx context.Context, fromID string, toID string) (int64, error) {
+	ret := _m.Called(ctx, fromID, toID)
+
+	if len(ret) == 0 {
+		panic("no return value specified for ReassignSpeakerID")
+	}
+
+	var r0 int64
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, string, string) (int64, error)); ok {
+		return rf(ctx, fromID, toID)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, string, string) int64); ok {
+		r0 = rf(ctx, fromID, toID)
+	} else {
+		r0 = ret.Get(0).(int64)
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, string, string) error); ok {
+		r1 = rf(ctx, fromID, toID)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockInterface_ReassignSpeakerID_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'ReassignSpeakerID'
+type MockInterface_ReassignSpeakerID_Call struct {
+	*mock.Call
+}
+
+// ReassignSpeakerID is a helper method to define mock.On call
+//   - ctx context.Context
+//   - fromID string
+//   - toID string
+func (_e *MockInterface_Expecter) ReassignSpeakerID(ctx interface{}, fromID interface{}, toID interface{}) *MockInterface_ReassignSpeakerID_Call {
+	return &MockInterface_ReassignSpeakerID_Call{Call: _e.mock.On("ReassignSpeakerID", ctx, fromID, toID)}
+}
+
+func (_c *MockInterface_ReassignSpeakerID_Call) Run(run func(ctx context.Context, fromID string, toID string)) *MockInterface_ReassignSpeakerID_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(string), args[2].(string))
+	})
+	return _c
+}
+
+func (_c *MockInterface_ReassignSpeakerID_Call) Return(_a0 int64, _a1 error) *MockInterface_ReassignSpeakerID_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockInterface_ReassignSpeakerID_Call) RunAndReturn(run func(context.Context, string, string) (int64, error)) *MockInterface_ReassignSpeakerID_Call {
 	_c.Call.Return(run)
 	return _c
 }

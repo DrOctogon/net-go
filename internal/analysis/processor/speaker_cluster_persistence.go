@@ -69,8 +69,9 @@ func (p *Processor) restoreSpeakerClusters() {
 		logger.String("operation", "restore_speaker_clusters"))
 }
 
-// persistSpeakerClusters writes the current clusters to disk. It is called during
-// shutdown; failures are logged but never block shutdown.
+// persistSpeakerClusters writes the current clusters to disk. It is called at
+// shutdown and immediately after an operator cluster merge/forget; failures are
+// logged but never block the caller.
 func (p *Processor) persistSpeakerClusters() {
 	if p.speakerClusterer == nil {
 		return
@@ -81,7 +82,7 @@ func (p *Processor) persistSpeakerClusters() {
 	}
 
 	if err := p.speakerClusterer.Save(path); err != nil {
-		GetLogger().Warn("Failed to persist voice-print clusters during shutdown",
+		GetLogger().Warn("Failed to persist voice-print clusters",
 			logger.String("component", "analysis.processor.speaker"),
 			logger.String("path", path),
 			logger.Error(err),

@@ -697,6 +697,14 @@ func (s *testLegacyInterface) GetSpeakerDailyActivity(_ context.Context, _, _ st
 	return []datastore.SpeakerDailyActivity{}, nil
 }
 
+func (s *testLegacyInterface) ReassignSpeakerID(_ context.Context, _, _ string) (int64, error) {
+	return 0, nil
+}
+
+func (s *testLegacyInterface) ClearSpeakerID(_ context.Context, _ string) (int64, error) {
+	return 0, nil
+}
+
 func (s *testLegacyInterface) Open() error                                         { return nil }
 func (s *testLegacyInterface) Close() error                                        { return nil }
 func (s *testLegacyInterface) Save(_ *datastore.Note, _ []datastore.Results) error { return nil }

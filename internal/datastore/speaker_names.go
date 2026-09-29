@@ -5,6 +5,7 @@ package datastore
 
 import (
 	"context"
+	"fmt"
 	"sort"
 	"strings"
 	"time"
@@ -36,6 +37,12 @@ type SpeakerDailyActivity struct {
 // speakerNamesUpdatedAtColumn is the updated_at column name used in the
 // upsert's conflict assignment list.
 const speakerNamesUpdatedAtColumn = "updated_at"
+
+// ErrEmptySpeakerID is returned by the bulk speaker-relabelling operations when
+// given an empty cluster id. Shared by every store implementation so both
+// legacy and v2 reject it identically; the API layer validates the id format
+// long before this, so it is a defensive guard against a bad internal caller.
+var ErrEmptySpeakerID = errors.NewStd("speaker id cannot be empty")
 
 // NormalizeSpeakerName validates a speaker rename request and returns the
 // trimmed display name. It is shared by every store implementation (legacy and
@@ -151,6 +158,69 @@ func (ds *DataStore) GetSpeakerDailyActivity(ctx context.Context, startDate, end
 			"end_date", endDate)
 	}
 	return activity, nil
+}
+
+// ReassignSpeakerID repoints every detection labelled fromID at toID and
+// returns the number of rows changed. It is the database half of a speaker
+// cluster merge (see Clusterer.Merge): the source cluster's history is adopted
+// by the target so the merged speaker keeps one continuous timeline.
+// Speaker-name rows are not touched here; the caller owns that policy.
+func (ds *DataStore) ReassignSpeakerID(ctx context.Context, fromID, toID string) (int64, error) {
+	if fromID == "" || toID == "" {
+		return 0, fmt.Errorf("reassign speaker id: %w", ErrEmptySpeakerID)
+	}
+
+	var affected int64
+	err := RetryOnLock(ctx, "reassign_speaker_id", func() error {
+		result := ds.DB.WithContext(ctx).
+			Model(&Note{}).
+			Where("speaker_id = ?", fromID).
+			Update("speaker_id", toID)
+		if result.Error != nil {
+			return dbError(result.Error, "reassign_speaker_id", errors.PriorityMedium,
+				"table", "notes",
+				"action", "merge_speaker_clusters",
+				"from_speaker_id", fromID,
+				"to_speaker_id", toID)
+		}
+		affected = result.RowsAffected
+		return nil
+	}, ds.getMetrics())
+	if err != nil {
+		return 0, err
+	}
+	return affected, nil
+}
+
+// ClearSpeakerID unlabels every detection belonging to speakerID and returns the
+// number of rows changed. It is the database half of forgetting a speaker
+// cluster: the clips stay, their voice-print attribution does not. The legacy
+// notes.speaker_id column is a non-nullable string, so "unlabelled" is the empty
+// string — the same value every roster/activity query already filters out.
+func (ds *DataStore) ClearSpeakerID(ctx context.Context, speakerID string) (int64, error) {
+	if speakerID == "" {
+		return 0, fmt.Errorf("clear speaker id: %w", ErrEmptySpeakerID)
+	}
+
+	var affected int64
+	err := RetryOnLock(ctx, "clear_speaker_id", func() error {
+		result := ds.DB.WithContext(ctx).
+			Model(&Note{}).
+			Where("speaker_id = ?", speakerID).
+			Update("speaker_id", "")
+		if result.Error != nil {
+			return dbError(result.Error, "clear_speaker_id", errors.PriorityMedium,
+				"table", "notes",
+				"action", "forget_speaker_cluster",
+				"speaker_id", speakerID)
+		}
+		affected = result.RowsAffected
+		return nil
+	}, ds.getMetrics())
+	if err != nil {
+		return 0, err
+	}
+	return affected, nil
 }
 
 // SetSpeakerName upserts the display name for a speaker cluster id.

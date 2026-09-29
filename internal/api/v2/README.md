@@ -142,13 +142,17 @@ Lightweight connectivity check. Returns a minimal response with no database quer
 
 ### Speakers (`speakers.go`)
 
-| Method | Route                | Handler              | Auth | Description                                                                                                                                                                                                                                        |
-| ------ | -------------------- | -------------------- | ---- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| GET    | `/speakers`          | `GetSpeakers`        | ✅⚡ | Full speaker roster (named + unnamed): `[{speakerId, name, detections}]`; `name` is `""` for unnamed speakers                                                                                                                                      |
-| GET    | `/speakers/activity` | `GetSpeakerActivity` | ✅⚡ | Per-speaker daily detection counts: `[{speakerId, date, count}]`, ordered by date then speaker id. Optional `start`/`end` (YYYY-MM-DD, inclusive); defaults to the last 30 days; range capped at 366 days. Names join client-side from `/speakers` |
-| PUT    | `/speakers/:id/name` | `UpdateSpeakerName`  | ✅⚡ | Set display name for a `spk_<n>` cluster; empty name clears mapping                                                                                                                                                                                |
+| Method | Route                 | Handler              | Auth | Description                                                                                                                                                                                                                                        |
+| ------ | --------------------- | -------------------- | ---- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET    | `/speakers`           | `GetSpeakers`        | ✅⚡ | Full speaker roster (named + unnamed): `[{speakerId, name, detections}]`; `name` is `""` for unnamed speakers                                                                                                                                      |
+| GET    | `/speakers/activity`  | `GetSpeakerActivity` | ✅⚡ | Per-speaker daily detection counts: `[{speakerId, date, count}]`, ordered by date then speaker id. Optional `start`/`end` (YYYY-MM-DD, inclusive); defaults to the last 30 days; range capped at 366 days. Names join client-side from `/speakers` |
+| PUT    | `/speakers/:id/name`  | `UpdateSpeakerName`  | ✅⚡ | Set display name for a `spk_<n>` cluster; empty name clears mapping                                                                                                                                                                                |
+| POST   | `/speakers/:id/merge` | `MergeSpeakers`      | ✅⚡ | Fold body `{"sourceId":"spk_<n>"}` into the path cluster (one person split across two ids). Returns `{speakerId, sourceId}`. `400` invalid id, `404` unknown cluster, `409` same id, `503` voice-print clustering disabled                         |
+| DELETE | `/speakers/:id`       | `ForgetSpeaker`      | ✅⚡ | Forget a `spk_<n>` cluster: unlabels its detections (clips are kept), deletes its name, drops the cluster. `204` on success; `400`/`404`/`503` as above                                                                                            |
 
-All `/speakers` routes are rate limited to 30 requests/min per IP; `PUT /speakers/:id/name` has an additional 10/min budget.
+All `/speakers` routes are rate limited to 30 requests/min per IP; `PUT /speakers/:id/name`, `POST /speakers/:id/merge` and `DELETE /speakers/:id` each have an additional 10/min budget.
+
+**Cluster management semantics.** A merge relabels every detection of the source id to the target id, combines the in-memory voice-print centroids weighted by member count, and writes the cluster snapshot immediately. The target id survives; the source id is retired and never reissued, so historic labels stay unambiguous. Names: the target keeps its own display name, an **unnamed** target adopts the source's name, and the source's name row is always deleted. The database is updated before the in-memory clusterer, so a database failure leaves the clusterer untouched and the request is safe to retry.
 
 ### App (`app.go`)
 
