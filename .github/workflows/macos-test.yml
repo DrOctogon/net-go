@@ -139,7 +139,36 @@ jobs:
           # Failed tests are printed below and in the job summary instead.
           go test -tags noembed,skipfrontend -race -json -v -short -timeout 900s ./... > gotest.log 2>&1
           TEST_EXIT_CODE=$?
-          grep '"Action":"fail"' gotest.log | jq -r 'select(.Test) | "FAIL  \(.Package)  \(.Test)"' | sort -u || true
+
+          # `jq -R 'fromjson? // empty'` reads every line as raw text and only
+          # keeps it if it parses as JSON, so a stray non-JSON line (the macOS
+          # cgo `ld: warning` lines mentioned above, a truncated line from a
+          # killed process) is skipped instead of killing the whole pipeline -
+          # no `grep` pre-filter needed.
+          echo "--- Per-test failures ---"
+          jq -R -r 'fromjson? // empty | select(.Action == "fail" and .Test) | "FAIL  \(.Package)  \(.Test)"' gotest.log | sort -u
+
+          # Package-level failures (build error, panic outside a test, or a
+          # "[setup failed]" package) have a "fail" Action but NO .Test field, so
+          # the per-test filter above silently drops them - this is exactly what
+          # has been showing up as "no test names" in this job. Always print
+          # these plus their raw output so the cause is visible without a rerun.
+          echo "--- Package-level failures (build error / panic / setup failure) ---"
+          PKG_FAILS=$(jq -R -r 'fromjson? // empty | select(.Action == "fail" and (.Test | not)) | .Package' gotest.log | sort -u)
+          if [ -n "$PKG_FAILS" ]; then
+            while IFS= read -r pkg; do
+              echo "## $pkg"
+              grep -F "\"Package\":\"$pkg\"" gotest.log | jq -R -r 'fromjson? // empty | select(.Action == "output") | .Output' | tail -n 40
+            done <<< "$PKG_FAILS"
+          else
+            echo "(none)"
+          fi
+
+          # Always show the raw log tail too: covers cases where go test never
+          # emits a matching JSON "fail" event at all (e.g. the process is
+          # killed by a timeout before it can flush one).
+          echo "--- Last 100 lines of gotest.log ---"
+          tail -n 100 gotest.log
 
           if [ "$TEST_EXIT_CODE" -ne 0 ]; then
             echo "::error title=Test Failure::macOS unit tests failed - see job summary for details"
@@ -150,7 +179,17 @@ jobs:
               echo ""
               echo "### Quick Preview of Failures"
               echo '```'
-              grep '"Action":"fail"' gotest.log | jq -r 'select(.Test) | (.Package + " " + .Test)' | head -20 || echo "Failed to parse test failures"
+              jq -R -r 'fromjson? // empty | select(.Action == "fail" and .Test) | (.Package + " " + .Test)' gotest.log | sort -u | head -20
+              echo '```'
+              echo ""
+              echo "### Package-level Failures"
+              echo '```'
+              if [ -n "$PKG_FAILS" ]; then echo "$PKG_FAILS"; else echo "(none)"; fi
+              echo '```'
+              echo ""
+              echo "### Last 60 Lines of Raw Log"
+              echo '```'
+              tail -n 60 gotest.log
               echo '```'
             } >> "$GITHUB_STEP_SUMMARY"
             exit "$TEST_EXIT_CODE"
