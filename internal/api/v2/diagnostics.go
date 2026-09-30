@@ -625,7 +625,29 @@ func (c *Controller) RunDiagnostics(ctx echo.Context) error {
 	report := health.NewReport(id, startedAt, results)
 	c.healthReports.Save(report)
 
-	return ctx.JSON(http.StatusOK, report)
+	return c.respondDiagnosticsJSON(ctx, "diagnostics_report", report)
+}
+
+// respondDiagnosticsJSON serialises a diagnostics payload with panic recovery
+// and writes it, returning 500 if the encoder panicked.
+//
+// health.Result carries Details as a map[string]any that each check fills in
+// however it likes, so the encoder is handed values this package never declared
+// and cannot audit - a concurrently mutated map, or a type whose MarshalJSON
+// dereferences something nil. encoding/json panics on those rather than
+// returning an error. echo's Recover middleware turns that into a 500 in a
+// running server, but a handler called directly (as tests do) has no middleware
+// and takes the whole process down instead, which is how this first surfaced:
+// an opaque package-level failure on the Windows CI job.
+//
+// Recovering here keeps one misbehaving check from destroying the response, and
+// names the failure in the log instead of leaving a bare stack trace.
+func (c *Controller) respondDiagnosticsJSON(ctx echo.Context, event string, payload any) error {
+	encoded, err := c.safeMarshalJSON(event, payload)
+	if err != nil {
+		return c.HandleError(ctx, err, "failed to encode diagnostics response", http.StatusInternalServerError)
+	}
+	return ctx.JSONBlob(http.StatusOK, encoded)
 }
 
 // GetDiagnosticsReport retrieves a stored diagnostics report by ID.
@@ -635,7 +657,9 @@ func (c *Controller) GetDiagnosticsReport(ctx echo.Context) error {
 	if !ok {
 		return c.HandleError(ctx, nil, "report not found", http.StatusNotFound)
 	}
-	return ctx.JSON(http.StatusOK, report)
+	// Same Details exposure as RunDiagnostics: this serves a stored report whose
+	// Details came from the same checks.
+	return c.respondDiagnosticsJSON(ctx, "diagnostics_report_stored", report)
 }
 
 // GetRecentErrors returns recent error log entries from the error ring buffer.
