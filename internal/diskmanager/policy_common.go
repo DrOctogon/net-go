@@ -432,15 +432,26 @@ func clearDeletedClipPaths(db Interface, deletedPaths []string, baseDir, policy 
 		clipNames = append(clipNames, filepath.ToSlash(relPath))
 	}
 
+	clearClipRefs(db, clipNames, policy, scrubSpeechData)
+}
+
+// clearClipRefs blanks the clip_name column for the given clip names (in the
+// exact form the database stores them) and, when scrubSpeechData is enabled,
+// first erases the speech-derived and biometric-adjacent columns of the same
+// rows. Returns the number of rows whose clip reference was cleared.
+//
+// Best-effort: failures are logged but never block the caller's run.
+func clearClipRefs(db Interface, clipNames []string, policy string, scrubSpeechData bool) int64 {
 	if len(clipNames) == 0 {
-		return
+		return 0
 	}
+
+	log := GetLogger()
 
 	// Privacy: when enabled, erase speech-derived and biometric-adjacent data so
 	// it does not outlive the audio clip it was derived from. This MUST run before
 	// clearing the clip paths below, since the scrub matches notes by clip_name and
-	// ClearNoteClipPathsByNames blanks that column. Best-effort — a failure here is
-	// logged but never blocks the retention run.
+	// ClearNoteClipPathsByNames blanks that column.
 	if scrubSpeechData {
 		scrubbed, err := db.ScrubSpeechDataByClipNames(clipNames)
 		if err != nil {
@@ -462,7 +473,7 @@ func clearDeletedClipPaths(db Interface, deletedPaths []string, baseDir, policy 
 			logger.String("policy", policy),
 			logger.Int("deleted_files", len(clipNames)),
 			logger.Error(err))
-		return
+		return 0
 	}
 
 	if cleared > 0 {
@@ -471,6 +482,8 @@ func clearDeletedClipPaths(db Interface, deletedPaths []string, baseDir, policy 
 			logger.Int64("records_cleared", cleared),
 			logger.Int("files_deleted", len(clipNames)))
 	}
+
+	return cleared
 }
 
 // ShouldSkipUsageBasedCleanup checks if cleanup can be skipped based on current disk usage.

@@ -2535,6 +2535,31 @@ func (ds *Datastore) ClearNoteClipPathsByNames(clipNames []string) (int64, error
 	return totalAffected, nil
 }
 
+// ListClipNames returns up to limit non-empty clip names ordered by detection
+// id, skipping the first offset rows. It exists so the disk manager's
+// reconciliation sweep can page through clip references without loading the
+// whole table into memory, and satisfies diskmanager.ClipNameLister.
+//
+// It is deliberately not part of datastore.Interface: the sweep declares the
+// narrow interface it needs and both datastore implementations satisfy it.
+func (ds *Datastore) ListClipNames(ctx context.Context, limit, offset int) ([]string, error) {
+	var clipNames []string
+	detectionsTable := ds.manager.TablePrefix() + "detections"
+
+	err := ds.manager.DB().WithContext(ctx).
+		Table(detectionsTable).
+		Where("clip_name IS NOT NULL AND clip_name != ''").
+		Order("id").
+		Limit(limit).
+		Offset(offset).
+		Pluck("clip_name", &clipNames).
+		Error
+	if err != nil {
+		return nil, fmt.Errorf("failed to list clip names (limit %d, offset %d): %w", limit, offset, err)
+	}
+	return clipNames, nil
+}
+
 // scrubbedSpeechColumns is the set of speech-derived and biometric-adjacent
 // v2 detection columns cleared by ScrubSpeechDataByClipNames. All are nullable,
 // so scrubbing sets them to NULL. The flagged column is deliberately retained:

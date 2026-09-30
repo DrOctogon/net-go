@@ -80,6 +80,15 @@ type RetentionSettings struct {
 	// across clip expiry); speaker features are opt-in and off by default, so the
 	// default install has no such data to keep.
 	ScrubSpeechData bool `yaml:"scrubspeechdata" json:"scrubSpeechData"`
+	// DeleteOrphanClips, when true, lets the reconciliation sweep delete clip
+	// files on disk that no detection row references (a crash between writing
+	// the file and committing the row, a failed save, a partial restore). It
+	// defaults to FALSE: the sweep otherwise only detects and reports orphans,
+	// because a bug in the reference comparison would otherwise eat the user's
+	// recordings. Dangling database references (a row pointing at a file that
+	// is provably gone) are cleared regardless, since that reference is
+	// already useless.
+	DeleteOrphanClips bool `yaml:"deleteorphanclips" json:"deleteOrphanClips"`
 }
 
 // ContinuousRecordingSettings contains settings for continuous full-audio recording.

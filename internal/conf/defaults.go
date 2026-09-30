@@ -180,6 +180,9 @@ func setDefaultConfig() {
 	viper.SetDefault("realtime.audio.export.retention.minclips", 0)
 	viper.SetDefault("realtime.audio.export.retention.keepspectrograms", true)
 	viper.SetDefault("realtime.audio.export.retention.scrubspeechdata", true)
+	// Orphan clip deletion is opt-in: the reconciliation sweep reports orphan
+	// files by default and never removes them unless this is explicitly set.
+	viper.SetDefault("realtime.audio.export.retention.deleteorphanclips", false)
 	viper.SetDefault("realtime.audio.export.retention.checkinterval", DefaultCleanupCheckInterval)
 
 	// Dynamic threshold configuration
