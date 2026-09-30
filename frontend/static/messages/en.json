@@ -710,9 +710,9 @@
     },
     "banner": {
       "title": "Title",
-      "titlePlaceholder": "My Bird Station",
+      "titlePlaceholder": "My VoiceWatch Station",
       "description": "Description",
-      "descriptionPlaceholder": "A brief description of your bird monitoring station...",
+      "descriptionPlaceholder": "A brief description of your voice monitoring station...",
       "subElements": "Sub-elements",
       "showImage": "Show custom image",
       "imageUrl": "Image URL or path",
@@ -744,7 +744,7 @@
       "cancel": "Cancel",
       "disabled": "hidden",
       "noConfig": "No additional configuration options available yet.",
-      "currentlyHearingNote": "This element shows currently detected birds when viewing today's date. No additional configuration needed.",
+      "currentlyHearingNote": "This element shows currently detected voices when viewing today's date. No additional configuration needed.",
       "notAvailable": "Configuration for this element type is not yet available.",
       "configureElement": "Configure element",
       "closeModal": "Close",
@@ -1882,7 +1882,7 @@
         },
         "heatmap": {
           "title": "Seasonal Activity Heatmap",
-          "description": "Detection density by date and time of day, revealing migration waves and dawn-chorus drift",
+          "description": "Detection density by date and time of day, revealing which days and hours carry the most voice activity",
           "noData": "No activity data available",
           "noDataHint": "Select a date range to view seasonal activity patterns",
           "axisDate": "Date",
@@ -1903,7 +1903,7 @@
         },
         "succession": {
           "title": "Acoustic Succession",
-          "description": "How the soundscape's top species hand off through the day, shown as stacked bands of hourly detections from pre-dawn through night",
+          "description": "How detections are distributed across the day, shown as stacked bands of hourly activity from pre-dawn through night",
           "noData": "No acoustic succession data available",
           "noDataHint": "Select a wider date range to see how species hand off through the day",
           "ariaLabel": "Acoustic succession streamgraph: stacked hour-of-day detections for the top species",
@@ -1914,11 +1914,11 @@
           "summary": "Hour-of-day succession for {count} species. Most active: {species} around {time}."
         },
         "dawnOnset": {
-          "title": "Dawn Chorus Onset",
+          "title": "Daily Activity Onset",
           "description": "When the morning chorus starts each day relative to civil dawn, isolating the seasonal shift from clock time",
-          "noData": "No dawn chorus data available",
-          "noDataHint": "Select a wider date range to track how the dawn chorus shifts across the seasons",
-          "ariaLabel": "Dawn chorus onset tracker: daily chorus onset relative to civil dawn",
+          "noData": "No activity-onset data available",
+          "noDataHint": "Select a wider date range to track how the first voice activity of the day shifts across the seasons",
+          "ariaLabel": "Activity onset tracker: first daily voice activity relative to civil dawn",
           "axisDate": "Date",
           "axisOnset": "Minutes from civil dawn",
           "civilDawn": "Civil dawn",
@@ -1927,7 +1927,7 @@
           "tooltipOnsetBefore": "{minutes} min before civil dawn",
           "tooltipOnsetAt": "At civil dawn",
           "tooltipCount": "Detections",
-          "summary": "Dawn chorus onset relative to civil dawn across {days} days ({plotted} with a measurable onset)."
+          "summary": "First daily voice activity relative to civil dawn across {days} days ({plotted} with a measurable onset)."
         },
         "nocturnal": {
           "title": "Nocturnal Activity Clock",
@@ -1945,7 +1945,7 @@
         },
         "confidence": {
           "title": "Confidence Distribution",
-          "description": "How confident the model is per species, so you can spot the birds it most often second-guesses",
+          "description": "How confident the model is per label, so you can spot the detections it most often second-guesses",
           "noData": "No confidence data available",
           "noDataHint": "Select a wider date range to compare how confident the model is across species",
           "ariaLabel": "Confidence distribution: per-species histogram of detection confidence scores",
@@ -1964,7 +1964,7 @@
         }
       },
       "categories": {
-        "birds": "Birds"
+        "birds": "Voice Detections"
       },
       "filters": {
         "startDate": "Start date",
@@ -2075,11 +2075,11 @@
           "description": "Automatically adjust detection sensitivity based on prior observations",
           "enable": {
             "label": "Enable Dynamic Threshold (VoiceWatch specific feature)",
-            "helpText": "Enables dynamic confidence threshold feature for more adaptive bird call detection."
+            "helpText": "Enables dynamic confidence threshold feature for more adaptive voice detection."
           },
           "trigger": {
             "label": "Trigger Threshold",
-            "helpText": "The confidence level at which the dynamic threshold is activated. If a bird call is detected with confidence over this value, the threshold for positive matches of that species will be lowered for subsequent calls."
+            "helpText": "The confidence level at which the dynamic threshold is activated. If a voice is detected with confidence over this value, the threshold for positive matches of that species will be lowered for subsequent calls."
           },
           "minimum": {
             "label": "Minimum Dynamic Threshold",
@@ -2304,7 +2304,7 @@
                   "extended": "Extended (120 dB)"
                 },
                 "descriptions": {
-                  "highContrast": "Best for weak signals. Bird calls stand out clearly from background noise. Recommended for scientific/grayscale styles.",
+                  "highContrast": "Best for weak signals. Voices stand out clearly from background noise. Recommended for scientific/grayscale styles.",
                   "standard": "Default balanced setting. Good for most use cases.",
                   "extended": "More detail visible but lower contrast. SoX default value."
                 }
@@ -2405,7 +2405,7 @@
           "applicationLogs": "**Application logs** - Recent errors and debug information",
           "configuration": "**Configuration** - Your settings with sensitive data removed",
           "systemInfo": "**System information** - OS version, memory, and runtime details",
-          "notIncluded": "**NOT included** - Audio files, bird detections, or personal data"
+          "notIncluded": "**NOT included** - Audio files, voice detections, transcripts, or personal data"
         },
         "userMessage": {
           "label": "Describe the issue",
@@ -2488,7 +2488,7 @@
         "variablesDescription": "Use these variables in your templates with the syntax",
         "loading": "Loading...",
         "fields": {
-          "commonName": "Bird common name (e.g., \"Northern Cardinal\")",
+          "commonName": "Detection label (e.g., \"Human Voice\")",
           "scientificName": "Scientific name (e.g., \"Cardinalis cardinalis\")",
           "confidence": "Confidence value (0.0 to 1.0)",
           "confidencePercent": "Confidence as percentage (e.g., \"99\")",
@@ -2535,7 +2535,7 @@
         "urls": "Detection URLs",
         "urlsDetails": "May expose internal network information",
         "species": "Species Data",
-        "speciesDetails": "What birds were detected and when",
+        "speciesDetails": "What voices were detected and when",
         "recommendation": "Only enable external webhooks if you trust the receiving service or use self-hosted/local services."
       },
       "push": {
@@ -2546,7 +2546,7 @@
         "enabledDescription": "Push notifications will be sent to all enabled providers below",
         "filters": {
           "title": "Detection Filters",
-          "description": "Control which bird detections trigger push notifications",
+          "description": "Control which voice detections trigger push notifications",
           "minConfidence": {
             "label": "Minimum Confidence",
             "helpText": "Only send notifications for detections above this confidence level. Set to 0 to disable."
@@ -2592,7 +2592,7 @@
           "notificationTypes": {
             "label": "Notification Types",
             "helpText": "Select which types of notifications to send to this provider",
-            "detection": "Bird detections",
+            "detection": "Voice detections",
             "error": "Errors",
             "warning": "Warnings",
             "info": "Information",
@@ -2700,7 +2700,7 @@
             },
             "topic": {
               "label": "Topic",
-              "placeholder": "my-bird-alerts",
+              "placeholder": "my-voicewatch-alerts",
               "helpText": "Topic name for your notifications"
             },
             "incomplete": "Topic is required"
@@ -2754,7 +2754,7 @@
             },
             "eventName": {
               "label": "Event Name",
-              "placeholder": "bird_detected",
+              "placeholder": "voice_detected",
               "helpText": "The event name to trigger in your IFTTT applet"
             },
             "incomplete": "Webhook key and event name are required"
@@ -2913,7 +2913,7 @@
       },
       "observability": {
         "title": "Observability",
-        "description": "Monitor VoiceWatch's performance and bird detection metrics through Prometheus-compatible endpoint",
+        "description": "Monitor VoiceWatch's performance and voice detection metrics through Prometheus-compatible endpoint",
         "enable": "Enable Observability Integration",
         "disabled": "Observability integration is not enabled",
         "listenAddress": {
@@ -3041,7 +3041,7 @@
         "title": "Sound Card",
         "description": "Configure local audio input device",
         "audioSourceLabel": "Audio Source (requires application restart to take effect)",
-        "audioSourceHelp": "Select the audio input device for bird sound detection. Changes require application restart to take effect.",
+        "audioSourceHelp": "Select the audio input device for voice detection. Changes require application restart to take effect.",
         "noSoundCardCapture": "No sound card capture",
         "empty": {
           "title": "No Sound Cards Detected",
@@ -3055,7 +3055,7 @@
       },
       "noSources": {
         "warning": "No Audio Sources Configured",
-        "description": "VoiceWatch needs an audio input to detect birds. Please configure at least one source in the Sound Card or Streams tab."
+        "description": "VoiceWatch needs an audio input to detect voices. Please configure at least one source in the Sound Card or Streams tab."
       },
       "soundCards": {
         "summary": "{count} sound card source(s)",
@@ -3076,7 +3076,7 @@
         "deleteConfirm": "Remove this sound card source?",
         "emptyState": {
           "title": "No Sound Card Sources Configured",
-          "description": "Add a sound card source to start capturing audio for bird detection.",
+          "description": "Add a sound card source to start capturing audio for voice detection.",
           "hintsTitle": "Getting Started",
           "hints": {
             "device": "Select from available audio input devices on your system",
@@ -3104,10 +3104,10 @@
       },
       "audioCapture": {
         "title": "Sound Card Configuration",
-        "description": "Select the audio input device for bird sound detection. Changes require application restart.",
+        "description": "Select the audio input device for voice detection. Changes require application restart.",
         "soundCardSource": "Sound Card Source",
         "audioSourceLabel": "Audio Source (requires application restart to take effect)",
-        "audioSourceHelp": "Select the audio input device for bird sound detection. Changes require application restart to take effect.",
+        "audioSourceHelp": "Select the audio input device for voice detection. Changes require application restart to take effect.",
         "noSoundCardCapture": "No sound card capture",
         "noDeviceSelected": "No audio device selected",
         "refreshDevices": "Refresh",
@@ -3124,7 +3124,7 @@
       "quietHours": {
         "title": "Quiet Hours",
         "sectionTitle": "Quiet Hours",
-        "sectionDescription": "Pause audio capture during configured time windows to reduce CPU usage when birds are unlikely to be active.",
+        "sectionDescription": "Pause audio capture during configured time windows to reduce CPU usage when nobody is likely to be speaking.",
         "modeLabel": "Schedule Mode",
         "modeFixed": "Fixed Times",
         "modeSolar": "Sunrise/Sunset",
@@ -3263,7 +3263,7 @@
         "title": "Audio Filters",
         "description": "Configure default audio filters applied to all sources. Per-source EQ overrides are available in each sound card's settings.",
         "enableEqualizer": "Enable Audio Equalizer",
-        "enableEqualizerHelp": "Apply frequency filtering to improve bird call detection by reducing unwanted noise and frequencies.",
+        "enableEqualizerHelp": "Apply frequency filtering to improve voice detection by reducing unwanted noise and frequencies.",
         "filterType": "Filter Type",
         "newFilterType": "New Filter Type",
         "selectFilterType": "Select filter type",
@@ -3271,7 +3271,7 @@
         "remove": "Remove",
         "frequencyResponse": "Frequency Response",
         "cutoffFrequency": "Cutoff Frequency",
-        "cutoffFrequencyHelp": "Frequency at which the filter begins to attenuate signals. Bird calls typically range from 1-10 kHz.",
+        "cutoffFrequencyHelp": "Frequency at which the filter begins to attenuate signals. Human speech energy sits mostly between 300 Hz and 3.4 kHz.",
         "qFactor": "Q Factor",
         "qFactorHelp": "Quality factor controls the sharpness of the filter. Lower values (0.1-1) create gentler slopes, higher values (1-10) create steeper cutoffs.",
         "gain": "Gain",
@@ -3285,7 +3285,7 @@
           "36db": "36dB",
           "48db": "48dB"
         },
-        "filterHelp": "Add multiple filters to shape the frequency response for optimal bird detection in your environment.",
+        "filterHelp": "Add multiple filters to shape the frequency response for optimal voice detection in your environment.",
         "graph": {
           "flatResponse": "Flat Response (No Filters Applied)",
           "frequency": "Frequency (Hz)",
@@ -3296,7 +3296,7 @@
         "title": "Sound Level Monitoring",
         "description": "Monitor and report environmental sound levels",
         "enable": "Enable Sound Level Monitoring",
-        "enableHelp": "Track ambient noise levels to understand your recording environment and correlate with bird activity patterns.",
+        "enableHelp": "Track ambient noise levels to understand your recording environment and correlate with voice activity patterns.",
         "disabled": "Sound level monitoring is disabled",
         "intervalLabel": "Measurement Interval (seconds)",
         "intervalHelp": "How often to measure and report sound levels. Lower values provide more granular data but use more resources. Minimum 5 seconds, recommended 60 seconds.",
@@ -3308,19 +3308,19 @@
       },
       "clipSettings": {
         "title": "Clip Settings",
-        "description": "Configure audio clip capture and processing for identified bird calls"
+        "description": "Configure audio clip capture and processing for identified voice detections"
       },
       "clipRecording": {
         "title": "Clip Recording",
-        "description": "Configure when and how audio clips are captured for detected bird calls.",
+        "description": "Configure when and how audio clips are captured for detected voices.",
         "enable": "Enable Clip Recording",
-        "enableHelp": "Save audio clips of detected bird calls for review, sharing, or building custom datasets.",
+        "enableHelp": "Save audio clips of detected voices for review, sharing, or building custom datasets.",
         "disabled": "Clip recording is disabled",
         "captureSettings": "Capture Settings",
         "lengthLabel": "Capture Length",
         "lengthHelp": "Duration of audio to capture for each detection (10-60 seconds). Longer clips provide more context but use more storage.",
         "preCaptureLabel": "Pre-Detection Buffer",
-        "preCaptureHelp": "Seconds of audio to include before the bird was detected (0-{max} seconds). Ensures the complete bird call is captured from its beginning.",
+        "preCaptureHelp": "Seconds of audio to include before the voice was detected (0-{max} seconds). Ensures the complete utterance is captured from its beginning.",
         "gainLabel": "Audio Gain",
         "gainHelp": "Audio amplification for saved clips in decibels (0 to 20 dB). Makes saved audio clips louder for easier listening. Does not affect detection. 0 dB means no amplification.",
         "normalization": "Audio Normalization",
@@ -3337,7 +3337,7 @@
         "normalizationNoteDescription": "Audio normalization follows the EBU R128 broadcast standard, ensuring consistent playback levels across different devices and preventing clipping.",
         "fileSettings": "File Settings",
         "pathLabel": "Clips Folder",
-        "pathHelp": "Directory where audio clips will be saved. Relative paths are from the application directory. Example: 'clips/' or '/var/audio/birds/'",
+        "pathHelp": "Directory where audio clips will be saved. Relative paths are from the application directory. Example: 'clips/' or '/var/audio/voices/'",
         "typeLabel": "Audio Format",
         "typeHelp": "Audio format for saved clips. WAV and FLAC are lossless (best quality, larger files). MP3, AAC, and Opus are lossy (smaller files, slight quality loss).",
         "bitrateLabel": "Bitrate",
@@ -3359,7 +3359,7 @@
         "title": "File Settings",
         "description": "Configure storage location and audio format for saved clips.",
         "pathLabel": "Clips Folder",
-        "pathHelp": "Directory where audio clips will be saved. Relative paths are from the application directory. Example: 'clips/' or '/var/audio/birds/'",
+        "pathHelp": "Directory where audio clips will be saved. Relative paths are from the application directory. Example: 'clips/' or '/var/audio/voices/'",
         "typeLabel": "Audio Format",
         "typeHelp": "Audio format for saved clips. WAV and FLAC are lossless (best quality, larger files). MP3, AAC, and Opus are lossy (smaller files, slight quality loss).",
         "bitrateLabel": "Bitrate",
@@ -3392,7 +3392,7 @@
         "maxUsageLabel": "Maximum Disk Usage",
         "maxUsageHelp": "Delete oldest clips when the audio directory uses more than this percentage of available disk space.",
         "minClipsLabel": "Minimum Clips per Species",
-        "minClipsHelp": "Always keep at least this many clips for each bird species, regardless of age or disk usage. Helps preserve rare recordings.",
+        "minClipsHelp": "Always keep at least this many clips for each detection label, regardless of age or disk usage. Helps preserve rare recordings.",
         "keepSpectrograms": "Keep Spectrogram Images",
         "keepSpectrogramsHelp": "Retain spectrogram images even when audio clips are deleted. Spectrograms use less space and provide visual reference.",
         "policies": {
@@ -3953,9 +3953,9 @@
       },
       "audioPlayback": {
         "title": "Audio Playback",
-        "description": "Default settings for playing bird recordings.",
+        "description": "Default settings for playing voice recordings.",
         "defaultGain": "Default Volume Boost",
-        "defaultGainHelpText": "Initial gain applied when playing recordings. Bird sounds are often quiet, so a boost of 6-12 dB is recommended.",
+        "defaultGainHelpText": "Initial gain applied when playing recordings. Recorded speech is often quiet, so a boost of 6-12 dB is recommended.",
         "defaultGainUnit": "dB"
       }
     },
@@ -4478,7 +4478,7 @@
         "uiLanguageLabel": "Interface Language",
         "uiLanguageHelp": "Language used for the web interface",
         "speciesLanguageLabel": "Species Name Language",
-        "speciesLanguageHelp": "Language used for bird species names in detections",
+        "speciesLanguageHelp": "Language used for detection label names",
         "locationLabel": "Station Location",
         "locationHelp": "Your location helps filter species to those likely in your area",
         "latitudeLabel": "Latitude",
@@ -4542,16 +4542,16 @@
       },
       "responsibleUse": {
         "title": "Using VoiceWatch Responsibly",
-        "intro": "VoiceWatch is a powerful tool that enhances your birding experience through AI-assisted identification. To ensure the best outcomes for both birding and conservation:",
+        "intro": "VoiceWatch records and analyses human voices. Its detections are AI estimates, not proof of who spoke. To use it responsibly:",
         "point1": "Review and verify detections before sharing observations",
         "point2": "Use the confidence scores as a guide, not absolute truth",
-        "point3": "Cross-reference with field guides and local expertise",
-        "point4": "Consider seasonal patterns and habitat suitability",
-        "citizenScienceHeading": "When contributing to citizen science:",
-        "citizenPoint1": "Only submit observations you have personally verified",
-        "citizenPoint2": "Include notes about visual or behavioral confirmation",
-        "citizenPoint3": "Use AI detections as a starting point for your own observations",
-        "outro": "This approach ensures data quality for scientific research while maximizing your learning and enjoyment of birds.",
+        "point3": "Tell the people in range that audio is being recorded and analysed",
+        "point4": "Check your local laws on recording voices before you deploy a microphone",
+        "citizenScienceHeading": "When sharing detections outside this device:",
+        "citizenPoint1": "Only share detections you have personally verified",
+        "citizenPoint2": "Remember that clips and transcripts contain recorded speech",
+        "citizenPoint3": "Treat speaker names and attribute estimates as guesses, not identity",
+        "outro": "This keeps the people around your microphone informed and your detections trustworthy.",
         "acknowledge": "I understand"
       }
     }
