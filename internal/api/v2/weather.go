@@ -187,6 +187,24 @@ func (c *Controller) GetHourlyWeatherForDay(ctx echo.Context) error {
 	})
 }
 
+// isFutureDate reports whether a YYYY-MM-DD string names a calendar day after
+// the calendar day of now, with both read in now's location.
+//
+// The location matters: time.Parse fixes a date-only string at midnight UTC, so
+// comparing it against a local time.Now() misjudges the boundary anywhere off
+// UTC. West of UTC late in the day, tomorrow's local midnight has already passed
+// in UTC terms and "tomorrow" compared as not future; east of UTC early in the
+// day, today compared as future. Comparing calendar days in one location is
+// correct everywhere.
+func isFutureDate(date string, now time.Time) (isFuture bool, err error) {
+	requested, err := time.ParseInLocation(time.DateOnly, date, now.Location())
+	if err != nil {
+		return false, err
+	}
+	today := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
+	return requested.After(today), nil
+}
+
 // handleEmptyHourlyWeather handles the case when no hourly weather data is found
 func (c *Controller) handleEmptyHourlyWeather(ctx echo.Context, date, ip, path string) error {
 	emptyResponse := struct {
@@ -197,14 +215,14 @@ func (c *Controller) handleEmptyHourlyWeather(ctx echo.Context, date, ip, path s
 	}
 
 	// Check if it's a future date
-	requestedDate, parseErr := time.Parse(time.DateOnly, date)
+	isFuture, parseErr := isFutureDate(date, time.Now())
 	if parseErr != nil {
 		c.logErrorIfEnabled("Invalid date format in hourly weather request", logger.String("date", date), logger.Error(parseErr), logger.String("path", path), logger.IP("ip", ip))
 		emptyResponse.Message = "No weather data found for the specified date"
 		return ctx.JSON(http.StatusOK, emptyResponse)
 	}
 
-	if requestedDate.After(time.Now()) {
+	if isFuture {
 		c.logWarnIfEnabled("No hourly weather data for future date", logger.String("date", date), logger.String("reason", "future_date"), logger.String("path", path), logger.IP("ip", ip))
 		emptyResponse.Message = "No weather data available for future date"
 		return ctx.JSON(http.StatusOK, emptyResponse)

@@ -305,6 +305,86 @@ func TestGetHourlyWeatherForDayNoData(t *testing.T) {
 	runGetHourlyWeatherForDayNoDataTest(t, "2023-01-01")
 }
 
+// TestIsFutureDate pins the calendar-day comparison across UTC offsets. Parsing a
+// date-only string with time.Parse fixes it at midnight UTC, so comparing it to a
+// local now got the boundary wrong off UTC: west of UTC late in the day tomorrow
+// read as not-future (which is how TestGetHourlyWeatherForDayFutureDate failed in
+// PDT while passing in CI), and east of UTC early in the day today read as future.
+// These cases fail against that old behaviour and pass against the fixed one, in
+// any machine timezone, because now carries its own location.
+func TestIsFutureDate(t *testing.T) {
+	t.Parallel()
+
+	west := time.FixedZone("PDT", -7*60*60)
+	east := time.FixedZone("NZDT", 13*60*60)
+
+	tests := []struct {
+		name    string
+		date    string
+		now     time.Time
+		want    bool
+		wantErr bool
+	}{
+		{
+			name: "tomorrow is future west of UTC late in the day",
+			date: "2026-09-30",
+			now:  time.Date(2026, 9, 29, 20, 57, 0, 0, west),
+			want: true,
+		},
+		{
+			name: "today is not future west of UTC late in the day",
+			date: "2026-09-29",
+			now:  time.Date(2026, 9, 29, 20, 57, 0, 0, west),
+			want: false,
+		},
+		{
+			name: "today is not future east of UTC early in the day",
+			date: "2026-09-30",
+			now:  time.Date(2026, 9, 30, 0, 30, 0, 0, east),
+			want: false,
+		},
+		{
+			name: "tomorrow is future east of UTC early in the day",
+			date: "2026-10-01",
+			now:  time.Date(2026, 9, 30, 0, 30, 0, 0, east),
+			want: true,
+		},
+		{
+			name: "midnight exactly is not future",
+			date: "2026-09-29",
+			now:  time.Date(2026, 9, 29, 0, 0, 0, 0, time.UTC),
+			want: false,
+		},
+		{
+			name: "yesterday is not future",
+			date: "2026-09-28",
+			now:  time.Date(2026, 9, 29, 12, 0, 0, 0, time.UTC),
+			want: false,
+		},
+		{
+			name:    "unparseable date returns an error",
+			date:    "not-a-date",
+			now:     time.Date(2026, 9, 29, 12, 0, 0, 0, time.UTC),
+			wantErr: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			got, err := isFutureDate(tt.date, tt.now)
+			if tt.wantErr {
+				require.Error(t, err)
+				assert.False(t, got, "an unparseable date must not be reported as future")
+				return
+			}
+			require.NoError(t, err)
+			assert.Equal(t, tt.want, got)
+		})
+	}
+}
+
 // TestGetHourlyWeatherForDayFutureDate tests the hourly weather endpoint with a future date
 func TestGetHourlyWeatherForDayFutureDate(t *testing.T) {
 	// Setup
