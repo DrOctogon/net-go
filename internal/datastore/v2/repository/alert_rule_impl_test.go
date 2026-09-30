@@ -237,6 +237,41 @@ func TestAlertRuleRepository_DeleteRule(t *testing.T) {
 	assert.Equal(t, int64(0), actionCount)
 }
 
+func TestAlertRuleRepository_DeleteRule_NotFound(t *testing.T) {
+	db := setupAlertTestDB(t)
+	repo := NewAlertRuleRepository(db, nil)
+
+	err := repo.DeleteRule(t.Context(), 4242)
+	require.ErrorIs(t, err, ErrAlertRuleNotFound)
+	require.NotErrorIs(t, err, ErrAlertRuleBuiltIn, "a missing rule must not look like a built-in rule")
+}
+
+// TestAlertRuleRepository_DeleteRule_BuiltIn pins the invariant at the
+// repository layer: built-in rules survive DeleteRule regardless of caller.
+func TestAlertRuleRepository_DeleteRule_BuiltIn(t *testing.T) {
+	db := setupAlertTestDB(t)
+	repo := NewAlertRuleRepository(db, nil)
+	ctx := t.Context()
+
+	rule := &entities.AlertRule{
+		Name: "BuiltIn guarded", Enabled: true, BuiltIn: true,
+		ObjectType: "stream", TriggerType: "event", EventName: "stream.disconnected", CooldownSec: 300,
+		Conditions: []entities.AlertCondition{{Property: "confidence", Operator: "greater_than", Value: "0.90", SortOrder: 0}},
+		Actions:    []entities.AlertAction{{Target: "bell", SortOrder: 0}},
+	}
+	require.NoError(t, repo.CreateRule(ctx, rule))
+
+	err := repo.DeleteRule(ctx, rule.ID)
+	require.ErrorIs(t, err, ErrAlertRuleBuiltIn)
+	require.NotErrorIs(t, err, ErrAlertRuleNotFound, "a built-in rule must not look missing")
+
+	kept, err := repo.GetRule(ctx, rule.ID)
+	require.NoError(t, err, "built-in rule row must survive the refused delete")
+	assert.True(t, kept.BuiltIn)
+	assert.Len(t, kept.Conditions, 1, "conditions must not be cascade-deleted")
+	assert.Len(t, kept.Actions, 1, "actions must not be cascade-deleted")
+}
+
 func TestAlertRuleRepository_ToggleRule(t *testing.T) {
 	db := setupAlertTestDB(t)
 	repo := NewAlertRuleRepository(db, nil)

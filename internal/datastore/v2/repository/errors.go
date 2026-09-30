@@ -71,6 +71,12 @@ var (
 	// ErrAlertRuleNotFound indicates the requested alert rule does not exist.
 	ErrAlertRuleNotFound = errors.NewStd("alert rule not found")
 
+	// ErrAlertRuleBuiltIn indicates the alert rule is built-in and therefore
+	// cannot be deleted. Built-in rules are the product's safety net; disabling
+	// them via ToggleRule is the supported way to silence one. Use
+	// DeleteBuiltInRules for the deliberate reset-to-defaults purge.
+	ErrAlertRuleBuiltIn = errors.NewStd("built-in alert rules cannot be deleted")
+
 	// ErrCommonNameSearchUnsupported indicates a free-text query reached the
 	// dual-write read path, which has no name-map source to resolve common names
 	// to label IDs. Honoring the query would silently degrade to scientific-name-only

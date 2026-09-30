@@ -27,6 +27,7 @@ import (
 	datastoreV2 "github.com/tphakala/voicewatch/internal/datastore/v2"
 	"github.com/tphakala/voicewatch/internal/datastore/v2/entities"
 	"github.com/tphakala/voicewatch/internal/datastore/v2/repository"
+	"github.com/tphakala/voicewatch/internal/notification"
 	"github.com/tphakala/voicewatch/internal/observability"
 	"github.com/tphakala/voicewatch/internal/suncalc"
 	"gorm.io/driver/sqlite"
@@ -115,6 +116,16 @@ func setupAlertTestEnvironment(t *testing.T) (*echo.Echo, *Controller) {
 	})
 
 	return e, controller
+}
+
+// decodeErrorKey returns the i18n error_key from a JSON error response body.
+func decodeErrorKey(t *testing.T, rec *httptest.ResponseRecorder) string {
+	t.Helper()
+	var body struct {
+		ErrorKey string `json:"error_key"`
+	}
+	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &body), "error response must be JSON")
+	return body.ErrorKey
 }
 
 // --- request helpers -------------------------------------------------------
@@ -406,6 +417,7 @@ func TestDeleteAlertRule_BuiltInRejected(t *testing.T) {
 
 	require.NoError(t, err)
 	assert.Equal(t, http.StatusConflict, rec.Code)
+	assert.Equal(t, notification.MsgErrAlertBuiltInDelete, decodeErrorKey(t, rec))
 
 	// The rule must still exist; Toggle remains the supported disable path.
 	kept, err := controller.alertRuleRepo.GetRule(ctx, rule.ID)
@@ -413,6 +425,8 @@ func TestDeleteAlertRule_BuiltInRejected(t *testing.T) {
 	assert.True(t, kept.BuiltIn)
 }
 
+// TestDeleteAlertRule_NotFound pins 404 (not the built-in 409) for an unknown
+// id, the condition that makes collapsing the handler's pre-check safe.
 func TestDeleteAlertRule_NotFound(t *testing.T) {
 	e, controller := setupAlertTestEnvironment(t)
 
@@ -420,6 +434,7 @@ func TestDeleteAlertRule_NotFound(t *testing.T) {
 
 	require.NoError(t, err)
 	assert.Equal(t, http.StatusNotFound, rec.Code)
+	assert.Equal(t, notification.MsgErrAlertNotFound, decodeErrorKey(t, rec))
 }
 
 // --- ResetDefaultAlertRules ---------------------------------------------------
