@@ -95,9 +95,12 @@ func TestFilesystemStore(t *testing.T) {
 	// Create a temporary directory for testing
 	tempDir := t.TempDir()
 
-	// Set test config path and restore after test
+	// Set test config path and restore the package-wide sandbox path afterwards
+	// (TestMain's temp dir) rather than clearing it, which would re-expose the
+	// real ~/.config/birdnet-go to every test that runs after this one.
+	prevConfigPath := testConfigPath
 	SetTestConfigPath(tempDir)
-	defer SetTestConfigPath("")
+	t.Cleanup(func() { SetTestConfigPath(prevConfigPath) })
 
 	// Setup test settings
 	settings := &conf.Settings{

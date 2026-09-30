@@ -376,17 +376,33 @@ func parseBasicAuthRedirectURI(settings *conf.Settings) *url.URL {
 	return parsedURI
 }
 
+// configBaseDir returns the directory that holds this package's on-disk state
+// (the session store and the persisted token file). Tests redirect it via
+// SetTestConfigPath so they never read or overwrite the real
+// ~/.config/birdnet-go state of whoever runs them.
+func configBaseDir() (string, error) {
+	if testConfigPath != "" {
+		return testConfigPath, nil
+	}
+
+	configPaths, err := conf.GetDefaultConfigPaths()
+	if err != nil {
+		return "", err
+	}
+	return configPaths[0], nil
+}
+
 // setupTokenPersistence configures token persistence for the OAuth2 server
 func (s *OAuth2Server) setupTokenPersistence() {
 	secLog := GetLogger()
 
-	configPaths, err := conf.GetDefaultConfigPaths()
+	baseDir, err := configBaseDir()
 	if err != nil {
 		secLog.Warn("Failed to get config paths for token persistence, persistence disabled", logger.Error(err))
 		return
 	}
 
-	s.tokensFile = filepath.Join(configPaths[0], "tokens.json")
+	s.tokensFile = filepath.Join(baseDir, "tokens.json")
 	s.persistTokens = true
 	secLog = secLog.With(logger.String("file", s.tokensFile))
 	secLog.Info("Token persistence configured")
@@ -464,18 +480,13 @@ func setupSessionStore(settings *conf.Settings) {
 func getSessionPath() (string, bool) {
 	secLog := GetLogger()
 
-	if testConfigPath != "" {
-		secLog.Info("Using test config path for session storage", logger.String("path", testConfigPath))
-		return filepath.Join(testConfigPath, "sessions"), true
-	}
-
-	configPaths, err := conf.GetDefaultConfigPaths()
+	baseDir, err := configBaseDir()
 	if err != nil {
 		secLog.Warn("Failed to get config paths for session store, using in-memory cookie store", logger.Error(err))
 		return "", false
 	}
 
-	sessionPath := filepath.Join(configPaths[0], "sessions")
+	sessionPath := filepath.Join(baseDir, "sessions")
 	secLog.Info("Using filesystem session store", logger.String("path", sessionPath))
 	return sessionPath, true
 }
