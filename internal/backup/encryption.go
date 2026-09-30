@@ -15,10 +15,23 @@ import (
 	"github.com/tphakala/voicewatch/internal/logger"
 )
 
-// getEncryptionKeyPath returns the path to the encryption key file
+// getEncryptionKeyPath returns the path to the encryption key file, resolved
+// beside the *active* config.yaml so it honours the --config flag. Resolving it
+// from the OS default config directory instead made two instances started with
+// different --config files share one key, and put the key outside a container's
+// mounted /config where it was lost on restart - losing it makes every existing
+// backup permanently undecryptable.
+//
+// Migration, read-in-place: every caller - the read path, key generation and key
+// import - goes through this one function, so returning a pre-existing key from
+// the OS default config directory keeps readers and writers pointed at the same
+// file and there is no copy step that could half-succeed. This is the safest
+// possible choice for a secret: a key that cannot be found is data loss, not an
+// inconvenience. The accepted cost is that an install with a key already in the
+// default directory stays pinned to it until that file is removed; fresh
+// installs and containers get the key beside their config immediately.
 func (m *Manager) getEncryptionKeyPath() (string, error) {
-	// Get the config directory
-	configPaths, err := conf.GetDefaultConfigPaths()
+	keyPath, err := conf.ResolveConfigArtifact(EncryptionKeyFileName)
 	if err != nil {
 		return "", errors.New(err).
 			Component("backup").
@@ -26,16 +39,7 @@ func (m *Manager) getEncryptionKeyPath() (string, error) {
 			Context("operation", "get_encryption_key_path").
 			Build()
 	}
-	if len(configPaths) == 0 {
-		return "", errors.Newf("no config paths available").
-			Component("backup").
-			Category(errors.CategoryConfiguration).
-			Context("operation", "get_encryption_key_path").
-			Build()
-	}
-
-	// Use the first config path (which should be the active one)
-	return filepath.Join(configPaths[0], "encryption.key"), nil
+	return keyPath, nil
 }
 
 // getEncryptionKey returns the encryption key, generating it if necessary

@@ -52,16 +52,32 @@ type MissedBackup struct {
 
 // StateManager handles persistence of backup states
 type StateManager struct {
-	state     *BackupState
+	state *BackupState
+	// statePath is the active location and the only path written to.
 	statePath string
-	mu        sync.RWMutex
-	logger    logger.Logger
+	// legacyStatePath is a read-only fallback to a state file left in the OS
+	// default config directory before --config was honoured; "" when there is
+	// nothing to migrate.
+	legacyStatePath string
+	mu              sync.RWMutex
+	logger          logger.Logger
 }
 
-// NewStateManager creates a new state manager
+// NewStateManager creates a new state manager.
+//
+// The state file is resolved beside the *active* config.yaml so it honours the
+// --config flag; resolving it from the OS default config directory made
+// instances started with different --config files share one state file.
+//
+// Migration, read-and-migrate: writes always go to the active location, but a
+// state file left in the default directory by a pre-fix release is still read so
+// schedules and statistics survive the upgrade. The first save lands in the
+// active location and the fallback stops applying. Read-and-migrate is right
+// here (rather than read-in-place, as used for the encryption key) because
+// backup state is regenerable bookkeeping: the worst case if a migration is
+// missed is a re-derived schedule, not unreachable data.
 func NewStateManager(_ logger.Logger) (*StateManager, error) {
-	// Get config directory
-	configPaths, err := conf.GetDefaultConfigPaths()
+	statePath, err := conf.ConfigArtifactPath(BackupStateFileName)
 	if err != nil {
 		return nil, errors.New(err).
 			Component("backup").
@@ -69,18 +85,10 @@ func NewStateManager(_ logger.Logger) (*StateManager, error) {
 			Context("operation", "get_config_paths").
 			Build()
 	}
-	if len(configPaths) == 0 {
-		return nil, errors.Newf("no config paths available").
-			Component("backup").
-			Category(errors.CategoryConfiguration).
-			Build()
-	}
-
-	// Create state file path
-	statePath := filepath.Join(configPaths[0], "backup-state.json")
 
 	sm := &StateManager{
-		statePath: statePath,
+		statePath:       statePath,
+		legacyStatePath: conf.LegacyConfigArtifact(BackupStateFileName),
 		state: &BackupState{
 			Schedules:  make(map[string]ScheduleState),
 			Targets:    make(map[string]TargetState),
@@ -111,6 +119,11 @@ func (sm *StateManager) loadState() error {
 	defer sm.mu.Unlock()
 
 	data, err := os.ReadFile(sm.statePath)
+	if err != nil && os.IsNotExist(err) && sm.legacyStatePath != "" {
+		// No state at the active location yet: read the pre-fix one so schedules
+		// and statistics survive. saveState still writes to sm.statePath.
+		data, err = os.ReadFile(sm.legacyStatePath)
+	}
 	if err != nil {
 		return err
 	}

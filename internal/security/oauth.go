@@ -221,9 +221,13 @@ type OAuth2Server struct {
 	GithubConfig *oauth2.Config
 	GoogleConfig *oauth2.Config
 
-	// Token persistence
-	tokensFile    string
-	persistTokens bool
+	// Token persistence. tokensFile is the active location and the only path
+	// written to; legacyTokensFile is a read-only fallback to a token file left in
+	// the OS default config directory before --config was honoured, and is empty
+	// when there is nothing to migrate.
+	tokensFile       string
+	legacyTokensFile string
+	persistTokens    bool
 
 	// Throttling
 	throttledMessages map[string]time.Time
@@ -376,33 +380,53 @@ func parseBasicAuthRedirectURI(settings *conf.Settings) *url.URL {
 	return parsedURI
 }
 
-// configBaseDir returns the directory that holds this package's on-disk state
-// (the session store and the persisted token file). Tests redirect it via
-// SetTestConfigPath so they never read or overwrite the real
-// ~/.config/birdnet-go state of whoever runs them.
-func configBaseDir() (string, error) {
+// configArtifactPath resolves a piece of this package's on-disk state (the
+// persisted token file, the session store) to a path beside the *active*
+// config.yaml, honouring the --config flag. Resolving from the OS default config
+// directory instead is what let two instances started with different --config
+// files silently share tokens and sessions, and what put them outside a
+// container's mounted /config where they were lost on restart.
+//
+// Tests redirect it via SetTestConfigPath so they never read or overwrite the
+// real ~/.config/birdnet-go state of whoever runs them. The test hook also
+// suppresses the legacy-location fallback below, which would otherwise reach
+// into that real directory.
+func configArtifactPath(name string) (string, error) {
 	if testConfigPath != "" {
-		return testConfigPath, nil
+		return filepath.Join(testConfigPath, name), nil
 	}
+	return conf.ConfigArtifactPath(name)
+}
 
-	configPaths, err := conf.GetDefaultConfigPaths()
-	if err != nil {
-		return "", err
+// legacyConfigArtifactPath returns a pre-existing artifact in the OS default
+// config directory (the pre-fix location) to fall back to for reads, or "" when
+// there is nothing to migrate. Always "" under the test hook.
+func legacyConfigArtifactPath(name string) string {
+	if testConfigPath != "" {
+		return ""
 	}
-	return configPaths[0], nil
+	return conf.LegacyConfigArtifact(name)
 }
 
 // setupTokenPersistence configures token persistence for the OAuth2 server
 func (s *OAuth2Server) setupTokenPersistence() {
 	secLog := GetLogger()
 
-	baseDir, err := configBaseDir()
+	tokensFile, err := configArtifactPath(TokensFileName)
 	if err != nil {
-		secLog.Warn("Failed to get config paths for token persistence, persistence disabled", logger.Error(err))
+		secLog.Warn("Failed to resolve config directory for token persistence, persistence disabled", logger.Error(err))
 		return
 	}
 
-	s.tokensFile = filepath.Join(baseDir, "tokens.json")
+	s.tokensFile = tokensFile
+	// Migration, read-and-migrate: writes always go to the active location, but a
+	// token file left in the OS default directory by a pre-fix release is still
+	// read once so nobody is logged out by the upgrade. The first save then lands
+	// in the active location and the fallback stops applying - which is why this
+	// is read-and-migrate rather than read-in-place: tokens are short-lived and
+	// rewritten on every change, so migrating costs nothing, whereas reading in
+	// place would leave two --config instances sharing one token file forever.
+	s.legacyTokensFile = legacyConfigArtifactPath(TokensFileName)
 	s.persistTokens = true
 	secLog = secLog.With(logger.String("file", s.tokensFile))
 	secLog.Info("Token persistence configured")
@@ -477,16 +501,32 @@ func setupSessionStore(settings *conf.Settings) {
 }
 
 // getSessionPath returns the path for session storage and whether it was successfully determined.
+//
+// Migration, read-in-place: gorilla's FilesystemStore reads and writes a single
+// directory, so it cannot read old sessions while writing new ones. When a
+// pre-fix session directory in the OS default config directory still holds
+// sessions, that directory keeps being used rather than relocating and logging
+// every user out on upgrade; an empty one is ignored, so fresh installs and
+// containers get their sessions beside the active config immediately. The
+// accepted cost is that such an install keeps its sessions in the default
+// directory until they are removed - tolerable because session files are
+// encrypted with keys derived from SessionSecret, so instances that do not also
+// share that secret cannot read each other's sessions.
 func getSessionPath() (string, bool) {
 	secLog := GetLogger()
 
-	baseDir, err := configBaseDir()
+	if legacy := legacyConfigArtifactPath(SessionsDirName); legacy != "" {
+		secLog.Info("Using pre-existing filesystem session store from the default config directory",
+			logger.String("path", legacy))
+		return legacy, true
+	}
+
+	sessionPath, err := configArtifactPath(SessionsDirName)
 	if err != nil {
-		secLog.Warn("Failed to get config paths for session store, using in-memory cookie store", logger.Error(err))
+		secLog.Warn("Failed to resolve config directory for session store, using in-memory cookie store", logger.Error(err))
 		return "", false
 	}
 
-	sessionPath := filepath.Join(baseDir, "sessions")
 	secLog.Info("Using filesystem session store", logger.String("path", sessionPath))
 	return sessionPath, true
 }
@@ -1062,6 +1102,21 @@ func (s *OAuth2Server) persistTokensIfEnabled() {
 	}
 }
 
+// readTokensFile reads the persisted token file from the active location,
+// falling back to a pre-fix token file in the OS default config directory when
+// the active location has none. Only reads use the fallback; saveTokens always
+// writes to s.tokensFile, which completes the migration.
+func (s *OAuth2Server) readTokensFile() ([]byte, error) {
+	data, err := os.ReadFile(s.tokensFile)
+	if err == nil || !os.IsNotExist(err) || s.legacyTokensFile == "" {
+		return data, err
+	}
+
+	GetLogger().Info("No token file at the active location, reading the pre-existing one from the default config directory",
+		logger.String("legacy_file", s.legacyTokensFile))
+	return os.ReadFile(s.legacyTokensFile)
+}
+
 // loadTokens loads tokens from the persistence file
 func (s *OAuth2Server) loadTokens(ctx context.Context) error {
 	secLog := GetLogger().With(logger.String("file", s.tokensFile))
@@ -1082,7 +1137,7 @@ func (s *OAuth2Server) loadTokens(ctx context.Context) error {
 	}
 
 	// Read file outside the lock
-	data, err := os.ReadFile(s.tokensFile)
+	data, err := s.readTokensFile()
 	if err != nil {
 		if os.IsNotExist(err) {
 			secLog.Info("Token file does not exist, skipping load")

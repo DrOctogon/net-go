@@ -16,6 +16,14 @@ const (
 
 	// KeyFileHeader is the expected header in exported key files
 	KeyFileHeader = "VoiceWatch Backup Encryption Key"
+
+	// EncryptionKeyFileName is the backup encryption key, stored beside the
+	// active config.yaml.
+	EncryptionKeyFileName = "encryption.key"
+
+	// BackupStateFileName is the backup scheduler state, stored beside the
+	// active config.yaml.
+	BackupStateFileName = "backup-state.json"
 )
 
 // File system permission constants
