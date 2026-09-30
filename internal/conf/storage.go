@@ -273,7 +273,14 @@ func createDefaultConfig() error {
 			Context("operation", "create-default-config-paths").
 			Build()
 	}
-	configPath := filepath.Join(configPaths[0], "config.yaml")
+	configPath := filepath.Join(configPaths[0], configFileName)
+	// Deliberately NOT guarded. This is the provisioning write reached by
+	// Load() whenever viper finds no config file, so on a CI runner with no
+	// config every test that lazily calls conf.Setting() routes through here.
+	// Guarding it made Load() fail, which made conf.Setting() return nil and
+	// crashed unrelated packages. It also cannot destroy a developer's
+	// settings: it only ever runs when no config file exists yet.
+	// See config_guard.go.
 	defaultConfig, err := getDefaultConfig()
 	if err != nil {
 		return err
@@ -330,7 +337,7 @@ func createDefaultConfig() error {
 
 // getDefaultConfig reads the default configuration from the embedded config.yaml file.
 func getDefaultConfig() (string, error) {
-	data, err := fs.ReadFile(configFiles, "config.yaml")
+	data, err := fs.ReadFile(configFiles, configFileName)
 	if err != nil {
 		return "", errors.New(err).
 			Category(errors.CategoryConfiguration).
@@ -474,7 +481,17 @@ func SaveSettings() error {
 
 // SaveYAMLConfig updates the YAML configuration file with new settings.
 // It overwrites the existing file, not preserving comments or structure.
+//
+// This is the single chokepoint for configuration writes (SaveSettings and the
+// migrations both route through it), so it is where the test guard refuses to
+// overwrite the machine owner's real config file; see config_guard.go. The
+// check runs before any filesystem access, so a rejected call creates neither
+// the destination file nor a temporary file beside it.
 func SaveYAMLConfig(configPath string, settings *Settings) error {
+	if err := guardRealConfigPath(configPath); err != nil {
+		return err
+	}
+
 	// Marshal the settings struct to YAML
 	yamlData, err := yaml.Marshal(settings)
 	if err != nil {

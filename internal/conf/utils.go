@@ -93,8 +93,9 @@ func GetDefaultConfigPaths() ([]string, error) {
 	}
 	exeDir := filepath.Dir(exePath)
 
-	// Fetch the user's home directory.
-	homeDir, err := GetUserHomeDir()
+	// Fetch the per-user configuration directory. This is the same helper the
+	// test guard uses, so the resolver and the guard cannot drift apart.
+	userDir, err := userConfigDir()
 	if err != nil {
 		return nil, errors.New(err).
 			Category(errors.CategorySystem).
@@ -106,21 +107,15 @@ func GetDefaultConfigPaths() ([]string, error) {
 	switch runtime.GOOS {
 	case osWindows:
 		// For Windows, use the executable directory and the AppData Roaming directory.
-		configPaths = []string{
-			exeDir,
-			filepath.Join(homeDir, "AppData", "Roaming", "birdnet-go"),
-		}
+		configPaths = []string{exeDir, userDir}
 	default:
 		// For Linux and macOS, use a hidden directory in the home directory and a system-wide configuration directory.
-		configPaths = []string{
-			filepath.Join(homeDir, ".config", "birdnet-go"),
-			"/etc/birdnet-go",
-		}
+		configPaths = []string{userDir, systemConfigDir}
 	}
 
 	// Check if config.yaml exists in any of the paths
 	for _, path := range configPaths {
-		configFile := filepath.Join(path, "config.yaml")
+		configFile := filepath.Join(path, configFileName)
 		if _, err := os.Stat(configFile); err == nil {
 			// Config file found, return this path as the only default path
 			return []string{path}, nil
@@ -134,6 +129,12 @@ func GetDefaultConfigPaths() ([]string, error) {
 // FindConfigFile locates the configuration file.
 // It checks the explicit --config CLI flag path first, then falls back
 // to viper.ConfigFileUsed(), and finally searches the default paths.
+//
+// Deliberately NOT guarded against resolving the machine owner's real config
+// path under test: resolution is a read, and a test that merely reads the
+// developer's config is untidy rather than destructive. Guarding it broke the
+// suite repo-wide (see config_guard.go). The write chokepoint is guarded
+// instead.
 func FindConfigFile() (string, error) {
 	// Check explicit config path first (set by --config CLI flag).
 	if ConfigPath != "" {
@@ -164,7 +165,7 @@ func FindConfigFile() (string, error) {
 	}
 
 	for _, path := range configPaths {
-		configFilePath := filepath.Join(path, "config.yaml")
+		configFilePath := filepath.Join(path, configFileName)
 		if _, err := os.Stat(configFilePath); err == nil {
 			return configFilePath, nil
 		}
