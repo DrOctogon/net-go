@@ -57,7 +57,7 @@ Performance Optimizations:
     ChevronsLeft,
     ChevronsRight,
     LineChart,
-    Bird,
+    AudioLines,
     Monitor,
     Database,
     Terminal,
@@ -249,7 +249,7 @@ Performance Optimizations:
       routeKey: 'analyticsExact',
     },
     {
-      icon: Bird,
+      icon: AudioLines,
       label: t('analytics.species.title'),
       url: navigationUrls.analyticsSpecies,
       routeKey: 'analyticsSpecies',

@@ -46,7 +46,7 @@
     RotateCcw,
     Download,
     Upload,
-    Bird,
+    AudioLines,
     Activity,
     Radio,
     Cpu,
@@ -1345,8 +1345,8 @@
   // ============================================================
 
   function objectTypeIcon(typeName: string) {
-    const icons: Record<string, typeof Bird> = {
-      detection: Bird,
+    const icons: Record<string, typeof AudioLines> = {
+      detection: AudioLines,
       stream: Activity,
       device: Radio,
       system: Cpu,
