@@ -4558,13 +4558,10 @@
   },
   "analysis": {
     "title": "Analysis",
-    "tabs": {
-      "settings": "Settings",
-      "models": "Models"
-    },
     "detection": {
       "title": "Detection Settings",
       "description": "Configure confidence thresholds and language for species classification.",
+      "builtInModel": "Detection uses the built-in Human Voice (Silero VAD) model by the Silero team (silero-vad, MIT license).",
       "confidenceThreshold": {
         "label": "Confidence Threshold",
         "helpText": "Minimum confidence score (0.0 - 1.0) required for a detection to be recorded."
@@ -4604,73 +4601,6 @@
     "advanced": {
       "title": "Advanced",
       "description": "Processing and custom model configuration."
-    },
-    "gallery": {
-      "title": "Model Gallery",
-      "description": "Manage classifier models for bird and bat detection.",
-      "tabs": {
-        "installed": "Installed",
-        "available": "Available"
-      },
-      "loading": "Loading models...",
-      "retry": "Retry",
-      "builtIn": "Built-in",
-      "builtInDescription": "Built-in bird species classifier by the BirdNET team.",
-      "species": "{count} species",
-      "install": "Install",
-      "installing": "Installing...",
-      "remove": "Remove",
-      "removing": "Removing...",
-      "noInstalledModels": "No additional models installed. Browse the Available tab to add more classifiers.",
-      "noAvailableModels": "No additional models available for your platform.",
-      "sections": {
-        "acoustic": "Acoustic Classifiers",
-        "geomodel": "Geomodels"
-      },
-      "categories": {
-        "wildlife": "Wildlife Classifiers",
-        "bird": "Bird Classifiers",
-        "bat": "Bat Classifiers"
-      },
-      "progress": {
-        "downloading": "Downloading...",
-        "verifying": "Verifying...",
-        "loading": "Loading...",
-        "complete": "Installed successfully",
-        "failed": "Failed"
-      },
-      "license": {
-        "title": "License Agreement",
-        "model": "Model",
-        "author": "Author",
-        "license": "License",
-        "commercialUse": "Commercial Use",
-        "downloadSize": "Download Size",
-        "allowed": "Allowed",
-        "notAllowed": "Not allowed",
-        "commercialUseAllowed": "Commercial use allowed",
-        "nonCommercialOnly": "Non-commercial use only",
-        "nonCommercialWarning": "This model is licensed for non-commercial use only. By installing, you agree to comply with the license terms.",
-        "acceptAndInstall": "Accept & Install"
-      },
-      "removeDialog": {
-        "title": "Remove {name}?",
-        "confirmation": "This will remove the model files from disk. Label data is retained for existing detections."
-      },
-      "errors": {
-        "catalogLoadFailed": "Failed to load model catalog",
-        "installFailed": "Failed to start model installation",
-        "removeFailed": "Failed to remove model"
-      },
-      "regionLabel": "Region",
-      "speciesLabel": "Species",
-      "reinstall": "Reinstall",
-      "reinstalling": "Reinstalling...",
-      "reinstallComplete": "Files verified successfully",
-      "geomodelBadge": "Includes VoiceWatch v3.0 geomodel",
-      "onnxRuntimeRequired": "Requires ONNX Runtime which is not available on this system.",
-      "onnxRuntimeMissing": "ONNX Runtime is not available. This model cannot run.",
-      "unavailable": "Unavailable"
     },
     "bird": {
       "title": "Bird Detection",

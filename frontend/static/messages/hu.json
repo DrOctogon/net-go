@@ -4558,13 +4558,10 @@
   },
   "analysis": {
     "title": "Elemzés",
-    "tabs": {
-      "settings": "Beállítások",
-      "models": "Modellek"
-    },
     "detection": {
       "title": "Detektálási beállítások",
       "description": "Megbízhatósági küszöbértékek és nyelv beállítása a fajok osztályozásához.",
+      "builtInModel": "Az észlelés a beépített Human Voice (Silero VAD) modellt használja a Silero csapatától (silero-vad, MIT licenc).",
       "confidenceThreshold": {
         "label": "Megbízhatósági küszöb",
         "helpText": "A detektálás rögzítéséhez szükséges minimális megbízhatósági pontszám (0.0 - 1.0)."
@@ -4604,73 +4601,6 @@
     "advanced": {
       "title": "Haladó",
       "description": "Feldolgozási és egyéni modell beállítások."
-    },
-    "gallery": {
-      "title": "Modellgaléria",
-      "description": "Osztályozó modellek kezelése madár- és denevérdetektáláshoz.",
-      "tabs": {
-        "installed": "Telepített",
-        "available": "Elérhető"
-      },
-      "loading": "Modellek betöltése...",
-      "retry": "Újra",
-      "builtIn": "Beépített",
-      "builtInDescription": "A VoiceWatch csapat beépített madárfaj-osztályozója.",
-      "species": "{count} faj",
-      "install": "Telepítés",
-      "installing": "Telepítés...",
-      "remove": "Eltávolítás",
-      "removing": "Eltávolítás...",
-      "noInstalledModels": "Nincs további telepített modell. Az Elérhető fülön böngészhet további osztályozók között.",
-      "noAvailableModels": "Nincs további elérhető modell az Ön platformjához.",
-      "sections": {
-        "acoustic": "Akusztikus osztályozók",
-        "geomodel": "Geomodellek"
-      },
-      "categories": {
-        "wildlife": "Vadon élő állatok osztályozók",
-        "bird": "Madár osztályozók",
-        "bat": "Denevér osztályozók"
-      },
-      "progress": {
-        "downloading": "Letöltés...",
-        "verifying": "Ellenőrzés...",
-        "loading": "Betöltés...",
-        "complete": "Sikeresen telepítve",
-        "failed": "Sikertelen"
-      },
-      "license": {
-        "title": "Licencszerződés",
-        "model": "Modell",
-        "author": "Szerző",
-        "license": "Licenc",
-        "commercialUse": "Kereskedelmi felhasználás",
-        "downloadSize": "Letöltési méret",
-        "allowed": "Engedélyezett",
-        "notAllowed": "Nem engedélyezett",
-        "commercialUseAllowed": "Kereskedelmi felhasználás engedélyezett",
-        "nonCommercialOnly": "Csak nem kereskedelmi célú felhasználás",
-        "nonCommercialWarning": "Ez a modell csak nem kereskedelmi felhasználásra licencelt. A telepítéssel elfogadja a licencfeltételeket.",
-        "acceptAndInstall": "Elfogadás és telepítés"
-      },
-      "removeDialog": {
-        "title": "{name} eltávolítása?",
-        "confirmation": "Ez eltávolítja a modellfájlokat a lemezről. A meglévő detektálások címkeadatai megmaradnak."
-      },
-      "errors": {
-        "catalogLoadFailed": "Nem sikerült betölteni a modellkatalógust",
-        "installFailed": "Nem sikerült elindítani a modell telepítését",
-        "removeFailed": "Nem sikerült eltávolítani a modellt"
-      },
-      "regionLabel": "Régió",
-      "speciesLabel": "Fajok",
-      "reinstall": "Újratelepítés",
-      "reinstalling": "Újratelepítés...",
-      "reinstallComplete": "Fájlok sikeresen ellenőrizve",
-      "geomodelBadge": "Tartalmazza a VoiceWatch v3.0 geomodellt",
-      "onnxRuntimeRequired": "ONNX Runtime szükséges, amely nem elérhető ezen a rendszeren.",
-      "onnxRuntimeMissing": "Az ONNX Runtime nem elérhető. Ez a modell nem futtatható.",
-      "unavailable": "Nem elérhető"
     },
     "bird": {
       "title": "Madárészlelés",
