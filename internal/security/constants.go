@@ -39,6 +39,11 @@ const (
 	DirPermissions  = 0o750 // rwxr-x---
 	FilePermissions = 0o600 // rw-------
 
+	// Names of this package's on-disk state, resolved beside the active
+	// config.yaml by configArtifactPath.
+	TokensFileName  = "tokens.json"
+	SessionsDirName = "sessions"
+
 	// Timeouts
 	TokenExchangeTimeout = 15 * time.Second
 	TokenSaveTimeout     = 10 * time.Second

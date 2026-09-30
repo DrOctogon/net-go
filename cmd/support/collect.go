@@ -19,10 +19,12 @@ func CollectCommand() *cobra.Command {
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("Collecting support data...")
 
-			// Get config directory
-			configPaths, err := conf.GetDefaultConfigPaths()
-			if err != nil || len(configPaths) == 0 {
-				configPaths = []string{"."}
+			// Resolve the directory of the *active* config.yaml so `--config` is
+			// honoured and the dump describes the installation actually in use.
+			// No legacy fallback: a support dump must describe the live install.
+			configDir, err := conf.ResolveConfigDir()
+			if err != nil {
+				configDir = "."
 			}
 
 			// Get current settings for system ID
@@ -36,8 +38,8 @@ func CollectCommand() *cobra.Command {
 
 			// Create collector
 			collector := support.NewCollector(
-				configPaths[0], // Config directory
-				".",            // Data directory
+				configDir, // Config directory
+				".",       // Data directory
 				systemID,
 				version,
 			)

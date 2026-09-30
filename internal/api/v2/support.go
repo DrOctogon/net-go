@@ -136,16 +136,19 @@ func (c *Controller) GenerateSupportDump(ctx echo.Context) error {
 		return c.HandleError(ctx, nil, "Settings not available", http.StatusInternalServerError)
 	}
 
-	// Get config directory path
-	configPath, err := conf.GetDefaultConfigPaths()
-	if err != nil || len(configPath) == 0 {
-		configPath = []string{"."}
+	// Resolve the directory of the *active* config.yaml so a --config instance
+	// dumps the configuration and logs it is actually running with, rather than
+	// whatever happens to sit in the OS default directory. No legacy fallback: a
+	// support dump must describe the live installation.
+	configDir, err := conf.ResolveConfigDir()
+	if err != nil {
+		configDir = "."
 	}
 
 	// Create collector with proper paths
 	collector := support.NewCollector(
-		configPath[0], // Use first config path
-		".",           // Data directory (current directory)
+		configDir,
+		".", // Data directory (current directory)
 		settings.SystemID,
 		settings.Version,
 	)
