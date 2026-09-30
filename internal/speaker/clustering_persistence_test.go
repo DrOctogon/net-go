@@ -381,3 +381,125 @@ func TestClusterer_SaveFailsWhenDestIsDirectory(t *testing.T) {
 	assert.Equal(t, "clusters.json", entries[0].Name())
 	assert.True(t, entries[0].IsDir())
 }
+
+// saveSentinel is written over a snapshot file so a test can prove a skipped
+// save left the bytes untouched.
+const saveSentinel = "sentinel-not-a-snapshot"
+
+func TestClusterer_SaveIfChanged_SkipsUnchanged(t *testing.T) {
+	t.Parallel()
+
+	c := NewClusterer(0)
+	c.Assign(oneHot(4, 0))
+	path := filepath.Join(t.TempDir(), "clusters.json")
+
+	wrote, err := c.SaveIfChanged(path)
+	require.NoError(t, err)
+	assert.True(t, wrote, "a clusterer with unsaved assignments must write")
+
+	// Overwrite with a sentinel: a skipped save must leave it byte-identical.
+	require.NoError(t, os.WriteFile(path, []byte(saveSentinel), 0o600))
+
+	wrote, err = c.SaveIfChanged(path)
+	require.NoError(t, err)
+	assert.False(t, wrote, "an unchanged clusterer must not write")
+	data, err := os.ReadFile(path)
+	require.NoError(t, err)
+	assert.Equal(t, saveSentinel, string(data), "skipped save must not touch the file")
+
+	// A further assignment makes it dirty again.
+	c.Assign(oneHot(4, 2))
+	wrote, err = c.SaveIfChanged(path)
+	require.NoError(t, err)
+	assert.True(t, wrote, "a new assignment must make the clusterer dirty again")
+
+	loaded, err := Load(path)
+	require.NoError(t, err)
+	assert.Equal(t, 2, loaded.NumClusters())
+}
+
+func TestClusterer_SaveIfChanged_UnconditionalSaveMarksClean(t *testing.T) {
+	t.Parallel()
+
+	c := NewClusterer(0)
+	c.Assign(oneHot(4, 0))
+	path := filepath.Join(t.TempDir(), "clusters.json")
+
+	// Save (the shutdown/operator path) must also clear the dirty flag, so a
+	// following autosave tick does not rewrite the same bytes.
+	require.NoError(t, c.Save(path))
+
+	wrote, err := c.SaveIfChanged(path)
+	require.NoError(t, err)
+	assert.False(t, wrote, "Save must mark the clusterer clean")
+}
+
+func TestClusterer_SaveIfChanged_FreshClustererIsClean(t *testing.T) {
+	t.Parallel()
+
+	path := filepath.Join(t.TempDir(), "clusters.json")
+
+	// Nothing learned yet → nothing to write. Also covers a clusterer restored
+	// from a snapshot, whose on-disk state already matches memory.
+	wrote, err := NewClusterer(0).SaveIfChanged(path)
+	require.NoError(t, err)
+	assert.False(t, wrote, "a clusterer with no assignments must not write")
+	assert.NoFileExists(t, path)
+}
+
+func TestClusterer_SaveIfChanged_MergeAndRemoveMarkDirty(t *testing.T) {
+	t.Parallel()
+
+	path := filepath.Join(t.TempDir(), "clusters.json")
+
+	c := NewClusterer(0)
+	require.Equal(t, opsID1, c.Assign(oneHot(8, 0)))
+	require.Equal(t, opsID2, c.Assign(oneHot(8, 3)))
+	require.Equal(t, opsID3, c.Assign(oneHot(8, 6)))
+	require.NoError(t, c.Save(path))
+
+	require.NoError(t, c.Merge(opsID1, opsID2))
+	wrote, err := c.SaveIfChanged(path)
+	require.NoError(t, err)
+	assert.True(t, wrote, "Merge must mark the clusterer dirty")
+
+	require.NoError(t, c.Remove(opsID3))
+	wrote, err = c.SaveIfChanged(path)
+	require.NoError(t, err)
+	assert.True(t, wrote, "Remove must mark the clusterer dirty")
+
+	// Rejected Merge/Remove calls change nothing and must not mark it dirty.
+	require.Error(t, c.Merge(opsID1, opsIDAbsent))
+	require.Error(t, c.Remove(opsIDAbsent))
+	wrote, err = c.SaveIfChanged(path)
+	require.NoError(t, err)
+	assert.False(t, wrote, "rejected operations must leave the clusterer clean")
+}
+
+func TestClusterer_SaveIfChanged_StaysDirtyAfterFailure(t *testing.T) {
+	t.Parallel()
+
+	dir := t.TempDir()
+	path := filepath.Join(dir, "clusters.json")
+	// A directory in the way makes the final rename fail (see
+	// TestClusterer_SaveFailsWhenDestIsDirectory).
+	require.NoError(t, os.Mkdir(path, 0o755))
+
+	c := NewClusterer(0)
+	c.Assign(oneHot(4, 0))
+
+	wrote, err := c.SaveIfChanged(path)
+	require.Error(t, err)
+	assert.False(t, wrote)
+
+	// The data is still in memory and still dirty, so the next attempt retries
+	// rather than silently dropping everything learned since the last save.
+	require.NoError(t, os.Remove(path))
+	wrote, err = c.SaveIfChanged(path)
+	require.NoError(t, err)
+	assert.True(t, wrote, "a failed save must leave the clusterer dirty for the next attempt")
+
+	loaded, err := Load(path)
+	require.NoError(t, err)
+	assert.Equal(t, 1, loaded.NumClusters())
+}

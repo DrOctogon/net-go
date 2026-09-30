@@ -36,6 +36,13 @@ type ClusterSnapshot struct {
 // value shares no memory with the clusterer, so it is safe to serialise or
 // retain while clustering continues.
 func (c *Clusterer) Snapshot() SpeakerClusterSnapshot {
+	snap, _ := c.snapshotWithVersion()
+	return snap
+}
+
+// snapshotWithVersion is Snapshot plus the mutation counter the returned state
+// reflects, so a successful write can mark exactly that version as saved.
+func (c *Clusterer) snapshotWithVersion() (snap SpeakerClusterSnapshot, version int64) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
@@ -49,7 +56,7 @@ func (c *Clusterer) Snapshot() SpeakerClusterSnapshot {
 		copy(centroid, cl.centroid)
 		out.Clusters[i] = ClusterSnapshot{ID: cl.id, Centroid: centroid, Count: cl.count, LastSeen: cl.lastSeen}
 	}
-	return out
+	return out, c.version
 }
 
 // NewClustererFromSnapshot rebuilds a Clusterer from a snapshot. Invalid or
@@ -126,12 +133,47 @@ func spkIDSuffix(id string) (int, bool) {
 	return n, true
 }
 
+// SaveIfChanged writes the snapshot to path only when the clusterer has been
+// mutated since the last successful save, and reports whether it wrote. It backs
+// the periodic autosave: on a Raspberry Pi every skipped write is an SD-card
+// erase cycle not spent rewriting bytes that are already on disk.
+//
+// A failed write leaves the clusterer dirty (and its data in memory), so the
+// next call retries rather than silently losing everything learned since the
+// last successful save.
+func (c *Clusterer) SaveIfChanged(path string) (wrote bool, err error) {
+	c.mu.Lock()
+	clean := c.version == c.savedVersion
+	c.mu.Unlock()
+	if clean {
+		return false, nil
+	}
+	if err := c.Save(path); err != nil {
+		return false, err
+	}
+	return true, nil
+}
+
+// markSaved records that state up to version is on disk. A later version
+// already recorded by a concurrent save is never rolled back, so an
+// out-of-order completion cannot mask a pending mutation.
+func (c *Clusterer) markSaved(version int64) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	if version > c.savedVersion {
+		c.savedVersion = version
+	}
+}
+
 // Save atomically writes the clusterer's snapshot to path as JSON. It writes to a
 // temporary file in the same directory and renames it over path, so a crash mid-
 // write never leaves a partially written cluster file. The file is created with
 // 0600 permissions and no temp file is left behind on success or failure.
+//
+// It writes unconditionally (the shutdown and operator-correction paths); use
+// SaveIfChanged for a periodic save that should skip an unchanged snapshot.
 func (c *Clusterer) Save(path string) error {
-	snap := c.Snapshot()
+	snap, version := c.snapshotWithVersion()
 	data, err := json.Marshal(snap)
 	if err != nil {
 		return errors.New(err).
@@ -185,6 +227,7 @@ func (c *Clusterer) Save(path string) error {
 			Context("operation", "rename_speaker_clusters").
 			Build()
 	}
+	c.markSaved(version)
 	return nil
 }
 
