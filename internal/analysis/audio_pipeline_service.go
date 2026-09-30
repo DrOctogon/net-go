@@ -1631,6 +1631,11 @@ func clipCleanupMonitor(quitChan chan struct{}, dataStore datastore.Interface) {
 		logger.Int("check_interval_minutes", checkInterval),
 		logger.String("operation", "clip_cleanup_init"))
 
+	// The reconciliation sweep walks the whole clip directory and pages the
+	// whole clip reference table, so it runs on its own (much slower) cadence
+	// rather than on every cleanup tick. Zero value means "run on first tick".
+	var lastReconcile time.Time
+
 	for {
 		// Re-read interval each iteration so hot-reload takes effect.
 		interval := conf.Setting().Realtime.Audio.Export.Retention.CheckInterval
@@ -1661,6 +1666,14 @@ func clipCleanupMonitor(quitChan chan struct{}, dataStore datastore.Interface) {
 				logger.String("timestamp", t.Format(time.RFC3339)),
 				logger.String("policy", currentPolicy),
 				logger.String("operation", "clip_cleanup_task"))
+
+			// Reconcile drift between detection rows and clip files. Runs
+			// independently of the retention policy (drift accumulates even
+			// with policy "none") but on its own slower cadence.
+			if time.Since(lastReconcile) >= diskmanager.ReconcileInterval {
+				lastReconcile = time.Now()
+				reconcileClips(quitChan, dataStore)
+			}
 
 			if currentPolicy == "age" {
 				result := diskmanager.AgeBasedCleanup(quitChan, dataStore)
@@ -1706,6 +1719,57 @@ func clipCleanupMonitor(quitChan chan struct{}, dataStore datastore.Interface) {
 				}
 			}
 		}
+	}
+}
+
+// reconcileClips runs the dangling-clip reconciliation sweep, translating the
+// monitor's quit channel into the context cancellation the sweep honours.
+//
+// The sweep needs a paged clip-reference query on top of the retention
+// datastore surface. Implementations that do not provide it (test doubles,
+// reduced datastores) simply skip reconciliation rather than blocking cleanup.
+func reconcileClips(quitChan chan struct{}, dataStore datastore.Interface) {
+	log := GetLogger()
+
+	store, ok := dataStore.(diskmanager.ReconcileStore)
+	if !ok {
+		log.Debug("skipping clip reconciliation: datastore does not support clip reference listing",
+			logger.String("operation", "clip_reconcile_skip"))
+		return
+	}
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	go func() {
+		select {
+		case <-quitChan:
+			cancel()
+		case <-ctx.Done():
+		}
+	}()
+
+	result := diskmanager.ReconcileClips(ctx, store)
+	switch {
+	case result.Err != nil:
+		log.Error("clip reconciliation failed",
+			logger.Error(result.Err),
+			logger.String("operation", "clip_reconcile"))
+	case result.GuardTripped != "":
+		log.Warn("clip reconciliation refused to act",
+			logger.String("guard", result.GuardTripped),
+			logger.Int("dangling_refs", result.DanglingRefs),
+			logger.Int("orphan_files", result.OrphanFiles),
+			logger.String("operation", "clip_reconcile"))
+	default:
+		log.Info("clip reconciliation completed",
+			logger.Int("clip_refs_checked", result.ClipRefsChecked),
+			logger.Int("dangling_refs", result.DanglingRefs),
+			logger.Int64("refs_cleared", result.RefsCleared),
+			logger.Int("unreadable_refs", result.UnreadableRefs),
+			logger.Int("orphan_files", result.OrphanFiles),
+			logger.Int64("orphan_bytes", result.OrphanBytes),
+			logger.Int("orphans_deleted", result.OrphansDeleted),
+			logger.String("operation", "clip_reconcile"))
 	}
 }
 
