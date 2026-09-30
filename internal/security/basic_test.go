@@ -10,7 +10,6 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
-	"os"
 	"strings"
 	"testing"
 	"time"
@@ -132,8 +131,9 @@ func TestHandleBasicAuthTokenSuccess(t *testing.T) {
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
 
-	// Initialize Gothic session
-	gothic.Store = sessions.NewFilesystemStore(os.TempDir(), []byte("secret-key"))
+	// Initialize Gothic session. t.TempDir, not os.TempDir: the store writes a
+	// session_* file per save, and os.TempDir leaves them behind forever.
+	gothic.Store = sessions.NewFilesystemStore(t.TempDir(), []byte("secret-key"))
 
 	s := &OAuth2Server{
 		settings: &conf.Settings{
@@ -230,7 +230,7 @@ func TestHandleBasicAuthTokenHotReloadAfterEnable(t *testing.T) {
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
 
-	gothic.Store = sessions.NewFilesystemStore(os.TempDir(), []byte("secret-key"))
+	gothic.Store = sessions.NewFilesystemStore(t.TempDir(), []byte("secret-key"))
 
 	// Startup snapshot: basic auth not configured (no client credentials).
 	s := &OAuth2Server{
@@ -277,7 +277,7 @@ func TestHandleBasicAuthTokenHotReloadAfterEnable(t *testing.T) {
 // TestHandleBasicAuthCallback tests the basic authorization callback handler
 func TestHandleBasicAuthCallback(t *testing.T) {
 	// Initialize Gothic session store for tests
-	gothic.Store = sessions.NewFilesystemStore(os.TempDir(), []byte("test-secret-key"))
+	gothic.Store = sessions.NewFilesystemStore(t.TempDir(), []byte("test-secret-key"))
 
 	tests := []struct {
 		name           string
