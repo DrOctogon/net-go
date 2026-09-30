@@ -63,6 +63,12 @@ type Clusterer struct {
 	// seq is a monotonic tick, incremented per assignment, used to track each
 	// cluster's recency for LRU eviction at MaxClusters.
 	seq int64
+	// version counts mutations (assignments, merges, removals). savedVersion is
+	// the version captured by the most recent successful Save, so version !=
+	// savedVersion means "there is something on disk worth updating". Both are
+	// guarded by mu, like every other field. See SaveIfChanged.
+	version      int64
+	savedVersion int64
 }
 
 type cluster struct {
@@ -117,6 +123,7 @@ func (c *Clusterer) AssignWithNovelty(embedding []float32) (id string, isNew boo
 	}
 
 	c.seq++
+	c.version++
 
 	if bestIdx >= 0 {
 		c.clusters[bestIdx].update(embedding)
@@ -206,6 +213,7 @@ func (c *Clusterer) Merge(targetID, sourceID string) error {
 	target.lastSeen = max(target.lastSeen, source.lastSeen)
 
 	c.clusters = slices.Delete(c.clusters, si, si+1)
+	c.version++
 	return nil
 }
 
@@ -220,6 +228,7 @@ func (c *Clusterer) Remove(id string) error {
 		return fmt.Errorf("%w: %s", ErrUnknownCluster, id)
 	}
 	c.clusters = slices.Delete(c.clusters, i, i+1)
+	c.version++
 	return nil
 }
 

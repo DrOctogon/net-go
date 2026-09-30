@@ -577,7 +577,8 @@ func New(settings *conf.Settings, ds datastore.Interface, bn *classifier.Orchest
 	// Voice-print clusterer assigns a stable SpeakerID from embeddings produced
 	// by the analyzer. Created only when voice-print analysis is enabled; it is
 	// inert (never called) otherwise since no embeddings are produced. Clusters
-	// live for the process lifetime (no cross-restart persistence yet).
+	// survive restarts: restored here, autosaved periodically once Start() runs,
+	// and saved again on shutdown (see speaker_cluster_persistence.go).
 	if sa.Enabled && sa.VoicePrint.Enabled {
 		p.speakerClusterer = speaker.NewClusterer(0) // 0 => DefaultClusterThreshold
 		p.restoreSpeakerClusters()                   // resume speaker IDs across restarts
@@ -602,6 +603,7 @@ func (p *Processor) Start() {
 
 		p.flusherCtx, p.flusherCancel = context.WithCancel(context.Background())
 		p.pendingDetectionsFlusher()
+		p.startSpeakerClusterAutosave(p.flusherCtx)
 
 		if p.pipelineStats != nil {
 			p.pipelineStats.Start()
