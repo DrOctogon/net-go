@@ -97,10 +97,15 @@ func (r *alertRuleRepository) UpdateRule(ctx context.Context, rule *entities.Ale
 }
 
 // DeleteRule deletes an alert rule and its conditions/actions via cascade.
+// Built-in rules are refused with ErrAlertRuleBuiltIn: they are the product's
+// safety net, so ToggleRule is the supported way to silence one and
+// DeleteBuiltInRules the deliberate reset-to-defaults purge. The guard lives in
+// the DELETE predicate rather than a preceding read so a concurrent flip of
+// built_in cannot slip a built-in rule through.
 func (r *alertRuleRepository) DeleteRule(ctx context.Context, id uint) error {
 	var rowsAffected int64
 	err := datastore.RetryOnLock(ctx, "v2_delete_alert_rule", func() error {
-		result := r.db.WithContext(ctx).Delete(&entities.AlertRule{}, id)
+		result := r.db.WithContext(ctx).Where("id = ? AND built_in = ?", id, false).Delete(&entities.AlertRule{})
 		if result.Error != nil {
 			return fmt.Errorf("failed to delete alert rule %d: %w", id, result.Error)
 		}
@@ -111,6 +116,14 @@ func (r *alertRuleRepository) DeleteRule(ctx context.Context, id uint) error {
 		return err
 	}
 	if rowsAffected == 0 {
+		// Nothing matched: either the rule is gone or it is built-in.
+		var count int64
+		if err := r.db.WithContext(ctx).Model(&entities.AlertRule{}).Where("id = ?", id).Count(&count).Error; err != nil {
+			return fmt.Errorf("failed to check alert rule %d after refused delete: %w", id, err)
+		}
+		if count > 0 {
+			return ErrAlertRuleBuiltIn
+		}
 		return ErrAlertRuleNotFound
 	}
 	return nil
