@@ -6,7 +6,6 @@
 package v2only
 
 import (
-	"context"
 	"fmt"
 	"testing"
 
@@ -41,7 +40,7 @@ func clipNameTestNote(clipName string) *datastore.Note {
 func TestListClipNames(t *testing.T) {
 	ds, cleanup := setupTestDatastore(t)
 	defer cleanup()
-	ctx := context.Background()
+	ctx := t.Context()
 
 	// Detections with clips, interleaved with ones that have none. The
 	// clipless ones must never appear: a detection with no clip is not drift.
@@ -86,7 +85,7 @@ func TestListClipNamesEmptyTable(t *testing.T) {
 	ds, cleanup := setupTestDatastore(t)
 	defer cleanup()
 
-	got, err := ds.ListClipNames(context.Background(), 100, 0)
+	got, err := ds.ListClipNames(t.Context(), 100, 0)
 	require.NoError(t, err)
 	assert.Empty(t, got)
 }

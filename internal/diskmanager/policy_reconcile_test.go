@@ -95,7 +95,7 @@ func TestReconcileClipsDanglingReference(t *testing.T) {
 	db := newReconcileStore(t, nil, presentName, danglingName)
 	db.On("ClearNoteClipPathsByNames", []string{danglingName}).Return(int64(1), nil).Once()
 
-	result := ReconcileClips(context.Background(), db)
+	result := ReconcileClips(t.Context(), db)
 
 	require.NoError(t, result.Err)
 	assert.Empty(t, result.GuardTripped, "No guard should trip for one missing clip out of two")
@@ -134,7 +134,7 @@ func TestReconcileClipsStatErrorIsSkipped(t *testing.T) {
 	const blockedName = "blocked/homo_sapiens_60p_20250101T101010Z.wav"
 	db := newReconcileStore(t, nil, append(names, blockedName)...)
 
-	result := ReconcileClips(context.Background(), db)
+	result := ReconcileClips(t.Context(), db)
 
 	require.NoError(t, result.Err)
 	assert.Empty(t, result.GuardTripped, "No guard may trip: this run has one unreadable reference and nothing else")
@@ -155,7 +155,7 @@ func TestReconcileClipsOrphanNotDeletedByDefault(t *testing.T) {
 
 	db := newReconcileStore(t, nil, relName(t, baseDir, referenced))
 
-	result := ReconcileClips(context.Background(), db)
+	result := ReconcileClips(t.Context(), db)
 
 	require.NoError(t, result.Err)
 	assert.Empty(t, result.GuardTripped)
@@ -177,7 +177,7 @@ func TestReconcileClipsOrphanDeletedUnderOptIn(t *testing.T) {
 
 	db := newReconcileStore(t, nil, relName(t, baseDir, referenced))
 
-	result := ReconcileClips(context.Background(), db)
+	result := ReconcileClips(t.Context(), db)
 
 	require.NoError(t, result.Err)
 	assert.Equal(t, 1, result.OrphanFiles)
@@ -200,7 +200,7 @@ func TestReconcileClipsLockedOrphanIsNeverDeleted(t *testing.T) {
 	// the worst case: the lock is the only thing protecting it.
 	db := newReconcileStore(t, []string{filepath.Base(locked)})
 
-	result := ReconcileClips(context.Background(), db)
+	result := ReconcileClips(t.Context(), db)
 
 	require.NoError(t, result.Err)
 	assert.Zero(t, result.OrphanFiles, "A locked clip must not be reported as an orphan")
@@ -217,14 +217,15 @@ func TestReconcileClipsMassMissingGuard(t *testing.T) {
 
 	// One clip present, four references missing => 80% missing.
 	present := createRetentionTestFile(t, baseDir, reconcileTestSpecies, 80, time.Now(), ".wav", 16)
-	names := []string{relName(t, baseDir, present)}
+	names := make([]string, 0, 5)
+	names = append(names, relName(t, baseDir, present))
 	for i := range 4 {
 		names = append(names, fmt.Sprintf("homo_sapiens_6%dp_2025010%dT101010Z.wav", i, i+1))
 	}
 
 	db := newReconcileStore(t, nil, names...)
 
-	result := ReconcileClips(context.Background(), db)
+	result := ReconcileClips(t.Context(), db)
 
 	require.NoError(t, result.Err)
 	assert.Equal(t, guardMassMissing, result.GuardTripped, "The sanity guard must refuse to act")
@@ -245,7 +246,7 @@ func TestReconcileClipsEmptyDirGuard(t *testing.T) {
 		"homo_sapiens_80p_20250101T101010Z.wav",
 		"homo_sapiens_81p_20250101T101011Z.wav")
 
-	result := ReconcileClips(context.Background(), db)
+	result := ReconcileClips(t.Context(), db)
 
 	require.NoError(t, result.Err)
 	assert.Equal(t, guardEmptyClipDir, result.GuardTripped,
@@ -265,13 +266,13 @@ func TestReconcileClipsContextCancellation(t *testing.T) {
 
 	db := newReconcileStore(t, nil, "homo_sapiens_70p_20250101T101010Z.wav")
 
-	ctx, cancel := context.WithCancel(context.Background())
+	ctx, cancel := context.WithCancel(t.Context())
 	cancel()
 
 	result := ReconcileClips(ctx, db)
 
 	require.Error(t, result.Err, "A cancelled sweep must surface the context error")
-	assert.ErrorIs(t, result.Err, context.Canceled)
+	require.ErrorIs(t, result.Err, context.Canceled)
 	assert.Zero(t, result.RefsCleared)
 	db.AssertNotCalled(t, "ClearNoteClipPathsByNames", mock.Anything)
 }
@@ -294,7 +295,7 @@ func TestReconcileClipsPagesThroughReferences(t *testing.T) {
 
 	db := newReconcileStore(t, nil, names...)
 
-	result := ReconcileClips(context.Background(), db)
+	result := ReconcileClips(t.Context(), db)
 
 	require.NoError(t, result.Err)
 	assert.Equal(t, total, result.ClipRefsChecked, "Every reference must be visited across pages")
@@ -346,7 +347,7 @@ func TestReconcileClipsUnconfiguredPath(t *testing.T) {
 
 	db := newReconcileStore(t, nil)
 
-	result := ReconcileClips(context.Background(), db)
+	result := ReconcileClips(t.Context(), db)
 
 	require.NoError(t, result.Err)
 	assert.Zero(t, result.ClipRefsChecked)

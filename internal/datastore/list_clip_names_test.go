@@ -3,7 +3,6 @@
 package datastore
 
 import (
-	"context"
 	"fmt"
 	"testing"
 
@@ -19,11 +18,20 @@ import (
 // so a rename here is a build failure, not a quietly disabled sweep.
 var _ diskmanager.ReconcileStore = (*DataStore)(nil)
 
+// Fixed identity fields for the clip-reference listing fixtures. Hoisted so
+// this file adds no new repeated string literals to the package.
+const (
+	clipNameTestDate    = "2026-07-06"
+	clipNameTestTime    = "10:00:00"
+	clipNameTestSciName = "Homo sapiens"
+	clipNameTestComName = "Human Voice"
+)
+
 // clipNameTestNote returns a minimal note carrying the given clip reference.
 func clipNameTestNote(id uint, clipName string) *Note {
 	return &Note{
-		ID: id, Date: "2026-07-06", Time: "10:00:00",
-		ScientificName: "Homo sapiens", CommonName: "Human Voice", Confidence: 0.9,
+		ID: id, Date: clipNameTestDate, Time: clipNameTestTime,
+		ScientificName: clipNameTestSciName, CommonName: clipNameTestComName, Confidence: 0.9,
 		ClipName: clipName,
 	}
 }
@@ -34,7 +42,7 @@ func clipNameTestNote(id uint, clipName string) *Note {
 func TestListClipNames(t *testing.T) {
 	t.Parallel()
 	ds := setupScrubTestDB(t)
-	ctx := context.Background()
+	ctx := t.Context()
 
 	// Five notes with clips, interleaved with two that have none. The empty
 	// ones must never appear: a detection with no clip is not drift.
@@ -82,7 +90,7 @@ func TestListClipNamesEmptyTable(t *testing.T) {
 	t.Parallel()
 	ds := setupScrubTestDB(t)
 
-	got, err := ds.ListClipNames(context.Background(), 100, 0)
+	got, err := ds.ListClipNames(t.Context(), 100, 0)
 	require.NoError(t, err)
 	assert.Empty(t, got)
 }
