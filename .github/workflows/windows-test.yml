@@ -50,8 +50,28 @@ jobs:
       - uses: actions/checkout@v6
       - uses: actions/setup-go@v6
         with:
-          go-version-file: 'go.mod'
+          # Pinned, NOT go-version-file, deliberately: this is the only job that
+          # does not follow go.mod's 1.26.1. Go 1.26.1 on windows/amd64 produced
+          # states that are not reachable by correct code on this job, twice over:
+          #
+          #   1. Under -race, "fatal error: invalid g status" / "unexpected signal
+          #      during runtime execution" with GC mark/preemption frames and
+          #      goid=0 (removed -race in #54 to stop it red-flagging PRs).
+          #   2. Without -race, a nil-pointer crash inside encoding/json's
+          #      addrMarshalerEncoder at addr=0x18, which is itab.Fun[0] for a nil
+          #      json.Marshaler. That interface is nil only if
+          #      reflect.TypeAssert[Marshaler] returned false for a *time.Time -
+          #      verified locally under 1.26.1 to be impossible (ok=true, marshals
+          #      fine). See #60.
+          #
+          # Two different impossible states on one platform point at the toolchain,
+          # not the code. 1.26.8 keeps the same minor version releases build with
+          # while picking up seven patch releases of runtime/compiler fixes. Every
+          # other job still tracks go.mod, so this pin only affects native Windows
+          # validation. Revisit when go.mod's Go version moves past this.
+          go-version: '1.26.8'
           cache: true
+      # Printed so the pin above is visible in the log without reading the workflow.
       - run: go version
 
       - name: Resolve tool versions from Taskfile
