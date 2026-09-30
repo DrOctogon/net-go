@@ -4558,13 +4558,10 @@
   },
   "analysis": {
     "title": "Analyse",
-    "tabs": {
-      "settings": "Innstillinger",
-      "models": "Modeller"
-    },
     "detection": {
       "title": "Deteksjonsinnstillinger",
       "description": "Konfigurer sikkerhetsterskler og språk for artsklassifisering.",
+      "builtInModel": "Deteksjon bruker den innebygde Human Voice-modellen (Silero VAD) fra Silero-teamet (silero-vad, MIT-lisens).",
       "confidenceThreshold": {
         "label": "Sikkerhetsterskel",
         "helpText": "Minimum sikkerhetscore (0,0–1,0) kreves for at en registrering skal lagres."
@@ -4604,73 +4601,6 @@
     "advanced": {
       "title": "Avansert",
       "description": "Behandling og egendefinert modellkonfigurasjon."
-    },
-    "gallery": {
-      "title": "Modellgalleri",
-      "description": "Administrer klassifikatormodeller for fugle- og flaggermusdeteksjon.",
-      "tabs": {
-        "installed": "Installert",
-        "available": "Tilgjengelig"
-      },
-      "loading": "Laster modeller...",
-      "retry": "Prøv igjen",
-      "builtIn": "Innebygd",
-      "builtInDescription": "Innebygd fuglearts-klassifikator fra VoiceWatch-teamet.",
-      "species": "{count} arter",
-      "install": "Installer",
-      "installing": "Installerer...",
-      "remove": "Fjern",
-      "removing": "Fjerner...",
-      "noInstalledModels": "Ingen ekstra modeller installert. Bla gjennom Tilgjengelig-fanen for å legge til flere klassifikatorer.",
-      "noAvailableModels": "Ingen ekstra modeller tilgjengelig for din plattform.",
-      "sections": {
-        "acoustic": "Akustiske klassifikatorer",
-        "geomodel": "Geomodeller"
-      },
-      "categories": {
-        "wildlife": "Viltklassifikatorer",
-        "bird": "Fugleklassifikatorer",
-        "bat": "Flaggermusklassifikatorer"
-      },
-      "progress": {
-        "downloading": "Laster ned...",
-        "verifying": "Verifiserer...",
-        "loading": "Laster...",
-        "complete": "Installert",
-        "failed": "Mislyktes"
-      },
-      "license": {
-        "title": "Lisensavtale",
-        "model": "Modell",
-        "author": "Forfatter",
-        "license": "Lisens",
-        "commercialUse": "Kommersiell bruk",
-        "downloadSize": "Nedlastingsstørrelse",
-        "allowed": "Tillatt",
-        "notAllowed": "Ikke tillatt",
-        "commercialUseAllowed": "Kommersiell bruk tillatt",
-        "nonCommercialOnly": "Kun ikke-kommersiell bruk",
-        "nonCommercialWarning": "Denne modellen er lisensiert kun for ikke-kommersiell bruk. Ved installasjon godtar du å overholde lisensvilkårene.",
-        "acceptAndInstall": "Godta og installer"
-      },
-      "removeDialog": {
-        "title": "Fjerne {name}?",
-        "confirmation": "Dette vil fjerne modellfilene fra disk. Etikettdata beholdes for eksisterende registreringer."
-      },
-      "errors": {
-        "catalogLoadFailed": "Innlasting av modellkatalog mislyktes",
-        "installFailed": "Oppstart av modellinstallasjon mislyktes",
-        "removeFailed": "Fjerning av modell mislyktes"
-      },
-      "regionLabel": "Region",
-      "speciesLabel": "Arter",
-      "reinstall": "Reinstaller",
-      "reinstalling": "Reinstallerer...",
-      "reinstallComplete": "Filer verifisert",
-      "geomodelBadge": "Inkluderer VoiceWatch v3.0 geomodell",
-      "onnxRuntimeRequired": "Krever ONNX Runtime som ikke er tilgjengelig på dette systemet.",
-      "onnxRuntimeMissing": "ONNX Runtime er ikke tilgjengelig. Denne modellen kan ikke kjøres.",
-      "unavailable": "Ikke tilgjengelig"
     },
     "bird": {
       "title": "Fugledeteksjon",

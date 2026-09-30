@@ -4558,13 +4558,10 @@
   },
   "analysis": {
     "title": "Analyse",
-    "tabs": {
-      "settings": "Einstellungen",
-      "models": "Modelle"
-    },
     "detection": {
       "title": "Erkennungseinstellungen",
       "description": "Konfidenz-Schwellenwerte für die Artenklassifizierung konfigurieren.",
+      "builtInModel": "Die Erkennung nutzt das integrierte Modell Human Voice (Silero VAD) vom Silero-Team (silero-vad, MIT-Lizenz).",
       "confidenceThreshold": {
         "label": "Konfidenz-Schwellenwert",
         "helpText": "Mindest-Konfidenzwert (0.0 - 1.0), ab dem eine Erkennung aufgezeichnet wird."
@@ -4604,73 +4601,6 @@
     "advanced": {
       "title": "Erweitert",
       "description": "Verarbeitungs- und benutzerdefinierte Modellkonfiguration."
-    },
-    "gallery": {
-      "title": "Modellgalerie",
-      "description": "Klassifikatormodelle für Vogel- und Fledermauserkennungen verwalten.",
-      "tabs": {
-        "installed": "Installiert",
-        "available": "Verfügbar"
-      },
-      "loading": "Modelle werden geladen...",
-      "retry": "Wiederholen",
-      "builtIn": "Integriert",
-      "builtInDescription": "Integrierter Vogelartenklassifikator des VoiceWatch-Teams.",
-      "species": "{count} Arten",
-      "install": "Installieren",
-      "installing": "Wird installiert...",
-      "remove": "Entfernen",
-      "removing": "Wird entfernt...",
-      "noInstalledModels": "Keine zusätzlichen Modelle installiert. Durchsuchen Sie den Tab Verfügbar, um weitere Klassifikatoren hinzuzufügen.",
-      "noAvailableModels": "Keine zusätzlichen Modelle für Ihre Plattform verfügbar.",
-      "sections": {
-        "acoustic": "Akustische Klassifikatoren",
-        "geomodel": "Geomodelle"
-      },
-      "categories": {
-        "wildlife": "Wildtierklassifikatoren",
-        "bird": "Vogelklassifikatoren",
-        "bat": "Fledermausklassifikatoren"
-      },
-      "progress": {
-        "downloading": "Wird heruntergeladen...",
-        "verifying": "Wird überprüft...",
-        "loading": "Wird geladen...",
-        "complete": "Erfolgreich installiert",
-        "failed": "Fehlgeschlagen"
-      },
-      "license": {
-        "title": "Lizenzvereinbarung",
-        "model": "Modell",
-        "author": "Autor",
-        "license": "Lizenz",
-        "commercialUse": "Kommerzielle Nutzung",
-        "downloadSize": "Downloadgröße",
-        "allowed": "Erlaubt",
-        "notAllowed": "Nicht erlaubt",
-        "commercialUseAllowed": "Kommerzielle Nutzung erlaubt",
-        "nonCommercialOnly": "Nur nichtkommerzielle Nutzung",
-        "nonCommercialWarning": "Dieses Modell ist nur für nichtkommerzielle Nutzung lizenziert. Mit der Installation stimmen Sie den Lizenzbedingungen zu.",
-        "acceptAndInstall": "Akzeptieren & Installieren"
-      },
-      "removeDialog": {
-        "title": "{name} entfernen?",
-        "confirmation": "Die Modelldateien werden von der Festplatte entfernt. Labeldaten bestehender Erkennungen bleiben erhalten."
-      },
-      "errors": {
-        "catalogLoadFailed": "Modellkatalog konnte nicht geladen werden",
-        "installFailed": "Modellinstallation konnte nicht gestartet werden",
-        "removeFailed": "Modell konnte nicht entfernt werden"
-      },
-      "regionLabel": "Region",
-      "speciesLabel": "Arten",
-      "reinstall": "Neu installieren",
-      "reinstalling": "Wird neu installiert...",
-      "reinstallComplete": "Dateien erfolgreich überprüft",
-      "geomodelBadge": "Enthält VoiceWatch v3.0 Geomodell",
-      "onnxRuntimeRequired": "Erfordert ONNX Runtime, das auf diesem System nicht verfügbar ist.",
-      "onnxRuntimeMissing": "ONNX Runtime ist nicht verfügbar. Dieses Modell kann nicht ausgeführt werden.",
-      "unavailable": "Nicht verfügbar"
     },
     "bird": {
       "title": "Vogelerkennung",

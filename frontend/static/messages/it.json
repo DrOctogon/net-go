@@ -4558,13 +4558,10 @@
   },
   "analysis": {
     "title": "Analisi",
-    "tabs": {
-      "settings": "Impostazioni",
-      "models": "Modelli"
-    },
     "detection": {
       "title": "Impostazioni di rilevamento",
       "description": "Configura le soglie di confidenza e la lingua per la classificazione delle specie.",
+      "builtInModel": "Il rilevamento usa il modello integrato Human Voice (Silero VAD) del team Silero (silero-vad, licenza MIT).",
       "confidenceThreshold": {
         "label": "Confidence Threshold",
         "helpText": "Minimum confidence score (0.0 - 1.0) required for a detection to be recorded."
@@ -4604,73 +4601,6 @@
     "advanced": {
       "title": "Avanzate",
       "description": "Configurazione dell'elaborazione e dei modelli personalizzati."
-    },
-    "gallery": {
-      "title": "Galleria modelli",
-      "description": "Gestisci i modelli di classificazione per il rilevamento di uccelli e pipistrelli.",
-      "tabs": {
-        "installed": "Installati",
-        "available": "Disponibili"
-      },
-      "loading": "Caricamento modelli...",
-      "retry": "Riprova",
-      "builtIn": "Integrato",
-      "builtInDescription": "Classificatore di specie di uccelli integrato dal team VoiceWatch.",
-      "species": "{count} specie",
-      "install": "Installa",
-      "installing": "Installazione...",
-      "remove": "Rimuovi",
-      "removing": "Rimozione...",
-      "noInstalledModels": "Nessun modello aggiuntivo installato. Sfoglia la scheda Disponibili per aggiungerne altri.",
-      "noAvailableModels": "Nessun modello aggiuntivo disponibile per la tua piattaforma.",
-      "sections": {
-        "acoustic": "Classificatori acustici",
-        "geomodel": "Geomodelli"
-      },
-      "categories": {
-        "wildlife": "Classificatori di fauna selvatica",
-        "bird": "Classificatori di uccelli",
-        "bat": "Classificatori di pipistrelli"
-      },
-      "progress": {
-        "downloading": "Download in corso...",
-        "verifying": "Verifica in corso...",
-        "loading": "Caricamento...",
-        "complete": "Installazione completata",
-        "failed": "Non riuscito"
-      },
-      "license": {
-        "title": "Contratto di licenza",
-        "model": "Modello",
-        "author": "Autore",
-        "license": "Licenza",
-        "commercialUse": "Uso commerciale",
-        "downloadSize": "Dimensione download",
-        "allowed": "Consentito",
-        "notAllowed": "Non consentito",
-        "commercialUseAllowed": "Uso commerciale consentito",
-        "nonCommercialOnly": "Solo uso non commerciale",
-        "nonCommercialWarning": "Questo modello è concesso in licenza solo per uso non commerciale. Installandolo, accetti di rispettare i termini della licenza.",
-        "acceptAndInstall": "Accetta e installa"
-      },
-      "removeDialog": {
-        "title": "Rimuovere {name}?",
-        "confirmation": "I file del modello verranno rimossi dal disco. I dati delle etichette vengono conservati per i rilevamenti esistenti."
-      },
-      "errors": {
-        "catalogLoadFailed": "Impossibile caricare il catalogo dei modelli",
-        "installFailed": "Impossibile avviare l'installazione del modello",
-        "removeFailed": "Impossibile rimuovere il modello"
-      },
-      "regionLabel": "Regione",
-      "speciesLabel": "Specie",
-      "reinstall": "Reinstalla",
-      "reinstalling": "Reinstallazione...",
-      "reinstallComplete": "File verificati con successo",
-      "geomodelBadge": "Include il geomodel VoiceWatch v3.0",
-      "onnxRuntimeRequired": "Richiede ONNX Runtime che non è disponibile su questo sistema.",
-      "onnxRuntimeMissing": "ONNX Runtime non è disponibile. Questo modello non può essere eseguito.",
-      "unavailable": "Non disponibile"
     },
     "bird": {
       "title": "Rilevamento uccelli",

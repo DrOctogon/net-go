@@ -4558,13 +4558,10 @@
   },
   "analysis": {
     "title": "Analiza",
-    "tabs": {
-      "settings": "Ustawienia",
-      "models": "Modele"
-    },
     "detection": {
       "title": "Ustawienia detekcji",
       "description": "Skonfiguruj progi pewności dla klasyfikacji gatunków.",
+      "builtInModel": "Wykrywanie korzysta z wbudowanego modelu Human Voice (Silero VAD) zespołu Silero (silero-vad, licencja MIT).",
       "confidenceThreshold": {
         "label": "Próg pewności",
         "helpText": "Minimalny wynik pewności (0.0 - 1.0) wymagany do zarejestrowania detekcji."
@@ -4604,73 +4601,6 @@
     "advanced": {
       "title": "Zaawansowane",
       "description": "Konfiguracja przetwarzania i modeli niestandardowych."
-    },
-    "gallery": {
-      "title": "Galeria modeli",
-      "description": "Zarządzaj modelami klasyfikatorów do detekcji ptaków i nietoperzy.",
-      "tabs": {
-        "installed": "Zainstalowane",
-        "available": "Dostępne"
-      },
-      "loading": "Ładowanie modeli...",
-      "retry": "Ponów",
-      "builtIn": "Wbudowany",
-      "builtInDescription": "Wbudowany klasyfikator gatunków ptaków zespołu VoiceWatch.",
-      "species": "{count} gatunków",
-      "install": "Zainstaluj",
-      "installing": "Instalowanie...",
-      "remove": "Usuń",
-      "removing": "Usuwanie...",
-      "noInstalledModels": "Brak zainstalowanych dodatkowych modeli. Przejdź do karty Dostępne, aby dodać więcej klasyfikatorów.",
-      "noAvailableModels": "Brak dodatkowych modeli dostępnych dla Twojej platformy.",
-      "sections": {
-        "acoustic": "Klasyfikatory akustyczne",
-        "geomodel": "Geomodele"
-      },
-      "categories": {
-        "wildlife": "Klasyfikatory dzikiej przyrody",
-        "bird": "Klasyfikatory ptaków",
-        "bat": "Klasyfikatory nietoperzy"
-      },
-      "progress": {
-        "downloading": "Pobieranie...",
-        "verifying": "Weryfikacja...",
-        "loading": "Ładowanie...",
-        "complete": "Zainstalowano pomyślnie",
-        "failed": "Niepowodzenie"
-      },
-      "license": {
-        "title": "Umowa licencyjna",
-        "model": "Model",
-        "author": "Autor",
-        "license": "Licencja",
-        "commercialUse": "Użycie komercyjne",
-        "downloadSize": "Rozmiar pobierania",
-        "allowed": "Dozwolone",
-        "notAllowed": "Niedozwolone",
-        "commercialUseAllowed": "Użycie komercyjne dozwolone",
-        "nonCommercialOnly": "Tylko użycie niekomercyjne",
-        "nonCommercialWarning": "Ten model jest licencjonowany wyłącznie do użytku niekomercyjnego. Instalując go, zgadzasz się na warunki licencji.",
-        "acceptAndInstall": "Akceptuj i zainstaluj"
-      },
-      "removeDialog": {
-        "title": "Usunąć {name}?",
-        "confirmation": "Pliki modelu zostaną usunięte z dysku. Dane etykiet istniejących detekcji zostaną zachowane."
-      },
-      "errors": {
-        "catalogLoadFailed": "Nie udało się załadować katalogu modeli",
-        "installFailed": "Nie udało się rozpocząć instalacji modelu",
-        "removeFailed": "Nie udało się usunąć modelu"
-      },
-      "regionLabel": "Region",
-      "speciesLabel": "Gatunki",
-      "reinstall": "Zainstaluj ponownie",
-      "reinstalling": "Ponowna instalacja...",
-      "reinstallComplete": "Pliki zweryfikowane pomyślnie",
-      "geomodelBadge": "Zawiera VoiceWatch v3.0 geomodel",
-      "onnxRuntimeRequired": "Wymaga ONNX Runtime, który nie jest dostępny w tym systemie.",
-      "onnxRuntimeMissing": "ONNX Runtime nie jest dostępny. Ten model nie może działać.",
-      "unavailable": "Niedostępne"
     },
     "bird": {
       "title": "Wykrywanie ptaków",

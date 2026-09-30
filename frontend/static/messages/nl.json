@@ -4558,13 +4558,10 @@
   },
   "analysis": {
     "title": "Analyse",
-    "tabs": {
-      "settings": "Instellingen",
-      "models": "Modellen"
-    },
     "detection": {
       "title": "Detectie-instellingen",
       "description": "Configureer betrouwbaarheidsdrempels voor soortclassificatie.",
+      "builtInModel": "Detectie gebruikt het ingebouwde Human Voice-model (Silero VAD) van het Silero-team (silero-vad, MIT-licentie).",
       "confidenceThreshold": {
         "label": "Betrouwbaarheidsdrempel",
         "helpText": "Minimale betrouwbaarheidsscore (0.0 - 1.0) vereist om een detectie vast te leggen."
@@ -4604,73 +4601,6 @@
     "advanced": {
       "title": "Geavanceerd",
       "description": "Verwerking en aangepaste modelconfiguratie."
-    },
-    "gallery": {
-      "title": "Modellengalerij",
-      "description": "Beheer classificatiemodellen voor vogel- en vleermuisdetectie.",
-      "tabs": {
-        "installed": "Geïnstalleerd",
-        "available": "Beschikbaar"
-      },
-      "loading": "Modellen laden...",
-      "retry": "Opnieuw proberen",
-      "builtIn": "Ingebouwd",
-      "builtInDescription": "Ingebouwde vogelsoortclassificator van het VoiceWatch-team.",
-      "species": "{count} soorten",
-      "install": "Installeren",
-      "installing": "Installeren...",
-      "remove": "Verwijderen",
-      "removing": "Verwijderen...",
-      "noInstalledModels": "Geen extra modellen geïnstalleerd. Blader door het tabblad Beschikbaar om meer classificatoren toe te voegen.",
-      "noAvailableModels": "Geen extra modellen beschikbaar voor uw platform.",
-      "sections": {
-        "acoustic": "Akoestische classificatoren",
-        "geomodel": "Geomodellen"
-      },
-      "categories": {
-        "wildlife": "Wildlifeclassificatoren",
-        "bird": "Vogelclassificatoren",
-        "bat": "Vleermuisclassificatoren"
-      },
-      "progress": {
-        "downloading": "Downloaden...",
-        "verifying": "Verifiëren...",
-        "loading": "Laden...",
-        "complete": "Succesvol geïnstalleerd",
-        "failed": "Mislukt"
-      },
-      "license": {
-        "title": "Licentieovereenkomst",
-        "model": "Model",
-        "author": "Auteur",
-        "license": "Licentie",
-        "commercialUse": "Commercieel gebruik",
-        "downloadSize": "Downloadgrootte",
-        "allowed": "Toegestaan",
-        "notAllowed": "Niet toegestaan",
-        "commercialUseAllowed": "Commercieel gebruik toegestaan",
-        "nonCommercialOnly": "Alleen niet-commercieel gebruik",
-        "nonCommercialWarning": "Dit model is gelicentieerd voor alleen niet-commercieel gebruik. Door te installeren gaat u akkoord met de licentievoorwaarden.",
-        "acceptAndInstall": "Accepteren en installeren"
-      },
-      "removeDialog": {
-        "title": "{name} verwijderen?",
-        "confirmation": "De modelbestanden worden van de schijf verwijderd. Labelgegevens van bestaande detecties blijven behouden."
-      },
-      "errors": {
-        "catalogLoadFailed": "Kan modelcatalogus niet laden",
-        "installFailed": "Kan modelinstallatie niet starten",
-        "removeFailed": "Kan model niet verwijderen"
-      },
-      "regionLabel": "Regio",
-      "speciesLabel": "Soorten",
-      "reinstall": "Opnieuw installeren",
-      "reinstalling": "Opnieuw installeren...",
-      "reinstallComplete": "Bestanden succesvol geverifieerd",
-      "geomodelBadge": "Bevat VoiceWatch v3.0 geomodel",
-      "onnxRuntimeRequired": "Vereist ONNX Runtime dat niet beschikbaar is op dit systeem.",
-      "onnxRuntimeMissing": "ONNX Runtime is niet beschikbaar. Dit model kan niet worden uitgevoerd.",
-      "unavailable": "Niet beschikbaar"
     },
     "bird": {
       "title": "Vogeldetectie",

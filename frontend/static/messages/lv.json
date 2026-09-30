@@ -4558,13 +4558,10 @@
   },
   "analysis": {
     "title": "Analīze",
-    "tabs": {
-      "settings": "Iestatījumi",
-      "models": "Modeļi"
-    },
     "detection": {
       "title": "Noteikšanas iestatījumi",
       "description": "Konfigurējiet ticamības sliekšņus un valodu sugu klasifikācijai.",
+      "builtInModel": "Noteikšanai tiek izmantots iebūvētais Human Voice (Silero VAD) modelis no Silero komandas (silero-vad, MIT licence).",
       "confidenceThreshold": {
         "label": "Confidence Threshold",
         "helpText": "Minimum confidence score (0.0 - 1.0) required for a detection to be recorded."
@@ -4604,73 +4601,6 @@
     "advanced": {
       "title": "Papildu",
       "description": "Apstrādes un pielāgotu modeļu konfigurācija."
-    },
-    "gallery": {
-      "title": "Modeļu galerija",
-      "description": "Pārvaldiet klasifikācijas modeļus putnu un sikspārņu noteikšanai.",
-      "tabs": {
-        "installed": "Instalētie",
-        "available": "Pieejamie"
-      },
-      "loading": "Ielādē modeļus...",
-      "retry": "Mēģināt vēlreiz",
-      "builtIn": "Iebūvēts",
-      "builtInDescription": "VoiceWatch komandas iebūvēts putnu sugu klasifikators.",
-      "species": "{count} sugas",
-      "install": "Instalēt",
-      "installing": "Instalē...",
-      "remove": "Noņemt",
-      "removing": "Noņem...",
-      "noInstalledModels": "Nav instalēti papildu modeļi. Pārlūkojiet cilni Pieejamie, lai pievienotu vairāk klasifikatoru.",
-      "noAvailableModels": "Jūsu platformai nav pieejami papildu modeļi.",
-      "sections": {
-        "acoustic": "Akustiskie klasifikatori",
-        "geomodel": "Ģeomodeļi"
-      },
-      "categories": {
-        "wildlife": "Savvaļas dzīvnieku klasifikatori",
-        "bird": "Putnu klasifikatori",
-        "bat": "Sikspārņu klasifikatori"
-      },
-      "progress": {
-        "downloading": "Lejupielādē...",
-        "verifying": "Pārbauda...",
-        "loading": "Ielādē...",
-        "complete": "Veiksmīgi instalēts",
-        "failed": "Neizdevās"
-      },
-      "license": {
-        "title": "Licences līgums",
-        "model": "Modelis",
-        "author": "Autors",
-        "license": "Licence",
-        "commercialUse": "Komerciāla izmantošana",
-        "downloadSize": "Lejupielādes izmērs",
-        "allowed": "Atļauts",
-        "notAllowed": "Nav atļauts",
-        "commercialUseAllowed": "Komerciāla izmantošana atļauta",
-        "nonCommercialOnly": "Tikai nekomerciāla izmantošana",
-        "nonCommercialWarning": "Šis modelis ir licencēts tikai nekomerciālai izmantošanai. Instalējot jūs piekrītat licences noteikumiem.",
-        "acceptAndInstall": "Pieņemt un instalēt"
-      },
-      "removeDialog": {
-        "title": "Noņemt {name}?",
-        "confirmation": "Modeļa faili tiks noņemti no diska. Esošo noteikšanu etiķešu dati tiks saglabāti."
-      },
-      "errors": {
-        "catalogLoadFailed": "Neizdevās ielādēt modeļu katalogu",
-        "installFailed": "Neizdevās sākt modeļa instalēšanu",
-        "removeFailed": "Neizdevās noņemt modeli"
-      },
-      "regionLabel": "Reģions",
-      "speciesLabel": "Sugas",
-      "reinstall": "Pārinstalēt",
-      "reinstalling": "Pārinstalē...",
-      "reinstallComplete": "Faili veiksmīgi pārbaudīti",
-      "geomodelBadge": "Ietver VoiceWatch v3.0 ģeomodelis",
-      "onnxRuntimeRequired": "Nepieciešams ONNX Runtime, kas šajā sistēmā nav pieejams.",
-      "onnxRuntimeMissing": "ONNX Runtime nav pieejams. Šo modeli nevar palaist.",
-      "unavailable": "Nav pieejams"
     },
     "bird": {
       "title": "Putnu noteikšana",

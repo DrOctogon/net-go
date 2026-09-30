@@ -4558,13 +4558,10 @@
   },
   "analysis": {
     "title": "Analýza",
-    "tabs": {
-      "settings": "Nastavenia",
-      "models": "Modely"
-    },
     "detection": {
       "title": "Nastavenia detekcie",
       "description": "Nastavte prahové hodnoty spoľahlivosti a jazyk klasifikácie druhov.",
+      "builtInModel": "Detekcia používa vstavaný model Human Voice (Silero VAD) od tímu Silero (silero-vad, licencia MIT).",
       "confidenceThreshold": {
         "label": "Confidence Threshold",
         "helpText": "Minimum confidence score (0.0 - 1.0) required for a detection to be recorded."
@@ -4604,73 +4601,6 @@
     "advanced": {
       "title": "Pokročilé",
       "description": "Konfigurácia spracovania a vlastných modelov."
-    },
-    "gallery": {
-      "title": "Galéria modelov",
-      "description": "Správa klasifikačných modelov pre detekciu vtákov a netopierov.",
-      "tabs": {
-        "installed": "Nainštalované",
-        "available": "Dostupné"
-      },
-      "loading": "Načítavajú sa modely...",
-      "retry": "Skúsiť znova",
-      "builtIn": "Vstavaný",
-      "builtInDescription": "Vstavaný klasifikátor vtáčích druhov od tímu VoiceWatch.",
-      "species": "{count} druhov",
-      "install": "Inštalovať",
-      "installing": "Inštaluje sa...",
-      "remove": "Odstrániť",
-      "removing": "Odstraňovanie...",
-      "noInstalledModels": "Žiadne ďalšie modely nie sú nainštalované. Prejdite na kartu Dostupné a pridajte ďalšie klasifikátory.",
-      "noAvailableModels": "Pre vašu platformu nie sú k dispozícii žiadne ďalšie modely.",
-      "sections": {
-        "acoustic": "Akustické klasifikátory",
-        "geomodel": "Geomodely"
-      },
-      "categories": {
-        "wildlife": "Klasifikátory voľne žijúcich živočíchov",
-        "bird": "Klasifikátory vtákov",
-        "bat": "Klasifikátory netopierov"
-      },
-      "progress": {
-        "downloading": "Sťahovanie...",
-        "verifying": "Overovanie...",
-        "loading": "Načítava sa...",
-        "complete": "Úspešne nainštalované",
-        "failed": "Zlyhanie"
-      },
-      "license": {
-        "title": "Licenčná zmluva",
-        "model": "Model",
-        "author": "Autor",
-        "license": "Licencia",
-        "commercialUse": "Komerčné využitie",
-        "downloadSize": "Veľkosť na stiahnutie",
-        "allowed": "Povolené",
-        "notAllowed": "Nepovolené",
-        "commercialUseAllowed": "Komerčné využitie povolené",
-        "nonCommercialOnly": "Len nekomerčné využitie",
-        "nonCommercialWarning": "Tento model je licencovaný len na nekomerčné použitie. Inštaláciou súhlasíte s licenčnými podmienkami.",
-        "acceptAndInstall": "Prijať a inštalovať"
-      },
-      "removeDialog": {
-        "title": "Odstrániť {name}?",
-        "confirmation": "Tým sa odstránia súbory modelu z disku. Údaje štítkov pre existujúce detekcie sa zachovajú."
-      },
-      "errors": {
-        "catalogLoadFailed": "Nepodarilo sa načítať katalóg modelov",
-        "installFailed": "Nepodarilo sa spustiť inštaláciu modelu",
-        "removeFailed": "Nepodarilo sa odstrániť model"
-      },
-      "regionLabel": "Región",
-      "speciesLabel": "Druhy",
-      "reinstall": "Preinštalovať",
-      "reinstalling": "Preinštalovanie...",
-      "reinstallComplete": "Súbory úspešne overené",
-      "geomodelBadge": "Obsahuje VoiceWatch v3.0 geomodel",
-      "onnxRuntimeRequired": "Vyžaduje ONNX Runtime, ktorý nie je v tomto systéme k dispozícii.",
-      "onnxRuntimeMissing": "ONNX Runtime nie je k dispozícii. Tento model nie je možné spustiť.",
-      "unavailable": "Nedostupné"
     },
     "bird": {
       "title": "Detekcia vtákov",

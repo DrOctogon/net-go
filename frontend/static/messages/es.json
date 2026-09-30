@@ -4558,13 +4558,10 @@
   },
   "analysis": {
     "title": "Análisis",
-    "tabs": {
-      "settings": "Ajustes",
-      "models": "Modelos"
-    },
     "detection": {
       "title": "Configuración de detección",
       "description": "Configurar umbrales de confianza para la clasificación de especies.",
+      "builtInModel": "La detección usa el modelo integrado Human Voice (Silero VAD) del equipo de Silero (silero-vad, licencia MIT).",
       "confidenceThreshold": {
         "label": "Umbral de confianza",
         "helpText": "Puntuación mínima de confianza (0.0 - 1.0) requerida para registrar una detección."
@@ -4604,73 +4601,6 @@
     "advanced": {
       "title": "Avanzado",
       "description": "Configuración de procesamiento y modelos personalizados."
-    },
-    "gallery": {
-      "title": "Galería de modelos",
-      "description": "Gestionar modelos clasificadores para la detección de aves y murciélagos.",
-      "tabs": {
-        "installed": "Instalados",
-        "available": "Disponibles"
-      },
-      "loading": "Cargando modelos...",
-      "retry": "Reintentar",
-      "builtIn": "Integrado",
-      "builtInDescription": "Clasificador de especies de aves integrado del equipo VoiceWatch.",
-      "species": "{count} especies",
-      "install": "Instalar",
-      "installing": "Instalando...",
-      "remove": "Eliminar",
-      "removing": "Eliminando...",
-      "noInstalledModels": "No hay modelos adicionales instalados. Explore la pestaña Disponibles para agregar más clasificadores.",
-      "noAvailableModels": "No hay modelos adicionales disponibles para su plataforma.",
-      "sections": {
-        "acoustic": "Clasificadores acústicos",
-        "geomodel": "Geomodelos"
-      },
-      "categories": {
-        "wildlife": "Clasificadores de fauna",
-        "bird": "Clasificadores de aves",
-        "bat": "Clasificadores de murciélagos"
-      },
-      "progress": {
-        "downloading": "Descargando...",
-        "verifying": "Verificando...",
-        "loading": "Cargando...",
-        "complete": "Instalado correctamente",
-        "failed": "Error"
-      },
-      "license": {
-        "title": "Acuerdo de licencia",
-        "model": "Modelo",
-        "author": "Autor",
-        "license": "Licencia",
-        "commercialUse": "Uso comercial",
-        "downloadSize": "Tamaño de descarga",
-        "allowed": "Permitido",
-        "notAllowed": "No permitido",
-        "commercialUseAllowed": "Uso comercial permitido",
-        "nonCommercialOnly": "Solo uso no comercial",
-        "nonCommercialWarning": "Este modelo está licenciado solo para uso no comercial. Al instalarlo, acepta cumplir con los términos de la licencia.",
-        "acceptAndInstall": "Aceptar e instalar"
-      },
-      "removeDialog": {
-        "title": "¿Eliminar {name}?",
-        "confirmation": "Esto eliminará los archivos del modelo del disco. Los datos de etiquetas de las detecciones existentes se conservarán."
-      },
-      "errors": {
-        "catalogLoadFailed": "No se pudo cargar el catálogo de modelos",
-        "installFailed": "No se pudo iniciar la instalación del modelo",
-        "removeFailed": "No se pudo eliminar el modelo"
-      },
-      "regionLabel": "Región",
-      "speciesLabel": "Especies",
-      "reinstall": "Reinstalar",
-      "reinstalling": "Reinstalando...",
-      "reinstallComplete": "Archivos verificados correctamente",
-      "geomodelBadge": "Incluye VoiceWatch v3.0 geomodel",
-      "onnxRuntimeRequired": "Requiere ONNX Runtime, que no está disponible en este sistema.",
-      "onnxRuntimeMissing": "ONNX Runtime no está disponible. Este modelo no puede ejecutarse.",
-      "unavailable": "No disponible"
     },
     "bird": {
       "title": "Detección de aves",

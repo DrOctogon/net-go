@@ -4558,13 +4558,10 @@
   },
   "analysis": {
     "title": "Analys",
-    "tabs": {
-      "settings": "Inställningar",
-      "models": "Modeller"
-    },
     "detection": {
       "title": "Detektionsinställningar",
       "description": "Konfigurera konfidenströsklar och språk för artklassificering.",
+      "builtInModel": "Detektering använder den inbyggda Human Voice-modellen (Silero VAD) från Silero-teamet (silero-vad, MIT-licens).",
       "confidenceThreshold": {
         "label": "Confidence Threshold",
         "helpText": "Minimum confidence score (0.0 - 1.0) required for a detection to be recorded."
@@ -4604,73 +4601,6 @@
     "advanced": {
       "title": "Avancerat",
       "description": "Bearbetning och anpassad modellkonfiguration."
-    },
-    "gallery": {
-      "title": "Modellgalleri",
-      "description": "Hantera klassificeringsmodeller för fågel- och fladdermusdetektion.",
-      "tabs": {
-        "installed": "Installerade",
-        "available": "Tillgängliga"
-      },
-      "loading": "Laddar modeller...",
-      "retry": "Försök igen",
-      "builtIn": "Inbyggd",
-      "builtInDescription": "Inbyggd fågelartsklassificerare från VoiceWatch-teamet.",
-      "species": "{count} arter",
-      "install": "Installera",
-      "installing": "Installerar...",
-      "remove": "Ta bort",
-      "removing": "Tar bort...",
-      "noInstalledModels": "Inga ytterligare modeller installerade. Bläddra i fliken Tillgängliga för att lägga till fler klassificerare.",
-      "noAvailableModels": "Inga ytterligare modeller tillgängliga för din plattform.",
-      "sections": {
-        "acoustic": "Akustiska klassificerare",
-        "geomodel": "Geomodeller"
-      },
-      "categories": {
-        "wildlife": "Viltklassificerare",
-        "bird": "Fågelklassificerare",
-        "bat": "Fladdermusklassificerare"
-      },
-      "progress": {
-        "downloading": "Laddar ner...",
-        "verifying": "Verifierar...",
-        "loading": "Laddar...",
-        "complete": "Installerad",
-        "failed": "Misslyckades"
-      },
-      "license": {
-        "title": "Licensavtal",
-        "model": "Modell",
-        "author": "Upphovsperson",
-        "license": "Licens",
-        "commercialUse": "Kommersiellt bruk",
-        "downloadSize": "Nedladdningsstorlek",
-        "allowed": "Tillåtet",
-        "notAllowed": "Ej tillåtet",
-        "commercialUseAllowed": "Kommersiellt bruk tillåtet",
-        "nonCommercialOnly": "Endast icke-kommersiellt bruk",
-        "nonCommercialWarning": "Denna modell är licensierad enbart för icke-kommersiellt bruk. Genom att installera godkänner du att följa licensvillkoren.",
-        "acceptAndInstall": "Acceptera och installera"
-      },
-      "removeDialog": {
-        "title": "Ta bort {name}?",
-        "confirmation": "Detta tar bort modellfilerna från disken. Etikettdata behålls för befintliga detektioner."
-      },
-      "errors": {
-        "catalogLoadFailed": "Kunde inte ladda modellkatalogen",
-        "installFailed": "Kunde inte starta modellinstallation",
-        "removeFailed": "Kunde inte ta bort modell"
-      },
-      "regionLabel": "Region",
-      "speciesLabel": "Arter",
-      "reinstall": "Installera om",
-      "reinstalling": "Installerar om...",
-      "reinstallComplete": "Filer verifierade",
-      "geomodelBadge": "Inkluderar VoiceWatch v3.0 geomodell",
-      "onnxRuntimeRequired": "Kräver ONNX Runtime som inte är tillgängligt på detta system.",
-      "onnxRuntimeMissing": "ONNX Runtime är inte tillgängligt. Denna modell kan inte köras.",
-      "unavailable": "Ej tillgänglig"
     },
     "bird": {
       "title": "Fågeldetektering",
