@@ -153,12 +153,42 @@ jobs:
           # the per-test filter above silently drops them - this is exactly what
           # has been showing up as "no test names" in this job. Always print
           # these plus their raw output so the cause is visible without a rerun.
+          #
+          # Markers are printed BEFORE the output window deliberately. A Go fatal
+          # error or panic prints its one-line header ABOVE a goroutine dump that
+          # runs to hundreds or thousands of lines, so a plain tail of a package's
+          # output shows only the bottom of that dump and hides the line naming
+          # the cause. That truncation is why the windows -race runtime crash
+          # ("fatal error: invalid g status") read as an unexplained flake for a
+          # week. Grepping the headers first makes the cause visible in the log
+          # view without downloading the artifact.
+          FAIL_MARKERS='fatal error:|panic:|\[signal |SIGSEGV|SIGABRT|SIGBUS|DATA RACE|test timed out|\[build failed\]|\[setup failed\]|cannot find package|undefined:'
+          MARKER_LINES=40
+          PKG_TAIL_LINES=200
           echo "--- Package-level failures (build error / panic / setup failure) ---"
           PKG_FAILS=$(jq -R -r 'fromjson? // empty | select(.Action == "fail" and (.Test | not)) | .Package' gotest.log | sort -u)
+          # Accumulate markers in a file, not a shell variable: a multi-line
+          # value would have to be written with continuation lines at column 0,
+          # which dedents out of this YAML block scalar and makes the workflow
+          # unparseable.
+          MARKER_FILE=pkg_markers.txt
+          : > "$MARKER_FILE"
           if [ -n "$PKG_FAILS" ]; then
             while IFS= read -r pkg; do
               echo "## $pkg"
-              grep -F "\"Package\":\"$pkg\"" gotest.log | jq -R -r 'fromjson? // empty | select(.Action == "output") | .Output' | tail -n 40
+              # Decode this package's output once: both views below consume it,
+              # and re-scanning the whole log per view is wasteful on a big run.
+              pkg_out=$(grep -F "\"Package\":\"$pkg\"" gotest.log | jq -R -r 'fromjson? // empty | select(.Action == "output") | .Output')
+              markers=$(printf '%s\n' "$pkg_out" | grep -nE "$FAIL_MARKERS" | head -n "$MARKER_LINES")
+              if [ -n "$markers" ]; then
+                echo "### diagnostic markers (line numbers are within this package's output)"
+                printf '%s\n' "$markers"
+                { echo "$pkg"; printf '%s\n\n' "$markers"; } >> "$MARKER_FILE"
+              else
+                echo "### diagnostic markers: (none matched)"
+              fi
+              echo "### last $PKG_TAIL_LINES lines of this package's output"
+              printf '%s\n' "$pkg_out" | tail -n "$PKG_TAIL_LINES"
             done <<< "$PKG_FAILS"
           else
             echo "(none)"
@@ -187,6 +217,13 @@ jobs:
               if [ -n "$PKG_FAILS" ]; then echo "$PKG_FAILS"; else echo "(none)"; fi
               echo '```'
               echo ""
+              if [ -s "$MARKER_FILE" ]; then
+                echo "### Diagnostic Markers"
+                echo '```'
+                cat "$MARKER_FILE"
+                echo '```'
+                echo ""
+              fi
               echo "### Last 60 Lines of Raw Log"
               echo '```'
               tail -n 60 gotest.log
@@ -203,5 +240,9 @@ jobs:
         if: always()
         with:
           name: test-log-macos
-          path: gotest.log
+          # pkg_markers.txt is the extracted crash/build-failure headers; it is
+          # tiny and is the first thing worth reading when this job goes red.
+          path: |
+            gotest.log
+            pkg_markers.txt
           if-no-files-found: warn
